@@ -17,29 +17,31 @@
             <div class="panel panel-default panel-table">
                 <div class="panel-heading">
                     <h3 class="panel-title">Category List</h3>
+                    <div class="pull-right">
+                        <button class="btn btn-filter btn-xs"><i class="fa fa-filter"></i></button>
+                    </div>
                 </div>
-                <div class="panel-body panel-filter" style="display: none;">
-                    <form role="form" id="filter-form" accept-charset="utf-8" method="GET" action="">
+                <div class="panel-body panel-filter" style="display: none">
+                    <form role="form" id="filter-form" accept-charset="utf-8" method="GET" action="{{url('/categories')}}">
                         <div class="filter-bar">
                             <div class="form-inline">
                                 <div class="row">
                                     <div class="col-md-3 pull-right text-right">
                                         <div class="form-group">
-                                            <input type="text" name="filter_search" class="form-control input-sm" value="" placeholder="Search customer name or email." />&nbsp;&nbsp;&nbsp;
+                                            <input type="text" name="category_search" class="form-control input-sm" value="" placeholder="Search category name, description or status." />&nbsp;&nbsp;&nbsp;
                                         </div>
-                                        <a class="btn btn-grey" onclick="filterList();" title=""><i class="fa fa-search"></i></a>
+                                        <a class="btn btn-grey" onclick="filterList();" title="Search"><i class="fa fa-search"></i></a>
                                     </div>
                                     <div class="col-md-8 pull-left">
                                         <div class="form-group">
-                                            <select name="filter_date" class="form-control input-sm">
-                                            </select>&nbsp;
-                                        </div>
-                                        <div class="form-group">
-                                            <select name="filter_status" class="form-control input-sm">
+                                            <select name="category_status" class="form-control input-sm">
+                                                <option value="">View all status</option>
+                                                <option value="1"  >Enabled</option>
+                                                <option value="0"  >Disabled</option>
                                             </select>
                                         </div>
-                                        <a class="btn btn-grey" onclick="filterList();" title=""><i class="fa fa-filter"></i></a>&nbsp;
-                                        <a class="btn btn-grey" href="" title=""><i class="fa fa-times"></i></a>
+                                        <a class="btn btn-grey" onclick="filterList();" title="Filter"><i class="fa fa-filter"></i></a>&nbsp;
+                                        <a class="btn btn-grey" href="{{url('/categories')}}" title="Clear"><i class="fa fa-times"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -71,7 +73,11 @@
                                     <td>{{$category->description}}</td>
                                     <td>{{$category->parent_id}}</td>
                                     <td>{{$category->priority}}</td>
-                                    <td>{{$category->status}}</td>
+                                    @if($category->status == 1)
+                                        <td>Enable</td>
+                                    @else
+                                        <td>Disable</td>
+                                    @endif
                                     <td>{{$category->category_id}}</td>
                                 </tr>
                             @endforeach
@@ -89,4 +95,41 @@
     </div>
     </form>
     </div>
+    <script type="text/javascript">
+        function filterList() {
+            $('#filter-form').submit();
+        }
+        //--></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            if (document.location.toString().toLowerCase().indexOf(active_menu, 1) != -1) {
+                $('#side-menu .' + active_menu).addClass('active');
+                $('#side-menu .' + active_menu).parents('.collapse').parent().addClass('active');
+                $('#side-menu .' + active_menu).parents('.collapse').collapse('show');
+                $('#side-menu .' + active_menu).parents('.collapse').collapse('show');
+            }
+
+            if (window.location.hash) {
+                var hash = window.location.hash.substring(1); //Puts hash in variable, and removes the # character
+                $('html,body').animate({scrollTop: $('#wrapper').offset().top - 45}, 800);
+                $('#nav-tabs a[href="#'+hash+'"]').tab('show');
+            }
+
+            $('.btn-group input[type="radio"]:checked, .btn-group .active input[type="radio"]').trigger('change');
+        });
+
+        function confirmDelete(form) {
+            if ($('input[name="delete[]"]:checked').length && confirm('This cannot be undone! Are you sure you want to do this?')) {
+                form = (typeof form === 'undefined' || form === null) ? 'list-form' : form;
+                $('#'+form).submit();
+            } else {
+                return false;
+            }
+        }
+
+        function saveClose() {
+            $('#edit-form').append('<input type="hidden" name="save_close" value="1" />');
+            $('#edit-form').submit();
+        }
+    </script>
 @endsection

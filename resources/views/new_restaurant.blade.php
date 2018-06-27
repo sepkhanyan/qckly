@@ -42,7 +42,7 @@
                     </li>
                 </ul>
             </div>
-            <form role="form" id="edit-form" name="edit_form" class="form-horizontal" accept-charset="utf-8" method="GET" action="{{ url('/store/restaurants') }}" >
+            <form role="form" id="edit-form" name="edit_form" class="form-horizontal" accept-charset="utf-8" method="POST" action="{{ url('/store/restaurants') }}"  enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <div class="tab-content">
                     <div id="general" class="tab-pane row wrap-all active">
@@ -199,24 +199,25 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            {{--<label for="" class="col-sm-3 control-label">Image--}}
-                                {{--<span class="help-block">Select an image to use as the location logo, this image is displayed in the restaurant list.</span>--}}
-                            {{--</label>--}}
-                            {{--<div class="col-sm-5">--}}
-                                {{--<div class="thumbnail imagebox" id="selectImage">--}}
-                                    {{--<div class="preview">--}}
-                                        {{--<img src="https://demo.tastyigniter.com/assets/images/data/no_photo.png" class="thumb img-responsive" id="thumb">--}}
-                                    {{--</div>--}}
-                                    {{--<div class="caption">--}}
-                                        {{--<span class="name text-center"></span>--}}
-                                        {{--<input type="hidden" name="location_image" value="" id="field">--}}
-                                        {{--<p>--}}
-                                            {{--<a id="select-image" class="btn btn-primary" onclick="mediaManager('field');"><i class="fa fa-picture-o"></i>&nbsp;&nbsp;Select</a>--}}
-                                            {{--<a class="btn btn-danger" onclick="$('#thumb').attr('src', 'https://demo.tastyigniter.com/assets/images/data/no_photo.png'); $('#field').attr('value', ''); $(this).parent().parent().find('.name').html('');"><i class="fa fa-times-circle"></i>&nbsp;&nbsp;Remove </a>--}}
-                                        {{--</p>--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
+                            <label for="" class="col-sm-3 control-label">Image
+                                <span class="help-block">Select an image to use as the location logo, this image is displayed in the restaurant list.</span>
+                            </label>
+                            <div class="col-sm-5">
+                                <div class="thumbnail imagebox" id="selectImage">
+                                    <div class="preview">
+                                        <img src="https://demo.tastyigniter.com/assets/images/data/no_photo.png" class="thumb img-responsive" id="thumb">
+                                    </div>
+                                   <div class="caption">
+                                        <span class="name text-center"></span>
+                                        <input type="hidden" name="location_image" value="" id="field">
+                                        <p>
+                                           {{-- <input type="file" name="location_image" class="form-control">--}}
+                                         <a href="{{url('/image/manager')}}" rel="modal:open" id="select-image" data-toggle="modal" data-target="#media-manager" class="btn btn-primary" {{--onclick="mediaManager('field');"--}}><i class="fa fa-picture-o"></i>&nbsp;&nbsp;Select</a>
+                                            <a class="btn btn-danger" onclick="$('#thumb').attr('src', 'https://demo.tastyigniter.com/assets/images/data/no_photo.png'); $('#field').attr('value', ''); $(this).parent().parent().find('.name').html('');"><i class="fa fa-times-circle"></i>&nbsp;&nbsp;Remove </a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="input-status" class="col-sm-3 control-label">Status</label>
@@ -729,7 +730,7 @@
         </div>
     </div>
 
-    <script type="text/javascript"><!--
+    <script type="text/javascript">
         $('input[name=\'table\']').select2({
             placeholder: 'Start typing...',
             minimumInputLength: 2,
@@ -753,9 +754,9 @@
             $('#table-box' + e.choice.id).remove();
             $('#table-box table tbody').append('<tr id="table-box' + e.choice.id + '"><td class="name">' + e.choice.text + '</td><td>' + e.choice.min + '</td><td>' + e.choice.max + '</td><td class="img">' + '<a class="btn btn-danger btn-xs" onclick="confirm(\'This cannot be undone! Are you sure you want to do this?\') ? $(this).parent().parent().remove() : false;"><i class="fa fa-times-circle"></i></a>' + '<input type="hidden" name="tables[]" value="' + e.choice.id + '" /></td></tr>');
         });
-        //--></script>
+        </script>
     <script type="text/javascript">
-        <!--
+
         $(function () {
             $('.table-sortable').sortable({
                 containerSelector: 'table',
@@ -798,8 +799,8 @@
 
             var field = 'image-thumb' + image_row;
             $('#media-manager').remove();
-            var iframe_url = js_site_url('image_manager?popup=iframe&field_id=' + field);
-
+            // var iframe_url = js_site_url('image_manager?popup=iframe&field_id=' + field);
+               var iframe_url = 'https://demo.tastyigniter.com/admin/image_manager?popup=iframe&field_id=field&sub_folder= '
             $('body').append('<div id="media-manager" class="modal" tabindex="-1" data-parent="note-editor" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'
                 + '<div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header">'
                 + '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>'
@@ -824,12 +825,26 @@
                 }
             });
         }
-        //--></script>
+        </script>
+    <div id="media-manager" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Image Manager</h4>
+                </div>
+                <div class="modal-body wrap-none">
+                    {{--<iframe name="media_manager" src="qckly.loc/image_manager?popup=iframe&field_id=field&sub_folder=" width="100%" height="241px" frameborder="0"></iframe>--}}
+                </div>
+
+            </div>
+        </div>
+    </div>
     </div>
     <div id="footer" class="">
         <div class="row navbar-footer">
             <div class="col-sm-12 text-version">
-                <p class="col-xs-9 wrap-none">Thank you for using <a target="_blank" href="http://tastyigniter.com">TastyIgniter</a></p>
+                <p class="col-xs-9 wrap-none">Thank you for using <a target="_blank" href="">Qckly</a></p>
                 <p class="col-xs-3 text-right wrap-none">Version 2.1.1</p>
             </div>
         </div>

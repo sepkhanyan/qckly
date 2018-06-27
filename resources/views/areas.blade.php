@@ -17,29 +17,22 @@
             <div class="panel panel-default panel-table">
                 <div class="panel-heading">
                     <h3 class="panel-title">Areas</h3>
+                    <div class="pull-right">
+                        <button class="btn btn-filter btn-xs"><i class="fa fa-filter"></i></button>
+                    </div>
                 </div>
-                <div class="panel-body panel-filter" style="display: none;">
-                    <form role="form" id="filter-form" accept-charset="utf-8" method="GET" action="">
+                <div class="panel-body panel-filter" style="display: none">
+                    <form role="form" id="filter-form" accept-charset="utf-8" method="GET" action="{{url('/areas')}}">
                         <div class="filter-bar">
                             <div class="form-inline">
                                 <div class="row">
-                                    <div class="col-md-3 pull-right text-right">
-                                        <div class="form-group">
-                                            <input type="text" name="filter_search" class="form-control input-sm" value="" placeholder="Search customer name or email." />&nbsp;&nbsp;&nbsp;
-                                        </div>
-                                        <a class="btn btn-grey" onclick="filterList();" title=""><i class="fa fa-search"></i></a>
-                                    </div>
                                     <div class="col-md-8 pull-left">
                                         <div class="form-group">
-                                            <select name="filter_date" class="form-control input-sm">
-                                            </select>&nbsp;
+                                            <input type="text" name="area_search" class="form-control input-sm" value="" placeholder="Search area." />&nbsp;&nbsp;&nbsp;
                                         </div>
-                                        <div class="form-group">
-                                            <select name="filter_status" class="form-control input-sm">
-                                            </select>
-                                        </div>
-                                        <a class="btn btn-grey" onclick="filterList();" title=""><i class="fa fa-filter"></i></a>&nbsp;
-                                        <a class="btn btn-grey" href="" title=""><i class="fa fa-times"></i></a>
+                                        <a class="btn btn-grey" onclick="filterList();" title="Search"><i class="fa fa-search"></i></a>
+                                        <a class="btn btn-grey" href="{{url('/areas')}}" title="Clear"><i class="fa fa-times"></i></a>
+
                                     </div>
                                 </div>
                             </div>
@@ -72,10 +65,10 @@
                         </table>
                     </div>
                 </form>
-                <div class="pagination-bar clearfix">
+               {{-- <div class="pagination-bar clearfix">
                     <div class="links"></div>
                     <div class="info"></div>
-                </div>
+                </div>--}}
             </div>
         </div>
     </div>
@@ -119,4 +112,9 @@
 
     </form>
     </div>
+    <script type="text/javascript">
+        function filterList() {
+            $('#filter-form').submit();
+        }
+        </script>
 @endsection

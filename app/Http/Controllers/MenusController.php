@@ -7,6 +7,7 @@ use Auth;
 use Illuminate\Http\Request;
 use App\Menus;
 use App\Locations;
+use App\Categories;
 
 class MenusController extends Controller
 {
@@ -15,16 +16,38 @@ class MenusController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id=null)
+    public function index($id=null, Request $request)
     {
+
+        $categories = Categories::all();
         $locations = Locations::all();
+        $restaurant = Locations::find($id);
+        $data = $request->all();
+        $menus = [];
         if($id){
             $menus = Menus::where('location_id',$id)->get();
-
-        }else{
-            $menus = [];
+            if(isset($data['menu_status'])){
+                $menus = Menus::where('location_id',$id)
+                    ->where('menu_status',$data['menu_status'])->get();
+            }
+            if(isset($data['menu_category'])){
+                $menus = Menus::where('location_id',$id)
+                    ->where('menu_category_id',$data['menu_category'])->get();
+            }
+            if(isset($data['menu_search'])){
+                $menus = Menus::where('location_id',$id)
+                    ->where('menu_name','like',$data['menu_search'])
+                    ->orWhere('menu_price','like',$data['menu_search'])
+                    ->orWhere('stock_qty','like',$data['menu_search'])->get();
+            }
         }
-        return view('menus', ['menus' => $menus, 'locations' => $locations]);
+        return view('menus', [
+            'id' => $id,
+            'menus' => $menus,
+            'locations' => $locations,
+            'categories' => $categories,
+            'restaurant' => $restaurant
+        ]);
     }
 
     /**
@@ -35,7 +58,11 @@ class MenusController extends Controller
     public function create()
     {
         $locations = Locations::all();
-        return view('new_menus', ['locations' => $locations]);
+        $categories = Categories::all();
+        return view('new_menus', [
+            'locations' => $locations,
+            'categories' => $categories
+        ]);
     }
 
     /**
@@ -84,7 +111,12 @@ class MenusController extends Controller
     {
         $menu = Menus::find($id);
         $locations = Locations::all();
-        return view('menu_edit', ['locations' => $locations, 'menu' => $menu]);
+        $categories = Categories::all();
+        return view('menu_edit', [
+            'locations' => $locations,
+            'categories' => $categories,
+            'menu' => $menu
+        ]);
     }
 
     /**
@@ -126,4 +158,6 @@ class MenusController extends Controller
 
         return redirect('/menus');
     }
+
+
 }

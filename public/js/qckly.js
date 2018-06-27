@@ -11,6 +11,16 @@ $(document).ready(function() {
             }
         })
     })
+    $("a#select-image").on("click", function(){
+
+
+        $.post("/image/manager", function(data){
+
+            $("#media-manager").html(data).fadeIn();
+
+        });//Put the code from above here.
+
+    });
     $('#lat-lng-no').click(function() {
         $('#lat-lng'). slideDown('fast');
     });

@@ -1,7 +1,6 @@
 @extends('header')
 @section('content')
-
-       <div class="page-header">
+  <div class="page-header">
         <div class="page-action">
             <a href="{{ url('/new/menus') }}" class="btn btn-primary">
                 <i class="fa fa-plus"></i>
@@ -25,15 +24,53 @@
         </div>
     </div>
        @if(count($menus)>0)
+
     <div class="row content" >
         <div class="col-md-12">
             <div class="panel panel-default panel-table">
                 <div class="panel-heading">
+                    <h2>{{$restaurant->location_name}}</h2>
                     <h3 class="panel-title">Menu Item List</h3>
-
-                    {{--<div class="pull-right">
+                    <div class="pull-right">
                         <button class="btn btn-filter btn-xs"><i class="fa fa-filter"></i></button>
-                    </div>--}}
+                    </div>
+                </div>
+                <div class="panel-body panel-filter" style="display: none;">
+                    <form role="form" id="filter-form" accept-charset="utf-8" method="GET" action="{{url('/menus/' . $id )}}">
+                        <div class="filter-bar">
+                            <div class="form-inline">
+                                <div class="row">
+                                    <div class="col-md-3 pull-right text-right">
+                                        <div class="form-group">
+                                            <input type="text" name="menu_search" class="form-control input-sm" value="" placeholder="Search name, price or stock qty."/>&nbsp;&nbsp;&nbsp;
+                                        </div>
+                                        <a class="btn btn-grey" onclick="filterList();" title="Search"><i class="fa fa-search"></i></a>
+                                    </div>
+                                    <div class="col-md-8 pull-left">
+                                        <div class="form-group">
+                                            <select name="menu_category" class="form-control input-sm">
+                                                <option value="">View all categories</option>
+                                                @foreach ($categories as $category)
+                                                    <option value="{{$category->category_id}}">{{$category->name}}</option>
+                                                @endforeach
+                                            </select>&nbsp;
+                                        </div>
+                                        <div class="form-group">
+                                            <select name="menu_status" class="form-control input-sm">
+                                                <option value="">View all status</option>
+                                                    <option value="1"  >Enabled</option>
+                                                    <option value="0"  >Disabled</option>
+                                            </select>
+                                        </div>
+                                        <a class="btn btn-grey" onclick="filterList();" title="Filter"><i class="fa fa-filter"></i></a>&nbsp;
+                                        <a class="btn btn-grey" href="{{url('/menus/' . $id )}}" title="Clear"><i class="fa fa-times"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
                 </div>
                 <form role="form" id="list-form" accept-charset="utf-8" method="POST" action="">
                     <div class="table-responsive">
@@ -60,7 +97,11 @@
                                     <td>{{$menu->menu_price}}</td>
                                     <td>{{$menu->menu_category_id}}</td>
                                     <td>{{$menu->stock_qty}}</td>
-                                    <td>{{$menu->menu_status}}</td>
+                                    @if($menu->menu_status == 1)
+                                        <td>Enable</td>
+                                    @else
+                                        <td>Disable</td>
+                                    @endif
                                     <td>{{$menu->menu_id}}</td>
                                 </tr>
                             @endforeach
@@ -78,17 +119,14 @@
             $('#filter-form').submit();
         }
         </script>
-    </div>
-    <div id="footer" class="">
+    {{--<div id="footer" class="">
         <div class="row navbar-footer">
             <div class="col-sm-12 text-version">
                 <p class="col-xs-9 wrap-none">Thank you for using <a target="_blank" href="http://tastyigniter.com">TastyIgniter</a></p>
                 <p class="col-xs-3 text-right wrap-none">Version 2.1.1</p>
             </div>
         </div>
-    </div>
-    </div>
-
+    </div>--}}
     <script type="text/javascript">
         $(document).ready(function() {
             if (document.location.toString().toLowerCase().indexOf(active_menu, 1) != -1) {
@@ -120,7 +158,7 @@
             $('#edit-form').append('<input type="hidden" name="save_close" value="1" />');
             $('#edit-form').submit();
         }
-    </script>--}}
+    </script>
     <script type="text/javascript">
         $('#menus ').select2();
     </script>

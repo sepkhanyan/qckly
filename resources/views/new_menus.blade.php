@@ -76,23 +76,9 @@
                             <div class="col-sm-5">
                                 <select name="menu_category" id="category" class="form-control">
                                     <option value="">Select category</option>
-                                    <option value="16"  >Main Course</option>
-                                    <option value="15"  >Appetizer</option>
-                                    <option value="17"  >Salads</option>
-                                    <option value="18"  >Seafoods</option>
-                                    <option value="19"  >Traditional</option>
-                                    <option value="20"  >Vegetarian</option>
-                                    <option value="21"  >Soups</option>
-                                    <option value="22"  >Desserts</option>
-                                    <option value="23"  >Drinks</option>
-                                    <option value="24"  >Specials</option>
-                                    <option value="26"  >Rice Dishes</option>
-                                    <option value="44"  >Pizza</option>
-                                    <option value="46"  >Lanches</option>
-                                    <option value="48"  >burger</option>
-                                    <option value="49"  >Chicken</option>
-                                    <option value="50"  >Chinese food</option>
-                                    <option value="51"  >Biryani</option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{$category->category_id}}">{{$category->name}}</option>
+                                    @endforeach
                                 </select>
                                 @if ($errors->has('menu_category'))
                                     <span class="help-block">

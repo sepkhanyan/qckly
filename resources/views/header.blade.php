@@ -17,11 +17,12 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-		
+
 		<script src="{{ asset('js/jquery-1.11.2.min.js') }}" ></script>
 		<script src="{{ asset('js/jquery.js') }}" ></script>
 		<script src="{{ asset('js/jquery-sortable.js') }}" ></script>
 		<script src="{{ asset('js/jquery-ui.js') }}" ></script>
+		<script src="{{ asset('js/jquery.raty.js') }}" ></script>
 		<script src="{{ asset('js/datepicker/timepicki.js') }}" ></script>
 		<script src="{{ asset('js/datepicker/bootstrap-datepicker.js') }}" ></script>
 		<script src="{{ asset('js/datepicker/bootstrap-timepicker.js') }}" ></script>
@@ -30,7 +31,6 @@
 		<script src="{{ asset('js/bootstrap.min.js') }}" ></script>
 		<script src="{{ asset('js/metisMenu.min.js') }}" ></script>
 		<script src="{{ asset('js/select2.js') }}" ></script>
-		<script src="{{ asset('js/jquery.raty.js') }}" ></script>
 		<script src="{{ asset('js/common.js') }}" ></script>
 
 
@@ -49,8 +49,30 @@
 		<link href="{{ asset('css/stylesheet.css') }}" rel="stylesheet">
 		<link href="{{ asset('js/datepicker/datepicker.css') }}" rel="stylesheet">
 		<link href="{{ asset('js/datepicker/bootstrap-timepicker.css') }}" rel="stylesheet">
+		<script>
+		var js_site_url = function(str) {
+		var strTmp = "qckly.loc/" + str;
+		return strTmp;
+		};
 
+		var js_base_url = function(str) {
+		var strTmp = "qckly.loc/" + str;
+		return strTmp;
+		};
 
+		var active_menu = 'menus';
+        </script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('a[title], span[title], button[title]').tooltip({placement: 'bottom'});
+                $('select.form-control').select2({minimumResultsForSearch: 10});
+
+                $('.alert').alert();
+                $('.dropdown-toggle').dropdown();
+
+                $("#list-form td:contains('Disabled')").addClass('red');
+            });
+		</script>
 </head>
 <body>
     <div id="wrapper" class="">
@@ -58,10 +80,11 @@
 			<div class="navbar-header">
 				<div class="navbar-brand">
 					<div class="navbar-logo col-xs-3">
-						<img class="logo-image" alt="TastyIgniter" title="TastyIgniter" src="https://demo.tastyigniter.com/admin/views/themes/tastyigniter-blue/images/tastyigniter-logo.png"/>
+						<img class="logo-image" alt="Qckly" title="Qckly" src="https://demo.tastyigniter.com/admin/views/themes/tastyigniter-blue/images/tastyigniter-logo.png"/>
 					</div>
-					<div class="navbar-logo col-xs-9">
-						<img class="logo-text" alt="TastyIgniter" title="TastyIgniter" src="https://demo.tastyigniter.com/admin/views/themes/tastyigniter-blue/images/tastyigniter-logo-text.png"/>
+					<div  class="navbar-logo col-xs-9" style="color: white;font-family: fantasy;font-size: 40px; margin-top: 5px;">
+						{{--<img class="logo-text" alt="TastyIgniter" title="TastyIgniter" src="https://demo.tastyigniter.com/admin/views/themes/tastyigniter-blue/images/tastyigniter-logo-text.png"/>--}}
+						Qckly
 					</div>
 				</div>
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -264,7 +287,7 @@
 									</a>
 									<ul class="nav nav-second-level collapse">
 										<li>
-											<a href="#" class="languages">
+											<a href="{{url('/languages')}}" class="languages">
 												<i class="fa fa-square-o fa-fw"></i>
 												Languages
 											</a>
@@ -460,7 +483,7 @@
 							</li>
 							<li class="divider"></li>
 							<li>
-								<a href="https://demo.tastyigniter.com/admin/staffs/edit?id=12">
+								<a href="#">
 									<i class="fa fa-user fa-fw"></i>
 									&nbsp;&nbsp;Edit Details
 								</a>
@@ -478,19 +501,19 @@
 							</li>
 							<li class="divider"></li>
 							<li>
-								<a href="http://tastyigniter.com/about/" target="_blank">
+								<a href="#" >
 									<i class="fa fa-info-circle fa-fw"></i>
 									&nbsp;&nbsp;About TastyIgniter
 								</a>
 							</li>
 							<li>
-								<a href="http://docs.tastyigniter.com" target="_blank">
+								<a href="#" >
 									<i class="fa fa-book fa-fw"></i>
 									&nbsp;&nbsp;Documentation
 								</a>
 							</li>
 							<li>
-								<a href="http://forum.tastyigniter.com" target="_blank">
+								<a href="#" >
 									<i class="fa fa-users fa-fw"></i>
 									&nbsp;Community Support
 								</a>
@@ -509,10 +532,14 @@
 								{{--<i class="fa fa-refresh"></i>--}}
 								{{--Chek Updates--}}
 							{{--</a>--}}
-						{{--</div>--}}
+				{{--</div>--}}
 				{{--</div>--}}
 			@yield('content')
-				<div id="notification"></div>
+	</div>
+
+	</div>
+
+				{{--<div id="notification"></div>
 				<div class="row content dashboard">
 					<div class="col-md-12">
 						<div class="row mini-statistics">
@@ -535,9 +562,9 @@
 				</div>
 		</div>
 
-	</div>
+	</div>--}}
 
-        </body>
+            </body>
 </html>
 
 

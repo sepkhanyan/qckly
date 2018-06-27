@@ -14,9 +14,17 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $users = User::all();
+        $data = $request->all();
+        /*if(isset($data['customer_status'])){
+            $users = User::where('user_status',$data['customer_status'])->get();
+        }*/
+        if(isset($data['customer_search'])){
+            $users = User::where('email','like',$data['customer_search'])
+                /*->orWhere('name','like',$data['customer_search'])*/->get();
+        }
         return view('customers', ['users' => $users]);
     }
 
@@ -161,6 +169,7 @@ class UsersController extends Controller
 //                          'sms_sended_date' => $date,
                             'sms_count' => 1,
                             'username'=>'',
+                            'email' => 'email@example.com',
                             'password' => bcrypt($password)
 
                         ]

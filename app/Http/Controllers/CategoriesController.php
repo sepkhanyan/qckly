@@ -14,10 +14,20 @@ class CategoriesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Categories::all();
-        return view('categories', ['categories' => $categories]);
+            $categories = Categories::all();
+        $data = $request->all();
+        if(isset($data['category_status'])){
+            $categories = Categories::where('status',$data['category_status'])->get();
+        }
+        if(isset($data['category_search'])){
+            $categories = Categories::where('name','like',$data['category_search'])
+                ->orWhere('status','like',$data['category_search'])
+                ->orWhere('description','like',$data['category_search'])->get();
+        }
+            return view('categories', ['categories' => $categories]);
+
     }
 
     /**

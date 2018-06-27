@@ -12,11 +12,10 @@
 */
 
 
-
 Auth::routes();
 Route::group(['middleware' => ['web', 'auth']], function (){
     Route::group(['middleware' => 'admin'],function(){
-
+            Route::get('/image/manager', 'locationsController@selectImages');
             Route::get('/', 'HomeController@test')->name('home');
             Route::get('/new/customers', 'UsersController@create');
             Route::get('/store/customers', 'UsersController@store');
@@ -32,7 +31,7 @@ Route::group(['middleware' => ['web', 'auth']], function (){
             Route::post('/delete/areas', 'AreasController@deleteAreas');
             Route::get('/restaurants', 'LocationsController@index');
             Route::get('/new/restaurants', 'LocationsController@create');
-            Route::get('/store/restaurants', 'LocationsController@store');
+            Route::post('/store/restaurants', 'LocationsController@store');
             Route::get('/restaurant/edit/{id}', 'LocationsController@edit');
             Route::post('/restaurant/update/{id}', 'LocationsController@update');
             Route::post('/delete/restaurants', 'LocationsController@deleteRestaurants');
@@ -60,5 +59,4 @@ Route::group(['middleware' => ['web', 'auth']], function (){
 
 
 Route::get('/register-as-user','UsersController@registerAsUser');
-Route::get('/tables', 'TablesController@index');
 

@@ -7,6 +7,7 @@ use Auth;
 use Illuminate\Http\Request;
 use App\Locations;
 use App\Areas;
+use Illuminate\Support\Facades\File;
 
 class LocationsController extends Controller
 {
@@ -16,9 +17,19 @@ class LocationsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $locations = Locations::all();
+        $data = $request->all();
+        if(isset($data['restaurant_status'])){
+            $locations = Locations::where('location_status',$data['restaurant_status'])->get();
+        }
+        if(isset($data['restaurant_search'])){
+            $locations = Locations::where('location_name','like',$data['restaurant_search'])
+                ->orWhere('location_city','like',$data['restaurant_search'])
+                ->orWhere('location_postcode','like',$data['restaurant_search'])
+                ->orWhere('location_state','like',$data['restaurant_search'])->get();
+        }
         return view('restaurants', ['locations' => $locations]);
     }
 
@@ -41,8 +52,13 @@ class LocationsController extends Controller
      */
     public function store(RestaurantRequest $request)
     {
-//dd($request->all());
+
+        $image = $request->file('location_image');
+        $name = time() . '.' . $image->getClientOriginalExtension();
+        $destinationPath = public_path('/images');
+        $image->move($destinationPath, $name);
         $location = new Locations();
+        $location->location_image = $name;
         $location->location_name = $request->input('location_name');
         $location->location_email = $request->input('email');
         $location->location_telephone = $request->input('telephone');
@@ -94,7 +110,10 @@ class LocationsController extends Controller
     {
         $location = Locations::find($id);
         $areas = Areas::all();
-        return view('restaurant_edit', ['location' => $location, 'areas' => $areas]);
+        return view('restaurant_edit', [
+            'location' => $location,
+            'areas' => $areas
+        ]);
     }
 
     /**
@@ -133,6 +152,16 @@ class LocationsController extends Controller
         $location->reservation_turn = $request->input('reservation_stay_time');
         $location->collection_time = $request->input('collection_time');
         $location->location_status = $request->input('location_status');
+        if ($request->hasFile('location_image')) {
+            $deletedImage = File::delete(public_path('images/' . $location->location_image));
+            if ($deletedImage) {
+                $image = $request->file('location_image');
+                $name = time() . '.' . $image->getClientOriginalExtension();
+                $destinationPath = public_path('/images');
+                $image->move($destinationPath, $name);
+                $location->location_image = $name;
+            }
+        }
         $location->save();
         return redirect('/restaurants');
     }
@@ -151,5 +180,30 @@ class LocationsController extends Controller
 
 
         return redirect('/restaurants');
+    }
+
+
+
+    public function getRestaurants(){
+        $locations = Locations::all();
+        foreach($locations as $location){
+            $arr []=[
+                'restaurant_image'=>url('/').'/images/'. $location->location_image,
+                'restaurant_name'=>$location->location_name,
+                ];
+
+        }
+        if ($arr){
+            return response()->json(array(
+                'success'=> 1,
+                'status_code'=> 200 ,
+                'data' => $arr));
+        }
+    }
+
+    public function selectImages()
+    {
+        $locations = Locations::all();
+        return view('image_manager', ['locations' => $locations]);
     }
 }

@@ -10,4 +10,7 @@ class Orders extends Model
 
 
     protected $table = 'orders';
+
+
+    protected $primaryKey = 'order_id';
 }

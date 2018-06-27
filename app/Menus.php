@@ -14,6 +14,11 @@ class Menus extends Model
 
     protected $primaryKey = 'menu_id';
 
+    public function category()
+    {
+        return$this->hasMany('App\Categories', 'menu_category_id', 'category_id');
+    }
+
     public function restaurant()
     {
         return $this->hasMany('App\Locations', 'location_id', 'location_id');

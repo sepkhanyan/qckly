@@ -11,4 +11,9 @@ class Categories extends Model
     protected $table = 'categories';
 
     protected $primaryKey = 'category_id';
+
+    public function menu()
+    {
+        return$this->belongsTo('App\Menus', 'menu_category_id', 'category_id');
+    }
 }

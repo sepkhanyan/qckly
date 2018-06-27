@@ -14,9 +14,15 @@ class AreasController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $areas = Areas::all();
+        $data = $request->all();
+
+        if(isset($data['area_search'])){
+            $areas = Areas::where('area_en','like',$data['area_search'])
+                ->orWhere('area_ar','like',$data['area_search'])->get();
+        }
         return view('areas', ['areas' => $areas]);
 
     }
@@ -99,4 +105,32 @@ class AreasController extends Controller
 
         return redirect('/areas');
     }
+   public function getAreas(Request $request){
+        $lang = $request->header('Accept-Language');
+
+        $areas = Areas::all();
+        foreach ($areas as $area){
+            if ($lang == 'en'){
+                $arr []=[
+                    'area_id'=>$area->id,
+                    'area_en'=>$area->area_en,
+
+
+                ];
+            }else{
+                $arr []=[
+                    'area_id'=>$area->id,
+                    'area_en'=>$area->area_ar,
+
+                ];
+            }
+
+        }
+        if ($arr){
+            return response()->json(array(
+                'success'=> 1,
+                'status_code'=> 200 ,
+                'data' => $arr));
+   }
+   }
 }

@@ -46,7 +46,7 @@
                                 <input type="text" name="permalink[slug]" id="input-slug" class="form-control" value="">
                             </div>
                         </div>
-                        <div class="form-group{{ $errors->has('parent_id') ? ' has-error' : '' }}">
+                        <div class="form-group">
                             <label for="input-name" class="col-sm-3 control-label">Parent</label>
                             <div class="col-sm-5">
                                 {{--<div class="select2-container form-control" id="s2id_category">--}}
@@ -80,11 +80,6 @@
                                     <option value="50">Chinese food</option>
                                     <option value="51">Biryani</option>
                                 </select>
-                                @if ($errors->has('parent_id'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('parent_id') }}</strong>
-                                    </span>
-                                @endif
                             </div>
                         </div>
                         <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">

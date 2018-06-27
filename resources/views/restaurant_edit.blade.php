@@ -42,7 +42,7 @@
                     </li>
                 </ul>
             </div>
-            <form role="form" id="edit-form" name="edit_form" class="form-horizontal" accept-charset="utf-8" method="POST" action="{{ url('/restaurant/update/' . $location->location_id ) }}" >
+            <form role="form" id="edit-form" name="edit_form" class="form-horizontal" accept-charset="utf-8" method="POST" action="{{ url('/restaurant/update/' . $location->location_id ) }}" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <div class="tab-content">
                     <div id="general" class="tab-pane row wrap-all active">
@@ -199,24 +199,25 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            {{--<label for="" class="col-sm-3 control-label">Image--}}
-                            {{--<span class="help-block">Select an image to use as the location logo, this image is displayed in the restaurant list.</span>--}}
-                            {{--</label>--}}
-                            {{--<div class="col-sm-5">--}}
-                            {{--<div class="thumbnail imagebox" id="selectImage">--}}
-                            {{--<div class="preview">--}}
-                            {{--<img src="https://demo.tastyigniter.com/assets/images/data/no_photo.png" class="thumb img-responsive" id="thumb">--}}
-                            {{--</div>--}}
-                            {{--<div class="caption">--}}
-                            {{--<span class="name text-center"></span>--}}
-                            {{--<input type="hidden" name="location_image" value="" id="field">--}}
-                            {{--<p>--}}
-                            {{--<a id="select-image" class="btn btn-primary" onclick="mediaManager('field');"><i class="fa fa-picture-o"></i>&nbsp;&nbsp;Select</a>--}}
-                            {{--<a class="btn btn-danger" onclick="$('#thumb').attr('src', 'https://demo.tastyigniter.com/assets/images/data/no_photo.png'); $('#field').attr('value', ''); $(this).parent().parent().find('.name').html('');"><i class="fa fa-times-circle"></i>&nbsp;&nbsp;Remove </a>--}}
-                            {{--</p>--}}
-                            {{--</div>--}}
-                            {{--</div>--}}
-                            {{--</div>--}}
+                            <label for="" class="col-sm-3 control-label">Image
+                                <span class="help-block">Select an image to use as the location logo, this image is displayed in the restaurant list.</span>
+                            </label>
+                            <div class="col-sm-5">
+                                <div class="thumbnail imagebox" id="selectImage">
+                                    <div class="preview">
+                                        <img src="https://demo.tastyigniter.com/assets/images/data/no_photo.png" class="thumb img-responsive" id="thumb">
+                                    </div>
+                                    <div class="caption">
+                                        <span class="name text-center"></span>
+                                        {{--<input type="hidden" name="location_image" value="" id="field">--}}
+                                        <input type="file" name="location_image" class="form-control">
+                                        {{--<p>
+                                            <a id="select-image" class="btn btn-primary" onclick="mediaManager('field');"><i class="fa fa-picture-o"></i>&nbsp;&nbsp;Select</a>
+                                            <a class="btn btn-danger" onclick="$('#thumb').attr('src', 'https://demo.tastyigniter.com/assets/images/data/no_photo.png'); $('#field').attr('value', ''); $(this).parent().parent().find('.name').html('');"><i class="fa fa-times-circle"></i>&nbsp;&nbsp;Remove </a>
+                                        </p>--}}
+                                    </div>
+                                </div>
+                            </div>-
                         </div>
                         <div class="form-group">
                             <label for="input-status" class="col-sm-3 control-label">Status</label>
