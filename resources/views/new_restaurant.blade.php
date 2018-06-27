@@ -207,17 +207,17 @@
                                     <div class="preview">
                                         <img src="https://demo.tastyigniter.com/assets/images/data/no_photo.png" class="thumb img-responsive" id="thumb">
                                     </div>
-                                   <div class="caption">
+                                    <div class="caption">
                                         <span class="name text-center"></span>
-                                        <input type="hidden" name="location_image" value="" id="field">
-                                        <p>
-                                           {{-- <input type="file" name="location_image" class="form-control">--}}
-                                         <a href="{{url('/image/manager')}}" rel="modal:open" id="select-image" data-toggle="modal" data-target="#media-manager" class="btn btn-primary" {{--onclick="mediaManager('field');"--}}><i class="fa fa-picture-o"></i>&nbsp;&nbsp;Select</a>
+                                        {{--<input type="hidden" name="location_image" value="" id="field">--}}
+                                        <input type="file" name="location_image" class="form-control">
+                                        {{--<p>
+                                            <a id="select-image" class="btn btn-primary" onclick="mediaManager('field');"><i class="fa fa-picture-o"></i>&nbsp;&nbsp;Select</a>
                                             <a class="btn btn-danger" onclick="$('#thumb').attr('src', 'https://demo.tastyigniter.com/assets/images/data/no_photo.png'); $('#field').attr('value', ''); $(this).parent().parent().find('.name').html('');"><i class="fa fa-times-circle"></i>&nbsp;&nbsp;Remove </a>
-                                        </p>
+                                        </p>--}}
                                     </div>
                                 </div>
-                            </div>
+                            </div>-
                         </div>
                         <div class="form-group">
                             <label for="input-status" class="col-sm-3 control-label">Status</label>
