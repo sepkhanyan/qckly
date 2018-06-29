@@ -282,36 +282,51 @@ class RestaurantsController extends Controller
 
     public function availableRestaurants(Request $request)
     {
-        $id = $request->header('id');
-        $working_day = $request->header('working-day');
-        $working_time = $request->header('working-time');
-        $working_time = Carbon::parse( $working_time);
-        $restaurants = Restaurant::whereHas('workingHour', function($q)use($id,$working_day, $working_time){
-            $q
-               ->where('restaurant_id', $id)
-               ->where('weekday', $working_day)
-               ->where('opening_time', '<=', $working_time)
-                ->where('closing_time', '>=', $working_time);
-        })->get();
+        $DataRequests = $request->all();
 
-        if(count($restaurants)>0){
-            foreach($restaurants as $restaurant){
-                $arr [] = [
-                    'restaurant_id' => $restaurant->restaurant_id,
-                    'restaurant_name' => $restaurant->restaurant_name,
-                    'restaurant_image'=>url('/').'/images/'. $restaurant->restaurant_image,
-                ];
+        $validator = \Validator::make($DataRequests, [
+            'restaurant_id' => 'required|integer',
+            'working_day' => 'required|integer',
+            'working_time' => 'required',
+
+        ]);
+        if ($validator->fails()) {
+            return response()->json(array('success' => 1, 'status_code' => 400,
+                'message' => 'Invalid inputs',
+                'error_details' => $validator->messages()));
+        } else {
+            $id = $DataRequests['restaurant_id'];
+            $working_day = $DataRequests['working_day'];
+            $working_time = $DataRequests['working_time'];
+            $working_time = Carbon::parse($working_time);
+            $restaurants = Restaurant::whereHas('workingHour', function ($q) use ($id, $working_day, $working_time) {
+                $q
+                    ->where('restaurant_id', $id)
+                    ->where('weekday', $working_day)
+                    ->where('opening_time', '<=', $working_time)
+                    ->where('closing_time', '>=', $working_time);
+            })->get();
+
+            if (count($restaurants) > 0) {
+                foreach ($restaurants as $restaurant) {
+                    $arr [] = [
+                        'restaurant_id' => $restaurant->restaurant_id,
+                        'restaurant_name' => $restaurant->restaurant_name,
+                        'restaurant_image' => url('/') . '/images/' . $restaurant->restaurant_image,
+                    ];
+                    return response()->json(array(
+                        'success' => 1,
+                        'status_code' => 200,
+                        'data' => $arr));
+                }
+            } else {
                 return response()->json(array(
-                    'success'=> 1,
-                    'status_code'=> 200 ,
-                    'data' => $arr));
+                    'success' => 1,
+                    'status_code' => 200,
+                    'message' => 'No available restaurant!'));
             }
-        }else{
-            return response()->json(array(
-                'success'=> 1,
-                'status_code'=> 200 ,
-                'message' => 'No available restaurant!'));
         }
+
 
 
 
