@@ -11,8 +11,8 @@ class Areas extends Model
 
     protected $table = 'areas';
 
-    public function locations()
+    public function restaurant()
     {
-        return $this->hasMany('App\Locations', 'location_country_id');
+        return $this->hasMany('App\Restaurant', 'restaurant_country_id');
     }
 }

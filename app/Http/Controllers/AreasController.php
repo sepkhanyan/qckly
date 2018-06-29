@@ -64,18 +64,6 @@ class AreasController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $area = Areas::find($id);
-        return view('area_edit', ['area' => $area]);
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -89,6 +77,18 @@ class AreasController extends Controller
         $area->area_ar = $request->input('area_ar');
         $area->save();
         return redirect('/areas');
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $area = Areas::find($id);
+        return view('area_edit', ['area' => $area]);
     }
 
     /**
@@ -126,7 +126,8 @@ class AreasController extends Controller
             }
 
         }
-        if ($arr){
+
+       if ($arr){
             return response()->json(array(
                 'success'=> 1,
                 'status_code'=> 200 ,

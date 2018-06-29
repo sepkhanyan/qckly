@@ -29,12 +29,12 @@ Route::group(['middleware' => ['web', 'auth']], function (){
             Route::get('/area/edit/{id}', 'AreasController@edit');
             Route::post('/area/update/{id}', 'AreasController@update');
             Route::post('/delete/areas', 'AreasController@deleteAreas');
-            Route::get('/restaurants', 'LocationsController@index');
-            Route::get('/new/restaurants', 'LocationsController@create');
-            Route::post('/store/restaurants', 'LocationsController@store');
-            Route::get('/restaurant/edit/{id}', 'LocationsController@edit');
-            Route::post('/restaurant/update/{id}', 'LocationsController@update');
-            Route::post('/delete/restaurants', 'LocationsController@deleteRestaurants');
+            Route::get('/restaurants', 'RestaurantsController@index');
+            Route::get('/new/restaurants', 'RestaurantsController@create');
+            Route::post('/store/restaurants', 'RestaurantsController@store');
+            Route::get('/restaurant/edit/{id}', 'RestaurantsController@edit');
+            Route::post('/restaurant/update/{id}', 'RestaurantsController@update');
+            Route::post('/delete/restaurants', 'RestaurantsController@deleteRestaurants');
             Route::get('/categories', 'CategoriesController@index');
             Route::get('/new/categories', 'CategoriesController@create');
             Route::get('/store/categories', 'CategoriesController@store');

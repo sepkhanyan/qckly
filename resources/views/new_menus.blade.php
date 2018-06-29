@@ -33,9 +33,9 @@
                         <div class="form-group">
                             <label for="input-name" class="col-sm-3 control-label">Restaurant</label>
                             <div class="col-sm-5">
-                                <select name="location_name" id="restaurant" class="form-control" tabindex="-1" title="">
-                                    @foreach($locations as $location)
-                                        <option value="{{$location->location_id}}">{{$location->location_name}}</option>
+                                <select name="restaurant_name" id="restaurant" class="form-control" tabindex="-1" title="">
+                                    @foreach($restaurants as $restaurant)
+                                        <option value="{{$restaurant->restaurant_id}}">{{$restaurant->restaurant_name}}</option>
                                     @endforeach
                                 </select>
                             </div>

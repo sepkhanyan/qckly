@@ -23,6 +23,7 @@
                 </ul>
             </div>
             <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST" action="{{ url('/area/update/' . $area->id) }}">
+                {{ csrf_field() }}
                 <div class="tab-content">
                     <div id="general" class="tab-pane row wrap-all active">
                         <div class="form-group{{ $errors->has('area_en') ? ' has-error' : '' }}">

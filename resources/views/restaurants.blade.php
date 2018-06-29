@@ -66,22 +66,22 @@
                             </thead>
                             <tbody>
 
-                            @foreach($locations as $location)
+                            @foreach($restaurants as $restaurant)
                                 <tr>
-                                    <td class="action"><input type="checkbox" value="{{ $location->location_id }}" name="delete" />&nbsp;&nbsp;&nbsp;
-                                        <a class="btn btn-edit" title="" href="{{ url('restaurant/edit/' . $location->location_id )}}"><i class="fa fa-pencil"></i></a>&nbsp;&nbsp;
+                                    <td class="action"><input type="checkbox" value="{{ $restaurant->restaurant_id }}" name="delete" />&nbsp;&nbsp;&nbsp;
+                                        <a class="btn btn-edit" title="" href="{{ url('restaurant/edit/' . $restaurant->restaurant_id )}}"><i class="fa fa-pencil"></i></a>&nbsp;&nbsp;
                                     </td>
-                                    <td><img src="/images/{{$location->location_image}}" width="30px" height="30px"> {{$location->location_name}}</td>
-                                    <td>{{$location->location_city}}</td>
-                                    <td>{{$location->location_state}}</td>
-                                    <td>{{$location->location_postcode}}</td>
-                                    <td>{{$location->location_telephone}}</td>
-                                    @if($location->location_status == 1)
+                                    <td><img src="/images/{{$restaurant->restaurant_image}}" width="30px" height="30px"> {{$restaurant->restaurant_name}}</td>
+                                    <td>{{$restaurant->restaurant_city}}</td>
+                                    <td>{{$restaurant->restaurant_state}}</td>
+                                    <td>{{$restaurant->restaurant_postcode}}</td>
+                                    <td>{{$restaurant->restaurant_telephone}}</td>
+                                    @if($restaurant->restaurant_status == 1)
                                     <td>Enable</td>
                                     @else
                                         <td>Disable</td>
                                     @endif
-                                    <td>{{$location->location_id}}</td>
+                                    <td>{{$restaurant->restaurant_id}}</td>
                                     
                                 </tr>
                             @endforeach

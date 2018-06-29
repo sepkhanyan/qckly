@@ -21,6 +21,6 @@ class Menus extends Model
 
     public function restaurant()
     {
-        return $this->hasMany('App\Locations', 'location_id', 'location_id');
+        return $this->hasMany('App\Restaurant', 'restaurant_id', 'restaurant_id');
     }
 }

@@ -18,4 +18,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/areas', 'AreasController@getAreas');
-Route::get('/restaurants', 'LocationsController@getRestaurants');
+Route::get('/restaurants', 'RestaurantsController@getRestaurants');
+Route::post('/availableRestaurants', 'RestaurantsController@availableRestaurants');

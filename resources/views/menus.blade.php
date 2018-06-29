@@ -15,21 +15,21 @@
     <div class="form-group">
         <label for="input-name" class="col-sm-3 control-label">Restaurants</label>
         <div class="col-sm-5">
-            <select name="location_name" id="menus" class="form-control" tabindex="-1" title="" onchange="top.location.href = this.options[this.selectedIndex].value">
+            <select name="restaurant_name" id="menus" class="form-control" tabindex="-1" title="" onchange="top.location.href = this.options[this.selectedIndex].value">
                 <option value>Select Restaurant</option>
-                @foreach($locations as $location)
-                    <option value="{{url('/menus/' . $location->location_id)}}">{{$location->location_name}}</option>
+                @foreach($restaurants as $restaurant)
+                    <option value="{{url('/menus/' . $restaurant->restaurant_id)}}">{{$restaurant->restaurant_name}}</option>
                 @endforeach
             </select>
         </div>
-    </div>
        @if(count($menus)>0)
+  </div>
 
     <div class="row content" >
         <div class="col-md-12">
             <div class="panel panel-default panel-table">
                 <div class="panel-heading">
-                    <h2>{{$restaurant->location_name}}</h2>
+                    <h2>{{$selectedRestaurant->restaurant_name}} <img src="/images/{{$selectedRestaurant->restaurant_image}}" width="50px" height="50px"></h2>
                     <h3 class="panel-title">Menu Item List</h3>
                     <div class="pull-right">
                         <button class="btn btn-filter btn-xs"><i class="fa fa-filter"></i></button>

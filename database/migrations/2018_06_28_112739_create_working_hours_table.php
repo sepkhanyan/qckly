@@ -14,11 +14,12 @@ class CreateWorkingHoursTable extends Migration
     public function up()
     {
         Schema::create('working_hours', function (Blueprint $table) {
-            $table->increments('location_id');
+            $table->increments('id');
             $table->integer('weekday');
             $table->time('opening_time')->default('00:00:00');
             $table->time('closing_time')->default('00:00:00');
             $table->tinyInteger('status');
+            $table->integer('restaurant_id');
             $table->string('type',32);
             $table->timestamps();
         });
