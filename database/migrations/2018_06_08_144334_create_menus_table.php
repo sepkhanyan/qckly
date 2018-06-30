@@ -26,7 +26,7 @@ class CreateMenusTable extends Migration
             $table->tinyInteger('menu_status');
             $table->integer('menu_priority');
             $table->integer('mealtime_id');
-            $table->integer('restaurant_id');
+            $table->integer('location_id');
             $table->timestamps();
         });
     }
