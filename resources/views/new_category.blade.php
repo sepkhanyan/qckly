@@ -19,7 +19,11 @@
     <div class="col-md-12">
         <div class="row wrap-vertical">
             <ul id="nav-tabs" class="nav nav-tabs">
-                <li class="active"><a href="#general" data-toggle="tab">Category Details</a></li>
+                <li class="active">
+                    <a href="#general" data-toggle="tab">
+                        Category Details
+                    </a>
+                </li>
             </ul>
         </div>
 
@@ -39,7 +43,9 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="input-slug" class="col-sm-3 control-label">Permalink Slug							<span class="help-block">Use ONLY alpha-numeric lowercase characters, underscores or dashes and make sure it is unique GLOBALLY.</span>
+                        <label for="input-slug" class="col-sm-3 control-label">
+                            Permalink Slug
+                            <span class="help-block">Use ONLY alpha-numeric lowercase characters, underscores or dashes and make sure it is unique GLOBALLY.</span>
                         </label>
                         <div class="col-sm-5">
                             <input type="hidden" name="permalink[permalink_id]" value="0">
@@ -94,23 +100,26 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        {{--<label for="" class="col-sm-3 control-label">Image							<span class="help-block">Select a file to update category image, otherwise leave blank.</span>--}}
-                        {{--</label>--}}
-                        {{--<div class="col-sm-5">--}}
-                            {{--<div class="thumbnail imagebox imagebox-sm" id="selectImage">--}}
-                                {{--<div class="preview">--}}
-                                    {{--<img src="https://demo.tastyigniter.com/assets/images/data/no_photo.png" class="thumb img-responsive" id="thumb">--}}
-                                {{--</div>--}}
-                                {{--<div class="caption">--}}
-                                    {{--<span class="name text-center"></span>--}}
+                        <label for="" class="col-sm-3 control-label">
+                            Image
+                            <span class="help-block">Select a file to update category image, otherwise leave blank.</span>
+                        </label>
+                        <div class="col-sm-5">
+                            <div class="thumbnail imagebox imagebox-sm" id="selectImage">
+                                <div class="preview">
+                                    <img src="https://demo.tastyigniter.com/assets/images/data/no_photo.png" class="thumb img-responsive" id="thumb">
+                                </div>
+                                <div class="caption">
+                                    <span class="name text-center"></span>
+                                    <input type="file" name="image" class="form-control">
                                     {{--<input type="hidden" name="image" value="" id="field">--}}
                                     {{--<p>--}}
                                         {{--<a id="select-image" class="btn btn-primary" onclick="mediaManager('field');"><i class="fa fa-picture-o"></i></a>--}}
                                         {{--<a class="btn btn-danger" onclick="$('#thumb').attr('src', 'https://demo.tastyigniter.com/assets/images/data/no_photo.png'); $('#field').attr('value', ''); $(this).parent().parent().find('.name').html('');"><i class="fa fa-times-circle"></i></a>--}}
                                     {{--</p>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group{{ $errors->has('priority') ? ' has-error' : '' }}">
                         <label for="input-priority" class="col-sm-3 control-label">Priority</label>
@@ -127,8 +136,14 @@
                         <label for="input-status" class="col-sm-3 control-label">Status</label>
                         <div class="col-sm-5">
                             <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                <label class="btn btn-danger active"><input type="radio" name="status" value="0" checked="checked">Disabled</label>
-                                <label class="btn btn-success"><input type="radio" name="status" value="1">Enabled</label>
+                                <label class="btn btn-danger active">
+                                    <input type="radio" name="status" value="0" checked="checked">
+                                    Disabled
+                                </label>
+                                <label class="btn btn-success">
+                                    <input type="radio" name="status" value="1">
+                                    Enabled
+                                </label>
                             </div>
                         </div>
                     </div>

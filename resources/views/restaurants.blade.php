@@ -18,7 +18,9 @@
                 <div class="panel-heading">
                     <h3 class="panel-title">Restaurants</h3>
                     <div class="pull-right">
-                        <button class="btn btn-filter btn-xs"><i class="fa fa-filter"></i></button>
+                        <button class="btn btn-filter btn-xs">
+                            <i class="fa fa-filter"></i>
+                        </button>
                     </div>
                 </div>
                 <div class="panel-body panel-filter" style="display: none">
@@ -30,19 +32,24 @@
                                         <div class="form-group">
                                             <input type="text" name="restaurant_search" class="form-control input-sm" value="" placeholder="Search name, city, state or postcode." />&nbsp;&nbsp;&nbsp;
                                         </div>
-                                        <a class="btn btn-grey" onclick="filterList();" title="Search"><i class="fa fa-search"></i></a>
+                                        <a class="btn btn-grey" onclick="filterList();" title="Search">
+                                            <i class="fa fa-search"></i>
+                                        </a>
                                     </div>
                                     <div class="col-md-8 pull-left">
                                         <div class="form-group">
                                             <select name="restaurant_status" class="form-control input-sm">
                                                 <option value="">View all status</option>
-
                                                     <option value="1"  >Enabled</option>
                                                     <option value="0"  >Disabled</option>
                                             </select>
                                         </div>
-                                        <a class="btn btn-grey" onclick="filterList();" title="Filter"><i class="fa fa-filter"></i></a>&nbsp;
-                                        <a class="btn btn-grey" href="{{url('/restaurants')}}" title="Clear"><i class="fa fa-times"></i></a>
+                                        <a class="btn btn-grey" onclick="filterList();" title="Filter">
+                                            <i class="fa fa-filter"></i>
+                                        </a>&nbsp;
+                                        <a class="btn btn-grey" href="{{url('/restaurants')}}" title="Clear">
+                                            <i class="fa fa-times"></i>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -54,24 +61,67 @@
                         <table border="0" class="table table-striped table-border">
                             <thead>
                             <tr>
-                                <th class="action action-three"><input type="checkbox" onclick="$('input[name*=\'delete\']').prop('checked', this.checked);"></th>
-                                <th><a class="sort" href="">Name<i class="fa fa-sort"></i></a></th>
-                                <th><a class="sort" href="">City<i class="fa fa-sort>"></i></a></th>
-                                <th><a class="sort" href="">State<i class="fa fa-sort"></i></a></th>
-                                <th><a class="sort" href="">Postcode<i class="fa fa-sort>"></i></a></th>
-                                <th><a class="sort" href="">Telephone<i class="fa fa-sort"></i></a></th>
-                                <th><a class="sort" href="">Status<i class="fa fa-sort>"></i></a></th>
-                                <th><a class="sort" href="">ID<i class="fa fa-sort>"></i></a></th>
+                                <th class="action action-three">
+                                    <input type="checkbox" onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">
+                                </th>
+                                <th>
+                                    <a class="sort" href="">
+                                        Name
+                                        <i class="fa fa-sort"></i>
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="sort" href="">
+                                        City
+                                        <i class="fa fa-sort>"></i>
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="sort" href="">
+                                        State
+                                        <i class="fa fa-sort"></i>
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="sort" href="">
+                                        Postcode
+                                        <i class="fa fa-sort>"></i>
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="sort" href="">
+                                        Telephone
+                                        <i class="fa fa-sort"></i>
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="sort" href="">
+                                        Status
+                                        <i class="fa fa-sort>"></i>
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="sort" href="">
+                                        ID
+                                        <i class="fa fa-sort>"></i>
+                                    </a>
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
 
                             @foreach($restaurants as $restaurant)
                                 <tr>
-                                    <td class="action"><input type="checkbox" value="{{ $restaurant->restaurant_id }}" name="delete" />&nbsp;&nbsp;&nbsp;
-                                        <a class="btn btn-edit" title="" href="{{ url('restaurant/edit/' . $restaurant->restaurant_id )}}"><i class="fa fa-pencil"></i></a>&nbsp;&nbsp;
+                                    <td class="action">
+                                        <input type="checkbox" value="{{ $restaurant->restaurant_id }}" name="delete" />&nbsp;&nbsp;&nbsp;
+                                        <a class="btn btn-edit" title="" href="{{ url('restaurant/edit/' . $restaurant->restaurant_id )}}">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>&nbsp;&nbsp;
                                     </td>
-                                    <td><img src="/images/{{$restaurant->restaurant_image}}" width="30px" height="30px"> {{$restaurant->restaurant_name}}</td>
+                                    <td>
+                                        <img src="/images/{{$restaurant->restaurant_image}}" width="30px" height="30px">
+                                        {{$restaurant->restaurant_name}}
+                                    </td>
                                     <td>{{$restaurant->restaurant_city}}</td>
                                     <td>{{$restaurant->restaurant_state}}</td>
                                     <td>{{$restaurant->restaurant_postcode}}</td>

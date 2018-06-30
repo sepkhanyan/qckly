@@ -49,7 +49,7 @@
 		<link href="{{ asset('css/stylesheet.css') }}" rel="stylesheet">
 		<link href="{{ asset('js/datepicker/datepicker.css') }}" rel="stylesheet">
 		<link href="{{ asset('js/datepicker/bootstrap-timepicker.css') }}" rel="stylesheet">
-		<script>
+		{{--<script>
 		var js_site_url = function(str) {
 		var strTmp = "qckly.loc/" + str;
 		return strTmp;
@@ -61,7 +61,7 @@
 		};
 
 		var active_menu = 'menus';
-        </script>
+        </script>--}}
         <script type="text/javascript">
             $(document).ready(function() {
                 $('a[title], span[title], button[title]').tooltip({placement: 'bottom'});
@@ -80,18 +80,19 @@
 			<div class="navbar-header">
 				<div class="navbar-brand">
 					<div class="navbar-logo col-xs-3">
-						<img class="logo-image" alt="Qckly" title="Qckly" src="https://demo.tastyigniter.com/admin/views/themes/tastyigniter-blue/images/tastyigniter-logo.png"/>
+						<img class="logo-image" alt="TastyIgniter" title="TastyIgniter" src="https://demo.tastyigniter.com/admin/views/themes/tastyigniter-blue/images/tastyigniter-logo.png"/>
 					</div>
-					<div  class="navbar-logo col-xs-9" style="color: white;font-family: fantasy;font-size: 40px; margin-top: 5px;">
-						{{--<img class="logo-text" alt="TastyIgniter" title="TastyIgniter" src="https://demo.tastyigniter.com/admin/views/themes/tastyigniter-blue/images/tastyigniter-logo-text.png"/>--}}
-						Qckly
+					<div class="navbar-logo col-xs-9">
+						<img class="logo-text" alt="TastyIgniter" title="TastyIgniter" src="https://demo.tastyigniter.com/admin/views/themes/tastyigniter-blue/images/tastyigniter-logo-text.png"/>
+						<!--						<a class="logo-text" href="--><!--">--><!--</a>-->
 					</div>
 				</div>
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
 					<span class="sr-only">Toggle navigation</span>
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
-				</button>					<span class="icon-bar"></span>
+				</button>
+				<span class="icon-bar"></span>
 
 			</div>
 

@@ -567,8 +567,14 @@
                             <label for="" class="col-sm-3 control-label">Delivery Hours</label>
                             <div class="col-sm-5">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                    <label class="btn btn-default active" id="delivery-hours-daily-hide"><input type="radio" name="delivery_type" value="0"  checked="checked">Same As Opening</label>
-                                    <label class="btn btn-default" id="delivery-hours-daily-show"><input type="radio" name="delivery_type" value="1" >Custom</label>
+                                    <label class="btn btn-default active" id="delivery-hours-daily-hide">
+                                        <input type="radio" name="delivery_type" value="0"  checked="checked">
+                                        Same As Opening
+                                    </label>
+                                    <label class="btn btn-default" id="delivery-hours-daily-show">
+                                        <input type="radio" name="delivery_type" value="1" >
+                                        Custom
+                                    </label>
                                 </div>
                             </div>
                         </div>
@@ -928,7 +934,11 @@
                                         </tbody>
                                         <tfoot>
                                         <tr id="tfoot">
-                                            <td class="action action-one"><a class="btn btn-primary btn-lg" onclick="addImageToGallery();"><i class="fa fa-plus"></i></a></td>
+                                            <td class="action action-one">
+                                                <a class="btn btn-primary btn-lg" onclick="addImageToGallery();">
+                                                    <i class="fa fa-plus"></i>
+                                                </a>
+                                            </td>
                                             <td colspan="4"></td>
                                         </tr>
                                         </tfoot>

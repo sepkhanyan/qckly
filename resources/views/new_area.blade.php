@@ -19,7 +19,11 @@
         <div class="col-md-12">
             <div class="row wrap-vertical">
                 <ul id="nav-tabs" class="nav nav-tabs">
-                    <li class="active"><a href="#general" data-toggle="tab">Area</a></li>
+                    <li class="active">
+                        <a href="#general" data-toggle="tab">
+                            Area
+                        </a>
+                    </li>
                 </ul>
             </div>
             <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="GET" action="{{ url('/store/areas') }}">

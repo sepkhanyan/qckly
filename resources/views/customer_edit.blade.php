@@ -19,8 +19,16 @@
     <div class="col-md-12">
         <div class="row wrap-vertical">
             <ul id="nav-tabs" class="nav nav-tabs">
-                <li class="active"><a href="#general" data-toggle="tab">Customer</a></li>
-                <li><a href="#addresses" data-toggle="tab">Address</a></li>
+                <li class="active">
+                    <a href="#general" data-toggle="tab">
+                        Customer
+                    </a>
+                </li>
+                <li>
+                    <a href="#addresses" data-toggle="tab">
+                        Address
+                    </a>
+                </li>
             </ul>
         </div>
 
@@ -53,7 +61,9 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="input-password" class="col-sm-3 control-label">Password							<span class="help-block">Leave blank to leave password unchanged</span>
+                        <label for="input-password" class="col-sm-3 control-label">
+                            Password
+                            <span class="help-block">Leave blank to leave password unchanged</span>
                         </label>
                         <div class="col-sm-5">
                             <input type="password" name="password" id="input-password" class="form-control" value="" autocomplete="off" />
@@ -97,8 +107,14 @@
                         <label for="input-newsletter" class="col-sm-3 control-label">Newsletter</label>
                         <div class="col-sm-5">
                             <div id="input-newsletter" class="btn-group btn-group-switch" data-toggle="buttons">
-                                <label class="btn btn-danger active"><input type="radio" name="newsletter" value="0"  checked="checked">Un-subscribe</label>
-                                <label class="btn btn-success"><input type="radio" name="newsletter" value="1" >Subscribe</label>
+                                <label class="btn btn-danger active">
+                                    <input type="radio" name="newsletter" value="0"  checked="checked">
+                                    Un-subscribe
+                                </label>
+                                <label class="btn btn-success">
+                                    <input type="radio" name="newsletter" value="1" >
+                                    Subscribe
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -106,8 +122,14 @@
                         <label for="input-status" class="col-sm-3 control-label">Status</label>
                         <div class="col-sm-5">
                             <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                <label class="btn btn-danger"><input type="radio" name="status" value="0" >Disabled</label>
-                                <label class="btn btn-success active"><input type="radio" name="status" value="1"  checked="checked">Enabled</label>
+                                <label class="btn btn-danger">
+                                    <input type="radio" name="status" value="0" >
+                                    Disabled
+                                </label>
+                                <label class="btn btn-success active">
+                                    <input type="radio" name="status" value="1"  checked="checked">
+                                    Enabled
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -115,7 +137,12 @@
 
                 <div id="addresses" class="tab-pane row wrap-all">
                     <ul id="sub-tabs" class="nav nav-tabs">
-                        <li class="add_address"><a onclick="addAddress();"><i class="fa fa-book"></i>&nbsp;<i class="fa fa-plus"></i></a></li>
+                        <li class="add_address">
+                            <a onclick="addAddress();">
+                                <i class="fa fa-book"></i>
+                                &nbsp;<i class="fa fa-plus"></i>
+                            </a>
+                        </li>
                     </ul>
 
                     <div id="new-address" class="tab-content">

@@ -30,8 +30,12 @@
                                         <div class="form-group">
                                             <input type="text" name="area_search" class="form-control input-sm" value="" placeholder="Search area." />&nbsp;&nbsp;&nbsp;
                                         </div>
-                                        <a class="btn btn-grey" onclick="filterList();" title="Search"><i class="fa fa-search"></i></a>
-                                        <a class="btn btn-grey" href="{{url('/areas')}}" title="Clear"><i class="fa fa-times"></i></a>
+                                        <a class="btn btn-grey" onclick="filterList();" title="Search">
+                                            <i class="fa fa-search"></i>
+                                        </a>
+                                        <a class="btn btn-grey" href="{{url('/areas')}}" title="Clear">
+                                            <i class="fa fa-times"></i>
+                                        </a>
 
                                     </div>
                                 </div>
@@ -44,17 +48,32 @@
                         <table border="0" class="table table-striped table-border">
                             <thead>
                             <tr>
-                                <th class="action action-three"><input type="checkbox" onclick="$('input[name*=\'delete\']').prop('checked', this.checked);"></th>
-                                <th><a class="sort" href="">Area En<i class="fa fa-sort"></i></a></th>
-                                <th><a class="sort" href="">Area Ar<i class="fa fa-sort>"></i></a></th>
+                                <th class="action action-three">
+                                    <input type="checkbox" onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">
+                                </th>
+                                <th>
+                                    <a class="sort" href="">
+                                        Area En
+                                        <i class="fa fa-sort"></i>
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="sort" href="">
+                                        Area Ar
+                                        <i class="fa fa-sort>"></i>
+                                    </a>
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
 
                             @foreach($areas as $area)
                                 <tr>
-                                    <td class="action"><input type="checkbox" value="{{ $area->id }}" name="delete" />&nbsp;&nbsp;&nbsp;
-                                        <a class="btn btn-edit" title="" href="{{ url('area/edit/' . $area->id )}}"><i class="fa fa-pencil"></i></a>&nbsp;&nbsp;
+                                    <td class="action">
+                                        <input type="checkbox" value="{{ $area->id }}" name="delete" />&nbsp;&nbsp;&nbsp;
+                                        <a class="btn btn-edit" title="" href="{{ url('area/edit/' . $area->id )}}">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>&nbsp;&nbsp;
                                     </td>
                                     <td>{{$area->area_en}}</td>
                                     <td>{{$area->area_ar}}</td>

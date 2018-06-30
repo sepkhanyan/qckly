@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Restaurant;
 use App\Areas;
 use App\WorkingHours;
+use App\Menus;
+use App\Categories;
 use DB;
 use App\Quotation;
 use Carbon\Carbon;
@@ -328,12 +330,43 @@ class RestaurantsController extends Controller
         }
 
 
+    }
 
+    public function getRestaurant($id)
+    {
+        $restaurants = Restaurant::where('restaurant_id',$id)->with(['menu', 'menu.category'])->get();
+        foreach($restaurants as $restaurant){
+            foreach($restaurant->menu as $menu){
+                if($menu->menu_status ==1){
+                    $status = 'Enable';
+                }else{
+                    $status = 'Disable';
+                }
 
+                $arr [] = [
+                    'restaurant_id' => $restaurant->restaurant_id,
+                    'restaurant_name' => $restaurant->restaurant_name,
+                    'restaurant_image' => url('/') . '/images/' . $restaurant->restaurant_image,
+                    'menu' => $restaurant->menu[] = [
+                        'menu_id' => $menu->menu_id,
+                        'menu_name' => $menu->menu_name,
+                        'menu_price' => $menu->menu_price,
+                        'menu_category' => $menu->category['name'],
+                        'menu_stock_qty' => $menu->stock_qty,
+                        'menu_status' => $status,
+                    ],
+                ];
+            }
 
+        }
 
-
-
+        if ($arr){
+            return response()->json(array(
+                'success'=> 1,
+                'status_code'=> 200 ,
+                'data' => $arr));
+        }
 
     }
+
 }

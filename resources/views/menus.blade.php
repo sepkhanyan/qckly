@@ -29,10 +29,15 @@
         <div class="col-md-12">
             <div class="panel panel-default panel-table">
                 <div class="panel-heading">
-                    <h2>{{$selectedRestaurant->restaurant_name}} <img src="/images/{{$selectedRestaurant->restaurant_image}}" width="50px" height="50px"></h2>
+                    <h2>
+                        {{$selectedRestaurant->restaurant_name}}
+                        <img src="/images/{{$selectedRestaurant->restaurant_image}}" width="50px" height="50px">
+                    </h2>
                     <h3 class="panel-title">Menu Item List</h3>
                     <div class="pull-right">
-                        <button class="btn btn-filter btn-xs"><i class="fa fa-filter"></i></button>
+                        <button class="btn btn-filter btn-xs">
+                            <i class="fa fa-filter"></i>
+                        </button>
                     </div>
                 </div>
                 <div class="panel-body panel-filter" style="display: none;">
@@ -44,7 +49,9 @@
                                         <div class="form-group">
                                             <input type="text" name="menu_search" class="form-control input-sm" value="" placeholder="Search name, price or stock qty."/>&nbsp;&nbsp;&nbsp;
                                         </div>
-                                        <a class="btn btn-grey" onclick="filterList();" title="Search"><i class="fa fa-search"></i></a>
+                                        <a class="btn btn-grey" onclick="filterList();" title="Search">
+                                            <i class="fa fa-search"></i>
+                                        </a>
                                     </div>
                                     <div class="col-md-8 pull-left">
                                         <div class="form-group">
@@ -62,8 +69,12 @@
                                                     <option value="0"  >Disabled</option>
                                             </select>
                                         </div>
-                                        <a class="btn btn-grey" onclick="filterList();" title="Filter"><i class="fa fa-filter"></i></a>&nbsp;
-                                        <a class="btn btn-grey" href="{{url('/menus/' . $id )}}" title="Clear"><i class="fa fa-times"></i></a>
+                                        <a class="btn btn-grey" onclick="filterList();" title="Filter">
+                                            <i class="fa fa-filter"></i>
+                                        </a>&nbsp;
+                                        <a class="btn btn-grey" href="{{url('/menus/' . $id )}}" title="Clear">
+                                            <i class="fa fa-times"></i>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -77,21 +88,56 @@
                         <table border="0" class="table table-striped table-border">
                             <thead>
                             <tr>
-                                <th class="action action-three"><input type="checkbox" onclick="$('input[name*=\'delete\']').prop('checked', this.checked);"></th>
-                                <th><a class="sort" href="">Name<i class="fa fa-sort"></i></a></th>
-                                <th><a class="sort" href="">Price<i class="fa fa-sort>"></i></a></th>
-                                <th><a class="sort" href="">Category<i class="fa fa-sort"></i></a></th>
-                                <th><a class="sort" href="">Stock Qty<i class="fa fa-sort>"></i></a></th>
-                                <th><a class="sort" href="">Status<i class="fa fa-sort>"></i></a></th>
-                                <th><a class="sort" href="">ID<i class="fa fa-sort>"></i></a></th>
+                                <th class="action action-three">
+                                    <input type="checkbox" onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">
+                                </th>
+                                <th>
+                                    <a class="sort" href="">
+                                        Name
+                                        <i class="fa fa-sort"></i>
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="sort" href="">
+                                        Price
+                                        <i class="fa fa-sort>"></i>
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="sort" href="">
+                                        Category
+                                        <i class="fa fa-sort"></i>
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="sort" href="">
+                                        Stock Qty
+                                        <i class="fa fa-sort>"></i>
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="sort" href="">
+                                        Status
+                                        <i class="fa fa-sort>"></i>
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="sort" href="">
+                                        ID
+                                        <i class="fa fa-sort>"></i>
+                                    </a>
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
 
                             @foreach($menus as $menu)
                                 <tr>
-                                    <td class="action"><input type="checkbox" value="{{ $menu->menu_id }}" name="delete" />
-                                        <a class="btn btn-edit" title="" href="{{ url('menu/edit/' . $menu->menu_id )}}"><i class="fa fa-pencil"></i></a>&nbsp;&nbsp;
+                                    <td class="action">
+                                        <input type="checkbox" value="{{ $menu->menu_id }}" name="delete" />
+                                        <a class="btn btn-edit" title="" href="{{ url('menu/edit/' . $menu->menu_id )}}">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>&nbsp;&nbsp;
                                     </td>
                                     <td>{{$menu->menu_name}}</td>
                                     <td>{{$menu->menu_price}}</td>

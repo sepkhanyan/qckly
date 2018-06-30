@@ -19,7 +19,11 @@
         <div class="col-md-12">
             <div class="row wrap-vertical">
                 <ul id="nav-tabs" class="nav nav-tabs">
-                    <li class="active"><a href="#general" data-toggle="tab">Category Details</a></li>
+                    <li class="active">
+                        <a href="#general" data-toggle="tab">
+                            Category Details
+                        </a>
+                    </li>
                 </ul>
             </div>
 
@@ -39,7 +43,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="input-slug" class="col-sm-3 control-label">Permalink Slug							<span class="help-block">Use ONLY alpha-numeric lowercase characters, underscores or dashes and make sure it is unique GLOBALLY.</span>
+                            <label for="input-slug" class="col-sm-3 control-label">
+                                Permalink Slug
+                                <span class="help-block">Use ONLY alpha-numeric lowercase characters, underscores or dashes and make sure it is unique GLOBALLY.</span>
                             </label>
                             <div class="col-sm-5">
                                 <input type="hidden" name="permalink[permalink_id]" value="0">
@@ -127,8 +133,14 @@
                             <label for="input-status" class="col-sm-3 control-label">Status</label>
                             <div class="col-sm-5">
                                 <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                    <label class="btn btn-danger active"><input type="radio" name="status" value="0" checked="checked">Disabled</label>
-                                    <label class="btn btn-success"><input type="radio" name="status" value="1">Enabled</label>
+                                    <label class="btn btn-danger active">
+                                        <input type="radio" name="status" value="0" checked="checked">
+                                        Disabled
+                                    </label>
+                                    <label class="btn btn-success">
+                                        <input type="radio" name="status" value="1">
+                                        Enabled
+                                    </label>
                                 </div>
                             </div>
                         </div>

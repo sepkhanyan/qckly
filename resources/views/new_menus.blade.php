@@ -67,7 +67,9 @@
                             <div class="col-sm-5">
                                 <div class="input-group">
                                     <input type="text" name="menu_price" id="input-price" class="form-control" value="" />
-                                    <span class="input-group-addon"><i class="fa fa-money"></i></span>
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-money"></i>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -88,7 +90,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="" class="col-sm-3 control-label">Image                            <span class="help-block">Select a file to update menu image, otherwise leave blank.</span>
+                            <label for="" class="col-sm-3 control-label">
+                                Image
+                                <span class="help-block">Select a file to update menu image, otherwise leave blank.</span>
                             </label>
                             <div class="col-sm-5">
                                 <div class="thumbnail imagebox" id="selectImage">
@@ -97,11 +101,12 @@
                                     </div>
                                     <div class="caption">
                                         <span class="name text-center"></span>
-                                        <input type="hidden" name="menu_photo" value="" id="field" />
+                                        <input type="file" name="menu_photo" class="form-control">
+                                       {{-- <input type="hidden" name="menu_photo" value="" id="field" />
                                         <p>
                                             <a id="select-image" class="btn btn-primary" onclick="mediaManager('field');"><i class="fa fa-picture-o"></i>&nbsp;&nbsp;Select</a>
                                             <a class="btn btn-danger" onclick="$('#thumb').attr('src', 'https://demo.tastyigniter.com/assets/images/data/no_photo.png'); $('#field').attr('value', ''); $(this).parent().parent().find('.name').html('');"><i class="fa fa-times-circle"></i>&nbsp;&nbsp;Remove </a>
-                                        </p>
+                                        </p>--}}
                                     </div>
                                 </div>
                             </div>
@@ -109,7 +114,9 @@
                     </div>
                     <div id="menu-details" class="tab-pane row wrap-all">
                         <div class="form-group">
-                            <label for="input-mealtime" class="col-sm-3 control-label">Mealtime                            <span class="help-block">Set what mealtime of day your customers can order this menu. Mealtimes can be managed under Localisation -> Mealtimes</span>
+                            <label for="input-mealtime" class="col-sm-3 control-label">
+                                Mealtime
+                                <span class="help-block">Set what mealtime of day your customers can order this menu. Mealtimes can be managed under Localisation -> Mealtimes</span>
                             </label>
                             <div class="col-sm-5">
                                 <select name="mealtime_id" id="mealtime" class="form-control">
@@ -124,7 +131,9 @@
                             </div>
                         </div>
                         <div class="form-group{{ $errors->has('stock_qty') ? ' has-error' : '' }}">
-                            <label for="input-stock" class="col-sm-3 control-label">Stock Quantity                            <span class="help-block">Set to 0 for unlimited stock quantity.</span>
+                            <label for="input-stock" class="col-sm-3 control-label">
+                                Stock Quantity
+                                <span class="help-block">Set to 0 for unlimited stock quantity.</span>
                             </label>
                             <div class="col-sm-5">
                                 <input type="text" name="stock_qty" id="input-stock" class="form-control" value="{{ old('stock_qty') }}" />
@@ -136,7 +145,9 @@
                             </div>
                         </div>
                         <div class="form-group{{ $errors->has('minimum_qty') ? ' has-error' : '' }}">
-                            <label for="input-minimum" class="col-sm-3 control-label">Minimum Quantity                            <span class="help-block">The minimum quantity that can be ordered. Default is 1, unless set otherwise.</span>
+                            <label for="input-minimum" class="col-sm-3 control-label">
+                                Minimum Quantity
+                                <span class="help-block">The minimum quantity that can be ordered. Default is 1, unless set otherwise.</span>
                             </label>
                             <div class="col-sm-5">
                                 <input type="text" name="minimum_qty" id="input-minimum" class="form-control" value="1" />
@@ -151,8 +162,14 @@
                             <label for="input-subtract-stock" class="col-sm-3 control-label">Subtract Stock</label>
                             <div class="col-sm-5">
                                 <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                    <label class="btn btn-danger active"><input type="radio" name="subtract_stock" value="0"  checked="checked">NO</label>
-                                    <label class="btn btn-success"><input type="radio" name="subtract_stock" value="1" >YES</label>
+                                    <label class="btn btn-danger active">
+                                        <input type="radio" name="subtract_stock" value="0"  checked="checked">
+                                        NO
+                                    </label>
+                                    <label class="btn btn-success">
+                                        <input type="radio" name="subtract_stock" value="1" >
+                                        YES
+                                    </label>
                                 </div>
                             </div>
                         </div>
@@ -160,8 +177,14 @@
                             <label for="input-status" class="col-sm-3 control-label">Status</label>
                             <div class="col-sm-5">
                                 <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                    <label class="btn btn-danger"><input type="radio" name="menu_status" value="0" >Disabled</label>
-                                    <label class="btn btn-success active"><input type="radio" name="menu_status" value="1"  checked="checked">Enabled</label>
+                                    <label class="btn btn-danger">
+                                        <input type="radio" name="menu_status" value="0" >
+                                        Disabled
+                                    </label>
+                                    <label class="btn btn-success active">
+                                        <input type="radio" name="menu_status" value="1"  checked="checked">
+                                        Enabled
+                                    </label>
                                 </div>
                             </div>
                         </div>
@@ -202,8 +225,14 @@
                             <label for="input-special-status" class="col-sm-3 control-label">Special</label>
                             <div class="col-sm-5">
                                 <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                    <label id="special_toggle_hide" class="btn btn-danger active"><input type="radio" name="special_status" value="0" checked>Disabled</label>
-                                    <label id="special_toggle_show" class="btn btn-success"><input type="radio" name="special_status" value="1">Enabled</label>
+                                    <label id="special_toggle_hide" class="btn btn-danger active">
+                                        <input type="radio" name="special_status" value="0" checked>
+                                        Disabled
+                                    </label>
+                                    <label id="special_toggle_show" class="btn btn-success">
+                                        <input type="radio" name="special_status" value="1">
+                                        Enabled
+                                    </label>
                                 </div>
                                 <input type="hidden" name="special_id" value="" />
                             </div>
@@ -214,7 +243,9 @@
                                 <div class="col-sm-5">
                                     <div class="input-group">
                                         <input type="text" name="start_date" id="start-date" class="form-control" value="" />
-                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -223,7 +254,9 @@
                                 <div class="col-sm-5">
                                     <div class="input-group">
                                         <input type="text" name="end_date" id="end-date" class="form-control" value="" />
-                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -233,7 +266,9 @@
                                     <div class="input-group">
                                         <input type="text" name="special_price" id="input-special-price" class="form-control" value="" />
                                         <span class="input-group-addon">.00</span>
-                                        <span class="input-group-addon"><i class="fa fa-money"></i></span>
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-money"></i>
+                                        </span>
                                     </div>
                                 </div>
                             </div>

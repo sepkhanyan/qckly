@@ -42,7 +42,7 @@
                     </li>
                 </ul>
             </div>
-            <form role="form" id="edit-form" name="edit_form" class="form-horizontal" accept-charset="utf-8" method="POST" action="{{ url('/restaurant/update/' . $location->location_id ) }}" enctype="multipart/form-data">
+            <form role="form" id="edit-form" name="edit_form" class="form-horizontal" accept-charset="utf-8" method="POST" action="{{ url('/restaurant/update/' . $restaurant->restaurant_id ) }}" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <div class="tab-content">
                     <div id="general" class="tab-pane row wrap-all active">
@@ -142,8 +142,14 @@
                             <label for="" class="col-sm-3 control-label">Automatically fetch lat/lng</label>
                             <div class="col-sm-5">
                                 <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
-                                    <label id="lat-lng-yes" class="btn btn-default active"><input type="radio" name="auto_lat_lng" value="1"  checked="checked">YES</label>
-                                    <label class="btn btn-default" id="lat-lng-no"><input type="radio" name="auto_lat_lng" value="0" >NO</label>
+                                    <label id="lat-lng-yes" class="btn btn-default active">
+                                        <input type="radio" name="auto_lat_lng" value="1"  checked="checked">
+                                        YES
+                                    </label>
+                                    <label class="btn btn-default" id="lat-lng-no">
+                                        <input type="radio" name="auto_lat_lng" value="0" >
+                                        NO
+                                    </label>
                                 </div>
                             </div>
                         </div>
@@ -188,7 +194,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="input-slug" class="col-sm-3 control-label">Permalink Slug							<span class="help-block">Use ONLY alpha-numeric lowercase characters, underscores or dashes and make sure it is unique GLOBALLY.</span>
+                            <label for="input-slug" class="col-sm-3 control-label">
+                                Permalink Slug
+                                <span class="help-block">Use ONLY alpha-numeric lowercase characters, underscores or dashes and make sure it is unique GLOBALLY.</span>
                             </label>
                             <div class="col-sm-5">
                                 <div class="input-group">
@@ -223,8 +231,14 @@
                             <label for="input-status" class="col-sm-3 control-label">Status</label>
                             <div class="col-sm-5">
                                 <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                    <label class="btn btn-danger"><input type="radio" name="restaurant_status" value="0" >Disabled</label>
-                                    <label class="btn btn-success active"><input type="radio" name="restaurant_status" value="1"  checked="checked">Enabled</label>
+                                    <label class="btn btn-danger">
+                                        <input type="radio" name="restaurant_status" value="0" >
+                                        Disabled
+                                    </label>
+                                    <label class="btn btn-success active">
+                                        <input type="radio" name="restaurant_status" value="1"  checked="checked">
+                                        Enabled
+                                    </label>
                                 </div>
                             </div>
                         </div>
@@ -729,7 +743,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="input-delivery-time" class="col-sm-3 control-label">Delivery Time							<span class="help-block">Set number of minutes an order will be delivered after being placed, or set to 0 to use default</span>
+                            <label for="input-delivery-time" class="col-sm-3 control-label">
+                                Delivery Time
+                                <span class="help-block">Set number of minutes an order will be delivered after being placed, or set to 0 to use default</span>
                             </label>
                             <div class="col-sm-5">
                                 <div class="input-group">
@@ -739,7 +755,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="input-collection-time" class="col-sm-3 control-label">Pick-up Time							<span class="help-block">Set number of minutes an order will be ready for pick-up after being placed, or set to 0 to use default</span>
+                            <label for="input-collection-time" class="col-sm-3 control-label">
+                                Pick-up Time
+                                <span class="help-block">Set number of minutes an order will be ready for pick-up after being placed, or set to 0 to use default</span>
                             </label>
                             <div class="col-sm-5">
                                 <div class="input-group">
@@ -749,7 +767,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="input-last-order-time" class="col-sm-3 control-label">Last Order Time							<span class="help-block">Set number of minutes before closing time for last order, or set to 0 to use closing hour.</span>
+                            <label for="input-last-order-time" class="col-sm-3 control-label">
+                                Last Order Time
+                                <span class="help-block">Set number of minutes before closing time for last order, or set to 0 to use closing hour.</span>
                             </label>
                             <div class="col-sm-5">
                                 <div class="input-group">
@@ -759,7 +779,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="input-future-orders" class="col-sm-3 control-label">Accept Future Orders							<span class="help-block">Allow customer to place order for a later time when restaurant is closed for delivery or pick-up during opening hours</span>
+                            <label for="input-future-orders" class="col-sm-3 control-label">
+                                Accept Future Orders
+                                <span class="help-block">Allow customer to place order for a later time when restaurant is closed for delivery or pick-up during opening hours</span>
                             </label>
                             <div class="col-sm-5">
                                 <div class="btn-group btn-group-switch" data-toggle="buttons">
