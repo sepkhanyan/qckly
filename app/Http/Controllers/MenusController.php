@@ -26,20 +26,20 @@ class MenusController extends Controller
         $data = $request->all();
         $menus = [];
         if($id){
-            $menus = Menus::where('restaurant_id',$id)->with(['category','restaurant'])->get();
+            $menus = Menus::where('restaurant_id',$id)->with(['category','restaurant'])->paginate(15);
             if(isset($data['menu_status'])){
                 $menus = Menus::where('restaurant_id',$id)
-                    ->where('menu_status',$data['menu_status'])->get();
+                    ->where('menu_status',$data['menu_status'])->paginate(15);
             }
             if(isset($data['menu_category'])){
                 $menus = Menus::where('restaurant_id',$id)
-                    ->where('menu_category_id',$data['menu_category'])->get();
+                    ->where('menu_category_id',$data['menu_category'])->paginate(15);
             }
             if(isset($data['menu_search'])){
                 $menus = Menus::where('restaurant_id',$id)
                     ->where('menu_name','like',$data['menu_search'])
                     ->orWhere('menu_price','like',$data['menu_search'])
-                    ->orWhere('stock_qty','like',$data['menu_search'])->get();
+                    ->orWhere('stock_qty','like',$data['menu_search'])->paginate(15);
             }
         }
         return view('menus', [

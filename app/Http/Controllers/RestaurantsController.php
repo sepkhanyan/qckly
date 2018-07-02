@@ -254,27 +254,24 @@ class RestaurantsController extends Controller
     public function getRestaurants(){
         $restaurants = Restaurant::with('menu')->paginate(20);
         foreach($restaurants as $restaurant){
+            $famous = null;
+            $famous = [];
+
             foreach($restaurant->menu as $menu){
-                $arr []=[
-                    'restaurant_id' => $restaurant->restaurant_id,
-                    'restaurant_image'=>url('/').'/images/'. $restaurant->restaurant_image,
-                    'restaurant_name'=>$restaurant->restaurant_name,
-                    'restaurant_famous_food' => ''
-                ];
-                    if($menu->famous ==1){
-                        $arr []=[
-                            'restaurant_id' => $restaurant->restaurant_id,
-                            'restaurant_image'=>url('/').'/images/'. $restaurant->restaurant_image,
-                            'restaurant_name'=>$restaurant->restaurant_name,
-                            'restaurant_famous_food' => $restaurant->menu[] = [
-                                'famous_food_name' => $menu->menu_name,
-                                'famous_food_image' =>url('/').'/images/'. $menu->menu_photo,
-                            ],
-                        ];
+
+                if ($menu->famous == 1){
+                    $image = url('/').'/images/'. $menu->menu_photo;
+                    array_push($famous , $image);
                 }
             }
-
-
+            $arr []=[
+                    'restaurant_id' => $restaurant->restaurant_id,
+                    'restaurant_image'=>[
+                        'image'=>url('/').'/images/'. $restaurant->restaurant_image,
+                        'famous_food_images'=>$famous
+                        ],
+                    'restaurant_name'=>$restaurant->restaurant_name,
+                ];
         }
         $wholeData = [
             "total" => count($restaurants),
