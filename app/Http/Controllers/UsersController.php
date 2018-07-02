@@ -21,6 +21,9 @@ class UsersController extends Controller
         /*if(isset($data['customer_status'])){
             $users = User::where('user_status',$data['customer_status'])->get();
         }*/
+        /*if(isset($data['customer_date'])){
+            $users = User::where('created_at',$data['customer_date'])->get();
+        }*/
         if(isset($data['customer_search'])){
             $users = User::where('email','like',$data['customer_search'])
                 /*->orWhere('name','like',$data['customer_search'])*/->get();

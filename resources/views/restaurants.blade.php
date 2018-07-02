@@ -139,6 +139,7 @@
                             </tbody>
                         </table>
                     </div>
+                    {{ $restaurants->links() }}
                 </form>
                 <div class="pagination-bar clearfix">
                     <div class="links"></div>

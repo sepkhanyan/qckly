@@ -24,9 +24,9 @@ class RestaurantRequest extends FormRequest
     public function rules()
     {
         return   [
-            'id' => 'required|integer',
+            /*'id' => 'required|integer',
             'opening_days' => 'required|string|max:255',
-            'opening_hours' => '|string|max:255',
+            'opening_hours' => '|string|max:255',*/
         ];
 
 

@@ -39,9 +39,11 @@
 
                                     <div class="col-md-8 pull-left">
                                         <div class="form-group">
-                                            <select name="filter_date" class="form-control input-sm">
+                                            <select name="customer_date" class="form-control input-sm">
                                                 <option value="">View all dates</option>
-
+                                                @foreach($users as $user)
+                                                <option value="{{$user->created_at}}">{{date("jS F, Y", strtotime($user->created_at))}}</option>
+                                                @endforeach
                                             </select>&nbsp;
                                         </div>
                                         <div class="form-group">
@@ -122,7 +124,7 @@
                                     <td></td>
                                     <td>{{$user->email}}</td>
                                     <td>{{$user->mobile}}</td>
-                                    <td></td>
+                                    <td>{{date("jS F, Y", strtotime($user->created_at))}}</td>
                                     <td class="text-center"></td>
                                     <td>{{$user->user_id}}</td>
                                 </tr>

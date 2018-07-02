@@ -25,16 +25,16 @@ class RestaurantsController extends Controller
      */
     public function index(Request $request)
     {
-        $restaurants = Restaurant::all();
+        $restaurants = Restaurant::paginate(15);
         $data = $request->all();
         if(isset($data['restaurant_status'])){
-            $restaurants = Restaurant::where('restaurant_status',$data['restaurant_status'])->get();
+            $restaurants = Restaurant::where('restaurant_status',$data['restaurant_status'])->paginate(15);
         }
         if(isset($data['restaurant_search'])){
             $restaurants = Restaurant::where('restaurant_name','like',$data['restaurant_search'])
                 ->orWhere('restaurant_city','like',$data['restaurant_search'])
                 ->orWhere('restaurant_postcode','like',$data['restaurant_search'])
-                ->orWhere('restaurant_state','like',$data['restaurant_search'])->get();
+                ->orWhere('restaurant_state','like',$data['restaurant_search'])->paginate(15);
         }
 
         return view('restaurants', ['restaurants' => $restaurants]);
@@ -65,7 +65,6 @@ class RestaurantsController extends Controller
         $name = time() . '.' . $image->getClientOriginalExtension();
         $destinationPath = public_path('/images');
         $image->move($destinationPath, $name);
-
         $restaurant->restaurant_image = $name;
         $restaurant->restaurant_name = $request->input('restaurant_name');
         $restaurant->restaurant_email = $request->input('email');
@@ -253,13 +252,28 @@ class RestaurantsController extends Controller
 
 
     public function getRestaurants(){
-        $restaurants = Restaurant::paginate(20);
+        $restaurants = Restaurant::with('menu')->paginate(20);
         foreach($restaurants as $restaurant){
-            $arr []=[
-                'restaurant_id' => $restaurant->restaurant_id,
-                'restaurant_image'=>url('/').'/images/'. $restaurant->restaurant_image,
-                'restaurant_name'=>$restaurant->restaurant_name,
+            foreach($restaurant->menu as $menu){
+                $arr []=[
+                    'restaurant_id' => $restaurant->restaurant_id,
+                    'restaurant_image'=>url('/').'/images/'. $restaurant->restaurant_image,
+                    'restaurant_name'=>$restaurant->restaurant_name,
+                    'restaurant_famous_food' => ''
                 ];
+                    if($menu->famous ==1){
+                        $arr []=[
+                            'restaurant_id' => $restaurant->restaurant_id,
+                            'restaurant_image'=>url('/').'/images/'. $restaurant->restaurant_image,
+                            'restaurant_name'=>$restaurant->restaurant_name,
+                            'restaurant_famous_food' => $restaurant->menu[] = [
+                                'famous_food_name' => $menu->menu_name,
+                                'famous_food_image' =>url('/').'/images/'. $menu->menu_photo,
+                            ],
+                        ];
+                }
+            }
+
 
         }
         $wholeData = [
@@ -287,7 +301,7 @@ class RestaurantsController extends Controller
         $DataRequests = $request->all();
 
         $validator = \Validator::make($DataRequests, [
-            'restaurant_id' => 'required|integer',
+            'area_id' => 'required|integer',
             'working_day' => 'required|integer',
             'working_time' => 'required',
 
@@ -297,30 +311,33 @@ class RestaurantsController extends Controller
                 'message' => 'Invalid inputs',
                 'error_details' => $validator->messages()));
         } else {
-            $id = $DataRequests['restaurant_id'];
+            $id = $DataRequests['area_id'];
             $working_day = $DataRequests['working_day'];
             $working_time = $DataRequests['working_time'];
             $working_time = Carbon::parse($working_time);
-            $restaurants = Restaurant::whereHas('workingHour', function ($q) use ($id, $working_day, $working_time) {
-                $q
-                    ->where('restaurant_id', $id)
-                    ->where('weekday', $working_day)
-                    ->where('opening_time', '<=', $working_time)
-                    ->where('closing_time', '>=', $working_time);
-            })->get();
+            $restaurants = DB::table('restaurants')
+               ->join('areas', 'areas.id', '=', 'restaurants.restaurant_country_id')
+               ->join('working_hours', 'working_hours.restaurant_id', '=', 'restaurants.restaurant_id')
+               ->where('areas.id', $id)
+               ->where('working_hours.weekday', $working_day)
+               ->where('working_hours.opening_time', '<=', $working_time)
+               ->where('working_hours.closing_time', '>=', $working_time)->get();
 
-            if (count($restaurants) > 0) {
+
+            if ($restaurants) {
                 foreach ($restaurants as $restaurant) {
+
                     $arr [] = [
                         'restaurant_id' => $restaurant->restaurant_id,
                         'restaurant_name' => $restaurant->restaurant_name,
                         'restaurant_image' => url('/') . '/images/' . $restaurant->restaurant_image,
                     ];
-                    return response()->json(array(
-                        'success' => 1,
-                        'status_code' => 200,
-                        'data' => $arr));
+
                 }
+                return response()->json(array(
+                    'success' => 1,
+                    'status_code' => 200,
+                    'data' => $arr));
             } else {
                 return response()->json(array(
                     'success' => 1,

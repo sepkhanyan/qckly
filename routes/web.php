@@ -43,7 +43,7 @@ Route::group(['middleware' => ['web', 'auth']], function (){
             Route::post('/delete/categories', 'CategoriesController@deleteCategories');
             Route::get('/menus/{id?}', 'MenusController@index');
             Route::get('/new/menus', 'MenusController@create');
-            Route::get('/store/menus', 'MenusController@store');
+            Route::post('/store/menus', 'MenusController@store');
             Route::get('/menu/edit/{id}', 'MenusController@edit');
             Route::post('/menu/update/{id}', 'MenusController@update');
             Route::post('/delete/menus', 'MenusController@deleteMenus');

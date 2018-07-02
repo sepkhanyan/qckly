@@ -26,7 +26,7 @@
                 </ul>
             </div>
 
-            <form role="form" id="edit-form" class="form-horizontal" enctype="multipart/form-data" accept-charset="utf-8" method="GET" action="{{ url('/store/menus') }}" >
+            <form role="form" id="edit-form" class="form-horizontal" enctype="multipart/form-data" accept-charset="utf-8" method="POST" action="{{ url('/store/menus') }}" >
                 {{ csrf_field() }}
                 <div class="tab-content">
                     <div id="general" class="tab-pane row wrap-all active">
@@ -108,6 +108,21 @@
                                             <a class="btn btn-danger" onclick="$('#thumb').attr('src', 'https://demo.tastyigniter.com/assets/images/data/no_photo.png'); $('#field').attr('value', ''); $(this).parent().parent().find('.name').html('');"><i class="fa fa-times-circle"></i>&nbsp;&nbsp;Remove </a>
                                         </p>--}}
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="famous" class="col-sm-3 control-label">Famous</label>
+                            <div class="col-sm-5">
+                                <div class="btn-group btn-group-switch" data-toggle="buttons">
+                                    <label class="btn btn-danger">
+                                        <input type="radio" name="famous" value="0"   checked="checked">
+                                        Disabled
+                                    </label>
+                                    <label class="btn btn-success active">
+                                        <input type="radio" name="famous" value="1">
+                                        Enabled
+                                    </label>
                                 </div>
                             </div>
                         </div>

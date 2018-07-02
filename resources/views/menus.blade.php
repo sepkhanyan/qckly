@@ -140,8 +140,8 @@
                                         </a>&nbsp;&nbsp;
                                     </td>
                                     <td>{{$menu->menu_name}}</td>
-                                    <td>{{$menu->menu_price}}</td>
-                                    <td>{{$menu->menu_category_id}}</td>
+                                    <td>£{{$menu->menu_price}}</td>
+                                    <td>{{$menu->category['name']}}</td>
                                     <td>{{$menu->stock_qty}}</td>
                                     @if($menu->menu_status == 1)
                                         <td>Enable</td>
