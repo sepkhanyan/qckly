@@ -155,6 +155,7 @@
                             </tbody>
                         </table>
                     </div>
+                    {{ $menus->links() }}
                 </form>
             </div>
         </div>

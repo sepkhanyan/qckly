@@ -16,15 +16,15 @@ class CategoriesController extends Controller
      */
     public function index(Request $request)
     {
-            $categories = Categories::all();
+            $categories = Categories::paginate(15);
         $data = $request->all();
         if(isset($data['category_status'])){
-            $categories = Categories::where('status',$data['category_status'])->get();
+            $categories = Categories::where('status',$data['category_status'])->paginate(15);
         }
         if(isset($data['category_search'])){
             $categories = Categories::where('name','like',$data['category_search'])
                 ->orWhere('status','like',$data['category_search'])
-                ->orWhere('description','like',$data['category_search'])->get();
+                ->orWhere('description','like',$data['category_search'])->paginate(15);
         }
             return view('categories', ['categories' => $categories]);
 

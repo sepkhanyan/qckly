@@ -16,12 +16,12 @@ class AreasController extends Controller
      */
     public function index(Request $request)
     {
-        $areas = Areas::all();
+        $areas = Areas::paginate(15);
         $data = $request->all();
 
         if(isset($data['area_search'])){
             $areas = Areas::where('area_en','like',$data['area_search'])
-                ->orWhere('area_ar','like',$data['area_search'])->get();
+                ->orWhere('area_ar','like',$data['area_search'])->paginate(15);
         }
         return view('areas', ['areas' => $areas]);
 

@@ -82,6 +82,7 @@
 
                             </tbody>
                         </table>
+                        {{$areas->link()}}
                     </div>
                 </form>
                {{-- <div class="pagination-bar clearfix">

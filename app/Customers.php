@@ -13,4 +13,9 @@ class Customers extends Model
 
 
     protected $table = 'customers';
+
+    public function customer()
+    {
+        return $this->belongsTo('App\CustomerGroups', 'customer_group_id', 'customer_group_id');
+    }
 }

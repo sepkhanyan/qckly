@@ -16,7 +16,7 @@ class UsersController extends Controller
      */
     public function index(Request $request)
     {
-        $users = User::all();
+        $customers = User::all();
         $data = $request->all();
         /*if(isset($data['customer_status'])){
             $users = User::where('user_status',$data['customer_status'])->get();
@@ -25,10 +25,10 @@ class UsersController extends Controller
             $users = User::where('created_at',$data['customer_date'])->get();
         }*/
         if(isset($data['customer_search'])){
-            $users = User::where('email','like',$data['customer_search'])
+            $customers = User::where('email','like',$data['customer_search'])
                 /*->orWhere('name','like',$data['customer_search'])*/->get();
         }
-        return view('customers', ['users' => $users]);
+        return view('customers', ['customers' => $customers]);
     }
 
     /**
@@ -49,12 +49,12 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        $user = new User();
-        $user->mobile = $request->input('telephone');
-        $user->email = $request->input('email');
-        $user->password = bcrypt($request->input('telephone'));
-        $user->sms_code = '123456';
-        $user->save();
+        $customer = new User();
+        $customer->mobile = $request->input('telephone');
+        $customer->email = $request->input('email');
+        $customer->password = bcrypt($request->input('telephone'));
+        $customer->sms_code = '123456';
+        $customer->save();
         return redirect('/customers');
     }
 
@@ -77,8 +77,8 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-        $user = User::find($id);
-        return view('customer_edit', ['user' => $user]);
+        $customer = User::find($id);
+        return view('customer_edit', ['customer' => $customer]);
     }
 
     /**
@@ -90,11 +90,11 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = User::find($id);
-        $user->mobile = $request->input('telephone');
-        $user->email = $request->input('email');
-        $user->password = bcrypt($request->input('telephone'));
-        $user->save();
+        $customer = User::find($id);
+        $customer->mobile = $request->input('telephone');
+        $customer->email = $request->input('email');
+        $customer->password = bcrypt($request->input('telephone'));
+        $customer->save();
         return redirect('/customers');
     }
 

@@ -128,6 +128,7 @@
                             </tbody>
                         </table>
                     </div>
+                    {{ $categories->links() }}
                 </form>
                 <div class="pagination-bar clearfix">
                     <div class="links"></div>

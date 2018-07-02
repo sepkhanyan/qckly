@@ -260,16 +260,15 @@ class RestaurantsController extends Controller
             foreach($restaurant->menu as $menu){
 
                 if ($menu->famous == 1){
-                    $image = url('/').'/images/'. $menu->menu_photo;
-                    array_push($famous , $image);
+                        $image = url('/').'/images/'. $menu->menu_photo;
+                        array_push($famous , $image);
                 }
             }
             $arr []=[
                     'restaurant_id' => $restaurant->restaurant_id,
-                    'restaurant_image'=>[
-                        'image'=>url('/').'/images/'. $restaurant->restaurant_image,
-                        'famous_food_images'=>$famous
-                        ],
+                    'restaurant_image'=> url('/').'/images/'. $restaurant->restaurant_image,
+
+                'famous_image' => $famous,
                     'restaurant_name'=>$restaurant->restaurant_name,
                 ];
         }
@@ -293,13 +292,15 @@ class RestaurantsController extends Controller
         }
     }
 
+
     public function availableRestaurants(Request $request)
     {
+
         $DataRequests = $request->all();
 
         $validator = \Validator::make($DataRequests, [
             'area_id' => 'required|integer',
-            'working_day' => 'required|integer',
+            'working_day' => 'required',
             'working_time' => 'required',
 
         ]);
@@ -309,9 +310,12 @@ class RestaurantsController extends Controller
                 'error_details' => $validator->messages()));
         } else {
             $id = $DataRequests['area_id'];
-            $working_day = $DataRequests['working_day'];
+            $working_day = Carbon::parse($DataRequests['working_day'])->dayOfWeek;
             $working_time = $DataRequests['working_time'];
             $working_time = Carbon::parse($working_time);
+          /*dd(Carbon::parse($DataRequests['working_day']));*/
+            $date = Carbon::now()->dayOfWeek;
+          dd($working_day);
             $restaurants = DB::table('restaurants')
                ->join('areas', 'areas.id', '=', 'restaurants.restaurant_country_id')
                ->join('working_hours', 'working_hours.restaurant_id', '=', 'restaurants.restaurant_id')

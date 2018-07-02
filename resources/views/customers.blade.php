@@ -41,8 +41,8 @@
                                         <div class="form-group">
                                             <select name="customer_date" class="form-control input-sm">
                                                 <option value="">View all dates</option>
-                                                @foreach($users as $user)
-                                                <option value="{{$user->created_at}}">{{date("jS F, Y", strtotime($user->created_at))}}</option>
+                                                @foreach($customers as $customer)
+                                                <option value="{{$customer->created_at}}">{{date("jS F, Y", strtotime($customer->created_at))}}</option>
                                                 @endforeach
                                             </select>&nbsp;
                                         </div>
@@ -109,10 +109,10 @@
                             </thead>
                             <tbody>
 
-                            @foreach($users as $user)
+                            @foreach($customers as $customer)
                                 <tr>
-                                    <td class="action"><input type="checkbox" value="{{$user->user_id}}" name="delete" />&nbsp;&nbsp;&nbsp;
-                                        <a class="btn btn-edit" title="" href="{{ url('customer/edit/' . $user->user_id )}}">
+                                    <td class="action"><input type="checkbox" value="{{$customer->user_id}}" name="delete" />&nbsp;&nbsp;&nbsp;
+                                        <a class="btn btn-edit" title="" href="{{ url('customer/edit/' . $customer->user_id )}}">
                                             <i class="fa fa-pencil"></i>
                                         </a>&nbsp;&nbsp;
                                         <a class="btn btn-info " title=""  >
@@ -122,11 +122,11 @@
                                     </td>
                                     <td></td>
                                     <td></td>
-                                    <td>{{$user->email}}</td>
-                                    <td>{{$user->mobile}}</td>
-                                    <td>{{date("jS F, Y", strtotime($user->created_at))}}</td>
+                                    <td>{{$customer->email}}</td>
+                                    <td>{{$customer->mobile}}</td>
+                                    <td>{{date("jS F, Y", strtotime($customer->created_at))}}</td>
                                     <td class="text-center"></td>
-                                    <td>{{$user->user_id}}</td>
+                                    <td>{{$customer->user_id}}</td>
                                 </tr>
                             @endforeach
 
