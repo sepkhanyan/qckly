@@ -14,6 +14,11 @@ class Restaurant extends Model
 
     protected $primaryKey = 'restaurant_id';
 
+    public function category()
+    {
+        return $this->hasOne('App\RestaurantCategory', 'restaurant_category_id', 'restaurant_category_id');
+    }
+
     public function workingHour()
     {
         return $this->hasMany('App\WorkingHours', 'restaurant_id', 'restaurant_id');

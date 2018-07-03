@@ -10,6 +10,7 @@ use App\Areas;
 use App\WorkingHours;
 use App\Menus;
 use App\Categories;
+use App\RestaurantCategory;
 use DB;
 use App\Quotation;
 use Carbon\Carbon;
@@ -48,7 +49,8 @@ class RestaurantsController extends Controller
     public function create()
     {
         $areas = Areas::all();
-        return view('new_restaurant', ['areas' => $areas]);
+        $categories = RestaurantCategory::all();
+        return view('new_restaurant', ['areas' => $areas, 'categories' => $categories]);
     }
 
     /**
@@ -66,6 +68,7 @@ class RestaurantsController extends Controller
         $destinationPath = public_path('/images');
         $image->move($destinationPath, $name);
         $restaurant->restaurant_image = $name;
+        $restaurant->restaurant_category_id = $request->input('restaurant_category');
         $restaurant->restaurant_name = $request->input('restaurant_name');
         $restaurant->restaurant_email = $request->input('email');
         $restaurant->restaurant_telephone = $request->input('telephone');
@@ -243,7 +246,17 @@ class RestaurantsController extends Controller
     {
 
         $id = $request->get('id');
+        $restaurants = Restaurant::where('restaurant_id',$id)->get();
+        $images = [];
+        foreach ($restaurants as $restaurant) {
+            $images[] = public_path('images/' . $restaurant->restaurant_image);
+        }
+        File::delete($images);
         Restaurant::whereIn('restaurant_id',$id)->delete();
+
+
+
+
 
 
         return redirect('/restaurants');
@@ -251,8 +264,9 @@ class RestaurantsController extends Controller
 
 
 
-    public function getRestaurants(){
-        $restaurants = Restaurant::with('menu')->paginate(20);
+    public function getRestaurants(Request $request){
+        $lang = $request->header('Accept-Language');
+        $restaurants = Restaurant::with(['menu', 'category'])->paginate(20);
         foreach($restaurants as $restaurant){
             $famous = null;
             $famous = [];
@@ -264,12 +278,18 @@ class RestaurantsController extends Controller
                         array_push($famous , $image);
                 }
             }
+            if($lang == 'en'){
+                $category = $restaurant->category['restaurant_category_name_en'];
+            }else{
+                $category = $restaurant->category['restaurant_category_name_ar'];
+            }
+
             $arr []=[
                     'restaurant_id' => $restaurant->restaurant_id,
                     'restaurant_image'=> url('/').'/images/'. $restaurant->restaurant_image,
-
-                'famous_image' => $famous,
+                    'famous_image' => $famous,
                     'restaurant_name'=>$restaurant->restaurant_name,
+                    'category' => $category
                 ];
         }
         $wholeData = [
@@ -295,9 +315,8 @@ class RestaurantsController extends Controller
 
     public function availableRestaurants(Request $request)
     {
-
+        $lang = $request->header('Accept-Language');
         $DataRequests = $request->all();
-
         $validator = \Validator::make($DataRequests, [
             'area_id' => 'required|integer',
             'working_day' => 'required',
@@ -313,32 +332,57 @@ class RestaurantsController extends Controller
             $working_day = Carbon::parse($DataRequests['working_day'])->dayOfWeek;
             $working_time = $DataRequests['working_time'];
             $working_time = Carbon::parse($working_time);
-          /*dd(Carbon::parse($DataRequests['working_day']));*/
-            $date = Carbon::now()->dayOfWeek;
-          dd($working_day);
-            $restaurants = DB::table('restaurants')
-               ->join('areas', 'areas.id', '=', 'restaurants.restaurant_country_id')
-               ->join('working_hours', 'working_hours.restaurant_id', '=', 'restaurants.restaurant_id')
-               ->where('areas.id', $id)
-               ->where('working_hours.weekday', $working_day)
-               ->where('working_hours.opening_time', '<=', $working_time)
-               ->where('working_hours.closing_time', '>=', $working_time)->get();
+            $restaurants = Restaurant::
+                join('areas', 'areas.id', '=', 'restaurants.restaurant_country_id')
+                ->join('working_hours', 'working_hours.restaurant_id', '=', 'restaurants.restaurant_id')
+                ->where('areas.id', $id)
+                ->where('working_hours.weekday', $working_day)
+                ->where('working_hours.opening_time', '<=', $working_time)
+                ->where('working_hours.closing_time', '>=', $working_time)
+                ->with('category');
+            if(isset($DataRequests['category'])){
+                $category = $DataRequests['category'];
+                $restaurants = $restaurants->where('restaurant_category_id', $category)->paginate(20);
+            }else{
+                $restaurants = $restaurants->paginate(20);
+            }
 
-
-            if ($restaurants) {
+            if (count($restaurants)>0) {
                 foreach ($restaurants as $restaurant) {
+                    if($lang == 'ar'){
+                        $category = $restaurant->category->restaurant_category_name_ar;
+                    }else{
+                        $category =$restaurant->category->restaurant_category_name_en;
+                    }
 
                     $arr [] = [
                         'restaurant_id' => $restaurant->restaurant_id,
                         'restaurant_name' => $restaurant->restaurant_name,
                         'restaurant_image' => url('/') . '/images/' . $restaurant->restaurant_image,
+                        'availability_hours' => $restaurant->opening_time  . '-' . $restaurant->closing_time,
+                        'category' => $category
+
                     ];
 
                 }
-                return response()->json(array(
-                    'success' => 1,
-                    'status_code' => 200,
-                    'data' => $arr));
+                $wholeData = [
+                    "total" => count($restaurants),
+                    "per_page" => 20,
+                    "current_page" => $restaurants->currentPage(),
+                    "next_page_url" => $restaurants->nextPageUrl(),
+                    "prev_page_url" => $restaurants->previousPageUrl(),
+                    "from" => $restaurants->firstItem(),
+                    "to" => $restaurants->lastItem(),
+                    "count" => $restaurants->total(),
+                    "lastPage" => $restaurants->lastPage(),
+                    'data' => $arr,
+                ];
+                if ($wholeData){
+                    return response()->json(array(
+                        'success'=> 1,
+                        'status_code'=> 200 ,
+                        'data' => $wholeData));
+                }
             } else {
                 return response()->json(array(
                     'success' => 1,
@@ -360,6 +404,7 @@ class RestaurantsController extends Controller
                 }else{
                     $status = 'Disable';
                 }
+
 
                 $arr [] = [
                     'restaurant_id' => $restaurant->restaurant_id,
@@ -386,5 +431,7 @@ class RestaurantsController extends Controller
         }
 
     }
+
+
 
 }

@@ -47,6 +47,16 @@
                 <div class="tab-content">
                     <div id="general" class="tab-pane row wrap-all active">
                         <h4 class="tab-pane-title">Basic</h4>
+                        <div class="form-group">
+                            <label for="restaurant_category" class="col-sm-3 control-label">Category</label>
+                            <div class="col-sm-5">
+                                <select name="restaurant_category" id="restaurant_category" class="form-control" tabindex="-1" title="">
+                                    @foreach($categories as $category)
+                                        <option value="{{$category->restaurant_category_id}}">{{$category->restaurant_category_name_en}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                         <div class="form-group{{ $errors->has('restaurant_name') ? ' has-error' : '' }}">
                             <label for="input-name" class="col-sm-3 control-label">Name</label>
                             <div class="col-sm-5">

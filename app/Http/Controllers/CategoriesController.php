@@ -112,6 +112,12 @@ class CategoriesController extends Controller
     public function deleteCategories(Request $request)
     {
         $id = $request->get('id');
+        $categories = Categories::where('category_id',$id)->get();
+        $images = [];
+        foreach ($categories as $category) {
+            $images[] = public_path('images/' . $category->image);
+        }
+        File::delete($images);
         Categories::whereIn('category_id',$id)->delete();
 
 

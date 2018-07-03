@@ -110,17 +110,17 @@ class AreasController extends Controller
 
         $areas = Areas::all();
         foreach ($areas as $area){
-            if ($lang == 'en'){
+            if ($lang == 'ar'){
                 $arr []=[
                     'area_id'=>$area->id,
-                    'area_en'=>$area->area_en,
+                    'area_ar'=>$area->area_ar,
 
 
                 ];
             }else{
                 $arr []=[
                     'area_id'=>$area->id,
-                    'area_en'=>$area->area_ar,
+                    'area_en'=>$area->area_en,
 
                 ];
             }
@@ -132,6 +132,6 @@ class AreasController extends Controller
                 'success'=> 1,
                 'status_code'=> 200 ,
                 'data' => $arr));
-   }
-   }
+        }
+    }
 }

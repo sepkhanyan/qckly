@@ -31,11 +31,11 @@
                 <div class="tab-content">
                     <div id="general" class="tab-pane row wrap-all active">
                         <div class="form-group">
-                            <label for="input-name" class="col-sm-3 control-label">Restaurant</label>
+                            <label for="restaurant" class="col-sm-3 control-label">Restaurant</label>
                             <div class="col-sm-5">
                                 <select name="restaurant_name" id="restaurant" class="form-control" tabindex="-1" title="">
                                     @foreach($restaurants as $restaurant)
-                                        <option value="{{$restaurant->restaurant_id}}">{{$restaurant->restaurant_name}}</option>
+                                        <option value="{{$restaurant->restaurant_id}}">{{$restaurant->restaurant_name}},{{$restaurant->restaurant_city}},{{$restaurant->restaurant_address_1}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -116,11 +116,11 @@
                             <div class="col-sm-5">
                                 <div class="btn-group btn-group-switch" data-toggle="buttons">
                                     <label class="btn btn-danger">
-                                        <input type="radio" name="famous" value="0"   checked="checked">
+                                        <input type="radio" name="famous" value="0"  >
                                         Disabled
                                     </label>
                                     <label class="btn btn-success active">
-                                        <input type="radio" name="famous" value="1">
+                                        <input type="radio" name="famous" value="1"  checked="checked">
                                         Enabled
                                     </label>
                                 </div>

@@ -35,6 +35,12 @@ Route::group(['middleware' => ['web', 'auth']], function (){
             Route::get('/restaurant/edit/{id}', 'RestaurantsController@edit');
             Route::post('/restaurant/update/{id}', 'RestaurantsController@update');
             Route::post('/delete/restaurants', 'RestaurantsController@deleteRestaurants');
+            Route::get('/restaurant_categories', 'RestaurantCategoriesController@index');
+            Route::get('/new/restaurant_category', 'RestaurantCategoriesController@create');
+            Route::post('/store/restaurant_category', 'RestaurantCategoriesController@store');
+            Route::post('/delete/restaurant_category', 'RestaurantCategoriesController@deleteRestaurantCategory');
+            Route::get('/restaurant_category/edit/{id}', 'RestaurantCategoriesController@edit');
+            Route::post('/restaurant_category/update/{id}', 'RestaurantCategoriesController@update');
             Route::get('/categories', 'CategoriesController@index');
             Route::get('/new/categories', 'CategoriesController@create');
             Route::get('/store/categories', 'CategoriesController@store');

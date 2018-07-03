@@ -64,6 +64,26 @@ $(document).ready(function() {
         $('#special-toggle'). slideDown('fast');
     });
 
+    $('#delete_restaurant_category').click(function() {
+        window.checkValues = $('input[name=delete]:checked').map(function () {
+            return $(this).val();
+        }).get();
+        console.log(checkValues);
+
+
+        $.ajax({
+
+            method: "POST",
+            url:"/delete/restaurant_category",
+            data:{id:checkValues,_token:token },
+            success:function(data){
+
+                window.location.reload();
+            }
+
+        });
+
+    });
 
     $('#delete_restaurant').click(function() {
         window.checkValues = $('input[name=delete]:checked').map(function () {

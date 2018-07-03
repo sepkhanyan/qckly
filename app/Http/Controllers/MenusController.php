@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\MenuRequest;
 use Auth;
+use DB;
+use App\Areas;
 use Illuminate\Http\Request;
 use App\Menus;
 use App\Restaurant;
@@ -47,7 +49,8 @@ class MenusController extends Controller
             'menus' => $menus,
             'restaurants' => $restaurants,
             'categories' => $categories,
-            'selectedRestaurant' => $selectedRestaurant
+            'selectedRestaurant' => $selectedRestaurant,
+           /* 'area' => $area*/
         ]);
     }
 
@@ -168,6 +171,12 @@ class MenusController extends Controller
     public function deleteMenus(Request $request)
     {
         $id = $request->get('id');
+        $menus = Menus::where('menu_id',$id)->get();
+        $images = [];
+        foreach ($menus as $menu) {
+            $images[] = public_path('images/' . $menu->menu_photo);
+        }
+        File::delete($images);
         Menus::whereIn('menu_id',$id)->delete();
 
 

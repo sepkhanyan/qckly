@@ -216,6 +216,12 @@
 												Restaurants
 											</a>
 										</li>
+										<li>
+											<a href="{{ url('/restaurant_categories') }}" class="locations">
+												<i class="fa fa-square-o fa-fw"></i>
+												Categories
+											</a>
+										</li>
 
 									</ul>
 								</li>
