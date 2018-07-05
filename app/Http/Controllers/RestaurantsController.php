@@ -337,6 +337,9 @@ class RestaurantsController extends Controller
             join('restaurant_categories', 'restaurant_categories.id', '=', 'restaurants.restaurant_category_id')
                 ->where('restaurant_categories.id', $id)
                 ->with('menu')->paginate(20);
+            if($id == 1){
+                $restaurants = Restaurant::paginate(20);
+            }
             if (count($restaurants)>0) {
                 foreach($restaurants as $restaurant){
                     $famous = null;
