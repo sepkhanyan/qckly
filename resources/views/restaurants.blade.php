@@ -113,8 +113,8 @@
                             @foreach($restaurants as $restaurant)
                                 <tr>
                                     <td class="action">
-                                        <input type="checkbox" value="{{ $restaurant->restaurant_id }}" name="delete" />&nbsp;&nbsp;&nbsp;
-                                        <a class="btn btn-edit" title="" href="{{ url('restaurant/edit/' . $restaurant->restaurant_id )}}">
+                                        <input type="checkbox" value="{{ $restaurant->id }}" name="delete" />&nbsp;&nbsp;&nbsp;
+                                        <a class="btn btn-edit" title="" href="{{ url('restaurant/edit/' . $restaurant->id )}}">
                                             <i class="fa fa-pencil"></i>
                                         </a>&nbsp;&nbsp;
                                     </td>
@@ -131,7 +131,7 @@
                                     @else
                                         <td>Disable</td>
                                     @endif
-                                    <td>{{$restaurant->restaurant_id}}</td>
+                                    <td>{{$restaurant->id}}</td>
                                     
                                 </tr>
                             @endforeach

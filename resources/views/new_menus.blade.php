@@ -35,7 +35,7 @@
                             <div class="col-sm-5">
                                 <select name="restaurant_name" id="restaurant" class="form-control" tabindex="-1" title="">
                                     @foreach($restaurants as $restaurant)
-                                        <option value="{{$restaurant->restaurant_id}}">{{$restaurant->restaurant_name}},{{$restaurant->restaurant_city}},{{$restaurant->restaurant_address_1}}</option>
+                                        <option value="{{$restaurant->id}}">{{$restaurant->restaurant_name}},{{$restaurant->restaurant_city}},{{$restaurant->restaurant_address_1}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -79,7 +79,7 @@
                                 <select name="menu_category" id="category" class="form-control">
                                     <option value="">Select category</option>
                                     @foreach ($categories as $category)
-                                        <option value="{{$category->category_id}}">{{$category->name}}</option>
+                                        <option value="{{$category->id}}">{{$category->name}}</option>
                                     @endforeach
                                 </select>
                                 @if ($errors->has('menu_category'))
@@ -89,7 +89,7 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group{{ $errors->has('menu_photo') ? ' has-error' : '' }}">
                             <label for="" class="col-sm-3 control-label">
                                 Image
                                 <span class="help-block">Select a file to update menu image, otherwise leave blank.</span>
@@ -102,7 +102,12 @@
                                     <div class="caption">
                                         <span class="name text-center"></span>
                                         <input type="file" name="menu_photo" class="form-control">
-                                       {{-- <input type="hidden" name="menu_photo" value="" id="field" />
+                                        @if ($errors->has('menu_photo'))
+                                            <span class="help-block">
+                                            <strong>{{ $errors->first('menu_photo') }}</strong>
+                                        </span>
+                                        @endif
+                                        {{--<input type="hidden" name="menu_photo" value="" id="field" />
                                         <p>
                                             <a id="select-image" class="btn btn-primary" onclick="mediaManager('field');"><i class="fa fa-picture-o"></i>&nbsp;&nbsp;Select</a>
                                             <a class="btn btn-danger" onclick="$('#thumb').attr('src', 'https://demo.tastyigniter.com/assets/images/data/no_photo.png'); $('#field').attr('value', ''); $(this).parent().parent().find('.name').html('');"><i class="fa fa-times-circle"></i>&nbsp;&nbsp;Remove </a>

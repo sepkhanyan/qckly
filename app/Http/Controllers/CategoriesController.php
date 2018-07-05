@@ -6,6 +6,8 @@ use App\Http\Requests\CategoryRequest;
 use Auth;
 use Illuminate\Http\Request;
 use App\Categories;
+use App\Menus;
+use Illuminate\Support\Facades\File;
 
 class CategoriesController extends Controller
 {
@@ -16,15 +18,15 @@ class CategoriesController extends Controller
      */
     public function index(Request $request)
     {
-            $categories = Categories::paginate(15);
+        $categories = Categories::paginate(20);
         $data = $request->all();
         if(isset($data['category_status'])){
-            $categories = Categories::where('status',$data['category_status'])->paginate(15);
+            $categories = Categories::where('status',$data['category_status'])->paginate(20);
         }
         if(isset($data['category_search'])){
             $categories = Categories::where('name','like',$data['category_search'])
                 ->orWhere('status','like',$data['category_search'])
-                ->orWhere('description','like',$data['category_search'])->paginate(15);
+                ->orWhere('description','like',$data['category_search'])->paginate(20);
         }
             return view('categories', ['categories' => $categories]);
 
@@ -112,15 +114,13 @@ class CategoriesController extends Controller
     public function deleteCategories(Request $request)
     {
         $id = $request->get('id');
-        $categories = Categories::where('category_id',$id)->get();
+        $menus = Menus::where('menu_category_id',$id)->get();
         $images = [];
-        foreach ($categories as $category) {
-            $images[] = public_path('images/' . $category->image);
+        foreach($menus as $menu){
+                $images [] = public_path('images/' . $menu->menu_photo);
         }
         File::delete($images);
-        Categories::whereIn('category_id',$id)->delete();
-
-
+        Categories::whereIn('id',$id)->delete();
         return redirect('/categories');
     }
 }

@@ -35,21 +35,11 @@
                                         <a class="btn btn-grey" onclick="filterList();" title="Search">
                                             <i class="fa fa-search"></i>
                                         </a>
-                                    </div>
-                                    <div class="col-md-8 pull-left">
                                         <div class="form-group">
-                                            <select name="restaurant_category_status" class="form-control input-sm">
-                                                <option value="">View all status</option>
-                                                <option value="1"  >Enabled</option>
-                                                <option value="0"  >Disabled</option>
-                                            </select>
+                                            <a class="btn btn-grey" href="{{url('/restaurant_categories')}}" title="Clear">
+                                                <i class="fa fa-times"></i>
+                                            </a>
                                         </div>
-                                        <a class="btn btn-grey" onclick="filterList();" title="Filter">
-                                            <i class="fa fa-filter"></i>
-                                        </a>&nbsp;
-                                        <a class="btn btn-grey" href="{{url('/restaurant_categories')}}" title="Clear">
-                                            <i class="fa fa-times"></i>
-                                        </a>
                                     </div>
                                 </div>
                             </div>

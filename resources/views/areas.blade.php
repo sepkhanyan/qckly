@@ -63,6 +63,12 @@
                                         <i class="fa fa-sort>"></i>
                                     </a>
                                 </th>
+                                <th>
+                                    <a class="sort" href="">
+                                        ID
+                                        <i class="fa fa-sort>"></i>
+                                    </a>
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
@@ -77,12 +83,13 @@
                                     </td>
                                     <td>{{$area->area_en}}</td>
                                     <td>{{$area->area_ar}}</td>
+                                    <td>{{$area->id}}</td>
                                 </tr>
                             @endforeach
 
                             </tbody>
                         </table>
-
+                        {{ $areas->links() }}
                     </div>
                 </form>
                {{-- <div class="pagination-bar clearfix">

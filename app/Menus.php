@@ -12,15 +12,14 @@ class Menus extends Model
     protected $table = 'menus';
 
 
-    protected $primaryKey = 'menu_id';
 
     public function category()
     {
-        return$this->hasOne('App\Categories', 'category_id','menu_category_id' );
+        return$this->belongsTo('App\Categories','menu_category_id' );
     }
 
     public function restaurant()
     {
-        return $this->hasOne('App\Restaurant', 'restaurant_id', 'restaurant_id');
+        return $this->belongsTo('App\Restaurant', 'restaurant_id' );
     }
 }

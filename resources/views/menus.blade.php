@@ -18,7 +18,7 @@
             <select name="restaurant_name" id="menus" class="form-control" tabindex="-1" title="" onchange="top.location.href = this.options[this.selectedIndex].value">
                 <option value>Select Restaurant</option>
                 @foreach($restaurants as $restaurant)
-                    <option value="{{url('/menus/' . $restaurant->restaurant_id)}}">{{$restaurant->restaurant_name}},{{$restaurant->restaurant_city}},{{$restaurant->restaurant_address_1}}</option>
+                    <option value="{{url('/menus/' . $restaurant->id)}}">{{$restaurant->restaurant_name}},{{$restaurant->restaurant_city}},{{$restaurant->restaurant_address_1}}</option>
                 @endforeach
             </select>
         </div>
@@ -60,7 +60,7 @@
                                             <select name="menu_category" class="form-control input-sm">
                                                 <option value="">View all categories</option>
                                                 @foreach ($categories as $category)
-                                                    <option value="{{$category->category_id}}">{{$category->name}}</option>
+                                                    <option value="{{$category->id}}">{{$category->name}}</option>
                                                 @endforeach
                                             </select>&nbsp;
                                         </div>
@@ -136,8 +136,8 @@
                             @foreach($menus as $menu)
                                 <tr>
                                     <td class="action">
-                                        <input type="checkbox" value="{{ $menu->menu_id }}" name="delete" />
-                                        <a class="btn btn-edit" title="" href="{{ url('menu/edit/' . $menu->menu_id )}}">
+                                        <input type="checkbox" value="{{ $menu->id }}" name="delete" />
+                                        <a class="btn btn-edit" title="" href="{{ url('menu/edit/' . $menu->id )}}">
                                             <i class="fa fa-pencil"></i>
                                         </a>&nbsp;&nbsp;
                                     </td>
@@ -150,7 +150,7 @@
                                     @else
                                         <td>Disable</td>
                                     @endif
-                                    <td>{{$menu->menu_id}}</td>
+                                    <td>{{$menu->id}}</td>
                                 </tr>
                             @endforeach
 

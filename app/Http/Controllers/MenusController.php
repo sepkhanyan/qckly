@@ -28,21 +28,23 @@ class MenusController extends Controller
         $data = $request->all();
         $menus = [];
         if($id){
-            $menus = Menus::where('restaurant_id',$id)->with(['category','restaurant'])->paginate(15);
-            if(isset($data['menu_status'])){
-                $menus = Menus::where('restaurant_id',$id)
-                    ->where('menu_status',$data['menu_status'])->paginate(15);
+            $menus = Menus::
+            join('restaurants', 'menus.restaurant_id', '=', 'restaurants.id')
+            ->join('categories', 'menus.menu_category_id', '=', 'categories.id')
+            ->where('menus.restaurant_id', $id);
+            if(isset($data['menu_status'])) {
+                $menus = $menus->where('menu_status', $data['menu_status']);
             }
             if(isset($data['menu_category'])){
-                $menus = Menus::where('restaurant_id',$id)
-                    ->where('menu_category_id',$data['menu_category'])->paginate(15);
+                $menus = $menus->where('menu_category_id',$data['menu_category']);
+
             }
             if(isset($data['menu_search'])){
-                $menus = Menus::where('restaurant_id',$id)
-                    ->where('menu_name','like',$data['menu_search'])
+                $menus = $menus->where('menu_name','like',$data['menu_search'])
                     ->orWhere('menu_price','like',$data['menu_search'])
-                    ->orWhere('stock_qty','like',$data['menu_search'])->paginate(15);
+                    ->orWhere('stock_qty','like',$data['menu_search']);
             }
+            $menus = $menus->paginate(20);
         }
         return view('menus', [
             'id' => $id,
@@ -50,7 +52,6 @@ class MenusController extends Controller
             'restaurants' => $restaurants,
             'categories' => $categories,
             'selectedRestaurant' => $selectedRestaurant,
-           /* 'area' => $area*/
         ]);
     }
 
@@ -171,13 +172,13 @@ class MenusController extends Controller
     public function deleteMenus(Request $request)
     {
         $id = $request->get('id');
-        $menus = Menus::where('menu_id',$id)->get();
+        $menus = Menus::where('id',$id)->get();
         $images = [];
         foreach ($menus as $menu) {
             $images[] = public_path('images/' . $menu->menu_photo);
         }
         File::delete($images);
-        Menus::whereIn('menu_id',$id)->delete();
+        Menus::whereIn('id',$id)->delete();
 
 
         return redirect('/menus');

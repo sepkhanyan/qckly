@@ -23,15 +23,29 @@ class MenuRequest extends FormRequest
      */
     public function rules()
     {
-        return   [
+        $rules =   [
             'menu_name' => 'required|string|max:255',
             'menu_description' => 'required|string',
             'menu_category' => 'required|integer',
             'stock_qty' => 'required|integer',
             'minimum_qty' => 'required|integer',
             'menu_priority' => 'required|integer',
+            'menu_photo' => 'required|image'
 
         ];
+        if ($this->id) {
+            $rules = [
+                'menu_name' => 'required|string|max:255',
+                'menu_description' => 'required|string',
+                'menu_category' => 'required|integer',
+                'stock_qty' => 'required|integer',
+                'minimum_qty' => 'required|integer',
+                'menu_priority' => 'required|integer',
+                'menu_photo' => 'image'
+
+            ];
+        }
+        return $rules;
 
 
     }

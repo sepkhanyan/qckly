@@ -52,7 +52,7 @@
                             <div class="col-sm-5">
                                 <select name="restaurant_category" id="restaurant_category" class="form-control" tabindex="-1" title="">
                                     @foreach($categories as $category)
-                                        <option value="{{$category->restaurant_category_id}}">{{$category->restaurant_category_name_en}}</option>
+                                        <option value="{{$category->id}}">{{$category->restaurant_category_name_en}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -373,6 +373,10 @@
                                                 <input type="radio" name="flexible_hours[1][status]" value="0" >
                                                 Closed
                                             </label>
+                                            <label class="btn btn-danger">
+                                                <input type="radio" name="flexible_hours[1][status]" value="2" >
+                                                Busy
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
@@ -404,6 +408,10 @@
                                             <label class="btn btn-danger">
                                                 <input type="radio" name="flexible_hours[2][status]" value="0" >
                                                 Closed
+                                            </label>
+                                            <label class="btn btn-danger">
+                                                <input type="radio" name="flexible_hours[2][status]" value="2" >
+                                                Busy
                                             </label>
                                         </div>
                                     </div>
@@ -437,6 +445,10 @@
                                                 <input type="radio" name="flexible_hours[3][status]" value="0" >
                                                 Closed
                                             </label>
+                                            <label class="btn btn-danger">
+                                                <input type="radio" name="flexible_hours[3][status]" value="2" >
+                                                Busy
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
@@ -468,6 +480,10 @@
                                             <label class="btn btn-danger">
                                                 <input type="radio" name="flexible_hours[4][status]" value="0" >
                                                 Closed
+                                            </label>
+                                            <label class="btn btn-danger">
+                                                <input type="radio" name="flexible_hours[4][status]" value="2" >
+                                                Busy
                                             </label>
                                         </div>
                                     </div>
@@ -501,6 +517,10 @@
                                                 <input type="radio" name="flexible_hours[5][status]" value="0" >
                                                 Closed
                                             </label>
+                                            <label class="btn btn-danger">
+                                                <input type="radio" name="flexible_hours[5][status]" value="2" >
+                                                Busy
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
@@ -533,6 +553,10 @@
                                                 <input type="radio" name="flexible_hours[6][status]" value="0" >
                                                 Closed
                                             </label>
+                                            <label class="btn btn-danger">
+                                                <input type="radio" name="flexible_hours[6][status]" value="2" >
+                                                Busy
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
@@ -564,6 +588,10 @@
                                             <label class="btn btn-danger">
                                                 <input type="radio" name="flexible_hours[0][status]" value="0" >
                                                 Closed
+                                            </label>
+                                            <label class="btn btn-danger">
+                                                <input type="radio" name="flexible_hours[0][status]" value="2" >
+                                                Busy
                                             </label>
                                         </div>
                                     </div>

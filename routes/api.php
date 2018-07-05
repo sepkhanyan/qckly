@@ -22,3 +22,4 @@ Route::get('/restaurants', 'RestaurantsController@getRestaurants');
 Route::post('/availableRestaurants', 'RestaurantsController@availableRestaurants');
 Route::get('/restaurant/{id}', 'RestaurantsController@getRestaurant');
 Route::get('/restaurantCategories', 'RestaurantCategoriesController@getCategories');
+Route::post('/restaurantByCategory', 'RestaurantsController@getRestaurantByCategory');

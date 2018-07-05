@@ -69,7 +69,7 @@
                                 <select name="menu_category" id="category" class="form-control">
                                     <option value="">Select category</option>
                                     @foreach ($categories as $category)
-                                        <option value="{{$category->category_id}}">{{$category->name}}</option>
+                                        <option value="{{$category->id}}">{{$category->name}}</option>
                                     @endforeach
                                 </select>
                                 @if ($errors->has('menu_category'))
@@ -79,7 +79,7 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group{{ $errors->has('menu_photo') ? ' has-error' : '' }}">
                             <label for="" class="col-sm-3 control-label">
                                 Image
                                 <span class="help-block">Select a file to update menu image, otherwise leave blank.</span>
@@ -92,12 +92,32 @@
                                     <div class="caption">
                                         <span class="name text-center"></span>
                                         <input type="file" name="menu_photo" class="form-control">
+                                        @if ($errors->has('menu_photo'))
+                                            <span class="help-block">
+                                            <strong>{{ $errors->first('menu_photo') }}</strong>
+                                        </span>
+                                        @endif
                                         {{--<input type="hidden" name="menu_photo" value="" id="field" />
                                         <p>
                                             <a id="select-image" class="btn btn-primary" onclick="mediaManager('field');"><i class="fa fa-picture-o"></i>&nbsp;&nbsp;Select</a>
                                             <a class="btn btn-danger" onclick="$('#thumb').attr('src', 'https://demo.tastyigniter.com/assets/images/data/no_photo.png'); $('#field').attr('value', ''); $(this).parent().parent().find('.name').html('');"><i class="fa fa-times-circle"></i>&nbsp;&nbsp;Remove </a>
                                         </p>--}}
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="famous" class="col-sm-3 control-label">Famous</label>
+                            <div class="col-sm-5">
+                                <div class="btn-group btn-group-switch" data-toggle="buttons">
+                                    <label class="btn btn-danger">
+                                        <input type="radio" name="famous" value="0"  >
+                                        Disabled
+                                    </label>
+                                    <label class="btn btn-success active">
+                                        <input type="radio" name="famous" value="1"  checked="checked">
+                                        Enabled
+                                    </label>
                                 </div>
                             </div>
                         </div>

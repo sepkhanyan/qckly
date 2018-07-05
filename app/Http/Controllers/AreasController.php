@@ -6,6 +6,8 @@ use App\Http\Requests\AreaRequest;
 use Auth;
 use Illuminate\Http\Request;
 use App\Areas;
+use App\Restaurant;
+use Illuminate\Support\Facades\File;
 
 class AreasController extends Controller
 {
@@ -16,12 +18,12 @@ class AreasController extends Controller
      */
     public function index(Request $request)
     {
-        $areas = Areas::paginate(15);
+        $areas = Areas::paginate(20);
         $data = $request->all();
 
         if(isset($data['area_search'])){
             $areas = Areas::where('area_en','like',$data['area_search'])
-                ->orWhere('area_ar','like',$data['area_search'])->paginate(15);
+                ->orWhere('area_ar','like',$data['area_search'])->paginate(20);
         }
         return view('areas', ['areas' => $areas]);
 
@@ -100,6 +102,14 @@ class AreasController extends Controller
     public function deleteAreas(Request $request)
     {
         $id = $request->get('id');
+        $areas = Areas::with('restaurant')->where('id',$id)->get();
+        $images = [];
+        foreach ($areas as $area) {
+            foreach($area->restaurant as $restaurant){
+                $images[] = public_path('images/' . $restaurant->restaurant_image);
+            }
+        }
+        File::delete($images);
         Areas::whereIn('id',$id)->delete();
 
 

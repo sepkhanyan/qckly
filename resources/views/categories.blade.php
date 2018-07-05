@@ -107,8 +107,8 @@
                             @foreach($categories as $category)
                                 <tr>
                                     <td class="action">
-                                        <input type="checkbox" value="{{ $category->category_id }}" name="delete" />
-                                        <a class="btn btn-edit" title="" href="{{ url('category/edit/' . $category->category_id )}}">
+                                        <input type="checkbox" value="{{ $category->id }}" name="delete" />
+                                        <a class="btn btn-edit" title="" href="{{ url('category/edit/' . $category->id )}}">
                                             <i class="fa fa-pencil"></i>
                                         </a>&nbsp;&nbsp;
                                     </td>
@@ -121,7 +121,7 @@
                                     @else
                                         <td>Disable</td>
                                     @endif
-                                    <td>{{$category->category_id}}</td>
+                                    <td>{{$category->id}}</td>
                                 </tr>
                             @endforeach
 

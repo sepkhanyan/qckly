@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\RestaurantCategory;
 use App\Restaurant;
+use Illuminate\Support\Facades\File;
 
 class RestaurantCategoriesController extends Controller
 {
@@ -13,9 +14,14 @@ class RestaurantCategoriesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = RestaurantCategory::all();
+        $categories = RestaurantCategory::paginate(20);
+        $data = $request->all();
+        if(isset($data['restaurant_category_search'])){
+            $categories = RestaurantCategory::where('restaurant_category_name_en','like',$data['restaurant_category_search'])
+                ->orWhere('restaurant_category_name_ar','like',$data['restaurant_category_search'])->paginate(15);
+        }
         return view('restaurant_categories', ['categories' => $categories]);
     }
 
@@ -94,9 +100,18 @@ class RestaurantCategoriesController extends Controller
     public function deleteRestaurantCategory(Request $request)
     {
         $id = $request->get('id');
-        RestaurantCategory::whereIn('restaurant_category_id',$id)->delete();
-
-
+        $restaurants = Restaurant::with('menu')->where('restaurant_category_id',$id)->get();
+        $restaurant_images = [];
+        $menu_images = [];
+        foreach ($restaurants as $restaurant) {
+            foreach($restaurant->menu as $menu){
+                $menu_images[] = public_path('images/' . $menu->menu_photo);
+            }
+            $restaurant_images[] = public_path('images/' . $restaurant->restaurant_image);
+        }
+        File::delete($menu_images);
+        File::delete($restaurant_images);
+        RestaurantCategory::whereIn('id',$id)->delete();
         return redirect('/restaurant_categories');
     }
 
@@ -105,15 +120,15 @@ class RestaurantCategoriesController extends Controller
         $lang = $request->header('Accept-Language');
         $categories = RestaurantCategory::all();
         foreach($categories as $category){
-            if ($lang == 'en'){
+            if ($lang == 'ar'){
                 $arr [] = [
-                    'category_id' => $category->restaurant_category_id,
-                    'category_name' => $category->restaurant_category_name_en,
+                    'category_id' => $category->id,
+                    'category_name' => $category->restaurant_category_name_ar,
                 ];
             }else{
                 $arr [] = [
-                    'category_id' => $category->restaurant_category_id,
-                    'category_name' => $category->restaurant_category_name_ar,
+                    'category_id' => $category->id,
+                    'category_name' => $category->restaurant_category_name_en,
                 ];
             }
 
