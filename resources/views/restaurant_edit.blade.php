@@ -42,7 +42,7 @@
                     </li>
                 </ul>
             </div>
-            <form role="form" id="edit-form" name="edit_form" class="form-horizontal" accept-charset="utf-8" method="POST" action="{{ url('/restaurant/update/' . $restaurant->restaurant_id ) }}" enctype="multipart/form-data">
+            <form role="form" id="edit-form" name="edit_form" class="form-horizontal" accept-charset="utf-8" method="POST" action="{{ url('/restaurant/update/' . $restaurant->id ) }}" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <div class="tab-content">
                     <div id="general" class="tab-pane row wrap-all active">

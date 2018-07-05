@@ -412,13 +412,12 @@ class RestaurantsController extends Controller
             $working_time = $DataRequests['working_time'];
             $working_time = Carbon::parse($working_time);
             $restaurants = Restaurant::
-                join('areas', 'areas.id', '=', 'restaurants.restaurant_country_id')
-                ->join('working_hours', 'working_hours.restaurant_id', '=', 'restaurants.id')
-                ->where('areas.id', $id)
-                ->where('working_hours.weekday', $working_day)
-                ->where('working_hours.opening_time', '<=', $working_time)
-                ->where('working_hours.closing_time', '>=', $working_time)
-                ->with('category');
+                where('restaurant_country_id', $id)
+                ->whereHas('workingHour',function ($query) use ($working_day,$working_time){
+                    $query->where('weekday', $working_day)
+                          ->where('opening_time', '<=', $working_time)
+                          ->where('closing_time', '>=', $working_time);
+                })->with(['menu','category']);
 
             if(isset($DataRequests['category_id'])){
                 $category = $DataRequests['category_id'];
@@ -434,25 +433,45 @@ class RestaurantsController extends Controller
 
             if (count($restaurants)>0) {
                 foreach ($restaurants as $restaurant) {
+
                     if($lang == 'ar'){
                         $category = $restaurant->category->restaurant_category_name_ar;
                     }else{
                         $category =$restaurant->category->restaurant_category_name_en;
                     }
 
-                   if($restaurant->status == 1){
+
+                    $famous = null;
+                    $famous = [];
+                    foreach($restaurant->workingHour as $workingHour){
+                        $opening = $workingHour->opening_time;
+                        $closing = $workingHour->closing_time;
+                        $status = $workingHour->status;
+                    }
+                    if($status == 1){
                         $working_status = 'Open';
-                   }elseif ($restaurant->status == 0){
+                    }elseif ($status == 0){
                         $working_status = 'Close';
-                   }else{
+                    }else{
                         $working_status = 'Busy';
-                   }
+                    }
+
+                    foreach($restaurant->menu as $menu){
+
+                        if ($menu->famous == 1){
+                            $image = url('/').'/images/'. $menu->menu_photo;
+                            array_push($famous , $image);
+                        }
+                    }
 
                     $arr [] = [
                         'restaurant_id' => $restaurant->id,
                         'restaurant_name' => $restaurant->restaurant_name,
                         'restaurant_image' => url('/') . '/images/' . $restaurant->restaurant_image,
-                        'availability_hours' => $restaurant->opening_time  . '-' . $restaurant->closing_time,
+                        'famous_image' => $famous,
+                        'ratings_count' => 0,
+                        'reviews count' => 0,
+                        'availability_hours' => $opening  . '-' . $closing,
                         'description' => $restaurant->description,
                         'status' => $working_status,
                         'category_id' => $restaurant->category->id,
