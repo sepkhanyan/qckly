@@ -50,7 +50,7 @@
                         <div class="form-group">
                             <label for="restaurant_category" class="col-sm-3 control-label">Category</label>
                             <div class="col-sm-5">
-                                <select name="restaurant_category" id="restaurant_category" class="form-control" tabindex="-1" title="">
+                                <select name="restaurant_category[]" id="restaurant_category[]" class="form-control" tabindex="-1" multiple="multiple">
                                     @foreach($categories as $category)
                                         <option value="{{$category->id}}">{{$category->restaurant_category_name_en}}</option>
                                     @endforeach

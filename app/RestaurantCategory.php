@@ -11,8 +11,8 @@ class RestaurantCategory extends Model
 
     protected $fillable = ['restaurant_category_name_en', 'restaurant_category_name_ar'];
 
-    public function restaurant()
-    {
-        return $this->hasMany('App\Restaurant', 'restaurant_category_id');
-    }
+//    public function restaurant()
+//    {
+//        return $this->hasMany('App\Restaurant', 'restaurant_category_id');
+//    }
 }

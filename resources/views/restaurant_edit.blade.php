@@ -50,7 +50,7 @@
                         <div class="form-group">
                             <label for="restaurant_category" class="col-sm-3 control-label">Category</label>
                             <div class="col-sm-5">
-                                <select name="restaurant_category" id="restaurant_category" class="form-control" tabindex="-1" title="">
+                                <select name="restaurant_category[]" id="restaurant_category[]" class="form-control" tabindex="-1" multiple="multiple">
                                     @foreach($categories as $category)
                                         <option value="{{$category->id}}">{{$category->restaurant_category_name_en}}</option>
                                     @endforeach
@@ -281,31 +281,31 @@
                                 <div class="col-sm-5">
                                     <div class="btn-group btn-group-toggle btn-group-7" data-toggle="buttons">
                                         <label class="btn btn-default active">
-                                            <input type="checkbox" name="daily_days[]" value="0"  checked="checked">
+                                            <input type="checkbox" name="daily_days[]" value="1"  checked="checked">
                                             Mon
                                         </label>
                                         <label class="btn btn-default active">
-                                            <input type="checkbox" name="daily_days[]" value="1"  checked="checked">
+                                            <input type="checkbox" name="daily_days[]" value="2"  checked="checked">
                                             Tue
                                         </label>
                                         <label class="btn btn-default active">
-                                            <input type="checkbox" name="daily_days[]" value="2"  checked="checked">
+                                            <input type="checkbox" name="daily_days[]" value="3"  checked="checked">
                                             Wed
                                         </label>
                                         <label class="btn btn-default active">
-                                            <input type="checkbox" name="daily_days[]" value="3"  checked="checked">
+                                            <input type="checkbox" name="daily_days[]" value="4"  checked="checked">
                                             Thu
                                         </label>
                                         <label class="btn btn-default active">
-                                            <input type="checkbox" name="daily_days[]" value="4"  checked="checked">
+                                            <input type="checkbox" name="daily_days[]" value="5"  checked="checked">
                                             Fri
                                         </label>
                                         <label class="btn btn-default active">
-                                            <input type="checkbox" name="daily_days[]" value="5"  checked="checked">
+                                            <input type="checkbox" name="daily_days[]" value="6"  checked="checked">
                                             Sat
                                         </label>
                                         <label class="btn btn-default active">
-                                            <input type="checkbox" name="daily_days[]" value="6"  checked="checked">
+                                            <input type="checkbox" name="daily_days[]" value="0"  checked="checked">
                                             Sun
                                         </label>
                                     </div>
@@ -348,38 +348,6 @@
                             <div class="form-group">
                                 <label for="input-status" class="col-sm-3 control-label text-right">
                                     <span class="text-right">Monday</span>
-                                    <input type="hidden" name="flexible_hours[0][day]" value="0" />
-                                </label>
-                                <div class="col-sm-7">
-                                    <div class="control-group control-group-3">
-                                        <div class="input-group">
-                                            <input type="text" name="flexible_hours[0][open]" class="form-control timepicker" value="12:00 AM" />
-                                            <span class="input-group-addon">
-                                                <i class="fa fa-clock-o"></i>
-                                            </span>
-                                        </div>
-                                        <div class="input-group">
-                                            <input type="text" name="flexible_hours[0][close]" class="form-control timepicker" value="11:59 PM" />
-                                            <span class="input-group-addon">
-                                                <i class="fa fa-clock-o"></i>
-                                            </span>
-                                        </div>
-                                        <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                            <label class="btn btn-success active">
-                                                <input type="radio" name="flexible_hours[0][status]" value="1"  checked="checked">
-                                                Open
-                                            </label>
-                                            <label class="btn btn-danger">
-                                                <input type="radio" name="flexible_hours[0][status]" value="0" >
-                                                Closed
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="input-status" class="col-sm-3 control-label text-right">
-                                    <span class="text-right">Tuesday</span>
                                     <input type="hidden" name="flexible_hours[1][day]" value="1" />
                                 </label>
                                 <div class="col-sm-7">
@@ -411,7 +379,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="input-status" class="col-sm-3 control-label text-right">
-                                    <span class="text-right">Wednesday</span>
+                                    <span class="text-right">Tuesday</span>
                                     <input type="hidden" name="flexible_hours[2][day]" value="2" />
                                 </label>
                                 <div class="col-sm-7">
@@ -443,7 +411,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="input-status" class="col-sm-3 control-label text-right">
-                                    <span class="text-right">Thursday</span>
+                                    <span class="text-right">Wednesday</span>
                                     <input type="hidden" name="flexible_hours[3][day]" value="3" />
                                 </label>
                                 <div class="col-sm-7">
@@ -475,7 +443,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="input-status" class="col-sm-3 control-label text-right">
-                                    <span class="text-right">Friday</span>
+                                    <span class="text-right">Thursday</span>
                                     <input type="hidden" name="flexible_hours[4][day]" value="4" />
                                 </label>
                                 <div class="col-sm-7">
@@ -507,7 +475,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="input-status" class="col-sm-3 control-label text-right">
-                                    <span class="text-right">Saturday</span>
+                                    <span class="text-right">Friday</span>
                                     <input type="hidden" name="flexible_hours[5][day]" value="5" />
                                 </label>
                                 <div class="col-sm-7">
@@ -539,7 +507,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="input-status" class="col-sm-3 control-label text-right">
-                                    <span class="text-right">Sunday</span>
+                                    <span class="text-right">Saturday</span>
                                     <input type="hidden" name="flexible_hours[6][day]" value="6" />
                                 </label>
                                 <div class="col-sm-7">
@@ -563,6 +531,38 @@
                                             </label>
                                             <label class="btn btn-danger">
                                                 <input type="radio" name="flexible_hours[6][status]" value="0" >
+                                                Closed
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="input-status" class="col-sm-3 control-label text-right">
+                                    <span class="text-right">Sunday</span>
+                                    <input type="hidden" name="flexible_hours[0][day]" value="0" />
+                                </label>
+                                <div class="col-sm-7">
+                                    <div class="control-group control-group-3">
+                                        <div class="input-group">
+                                            <input type="text" name="flexible_hours[0][open]" class="form-control timepicker" value="12:00 AM" />
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-clock-o"></i>
+                                            </span>
+                                        </div>
+                                        <div class="input-group">
+                                            <input type="text" name="flexible_hours[0][close]" class="form-control timepicker" value="11:59 PM" />
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-clock-o"></i>
+                                            </span>
+                                        </div>
+                                        <div class="btn-group btn-group-switch" data-toggle="buttons">
+                                            <label class="btn btn-success active">
+                                                <input type="radio" name="flexible_hours[0][status]" value="1"  checked="checked">
+                                                Open
+                                            </label>
+                                            <label class="btn btn-danger">
+                                                <input type="radio" name="flexible_hours[0][status]" value="0" >
                                                 Closed
                                             </label>
                                         </div>
