@@ -209,6 +209,54 @@
                                 @endif
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label for="person-price" class="col-sm-3 control-label">Price per person</label>
+                            <div class="col-sm-5">
+                                <div class="input-group">
+                                    <input type="text" name="price_per_person" id="person-price" class="form-control" value="" />
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-money"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="quantity-price" class="col-sm-3 control-label">Price per quantity</label>
+                            <div class="col-sm-5">
+                                <div class="input-group">
+                                    <input type="text" name="price_per_quantity" id="quantity-price" class="form-control" value="" />
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-money"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="fixed-price" class="col-sm-3 control-label">Fixed price</label>
+                            <div class="col-sm-5">
+                                <div class="input-group">
+                                    <input type="text" name="fixed_price" id="fixed-price" class="form-control" value="" />
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-money"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="customisable" class="col-sm-3 control-label">Customisable</label>
+                            <div class="col-sm-5">
+                                <div class="btn-group btn-group-switch" data-toggle="buttons">
+                                    <label class="btn btn-danger active">
+                                        <input type="radio" name="customisable" value="0"  checked="checked">
+                                        NO
+                                    </label>
+                                    <label class="btn btn-success">
+                                        <input type="radio" name="customisable" value="1" >
+                                        YES
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div id="menu-options" class="tab-pane row wrap-all">

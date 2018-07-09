@@ -303,54 +303,60 @@ class RestaurantsController extends Controller
     public function getRestaurants(Request $request){
         $lang = $request->header('Accept-Language');
         $restaurants = Restaurant::with(['menu', 'categoryRestaurant'])->paginate(20);
-        foreach($restaurants as $restaurant){
-            $famous = null;
-            $famous = [];
+        if(count($restaurants) > 0){
+            foreach($restaurants as $restaurant){
+                $famous = null;
+                $famous = [];
 
-            foreach($restaurant->menu as $menu){
+                foreach($restaurant->menu as $menu){
 
-                if ($menu->famous == 1){
+                    if ($menu->famous == 1){
                         $image = url('/').'/images/'. $menu->menu_photo;
                         array_push($famous , $image);
+                    }
                 }
-            }
-            $category= [];
-            foreach($restaurant->categoryRestaurant as $categoryRestaurant){
-                if($lang == 'ar'){
-                    $ar = $categoryRestaurant['category_name_ar'];
-                    array_push( $category,$ar);
-                }else{
-                    $en = $categoryRestaurant['category_name_en'];
-                    array_push( $category,$en);
+                $category= [];
+                foreach($restaurant->categoryRestaurant as $categoryRestaurant){
+                    if($lang == 'ar'){
+                        $ar = $categoryRestaurant['category_name_ar'];
+                        array_push( $category,$ar);
+                    }else{
+                        $en = $categoryRestaurant['category_name_en'];
+                        array_push( $category,$en);
+                    }
                 }
-            }
 
-            $arr []=[
+                $arr []=[
                     'restaurant_id' => $restaurant->id,
                     'restaurant_image'=> url('/').'/images/'. $restaurant->restaurant_image,
                     'famous_images' => $famous,
                     'restaurant_name'=>$restaurant->restaurant_name,
                     'category' => $category
                 ];
-        }
-        $wholeData = [
-            "total" => count($restaurants),
-            "per_page" => 20,
-            "current_page" => $restaurants->currentPage(),
-            "next_page_url" => $restaurants->nextPageUrl(),
-            "prev_page_url" => $restaurants->previousPageUrl(),
-            "from" => $restaurants->firstItem(),
-            "to" => $restaurants->lastItem(),
-            "count" => $restaurants->total(),
-            "lastPage" => $restaurants->lastPage(),
-            'data' => $arr,
-        ];
-        if ($wholeData){
+            }
+            $wholeData = [
+                "total" => count($restaurants),
+                "per_page" => 20,
+                "current_page" => $restaurants->currentPage(),
+                "next_page_url" => $restaurants->nextPageUrl(),
+                "prev_page_url" => $restaurants->previousPageUrl(),
+                "from" => $restaurants->firstItem(),
+                "to" => $restaurants->lastItem(),
+                "count" => $restaurants->total(),
+                "lastPage" => $restaurants->lastPage(),
+                'data' => $arr,
+            ];
             return response()->json(array(
                 'success'=> 1,
                 'status_code'=> 200 ,
                 'data' => $wholeData));
+        }else{
+            return response()->json(array(
+                'success' => 1,
+                'status_code' => 200,
+                'message' => 'No available restaurant!'));
         }
+
     }
 
 
@@ -371,9 +377,7 @@ class RestaurantsController extends Controller
             $restaurants = Restaurant::whereHas('categoryRestaurant',function ($query) use ($id){
                     $query->where('category_id', $id);
                 })->with('menu')->paginate(20);
-            if($id == 1){
-                $restaurants = Restaurant::paginate(20);
-            }
+
             if (count($restaurants)>0) {
                 foreach($restaurants as $restaurant){
                     $famous = null;
@@ -405,30 +409,31 @@ class RestaurantsController extends Controller
                         'category' => $category
                     ];
                 }
+
+                $wholeData = [
+                    "total" => count($restaurants),
+                    "per_page" => 20,
+                    "current_page" => $restaurants->currentPage(),
+                    "next_page_url" => $restaurants->nextPageUrl(),
+                    "prev_page_url" => $restaurants->previousPageUrl(),
+                    "from" => $restaurants->firstItem(),
+                    "to" => $restaurants->lastItem(),
+                    "count" => $restaurants->total(),
+                    "lastPage" => $restaurants->lastPage(),
+                    'data' => $arr,
+                ];
+
+                    return response()->json(array(
+                        'success'=> 1,
+                        'status_code'=> 200 ,
+                        'data' => $wholeData));
+
             }else {
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200,
                     'message' => 'No available restaurant!'));
             }
-        }
-        $wholeData = [
-            "total" => count($restaurants),
-            "per_page" => 20,
-            "current_page" => $restaurants->currentPage(),
-            "next_page_url" => $restaurants->nextPageUrl(),
-            "prev_page_url" => $restaurants->previousPageUrl(),
-            "from" => $restaurants->firstItem(),
-            "to" => $restaurants->lastItem(),
-            "count" => $restaurants->total(),
-            "lastPage" => $restaurants->lastPage(),
-            'data' => $arr,
-        ];
-        if ($wholeData){
-            return response()->json(array(
-                'success'=> 1,
-                'status_code'=> 200 ,
-                'data' => $wholeData));
         }
     }
 
@@ -460,17 +465,14 @@ class RestaurantsController extends Controller
 
             if(isset($DataRequests['category_id'])){
                 $category = $DataRequests['category_id'];
-                if($category == 1){
-                    $restaurants = $restaurants->paginate(20);
-                }else{
                     $restaurants = $restaurants->whereHas('categoryRestaurant',function ($query) use ($category){
                         $query->where('category_id', $category);
                     })->paginate(20);
-                }
-
             }else{
                 $restaurants = $restaurants->paginate(20);
             }
+
+
 
             if (count($restaurants)>0) {
                 foreach ($restaurants as $restaurant) {
@@ -507,11 +509,15 @@ class RestaurantsController extends Controller
                             $name = $categoryRestaurant->category_name_en;
 
                         }
+
                         $category [] = [
                             'category_id' => $id,
                             'category_name' => $name
                         ];
 
+                        if(count($category) > 1 ){
+                            $category = 'All';
+                        }
                     }
                     $arr [] = [
                         'restaurant_id' => $restaurant->id,
@@ -539,12 +545,12 @@ class RestaurantsController extends Controller
                     "lastPage" => $restaurants->lastPage(),
                     'data' => $arr,
                 ];
-                if ($wholeData){
+
                     return response()->json(array(
                         'success'=> 1,
                         'status_code'=> 200 ,
                         'data' => $wholeData));
-                }
+
             } else {
                 return response()->json(array(
                     'success' => 1,
@@ -576,9 +582,7 @@ class RestaurantsController extends Controller
                             'menu_stock_qty' => $menu->stock_qty,
                             'menu_status' => $status,
                         ];
-                }
-
-
+                    }
 
                 }else{
                     $restaurant_menu = [];
@@ -601,6 +605,110 @@ class RestaurantsController extends Controller
                 'success' => 1,
                 'status_code' => 200,
                 'message' => 'No available restaurant!'));
+        }
+
+    }
+
+    public function restaurantMenuItems(Request $request)
+    {
+        $lang = $request->header('Accept-Language');
+        $DataRequests = $request->all();
+        $validator = \Validator::make($DataRequests, [
+            'price_per_person' => 'required',
+            'price_per_quantity' => 'required',
+            'fixed_price' => 'required',
+            'customisable' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(array('success' => 1, 'status_code' => 400,
+                'message' => 'Invalid inputs',
+                'error_details' => $validator->messages()));
+        } else {
+            $person_price = $DataRequests['price_per_person'];
+            $quantity_price = $DataRequests['price_per_quantity'];
+            $fixed_price = $DataRequests['fixed_price'];
+            $customisable = $DataRequests['customisable'];
+
+            $restaurants = Restaurant::whereHas('menu',function ($query) use ($person_price, $quantity_price, $fixed_price, $customisable){
+                    $query->where('price_per_person', $person_price)
+                        ->where('price_per_quantity', $quantity_price)
+                        ->where('fixed_price', $fixed_price)
+                    ->where('customisable',  $customisable );
+                })->with('categoryRestaurant')->paginate(20);
+            if(count($restaurants) > 0){
+                foreach($restaurants as $restaurant){
+                    if(count($restaurant->menu) > 0){
+                        foreach($restaurant->menu as $menu){
+                            if($menu->menu_status ==1){
+                                $status = 'Enable';
+                            }else{
+                                $status = 'Disable';
+                            }
+                            if($menu->customisable ==1){
+                                $customisable= 'Yes';
+                            }else{
+                                $customisable = 'No';
+                            }
+                            $restaurant_menu [] = [
+                                'menu_id' => $menu->id,
+                                'menu_name' => $menu->menu_name,
+                                'menu_image' => url('/') . '/images/' . $menu->menu_photo,
+                                'menu_price' => $menu->menu_price,
+                                'menu_category' => $menu->category['name'],
+                                'menu_stock_qty' => $menu->stock_qty,
+                                'menu_status' => $status,
+                                'price_per_person' => $menu->price_per_person,
+                                'price_per_quantity' => $menu->price_per_quantity,
+                                'fixed_price' => $menu->fixed_price,
+                                'customisable' => $customisable
+                            ];
+                        }
+
+                    }else{
+                        $restaurant_menu = [];
+                    }
+                    $category = [];
+                    foreach($restaurant->categoryRestaurant as $categoryRestaurant){
+                        $id = $categoryRestaurant->category_id;
+                        if($lang == 'ar'){
+                            $name= $categoryRestaurant->category_name_ar;
+
+                        }else{
+                            $name = $categoryRestaurant->category_name_en;
+
+                        }
+
+                        $category [] = [
+                            'category_id' => $id,
+                            'category_name' => $name
+                        ];
+
+                        if(count($category) > 1 ){
+                            $category = 'All';
+                        }
+                    }
+                    $arr [] = [
+                        'restaurant_id' => $restaurant->id,
+                        'restaurant_name' => $restaurant->restaurant_name,
+                        'restaurant_image' => url('/') . '/images/' . $restaurant->restaurant_image,
+                        'category' => $category,
+                        'menu' => $restaurant_menu
+                    ];
+                }
+
+
+                return response()->json(array(
+                    'success'=> 1,
+                    'status_code'=> 200 ,
+                    'data' => $arr));
+
+            }else {
+                return response()->json(array(
+                    'success' => 1,
+                    'status_code' => 200,
+                    'message' => 'No available restaurant!'));
+            }
+
         }
 
     }

@@ -28,10 +28,9 @@ class MenusController extends Controller
         $data = $request->all();
         $menus = [];
         if($id){
-            $menus = Menus::
-            join('restaurants', 'menus.restaurant_id', '=', 'restaurants.id')
-            ->join('categories', 'menus.menu_category_id', '=', 'categories.id')
-            ->where('menus.restaurant_id', $id);
+            $menus = Menus::whereHas('restaurant',function ($query) use ($id){
+                $query->where('restaurant_id', $id);})
+                ->with('category');
             if(isset($data['menu_status'])) {
                 $menus = $menus->where('menu_status', $data['menu_status']);
             }
@@ -96,6 +95,10 @@ class MenusController extends Controller
         $menus->mealtime_id = $request->input('mealtime_id');
         $menus->restaurant_id = $request->input('restaurant_name');
         $menus->famous = $request->input('famous');
+        $menus->price_per_person = $request->input('price_per_person');
+        $menus->price_per_quantity = $request->input('price_per_quantity');
+        $menus->fixed_price = $request->input('fixed_price');
+        $menus->customisable = $request->input('customisable');
         $menus->save();
         return redirect('/menus');
     }
@@ -149,6 +152,11 @@ class MenusController extends Controller
         $menus->menu_status = $request->input('menu_status');
         $menus->menu_priority = $request->input('menu_priority');
         $menus->mealtime_id = $request->input('mealtime_id');
+        $menus->famous = $request->input('famous');
+        $menus->price_per_person = $request->input('price_per_person');
+        $menus->price_per_quantity = $request->input('price_per_quantity');
+        $menus->fixed_price = $request->input('fixed_price');
+        $menus->customisable = $request->input('customisable');
         if ($request->hasFile('menu_photo')) {
             $deletedImage = File::delete(public_path('images/' . $menus->menu_photo));
             if ($deletedImage) {
@@ -179,7 +187,6 @@ class MenusController extends Controller
         }
         File::delete($images);
         Menus::whereIn('id',$id)->delete();
-
 
         return redirect('/menus');
     }

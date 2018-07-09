@@ -79,14 +79,14 @@
                             @foreach($categories as $category)
                                 <tr>
                                     <td class="action">
-                                        <input type="checkbox" value="{{ $category->restaurant_category_id }}" name="delete" />
-                                        <a class="btn btn-edit" title="" href="{{ url('restaurant_category/edit/' . $category->restaurant_category_id )}}">
+                                        <input type="checkbox" value="{{ $category->id }}" name="delete" />
+                                        <a class="btn btn-edit" title="" href="{{ url('restaurant_category/edit/' . $category->id )}}">
                                             <i class="fa fa-pencil"></i>
                                         </a>&nbsp;&nbsp;
                                     </td>
                                     <td>{{$category->restaurant_category_name_en}}</td>
                                     <td>{{$category->restaurant_category_name_ar}}</td>
-                                    <td>{{$category->restaurant_category_id}}</td>
+                                    <td>{{$category->id}}</td>
                                 </tr>
                             @endforeach
                             </tbody>
