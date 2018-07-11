@@ -47,12 +47,19 @@ Route::group(['middleware' => ['web', 'auth']], function (){
             Route::get('/category/edit/{id}', 'CategoriesController@edit');
             Route::post('/category/update/{id}', 'CategoriesController@update');
             Route::post('/delete/categories', 'CategoriesController@deleteCategories');
+            Route::get('/menu_subcategories', 'MenuSubcategoriesController@index');
+            Route::get('/menu_subcategory/store', 'MenuSubcategoriesController@store');
+            Route::post('/delete/menu_subcategory', 'MenuSubcategoriesController@deleteSubcategory');
             Route::get('/menus/{id?}', 'MenusController@index');
             Route::get('/new/menus', 'MenusController@create');
             Route::post('/store/menus', 'MenusController@store');
             Route::get('/menu/edit/{id}', 'MenusController@edit');
             Route::post('/menu/update/{id}', 'MenusController@update');
             Route::post('/delete/menus', 'MenusController@deleteMenus');
+            Route::get('/collections/{id?}','CollectionsController@index');
+            Route::get('/new/collection','CollectionsController@create');
+            Route::get('/collection/store','CollectionsController@store');
+            Route::post('/delete/collection','CollectionsController@deleteCollection');
         });
 
 

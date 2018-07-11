@@ -99,43 +99,43 @@
             </div>
         </div>
     </div>
-    {{--<div class="modal fade myeditform in " id="addCost" tabindex="-1"  >
-        <form class="form-horizontal ng-pristine ng-valid" accept-charset="utf-8" method="GET" action="{{ url('/areas/store') }}">
-            <div class="modal-dialog" >
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id=""> Add Area </h4>
-                    </div>
+    {{--<div class="modal fade myeditform in " id="addCost" tabindex="-1"  >--}}
+        {{--<form class="form-horizontal ng-pristine ng-valid" accept-charset="utf-8" method="GET" action="{{ url('/areas/store') }}">--}}
+            {{--<div class="modal-dialog" >--}}
+                {{--<div class="modal-content">--}}
+                    {{--<div class="modal-header">--}}
+                        {{--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>--}}
+                        {{--<h4 class="modal-title" id=""> Add Area </h4>--}}
+                    {{--</div>--}}
 
-                        <div class="form-group" style="margin-left: 3px">
-                            <label class="control-label col-sm-2" for="area-en">Area En</label>
-                            <div class="col-sm-8">
-                                <input type="text" name="area_en" class="form-control" id="area-en">
-                                <span class="help-block" >
+                        {{--<div class="form-group" style="margin-left: 3px">--}}
+                            {{--<label class="control-label col-sm-2" for="area-en">Area En</label>--}}
+                            {{--<div class="col-sm-8">--}}
+                                {{--<input type="text" name="area_en" class="form-control" id="area-en">--}}
+                                {{--<span class="help-block" >--}}
 
-                                       </span>
-                            </div>
-                        </div>
-                    <div class="form-group" style="margin-left: 3px">
-                        <label class="control-label col-sm-2" for="area-ar">Area Ar</label>
-                        <div class="col-sm-8">
-                            <input type="text" name="area_ar" class="form-control" id="area-ar">
-                            <span class="help-block" >
+                                       {{--</span>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                    {{--<div class="form-group" style="margin-left: 3px">--}}
+                        {{--<label class="control-label col-sm-2" for="area-ar">Area Ar</label>--}}
+                        {{--<div class="col-sm-8">--}}
+                            {{--<input type="text" name="area_ar" class="form-control" id="area-ar">--}}
+                            {{--<span class="help-block" >--}}
 
-                                       </span>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit"  class="btn btn-primary">Add Area</button>
-                    </div>
-                    </div>
+                                       {{--</span>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+                    {{--<div class="modal-footer">--}}
+                        {{--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>--}}
+                        {{--<button type="submit"  class="btn btn-primary">Add Area</button>--}}
+                    {{--</div>--}}
+                    {{--</div>--}}
 
-                </div>
+                {{--</div>--}}
 
-        </form>
-    </div>--}}
+        {{--</form>--}}
+    {{--</div>--}}
 
     </form>
     </div>

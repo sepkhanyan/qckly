@@ -515,9 +515,6 @@ class RestaurantsController extends Controller
                             'category_name' => $name
                         ];
 
-                        if(count($category) > 1 ){
-                            $category = 'All';
-                        }
                     }
                     $arr [] = [
                         'restaurant_id' => $restaurant->id,
@@ -611,88 +608,67 @@ class RestaurantsController extends Controller
 
     public function restaurantMenuItems(Request $request)
     {
-        $lang = $request->header('Accept-Language');
         $DataRequests = $request->all();
         $validator = \Validator::make($DataRequests, [
-            'price_per_person' => 'required',
-            'price_per_quantity' => 'required',
-            'fixed_price' => 'required',
-            'customisable' => 'required',
+            'restaurant_id' => 'required',
+            'category_id' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json(array('success' => 1, 'status_code' => 400,
                 'message' => 'Invalid inputs',
                 'error_details' => $validator->messages()));
         } else {
-            $person_price = $DataRequests['price_per_person'];
-            $quantity_price = $DataRequests['price_per_quantity'];
-            $fixed_price = $DataRequests['fixed_price'];
-            $customisable = $DataRequests['customisable'];
+            $restaurant_id = $DataRequests['restaurant_id'];
+            $category_id = $DataRequests['category_id'];
 
-            $restaurants = Restaurant::whereHas('menu',function ($query) use ($person_price, $quantity_price, $fixed_price, $customisable){
-                    $query->where('price_per_person', $person_price)
-                        ->where('price_per_quantity', $quantity_price)
-                        ->where('fixed_price', $fixed_price)
-                    ->where('customisable',  $customisable );
-                })->with('categoryRestaurant')->paginate(20);
+            $restaurants = Restaurant::whereHas('categoryRestaurant',function ($query) use ($restaurant_id,$category_id){
+                    $query->where('category_id', $category_id);
+                })
+                ->where('id', $restaurant_id)
+                ->with(['menu','collection.subcategory', 'collection.collectionItem'])->paginate(20);
             if(count($restaurants) > 0){
                 foreach($restaurants as $restaurant){
-                    if(count($restaurant->menu) > 0){
-                        foreach($restaurant->menu as $menu){
-                            if($menu->menu_status ==1){
-                                $status = 'Enable';
-                            }else{
-                                $status = 'Disable';
-                            }
-                            if($menu->customisable ==1){
-                                $customisable= 'Yes';
-                            }else{
-                                $customisable = 'No';
-                            }
-                            $restaurant_menu [] = [
-                                'menu_id' => $menu->id,
-                                'menu_name' => $menu->menu_name,
-                                'menu_image' => url('/') . '/images/' . $menu->menu_photo,
-                                'menu_price' => $menu->menu_price,
-                                'menu_category' => $menu->category['name'],
-                                'menu_stock_qty' => $menu->stock_qty,
-                                'menu_status' => $status,
-                                'price_per_person' => $menu->price_per_person,
-                                'price_per_quantity' => $menu->price_per_quantity,
-                                'fixed_price' => $menu->fixed_price,
-                                'customisable' => $customisable
-                            ];
-                        }
+                    if(count($restaurant->collection) > 0){
+                        foreach ($restaurant->collection as $collection){
 
+                            foreach($collection->collectionItem as $collection_item){
+                                if($collection->female_caterer_available == 1){
+                                    $female_caterer_available = 'Yes';
+                                }else{
+                                    $female_caterer_available = 'No';
+                                }
+
+                                if($collection->is_available == 1){
+                                    $is_available = 'Yes';
+                                }else{
+                                    $is_available = 'No';
+                                }
+                                $items [] = [
+                                    'item_id' => $collection_item->menu->id,
+                                    'item_name' => $collection_item->menu->menu_name,
+                                    'count' => $collection_item->max_count,
+                                    'price' => $collection->price
+                                ];
+                                $menu_collection [] = [
+                                    'collection_id' => $collection->id,
+                                    'female_caterer_available' => $female_caterer_available,
+                                    'is_available' => $is_available,
+                                    'notes' => $collection->notes,
+                                    'subcategory_id' => $collection->subcategory_id,
+                                    'subcategory_name' => $collection->subcategory->subcategory_name,
+                                    'items' => $items
+                                ];
+
+                            }
+
+                        }
                     }else{
-                        $restaurant_menu = [];
+                        $menu_collection = [];
                     }
-                    $category = [];
-                    foreach($restaurant->categoryRestaurant as $categoryRestaurant){
-                        $id = $categoryRestaurant->category_id;
-                        if($lang == 'ar'){
-                            $name= $categoryRestaurant->category_name_ar;
 
-                        }else{
-                            $name = $categoryRestaurant->category_name_en;
-
-                        }
-
-                        $category [] = [
-                            'category_id' => $id,
-                            'category_name' => $name
-                        ];
-
-                        if(count($category) > 1 ){
-                            $category = 'All';
-                        }
-                    }
                     $arr [] = [
                         'restaurant_id' => $restaurant->id,
-                        'restaurant_name' => $restaurant->restaurant_name,
-                        'restaurant_image' => url('/') . '/images/' . $restaurant->restaurant_image,
-                        'category' => $category,
-                        'menu' => $restaurant_menu
+                        'collections' => $menu_collection
                     ];
                 }
 

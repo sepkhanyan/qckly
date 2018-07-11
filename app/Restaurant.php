@@ -13,6 +13,11 @@ class Restaurant extends Model
 
 
 
+    public function collection()
+    {
+        return $this->hasMany('App\Collection', 'restaurant_id');
+    }
+
     public function category()
     {
         return $this->belongsTo('App\RestaurantCategory', 'restaurant_category_id');

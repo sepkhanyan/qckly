@@ -12,9 +12,6 @@
 		{{--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">--}}
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 
@@ -135,6 +132,12 @@
 											</a>
 										</li>
 										<li>
+											<a href="{{url('/collections')}}" class=menu_collections"">
+												<i class="fa fa-square-o fa-fw "></i>
+												Collections
+											</a>
+										</li>
+										<li>
 											<a href="#" class="menu_options">
 												<i class="fa fa-square-o fa-fw"></i>
 												Options
@@ -144,6 +147,12 @@
 											<a href="{{ url('/categories') }}" class="categories">
 												<i class="fa fa-square-o fa-fw"></i>
 												Categories
+											</a>
+										</li>
+										<li>
+											<a href="{{ url('/menu_subcategories') }}" class="subcategories">
+												<i class="fa fa-square-o fa-fw"></i>
+												Subcategories
 											</a>
 										</li>
 									</ul>

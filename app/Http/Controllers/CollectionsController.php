@@ -1,0 +1,127 @@
+<?php
+
+namespace App\Http\Controllers;
+
+
+use App\CollectionItem;
+use Illuminate\Http\Request;
+use App\Collection;
+use App\Restaurant;
+use App\MenuSubcategory;
+use App\Menus;
+
+class CollectionsController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index($id=null)
+    {
+        $restaurants = Restaurant::all();
+        $selectedRestaurant = Restaurant::find($id);
+        $collections = [];
+        if($id){
+            $collections = Collection::where('restaurant_id', $id)
+                ->with(['subcategory', 'collectionItem.menu'])->get();
+
+        }
+        return view('collections', [
+            'collections' => $collections,
+            'restaurants' => $restaurants,
+            'selectedRestaurant' => $selectedRestaurant
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $restaurants = Restaurant::all();
+        $subcategories = MenuSubcategory::all();
+        $menus = Menus::all();
+        return view('new_collection', [
+            'restaurants' => $restaurants,
+            'subcategories' => $subcategories,
+            'menus' => $menus
+        ]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $collection = New Collection();
+        $collection->restaurant_id = $request->input('restaurant_name');
+        $collection->subcategory_id = $request->input('subcategory');
+        $collection->female_caterer_available = $request->input('female_caterer_available');
+        $collection->is_available = $request->input('is_available');
+        $collection->notes = $request->input('notes');
+        $collection->price = $request->input('collection_price');
+        $collection->save();
+        $collection_item = new CollectionItem();
+        $collection_item->menu_id = $request->input('menu_item');
+        $collection_item->max_count = $request->input('menu_item_quantity');
+        $collection_item->collection_id = $collection->id;
+        $collection_item->save();
+
+
+
+        return redirect('/collections');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteCollection(Request $request)
+    {
+        $id = $request->get('id');
+        Collection::whereIn('id',$id)->delete();
+        return redirect('/collections');
+    }
+}

@@ -22,4 +22,9 @@ class Menus extends Model
     {
         return $this->belongsTo('App\Restaurant', 'restaurant_id' );
     }
+
+    public function collectionItem()
+    {
+        return $this->hasMany('App\CollectionItem', 'menu_id');
+    }
 }

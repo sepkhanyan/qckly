@@ -1,16 +1,18 @@
 $(document).ready(function() {
+
     var token = $('[name=csrf-token]').attr('content');
-	$('body').on('click', '#button_add_area', function() {
-        $('#addNote').modal('show');
-        var type = $(this).attr('data-type');
-        $.ajax({
-            url: '/areas/store/' + type,
-            method: 'GET',
-            success: function(result) {
-               
-            }
-        })
-    })
+    // $('body').on('click', '#button_add_area', function() {
+    //     $('#addNote').modal('show');
+    //     var type = $(this).attr('data-type');
+    //     $.ajax({
+    //         url: '/areas/store/' + type,
+    //         method: 'GET',
+    //         success: function(result) {
+    //
+    //         }
+    //     })
+    // });
+
     $("a#select-image").on("click", function(){
 
 
@@ -62,6 +64,85 @@ $(document).ready(function() {
     });
     $('#special_toggle_show').click(function() {
         $('#special-toggle'). slideDown('fast');
+    });
+
+
+
+
+    $('#subcategory').click(function() {
+        $('#items'). slideDown('fast');
+        if($('select[name=subcategory]').val() == 1){
+            $('#by_person'). slideDown('fast');
+            $('#by_item'). slideDown('fast');
+            $('#add_item'). slideUp('fast');
+        }else if($('select[name=subcategory]').val() == 2){
+            $('#by_item'). slideDown('fast');
+            $('#by_person'). slideUp('fast');
+            $('#add_item'). slideUp('fast');
+        }else if($('select[name=subcategory]').val() == 3){
+            $('#by_item'). slideUp('fast');
+            $('#by_person'). slideUp('fast');
+            $('#add_item'). slideUp('fast');
+        }else if($('select[name=subcategory]').val() == 4){
+            $('#by_item'). slideDown('fast');
+            $('#by_person'). slideUp('fast');
+            $('#add_item'). slideDown('fast');
+        }
+
+    });
+
+    $("#add_item").click(function(){
+        var original = $(".js-select");
+        var clone = original.clone();
+        clone.select2();
+        $("#item").clone().appendTo("#items_container");
+    });
+
+
+
+
+
+
+    $('#delete_collection').click(function() {
+        window.checkValues = $('input[name=delete]:checked').map(function () {
+            return $(this).val();
+        }).get();
+        console.log(checkValues);
+
+
+        $.ajax({
+
+            method: "POST",
+            url:"/delete/collection",
+            data:{id:checkValues,_token:token },
+            success:function(data){
+
+                window.location.reload();
+            }
+
+        });
+
+    });
+
+    $('#delete_menu_subcategory').click(function() {
+        window.checkValues = $('input[name=delete]:checked').map(function () {
+            return $(this).val();
+        }).get();
+        console.log(checkValues);
+
+
+        $.ajax({
+
+            method: "POST",
+            url:"/delete/menu_subcategory",
+            data:{id:checkValues,_token:token },
+            success:function(data){
+
+                window.location.reload();
+            }
+
+        });
+
     });
 
     $('#delete_restaurant_category').click(function() {

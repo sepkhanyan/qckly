@@ -83,8 +83,7 @@
                         </div>
                     </form>
                 </div>
-
-                </div>
+            </div>
                 <form role="form" id="list-form" accept-charset="utf-8" method="POST" action="">
                     <div class="table-responsive">
                         <table border="0" class="table table-striped table-border">
@@ -145,11 +144,13 @@
                                     <td>£{{$menu->menu_price}}</td>
                                     <td>{{$menu->category->name}}</td>
                                     <td>{{$menu->stock_qty}}</td>
+                                    <td>
                                     @if($menu->menu_status == 1)
-                                        <td>Enable</td>
+                                        Enable
                                     @else
-                                        <td>Disable</td>
-                                    @endif
+                                        Disable
+                                        @endif
+                                    </td>
                                     <td>{{$menu->id}}</td>
                                 </tr>
                             @endforeach
