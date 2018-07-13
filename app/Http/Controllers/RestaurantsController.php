@@ -679,9 +679,9 @@ class RestaurantsController extends Controller
                                 'food_item_image' => url('/').'/images/'. $collection_item->menu->menu_photo,
                                 'food_list_images' => $foodlist_images,
                                 'item_type' => $collection->subcategory->subcategory_name,
-                                'setupTime' => $collection->setup_time,
+                                'setup_time' => $collection->setup_time,
                                 'requirement' => $collection->requirements,
-                                'MaxTime' => $collection->max_time,
+                                'max_time' => $collection->max_time,
                                 'menu_items' => $menu
                             ];
                         }

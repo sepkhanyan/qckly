@@ -95,10 +95,6 @@ class MenusController extends Controller
         $menus->mealtime_id = $request->input('mealtime_id');
         $menus->restaurant_id = $request->input('restaurant_name');
         $menus->famous = $request->input('famous');
-        $menus->price_per_person = $request->input('price_per_person');
-        $menus->price_per_quantity = $request->input('price_per_quantity');
-        $menus->fixed_price = $request->input('fixed_price');
-        $menus->customisable = $request->input('customisable');
         $menus->save();
         return redirect('/menus');
     }
