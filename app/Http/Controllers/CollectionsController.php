@@ -76,6 +76,7 @@ class CollectionsController extends Controller
         $collection->restaurant_id = $request->input('restaurant_name');
         $collection->subcategory_id = $request->input('subcategory');
         $collection->name = $request->input('name');
+        $collection->description = $request->input('description');
         $collection->service_provide = $request->input('service_provide');
         $collection->service_presentation = $request->input('service_presentation');
         $collection->instruction = $request->input('instructions');
@@ -124,7 +125,27 @@ class CollectionsController extends Controller
      */
     public function edit($id)
     {
-        //
+
+//        $collection = Collection::with('restaurant')->find($id);
+//        dd($collection->restaurant);
+//        foreach($collection->restaurant->menu as $menu){
+//                dd($menu->category->name);
+//            $categories = $menu->category;
+//        }
+//        $menus = $menu->where('menu_category_id', $menu->category->id)->get();
+////        dd();
+////        $menus = $collection->restaurant->menu;
+////        $data = $request->all();
+////        $menus = [];
+//        $restaurant = Restaurant::all();
+//        $subcategories = MenuSubcategory::all();
+////        $categories = Categories::all();
+//        return view('edit_collection', [
+//            'menus' => $menus,
+//            'collection' => $collection,
+//            'subcategories' => $subcategories,
+//            'categories' => $categories
+//        ]);
     }
 
     /**

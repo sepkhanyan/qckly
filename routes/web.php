@@ -60,6 +60,8 @@ Route::group(['middleware' => ['web', 'auth']], function (){
             Route::get('/new/collection','CollectionsController@create');
             Route::get('/collection/store','CollectionsController@store');
             Route::post('/delete/collection','CollectionsController@deleteCollection');
+//            Route::get('/collection/edit/{id}', 'CollectionsController@edit');
+//            Route::post('/collection/update/{id}', 'CollectionsController@update');
         });
 
 

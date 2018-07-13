@@ -655,7 +655,7 @@ class RestaurantsController extends Controller
                                 $menu = [
                                     'menu_id' => $collection_item->menu->category->id,
                                     'menu_name' => $collection_item->menu->category->name,
-                                    'menu_description' => $collection_item->menu->category->description,
+                                    'menu_description' => $collection->description,
                                     'menu_min_qty' => $collection_item->min_count,
                                     'menu_max_qty' => $collection_item->max_count,
                                     'items' => $items
@@ -695,7 +695,7 @@ class RestaurantsController extends Controller
                             ];
                         }
                     }
-                    $arr [] = [
+                    $arr  = [
                         'restaurant_id' => $restaurant->id,
                         'collections' => $menu_collection
                     ];

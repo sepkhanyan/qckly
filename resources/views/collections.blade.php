@@ -95,13 +95,25 @@
                             </th>
                             <th>
                                 <a class="sort" href="">
-                                    Menu Item
+                                    Collection Name
                                     <i class="fa fa-sort>"></i>
                                 </a>
                             </th>
                             <th>
                                 <a class="sort" href="">
-                                   Subcategory
+                                    Description
+                                    <i class="fa fa-sort>"></i>
+                                </a>
+                            </th>
+                            <th>
+                                <a class="sort" href="">
+                                   Collection Type
+                                    <i class="fa fa-sort>"></i>
+                                </a>
+                            </th>
+                            <th>
+                                <a class="sort" href="">
+                                   Price
                                     <i class="fa fa-sort>"></i>
                                 </a>
                             </th>
@@ -113,13 +125,13 @@
                             </th>
                             <th>
                                 <a class="sort" href="">
-                                    Is Available
+                                    Service Presentation
                                     <i class="fa fa-sort>"></i>
                                 </a>
                             </th>
                             <th>
                                 <a class="sort" href="">
-                                    Notes
+                                    ID
                                     <i class="fa fa-sort>"></i>
                                 </a>
                             </th>
@@ -128,16 +140,17 @@
                         <tbody>
 
                         @foreach($collections as $collection)
-                            @foreach($collection->collectionItem as $collection_item)
                                 <tr>
                                     <td class="action">
                                         <input type="checkbox" value="{{$collection->id}}" name="delete" />
-                                        <a class="btn btn-edit" title="" href="{{ url('collection/edit/' . $collection->id )}}">
+                                        <a class="btn btn-edit" title="" href="{{ url('/collection/edit/' . $collection->id )}}">
                                             <i class="fa fa-pencil"></i>
                                         </a>&nbsp;&nbsp;
                                     </td>
-                                    <td>{{$collection_item->menu->menu_name}}</td>
+                                    <td>{{$collection->name}}</td>
+                                    <td>{{$collection->description}}</td>
                                     <td>{{$collection->subcategory->subcategory_name}}</td>
+                                    <td>{{$collection->price}}</td>
                                     <td>
                                         @if($collection->female_caterer_available == 1)
                                             Yes
@@ -145,17 +158,9 @@
                                             No
                                         @endif
                                     </td>
-                                    <td>
-                                        @if($collection->is_available == 1)
-                                            Yes
-                                        @else
-                                            No
-                                        @endif
-                                    </td>
-                                    <td>{{$collection->notes}}</td>
+                                    <td>{{$collection->service_presentation}}</td>
                                     <td>{{$collection->id}}</td>
                                 </tr>
-                                @endforeach
                         @endforeach
 
                         </tbody>
