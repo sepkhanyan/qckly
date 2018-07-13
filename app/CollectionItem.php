@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CollectionItem extends Model
 {
-    protected $fillable = ['collection_id', 'menu_id', 'min_count', 'max_count'];
+    protected $fillable = ['collection_id', 'menu_id', 'min_count', 'max_count', 'persons'];
 
     protected $table = 'collection_items';
 

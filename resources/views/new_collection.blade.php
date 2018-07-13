@@ -16,6 +16,39 @@
         </div>
     </div>
     <div class="row content">
+            <form role="form" id="filter-form" accept-charset="utf-8" method="GET" action="">
+                <div class="filter-bar">
+                        <div class="row">
+                                <div class="form-group">
+                                    <label for="restaurant" class="col-sm-3 control-label">Restaurant</label>
+                                    <div class="col-sm-5">
+                                        <select name="restaurant_name" id="restaurant" class="form-control" tabindex="-1" title=""  >
+                                            @foreach($restaurants as $restaurant)
+                                                <option value="{{$restaurant->id}}">{{$restaurant->restaurant_name}},{{$restaurant->restaurant_city}},{{$restaurant->restaurant_address_1}}</option>
+                                            @endforeach
+                                        </select>
+
+                                    </div>
+                                </div>
+                        </div>
+                    <div>
+                            <div class="form-group">
+                                <label for="input-name" class="col-sm-3 control-label">Category</label>
+                                <div class="col-sm-5">
+                                    <select name="category_name" id="category" class="form-control">
+                                        @foreach ($categories as $category)
+                                            <option value="{{$category->id}}" >{{$category->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                    <a class="btn btn-grey" onclick="filterList();" title="Filter">
+                        Choose
+                    </a>
+                </div>
+            </form>
         <div class="col-md-12">
             <div class="row wrap-vertical">
                 <ul id="nav-tabs" class="nav nav-tabs">
@@ -26,20 +59,70 @@
                     </li>
                 </ul>
             </div>
-            <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="GET" action="{{ url('/collection/store') }}">
-                {{ csrf_field() }}
                 <div class="tab-content">
                     <div id="general" class="tab-pane row wrap-all active">
+                        <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="GET" action="{{ url('/collection/store') }}">
+                            {{ csrf_field() }}
+                            <div class="form-group">
+                                <label for="restaurant" class="col-sm-3 control-label">Restaurant</label>
+                                <div class="col-sm-5">
+                                    <select name="restaurant_name" id="restaurant" class="form-control" tabindex="-1" title=""  >
+                                        @foreach($restaurants as $restaurant)
+                                            <option value="{{$restaurant->id}}">{{$restaurant->restaurant_name}},{{$restaurant->restaurant_city}},{{$restaurant->restaurant_address_1}}</option>
+                                        @endforeach
+                                    </select>
+
+                                </div>
+                            </div>
                         <div class="form-group">
-                            <label for="restaurant" class="col-sm-3 control-label">Restaurant</label>
+                            <label for="input-name" class="col-sm-3 control-label">Name</label>
                             <div class="col-sm-5">
-                                <select name="restaurant_name" id="restaurant" class="form-control" tabindex="-1" title="">
-                                    @foreach($restaurants as $restaurant)
-                                        <option value="{{$restaurant->id}}">{{$restaurant->restaurant_name}},{{$restaurant->restaurant_city}},{{$restaurant->restaurant_address_1}}</option>
-                                    @endforeach
-                                </select>
+                                <input type="text" name="name" id="input-name" class="form-control" value="">
                             </div>
                         </div>
+                            <div class="form-group">
+                                <label for="service" class="col-sm-3 control-label">Service Provide</label>
+                                <div class="col-sm-5">
+                                    <input type="text" name="service_provide" id="service" class="form-control" value="">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="presentation" class="col-sm-3 control-label">Service Presentation</label>
+                                <div class="col-sm-5">
+                                    <input type="text" name="service_presentation" id="presentation" class="form-control" value="">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="instructions" class="col-sm-3 control-label">Instructions</label>
+                                <div class="col-sm-5">
+                                    <textarea name="instructions" id="notes" class="form-control" rows="5"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="input-setup" class="col-sm-3 control-label">Setup Time</label>
+                                <div class="col-sm-5">
+                                    <div class="input-group">
+                                        <input type="text" name="setup_time" id="input-setup" class="form-control" value="" />
+
+                                    </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="input-max" class="col-sm-3 control-label">Max Time</label>
+                                <div class="col-sm-5">
+                                    <div class="input-group">
+                                        <input type="text" name="max_time" id="input-max" class="form-control" value="" />
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="input-requirements" class="col-sm-3 control-label">Requirements</label>
+                                <div class="col-sm-5">
+                                    <textarea name="requirements" id="input-requirements" class="form-control" rows="5"></textarea>
+                                </div>
+                            </div>
                         <div class="form-group">
                             <label for="female_caterer_available" class="col-sm-3 control-label">Female Caterer Available</label>
                             <div class="col-sm-5">
@@ -103,7 +186,7 @@
                                 <div class="form-group" id="item">
                                     <label for="menu_item" class="col-sm-3 control-label">Menu Item</label>
                                     <div class="col-sm-5">
-                                        <select  name="menu_item" id="menu_item" class="" tabindex="-1">
+                                        <select  name="menu_item[]" id="menu_item" class="" tabindex="-1" >
                                             <option value="">Select menu item</option>
                                             @foreach ($menus as $menu)
                                                 <option value="{{$menu->id}}">{{$menu->menu_name}}</option>
@@ -132,4 +215,9 @@
             </form>
         </div>
     </div>
+    <script type="text/javascript">
+        function filterList() {
+            $('#filter-form').submit();
+        }
+    </script>
 @endsection

@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 
+use App\Categories;
 use App\CollectionItem;
 use Illuminate\Http\Request;
 use App\Collection;
 use App\Restaurant;
 use App\MenuSubcategory;
 use App\Menus;
+use Carbon\Carbon;
 
 class CollectionsController extends Controller
 {
@@ -39,15 +41,26 @@ class CollectionsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
+        $data = $request->all();
+        $menus = [];
+            if(isset($data['restaurant_name'])) {
+                $menus = Menus::where('restaurant_id', $data['restaurant_name']);
+            }
+        if(isset($data['category_name'])) {
+            $menus = $menus->where('menu_category_id', $data['category_name']);
+            $menus = $menus->get();
+        }
+
         $restaurants = Restaurant::all();
         $subcategories = MenuSubcategory::all();
-        $menus = Menus::all();
+        $categories = Categories::all();
         return view('new_collection', [
             'restaurants' => $restaurants,
             'subcategories' => $subcategories,
-            'menus' => $menus
+            'menus' => $menus,
+            'categories' => $categories
         ]);
     }
 
@@ -62,16 +75,32 @@ class CollectionsController extends Controller
         $collection = New Collection();
         $collection->restaurant_id = $request->input('restaurant_name');
         $collection->subcategory_id = $request->input('subcategory');
+        $collection->name = $request->input('name');
+        $collection->service_provide = $request->input('service_provide');
+        $collection->service_presentation = $request->input('service_presentation');
+        $collection->instruction = $request->input('instructions');
+        $collection->setup_time = $request->input('setup_time');
+        $collection->max_time = $request->input('max_time');
+        $collection->requirements = $request->input('requirements');
         $collection->female_caterer_available = $request->input('female_caterer_available');
         $collection->is_available = $request->input('is_available');
         $collection->notes = $request->input('notes');
         $collection->price = $request->input('collection_price');
         $collection->save();
-        $collection_item = new CollectionItem();
-        $collection_item->menu_id = $request->input('menu_item');
-        $collection_item->max_count = $request->input('menu_item_quantity');
-        $collection_item->collection_id = $collection->id;
-        $collection_item->save();
+        $menus = $request->input('menu_item');
+        foreach($menus as $menu){
+            $collection_item = new CollectionItem();
+            $collection_item->menu_id = $menu;
+            $collection_item->max_count = $request->input('menu_item_quantity');
+            if($collection->subcategory_id == 3){
+                $collection_item->max_count = 1;
+            }
+            $collection_item->persons = $request->input('persons');
+            $collection_item->collection_id = $collection->id;
+            $collection_item->save();
+        }
+
+
 
 
 

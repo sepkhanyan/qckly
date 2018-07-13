@@ -611,7 +611,6 @@ class RestaurantsController extends Controller
         $DataRequests = $request->all();
         $validator = \Validator::make($DataRequests, [
             'restaurant_id' => 'required',
-            'category_id' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json(array('success' => 1, 'status_code' => 400,
@@ -619,53 +618,74 @@ class RestaurantsController extends Controller
                 'error_details' => $validator->messages()));
         } else {
             $restaurant_id = $DataRequests['restaurant_id'];
-            $category_id = $DataRequests['category_id'];
 
-            $restaurants = Restaurant::whereHas('categoryRestaurant',function ($query) use ($restaurant_id,$category_id){
+            $restaurants = Restaurant::where('id', $restaurant_id)
+                ->with(['menu.category','collection.subcategory', 'collection.collectionItem']);
+            if(isset($DataRequests['category_id'])){
+                $category_id = $DataRequests['category_id'];
+                $restaurants = $restaurants->whereHas('categoryRestaurant',function ($query) use ($category_id){
                     $query->where('category_id', $category_id);
-                })
-                ->where('id', $restaurant_id)
-                ->with(['menu','collection.subcategory', 'collection.collectionItem'])->paginate(20);
+                })->paginate(20);
+            }else{
+                $restaurants = $restaurants->paginate(20);
+            }
+
             if(count($restaurants) > 0){
+
                 foreach($restaurants as $restaurant){
+                    $menu_collection = [];
                     if(count($restaurant->collection) > 0){
+
                         foreach ($restaurant->collection as $collection){
 
-                            foreach($collection->collectionItem as $collection_item){
-                                if($collection->female_caterer_available == 1){
-                                    $female_caterer_available = 'Yes';
-                                }else{
-                                    $female_caterer_available = 'No';
-                                }
+                            $menu = [];
+                            $foodlist = [];
+                            $foodlist_images = [];
 
-                                if($collection->is_available == 1){
-                                    $is_available = 'Yes';
-                                }else{
-                                    $is_available = 'No';
-                                }
+                            foreach($collection->collectionItem as $collection_item){
+
+                                $foodlist [] =$collection_item->menu->menu_name;
+                                $image = url('/').'/images/'. $collection_item->menu->menu_photo;
+                                array_push($foodlist_images , $image);
+                                $items = [];
                                 $items [] = [
                                     'item_id' => $collection_item->menu->id,
                                     'item_name' => $collection_item->menu->menu_name,
-                                    'count' => $collection_item->max_count,
-                                    'price' => $collection->price
+                                    'item_image' => url('/') . '/images/' . $collection_item->menu->menu_photo,
                                 ];
-                                $menu_collection [] = [
-                                    'collection_id' => $collection->id,
-                                    'female_caterer_available' => $female_caterer_available,
-                                    'is_available' => $is_available,
-                                    'notes' => $collection->notes,
-                                    'subcategory_id' => $collection->subcategory_id,
-                                    'subcategory_name' => $collection->subcategory->subcategory_name,
+                                $menu [] = [
+                                    'menu_name' => $collection_item->menu->category->name,
+                                    'menu_description' => $collection_item->menu->category->description,
+                                    'menu_min_qty' => $collection_item->max_count,
                                     'items' => $items
                                 ];
 
                             }
-
+                            if($collection->female_caterer_available == 1){
+                                $female_caterer_available = 'Yes';
+                            }else{
+                                $female_caterer_available = 'No';
+                            }
+                            $menu_collection [] = [
+                                'collection_id' => $collection->id,
+                                'collection_name' => $collection->name,
+                                'cost' => $collection->price . ' qr',
+                                'female_caterer_available' => $female_caterer_available,
+                                'persons_count' => $collection_item->persons,
+                                'service_provide' => $collection->service_provide,
+                                'food_list' => $foodlist,
+                                'service_presentation' => $collection->service_presentation,
+                                'instruction' => $collection->instruction,
+                                'food_item_image' => url('/').'/images/'. $collection_item->menu->menu_photo,
+                                'food_list_images' => $foodlist_images,
+                                'item_type' => $collection->subcategory->subcategory_name,
+                                'setupTime' => $collection->setup_time,
+                                'requirement' => $collection->requirements,
+                                'MaxTime' => $collection->max_time,
+                                'menu_items' => $menu
+                            ];
                         }
-                    }else{
-                        $menu_collection = [];
                     }
-
                     $arr [] = [
                         'restaurant_id' => $restaurant->id,
                         'collections' => $menu_collection
