@@ -91,10 +91,8 @@ class CollectionsController extends Controller
         foreach($menus as $menu){
             $collection_item = new CollectionItem();
             $collection_item->menu_id = $menu;
-            $collection_item->max_count = $request->input('menu_item_quantity');
-            if($collection->subcategory_id == 3){
-                $collection_item->max_count = 1;
-            }
+            $collection_item->max_count = $request->input('max_quantity');
+            $collection_item->min_count = $request->input('min_quantity');
             $collection_item->persons = $request->input('persons');
             $collection_item->collection_id = $collection->id;
             $collection_item->save();

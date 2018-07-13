@@ -149,10 +149,6 @@ class MenusController extends Controller
         $menus->menu_priority = $request->input('menu_priority');
         $menus->mealtime_id = $request->input('mealtime_id');
         $menus->famous = $request->input('famous');
-        $menus->price_per_person = $request->input('price_per_person');
-        $menus->price_per_quantity = $request->input('price_per_quantity');
-        $menus->fixed_price = $request->input('fixed_price');
-        $menus->customisable = $request->input('customisable');
         if ($request->hasFile('menu_photo')) {
             $deletedImage = File::delete(public_path('images/' . $menus->menu_photo));
             if ($deletedImage) {

@@ -638,25 +638,26 @@ class RestaurantsController extends Controller
 
                         foreach ($restaurant->collection as $collection){
 
-                            $menu = [];
                             $foodlist = [];
                             $foodlist_images = [];
-
+                            $items = [];
                             foreach($collection->collectionItem as $collection_item){
 
                                 $foodlist [] =$collection_item->menu->menu_name;
                                 $image = url('/').'/images/'. $collection_item->menu->menu_photo;
                                 array_push($foodlist_images , $image);
-                                $items = [];
+
                                 $items [] = [
                                     'item_id' => $collection_item->menu->id,
                                     'item_name' => $collection_item->menu->menu_name,
                                     'item_image' => url('/') . '/images/' . $collection_item->menu->menu_photo,
                                 ];
-                                $menu [] = [
+                                $menu = [
+                                    'menu_id' => $collection_item->menu->category->id,
                                     'menu_name' => $collection_item->menu->category->name,
                                     'menu_description' => $collection_item->menu->category->description,
-                                    'menu_min_qty' => $collection_item->max_count,
+                                    'menu_min_qty' => $collection_item->min_count,
+                                    'menu_max_qty' => $collection_item->max_count,
                                     'items' => $items
                                 ];
 
@@ -665,6 +666,14 @@ class RestaurantsController extends Controller
                                 $female_caterer_available = 'Yes';
                             }else{
                                 $female_caterer_available = 'No';
+                            }
+                            $setup = '';
+                            $max = '';
+                            $requirement = '';
+                            if($collection->subcategory_id == 1){
+                                $setup = $collection->setup_time;
+                                $max = $collection->max_time;
+                                $requirement = $collection->requirements;
                             }
                             $menu_collection [] = [
                                 'collection_id' => $collection->id,
@@ -678,10 +687,10 @@ class RestaurantsController extends Controller
                                 'instruction' => $collection->instruction,
                                 'food_item_image' => url('/').'/images/'. $collection_item->menu->menu_photo,
                                 'food_list_images' => $foodlist_images,
-                                'item_type' => $collection->subcategory->subcategory_name,
-                                'setup_time' => $collection->setup_time,
-                                'requirement' => $collection->requirements,
-                                'max_time' => $collection->max_time,
+                                'collection_type' => $collection->subcategory->subcategory_name,
+                                'setup_time' => $setup,
+                                'requirement' => $requirement ,
+                                'max_time' => $max,
                                 'menu_items' => $menu
                             ];
                         }

@@ -71,7 +71,6 @@
                                             <option value="{{$restaurant->id}}">{{$restaurant->restaurant_name}},{{$restaurant->restaurant_city}},{{$restaurant->restaurant_address_1}}</option>
                                         @endforeach
                                     </select>
-
                                 </div>
                             </div>
                         <div class="form-group">
@@ -83,19 +82,19 @@
                             <div class="form-group">
                                 <label for="service" class="col-sm-3 control-label">Service Provide</label>
                                 <div class="col-sm-5">
-                                    <input type="text" name="service_provide" id="service" class="form-control" value="">
+                                    <textarea name="service_provide"  class="form-control" id="service"></textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="presentation" class="col-sm-3 control-label">Service Presentation</label>
                                 <div class="col-sm-5">
-                                    <input type="text" name="service_presentation" id="presentation" class="form-control" value="">
+                                    <textarea name="service_presentation"  class="form-control" id="presentation"></textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="instructions" class="col-sm-3 control-label">Instructions</label>
                                 <div class="col-sm-5">
-                                    <textarea name="instructions" id="notes" class="form-control" rows="5"></textarea>
+                                    <textarea name="instructions" id="notes" class="form-control" ></textarea>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -103,9 +102,14 @@
                                 <div class="col-sm-5">
                                     <div class="input-group">
                                         <input type="text" name="setup_time" id="input-setup" class="form-control" value="" />
-
                                     </span>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="input-requirements" class="col-sm-3 control-label">Requirements</label>
+                                <div class="col-sm-5">
+                                    <textarea name="requirements" id="input-requirements" class="form-control"></textarea>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -115,12 +119,6 @@
                                         <input type="text" name="max_time" id="input-max" class="form-control" value="" />
                                         </span>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="input-requirements" class="col-sm-3 control-label">Requirements</label>
-                                <div class="col-sm-5">
-                                    <textarea name="requirements" id="input-requirements" class="form-control" rows="5"></textarea>
                                 </div>
                             </div>
                         <div class="form-group">
@@ -183,9 +181,9 @@
                         </div>
                         <div style="display: none" id="items">
                             <div id="items_container">
-                                <div class="form-group" id="item">
+                                <div class="form-group" >
                                     <label for="menu_item" class="col-sm-3 control-label">Menu Item</label>
-                                    <div class="col-sm-5">
+                                    <div class="col-sm-5" id="item">
                                         <select  name="menu_item[]" id="menu_item" class="" tabindex="-1" >
                                             <option value="">Select menu item</option>
                                             @foreach ($menus as $menu)
@@ -194,7 +192,8 @@
                                         </select>
                                     </div>
                                     <span class="input-group" >
-                                        <input type="text" name="menu_item_quantity" class="form-control" id="by_item" placeholder="Quantity" style="width: 100px; display: none">
+                                        <input type="text" name="max_quantity" class="form-control" id="max_qty" placeholder="Max quantity" style="width: 100px; display: none">
+                                         <input type="text" name="min_quantity" class="form-control" id="min_qty" placeholder=" Min quantity" style="width: 100px; display: none">
                                         <input type="text" name="persons" class="form-control" id="by_person" placeholder="Persons" style="width: 100px; display: none">
                                     </span>
                                 </div>
@@ -206,13 +205,11 @@
                                         <button class="btn btn-primary"  type="button" >Add</button>
                                     </span>
                                 </div>
-
                             </div>
-
                         </div>
+                        </form>
                     </div>
                 </div>
-            </form>
         </div>
     </div>
     <script type="text/javascript">
