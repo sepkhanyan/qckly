@@ -209,7 +209,10 @@
                                         <select  name="menu_item[]" id="menu_item"  tabindex="-1" >
                                             <option value="">Select menu item</option>
                                             @foreach ($menus as $menu)
-                                                <option value="{{$menu->id}}">{{$menu->menu_name}}</option>
+                                                <option value="{{$menu->id}}">
+                                                    {{$menu->menu_name}}/
+                                                    <span id="item_price" style="display: none">{{$menu->menu_price}}</span>
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>

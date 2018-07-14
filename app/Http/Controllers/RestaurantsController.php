@@ -643,16 +643,24 @@ class RestaurantsController extends Controller
                             $items = [];
                             foreach($collection->collectionItem as $collection_item){
 
-                                $foodlist [] =$collection_item->menu->menu_name;
+                                $foodlist [] = $collection_item->menu->menu_name;
                                 $image = url('/').'/images/'. $collection_item->menu->menu_photo;
                                 array_push($foodlist_images , $image);
+                                if($collection->subcategory_id == 4 ){
+                                    $items [] = [
+                                        'item_id' => $collection_item->menu->id,
+                                        'item_name' => $collection_item->menu->menu_name,
+                                        'item_image' => url('/') . '/images/' . $collection_item->menu->menu_photo,
+                                        'item_price' => $collection_item->menu->menu_price,
+                                    ];
+                                }else{
+                                    $items [] = [
+                                        'item_id' => $collection_item->menu->id,
+                                        'item_name' => $collection_item->menu->menu_name,
+                                        'item_image' => url('/') . '/images/' . $collection_item->menu->menu_photo,
+                                    ];
+                                }
 
-                                $items [] = [
-                                    'item_id' => $collection_item->menu->id,
-                                    'item_name' => $collection_item->menu->menu_name,
-                                    'item_image' => url('/') . '/images/' . $collection_item->menu->menu_photo,
-                                    'item_price' => $collection_item->menu->menu_price,
-                                ];
                                 $menu = [
                                     'menu_id' => $collection_item->menu->category->id,
                                     'menu_name' => $collection_item->menu->category->name,
@@ -682,7 +690,6 @@ class RestaurantsController extends Controller
                                 'collection_description' => $collection->description,
                                 'collection_type_id' => $collection->subcategory_id,
                                 'collection_type' => $collection->subcategory->subcategory_en,
-                                'mealtime' => $collection->mealtime,
                                 'cost' => $collection->price . ' qr',
                                 'female_caterer_available' => $female_caterer_available,
                                 'persons_count' => $collection_item->persons,
@@ -701,6 +708,7 @@ class RestaurantsController extends Controller
                     }
                     $arr  = [
                         'restaurant_id' => $restaurant->id,
+                        'mealtime' => $collection->mealtime,
                         'collections' => $menu_collection
                     ];
                 }
