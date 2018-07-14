@@ -77,6 +77,7 @@ class CollectionsController extends Controller
         $collection->subcategory_id = $request->input('subcategory');
         $collection->name = $request->input('name');
         $collection->description = $request->input('description');
+        $collection->mealtime = $request->input('mealtime');
         $collection->service_provide = $request->input('service_provide');
         $collection->service_presentation = $request->input('service_presentation');
         $collection->instruction = $request->input('instructions');

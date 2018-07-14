@@ -53,7 +53,13 @@
                                 </th>
                                 <th>
                                     <a class="sort" href="">
-                                        Subcategory
+                                        Subcategory En
+                                        <i class="fa fa-sort"></i>
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="sort" href="">
+                                        Subcategory Ar
                                         <i class="fa fa-sort"></i>
                                     </a>
                                 </th>
@@ -70,11 +76,12 @@
                                 <tr>
                                     <td class="action">
                                         <input type="checkbox" value="{{ $subcategory->id }}" name="delete" />
-                                        <a class="btn btn-edit" title="" href="{{ url('subcategory/edit/' . $subcategory->id )}}">
+                                        <a class="btn btn-edit" title="" href="{{ url('/menu_subcategory/edit/' . $subcategory->id )}}">
                                             <i class="fa fa-pencil"></i>
                                         </a>&nbsp;&nbsp;
                                     </td>
-                                    <td>{{$subcategory->subcategory_name}}</td>
+                                    <td>{{$subcategory->subcategory_en}}</td>
+                                    <td>{{$subcategory->subcategory_ar}}</td>
                                     <td>{{$subcategory->id}}</td>
                                 </tr>
                             @endforeach
@@ -98,8 +105,14 @@
                     </div>
                     <div class="modal-body">
                         <div class="md-form mb-5" style="width: 400px">
-                            <label class="control-label" for="menu_subcategory">Subcategory</label>
-                            <input type="text" id="menu_subcategory" name="menu_subcategory">
+                            <label class="control-label" for="en">Subcategory En</label>
+                            <input type="text" id="en" name="subcategory_en">
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="md-form mb-5" style="width: 400px">
+                            <label class="control-label" for="ar">Subcategory Ar</label>
+                            <input type="text" id="ar" name="subcategory_ar">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -110,6 +123,7 @@
             </div>
         </form>
     </div>
+
     <script type="text/javascript">
         function filterList() {
             $('#filter-form').submit();

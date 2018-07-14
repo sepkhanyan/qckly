@@ -88,21 +88,25 @@ $(document).ready(function() {
             $('#max_qty'). slideDown('fast');
             $('#min_qty'). slideDown('fast');
             $('#add_item'). slideUp('fast');
+            $('#selection_price'). slideUp('fast');
         }else if($('select[name=subcategory]').val() == 2){
             $('#max_qty'). slideDown('fast');
             $('#min_qty'). slideDown('fast');
             $('#by_person'). slideUp('fast');
             $('#add_item'). slideUp('fast');
+            $('#selection_price'). slideUp('fast');
         }else if($('select[name=subcategory]').val() == 3){
             $('#max_qty'). slideDown('fast');
             $('#min_qty'). slideDown('fast');
             $('#by_person'). slideUp('fast');
             $('#add_item'). slideUp('fast');
+            $('#selection_price'). slideUp('fast');
         }else if($('select[name=subcategory]').val() == 4){
             $('#max_qty'). slideDown('fast');
             $('#min_qty'). slideDown('fast');
             $('#by_person'). slideUp('fast');
             $('#add_item'). slideDown('fast');
+            $('#selection_price'). slideDown('fast');
         }
 
     });
@@ -111,7 +115,7 @@ $(document).ready(function() {
         var original = $(".js-select");
         var clone = original.clone();
         clone.select2();
-        $("#menu_item").clone().appendTo("#item");
+        $("#items_container").clone().appendTo("#selection");
     });
 
 
@@ -139,6 +143,9 @@ $(document).ready(function() {
         });
 
     });
+
+
+
 
     $('#delete_menu_subcategory').click(function() {
         window.checkValues = $('input[name=delete]:checked').map(function () {

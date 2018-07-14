@@ -40,7 +40,8 @@ class MenuSubcategoriesController extends Controller
     public function store(Request $request)
     {
         $subcategory = New MenuSubcategory();
-        $subcategory->subcategory_name = $request->input('menu_subcategory');
+        $subcategory->subcategory_en = $request->input('subcategory_en');
+        $subcategory->subcategory_ar = $request->input('subcategory_ar');
         $subcategory->save();
         return redirect('/menu_subcategories');
     }
@@ -64,7 +65,8 @@ class MenuSubcategoriesController extends Controller
      */
     public function edit($id)
     {
-        //
+        $subcategory = MenuSubcategory::find($id);
+        return view('menu_subcategory_edit', ['subcategory' => $subcategory]);
     }
 
     /**
@@ -76,7 +78,11 @@ class MenuSubcategoriesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $subcategory = MenuSubcategory::find($id);
+        $subcategory->subcategory_en = $request->input('subcategory_en');
+        $subcategory->subcategory_ar = $request->input('subcategory_ar');
+        $subcategory->save();
+        return redirect('/menu_subcategories');
     }
 
     /**
@@ -85,7 +91,7 @@ class MenuSubcategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function deleteSubcategory(Request $request)
     {
         $id = $request->get('id');
         MenuSubcategory::whereIn('id',$id)->delete();

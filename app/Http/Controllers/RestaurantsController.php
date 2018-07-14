@@ -651,11 +651,12 @@ class RestaurantsController extends Controller
                                     'item_id' => $collection_item->menu->id,
                                     'item_name' => $collection_item->menu->menu_name,
                                     'item_image' => url('/') . '/images/' . $collection_item->menu->menu_photo,
+                                    'item_price' => $collection_item->menu->menu_price,
                                 ];
                                 $menu = [
                                     'menu_id' => $collection_item->menu->category->id,
                                     'menu_name' => $collection_item->menu->category->name,
-                                    'menu_description' => $collection->description,
+                                    'menu_description' => $collection_item->menu->menu_description,
                                     'menu_min_qty' => $collection_item->min_count,
                                     'menu_max_qty' => $collection_item->max_count,
                                     'items' => $items
@@ -678,6 +679,10 @@ class RestaurantsController extends Controller
                             $menu_collection [] = [
                                 'collection_id' => $collection->id,
                                 'collection_name' => $collection->name,
+                                'collection_description' => $collection->description,
+                                'collection_type_id' => $collection->subcategory_id,
+                                'collection_type' => $collection->subcategory->subcategory_en,
+                                'mealtime' => $collection->mealtime,
                                 'cost' => $collection->price . ' qr',
                                 'female_caterer_available' => $female_caterer_available,
                                 'persons_count' => $collection_item->persons,
@@ -687,7 +692,6 @@ class RestaurantsController extends Controller
                                 'instruction' => $collection->instruction,
                                 'food_item_image' => url('/').'/images/'. $collection_item->menu->menu_photo,
                                 'food_list_images' => $foodlist_images,
-                                'collection_type' => $collection->subcategory->subcategory_name,
                                 'setup_time' => $setup,
                                 'requirement' => $requirement ,
                                 'max_time' => $max,

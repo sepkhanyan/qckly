@@ -86,6 +86,12 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label for="input-mealtime" class="col-sm-3 control-label">Mealtime</label>
+                                <div class="col-sm-5">
+                                    <input type="text" name="mealtime" id="input-mealtime" class="form-control" value="">
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label for="service" class="col-sm-3 control-label">Service Provide</label>
                                 <div class="col-sm-5">
                                     <textarea name="service_provide"  class="form-control" id="service"></textarea>
@@ -180,30 +186,36 @@
                                 <select name="subcategory" id="subcategory" class="form-control">
                                     <option value="">Select subcategory</option>
                                     @foreach ($subcategories as $subcategory)
-                                        <option value="{{$subcategory->id}}" >{{$subcategory->subcategory_name}}</option>
+                                        <option value="{{$subcategory->id}}" >{{$subcategory->subcategory_en}}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
                         <div style="display: none" id="items">
-                            <div id="items_container">
-                                <div class="form-group" >
+                            <div id="selection">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Quantity</label>
+                                    <div class="col-sm-5">
+                                        <div class="input-group" >
+                                            <input type="text" name="max_quantity" class="form-control" id="max_qty" placeholder="Max quantity" style="width: 100px; display: none">
+                                            <input type="text" name="min_quantity" class="form-control" id="min_qty" placeholder=" Min quantity" style="width: 100px; display: none">
+                                            <input type="text" name="persons" class="form-control" id="by_person" placeholder="Persons" style="width: 100px; display: none">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group" id="items_container">
                                     <label for="menu_item" class="col-sm-3 control-label">Menu Item</label>
                                     <div class="col-sm-5" id="item">
-                                        <select  name="menu_item[]" id="menu_item" class="" tabindex="-1" >
+                                        <select  name="menu_item[]" id="menu_item"  tabindex="-1" >
                                             <option value="">Select menu item</option>
                                             @foreach ($menus as $menu)
                                                 <option value="{{$menu->id}}">{{$menu->menu_name}}</option>
                                             @endforeach
                                         </select>
                                     </div>
-                                    <span class="input-group" >
-                                        <input type="text" name="max_quantity" class="form-control" id="max_qty" placeholder="Max quantity" style="width: 100px; display: none">
-                                         <input type="text" name="min_quantity" class="form-control" id="min_qty" placeholder=" Min quantity" style="width: 100px; display: none">
-                                        <input type="text" name="persons" class="form-control" id="by_person" placeholder="Persons" style="width: 100px; display: none">
-                                    </span>
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <label class="col-sm-3 control-label"></label>
                                 <div class="col-sm-5">

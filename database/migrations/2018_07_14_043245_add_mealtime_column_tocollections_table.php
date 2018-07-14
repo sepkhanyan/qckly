@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnTocollectionsTable extends Migration
+class AddMealtimeColumnTocollectionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddColumnTocollectionsTable extends Migration
     public function up()
     {
         Schema::table('collections', function (Blueprint $table) {
-            $table->decimal('price');
+            $table->string('mealtime');
         });
 
     }
@@ -27,7 +27,7 @@ class AddColumnTocollectionsTable extends Migration
     public function down()
     {
         Schema::table('collections', function (Blueprint $table) {
-            $table->dropColumn('price');
+            $table->dropColumn('mealtime');
         });
     }
 }

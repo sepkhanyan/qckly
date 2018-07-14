@@ -50,6 +50,8 @@ Route::group(['middleware' => ['web', 'auth']], function (){
             Route::get('/menu_subcategories', 'MenuSubcategoriesController@index');
             Route::get('/menu_subcategory/store', 'MenuSubcategoriesController@store');
             Route::post('/delete/menu_subcategory', 'MenuSubcategoriesController@deleteSubcategory');
+            Route::get('/menu_subcategory/edit/{id}', 'MenuSubcategoriesController@edit');
+            Route::post('/menu_subcategory/update/{id}', 'MenuSubcategoriesController@update');
             Route::get('/menus/{id?}', 'MenusController@index');
             Route::get('/new/menus', 'MenusController@create');
             Route::post('/store/menus', 'MenusController@store');
