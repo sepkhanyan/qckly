@@ -150,7 +150,7 @@
                                     <td>{{$collection->name}}</td>
                                     <td>{{$collection->description}}</td>
                                     <td>{{$collection->subcategory->subcategory_name}}</td>
-                                    <td>{{$collection->price}}</td>
+                                    <td>{{$collection->price}}<span>&#36;</span></td>
                                     <td>
                                         @if($collection->female_caterer_available == 1)
                                             Yes

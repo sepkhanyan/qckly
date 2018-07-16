@@ -680,8 +680,21 @@ class RestaurantsController extends Controller
                             $max = '';
                             $requirement = '';
                             if($collection->subcategory_id == 1){
-                                $setup = $collection->setup_time;
-                                $max = $collection->max_time;
+                                $setup_hours = $collection->setup_time/60;
+                                $setup_minutes = $collection->setup_time%60;
+                                if($setup_minutes > 0){
+                                    $setup = floor($setup_hours)." hours ".($setup_minutes)." minutes";
+                                }else{
+                                    $setup = floor($setup_hours)." hours";
+                                }
+
+                                $max_hours = $collection->max_time/60;
+                                $max_minutes = $collection->max_time%60;
+                                if($max_minutes > 0){
+                                    $max = floor($max_hours)." hours ".($max_minutes)." minutes";
+                                }else{
+                                    $max = floor($max_hours)." hours";
+                                }
                                 $requirement = $collection->requirements;
                             }
                             $menu_collection [] = [
@@ -691,7 +704,7 @@ class RestaurantsController extends Controller
                                 'collection_type_id' => $collection->subcategory_id,
                                 'collection_type' => $collection->subcategory->subcategory_en,
                                 'mealtime' => $collection->mealtime,
-                                'cost' => $collection->price . ' qr',
+                                'cost' => $collection->price . '$',
                                 'female_caterer_available' => $female_caterer_available,
                                 'persons_count' => $collection_item->persons,
                                 'service_provide' => $collection->service_provide,
