@@ -141,7 +141,7 @@
                                         </a>&nbsp;&nbsp;
                                     </td>
                                     <td>{{$menu->menu_name}}</td>
-                                    <td>£{{$menu->menu_price}}</td>
+                                    <td>{{$menu->menu_price}}</td>
                                     <td>{{$menu->category->name}}</td>
                                     <td>{{$menu->stock_qty}}</td>
                                     <td>

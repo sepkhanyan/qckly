@@ -651,7 +651,8 @@ class RestaurantsController extends Controller
                                         'item_id' => $collection_item->menu->id,
                                         'item_name' => $collection_item->menu->menu_name,
                                         'item_image' => url('/') . '/images/' . $collection_item->menu->menu_photo,
-                                        'item_price' => $collection_item->menu->menu_price . '$',
+                                        'item_price' => $collection_item->menu->menu_price,
+                                        'item_price_unit' => "QR",
                                     ];
                                 }else{
                                     $items [] = [
@@ -704,7 +705,8 @@ class RestaurantsController extends Controller
                                 'collection_type_id' => $collection->subcategory_id,
                                 'collection_type' => $collection->subcategory->subcategory_en,
                                 'mealtime' => $collection->mealtime,
-                                'cost' => $collection->price . '$',
+                                'price' => $collection->price,
+                                'price_unit' => "QR",
                                 'female_caterer_available' => $female_caterer_available,
                                 'persons_count' => $collection_item->persons,
                                 'service_provide' => $collection->service_provide,
