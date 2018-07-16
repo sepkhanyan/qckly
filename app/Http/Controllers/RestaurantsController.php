@@ -651,7 +651,7 @@ class RestaurantsController extends Controller
                                         'item_id' => $collection_item->menu->id,
                                         'item_name' => $collection_item->menu->menu_name,
                                         'item_image' => url('/') . '/images/' . $collection_item->menu->menu_photo,
-                                        'item_price' => $collection_item->menu->menu_price,
+                                        'item_price' => $collection_item->menu->menu_price . '$',
                                     ];
                                 }else{
                                     $items [] = [
