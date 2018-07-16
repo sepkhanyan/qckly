@@ -660,13 +660,13 @@ class RestaurantsController extends Controller
                                         'item_image' => url('/') . '/images/' . $collection_item->menu->menu_photo,
                                     ];
                                 }
-
-                                $menu = [
+                                $menu = [];
+                                $menu [] = [
                                     'menu_id' => $collection_item->menu->category->id,
                                     'menu_name' => $collection_item->menu->category->name,
                                     'menu_description' => $collection_item->menu->menu_description,
-                                    'menu_min_qty' => $collection_item->min_count,
-                                    'menu_max_qty' => $collection_item->max_count,
+                                    'menu_min_qty' => $collection->min_qty,
+                                    'menu_max_qty' => $collection->max_qty,
                                     'items' => $items
                                 ];
 
@@ -690,6 +690,7 @@ class RestaurantsController extends Controller
                                 'collection_description' => $collection->description,
                                 'collection_type_id' => $collection->subcategory_id,
                                 'collection_type' => $collection->subcategory->subcategory_en,
+                                'mealtime' => $collection->mealtime,
                                 'cost' => $collection->price . ' qr',
                                 'female_caterer_available' => $female_caterer_available,
                                 'persons_count' => $collection_item->persons,
@@ -708,7 +709,6 @@ class RestaurantsController extends Controller
                     }
                     $arr  = [
                         'restaurant_id' => $restaurant->id,
-                        'mealtime' => $collection->mealtime,
                         'collections' => $menu_collection
                     ];
                 }

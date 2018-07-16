@@ -88,13 +88,13 @@ class CollectionsController extends Controller
         $collection->is_available = $request->input('is_available');
         $collection->notes = $request->input('notes');
         $collection->price = $request->input('collection_price');
+        $collection->max_qty = $request->input('max_quantity');
+        $collection->min_qty = $request->input('min_quantity');
         $collection->save();
         $menus = $request->input('menu_item');
         foreach($menus as $menu){
             $collection_item = new CollectionItem();
             $collection_item->menu_id = $menu;
-            $collection_item->max_count = $request->input('max_quantity');
-            $collection_item->min_count = $request->input('min_quantity');
             $collection_item->persons = $request->input('persons');
             $collection_item->collection_id = $collection->id;
             $collection_item->save();
@@ -127,7 +127,8 @@ class CollectionsController extends Controller
     public function edit($id)
     {
 
-//        $collection = Collection::with('restaurant')->find($id);
+        $collection = Collection::with('restaurant.menu')->find($id);
+//        dd($collection->restaurant->menu);
 //        dd($collection->restaurant);
 //        foreach($collection->restaurant->menu as $menu){
 //                dd($menu->category->name);
@@ -137,16 +138,16 @@ class CollectionsController extends Controller
 ////        dd();
 ////        $menus = $collection->restaurant->menu;
 ////        $data = $request->all();
-////        $menus = [];
+        $menus = $collection->restaurant->menu;
 //        $restaurant = Restaurant::all();
-//        $subcategories = MenuSubcategory::all();
-////        $categories = Categories::all();
-//        return view('edit_collection', [
-//            'menus' => $menus,
-//            'collection' => $collection,
-//            'subcategories' => $subcategories,
+        $subcategories = MenuSubcategory::all();
+//        $categories = Categories::all();
+        return view('edit_collection', [
+            'menus' => $menus,
+            'collection' => $collection,
+            'subcategories' => $subcategories,
 //            'categories' => $categories
-//        ]);
+        ]);
     }
 
     /**
@@ -158,7 +159,40 @@ class CollectionsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $collection = Collection::with('restaurant.menu')->find($id);
+//        dd($collection->restaurant_id);
+//        $collection->restaurant_id = $request->input('restaurant_name');
+        $collection->subcategory_id = $request->input('subcategory');
+        $collection->name = $request->input('name');
+        $collection->description = $request->input('description');
+        $collection->mealtime = $request->input('mealtime');
+        $collection->service_provide = $request->input('service_provide');
+        $collection->service_presentation = $request->input('service_presentation');
+        $collection->instruction = $request->input('instructions');
+        $collection->setup_time = $request->input('setup_time');
+        $collection->max_time = $request->input('max_time');
+        $collection->requirements = $request->input('requirements');
+        $collection->female_caterer_available = $request->input('female_caterer_available');
+        $collection->is_available = $request->input('is_available');
+        $collection->notes = $request->input('notes');
+        $collection->price = $request->input('collection_price');
+        $collection->max_qty = $request->input('max_quantity');
+        $collection->min_qty = $request->input('min_quantity');
+        $collection->save();
+        $menus = $request->input('menu_item');
+        foreach($menus as $menu){
+            $collection_item = CollectionItem::where('collection_id', $id)->first();
+            $collection_item->menu_id = $menu;
+            $collection_item->persons = $request->input('persons');
+            $collection_item->collection_id = $collection->id;
+            $collection_item->save();
+        }
+
+
+
+
+
+        return redirect('/collections');
     }
 
     /**

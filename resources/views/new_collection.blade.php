@@ -104,7 +104,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="instructions" class="col-sm-3 control-label">Instructions</label>
+                                <label for="instructions" class="col-sm-3 control-label">Instruction</label>
                                 <div class="col-sm-5">
                                     <textarea name="instructions" id="notes" class="form-control" ></textarea>
                                 </div>

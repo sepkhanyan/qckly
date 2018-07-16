@@ -60,7 +60,7 @@
             </div>
             <div class="tab-content">
                 <div id="general" class="tab-pane row wrap-all active">
-                    <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="GET" action="{{ url('/collection/store') }}">
+                    <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST" action="{{ url('/collection/update/' . $collection->id) }}" enctype="multipart/form-data">
                         {{ csrf_field() }}
                         {{--<div class="form-group">--}}
                             {{--<label for="restaurant" class="col-sm-3 control-label">Restaurant</label>--}}
@@ -75,38 +75,44 @@
                         <div class="form-group">
                             <label for="input-name" class="col-sm-3 control-label">Name</label>
                             <div class="col-sm-5">
-                                <input type="text" name="name" id="input-name" class="form-control" value="">
+                                <input type="text" name="name" id="input-name" class="form-control" value="{{$collection->name}}">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="input-description" class="col-sm-3 control-label">Description</label>
                             <div class="col-sm-5">
-                                <textarea name="description" id="input-description" class="form-control" rows="5">{{ old('description') }}</textarea>
+                                <textarea name="description" id="input-description" class="form-control" rows="5">{{$collection->description}}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="input-mealtime" class="col-sm-3 control-label">Mealtime</label>
+                            <div class="col-sm-5">
+                                <input type="text" name="mealtime" id="input-mealtime" class="form-control" value="{{$collection->mealtime}}">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="service" class="col-sm-3 control-label">Service Provide</label>
                             <div class="col-sm-5">
-                                <textarea name="service_provide"  class="form-control" id="service"></textarea>
+                                <textarea name="service_provide"  class="form-control" id="service">{{$collection->service_provide}}</textarea>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="presentation" class="col-sm-3 control-label">Service Presentation</label>
                             <div class="col-sm-5">
-                                <textarea name="service_presentation"  class="form-control" id="presentation"></textarea>
+                                <textarea name="service_presentation"  class="form-control" id="presentation">{{$collection->service_presentation}}</textarea>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="instructions" class="col-sm-3 control-label">Instructions</label>
+                            <label for="instructions" class="col-sm-3 control-label">Instruction</label>
                             <div class="col-sm-5">
-                                <textarea name="instructions" id="notes" class="form-control" ></textarea>
+                                <textarea name="instructions" id="notes" class="form-control" >{{$collection->instruction}}</textarea>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="input-setup" class="col-sm-3 control-label">Setup Time</label>
                             <div class="col-sm-5">
                                 <div class="input-group">
-                                    <input type="text" name="setup_time" id="input-setup" class="form-control" value="" />
+                                    <input type="text" name="setup_time" id="input-setup" class="form-control" value="{{$collection->setup_time}}" />
                                     </span>
                                 </div>
                             </div>
@@ -114,14 +120,14 @@
                         <div class="form-group">
                             <label for="input-requirements" class="col-sm-3 control-label">Requirements</label>
                             <div class="col-sm-5">
-                                <textarea name="requirements" id="input-requirements" class="form-control"></textarea>
+                                <textarea name="requirements" id="input-requirements" class="form-control">{{$collection->requirements}}</textarea>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="input-max" class="col-sm-3 control-label">Max Time</label>
                             <div class="col-sm-5">
                                 <div class="input-group">
-                                    <input type="text" name="max_time" id="input-max" class="form-control" value="" />
+                                    <input type="text" name="max_time" id="input-max" class="form-control" value="{{$collection->max_time}}" />
                                     </span>
                                 </div>
                             </div>
@@ -159,14 +165,14 @@
                         <div class="form-group">
                             <label for="notes" class="col-sm-3 control-label">Notes</label>
                             <div class="col-sm-5">
-                                <textarea name="notes" id="notes" class="form-control" rows="5"></textarea>
+                                <textarea name="notes" id="notes" class="form-control" rows="5">{{$collection->notes}}</textarea>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="input-price" class="col-sm-3 control-label">Price</label>
                             <div class="col-sm-5">
                                 <div class="input-group">
-                                    <input type="text" name="collection_price" id="input-price" class="form-control" value="" />
+                                    <input type="text" name="collection_price" id="input-price" class="form-control" value="{{$collection->price}}" />
                                     <span class="input-group-addon">
                                         <i class="fa fa-money"></i>
                                     </span>
@@ -179,30 +185,39 @@
                                 <select name="subcategory" id="subcategory" class="form-control">
                                     <option value="">Select subcategory</option>
                                     @foreach ($subcategories as $subcategory)
-                                        <option value="{{$subcategory->id}}" >{{$subcategory->subcategory_name}}</option>
+                                        <option value="{{$subcategory->id}}" >{{$subcategory->subcategory_en}}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
                         <div style="display: none" id="items">
-                            <div id="items_container">
-                                <div class="form-group" >
+                            <div id="selection">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Quantity</label>
+                                    <div class="col-sm-5">
+                                        <div class="input-group" >
+                                            <input type="text" name="max_quantity" class="form-control" id="max_qty" placeholder="Max quantity" style="width: 100px; display: none">
+                                            <input type="text" name="min_quantity" class="form-control" id="min_qty" placeholder=" Min quantity" style="width: 100px; display: none">
+                                            <input type="text" name="persons" class="form-control" id="by_person" placeholder="Persons" style="width: 100px; display: none">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group" id="items_container">
                                     <label for="menu_item" class="col-sm-3 control-label">Menu Item</label>
                                     <div class="col-sm-5" id="item">
-                                        <select  name="menu_item[]" id="menu_item" class="" tabindex="-1" >
+                                        <select  name="menu_item[]" id="menu_item"  tabindex="-1" >
                                             <option value="">Select menu item</option>
                                             @foreach ($menus as $menu)
-                                                <option value="{{$menu->id}}">{{$menu->menu_name}}</option>
+                                                <option value="{{$menu->id}}">
+                                                    {{$menu->menu_name}}/
+                                                    <span id="item_price" style="display: none">{{$menu->menu_price}}</span>
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>
-                                    <span class="input-group" >
-                                        <input type="text" name="max_quantity" class="form-control" id="max_qty" placeholder="Max quantity" style="width: 100px; display: none">
-                                         <input type="text" name="min_quantity" class="form-control" id="min_qty" placeholder=" Min quantity" style="width: 100px; display: none">
-                                        <input type="text" name="persons" class="form-control" id="by_person" placeholder="Persons" style="width: 100px; display: none">
-                                    </span>
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <label class="col-sm-3 control-label"></label>
                                 <div class="col-sm-5">
