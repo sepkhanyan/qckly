@@ -27,4 +27,9 @@ class Menus extends Model
     {
         return $this->hasMany('App\CollectionItem', 'menu_id');
     }
+
+    public function cart ()
+    {
+        return $this->belongsTo('App\UserCart', 'item_id');
+    }
 }

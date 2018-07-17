@@ -210,11 +210,14 @@
                                             <option value="">Select menu item</option>
                                             @foreach ($menus as $menu)
                                                 <option value="{{$menu->id}}">
-                                                    {{$menu->menu_name}}/
-                                                    <span id="item_price" style="display: none">{{$menu->menu_price}}</span>
+                                                    {{$menu->menu_name}}
                                                 </option>
                                             @endforeach
                                         </select>
+                                        <span  id="item_count" style="display: none">
+                                           <input type="text" name="item_qty"  placeholder="Quantity">
+                                        </span>
+
                                     </div>
                                 </div>
                             </div>

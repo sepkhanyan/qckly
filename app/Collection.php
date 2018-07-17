@@ -24,4 +24,9 @@ class Collection extends Model
     {
         return $this->hasMany('App\CollectionItem', 'collection_id');
     }
+
+    public function cart ()
+    {
+        return $this->belongsTo('App\UserCart', 'collection_id');
+    }
 }

@@ -88,25 +88,25 @@ $(document).ready(function() {
             $('#max_qty'). slideDown('fast');
             $('#min_qty'). slideDown('fast');
             $('#add_item'). slideUp('fast');
-            $('#item_price'). slideUp('fast');
+            $('#item_count'). slideUp('fast');
         }else if($('select[name=subcategory]').val() == 2){
             $('#max_qty'). slideDown('fast');
             $('#min_qty'). slideDown('fast');
             $('#by_person'). slideUp('fast');
             $('#add_item'). slideUp('fast');
-            $('#item_price'). slideUp('fast');
+            $('#item_count'). slideUp('fast');
         }else if($('select[name=subcategory]').val() == 3){
             $('#max_qty'). slideDown('fast');
             $('#min_qty'). slideDown('fast');
             $('#by_person'). slideUp('fast');
             $('#add_item'). slideUp('fast');
-            $('#item_price'). slideUp('fast');
+            $('#item_count'). slideUp('fast');
         }else if($('select[name=subcategory]').val() == 4){
             $('#max_qty'). slideDown('fast');
             $('#min_qty'). slideDown('fast');
             $('#by_person'). slideUp('fast');
             $('#add_item'). slideDown('fast');
-            $('#item_price'). slideDown('fast');
+            $('#item_count'). slideDown('fast');
         }
 
     });

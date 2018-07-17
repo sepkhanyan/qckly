@@ -213,6 +213,9 @@
                                                     <span id="item_price" style="display: none">{{$menu->menu_price}}</span>
                                                 </option>
                                             @endforeach
+                                            <span  id="item_count" style="display: none">
+                                                <input type="text" name="item_qty"  placeholder="Quantity">
+                                            </span>
                                         </select>
                                     </div>
                                 </div>

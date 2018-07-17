@@ -652,23 +652,15 @@ class RestaurantsController extends Controller
                                     $status = false;
                                 }
 
-                                if($collection->subcategory_id == 4 ){
                                     $items [] = [
                                         'item_id' => $collection_item->menu->id,
                                         'item_name' => $collection_item->menu->menu_name,
                                         'item_image' => url('/') . '/images/' . $collection_item->menu->menu_photo,
                                         'item_price' => $collection_item->menu->menu_price,
                                         'item_price_unit' => "QR",
-                                        'item_availability' => $status
+                                        'item_availability' => $status,
+                                        'item_qty' => $collection_item->min_count
                                     ];
-                                }else{
-                                    $items [] = [
-                                        'item_id' => $collection_item->menu->id,
-                                        'item_name' => $collection_item->menu->menu_name,
-                                        'item_image' => url('/') . '/images/' . $collection_item->menu->menu_photo,
-                                        'item_availability' => $status
-                                    ];
-                                }
                                 usort($items, function ($item1, $item2) {
                                     return $item2['item_availability'] <=> $item1['item_availability'];
                                 });

@@ -94,6 +94,7 @@ class CollectionsController extends Controller
         foreach($menus as $menu){
             $collection_item = new CollectionItem();
             $collection_item->menu_id = $menu;
+            $collection_item->min_count = $request->input('item_qty');
             $collection_item->persons = $request->input('persons');
             $collection_item->collection_id = $collection->id;
             $collection_item->save();
@@ -178,6 +179,7 @@ class CollectionsController extends Controller
         foreach($menus as $menu){
             $collection_item = CollectionItem::where('collection_id', $id)->first();
             $collection_item->menu_id = $menu;
+            $collection_item->min_count = $request->input('item_qty');
             $collection_item->persons = $request->input('persons');
             $collection_item->collection_id = $collection->id;
             $collection_item->save();
@@ -202,4 +204,6 @@ class CollectionsController extends Controller
         Collection::whereIn('id',$id)->delete();
         return redirect('/collections');
     }
+
+
 }
