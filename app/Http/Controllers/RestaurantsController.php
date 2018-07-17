@@ -620,7 +620,7 @@ class RestaurantsController extends Controller
             $restaurant_id = $DataRequests['restaurant_id'];
 
             $restaurants = Restaurant::where('id', $restaurant_id)
-                ->with(['menu.category','collection.subcategory', 'collection.collectionItem']);
+                ->with(['menu.category' ,'collection.subcategory', 'collection.collectionItem']);
             if(isset($DataRequests['category_id'])){
                 $category_id = $DataRequests['category_id'];
                 $restaurants = $restaurants->whereHas('categoryRestaurant',function ($query) use ($category_id){
@@ -646,6 +646,12 @@ class RestaurantsController extends Controller
                                 $foodlist [] = $collection_item->menu->menu_name;
                                 $image = url('/').'/images/'. $collection_item->menu->menu_photo;
                                 array_push($foodlist_images , $image);
+                                if($collection_item->menu->menu_status == 1){
+                                    $status = true;
+                                }else{
+                                    $status = false;
+                                }
+
                                 if($collection->subcategory_id == 4 ){
                                     $items [] = [
                                         'item_id' => $collection_item->menu->id,
@@ -653,14 +659,19 @@ class RestaurantsController extends Controller
                                         'item_image' => url('/') . '/images/' . $collection_item->menu->menu_photo,
                                         'item_price' => $collection_item->menu->menu_price,
                                         'item_price_unit' => "QR",
+                                        'item_availability' => $status
                                     ];
                                 }else{
                                     $items [] = [
                                         'item_id' => $collection_item->menu->id,
                                         'item_name' => $collection_item->menu->menu_name,
                                         'item_image' => url('/') . '/images/' . $collection_item->menu->menu_photo,
+                                        'item_availability' => $status
                                     ];
                                 }
+                                usort($items, function ($item1, $item2) {
+                                    return $item2['item_availability'] <=> $item1['item_availability'];
+                                });
                                 $menu = [];
                                 $menu [] = [
                                     'menu_id' => $collection_item->menu->category->id,
@@ -673,30 +684,39 @@ class RestaurantsController extends Controller
 
                             }
                             if($collection->female_caterer_available == 1){
-                                $female_caterer_available = 'Yes';
+                                $female_caterer_available = true;
                             }else{
-                                $female_caterer_available = 'No';
+                                $female_caterer_available = false;
+                            }
+                            if($collection->is_available == 1){
+                                $is_available = true;
+                            }else{
+                                $is_available = false;
                             }
                             $setup = '';
                             $max = '';
                             $requirement = '';
                             if($collection->subcategory_id == 1){
-                                $setup_hours = $collection->setup_time/60;
-                                $setup_minutes = $collection->setup_time%60;
+                                $setup_hours = $collection->setup_time / 60;
+                                $setup_minutes = $collection->setup_time % 60;
                                 if($setup_minutes > 0){
-                                    $setup = floor($setup_hours)." hours ".($setup_minutes)." minutes";
+                                    $setup = floor($setup_hours) . " hours " . ($setup_minutes) . " minutes";
                                 }else{
-                                    $setup = floor($setup_hours)." hours";
+                                    $setup = floor($setup_hours) . " hours";
                                 }
 
-                                $max_hours = $collection->max_time/60;
-                                $max_minutes = $collection->max_time%60;
+                                $max_hours = $collection->max_time / 60;
+                                $max_minutes = $collection->max_time % 60;
                                 if($max_minutes > 0){
-                                    $max = floor($max_hours)." hours ".($max_minutes)." minutes";
+                                    $max = floor($max_hours) . " hours " . ($max_minutes) . " minutes";
                                 }else{
-                                    $max = floor($max_hours)." hours";
+                                    $max = floor($max_hours) . " hours";
                                 }
                                 $requirement = $collection->requirements;
+                            }
+                            $persons = '';
+                            if($collection->subcategory_id == 1){
+                                $persons = $collection_item->persons;
                             }
                             $menu_collection [] = [
                                 'collection_id' => $collection->id,
@@ -708,7 +728,8 @@ class RestaurantsController extends Controller
                                 'price' => $collection->price,
                                 'price_unit' => "QR",
                                 'female_caterer_available' => $female_caterer_available,
-                                'persons_count' => $collection_item->persons,
+                                'is_available' => $is_available,
+                                'persons_count' => $persons,
                                 'service_provide' => $collection->service_provide,
                                 'food_list' => $foodlist,
                                 'service_presentation' => $collection->service_presentation,
@@ -722,6 +743,9 @@ class RestaurantsController extends Controller
                             ];
                         }
                     }
+                    usort($menu_collection, function ($item1, $item2) {
+                        return $item2['is_available'] <=> $item1['is_available'];
+                    });
                     $arr  = [
                         'restaurant_id' => $restaurant->id,
                         'collections' => $menu_collection

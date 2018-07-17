@@ -24,7 +24,6 @@
         </div>
         @if(count($collections)>0)
     </div>
-
     <div class="row content" >
         <div class="col-md-12">
             <div class="panel panel-default panel-table">
@@ -83,7 +82,6 @@
                         </div>
                     </form>
                 </div>
-
             </div>
             <form role="form" id="list-form" accept-charset="utf-8" method="POST" action="">
                 <div class="table-responsive">
@@ -138,7 +136,6 @@
                         </tr>
                         </thead>
                         <tbody>
-
                         @foreach($collections as $collection)
                                 <tr>
                                     <td class="action">
@@ -162,12 +159,9 @@
                                     <td>{{$collection->id}}</td>
                                 </tr>
                         @endforeach
-
                         </tbody>
                     </table>
-
                 </div>
-
             </form>
         </div>
     </div>

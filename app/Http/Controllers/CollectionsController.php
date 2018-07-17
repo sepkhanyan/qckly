@@ -52,7 +52,6 @@ class CollectionsController extends Controller
             $menus = $menus->where('menu_category_id', $data['category_name']);
             $menus = $menus->get();
         }
-
         $restaurants = Restaurant::all();
         $subcategories = MenuSubcategory::all();
         $categories = Categories::all();
@@ -99,10 +98,6 @@ class CollectionsController extends Controller
             $collection_item->collection_id = $collection->id;
             $collection_item->save();
         }
-
-
-
-
 
         return redirect('/collections');
     }
