@@ -71,7 +71,7 @@ $(document).ready(function() {
 
 
     $('#subcategory').change(function(){
-        if ($(this).val() == 3)
+        if ($(this).val() == 3 || $(this).val() == 4)
         {
             $('#menu_item').attr('multiple','multiple');
         }
@@ -87,14 +87,14 @@ $(document).ready(function() {
             $('#by_person'). slideDown('fast');
             $('#max_qty'). slideDown('fast');
             $('#min_qty'). slideDown('fast');
-            $('#add_item'). slideUp('fast');
-            $('#item_count'). slideUp('fast');
+            $('#add_item'). slideDown('fast');
+            $('#item_count'). slideDown('fast');
         }else if($('select[name=subcategory]').val() == 2){
             $('#max_qty'). slideDown('fast');
             $('#min_qty'). slideDown('fast');
             $('#by_person'). slideUp('fast');
-            $('#add_item'). slideUp('fast');
-            $('#item_count'). slideUp('fast');
+            $('#add_item'). slideDown('fast');
+            $('#item_count'). slideDown('fast');
         }else if($('select[name=subcategory]').val() == 3){
             $('#max_qty'). slideDown('fast');
             $('#min_qty'). slideDown('fast');
@@ -105,8 +105,8 @@ $(document).ready(function() {
             $('#max_qty'). slideDown('fast');
             $('#min_qty'). slideDown('fast');
             $('#by_person'). slideUp('fast');
-            $('#add_item'). slideDown('fast');
-            $('#item_count'). slideDown('fast');
+            $('#add_item'). slideUp('fast');
+            $('#item_count'). slideUp('fast');
         }
 
     });

@@ -32,7 +32,7 @@
                                 </div>
                         </div>
                     <div>
-                            <div class="form-group">
+                        <div class="form-group">
                                 <label for="input-name" class="col-sm-3 control-label">Category</label>
                                 <div class="col-sm-5">
                                     <select name="category_name" id="category" class="form-control">

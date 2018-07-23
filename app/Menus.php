@@ -28,8 +28,8 @@ class Menus extends Model
         return $this->hasMany('App\CollectionItem', 'menu_id');
     }
 
-    public function cart ()
+    public function cartItem ()
     {
-        return $this->belongsTo('App\UserCart', 'item_id');
+        return $this->hasMany('App\UserCartItem', 'item_id');
     }
 }

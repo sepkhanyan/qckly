@@ -25,8 +25,13 @@ class Collection extends Model
         return $this->hasMany('App\CollectionItem', 'collection_id');
     }
 
-    public function cart ()
+    public function cartItem ()
     {
-        return $this->belongsTo('App\UserCart', 'collection_id');
+        return $this->hasMany('App\UserCartItem', 'collection_id');
+    }
+
+    public function cartCollection ()
+    {
+        return $this->hasMany('App\UserCartCollection', 'collection_id');
     }
 }

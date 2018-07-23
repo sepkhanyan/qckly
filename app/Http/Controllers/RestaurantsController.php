@@ -651,7 +651,16 @@ class RestaurantsController extends Controller
                                 }else{
                                     $status = false;
                                 }
-
+                                if($collection->subcategory_id == 4 || $collection->subcategory_id == 3){
+                                    $items [] = [
+                                        'item_id' => $collection_item->menu->id,
+                                        'item_name' => $collection_item->menu->menu_name,
+                                        'item_image' => url('/') . '/images/' . $collection_item->menu->menu_photo,
+                                        'item_price' => $collection_item->menu->menu_price,
+                                        'item_price_unit' => "QR",
+                                        'item_availability' => $status,
+                                    ];
+                                }else{
                                     $items [] = [
                                         'item_id' => $collection_item->menu->id,
                                         'item_name' => $collection_item->menu->menu_name,
@@ -661,19 +670,33 @@ class RestaurantsController extends Controller
                                         'item_availability' => $status,
                                         'item_qty' => $collection_item->min_count
                                     ];
-                                usort($items, function ($item1, $item2) {
-                                    return $item2['item_availability'] <=> $item1['item_availability'];
-                                });
-                                $menu = [];
-                                $menu [] = [
-                                    'menu_id' => $collection_item->menu->category->id,
-                                    'menu_name' => $collection_item->menu->category->name,
-                                    'menu_description' => $collection_item->menu->menu_description,
-                                    'menu_min_qty' => $collection->min_qty,
-                                    'menu_max_qty' => $collection->max_qty,
-                                    'items' => $items
-                                ];
+                                }
 
+                                if($collection->subcategory_id == 4){
+                                    usort($items, function ($item1, $item2) {
+                                        return $item2['item_availability'] <=> $item1['item_availability'];
+                                    });
+                                    $menu = [];
+                                    $menu [] = [
+                                        'menu_id' => $collection_item->menu->category->id,
+                                        'menu_name' => $collection_item->menu->category->name,
+                                        'menu_description' => $collection_item->menu->menu_description,
+                                        'items' => $items
+                                    ];
+                                }else{
+                                    usort($items, function ($item1, $item2) {
+                                        return $item2['item_availability'] <=> $item1['item_availability'];
+                                    });
+                                    $menu = [];
+                                    $menu [] = [
+                                        'menu_id' => $collection_item->menu->category->id,
+                                        'menu_name' => $collection_item->menu->category->name,
+                                        'menu_description' => $collection_item->menu->menu_description,
+                                        'menu_min_qty' => $collection->min_qty,
+                                        'menu_max_qty' => $collection->max_qty,
+                                        'items' => $items
+                                    ];
+                                }
                             }
                             if($collection->female_caterer_available == 1){
                                 $female_caterer_available = true;
@@ -688,6 +711,7 @@ class RestaurantsController extends Controller
                             $setup = '';
                             $max = '';
                             $requirement = '';
+                            $persons = '';
                             if($collection->subcategory_id == 1){
                                 $setup_hours = $collection->setup_time / 60;
                                 $setup_minutes = $collection->setup_time % 60;
@@ -705,10 +729,10 @@ class RestaurantsController extends Controller
                                     $max = floor($max_hours) . " hours";
                                 }
                                 $requirement = $collection->requirements;
-                            }
-                            $persons = '';
-                            if($collection->subcategory_id == 1){
                                 $persons = $collection_item->persons;
+                            }
+                            if($collection->subcategory_id == 4){
+                                $collection->price = 'On Selection';
                             }
                             $menu_collection [] = [
                                 'collection_id' => $collection->id,
