@@ -72,14 +72,10 @@ class RestaurantsController extends Controller
         $destinationPath = public_path('/images');
         $image->move($destinationPath, $name);
         $restaurant->restaurant_image = $name;
-//        $categories
-//        foreach($categories as $category){
-
-//        }
-//        $restaurant->restaurant_category_id = $request->input('restaurant_category');
         $restaurant->restaurant_name = $request->input('restaurant_name');
         $restaurant->restaurant_email = $request->input('email');
         $restaurant->restaurant_telephone = $request->input('telephone');
+        $restaurant->female_caterer_available = $request->input('female_caterer_available');
         $address = $request->input('address');
         if($address){
             $restaurant->restaurant_address_1 = $address['address_1'];
@@ -191,10 +187,10 @@ class RestaurantsController extends Controller
     public function update(Request $request, $id)
     {
         $restaurant = Restaurant::find($id);
-
         $restaurant->restaurant_name = $request->input('restaurant_name');
         $restaurant->restaurant_email = $request->input('email');
         $restaurant->restaurant_telephone = $request->input('telephone');
+        $restaurant->female_caterer_available = $request->input('female_caterer_available');
         $address = $request->input('address');
         if($address){
             $restaurant->restaurant_address_1 = $address['address_1'];
@@ -633,6 +629,11 @@ class RestaurantsController extends Controller
             if(count($restaurants) > 0){
 
                 foreach($restaurants as $restaurant){
+                    if($restaurant->female_caterer_available == 1){
+                        $female_caterer_available = true;
+                    }else{
+                        $female_caterer_available = false;
+                    }
                     $menu_collection = [];
                     if(count($restaurant->collection) > 0){
 
@@ -698,11 +699,6 @@ class RestaurantsController extends Controller
                                     ];
                                 }
                             }
-                            if($collection->female_caterer_available == 1){
-                                $female_caterer_available = true;
-                            }else{
-                                $female_caterer_available = false;
-                            }
                             if($collection->is_available == 1){
                                 $is_available = true;
                             }else{
@@ -740,10 +736,10 @@ class RestaurantsController extends Controller
                                 'collection_description' => $collection->description,
                                 'collection_type_id' => $collection->subcategory_id,
                                 'collection_type' => $collection->subcategory->subcategory_en,
+                                'female_caterer_available' => $female_caterer_available,
                                 'mealtime' => $collection->mealtime,
                                 'price' => $collection->price,
                                 'price_unit' => "QR",
-                                'female_caterer_available' => $female_caterer_available,
                                 'is_available' => $is_available,
                                 'persons_count' => $persons,
                                 'service_provide' => $collection->service_provide,

@@ -85,7 +85,6 @@ class CollectionsController extends Controller
         $collection->setup_time = $request->input('setup_time');
         $collection->max_time = $request->input('max_time');
         $collection->requirements = $request->input('requirements');
-        $collection->female_caterer_available = $request->input('female_caterer_available');
         $collection->is_available = $request->input('is_available');
         $collection->notes = $request->input('notes');
         $collection->price = $request->input('collection_price');
@@ -170,7 +169,6 @@ class CollectionsController extends Controller
         $collection->setup_time = $request->input('setup_time');
         $collection->max_time = $request->input('max_time');
         $collection->requirements = $request->input('requirements');
-        $collection->female_caterer_available = $request->input('female_caterer_available');
         $collection->is_available = $request->input('is_available');
         $collection->notes = $request->input('notes');
         $collection->price = $request->input('collection_price');

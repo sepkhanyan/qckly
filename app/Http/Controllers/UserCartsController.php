@@ -47,6 +47,7 @@ class UserCartsController extends Controller
         $validator = \Validator::make($DataRequests, [
             'collection_type' => 'required|integer',
             'collection_id' => 'required|integer',
+            'female_caterer' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json(array('success' => 1, 'status_code' => 400,
@@ -55,6 +56,7 @@ class UserCartsController extends Controller
         } else {
             $collection_type = $DataRequests['collection_type'];
             $collection_id = $DataRequests['collection_id'];
+            $female_caterer = $DataRequests['female_caterer'];
             if ($collection_type == 1) {
                 $validator = \Validator::make($DataRequests, [
                     'collection_price' => 'required',
@@ -77,6 +79,7 @@ class UserCartsController extends Controller
                         $cart_collection->cart_id = $cart->id;
                         $cart_collection->price = $collection_price;
                         $cart_collection->quantity = $collection_quantity;
+                        $cart_collection->female_caterer = $female_caterer;
                         $cart_collection->save();
                         $collection_items = CollectionItem::where('collection_id', $collection_id)->with('menu')->get();
                         foreach ($collection_items as $collection_item) {
@@ -240,55 +243,10 @@ class UserCartsController extends Controller
                     $cart_collection->save();
                 }
             }
-            $user_carts = UserCart::where('user_id', '=', 1)->with(['cartCollection.collection', 'cartCollection.cartItem'])->get();
-            $price = 0;
-            foreach($user_carts as $user_cart){
-                foreach ($user_cart->cartCollection as $cartCollection) {
-                    $price += $cartCollection->price;
-                    $restaurant_id = $cartCollection->collection->restaurant_id;
-                    $items = [];
-                        foreach($cartCollection->cartItem as $cartItem){
-                            if($cartCollection->collection->subcategory_id == 4){
-                                $items [] = [
-                                    'item_id' => $cartItem->item_id,
-                                    'item' => $cartItem->menu->menu_name,
-                                    'item_qty' => $cartItem->quantity,
-                                    'item_price' => $cartItem->price,
-                                    'price_unit' => 'QR'
-                                ];
-                            }else{
-                                $items [] = [
-                                    'item_id' => $cartItem->item_id,
-                                    'item' => $cartItem->menu->menu_name,
-                                    'item_qty' => $cartItem->quantity,
-                                ];
-                            }
-                            $collect_items = collect($items);
-                            $items_unique = $collect_items->unique()->values()->all();
-                        }
-
-                        $collections [] = [
-                            'collection_id' => $cartCollection->collection_id,
-                            'collection_name' => $cartCollection->collection->name,
-                            'collection_price' => $cartCollection->collection->price,
-                            'items' => $items_unique,
-                            'collection_quantity' => $cartCollection->quantity,
-                            'collection_total_price' => $cartCollection->price,
-                            'price_unit' => 'QR'
-                        ];
-                        $collect_collections = collect($collections);
-                        $collections_unique = $collect_collections->unique()->values()->all();
-
-                }
-            }
-            $arr[] = [
+            $user_cart = UserCart::where('user_id', '=', 1)->first();
+            $arr = [
                 'cart_id' => $user_cart->id,
-                'restaurant_id' => $restaurant_id,
-                'collections' => $collections_unique,
-                'total_price' => $price,
-                'price_unit' => 'QR'
             ];
-
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
