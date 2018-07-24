@@ -23,6 +23,7 @@
                                     <label for="restaurant" class="col-sm-3 control-label">Restaurant</label>
                                     <div class="col-sm-5">
                                         <select name="restaurant_name" id="restaurant" class="form-control" tabindex="-1" title=""  >
+                                            <option value=" ">Select Restaurant</option>
                                             @foreach($restaurants as $restaurant)
                                                 <option value="{{$restaurant->id}}">{{$restaurant->restaurant_name}},{{$restaurant->restaurant_city}},{{$restaurant->restaurant_address_1}}</option>
                                             @endforeach
@@ -36,6 +37,7 @@
                                 <label for="input-name" class="col-sm-3 control-label">Category</label>
                                 <div class="col-sm-5">
                                     <select name="category_name" id="category" class="form-control">
+                                        <option value=" ">Select Category</option>
                                         @foreach ($categories as $category)
                                             <option value="{{$category->id}}" >{{$category->name}}</option>
                                         @endforeach

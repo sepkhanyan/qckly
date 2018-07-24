@@ -45,13 +45,15 @@ class CollectionsController extends Controller
     {
         $data = $request->all();
         $menus = [];
-            if(isset($data['restaurant_name'])) {
+        if(isset($data['restaurant_name'])) {
                 $menus = Menus::where('restaurant_id', $data['restaurant_name']);
+            if(isset($data['category_name'])) {
+                $menus = $menus->where('menu_category_id', $data['category_name']);
             }
-        if(isset($data['category_name'])) {
-            $menus = $menus->where('menu_category_id', $data['category_name']);
             $menus = $menus->get();
         }
+
+
         $restaurants = Restaurant::all();
         $subcategories = MenuSubcategory::all();
         $categories = Categories::all();
