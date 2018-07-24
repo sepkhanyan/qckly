@@ -57,6 +57,10 @@ class UserCartsController extends Controller
             $collection_type = $DataRequests['collection_type'];
             $collection_id = $DataRequests['collection_id'];
             $female_caterer = $DataRequests['female_caterer'];
+            $special_instruction = '';
+            if(isset($DataRequests['special_instruction'])){
+                $special_instruction = $DataRequests['special_instruction'];
+            }
             if ($collection_type == 1) {
                 $validator = \Validator::make($DataRequests, [
                     'collection_price' => 'required',
@@ -80,6 +84,7 @@ class UserCartsController extends Controller
                         $cart_collection->price = $collection_price;
                         $cart_collection->quantity = $collection_quantity;
                         $cart_collection->female_caterer = $female_caterer;
+                        $cart_collection->special_instruction = $special_instruction;
                         $cart_collection->save();
                         $collection_items = CollectionItem::where('collection_id', $collection_id)->with('menu')->get();
                         foreach ($collection_items as $collection_item) {
@@ -97,6 +102,9 @@ class UserCartsController extends Controller
                         UserCartCollection::where('cart_id', $cart->id)
                             ->where('collection_id', $collection_id)
                             ->increment('quantity', $collection_quantity);
+                        UserCartCollection::where('cart_id', $cart->id)
+                            ->where('collection_id', $collection_id)
+                            ->update((['special_instruction' => $special_instruction, 'female_caterer' => $female_caterer]));
                     }
 
 
