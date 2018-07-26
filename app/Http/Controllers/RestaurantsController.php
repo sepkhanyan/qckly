@@ -723,8 +723,6 @@ class RestaurantsController extends Controller
                                        if($collection->subcategory_id == 2){
                                            $persons = $collection_item->persons;
                                        }
-
-
                                 }
                                 $categories = Categories::whereHas('menu',function ($query) use ($restaurant_id){
                                     $query->where('restaurant_id', $restaurant_id);
@@ -759,7 +757,9 @@ class RestaurantsController extends Controller
                                         'items' => $items,
                                     ];
                                 }
-                                $collection->price = 0;
+                                if($collection->subcategory_id == 4){
+                                    $collection->price = 0;
+                                }
                             }
                             $menu_collection [] = [
                                 'collection_id' => $collection->id,
