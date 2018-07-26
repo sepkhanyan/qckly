@@ -650,41 +650,35 @@ class RestaurantsController extends Controller
                             $persons = '';
                             if($collection->subcategory_id == 1){
                                 $items = [];
+                                $menu = [];
                                 foreach ($collection->collectionItem as $collection_item) {
                                     $foodlist [] = $collection_item->menu->menu_name;
                                     $image = url('/') . '/images/' . $collection_item->menu->menu_photo;
                                     array_push($foodlist_images, $image);
-                                    $setup_hours = $collection->setup_time / 60;
-                                    $setup_minutes = $collection->setup_time % 60;
-                                    if ($setup_minutes > 0) {
-                                        $setup = floor($setup_hours) . " hours " . ($setup_minutes) . " minutes";
+                                    if ($collection_item->menu->menu_status == 1) {
+                                        $status = true;
                                     } else {
-                                        $setup = floor($setup_hours) . " hours";
+                                        $status = false;
                                     }
-
-                                    $max_hours = $collection->max_time / 60;
-                                    $max_minutes = $collection->max_time % 60;
-                                    if ($max_minutes > 0) {
-                                        $max = floor($max_hours) . " hours " . ($max_minutes) . " minutes";
-                                    } else {
-                                        $max = floor($max_hours) . " hours";
-                                    }
-                                    $requirement = $collection->requirements;
 
                                         $items  [] = [
+                                            'item_id' => $collection_item->menu_id,
                                             'item_name' => $collection_item->menu->menu_name,
                                             'item_qty' => $collection_item->min_count,
+                                            'item_price' => $collection_item->menu->menu_price,
+                                            'item_price_unit' => 'QR',
+                                            'item_availability' => $status
 
                                         ];
-                                        $menu  = [
-                                            'menu_name' => 'Combo Delicious',
-                                            'items' => $items,
-                                        ];
-
                                 }
+                                $menu [] = [
+                                    'menu_name' => 'Combo Delicious',
+                                    'items' => $items,
+                                ];
 
                             }elseif ($collection->subcategory_id == 3) {
                                 $items = [];
+                                $menu = [];
                                 foreach ($collection->collectionItem as $collection_item) {
                                     $foodlist [] = $collection_item->menu->menu_name;
                                     $image = url('/') . '/images/' . $collection_item->menu->menu_photo;
@@ -698,21 +692,21 @@ class RestaurantsController extends Controller
                                     $items  [] = [
                                         'item_id' => $collection_item->menu_id,
                                         'item_name' => $collection_item->menu->menu_name,
-                                        'item_availability' => $status,
-                                        'item_price' => $collection_item->menu->menu_price
+                                        'item_price' => $collection_item->menu->menu_price,
+                                        'item_price_unit' => 'QR',
+                                        'item_availability' => $status
 
                                     ];
                                     usort($items, function ($item1, $item2) {
                                         return $item2['item_availability'] <=> $item1['item_availability'];
                                     });
-                                    $menu = [
-                                        'menu_name' => 'Your Choice Food',
-                                        'menu_min_qty' => $collection_item->min_count,
-                                        'menu_max_qty' => $collection_item->max_count,
-                                        'items' => $items,
-                                    ];
-
                                 }
+                                $menu [] = [
+                                    'menu_name' => 'Your Choice Food',
+                                    'menu_min_qty' => $collection_item->min_count,
+                                    'menu_max_qty' => $collection_item->max_count,
+                                    'items' => $items,
+                                ];
                             }else{
                                 foreach ($collection->collectionItem as $collection_item) {
                                     $foodlist [] = $collection_item->menu->menu_name;
@@ -722,6 +716,22 @@ class RestaurantsController extends Controller
                                        $max_qty = $collection_item->max_count;
                                        if($collection->subcategory_id == 2){
                                            $persons = $collection_item->persons;
+                                           $setup_hours = $collection->setup_time / 60;
+                                           $setup_minutes = $collection->setup_time % 60;
+                                           if ($setup_minutes > 0) {
+                                               $setup = floor($setup_hours) . " hours " . ($setup_minutes) . " minutes";
+                                           } else {
+                                               $setup = floor($setup_hours) . " hours";
+                                           }
+
+                                           $max_hours = $collection->max_time / 60;
+                                           $max_minutes = $collection->max_time % 60;
+                                           if ($max_minutes > 0) {
+                                               $max = floor($max_hours) . " hours " . ($max_minutes) . " minutes";
+                                           } else {
+                                               $max = floor($max_hours) . " hours";
+                                           }
+                                           $requirement = $collection->requirements;
                                        }
                                 }
                                 $categories = Categories::whereHas('menu',function ($query) use ($restaurant_id){
@@ -741,6 +751,7 @@ class RestaurantsController extends Controller
                                             'item_id' => $item->id,
                                             'item_name' => $item->menu_name,
                                             'item_price' => $item->menu_price,
+                                            'item_price_unit' => 'QR',
                                             'item_availability' => $status
 
                                         ];
@@ -749,6 +760,7 @@ class RestaurantsController extends Controller
                                         return $item2['item_availability'] <=> $item1['item_availability'];
                                     });
                                     $menu [] = [
+                                        'menu_id' => $category->id,
                                         'menu_name' => $category->name,
                                         'menu_min_qty' => $min_qty,
                                         'menu_max_qty' => $max_qty,
