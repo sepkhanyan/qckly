@@ -96,6 +96,7 @@ class CollectionsController extends Controller
             $collection_item = new CollectionItem();
             $collection_item->menu_id = $menu;
             $collection_item->min_count = $request->input('item_qty');
+            $collection_item->max_count = $request->input('item_qty');
             $collection_item->persons = $request->input('persons');
             $collection_item->collection_id = $collection->id;
             $collection_item->save();
@@ -157,8 +158,7 @@ class CollectionsController extends Controller
     public function update(Request $request, $id)
     {
         $collection = Collection::with('restaurant.menu')->find($id);
-//        dd($collection->restaurant_id);
-//        $collection->restaurant_id = $request->input('restaurant_name');
+
         $collection->subcategory_id = $request->input('subcategory');
         $collection->name = $request->input('name');
         $collection->description = $request->input('description');
@@ -180,6 +180,7 @@ class CollectionsController extends Controller
             $collection_item = CollectionItem::where('collection_id', $id)->first();
             $collection_item->menu_id = $menu;
             $collection_item->min_count = $request->input('item_qty');
+            $collection_item->max_count = $request->input('item_qty');
             $collection_item->persons = $request->input('persons');
             $collection_item->collection_id = $collection->id;
             $collection_item->save();
