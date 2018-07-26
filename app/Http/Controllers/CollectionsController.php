@@ -53,7 +53,6 @@ class CollectionsController extends Controller
             $menus = $menus->get();
         }
 
-
         $restaurants = Restaurant::all();
         $subcategories = MenuSubcategory::all();
         $categories = Categories::all();
@@ -126,25 +125,12 @@ class CollectionsController extends Controller
     {
 
         $collection = Collection::with('restaurant.menu')->find($id);
-//        dd($collection->restaurant->menu);
-//        dd($collection->restaurant);
-//        foreach($collection->restaurant->menu as $menu){
-//                dd($menu->category->name);
-//            $categories = $menu->category;
-//        }
-//        $menus = $menu->where('menu_category_id', $menu->category->id)->get();
-////        dd();
-////        $menus = $collection->restaurant->menu;
-////        $data = $request->all();
         $menus = $collection->restaurant->menu;
-//        $restaurant = Restaurant::all();
         $subcategories = MenuSubcategory::all();
-//        $categories = Categories::all();
         return view('edit_collection', [
             'menus' => $menus,
             'collection' => $collection,
             'subcategories' => $subcategories,
-//            'categories' => $categories
         ]);
     }
 

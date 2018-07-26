@@ -737,7 +737,6 @@ class RestaurantsController extends Controller
                                         } else {
                                             $status = false;
                                         }
-
                                         $items  [] = [
                                             'item_id' => $item->id,
                                             'item_name' => $item->menu_name,
@@ -745,7 +744,6 @@ class RestaurantsController extends Controller
                                             'item_availability' => $status
 
                                         ];
-
                                     }
                                     usort($items, function ($item1, $item2) {
                                         return $item2['item_availability'] <=> $item1['item_availability'];
