@@ -9,7 +9,7 @@ class UserCartCollection extends Model
     protected $table = 'user_cart_collections';
 
 
-    protected $fillable = ['cart_id', 'collection_id', 'price', 'quantity'];
+    protected $fillable = ['cart_id', 'collection_id', 'price', 'quantity', 'female_caterer', 'special_instruction'];
 
 
     public function cart()

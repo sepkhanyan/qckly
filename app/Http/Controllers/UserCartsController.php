@@ -11,6 +11,7 @@ use App\Collection;
 use App\CollectionItem;
 
 
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 
 class UserCartsController extends Controller
@@ -47,6 +48,7 @@ class UserCartsController extends Controller
         $validator = \Validator::make($DataRequests, [
             'collection_type' => 'required|integer',
             'collection_id' => 'required|integer',
+            'collection_quantity' => 'integer|required',
             'female_caterer' => 'required',
         ]);
         if ($validator->fails()) {
@@ -56,6 +58,7 @@ class UserCartsController extends Controller
         } else {
             $collection_type = $DataRequests['collection_type'];
             $collection_id = $DataRequests['collection_id'];
+            $collection_quantity = $DataRequests['collection_quantity'];
             $female_caterer = $DataRequests['female_caterer'];
             $special_instruction = '';
             if(isset($DataRequests['special_instruction'])){
@@ -64,7 +67,6 @@ class UserCartsController extends Controller
             if ($collection_type == 1) {
                 $validator = \Validator::make($DataRequests, [
                     'collection_price' => 'required',
-                    'collection_quantity' => 'integer|required',
                 ]);
                 if ($validator->fails()) {
                     return response()->json(array('success' => 1, 'status_code' => 400,
@@ -72,12 +74,15 @@ class UserCartsController extends Controller
                         'error_details' => $validator->messages()));
                 } else {
                     $collection_price = $DataRequests['collection_price'];
-                    $collection_quantity = $DataRequests['collection_quantity'];
                     $cart = UserCart::where('user_id', '=', 1)->first();
                     if (!$cart) {
                         $cart = new UserCart();
                         $cart->user_id = 1;
                         $cart->save();
+                    }
+                    $cart_collection = UserCartCollection::where('cart_id', $cart->id)
+                        ->where('collection_id', $collection_id)->first();
+                    if(!$cart_collection){
                         $cart_collection = new UserCartCollection();
                         $cart_collection->collection_id = $collection_id;
                         $cart_collection->cart_id = $cart->id;
@@ -93,6 +98,7 @@ class UserCartsController extends Controller
                             $cart_item->collection_id = $collection_id;
                             $cart_item->item_id = $collection_item->menu->id;
                             $cart_item->quantity = $collection_item->min_count;
+                            $cart_item->cart_collection_id = $cart_collection->id;
                             $cart_item->save();
                         }
                     }else{
@@ -107,13 +113,14 @@ class UserCartsController extends Controller
                             ->update((['special_instruction' => $special_instruction, 'female_caterer' => $female_caterer]));
                     }
 
-
                 }
 
-            }
-            if ($collection_type == 2) {
+            }else if ($collection_type == 2) {
                 $validator = \Validator::make($DataRequests, [
                     'collection_price' => 'required',
+                    'item_id' => 'required',
+                    'item_quantity' => 'required',
+                    'menu_id' => 'required'
                 ]);
                 if ($validator->fails()) {
                     return response()->json(array('success' => 1, 'status_code' => 400,
@@ -127,24 +134,33 @@ class UserCartsController extends Controller
                         $cart->user_id = 1;
                         $cart->save();
                     }
-
                     $cart_collection = new UserCartCollection();
                     $cart_collection->collection_id = $collection_id;
                     $cart_collection->cart_id = $cart->id;
                     $cart_collection->price = $collection_price;
-                    $cart_collection->quantity = 1;
+                    $cart_collection->quantity = $collection_quantity;
+                    $cart_collection->female_caterer = $female_caterer;
+                    $cart_collection->special_instruction = $special_instruction;
                     $cart_collection->save();
-//                    $collection_items = CollectionItem::where('collection_id', $collection_id)->with('menu')->get();
-//                    foreach ($collection_items as $collection_item) {
-//                        $cart_item = new UserCartItem();
-//                        $cart_item->cart_id = $cart->id;
-//                        $cart_item->collection_id = $collection_id;
-//                        $cart_item->item_id = $collection_item->menu->id;
-//                        $cart_item->save();
-//                    }
+                    $menus = implode(",", $DataRequests['menu_id']);
+                    $menu = explode(",", $menus);
+                    $items = implode(",", $DataRequests['item_id']);
+                    $item = explode(",", $items);
+                    $quantitys = implode(",", $DataRequests['item_quantity']);
+                    $quantity = explode(",", $quantitys);
+                        for ($i = 0; $i < count($menu); $i++) {
+                                $cart_item = new UserCartItem;
+                                $cart_item->cart_id = $cart->id;
+                                $cart_item->collection_id = $collection_id;
+                                $cart_item->cart_collection_id = $cart_collection->id;
+                                $cart_item->menu_id = $menu[$i];
+                                $cart_item->item_id = $item[$i];
+                                $cart_item->quantity = $quantity[$i];
+                                $cart_item->save();
+                        }
                 }
-
             }
+
             if ($collection_type == 3) {
                     $cart = UserCart::where('user_id', '=', 1)->first();
                     if (!$cart) {
