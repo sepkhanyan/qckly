@@ -119,9 +119,7 @@ class UserCartsController extends Controller
                 $validator = \Validator::make($DataRequests, [
                     'collection_price' => 'required',
                     'persons_count' => 'required',
-                    'item_id' => 'required',
-                    'item_quantity' => 'required',
-                    'menu_id' => 'required'
+                    'menus' => 'required',
                 ]);
                 if ($validator->fails()) {
                     return response()->json(array('success' => 1, 'status_code' => 400,
@@ -130,6 +128,7 @@ class UserCartsController extends Controller
                 } else {
                     $collection_price = $DataRequests['collection_price'];
                     $persons_count = $DataRequests['persons_count'];
+                    $menus = $DataRequests['menus'];
                     $cart = UserCart::where('user_id', '=', 1)->first();
                     if (!$cart) {
                         $cart = new UserCart();
@@ -148,20 +147,14 @@ class UserCartsController extends Controller
                         $cart_collection->female_caterer = $female_caterer;
                         $cart_collection->special_instruction = $special_instruction;
                         $cart_collection->save();
-                        $menus = implode(",", $DataRequests['menu_id']);
-                        $menu = explode(",", $menus);
-                        $items = implode(",", $DataRequests['item_id']);
-                        $item = explode(",", $items);
-                        $quantitys = implode(",", $DataRequests['item_quantity']);
-                        $quantity = explode(",", $quantitys);
-                        for ($i = 0; $i < count($menu); $i++) {
-                            $cart_item = new UserCartItem;
+                        foreach($menus as $menu){
+                            $cart_item = new UserCartItem();
                             $cart_item->cart_id = $cart->id;
                             $cart_item->collection_id = $collection_id;
                             $cart_item->cart_collection_id = $cart_collection->id;
-                            $cart_item->menu_id = $menu[$i];
-                            $cart_item->item_id = $item[$i];
-                            $cart_item->quantity = $quantity[$i];
+                            $cart_item->menu_id = $menu['menu_id'];
+                            $cart_item->item_id = $menu['item_id'];
+                            $cart_item->quantity = $menu['item_quantity'];
                             $cart_item->save();
                         }
                     }else{
@@ -175,26 +168,19 @@ class UserCartsController extends Controller
                         $cart_collection->female_caterer = $female_caterer;
                         $cart_collection->special_instruction = $special_instruction;
                         $cart_collection->save();
-                        $menus = implode(",", $DataRequests['menu_id']);
-                        $menu = explode(",", $menus);
-                        $items = implode(",", $DataRequests['item_id']);
-                        $item = explode(",", $items);
-                        $quantitys = implode(",", $DataRequests['item_quantity']);
-                        $quantity = explode(",", $quantitys);
-                        for ($i = 0; $i < count($menu); $i++) {
-                            $cart_item = new UserCartItem;
+                        foreach($menus as $menu){
+                            $cart_item = new UserCartItem();
                             $cart_item->cart_id = $cart->id;
                             $cart_item->collection_id = $collection_id;
                             $cart_item->cart_collection_id = $cart_collection->id;
-                            $cart_item->menu_id = $menu[$i];
-                            $cart_item->item_id = $item[$i];
-                            $cart_item->quantity = $quantity[$i];
+                            $cart_item->menu_id = $menu['menu_id'];
+                            $cart_item->item_id = $menu['item_id'];
+                            $cart_item->quantity = $menu['item_quantity'];
                             $cart_item->save();
                         }
                     }
                 }
             }
-
             if ($collection_type == 3) {
                     $cart = UserCart::where('user_id', '=', 1)->first();
                     if (!$cart) {
