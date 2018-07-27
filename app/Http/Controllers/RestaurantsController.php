@@ -647,7 +647,8 @@ class RestaurantsController extends Controller
                             $setup = '';
                             $max = '';
                             $requirement = '';
-                            $persons = '';
+                            $min_persons = '';
+                            $max_persons = '';
                             if($collection->subcategory_id == 1){
                                 $items = [];
                                 $menu = [];
@@ -715,7 +716,8 @@ class RestaurantsController extends Controller
                                        $min_qty = $collection_item->min_count;
                                        $max_qty = $collection_item->max_count;
                                        if($collection->subcategory_id == 2){
-                                           $persons = $collection_item->persons;
+                                           $min_persons = $collection->persons_min_count;
+                                           $max_persons = $collection->persons_max_count;
                                            $setup_hours = $collection->setup_time / 60;
                                            $setup_minutes = $collection->setup_time % 60;
                                            if ($setup_minutes > 0) {
@@ -732,6 +734,8 @@ class RestaurantsController extends Controller
                                                $max = floor($max_hours) . " hours";
                                            }
                                            $requirement = $collection->requirements;
+                                           $collection->min_qty = -1;
+                                           $collection->max_qty = -1;
                                        }
                                 }
                                 $categories = Categories::whereHas('menu',function ($query) use ($restaurant_id){
@@ -779,10 +783,13 @@ class RestaurantsController extends Controller
                                 'collection_type' => $collection->subcategory->subcategory_en,
                                 'female_caterer_available' => $female_caterer_available,
                                 'mealtime' => $collection->mealtime,
+                                'collection_min_qty' => $collection->min_qty,
+                                'collection_max_qty' => $collection->max_qty,
                                 'price' => $collection->price,
                                 'price_unit' => "QR",
                                 'is_available' => $is_available,
-                                'persons_count' => $persons,
+                                'persons_min_count' => $min_persons,
+                                'persons_max_count' => $max_persons,
                                 'service_provide' => $collection->service_provide,
                                 'food_list' => $foodlist,
                                 'service_presentation' => $collection->service_presentation,

@@ -186,8 +186,12 @@
                                         <div class="input-group" >
                                             <input type="text" name="max_quantity" class="form-control" id="max_qty" placeholder="Max quantity" style="width: 100px; display: none">
                                             <input type="text" name="min_quantity" class="form-control" id="min_qty" placeholder=" Min quantity" style="width: 100px; display: none">
-                                            <input type="text" name="persons" class="form-control" id="by_person" placeholder="Persons" style="width: 100px; display: none">
                                         </div>
+                                        <div class="input-group">
+                                            <input type="text" name="persons_min_count" class="form-control" id="person_min_qty" placeholder="Min Persons" style="width: 100px; display: none">
+                                            <input type="text" name="persons_max_count" class="form-control" id="person_max_qty" placeholder="Max Persons" style="width: 100px; display: none">
+                                        </div>
+
                                     </div>
                                 </div>
                                 <div class="form-group" id="items_container">
