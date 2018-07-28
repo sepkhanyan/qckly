@@ -84,35 +84,34 @@ $(document).ready(function() {
     $('#subcategory').click(function() {
         $('#items'). slideDown('fast');
         if($('select[name=subcategory]').val() == 1){
-            $('#person_min_qty'). slideUp('fast');
-            $('#person_max_qty'). slideUp('fast');
-            $('#max_qty'). slideDown('fast');
-            $('#min_qty'). slideDown('fast');
+            $('#persons_qty'). slideDown('fast');
+            $('#max_person'). slideUp('fast');
+            $('#collection_qty'). slideDown('fast');
             $('#add_item'). slideDown('fast');
             $('#item_count'). slideDown('fast');
+            $('#person_increase'). slideUp('fast');
         }else if($('select[name=subcategory]').val() == 2){
-            $('#max_qty'). slideDown('fast');
-            $('#min_qty'). slideDown('fast');
-            $('#person_min_qty'). slideDown('fast');
-            $('#person_max_qty'). slideDown('fast');
+            $('#collection_qty'). slideUp('fast');
+            $('#persons_qty'). slideDown('fast');
+            $('#max_person'). slideDown('fast');
             $('#add_item'). slideUp('fast');
             $('#item_count'). slideDown('fast');
+            $('#person_increase'). slideDown('fast');
         }else if($('select[name=subcategory]').val() == 3){
-            $('#max_qty'). slideDown('fast');
-            $('#min_qty'). slideDown('fast');
-            $('#person_min_qty'). slideUp('fast');
-            $('#person_max_qty'). slideUp('fast');
+            $('#collection_qty'). slideDown('fast');
+            $('#persons_qty'). slideDown('fast');
+            $('#max_person'). slideUp('fast');
             $('#add_item'). slideUp('fast');
             $('#item_count'). slideDown('fast');
+            $('#person_increase'). slideUp('fast');
         }else if($('select[name=subcategory]').val() == 4){
             $('#items_container'). slideDown('fast');
-            $('#max_qty'). slideDown('fast');
-            $('#min_qty'). slideDown('fast');
-            $('#person_min_qty'). slideUp('fast');
-            $('#person_max_qty'). slideUp('fast');
+            $('#collection_qty'). slideDown('fast');
+            $('#persons_qty'). slideDown('fast');
+            $('#max_person'). slideUp('fast');
             $('#add_item'). slideUp('fast');
             $('#item_count'). slideDown('fast');
-
+            $('#person_increase'). slideUp('fast');
         }
 
     });

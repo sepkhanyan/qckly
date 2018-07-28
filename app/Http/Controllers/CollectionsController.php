@@ -89,8 +89,10 @@ class CollectionsController extends Controller
         $collection->price = $request->input('collection_price');
         $collection->max_qty = $request->input('max_quantity');
         $collection->min_qty = $request->input('min_quantity');
-        $collection->persons_min_count = $request->input('persons_min_count');
         $collection->persons_max_count = $request->input('persons_max_count');
+        $collection->min_serve_to_person = $request->input('min_serve_to_person');
+        $collection->max_serve_to_person = $request->input('max_serve_to_person');
+        $collection->allow_person_increase = $request->input('allow_person_increase');
         $collection->save();
         $menus = $request->input('menu_item');
         foreach($menus as $menu){
@@ -161,8 +163,10 @@ class CollectionsController extends Controller
         $collection->price = $request->input('collection_price');
         $collection->max_qty = $request->input('max_quantity');
         $collection->min_qty = $request->input('min_quantity');
-        $collection->persons_min_count = $request->input('persons_min_count');
         $collection->persons_max_count = $request->input('persons_max_count');
+        $collection->min_serve_to_person = $request->input('min_serve_to_person');
+        $collection->max_serve_to_person = $request->input('max_serve_to_person');
+        $collection->allow_person_increase = $request->input('allow_person_increase');
         $collection->save();
         $menus = $request->input('menu_item');
         foreach($menus as $menu){

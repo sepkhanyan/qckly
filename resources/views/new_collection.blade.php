@@ -183,15 +183,30 @@
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Quantity</label>
                                     <div class="col-sm-5">
-                                        <div class="input-group" >
-                                            <input type="text" name="max_quantity" class="form-control" id="max_qty" placeholder="Max quantity" style="width: 100px; display: none">
-                                            <input type="text" name="min_quantity" class="form-control" id="min_qty" placeholder=" Min quantity" style="width: 100px; display: none">
+                                        <div class="input-group" id="collection_qty" style="width: 200px; display: none">
+                                            <input type="text" name="max_quantity" class="form-control"  placeholder="Collection max quantity" >
+                                            <input type="text" name="min_quantity" class="form-control"  placeholder="Collection min quantity" >
                                         </div>
-                                        <div class="input-group">
-                                            <input type="text" name="persons_min_count" class="form-control" id="person_min_qty" placeholder="Min Persons" style="width: 100px; display: none">
-                                            <input type="text" name="persons_max_count" class="form-control" id="person_max_qty" placeholder="Max Persons" style="width: 100px; display: none">
+                                        <div class="input-group" id="persons_qty" style="display: none; width: 200px;">
+                                            <input type="text" name="min_serve_to_person" class="form-control"  placeholder="Serve to person(min)" >
+                                            <input type="text" name="max_serve_to_person" class="form-control"  placeholder="Serve to person(max)">
+                                            <input type="text" name="persons_max_count" id="max_person" class="form-control"  placeholder="Persons max count">
                                         </div>
-
+                                    </div>
+                                </div>
+                                <div class="form-group" id="person_increase" style="display: none">
+                                    <label for="is_available" class="col-sm-3 control-label">Allow Person Increase</label>
+                                    <div class="col-sm-5">
+                                        <div class="btn-group btn-group-switch" data-toggle="buttons">
+                                            <label class="btn btn-danger active">
+                                                <input type="radio" name="allow_person_increase" value="0"  checked="checked">
+                                                NO
+                                            </label>
+                                            <label class="btn btn-success">
+                                                <input type="radio" name="is_available" value="1" >
+                                                YES
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group" id="items_container">

@@ -647,8 +647,8 @@ class RestaurantsController extends Controller
                             $setup = '';
                             $max = '';
                             $requirement = '';
-                            $min_persons = '';
-                            $max_persons = '';
+                            $max_persons = -1;
+                            $person_increase = false;
                             if($collection->subcategory_id == 1){
                                 $items = [];
                                 $menu = [];
@@ -676,38 +676,6 @@ class RestaurantsController extends Controller
                                     'menu_name' => 'Combo Delicious',
                                     'items' => $items,
                                 ];
-
-                            }elseif ($collection->subcategory_id == 3) {
-                                $items = [];
-                                $menu = [];
-                                foreach ($collection->collectionItem as $collection_item) {
-                                    $foodlist [] = $collection_item->menu->menu_name;
-                                    $image = url('/') . '/images/' . $collection_item->menu->menu_photo;
-                                    array_push($foodlist_images, $image);
-                                    if ($collection_item->menu->menu_status == 1) {
-                                        $status = true;
-                                    } else {
-                                        $status = false;
-                                    }
-
-                                    $items  [] = [
-                                        'item_id' => $collection_item->menu_id,
-                                        'item_name' => $collection_item->menu->menu_name,
-                                        'item_price' => $collection_item->menu->menu_price,
-                                        'item_price_unit' => 'QR',
-                                        'item_availability' => $status
-
-                                    ];
-                                    usort($items, function ($item1, $item2) {
-                                        return $item2['item_availability'] <=> $item1['item_availability'];
-                                    });
-                                }
-                                $menu [] = [
-                                    'menu_name' => 'Your Choice Food',
-                                    'menu_min_qty' => $collection_item->min_count,
-                                    'menu_max_qty' => $collection_item->max_count,
-                                    'items' => $items,
-                                ];
                             }else{
                                 foreach ($collection->collectionItem as $collection_item) {
                                     $foodlist [] = $collection_item->menu->menu_name;
@@ -716,8 +684,13 @@ class RestaurantsController extends Controller
                                        $min_qty = $collection_item->min_count;
                                        $max_qty = $collection_item->max_count;
                                        if($collection->subcategory_id == 2){
-                                           $min_persons = $collection->persons_min_count;
+                                           if($collection->allow_person_increase == 1){
+                                               $person_increase = true;
+                                           }else{
+                                               $person_increase = false;
+                                           }
                                            $max_persons = $collection->persons_max_count;
+
                                            $setup_hours = $collection->setup_time / 60;
                                            $setup_minutes = $collection->setup_time % 60;
                                            if ($setup_minutes > 0) {
@@ -788,7 +761,9 @@ class RestaurantsController extends Controller
                                 'price' => $collection->price,
                                 'price_unit' => "QR",
                                 'is_available' => $is_available,
-                                'persons_min_count' => $min_persons,
+                                'min_serve_to_person' => $collection->min_serve_to_person,
+                                'max_serve_to_person' => $collection->max_serve_to_person,
+                                'allow_person_increase' => $person_increase,
                                 'persons_max_count' => $max_persons,
                                 'service_provide' => $collection->service_provide,
                                 'food_list' => $foodlist,
