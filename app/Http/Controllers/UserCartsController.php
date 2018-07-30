@@ -158,8 +158,6 @@ class UserCartsController extends Controller
                             $cart_item->save();
                         }
                     }else{
-                        $cart_collection->delete();
-                        $cart_collection = new UserCartCollection();
                         $cart_collection->collection_id = $collection_id;
                         $cart_collection->cart_id = $cart->id;
                         $cart_collection->price = $collection_price;
@@ -168,6 +166,7 @@ class UserCartsController extends Controller
                         $cart_collection->female_caterer = $female_caterer;
                         $cart_collection->special_instruction = $special_instruction;
                         $cart_collection->save();
+                        UserCartItem::where('cart_id', $cart->id)->where('collection_id', $collection_id)->delete();
                         foreach($menus as $menu){
                             $cart_item = new UserCartItem();
                             $cart_item->cart_id = $cart->id;
@@ -180,8 +179,7 @@ class UserCartsController extends Controller
                         }
                     }
                 }
-            }
-            if ($collection_type == 3) {
+            }elseif ($collection_type == 3) {
                 $validator = \Validator::make($DataRequests, [
                     'collection_price' => 'required',
                     'collection_quantity' => 'required',
@@ -223,7 +221,49 @@ class UserCartsController extends Controller
                             $cart_item->save();
                         }
                     }else{
-                        $cart_collection->delete();
+                        $cart_collection->collection_id = $collection_id;
+                        $cart_collection->cart_id = $cart->id;
+                        $cart_collection->price = $collection_price;
+                        $cart_collection->quantity = $collection_quantity;
+                        $cart_collection->female_caterer = $female_caterer;
+                        $cart_collection->special_instruction = $special_instruction;
+                        $cart_collection->save();
+                        UserCartItem::where('cart_id', $cart->id)->where('collection_id', $collection_id)->delete();
+                        foreach($menus as $menu){
+                            $cart_item = new UserCartItem();
+                            $cart_item->cart_id = $cart->id;
+                            $cart_item->collection_id = $collection_id;
+                            $cart_item->cart_collection_id = $cart_collection->id;
+                            $cart_item->menu_id = $menu['menu_id'];
+                            $cart_item->item_id = $menu['item_id'];
+                            $cart_item->quantity = $menu['item_quantity'];
+                            $cart_item->save();
+                        }
+                    }
+                }
+            }elseif ($collection_type == 4) {
+                $validator = \Validator::make($DataRequests, [
+                    'collection_price' => 'required',
+                    'collection_quantity' => 'required',
+                    'menus' => 'required',
+                ]);
+                if ($validator->fails()) {
+                    return response()->json(array('success' => 1, 'status_code' => 400,
+                        'message' => 'Invalid inputs',
+                        'error_details' => $validator->messages()));
+                } else {
+                    $collection_price = $DataRequests['collection_price'];
+                    $collection_quantity = $DataRequests['collection_quantity'];
+                    $menus = $DataRequests['menus'];
+                    $cart = UserCart::where('user_id', '=', 1)->first();
+                    if (!$cart) {
+                        $cart = new UserCart();
+                        $cart->user_id = 1;
+                        $cart->save();
+                    }
+                    $cart_collection = UserCartCollection::where('cart_id', $cart->id)
+                        ->where('collection_id', $collection_id)->first();
+                    if(!$cart_collection){
                         $cart_collection = new UserCartCollection();
                         $cart_collection->collection_id = $collection_id;
                         $cart_collection->cart_id = $cart->id;
@@ -239,64 +279,31 @@ class UserCartsController extends Controller
                             $cart_item->cart_collection_id = $cart_collection->id;
                             $cart_item->menu_id = $menu['menu_id'];
                             $cart_item->item_id = $menu['item_id'];
+                            $cart_item->price = $menu['item_price'];
+                            $cart_item->quantity = $menu['item_quantity'];
+                            $cart_item->save();
+                        }
+                    }else{
+                        $cart_collection->collection_id = $collection_id;
+                        $cart_collection->cart_id = $cart->id;
+                        $cart_collection->price = $collection_price;
+                        $cart_collection->quantity = $collection_quantity;
+                        $cart_collection->female_caterer = $female_caterer;
+                        $cart_collection->special_instruction = $special_instruction;
+                        $cart_collection->save();
+                        UserCartItem::where('cart_id', $cart->id)->where('collection_id', $collection_id)->delete();
+                        foreach($menus as $menu){
+                            $cart_item = new UserCartItem();
+                            $cart_item->cart_id = $cart->id;
+                            $cart_item->collection_id = $collection_id;
+                            $cart_item->cart_collection_id = $cart_collection->id;
+                            $cart_item->menu_id = $menu['menu_id'];
+                            $cart_item->item_id = $menu['item_id'];
+                            $cart_item->price = $menu['item_price'];
                             $cart_item->quantity = $menu['item_quantity'];
                             $cart_item->save();
                         }
                     }
-                }
-            }
-            if ($collection_type == 4) {
-                $cart = UserCart::where('user_id', '=', 1)->first();
-                if (!$cart) {
-                    $cart = new UserCart();
-                    $cart->user_id = 1;
-                    $cart->save();
-                }
-                if (isset($DataRequests['item_id'])) {
-                    $item_id = $DataRequests['item_id'];
-                    $validator = \Validator::make($DataRequests, [
-                        'item_price' => 'required',
-                    ]);
-                    if ($validator->fails()) {
-                        return response()->json(array('success' => 1, 'status_code' => 400,
-                            'message' => 'Invalid inputs',
-                            'error_details' => $validator->messages()));
-                    } else {
-                        $item_price = $DataRequests['item_price'];
-                        $cart_item = new UserCartItem();
-                        $cart_item->collection_id = $collection_id;
-                        $cart_item->cart_id = $cart->id;
-                        $cart_item->item_id = $item_id;
-                        $cart_item->price = $item_price;
-                        $cart_item->quantity = 1;
-                        $cart_item->save();
-                        $cart_collection = UserCartCollection::where('collection_id', $collection_id)->first();
-                        if (!$cart_collection) {
-                            $cart_collection = new UserCartCollection();
-                            $cart_collection->collection_id = $collection_id;
-                            $cart_collection->cart_id = $cart->id;
-                            $cart_collection->price = $item_price;
-                            $cart_collection->quantity = 1;
-                            $cart_collection->save();
-                        } else {
-                            UserCartCollection::where('collection_id', $collection_id)->increment('price', $item_price);
-                        }
-                    }
-                } else {
-                    $collection = UserCartCollection::where('collection_id', $collection_id)->first();
-                    if (!$collection) {
-                        return response()->json(array(
-                            'success' => 1,
-                            'status_code' => 200,
-                            'message' => 'You did not choose anything!'));
-                    }
-                    $collection_price = $collection->price;
-                    $cart_collection = new UserCartCollection();
-                    $cart_collection->collection_id = $collection_id;
-                    $cart_collection->cart_id = $cart->id;
-                    $cart_collection->price = $collection_price;
-                    $cart_collection->quantity = 1;
-                    $cart_collection->save();
                 }
             }
             $user_cart = UserCart::where('user_id', '=', 1)->first();
