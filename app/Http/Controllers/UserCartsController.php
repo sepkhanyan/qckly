@@ -357,14 +357,13 @@ class UserCartsController extends Controller
                     'menu_items' => $items
                 ];
             }
-           
+            if($cart_collection->persons_count == null){
+                $cart_collection->persons_count = '';
+            }
 
             $collections [] = [
                 'collection_id' => $cart_collection->collection_id,
-                'collection_type' => $cart_collection->collection->subcategory->subcategory_en,
-                'collection' => $cart_collection->collection->name,
                 'menu_items' => $menu,
-                'collection_price' => $cart_collection->collection->price,
                 'collection_quantity' => $cart_collection->quantity,
                 'persons_count' => $cart_collection->persons_count,
                 'collection_total_price' => $cart_collection->price,
