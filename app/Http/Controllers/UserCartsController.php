@@ -357,12 +357,7 @@ class UserCartsController extends Controller
                     'menu_items' => $items
                 ];
             }
-            if($cart_collection->persons_count == null){
-                $cart_collection->persons_count = '';
-            }
-            if($cart_collection->collection->price == null){
-                $cart_collection->collection->price = '';
-            }
+           
 
             $collections [] = [
                 'collection_id' => $cart_collection->collection_id,
