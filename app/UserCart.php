@@ -20,4 +20,5 @@ class UserCart extends Model
         return $this->hasMany('App\UserCartCollection', 'cart_id');
     }
 
+
 }

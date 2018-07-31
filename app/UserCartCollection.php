@@ -21,6 +21,7 @@ class UserCartCollection extends Model
         return $this->hasMany('App\UserCartItem', 'collection_id', 'collection_id');
     }
 
+
     public function collection ()
     {
         return $this->belongsTo('App\Collection', 'collection_id');

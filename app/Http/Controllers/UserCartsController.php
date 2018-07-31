@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Categories;
+use App\UserCartMenu;
 use Auth;
 use App\UserCart;
 use App\UserCartItem;
@@ -246,7 +247,6 @@ class UserCartsController extends Controller
             }elseif ($collection_type == 4) {
                  $validator = \Validator::make($DataRequests, [
                     'collection_price' => 'required',
-                    'collection_quantity' => 'required',
                     'menus' => 'required',
                 ]);
                 if ($validator->fails()) {
@@ -270,7 +270,7 @@ class UserCartsController extends Controller
                         $cart_collection->collection_id = $collection_id;
                         $cart_collection->cart_id = $cart->id;
                         $cart_collection->price = $collection_price;
-                        $cart_collection->quantity = $collection_quantity;
+                        $cart_collection->quantity = 1;
                         $cart_collection->female_caterer = $female_caterer;
                         $cart_collection->special_instruction = $special_instruction;
                         $cart_collection->save();
@@ -295,15 +295,15 @@ class UserCartsController extends Controller
                         $cart_collection->save();
                         UserCartItem::where('cart_id', $cart->id)->where('collection_id', $collection_id)->delete();
                         foreach($menus as $menu){
-                            $cart_item = new UserCartItem();
-                            $cart_item->cart_id = $cart->id;
-                            $cart_item->collection_id = $collection_id;
-                            $cart_item->cart_collection_id = $cart_collection->id;
-                            $cart_item->menu_id = $menu['menu_id'];
-                            $cart_item->item_id = $menu['item_id'];
-                            $cart_item->price = $menu['item_price'];
-                            $cart_item->quantity = $menu['item_quantity'];
-                            $cart_item->save();
+                                $cart_item = new UserCartItem();
+                                $cart_item->cart_id = $cart->id;
+                                $cart_item->collection_id = $collection_id;
+                                $cart_item->cart_collection_id = $cart_collection->id;
+                                $cart_item->menu_id = $menu['menu_id'];
+                                $cart_item->item_id = $menu['item_id'];
+                                $cart_item->price = $menu['item_price'];
+                                $cart_item->quantity = $menu['item_quantity'];
+                                $cart_item->save();
                         }
                     }
                 }
@@ -333,20 +333,57 @@ class UserCartsController extends Controller
      */
     public function showCart($id)
     {
-        $cart_collections = UserCartCollection::where('cart_id', $id)->with(['cartItem.menu', 'collection'])->get();
+        $cart_collections = UserCartCollection::where('cart_id', $id)->with('cartItem.menu')->get();
+        $total = 0;
         foreach($cart_collections as $cart_collection){
+            $menu = [];
+            $categories = Categories::whereHas('cartItem', function($query) use ($id, $cart_collection){
+                $query->where('collection_id', $cart_collection->collection_id);
+            })->with(['cartItem'=>function ($x) use($cart_collection){
+                $x->where('collection_id', $cart_collection->collection_id);
+            }])->get();
+            foreach($categories as $category){
+                $items = [];
+                foreach($category->cartItem as $cartItem){
+                    $items [] =[
+                        'item_id' => $cartItem->item_id,
+                        'item' => $cartItem->menu->menu_name,
+                        'item_quantity' => $cartItem->quantity
+                    ];
+                }
+                $menu [] = [
+                    'menu_id' => $category->id,
+                    'menu' => $category->name,
+                    'menu_items' => $items
+                ];
+            }
+            if($cart_collection->persons_count == null){
+                $cart_collection->persons_count = '';
+            }
+            if($cart_collection->collection->price == null){
+                $cart_collection->collection->price = '';
+            }
 
-            $arr [] = [
+            $collections [] = [
                 'collection_id' => $cart_collection->collection_id,
+                'collection_type' => $cart_collection->collection->subcategory->subcategory_en,
                 'collection' => $cart_collection->collection->name,
-//                'items' => $menu,
+                'menu_items' => $menu,
                 'collection_price' => $cart_collection->collection->price,
                 'collection_quantity' => $cart_collection->quantity,
-                'subtotal' => $cart_collection->price
+                'persons_count' => $cart_collection->persons_count,
+                'collection_total_price' => $cart_collection->price,
+                'price_unit' => "QR"
             ];
+            $total += $cart_collection->price;
+
         }
 
-
+        $arr [] = [
+            'collections' => $collections,
+            'total' => $total,
+            'price_unit' => 'QR'
+        ];
 
         return response()->json(array(
             'success' => 1,
