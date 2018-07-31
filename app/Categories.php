@@ -15,4 +15,9 @@ class Categories extends Model
     {
         return$this->hasMany('App\Menus', 'menu_category_id');
     }
+
+    public function cartItem ()
+    {
+        return $this->hasMany('App\UserCartItem', 'menu_id');
+    }
 }

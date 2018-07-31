@@ -22,9 +22,15 @@ class UserCartItem extends Model
         return $this->belongsTo('App\UserCartCollection', 'collection_id', 'collection_id');
     }
 
+
     public function menu ()
     {
         return $this->belongsTo('App\Menus', 'item_id');
+    }
+
+    public function category ()
+    {
+        return $this->belongsTo('App\Categories', 'menu_id');
     }
     public function collection ()
     {

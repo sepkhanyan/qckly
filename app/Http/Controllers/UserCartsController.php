@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Categories;
 use Auth;
 use App\UserCart;
 use App\UserCartItem;
@@ -96,6 +97,7 @@ class UserCartsController extends Controller
                             $cart_item = new UserCartItem();
                             $cart_item->cart_id = $cart->id;
                             $cart_item->collection_id = $collection_id;
+                            $cart_item->menu_id = $collection_item->menu->menu_category_id;
                             $cart_item->item_id = $collection_item->menu->id;
                             $cart_item->quantity = $collection_item->min_count;
                             $cart_item->cart_collection_id = $cart_collection->id;
@@ -242,7 +244,7 @@ class UserCartsController extends Controller
                     }
                 }
             }elseif ($collection_type == 4) {
-                $validator = \Validator::make($DataRequests, [
+                 $validator = \Validator::make($DataRequests, [
                     'collection_price' => 'required',
                     'collection_quantity' => 'required',
                     'menus' => 'required',
@@ -318,157 +320,8 @@ class UserCartsController extends Controller
 
     }
 
-    public function removeFromCart(Request $request)
+    public function editCart(Request $request)
     {
-        $DataRequests = $request->all();
-        $validator = \Validator::make($DataRequests, [
-            'collection_type' => 'required|integer',
-            'collection_id' => 'required|integer',
-        ]);
-        if ($validator->fails()) {
-            return response()->json(array('success' => 1, 'status_code' => 400,
-                'message' => 'Invalid inputs',
-                'error_details' => $validator->messages()));
-        } else {
-            $collection_type = $DataRequests['collection_type'];
-            $collection_id = $DataRequests['collection_id'];
-            if ($collection_type == 1) {
-                $validator = \Validator::make($DataRequests, [
-                    'collection_price' => 'required',
-                    'collection_quantity' => 'required|integer',
-                ]);
-                if ($validator->fails()) {
-                    return response()->json(array('success' => 1, 'status_code' => 400,
-                        'message' => 'Invalid inputs',
-                        'error_details' => $validator->messages()));
-                } else {
-                    $cart = UserCart::where('user_id', '=', 1)->first();
-                    if($cart){
-                        $cart_collection = UserCartCollection::where('cart_id', $cart->id)
-                            ->where('collection_id', $collection_id)->orderBy('id', 'desc')->first();
-                        $cart_collection->delete();
-                    }
-                }
-
-            } else if ($collection_type == 2) {
-                $cart = UserCart::where('user_id', '=', 1)->first();
-                if($cart){
-                    $cart_collection = UserCartCollection::where('cart_id', $cart->id)
-                        ->where('collection_id', $collection_id)->orderBy('id', 'desc')->first();
-                    $cart_collection->delete();
-                }
-            } else if ($collection_type == 3) {
-                if (isset($DataRequests['item_id'])) {
-                    $item_id = $DataRequests['item_id'];
-                    $cart = UserCart::where('user_id', '=', 1)->first();
-                    if($cart){
-                        $cart_item = UserCartItem::where('cart_id', $cart->id)
-                            ->where('collection_id', $collection_id)
-                            ->where('item_id', $item_id)->orderBy('id', 'desc')->first();
-                        $cart_item->delete();
-                    }
-                } else {
-                    $cart = UserCart::where('user_id', '=', 1)->first();
-                    if($cart){
-                        $cart_collection = UserCartCollection::where('cart_id', $cart->id)
-                            ->where('collection_id', $collection_id)->orderBy('id', 'desc')->first();
-                        $cart_collection->delete();
-                    }
-                }
-            } else if ($collection_type == 4) {
-                if (isset($DataRequests['item_id'])) {
-                    $item_id = $DataRequests['item_id'];
-                    $validator = \Validator::make($DataRequests, [
-                        'item_price' => 'required',
-                    ]);
-                    if ($validator->fails()) {
-                        return response()->json(array('success' => 1, 'status_code' => 400,
-                            'message' => 'Invalid inputs',
-                            'error_details' => $validator->messages()));
-                    } else {
-                        $item_price = $DataRequests['item_price'];
-                        $cart = UserCart::where('user_id', '=', 1)->first();
-                        if($cart){
-                            $cart_item = UserCartItem::where('cart_id', $cart->id)
-                                ->where('collection_id', $collection_id)
-                                ->where('item_id', $item_id)->orderBy('id', 'desc')->first();
-                            $cart_item->delete();
-                            UserCartCollection::where('cart_id', $cart->id)
-                                ->where('collection_id', $collection_id)->decrement('price', $item_price);
-                        }
-                    }
-                } else {
-                    $cart = UserCart::where('user_id', '=', 1)->first();
-                    if($cart){
-                        $cart_collection = UserCartCollection::where('cart_id', $cart->id)
-                            ->where('collection_id', $collection_id)->orderBy('id', 'desc')->first();
-                        $cart_collection->delete();
-                    }
-                }
-
-            }
-            $user_carts = UserCart::where('user_id', '=', 1)->with(['cartCollection.collection', 'cartCollection.cartItem'])->get();
-            $price = 0;
-            if(count($user_carts) > 0){
-                foreach($user_carts as $user_cart){
-                    if(count($user_cart->cartCollection) > 0){
-                        foreach ($user_cart->cartCollection as $cartCollection) {
-                            $price += $cartCollection->price;
-                            $restaurant_id = $cartCollection->collection->restaurant_id;
-                            $items = [];
-                            foreach($cartCollection->cartItem as $cartItem){
-                                if($cartCollection->collection->subcategory_id == 4){
-                                    $items [] = [
-                                        'item_id' => $cartItem->item_id,
-                                        'item' => $cartItem->menu->menu_name,
-                                        'item_qty' => $cartItem->quantity,
-                                        'item_price' => $cartItem->price,
-                                        'price_unit' => 'QR'
-                                    ];
-                                }else{
-                                    $items [] = [
-                                        'item_id' => $cartItem->item_id,
-                                        'item' => $cartItem->menu->menu_name,
-                                        'item_qty' => $cartItem->quantity,
-                                    ];
-                                }
-                                $collect_items = collect($items);
-                                $items_unique = $collect_items->unique()->values()->all();
-                            }
-
-                            $collections [] = [
-                                'collection_id' => $cartCollection->collection_id,
-                                'collection_name' => $cartCollection->collection->name,
-                                'collection_price' => $cartCollection->collection->price,
-                                'items' => $items_unique,
-                                'collection_quantity' => $cartCollection->quantity,
-                                'collection_total_price' => $cartCollection->price,
-                                'price_unit' => 'QR'
-                            ];
-                            $collect_collections = collect($collections);
-                            $collections_unique = $collect_collections->unique()->values()->all();
-                        }
-                        $arr[] = [
-                            'cart_id' => $user_cart->id,
-                            'restaurant_id' => $restaurant_id,
-                            'collections' => $collections_unique,
-                            'total_price' => $price,
-                            'price_unit' => 'QR'
-                        ];
-
-                    }else{
-                        return response()->json(array(
-                            'success' => 1,
-                            'status_code' => 200,
-                            'message' => 'You did not choose anything!'));
-                    }
-                }
-                return response()->json(array(
-                    'success' => 1,
-                    'status_code' => 200,
-                    'data' => $arr));
-            }
-        }
 
     }
 
@@ -478,9 +331,27 @@ class UserCartsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function showCart($id)
     {
-        //
+        $cart_collections = UserCartCollection::where('cart_id', $id)->with(['cartItem.menu', 'collection'])->get();
+        foreach($cart_collections as $cart_collection){
+
+            $arr [] = [
+                'collection_id' => $cart_collection->collection_id,
+                'collection' => $cart_collection->collection->name,
+//                'items' => $menu,
+                'collection_price' => $cart_collection->collection->price,
+                'collection_quantity' => $cart_collection->quantity,
+                'subtotal' => $cart_collection->price
+            ];
+        }
+
+
+
+        return response()->json(array(
+            'success' => 1,
+            'status_code' => 200,
+            'data' => $arr));
     }
 
     /**
@@ -501,10 +372,6 @@ class UserCartsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function addInCart(Request $request)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.

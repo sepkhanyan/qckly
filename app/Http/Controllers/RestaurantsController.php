@@ -746,6 +746,8 @@ class RestaurantsController extends Controller
                                 }
                                 if($collection->subcategory_id == 4){
                                     $collection->price = 0;
+                                    $collection->min_serve_to_person = -1;
+                                    $collection->max_serve_to_person = -1;
                                 }
                             }
                             $menu_collection [] = [
