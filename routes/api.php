@@ -25,5 +25,5 @@ Route::get('/restaurantCategories', 'RestaurantCategoriesController@getCategorie
 Route::post('/restaurantByCategory', 'RestaurantsController@getRestaurantByCategory');
 Route::post('/restaurantMenuItems', 'RestaurantsController@restaurantMenuItems');
 Route::post('/createCart', 'UserCartsController@createCart');
-Route::post('/editCart', 'UserCartsController@editCart');
+Route::post('/editCart/{id}', 'UserCartsController@editCart');
 Route::get('/showCart/{id}', 'UserCartsController@showCart');
