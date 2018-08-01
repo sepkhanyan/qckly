@@ -329,64 +329,75 @@ class UserCartsController extends Controller
         $cart = UserCart::find($id);
         $cart_collections = UserCartCollection::where('cart_id', $id)->with('collection.subcategory')->get();
         $total = 0;
-        foreach($cart_collections as $cart_collection){
-            $menu = [];
-            $categories = Categories::whereHas('cartItem', function($query) use ($id, $cart_collection){
-                $query->where('collection_id', $cart_collection->collection_id);
-            })->with(['cartItem'=>function ($x) use($cart_collection){
-                $x->where('collection_id', $cart_collection->collection_id);
-            }])->get();
-            foreach($categories as $category){
-                $items = [];
-                foreach($category->cartItem as $cartItem){
-                    $items [] =[
-                        'item_id' => $cartItem->item_id,
-                        'item' => $cartItem->menu->menu_name,
-                        'item_price' => $cartItem->menu->menu_price,
-                        'item_quantity' => $cartItem->quantity,
-                        'price_unit' => 'QR'
+        if(count($cart_collections) > 0){
+            foreach($cart_collections as $cart_collection){
+                $menu = [];
+                $categories = Categories::whereHas('cartItem', function($query) use ($id, $cart_collection){
+                    $query->where('collection_id', $cart_collection->collection_id);
+                })->with(['cartItem'=>function ($x) use($cart_collection){
+                    $x->where('collection_id', $cart_collection->collection_id);
+                }])->get();
+                if(count($categories) > 0){
+
+                }
+                foreach($categories as $category){
+                    $items = [];
+                    foreach($category->cartItem as $cartItem){
+                        $items [] =[
+                            'item_id' => $cartItem->item_id,
+                            'item_name' => $cartItem->menu->menu_name,
+                            'item_price' => $cartItem->menu->menu_price,
+                            'item_quantity' => $cartItem->quantity,
+                            'price_unit' => 'QR'
+                        ];
+                    }
+                    $menu [] = [
+                        'menu_id' => $category->id,
+                        'menu_name' => $category->name,
+                        'items' => $items
                     ];
                 }
-                $menu [] = [
-                    'menu_id' => $category->id,
-                    'menu' => $category->name,
-                    'menu_items' => $items
+                if($cart_collection->persons_count == null){
+                    $cart_collection->persons_count = '';
+                }
+
+
+                $collections [] = [
+                    'collection_id' => $cart_collection->collection_id,
+                    'collection_type' => $cart_collection->collection->subcategory->subcategory_en,
+                    'collection_name' => $cart_collection->collection->name,
+                    'collection_price' => $cart_collection->collection->price,
+                    'menu_items' => $menu,
+                    'quantity' => $cart_collection->quantity,
+                    'persons_count' => $cart_collection->persons_count,
+                    'collection_total_price' => $cart_collection->price,
+                    'price_unit' => "QR"
                 ];
-            }
-            if($cart_collection->persons_count == null){
-                $cart_collection->persons_count = '';
+                $total += $cart_collection->price;
+
             }
 
-
-            $collections [] = [
-                'collection_id' => $cart_collection->collection_id,
-                'collection_type' => $cart_collection->collection->subcategory->subcategory_en,
-                'collection' => $cart_collection->collection->name,
-                'collection_price' => $cart_collection->collection->price,
-                'menu_items' => $menu,
-                'quantity' => $cart_collection->quantity,
-                'persons_count' => $cart_collection->persons_count,
-                'collection_total_price' => $cart_collection->price,
-                'price_unit' => "QR"
+            $arr  = [
+                'cart_id' => $cart->id,
+                'order_area' => $cart->delivery_order_area,
+                'order_date' => $cart->delivery_order_date,
+                'order_time' => $cart->delivery_order_time,
+                'collections' => $collections,
+                'total' => $total,
+                'price_unit' => 'QR'
             ];
-            $total += $cart_collection->price;
 
+            return response()->json(array(
+                'success' => 1,
+                'status_code' => 200,
+                'data' => $arr));
+        }else{
+            return response()->json(array(
+                'success' => 1,
+                'status_code' => 200,
+                'data' => "Nothing selected!"));
         }
 
-        $arr  = [
-            'cart_id' => $cart->id,
-            'order_area' => $cart->delivery_order_area,
-            'order_date' => $cart->delivery_order_date,
-            'order_time' => $cart->delivery_order_time,
-            'collections' => $collections,
-            'total' => $total,
-            'price_unit' => 'QR'
-        ];
-
-        return response()->json(array(
-            'success' => 1,
-            'status_code' => 200,
-            'data' => $arr));
     }
 
     public function editCart(Request $request, $id)
