@@ -34,10 +34,6 @@ class UserCartsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -68,7 +64,7 @@ class UserCartsController extends Controller
             $cart = UserCart::where('user_id', '=', 1)->first();
             if (!$cart) {
                 $validator = \Validator::make($DataRequests, [
-                    'delivery_order_area' => 'required',
+                    'delivery_order_area' => 'required|integer',
                     'delivery_order_date' => 'required',
                     'delivery_order_time' => 'required',
                 ]);
@@ -289,7 +285,7 @@ class UserCartsController extends Controller
                         $cart_collection->collection_id = $collection_id;
                         $cart_collection->cart_id = $cart->id;
                         $cart_collection->price = $collection_price;
-                        $cart_collection->quantity = $collection_quantity;
+                        $cart_collection->quantity = 1;
                         $cart_collection->female_caterer = $female_caterer;
                         $cart_collection->special_instruction = $special_instruction;
                         $cart_collection->save();
@@ -320,10 +316,7 @@ class UserCartsController extends Controller
 
     }
 
-    public function editCart(Request $request)
-    {
 
-    }
 
     /**
      * Display the specified resource.
@@ -396,16 +389,18 @@ class UserCartsController extends Controller
             'data' => $arr));
     }
 
+    public function editCart(Request $request, $id)
+    {
+
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.
