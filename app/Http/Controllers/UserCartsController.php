@@ -352,6 +352,9 @@ class UserCartsController extends Controller
                         'items' => $items
                     ];
                 }
+                if($cart_collection->collection->price == null){
+                    $cart_collection->collection->price = '';
+                }
                 if($cart_collection->persons_count == null){
                     $cart_collection->persons_count = '';
                 }
@@ -362,13 +365,14 @@ class UserCartsController extends Controller
 
                 $collections [] = [
                     'collection_id' => $cart_collection->collection_id,
+                    'collection_type_id' => $cart_collection->collection->subcategory_id,
                     'collection_type' => $cart_collection->collection->subcategory->subcategory_en,
                     'collection_name' => $cart_collection->collection->name,
                     'collection_price' => $cart_collection->collection->price,
                     'menu_items' => $menu,
                     'quantity' => $cart_collection->quantity,
                     'persons_count' => $cart_collection->persons_count,
-                    'collection_total_price' => $cart_collection->price,
+                    'subtotal' => $cart_collection->price,
                     'price_unit' => "QR"
                 ];
                 $total += $cart_collection->price;
@@ -381,7 +385,7 @@ class UserCartsController extends Controller
                 'order_date' => $cart->delivery_order_date,
                 'order_time' => $cart->delivery_order_time,
                 'collections' => $collections,
-                'total_price' => $total,
+                'total' => $total,
                 'price_unit' => 'QR'
             ];
 
@@ -415,7 +419,6 @@ class UserCartsController extends Controller
             $collection_type = $DataRequests['collection_type'];
             $collection_id = $DataRequests['collection_id'];
             $female_caterer = $DataRequests['female_caterer'];
-            $special_instruction = '';
             if (isset($DataRequests['special_instruction'])) {
                 $special_instruction = $DataRequests['special_instruction'];
             }
@@ -442,7 +445,6 @@ class UserCartsController extends Controller
                 $validator = \Validator::make($DataRequests, [
                     'collection_price' => 'required',
                     'persons_count' => 'required',
-                    'menus' => 'required',
                 ]);
                 if ($validator->fails()) {
                     return response()->json(array('success' => 1, 'status_code' => 400,
@@ -451,32 +453,18 @@ class UserCartsController extends Controller
                 } else {
                     $collection_price = $DataRequests['collection_price'];
                     $persons_count = $DataRequests['persons_count'];
-                    $menus = $DataRequests['menus'];
                     $cart_collection = UserCartCollection::where('cart_id', $cart->id)
                         ->where('collection_id', $collection_id)->first();
                         $cart_collection->price = $collection_price;
                         $cart_collection->persons_count = $persons_count;
-                        $cart_collection->quantity = 1;
                         $cart_collection->female_caterer = $female_caterer;
                         $cart_collection->special_instruction = $special_instruction;
                         $cart_collection->save();
-                        UserCartItem::where('cart_id', $cart->id)->where('collection_id', $collection_id)->delete();
-                        foreach($menus as $menu){
-                            $cart_item = new UserCartItem();
-                            $cart_item->cart_id = $cart->id;
-                            $cart_item->collection_id = $collection_id;
-                            $cart_item->cart_collection_id = $cart_collection->id;
-                            $cart_item->menu_id = $menu['menu_id'];
-                            $cart_item->item_id = $menu['item_id'];
-                            $cart_item->quantity = $menu['item_quantity'];
-                            $cart_item->save();
-                        }
                 }
             }elseif ($collection_type == 3) {
                 $validator = \Validator::make($DataRequests, [
                     'collection_price' => 'required',
                     'collection_quantity' => 'required',
-                    'menus' => 'required',
                 ]);
                 if ($validator->fails()) {
                     return response()->json(array('success' => 1, 'status_code' => 400,
@@ -485,7 +473,6 @@ class UserCartsController extends Controller
                 } else {
                     $collection_price = $DataRequests['collection_price'];
                     $collection_quantity = $DataRequests['collection_quantity'];
-                    $menus = $DataRequests['menus'];
                     $cart_collection = UserCartCollection::where('cart_id', $cart->id)
                         ->where('collection_id', $collection_id)->first();
                         $cart_collection->price = $collection_price;
@@ -493,17 +480,6 @@ class UserCartsController extends Controller
                         $cart_collection->female_caterer = $female_caterer;
                         $cart_collection->special_instruction = $special_instruction;
                         $cart_collection->save();
-                        UserCartItem::where('cart_id', $cart->id)->where('collection_id', $collection_id)->delete();
-                        foreach($menus as $menu){
-                            $cart_item = new UserCartItem();
-                            $cart_item->cart_id = $cart->id;
-                            $cart_item->collection_id = $collection_id;
-                            $cart_item->cart_collection_id = $cart_collection->id;
-                            $cart_item->menu_id = $menu['menu_id'];
-                            $cart_item->item_id = $menu['item_id'];
-                            $cart_item->quantity = $menu['item_quantity'];
-                            $cart_item->save();
-                        }
                 }
             }elseif ($collection_type == 4) {
                 $validator = \Validator::make($DataRequests, [
@@ -520,7 +496,6 @@ class UserCartsController extends Controller
                     $cart_collection = UserCartCollection::where('cart_id', $cart->id)
                         ->where('collection_id', $collection_id)->first();
                         $cart_collection->price = $collection_price;
-                        $cart_collection->quantity = 1;
                         $cart_collection->female_caterer = $female_caterer;
                         $cart_collection->special_instruction = $special_instruction;
                         $cart_collection->save();
@@ -566,6 +541,9 @@ class UserCartsController extends Controller
                         'items' => $items
                     ];
                 }
+                if($cart_collection->collection->price == null){
+                    $cart_collection->collection->price = '';
+                }
                 if($cart_collection->persons_count == null){
                     $cart_collection->persons_count = '';
                 }
@@ -576,13 +554,14 @@ class UserCartsController extends Controller
 
                 $collections [] = [
                     'collection_id' => $cart_collection->collection_id,
+                    'collection_type_id' => $cart_collection->collection->subcategory_id,
                     'collection_type' => $cart_collection->collection->subcategory->subcategory_en,
                     'collection_name' => $cart_collection->collection->name,
                     'collection_price' => $cart_collection->collection->price,
                     'menu_items' => $menu,
                     'quantity' => $cart_collection->quantity,
                     'persons_count' => $cart_collection->persons_count,
-                    'collection_total_price' => $cart_collection->price,
+                    'subtotal' => $cart_collection->price,
                     'price_unit' => "QR"
                 ];
                 $total += $cart_collection->price;
@@ -595,7 +574,7 @@ class UserCartsController extends Controller
                 'order_date' => $cart->delivery_order_date,
                 'order_time' => $cart->delivery_order_time,
                 'collections' => $collections,
-                'total_price' => $total,
+                'total' => $total,
                 'price_unit' => 'QR'
             ];
 
