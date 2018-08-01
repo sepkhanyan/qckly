@@ -11,6 +11,7 @@ use App\UserCartCollection;
 use App\Menus;
 use App\Collection;
 use App\CollectionItem;
+use Carbon\Carbon;
 
 
 use Illuminate\Foundation\Auth\User;
@@ -64,6 +65,29 @@ class UserCartsController extends Controller
             if(isset($DataRequests['special_instruction'])){
                 $special_instruction = $DataRequests['special_instruction'];
             }
+            $cart = UserCart::where('user_id', '=', 1)->first();
+            if (!$cart) {
+                $validator = \Validator::make($DataRequests, [
+                    'delivery_order_area' => 'required',
+                    'delivery_order_date' => 'required',
+                    'delivery_order_time' => 'required',
+                ]);
+                if ($validator->fails()) {
+                    return response()->json(array('success' => 1, 'status_code' => 400,
+                        'message' => 'Invalid inputs',
+                        'error_details' => $validator->messages()));
+                } else {
+                    $delivery_area = $DataRequests['delivery_order_area'];
+                    $delivery_date = $DataRequests['delivery_order_date'];
+                    $delivery_time = $DataRequests['delivery_order_time'];
+                    $cart = new UserCart();
+                    $cart->user_id = 1;
+                    $cart->delivery_order_area = $delivery_area;
+                    $cart->delivery_order_date = Carbon::parse($delivery_date);
+                    $cart->delivery_order_time = Carbon::parse($delivery_time);
+                    $cart->save();
+                }
+            }
             if ($collection_type == 1) {
                 $validator = \Validator::make($DataRequests, [
                     'collection_price' => 'required',
@@ -76,12 +100,6 @@ class UserCartsController extends Controller
                 } else {
                     $collection_price = $DataRequests['collection_price'];
                     $collection_quantity = $DataRequests['collection_quantity'];
-                    $cart = UserCart::where('user_id', '=', 1)->first();
-                    if (!$cart) {
-                        $cart = new UserCart();
-                        $cart->user_id = 1;
-                        $cart->save();
-                    }
                     $cart_collection = UserCartCollection::where('cart_id', $cart->id)
                         ->where('collection_id', $collection_id)->first();
                     if(!$cart_collection){
@@ -132,12 +150,6 @@ class UserCartsController extends Controller
                     $collection_price = $DataRequests['collection_price'];
                     $persons_count = $DataRequests['persons_count'];
                     $menus = $DataRequests['menus'];
-                    $cart = UserCart::where('user_id', '=', 1)->first();
-                    if (!$cart) {
-                        $cart = new UserCart();
-                        $cart->user_id = 1;
-                        $cart->save();
-                    }
                     $cart_collection = UserCartCollection::where('cart_id', $cart->id)
                         ->where('collection_id', $collection_id)->first();
                     if(!$cart_collection){
@@ -196,12 +208,6 @@ class UserCartsController extends Controller
                     $collection_price = $DataRequests['collection_price'];
                     $collection_quantity = $DataRequests['collection_quantity'];
                     $menus = $DataRequests['menus'];
-                    $cart = UserCart::where('user_id', '=', 1)->first();
-                    if (!$cart) {
-                        $cart = new UserCart();
-                        $cart->user_id = 1;
-                        $cart->save();
-                    }
                     $cart_collection = UserCartCollection::where('cart_id', $cart->id)
                         ->where('collection_id', $collection_id)->first();
                     if(!$cart_collection){
@@ -257,12 +263,6 @@ class UserCartsController extends Controller
                     $collection_price = $DataRequests['collection_price'];
                     $collection_quantity = $DataRequests['collection_quantity'];
                     $menus = $DataRequests['menus'];
-                    $cart = UserCart::where('user_id', '=', 1)->first();
-                    if (!$cart) {
-                        $cart = new UserCart();
-                        $cart->user_id = 1;
-                        $cart->save();
-                    }
                     $cart_collection = UserCartCollection::where('cart_id', $cart->id)
                         ->where('collection_id', $collection_id)->first();
                     if(!$cart_collection){
@@ -308,9 +308,9 @@ class UserCartsController extends Controller
                     }
                 }
             }
-            $user_cart = UserCart::where('user_id', '=', 1)->first();
+//            $user_cart = UserCart::where('user_id', '=', 1)->first();
             $arr = [
-                'cart_id' => $user_cart->id,
+                'cart_id' => $cart->id,
             ];
             return response()->json(array(
                 'success' => 1,
@@ -333,7 +333,8 @@ class UserCartsController extends Controller
      */
     public function showCart($id)
     {
-        $cart_collections = UserCartCollection::where('cart_id', $id)->with('cartItem.menu')->get();
+        $cart = UserCart::find($id);
+        $cart_collections = UserCartCollection::where('cart_id', $id)->with('collection.subcategory')->get();
         $total = 0;
         foreach($cart_collections as $cart_collection){
             $menu = [];
@@ -348,7 +349,9 @@ class UserCartsController extends Controller
                     $items [] =[
                         'item_id' => $cartItem->item_id,
                         'item' => $cartItem->menu->menu_name,
-                        'item_quantity' => $cartItem->quantity
+                        'item_price' => $cartItem->menu->menu_price,
+                        'item_quantity' => $cartItem->quantity,
+                        'price_unit' => 'QR'
                     ];
                 }
                 $menu [] = [
@@ -361,10 +364,14 @@ class UserCartsController extends Controller
                 $cart_collection->persons_count = '';
             }
 
+
             $collections [] = [
                 'collection_id' => $cart_collection->collection_id,
+                'collection_type' => $cart_collection->collection->subcategory->subcategory_en,
+                'collection' => $cart_collection->collection->name,
+                'collection_price' => $cart_collection->collection->price,
                 'menu_items' => $menu,
-                'collection_quantity' => $cart_collection->quantity,
+                'quantity' => $cart_collection->quantity,
                 'persons_count' => $cart_collection->persons_count,
                 'collection_total_price' => $cart_collection->price,
                 'price_unit' => "QR"
@@ -373,7 +380,11 @@ class UserCartsController extends Controller
 
         }
 
-        $arr [] = [
+        $arr  = [
+            'cart_id' => $cart->id,
+            'order_area' => $cart->delivery_order_area,
+            'order_date' => $cart->delivery_order_date,
+            'order_time' => $cart->delivery_order_time,
             'collections' => $collections,
             'total' => $total,
             'price_unit' => 'QR'

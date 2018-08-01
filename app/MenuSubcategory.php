@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class MenuSubcategory extends Model
 {
-    protected $fillable = ['subcategory_name'];
+    protected $fillable = ['subcategory_en', 'subcategory_ar'];
 
 
     protected $table = 'menu_subcategories';
