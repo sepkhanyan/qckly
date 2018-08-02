@@ -27,3 +27,4 @@ Route::post('/restaurantMenuItems', 'RestaurantsController@restaurantMenuItems')
 Route::post('/createCart', 'UserCartsController@createCart');
 Route::post('/editCart/{id}', 'UserCartsController@editCart');
 Route::get('/showCart/{id}', 'UserCartsController@showCart');
+Route::post('/removeCart/{id}', 'UserCartsController@removeCart');

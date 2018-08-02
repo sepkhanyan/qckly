@@ -326,11 +326,11 @@ class UserCartsController extends Controller
     {
         $cart = UserCart::find($id);
         $cart_collections = UserCartCollection::where('cart_id', $cart->id)->with('collection.subcategory')->get();
-        $total = 0;
         if(count($cart_collections) > 0){
+            $total = 0;
             foreach($cart_collections as $cart_collection){
                 $menu = [];
-                $categories = Categories::whereHas('cartItem', function($query) use ($id, $cart_collection){
+                $categories = Categories::whereHas('cartItem', function($query) use ($cart_collection){
                     $query->where('collection_id', $cart_collection->collection_id);
                 })->with(['cartItem'=>function ($x) use($cart_collection){
                     $x->where('collection_id', $cart_collection->collection_id);
@@ -522,11 +522,11 @@ class UserCartsController extends Controller
             }
         }
         $cart_collections = UserCartCollection::where('cart_id', $cart->id)->with('collection.subcategory')->get();
-        $total = 0;
         if(count($cart_collections) > 0){
+            $total = 0;
             foreach($cart_collections as $cart_collection){
                 $menu = [];
-                $categories = Categories::whereHas('cartItem', function($query) use ($id, $cart_collection){
+                $categories = Categories::whereHas('cartItem', function($query) use ($cart_collection){
                     $query->where('collection_id', $cart_collection->collection_id);
                 })->with(['cartItem'=>function ($x) use($cart_collection){
                     $x->where('collection_id', $cart_collection->collection_id);
@@ -604,6 +604,105 @@ class UserCartsController extends Controller
                 'data' => "Nothing selected!"));
         }
     }
+
+
+    public function removeCart(Request $request, $id)
+    {
+        $DataRequests = $request->all();
+        $cart = UserCart::find($id);
+       if(isset($DataRequests['collection_id'])){
+           $collection_id = $DataRequests['collection_id'];
+           UserCartCollection::where('cart_id', $cart->id)->where('collection_id', $collection_id)->delete();
+       }else{
+           $cart->delete();
+       }
+        $cart_collections = UserCartCollection::where('cart_id', $cart->id)->with('collection.subcategory')->get();
+        if(count($cart_collections) > 0){
+            $total = 0;
+            foreach($cart_collections as $cart_collection){
+                $menu = [];
+                $categories = Categories::whereHas('cartItem', function($query) use ($cart_collection){
+                    $query->where('collection_id', $cart_collection->collection_id);
+                })->with(['cartItem'=>function ($x) use($cart_collection){
+                    $x->where('collection_id', $cart_collection->collection_id);
+                }])->get();
+                foreach($categories as $category){
+                    $items = [];
+                    foreach($category->cartItem as $cartItem){
+                        $items [] =[
+                            'item_id' => $cartItem->item_id,
+                            'item_name' => $cartItem->menu->menu_name,
+                            'item_price' => $cartItem->menu->menu_price,
+                            'item_quantity' => $cartItem->quantity,
+                            'price_unit' => 'QR'
+                        ];
+                    }
+                    $menu [] = [
+                        'menu_id' => $category->id,
+                        'menu_name' => $category->name,
+                        'items' => $items
+                    ];
+                }
+                if($cart_collection->collection->price == null){
+                    $cart_collection->collection->price = '';
+                }
+                if($cart_collection->persons_count == null){
+                    $cart_collection->persons_count = '';
+                }
+                if($cart_collection->quantity == null){
+                    $cart_collection->quantity = '';
+                }
+                if($cart_collection->female_caterer == 1){
+                    $female_caterer = true;
+                }else{
+                    $female_caterer = false;
+                }
+
+
+
+                $collections [] = [
+                    'collection_id' => $cart_collection->collection_id,
+                    'collection_type_id' => $cart_collection->collection->subcategory_id,
+                    'collection_type' => $cart_collection->collection->subcategory->subcategory_en,
+                    'collection_name' => $cart_collection->collection->name,
+                    'collection_price' => $cart_collection->collection->price,
+                    'female_caterer' => $female_caterer,
+                    'special_instruction' => $cart_collection->special_instruction,
+                    'menu_items' => $menu,
+                    'quantity' => $cart_collection->quantity,
+                    'persons_count' => $cart_collection->persons_count,
+                    'subtotal' => $cart_collection->price,
+                    'price_unit' => "QR"
+                ];
+                $total += $cart_collection->price;
+
+            }
+
+            $arr  = [
+                'cart_id' => $cart->id,
+                'order_area' => $cart->delivery_order_area,
+                'order_date' => $cart->delivery_order_date,
+                'order_time' => $cart->delivery_order_time,
+                'collections' => $collections,
+                'total' => $total,
+                'price_unit' => 'QR'
+            ];
+
+            return response()->json(array(
+                'success' => 1,
+                'status_code' => 200,
+                'data' => $arr));
+        }else{
+            $cart->delete();
+            return response()->json(array(
+                'success' => 1,
+                'status_code' => 200,
+                'data' => "Empty cart!"));
+
+        }
+    }
+
+
 
     /**
      * Show the form for editing the specified resource.
