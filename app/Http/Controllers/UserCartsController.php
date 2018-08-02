@@ -361,6 +361,11 @@ class UserCartsController extends Controller
                 if($cart_collection->quantity == null){
                     $cart_collection->quantity = '';
                 }
+                if($cart_collection->female_caterer == 1){
+                    $female_caterer = true;
+                }else{
+                    $female_caterer = false;
+                }
 
 
                 $collections [] = [
@@ -369,6 +374,8 @@ class UserCartsController extends Controller
                     'collection_type' => $cart_collection->collection->subcategory->subcategory_en,
                     'collection_name' => $cart_collection->collection->name,
                     'collection_price' => $cart_collection->collection->price,
+                    'female_caterer' => $female_caterer,
+                    'special_instruction' => $cart_collection->special_instruction,
                     'menu_items' => $menu,
                     'quantity' => $cart_collection->quantity,
                     'persons_count' => $cart_collection->persons_count,
@@ -550,6 +557,12 @@ class UserCartsController extends Controller
                 if($cart_collection->quantity == null){
                     $cart_collection->quantity = '';
                 }
+                if($cart_collection->female_caterer == 1){
+                    $female_caterer = true;
+                }else{
+                    $female_caterer = false;
+                }
+
 
 
                 $collections [] = [
@@ -558,6 +571,8 @@ class UserCartsController extends Controller
                     'collection_type' => $cart_collection->collection->subcategory->subcategory_en,
                     'collection_name' => $cart_collection->collection->name,
                     'collection_price' => $cart_collection->collection->price,
+                    'female_caterer' => $female_caterer,
+                    'special_instruction' => $cart_collection->special_instruction,
                     'menu_items' => $menu,
                     'quantity' => $cart_collection->quantity,
                     'persons_count' => $cart_collection->persons_count,
