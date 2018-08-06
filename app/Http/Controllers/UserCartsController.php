@@ -119,15 +119,11 @@ class UserCartsController extends Controller
                             $cart_item->save();
                         }
                     }else{
-                        UserCartCollection::where('cart_id', $cart->id)
-                            ->where('collection_id', $collection_id)
-                            ->increment('price', $collection_price);
-                        UserCartCollection::where('cart_id', $cart->id)
-                            ->where('collection_id', $collection_id)
-                            ->increment('quantity', $collection_quantity);
-                        UserCartCollection::where('cart_id', $cart->id)
-                            ->where('collection_id', $collection_id)
-                            ->update((['special_instruction' => $special_instruction, 'female_caterer' => $female_caterer]));
+                        $cart_collection->price = $collection_price;
+                        $cart_collection->quantity = $collection_quantity;
+                        $cart_collection->female_caterer = $female_caterer;
+                        $cart_collection->special_instruction = $special_instruction;
+                        $cart_collection->save();
                     }
 
                 }
@@ -169,8 +165,6 @@ class UserCartsController extends Controller
                             $cart_item->save();
                         }
                     }else{
-                        $cart_collection->collection_id = $collection_id;
-                        $cart_collection->cart_id = $cart->id;
                         $cart_collection->price = $collection_price;
                         $cart_collection->persons_count = $persons_count;
                         $cart_collection->quantity = 1;
@@ -226,8 +220,6 @@ class UserCartsController extends Controller
                             $cart_item->save();
                         }
                     }else{
-                        $cart_collection->collection_id = $collection_id;
-                        $cart_collection->cart_id = $cart->id;
                         $cart_collection->price = $collection_price;
                         $cart_collection->quantity = $collection_quantity;
                         $cart_collection->female_caterer = $female_caterer;
@@ -281,8 +273,6 @@ class UserCartsController extends Controller
                             $cart_item->save();
                         }
                     }else{
-                        $cart_collection->collection_id = $collection_id;
-                        $cart_collection->cart_id = $cart->id;
                         $cart_collection->price = $collection_price;
                         $cart_collection->quantity = 1;
                         $cart_collection->female_caterer = $female_caterer;
@@ -409,14 +399,12 @@ class UserCartsController extends Controller
 
     }
 
-    public function editCart(Request $request, $id)
+    public function editCart(Request $request)
     {
-        $cart = UserCart::find($id);
         $DataRequests = $request->all();
         $validator = \Validator::make($DataRequests, [
             'collection_type' => 'required|integer',
             'collection_id' => 'required|integer',
-            'female_caterer' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json(array('success' => 1, 'status_code' => 400,
@@ -425,185 +413,357 @@ class UserCartsController extends Controller
         } else {
             $collection_type = $DataRequests['collection_type'];
             $collection_id = $DataRequests['collection_id'];
-            $female_caterer = $DataRequests['female_caterer'];
-            if (isset($DataRequests['special_instruction'])) {
-                $special_instruction = $DataRequests['special_instruction'];
+            $collection = Collection::where('id', $collection_id)->with('collectionItem.menu')->first();
+            if ($collection->restaurant->female_caterer_available == 1) {
+                $female_caterer_available = true;
+            } else {
+                $female_caterer_available = false;
             }
-            if ($collection_type == 1) {
-                $validator = \Validator::make($DataRequests, [
-                    'collection_price' => 'required',
-                    'collection_quantity' => 'integer|required',
-                ]);
-                if ($validator->fails()) {
-                    return response()->json(array('success' => 1, 'status_code' => 400,
-                        'message' => 'Invalid inputs',
-                        'error_details' => $validator->messages()));
-                } else {
-                    $collection_price = $DataRequests['collection_price'];
-                    $collection_quantity = $DataRequests['collection_quantity'];
-                    $cart_collection = UserCartCollection::where('cart_id', $cart->id)->where('collection_id', $collection_id)->first();
-                    $cart_collection->price = $collection_price;
-                    $cart_collection->quantity = $collection_quantity;
-                    $cart_collection->female_caterer = $female_caterer;
-                    $cart_collection->special_instruction = $special_instruction;
-                    $cart_collection->save();
-                }
-            }else if ($collection_type == 2) {
-                $validator = \Validator::make($DataRequests, [
-                    'collection_price' => 'required',
-                    'persons_count' => 'required',
-                ]);
-                if ($validator->fails()) {
-                    return response()->json(array('success' => 1, 'status_code' => 400,
-                        'message' => 'Invalid inputs',
-                        'error_details' => $validator->messages()));
-                } else {
-                    $collection_price = $DataRequests['collection_price'];
-                    $persons_count = $DataRequests['persons_count'];
-                    $cart_collection = UserCartCollection::where('cart_id', $cart->id)
-                        ->where('collection_id', $collection_id)->first();
-                        $cart_collection->price = $collection_price;
-                        $cart_collection->persons_count = $persons_count;
-                        $cart_collection->female_caterer = $female_caterer;
-                        $cart_collection->special_instruction = $special_instruction;
-                        $cart_collection->save();
-                }
-            }elseif ($collection_type == 3) {
-                $validator = \Validator::make($DataRequests, [
-                    'collection_price' => 'required',
-                    'collection_quantity' => 'required',
-                ]);
-                if ($validator->fails()) {
-                    return response()->json(array('success' => 1, 'status_code' => 400,
-                        'message' => 'Invalid inputs',
-                        'error_details' => $validator->messages()));
-                } else {
-                    $collection_price = $DataRequests['collection_price'];
-                    $collection_quantity = $DataRequests['collection_quantity'];
-                    $cart_collection = UserCartCollection::where('cart_id', $cart->id)
-                        ->where('collection_id', $collection_id)->first();
-                        $cart_collection->price = $collection_price;
-                        $cart_collection->quantity = $collection_quantity;
-                        $cart_collection->female_caterer = $female_caterer;
-                        $cart_collection->special_instruction = $special_instruction;
-                        $cart_collection->save();
-                }
-            }elseif ($collection_type == 4) {
-                $validator = \Validator::make($DataRequests, [
-                    'collection_price' => 'required',
-                    'menus' => 'required',
-                ]);
-                if ($validator->fails()) {
-                    return response()->json(array('success' => 1, 'status_code' => 400,
-                        'message' => 'Invalid inputs',
-                        'error_details' => $validator->messages()));
-                } else {
-                    $collection_price = $DataRequests['collection_price'];
-                    $menus = $DataRequests['menus'];
-                    $cart_collection = UserCartCollection::where('cart_id', $cart->id)
-                        ->where('collection_id', $collection_id)->first();
-                        $cart_collection->price = $collection_price;
-                        $cart_collection->female_caterer = $female_caterer;
-                        $cart_collection->special_instruction = $special_instruction;
-                        $cart_collection->save();
-                        UserCartItem::where('cart_id', $cart->id)->where('collection_id', $collection_id)->delete();
-                        foreach($menus as $menu){
-                            $cart_item = new UserCartItem();
-                            $cart_item->cart_id = $cart->id;
-                            $cart_item->collection_id = $collection_id;
-                            $cart_item->cart_collection_id = $cart_collection->id;
-                            $cart_item->menu_id = $menu['menu_id'];
-                            $cart_item->item_id = $menu['item_id'];
-                            $cart_item->price = $menu['item_price'];
-                            $cart_item->quantity = $menu['item_quantity'];
-                            $cart_item->save();
-                        }
-                }
+            $foodlist = [];
+            $foodlist_images = [];
+            if ($collection->is_available == 1) {
+                $is_available = true;
+            } else {
+                $is_available = false;
             }
-        }
-        $cart_collections = UserCartCollection::where('cart_id', $cart->id)->with('collection.subcategory')->get();
-        if(count($cart_collections) > 0){
-            $total = 0;
-            foreach($cart_collections as $cart_collection){
+            $setup = '';
+            $max = '';
+            $requirement = '';
+            $max_persons = -1;
+            $person_increase = false;
+            if($collection_type == 1){
+                $items = [];
                 $menu = [];
-                $categories = Categories::whereHas('cartItem', function($query) use ($cart_collection){
-                    $query->where('collection_id', $cart_collection->collection_id);
-                })->with(['cartItem'=>function ($x) use($cart_collection){
-                    $x->where('collection_id', $cart_collection->collection_id);
+                foreach ($collection->collectionItem as $collection_item) {
+                    $foodlist [] = $collection_item->menu->menu_name;
+                    $image = url('/') . '/images/' . $collection_item->menu->menu_photo;
+                    array_push($foodlist_images, $image);
+                    if ($collection_item->menu->menu_status == 1) {
+                        $status = true;
+                    } else {
+                        $status = false;
+                    }
+
+                    $items  [] = [
+                        'item_id' => $collection_item->menu_id,
+                        'item_name' => $collection_item->menu->menu_name,
+                        'item_qty' => $collection_item->min_count,
+                        'item_price' => $collection_item->menu->menu_price,
+                        'item_price_unit' => 'QR',
+                        'item_availability' => $status
+
+                    ];
+                }
+                $menu [] = [
+                    'menu_name' => 'Combo Delicious',
+                    'items' => $items,
+                ];
+            }else{
+                foreach ($collection->collectionItem as $collection_item) {
+                    $foodlist [] = $collection_item->menu->menu_name;
+                    $image = url('/') . '/images/' . $collection_item->menu->menu_photo;
+                    array_push($foodlist_images, $image);
+                    $min_qty = $collection_item->min_count;
+                    $max_qty = $collection_item->max_count;
+                    if($collection->subcategory_id == 2){
+                        if($collection->allow_person_increase == 1){
+                            $person_increase = true;
+                        }else{
+                            $person_increase = false;
+                        }
+                        $max_persons = $collection->persons_max_count;
+
+                        $setup_hours = $collection->setup_time / 60;
+                        $setup_minutes = $collection->setup_time % 60;
+                        if ($setup_minutes > 0) {
+                            $setup = floor($setup_hours) . " hours " . ($setup_minutes) . " minutes";
+                        } else {
+                            $setup = floor($setup_hours) . " hours";
+                        }
+
+                        $max_hours = $collection->max_time / 60;
+                        $max_minutes = $collection->max_time % 60;
+                        if ($max_minutes > 0) {
+                            $max = floor($max_hours) . " hours " . ($max_minutes) . " minutes";
+                        } else {
+                            $max = floor($max_hours) . " hours";
+                        }
+                        $requirement = $collection->requirements;
+                        $collection->min_qty = -1;
+                        $collection->max_qty = -1;
+                    }
+                }
+                $categories = Categories::with(['menu'=>function ($query) use ($collection_id){
+                    $query->with(['collectionItem'=>function ($x) use($collection_id){
+                        $x->where('collection_id', $collection_id);}]);
                 }])->get();
+                $menu = [];
                 foreach($categories as $category){
                     $items = [];
-                    foreach($category->cartItem as $cartItem){
-                        $items [] =[
-                            'item_id' => $cartItem->item_id,
-                            'item_name' => $cartItem->menu->menu_name,
-                            'item_price' => $cartItem->menu->menu_price,
-                            'item_quantity' => $cartItem->quantity,
-                            'price_unit' => 'QR'
+                    foreach($category->menu as $item){
+                        if ($item->menu_status == 1) {
+                            $status = true;
+                        } else {
+                            $status = false;
+                        }
+                        $items  [] = [
+                            'item_id' => $item->id,
+                            'item_name' => $item->menu_name,
+                            'item_price' => $item->menu_price,
+                            'item_price_unit' => 'QR',
+                            'item_availability' => $status
+
                         ];
                     }
+                    usort($items, function ($item1, $item2) {
+                        return $item2['item_availability'] <=> $item1['item_availability'];
+                    });
                     $menu [] = [
                         'menu_id' => $category->id,
                         'menu_name' => $category->name,
-                        'items' => $items
+                        'menu_min_qty' => $min_qty,
+                        'menu_max_qty' => $max_qty,
+                        'items' => $items,
                     ];
                 }
-                if($cart_collection->collection->price == null){
-                    $cart_collection->collection->price = '';
+                if($collection->subcategory_id == 4){
+                    $collection->price = 0;
+                    $collection->min_serve_to_person = -1;
+                    $collection->max_serve_to_person = -1;
                 }
-                if($cart_collection->persons_count == null){
-                    $cart_collection->persons_count = '';
-                }
-                if($cart_collection->quantity == null){
-                    $cart_collection->quantity = '';
-                }
-                if($cart_collection->female_caterer == 1){
-                    $female_caterer = true;
-                }else{
-                    $female_caterer = false;
-                }
-
-
-
-                $collections [] = [
-                    'collection_id' => $cart_collection->collection_id,
-                    'collection_type_id' => $cart_collection->collection->subcategory_id,
-                    'collection_type' => $cart_collection->collection->subcategory->subcategory_en,
-                    'collection_name' => $cart_collection->collection->name,
-                    'collection_price' => $cart_collection->collection->price,
-                    'female_caterer' => $female_caterer,
-                    'special_instruction' => $cart_collection->special_instruction,
-                    'menu_items' => $menu,
-                    'quantity' => $cart_collection->quantity,
-                    'persons_count' => $cart_collection->persons_count,
-                    'subtotal' => $cart_collection->price,
-                    'price_unit' => "QR"
-                ];
-                $total += $cart_collection->price;
 
             }
-
-            $arr  = [
-                'cart_id' => $cart->id,
-                'order_area' => $cart->delivery_order_area,
-                'order_date' => $cart->delivery_order_date,
-                'order_time' => $cart->delivery_order_time,
-                'collections' => $collections,
-                'total' => $total,
-                'price_unit' => 'QR'
+            $menu_collection [] = [
+                'collection_id' => $collection->id,
+                'collection_name' => $collection->name,
+                'collection_description' => $collection->description,
+                'collection_type_id' => $collection->subcategory_id,
+                'collection_type' => $collection->subcategory->subcategory_en,
+                'female_caterer_available' => $female_caterer_available,
+                'mealtime' => $collection->mealtime,
+                'collection_min_qty' => $collection->min_qty,
+                'collection_max_qty' => $collection->max_qty,
+                'price' => $collection->price,
+                'price_unit' => "QR",
+                'is_available' => $is_available,
+                'min_serve_to_person' => $collection->min_serve_to_person,
+                'max_serve_to_person' => $collection->max_serve_to_person,
+                'allow_person_increase' => $person_increase,
+                'persons_max_count' => $max_persons,
+                'service_provide' => $collection->service_provide,
+                'food_list' => $foodlist,
+                'service_presentation' => $collection->service_presentation,
+                'instruction' => $collection->instruction,
+                'food_item_image' => url('/') . '/images/' . $collection_item->menu->menu_photo,
+                'food_list_images' => $foodlist_images,
+                'setup_time' => $setup,
+                'requirement' => $requirement,
+                'max_time' => $max,
+                'menu_items' => $menu
             ];
-
-            return response()->json(array(
-                'success' => 1,
-                'status_code' => 200,
-                'data' => $arr));
-        }else{
-            return response()->json(array(
-                'success' => 1,
-                'status_code' => 200,
-                'data' => "Nothing selected!"));
         }
+
+        return response()->json(array(
+            'success'=> 1,
+            'status_code'=> 200 ,
+            'data' => $menu_collection));
     }
+
+//    public function editCart(Request $request, $id)
+//    {
+//        $cart = UserCart::find($id);
+//        $DataRequests = $request->all();
+//        $validator = \Validator::make($DataRequests, [
+//            'collection_type' => 'required|integer',
+//            'collection_id' => 'required|integer',
+//            'female_caterer' => 'required',
+//        ]);
+//        if ($validator->fails()) {
+//            return response()->json(array('success' => 1, 'status_code' => 400,
+//                'message' => 'Invalid inputs',
+//                'error_details' => $validator->messages()));
+//        } else {
+//            $collection_type = $DataRequests['collection_type'];
+//            $collection_id = $DataRequests['collection_id'];
+//            $female_caterer = $DataRequests['female_caterer'];
+//            if (isset($DataRequests['special_instruction'])) {
+//                $special_instruction = $DataRequests['special_instruction'];
+//            }
+//            if ($collection_type == 1) {
+//                $validator = \Validator::make($DataRequests, [
+//                    'collection_price' => 'required',
+//                    'collection_quantity' => 'integer|required',
+//                ]);
+//                if ($validator->fails()) {
+//                    return response()->json(array('success' => 1, 'status_code' => 400,
+//                        'message' => 'Invalid inputs',
+//                        'error_details' => $validator->messages()));
+//                } else {
+//                    $collection_price = $DataRequests['collection_price'];
+//                    $collection_quantity = $DataRequests['collection_quantity'];
+//                    $cart_collection = UserCartCollection::where('cart_id', $cart->id)->where('collection_id', $collection_id)->first();
+//                    $cart_collection->price = $collection_price;
+//                    $cart_collection->quantity = $collection_quantity;
+//                    $cart_collection->female_caterer = $female_caterer;
+//                    $cart_collection->special_instruction = $special_instruction;
+//                    $cart_collection->save();
+//                }
+//            }else if ($collection_type == 2) {
+//                $validator = \Validator::make($DataRequests, [
+//                    'collection_price' => 'required',
+//                    'persons_count' => 'required',
+//                ]);
+//                if ($validator->fails()) {
+//                    return response()->json(array('success' => 1, 'status_code' => 400,
+//                        'message' => 'Invalid inputs',
+//                        'error_details' => $validator->messages()));
+//                } else {
+//                    $collection_price = $DataRequests['collection_price'];
+//                    $persons_count = $DataRequests['persons_count'];
+//                    $cart_collection = UserCartCollection::where('cart_id', $cart->id)
+//                        ->where('collection_id', $collection_id)->first();
+//                        $cart_collection->price = $collection_price;
+//                        $cart_collection->persons_count = $persons_count;
+//                        $cart_collection->female_caterer = $female_caterer;
+//                        $cart_collection->special_instruction = $special_instruction;
+//                        $cart_collection->save();
+//                }
+//            }elseif ($collection_type == 3) {
+//                $validator = \Validator::make($DataRequests, [
+//                    'collection_price' => 'required',
+//                    'collection_quantity' => 'required',
+//                ]);
+//                if ($validator->fails()) {
+//                    return response()->json(array('success' => 1, 'status_code' => 400,
+//                        'message' => 'Invalid inputs',
+//                        'error_details' => $validator->messages()));
+//                } else {
+//                    $collection_price = $DataRequests['collection_price'];
+//                    $collection_quantity = $DataRequests['collection_quantity'];
+//                    $cart_collection = UserCartCollection::where('cart_id', $cart->id)
+//                        ->where('collection_id', $collection_id)->first();
+//                        $cart_collection->price = $collection_price;
+//                        $cart_collection->quantity = $collection_quantity;
+//                        $cart_collection->female_caterer = $female_caterer;
+//                        $cart_collection->special_instruction = $special_instruction;
+//                        $cart_collection->save();
+//                }
+//            }elseif ($collection_type == 4) {
+//                $validator = \Validator::make($DataRequests, [
+//                    'collection_price' => 'required',
+//                    'menus' => 'required',
+//                ]);
+//                if ($validator->fails()) {
+//                    return response()->json(array('success' => 1, 'status_code' => 400,
+//                        'message' => 'Invalid inputs',
+//                        'error_details' => $validator->messages()));
+//                } else {
+//                    $collection_price = $DataRequests['collection_price'];
+//                    $menus = $DataRequests['menus'];
+//                    $cart_collection = UserCartCollection::where('cart_id', $cart->id)
+//                        ->where('collection_id', $collection_id)->first();
+//                        $cart_collection->price = $collection_price;
+//                        $cart_collection->female_caterer = $female_caterer;
+//                        $cart_collection->special_instruction = $special_instruction;
+//                        $cart_collection->save();
+//                        UserCartItem::where('cart_id', $cart->id)->where('collection_id', $collection_id)->delete();
+//                        foreach($menus as $menu){
+//                            $cart_item = new UserCartItem();
+//                            $cart_item->cart_id = $cart->id;
+//                            $cart_item->collection_id = $collection_id;
+//                            $cart_item->cart_collection_id = $cart_collection->id;
+//                            $cart_item->menu_id = $menu['menu_id'];
+//                            $cart_item->item_id = $menu['item_id'];
+//                            $cart_item->price = $menu['item_price'];
+//                            $cart_item->quantity = $menu['item_quantity'];
+//                            $cart_item->save();
+//                        }
+//                }
+//            }
+//        }
+//        $cart_collections = UserCartCollection::where('cart_id', $cart->id)->with('collection.subcategory')->get();
+//        if(count($cart_collections) > 0){
+//            $total = 0;
+//            foreach($cart_collections as $cart_collection){
+//                $menu = [];
+//                $categories = Categories::whereHas('cartItem', function($query) use ($cart_collection){
+//                    $query->where('collection_id', $cart_collection->collection_id);
+//                })->with(['cartItem'=>function ($x) use($cart_collection){
+//                    $x->where('collection_id', $cart_collection->collection_id);
+//                }])->get();
+//                foreach($categories as $category){
+//                    $items = [];
+//                    foreach($category->cartItem as $cartItem){
+//                        $items [] =[
+//                            'item_id' => $cartItem->item_id,
+//                            'item_name' => $cartItem->menu->menu_name,
+//                            'item_price' => $cartItem->menu->menu_price,
+//                            'item_quantity' => $cartItem->quantity,
+//                            'price_unit' => 'QR'
+//                        ];
+//                    }
+//                    $menu [] = [
+//                        'menu_id' => $category->id,
+//                        'menu_name' => $category->name,
+//                        'items' => $items
+//                    ];
+//                }
+//                if($cart_collection->collection->price == null){
+//                    $cart_collection->collection->price = '';
+//                }
+//                if($cart_collection->persons_count == null){
+//                    $cart_collection->persons_count = '';
+//                }
+//                if($cart_collection->quantity == null){
+//                    $cart_collection->quantity = '';
+//                }
+//                if($cart_collection->female_caterer == 1){
+//                    $female_caterer = true;
+//                }else{
+//                    $female_caterer = false;
+//                }
+//
+//
+//
+//                $collections [] = [
+//                    'collection_id' => $cart_collection->collection_id,
+//                    'collection_type_id' => $cart_collection->collection->subcategory_id,
+//                    'collection_type' => $cart_collection->collection->subcategory->subcategory_en,
+//                    'collection_name' => $cart_collection->collection->name,
+//                    'collection_price' => $cart_collection->collection->price,
+//                    'female_caterer' => $female_caterer,
+//                    'special_instruction' => $cart_collection->special_instruction,
+//                    'menu_items' => $menu,
+//                    'quantity' => $cart_collection->quantity,
+//                    'persons_count' => $cart_collection->persons_count,
+//                    'subtotal' => $cart_collection->price,
+//                    'price_unit' => "QR"
+//                ];
+//                $total += $cart_collection->price;
+//
+//            }
+//
+//            $arr  = [
+//                'cart_id' => $cart->id,
+//                'order_area' => $cart->delivery_order_area,
+//                'order_date' => $cart->delivery_order_date,
+//                'order_time' => $cart->delivery_order_time,
+//                'collections' => $collections,
+//                'total' => $total,
+//                'price_unit' => 'QR'
+//            ];
+//
+//            return response()->json(array(
+//                'success' => 1,
+//                'status_code' => 200,
+//                'data' => $arr));
+//        }else{
+//            return response()->json(array(
+//                'success' => 1,
+//                'status_code' => 200,
+//                'data' => "Nothing selected!"));
+//        }
+//    }
 
 
     public function removeCart(Request $request, $id)

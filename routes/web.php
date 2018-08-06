@@ -15,7 +15,6 @@
 Auth::routes();
 Route::group(['middleware' => ['web', 'auth']], function (){
     Route::group(['middleware' => 'admin'],function(){
-            Route::get('/image/manager', 'locationsController@selectImages');
             Route::get('/', 'HomeController@test')->name('home');
             Route::get('/new/customers', 'UsersController@create');
             Route::get('/store/customers', 'UsersController@store');
@@ -64,15 +63,10 @@ Route::group(['middleware' => ['web', 'auth']], function (){
             Route::post('/delete/collection','CollectionsController@deleteCollection');
             Route::get('/collection/edit/{id}', 'CollectionsController@edit');
             Route::post('/collection/update/{id}', 'CollectionsController@update');
+
+
         });
-
-
-
-
-
 });
-
-
 
 
 Route::get('/register-as-user','UsersController@registerAsUser');
