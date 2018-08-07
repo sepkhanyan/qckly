@@ -112,7 +112,7 @@
                             @foreach($customers as $customer)
                                 <tr>
                                     <td class="action"><input type="checkbox" value="{{$customer->user_id}}" name="delete" />&nbsp;&nbsp;&nbsp;
-                                        <a class="btn btn-edit" title="" href="{{ url('customer/edit/' . $customer->user_id )}}">
+                                        <a class="btn btn-edit" title="" href="{{ url('customer/edit/' . $customer->id )}}">
                                             <i class="fa fa-pencil"></i>
                                         </a>&nbsp;&nbsp;
                                         <a class="btn btn-info " title=""  >
@@ -126,7 +126,7 @@
                                     <td>{{$customer->mobile}}</td>
                                     <td>{{date("jS F, Y", strtotime($customer->created_at))}}</td>
                                     <td class="text-center"></td>
-                                    <td>{{$customer->user_id}}</td>
+                                    <td>{{$customer->id}}</td>
                                 </tr>
                             @endforeach
 

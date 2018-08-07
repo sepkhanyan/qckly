@@ -399,7 +399,7 @@ class UserCartsController extends Controller
 
     }
 
-    public function editCart(Request $request)
+    public function collectionDetails(Request $request)
     {
         $DataRequests = $request->all();
         $validator = \Validator::make($DataRequests, [

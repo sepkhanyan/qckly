@@ -107,7 +107,7 @@ class UsersController extends Controller
     public function deleteCustomers(Request $request)
     {
         $id = $request->get('id');
-        User::whereIn('user_id',$id)->delete();
+        User::whereIn('id',$id)->delete();
 
 
         return redirect('/customers');
@@ -200,6 +200,7 @@ class UsersController extends Controller
         \Log::info($request->all());
         $DataRequests = $request->all();
         $mobile = $request->input('mobile');
+        $password = bcrypt($request->input('password'));
         $DataRequests['lang'] = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), [
             'mobile' => 'required|min:8|max:8'
@@ -239,6 +240,7 @@ class UsersController extends Controller
                             'mobile' => $mobile,
                             'sms_code' => $random_val,
                             'sms_count' => 1,
+                            'password' => $password
                         ]
                     );
 
