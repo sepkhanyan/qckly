@@ -28,3 +28,4 @@ Route::post('/createCart', 'UserCartsController@createCart');
 Route::get('/collectionDetails', 'UserCartsController@collectionDetails');
 Route::get('/showCart/{id}', 'UserCartsController@showCart');
 Route::post('/removeCart/{id}', 'UserCartsController@removeCart');
+Route::post('/addAddress', 'AddressesController@addAddress');
