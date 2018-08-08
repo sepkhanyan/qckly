@@ -40,9 +40,9 @@ class AddressesController extends Controller
             'name' => 'required|string',
             'mobile_number' => 'required|string',
             'location' => 'required|string',
-            'building_number' => 'required|integer',
+            'building_number' => 'required|string',
             'zone' => 'required|string',
-            'is_apartment' => 'required|string'
+            'is_apartment' => 'required'
         ]);
         if ($validator->fails()) {
             return response()->json(array('success' => 1, 'status_code' => 400,
