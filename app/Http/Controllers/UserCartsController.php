@@ -382,7 +382,7 @@ class UserCartsController extends Controller
 
                 $arr  = [
                     'cart_id' => $cart->id,
-                    'order_area' => $cart->delivery_order_area,
+                    'delivery_address' => $cart->delivery_order_area,
                     'order_date' => $cart->delivery_order_date,
                     'order_time' => $cart->delivery_order_time,
                     'collections' => $collections,
@@ -823,8 +823,6 @@ class UserCartsController extends Controller
                     $female_caterer = false;
                 }
 
-
-
                 $collections [] = [
                     'collection_id' => $cart_collection->collection_id,
                     'collection_type_id' => $cart_collection->collection->subcategory_id,
@@ -845,7 +843,7 @@ class UserCartsController extends Controller
 
             $arr  = [
                 'cart_id' => $cart->id,
-                'order_area' => $cart->delivery_order_area,
+                'delivery_address' => $cart->delivery_order_area,
                 'order_date' => $cart->delivery_order_date,
                 'order_time' => $cart->delivery_order_time,
                 'collections' => $collections,

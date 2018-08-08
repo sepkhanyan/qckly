@@ -71,9 +71,31 @@ class AddressesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function getAddresses(Request $request)
     {
-        //
+        $DataRequests = $request->all();
+        $addresses = Address::where('user_id', 1)->get();
+        foreach($addresses as $address){
+            if($address->is_apartment = 1){
+                $apartment = true;
+            }else{
+                $apartment = false;
+            }
+            $arr [] = [
+                'address_id' => $address->id,
+                'address_name' => $address->name,
+                'mobile_number' => $address->mobile_number,
+                'location' => $address->location,
+                'building_number' => $address->building_number,
+                'zone' => $address->zone,
+                'is_apartment' => $apartment,
+                'apartment_number' => $address->apartment_number
+            ];
+        }
+        return response()->json(array(
+            'success' => 1,
+            'status_code' => 200,
+            'data' => $arr));
     }
 
     /**
