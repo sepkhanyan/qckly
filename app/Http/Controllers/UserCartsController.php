@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Address;
 use App\Categories;
 use App\UserCartMenu;
 use Auth;
@@ -76,8 +77,10 @@ class UserCartsController extends Controller
                     $delivery_area = $DataRequests['delivery_order_area'];
                     $delivery_date = $DataRequests['delivery_order_date'];
                     $delivery_time = $DataRequests['delivery_order_time'];
+                    $address = Address::where('user_id', 1)->where('is_default', 1)->first();
                     $cart = new UserCart();
                     $cart->user_id = 1;
+                    $cart->delivery_address_id = $address->id;
                     $cart->delivery_order_area = $delivery_area;
                     $cart->delivery_order_date = Carbon::parse($delivery_date);
                     $cart->delivery_order_time = Carbon::parse($delivery_time);
@@ -314,12 +317,13 @@ class UserCartsController extends Controller
      */
     public function showCart($id)
     {
-        $cart = UserCart::find($id);
+        $cart = UserCart::where('id', $id)->with(['address','cartCollection' => function ($query) {
+            $query->with(['cartItem', 'collection.subcategory']);
+        }])->first();
         if($cart){
-            $cart_collections = UserCartCollection::where('cart_id', $cart->id)->with('collection.subcategory')->get();
-            if(count($cart_collections) > 0){
+            if(count($cart->cartCollection ) > 0){
                 $total = 0;
-                foreach($cart_collections as $cart_collection){
+                foreach($cart->cartCollection as $cart_collection){
                     $menu = [];
                     $categories = Categories::whereHas('cartItem', function($query) use ($cart_collection){
                         $query->where('collection_id', $cart_collection->collection_id);
@@ -379,12 +383,23 @@ class UserCartsController extends Controller
                     $total += $cart_collection->price;
 
                 }
-
+                $address = [
+                    'address_id' => $cart->address->id,
+                    'address_name' => $cart->address->name,
+                    'mobile_number' => $cart->address->mobile_number,
+                    'location' => $cart->address->location,
+                    'building_number' => $cart->address->location,
+                    'zone' => $cart->address->zone,
+                    'is_apartment' => $cart->address->is_apartment,
+                    'apartment_number' => $cart->address->apartment_number,
+                    'is_default' => $cart->address->is_default
+                ];
                 $arr  = [
                     'cart_id' => $cart->id,
-                    'delivery_address' => $cart->delivery_order_area,
+                    'order_area' => $cart->delivery_order_area,
                     'order_date' => $cart->delivery_order_date,
                     'order_time' => $cart->delivery_order_time,
+                    'delivery_address' => $address,
                     'collections' => $collections,
                     'total' => $total,
                     'price_unit' => 'QR'

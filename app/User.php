@@ -30,4 +30,9 @@ class User extends Authenticatable
     ];
 
     protected $dates = ['created_at', 'updated_at', 'expired_at'];
+
+    public function address()
+    {
+      return  $this->hasMany('App\Address', 'user_id');
+    }
 }

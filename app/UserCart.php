@@ -20,5 +20,9 @@ class UserCart extends Model
         return $this->hasMany('App\UserCartCollection', 'cart_id');
     }
 
+    public function address()
+    {
+      return  $this->belongsTo('App\Address', 'delivery_address_id');
+    }
 
 }

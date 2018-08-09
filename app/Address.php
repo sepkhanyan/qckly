@@ -10,5 +10,13 @@ class Address extends Model
 
     protected $table = 'addresses';
 
+    public function user()
+    {
+       return $this->hasMany('App\User', 'user_id');
+    }
 
+    public function cart()
+    {
+        return $this->hasMany('App\UserCart', 'delivery_address_id');
+    }
 }

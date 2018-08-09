@@ -49,8 +49,10 @@ class AddressesController extends Controller
                 'message' => 'Invalid inputs',
                 'error_details' => $validator->messages()));
         } else {
+            Address::where('user_id',1)->where('is_default', 1)->update(['is_default'=> 0]);;
             $address = new Address();
             $address->user_id = 1;
+            $address->is_default = 1;
             $address->name = $DataRequests['name'];
             $address->mobile_number = $DataRequests['mobile_number'];
             $address->location = $DataRequests['location'];
