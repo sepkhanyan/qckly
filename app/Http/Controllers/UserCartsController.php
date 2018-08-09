@@ -78,9 +78,14 @@ class UserCartsController extends Controller
                     $delivery_date = $DataRequests['delivery_order_date'];
                     $delivery_time = $DataRequests['delivery_order_time'];
                     $address = Address::where('user_id', 1)->where('is_default', 1)->first();
+                    if($address){
+                        $address_id = $address->id;
+                    }else{
+                        $address_id = -1;
+                    }
                     $cart = new UserCart();
                     $cart->user_id = 1;
-                    $cart->delivery_address_id = $address->id;
+                    $cart->delivery_address_id = $address_id;
                     $cart->delivery_order_area = $delivery_area;
                     $cart->delivery_order_date = Carbon::parse($delivery_date);
                     $cart->delivery_order_time = Carbon::parse($delivery_time);
@@ -317,10 +322,36 @@ class UserCartsController extends Controller
      */
     public function showCart($id)
     {
-        $cart = UserCart::where('id', $id)->with(['address','cartCollection' => function ($query) {
+        $cart = UserCart::where('id', $id)->with(['cartCollection' => function ($query) {
             $query->with(['cartItem', 'collection.subcategory']);
         }])->first();
         if($cart){
+            if($cart->delivery_address_id != -1){
+                $cart = $cart->with('address')->first();
+                if($cart->address->is_apartment == 1){
+                    $apartment = true;
+                }else{
+                    $apartment = false;
+                }
+                if($cart->address->is_default == 1){
+                    $default = true;
+                }else{
+                    $default = false;
+                }
+                $address = [
+                    'address_id' => $cart->address->id,
+                    'address_name' => $cart->address->name,
+                    'mobile_number' => $cart->address->mobile_number,
+                    'location' => $cart->address->location,
+                    'building_number' => $cart->address->location,
+                    'zone' => $cart->address->zone,
+                    'is_apartment' => $apartment,
+                    'apartment_number' => $cart->address->apartment_number,
+                    'is_default' => $default
+                ];
+            }else{
+                $address = -1;
+            }
             if(count($cart->cartCollection ) > 0){
                 $total = 0;
                 foreach($cart->cartCollection as $cart_collection){
@@ -383,17 +414,6 @@ class UserCartsController extends Controller
                     $total += $cart_collection->price;
 
                 }
-                $address = [
-                    'address_id' => $cart->address->id,
-                    'address_name' => $cart->address->name,
-                    'mobile_number' => $cart->address->mobile_number,
-                    'location' => $cart->address->location,
-                    'building_number' => $cart->address->location,
-                    'zone' => $cart->address->zone,
-                    'is_apartment' => $cart->address->is_apartment,
-                    'apartment_number' => $cart->address->apartment_number,
-                    'is_default' => $cart->address->is_default
-                ];
                 $arr  = [
                     'cart_id' => $cart->id,
                     'order_area' => $cart->delivery_order_area,
@@ -404,12 +424,11 @@ class UserCartsController extends Controller
                     'total' => $total,
                     'price_unit' => 'QR'
                 ];
-
-                return response()->json(array(
-                    'success' => 1,
-                    'status_code' => 200,
-                    'data' => $arr));
             }
+            return response()->json(array(
+                'success' => 1,
+                'status_code' => 200,
+                'data' => $arr));
         }else{
             return response()->json(array(
                 'success' => 1,
@@ -793,91 +812,28 @@ class UserCartsController extends Controller
        if(isset($DataRequests['collection_id'])){
            $collection_id = $DataRequests['collection_id'];
            UserCartCollection::where('cart_id', $cart->id)->where('collection_id', $collection_id)->delete();
+           $cart_collections = UserCartCollection::where('cart_id', $cart->id)->get();
+           if(count($cart_collections) > 0){
+               return response()->json(array(
+                   'success' => 1,
+                   'status_code' => 200,
+                   'message' => 'Collection deleted successfully!'));
+           }else{
+               $cart->delete();
+               return response()->json(array(
+                   'success' => 1,
+                   'status_code' => 200,
+                   'message' => 'Cart deleted successfully!'));
+           }
+
        }else{
            $cart->delete();
+           return response()->json(array(
+               'success' => 1,
+               'status_code' => 200,
+               'message' => 'Cart deleted successfully!'));
        }
-        $cart_collections = UserCartCollection::where('cart_id', $cart->id)->with('collection.subcategory')->get();
-        if(count($cart_collections) > 0){
-            $total = 0;
-            foreach($cart_collections as $cart_collection){
-                $menu = [];
-                $categories = Categories::whereHas('cartItem', function($query) use ($cart_collection){
-                    $query->where('collection_id', $cart_collection->collection_id);
-                })->with(['cartItem'=>function ($x) use($cart_collection){
-                    $x->where('collection_id', $cart_collection->collection_id);
-                }])->get();
-                foreach($categories as $category){
-                    $items = [];
-                    foreach($category->cartItem as $cartItem){
-                        $items [] =[
-                            'item_id' => $cartItem->item_id,
-                            'item_name' => $cartItem->menu->menu_name,
-                            'item_price' => $cartItem->menu->menu_price,
-                            'item_quantity' => $cartItem->quantity,
-                            'price_unit' => 'QR'
-                        ];
-                    }
-                    $menu [] = [
-                        'menu_id' => $category->id,
-                        'menu_name' => $category->name,
-                        'items' => $items
-                    ];
-                }
-                if($cart_collection->collection->price == null){
-                    $cart_collection->collection->price = '';
-                }
-                if($cart_collection->persons_count == null){
-                    $cart_collection->persons_count = '';
-                }
-                if($cart_collection->quantity == null){
-                    $cart_collection->quantity = '';
-                }
-                if($cart_collection->female_caterer == 1){
-                    $female_caterer = true;
-                }else{
-                    $female_caterer = false;
-                }
 
-                $collections [] = [
-                    'collection_id' => $cart_collection->collection_id,
-                    'collection_type_id' => $cart_collection->collection->subcategory_id,
-                    'collection_type' => $cart_collection->collection->subcategory->subcategory_en,
-                    'collection_name' => $cart_collection->collection->name,
-                    'collection_price' => $cart_collection->collection->price,
-                    'female_caterer' => $female_caterer,
-                    'special_instruction' => $cart_collection->special_instruction,
-                    'menu_items' => $menu,
-                    'quantity' => $cart_collection->quantity,
-                    'persons_count' => $cart_collection->persons_count,
-                    'subtotal' => $cart_collection->price,
-                    'price_unit' => "QR"
-                ];
-                $total += $cart_collection->price;
-
-            }
-
-            $arr  = [
-                'cart_id' => $cart->id,
-                'delivery_address' => $cart->delivery_order_area,
-                'order_date' => $cart->delivery_order_date,
-                'order_time' => $cart->delivery_order_time,
-                'collections' => $collections,
-                'total' => $total,
-                'price_unit' => 'QR'
-            ];
-
-            return response()->json(array(
-                'success' => 1,
-                'status_code' => 200,
-                'data' => $arr));
-        }else{
-            $cart->delete();
-            return response()->json(array(
-                'success' => 1,
-                'status_code' => 200,
-                'data' => "Empty cart!"));
-
-        }
     }
 
 

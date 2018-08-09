@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Address;
+use App\UserCart;
 use Illuminate\Http\Request;
 
 class AddressesController extends Controller
@@ -49,7 +50,7 @@ class AddressesController extends Controller
                 'message' => 'Invalid inputs',
                 'error_details' => $validator->messages()));
         } else {
-            Address::where('user_id',1)->where('is_default', 1)->update(['is_default'=> 0]);;
+            Address::where('user_id',1)->where('is_default', 1)->update(['is_default'=> 0]);
             $address = new Address();
             $address->user_id = 1;
             $address->is_default = 1;
@@ -61,6 +62,8 @@ class AddressesController extends Controller
             $address->is_apartment = $DataRequests['is_apartment'];
             $address->apartment_number = $DataRequests['apartment_number'];
             $address->save();
+            UserCart::where('user_id', 1)->update(['delivery_address_id'=> $address->id]);
+
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200));
@@ -78,10 +81,15 @@ class AddressesController extends Controller
         $DataRequests = $request->all();
         $addresses = Address::where('user_id', 1)->get();
         foreach($addresses as $address){
-            if($address->is_apartment = 1){
+            if($address->is_apartment == 1){
                 $apartment = true;
             }else{
                 $apartment = false;
+            }
+            if($address->is_default == 1){
+                $default = true;
+            }else{
+                $default = false;
             }
             $arr [] = [
                 'address_id' => $address->id,
@@ -91,7 +99,8 @@ class AddressesController extends Controller
                 'building_number' => $address->building_number,
                 'zone' => $address->zone,
                 'is_apartment' => $apartment,
-                'apartment_number' => $address->apartment_number
+                'apartment_number' => $address->apartment_number,
+                'is_default' => $default
             ];
         }
         return response()->json(array(
@@ -129,8 +138,20 @@ class AddressesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function deleteAddress($id)
     {
-        //
+        $address = Address::find($id);
+        $address->delete();
+        $default_address =  Address::where('user_id',1)->where('is_default', 1)->first();
+        if(!$default_address){
+            $new_default_address =  Address::where('user_id',1)->orderBy('created_at', 'desc')->first();
+            $new_default_address->is_default = 1;
+            $new_default_address->save();
+            UserCart::where('user_id', 1)->update(['delivery_address_id'=> $new_default_address->id]);
+        }
+        return response()->json(array(
+            'success' => 1,
+            'status_code' => 200,
+            'message' => 'Address deleted successfully!'));
     }
 }
