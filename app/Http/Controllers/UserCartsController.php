@@ -322,12 +322,12 @@ class UserCartsController extends Controller
      */
     public function showCart($id)
     {
-        $cart = UserCart::where('id', $id)->with(['cartCollection' => function ($query) {
+        $cart = UserCart::where('id', $id)->with(['address', 'cartCollection' => function ($query) {
             $query->with(['cartItem', 'collection.subcategory']);
         }])->first();
         if($cart){
-            if($cart->delivery_address_id != -1){
-                $cart = $cart->with('address')->first();
+            $address = [];
+            if($cart->address){
                 if($cart->address->is_apartment == 1){
                     $apartment = true;
                 }else{
@@ -339,7 +339,6 @@ class UserCartsController extends Controller
                     $default = false;
                 }
                 $address = [
-                    'address_id' => $cart->address->id,
                     'address_name' => $cart->address->name,
                     'mobile_number' => $cart->address->mobile_number,
                     'location' => $cart->address->location,
@@ -349,9 +348,8 @@ class UserCartsController extends Controller
                     'apartment_number' => $cart->address->apartment_number,
                     'is_default' => $default
                 ];
-            }else{
-                $address = -1;
             }
+
             if(count($cart->cartCollection ) > 0){
                 $total = 0;
                 foreach($cart->cartCollection as $cart_collection){
@@ -419,6 +417,7 @@ class UserCartsController extends Controller
                     'order_area' => $cart->delivery_order_area,
                     'order_date' => $cart->delivery_order_date,
                     'order_time' => $cart->delivery_order_time,
+                    'delivery_address_id' => $cart->delivery_address_id,
                     'delivery_address' => $address,
                     'collections' => $collections,
                     'total' => $total,
