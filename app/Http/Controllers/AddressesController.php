@@ -112,7 +112,8 @@ class AddressesController extends Controller
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'message' => 'No address created!'));
+                'message' => 'No address created!',
+                'data' => []));
         }
 
     }
@@ -153,9 +154,17 @@ class AddressesController extends Controller
         $default_address =  Address::where('user_id',1)->where('is_default', 1)->first();
         if(!$default_address){
             $new_default_address =  Address::where('user_id',1)->orderBy('created_at', 'desc')->first();
-            $new_default_address->is_default = 1;
-            $new_default_address->save();
-            UserCart::where('user_id', 1)->update(['delivery_address_id'=> $new_default_address->id]);
+            if($new_default_address){
+                $new_default_address->is_default = 1;
+                $new_default_address->save();
+                UserCart::where('user_id', 1)->update(['delivery_address_id'=> $new_default_address->id]);
+            }else{
+                UserCart::where('user_id', 1)->update(['delivery_address_id'=> -1]);
+                return response()->json(array(
+                    'success' => 1,
+                    'status_code' => 200,
+                    'message' => 'No address available!'));
+            }
         }
         return response()->json(array(
             'success' => 1,
