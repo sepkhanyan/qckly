@@ -28,6 +28,6 @@ Route::post('/createCart', 'UserCartsController@createCart');
 Route::get('/collectionDetails', 'UserCartsController@collectionDetails');
 Route::get('/showCart/{id}', 'UserCartsController@showCart');
 Route::post('/removeCart/{id}', 'UserCartsController@removeCart');
-Route::post('/addAddress', 'AddressesController@addAddress');
+Route::post('/addAddress/{id?}', 'AddressesController@addAddress');
 Route::get('/getAddresses', 'AddressesController@getAddresses');
 Route::get('/deleteAddress/{id}', 'AddressesController@deleteAddress');

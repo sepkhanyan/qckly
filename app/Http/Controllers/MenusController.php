@@ -19,7 +19,7 @@ class MenusController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id=null, Request $request)
+    public function index($id = null, Request $request)
     {
 
         $categories = Categories::all();

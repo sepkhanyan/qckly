@@ -34,7 +34,7 @@ class AddressesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function addAddress(Request $request)
+    public function addAddress(Request $request, $id = null)
     {
         $DataRequests = $request->all();
         $validator = \Validator::make($DataRequests, [
@@ -43,6 +43,7 @@ class AddressesController extends Controller
             'location' => 'required|string',
             'building_number' => 'required|string',
             'zone' => 'required|string',
+            'apartment_number' => 'required|string',
             'is_apartment' => 'required'
         ]);
         if ($validator->fails()) {
@@ -50,19 +51,31 @@ class AddressesController extends Controller
                 'message' => 'Invalid inputs',
                 'error_details' => $validator->messages()));
         } else {
-            Address::where('user_id',1)->where('is_default', 1)->update(['is_default'=> 0]);
-            $address = new Address();
-            $address->user_id = 1;
-            $address->is_default = 1;
-            $address->name = $DataRequests['name'];
-            $address->mobile_number = $DataRequests['mobile_number'];
-            $address->location = $DataRequests['location'];
-            $address->building_number = $DataRequests['building_number'];
-            $address->zone = $DataRequests['zone'];
-            $address->is_apartment = $DataRequests['is_apartment'];
-            $address->apartment_number = $DataRequests['apartment_number'];
-            $address->save();
-            UserCart::where('user_id', 1)->update(['delivery_address_id'=> $address->id]);
+            if($id){
+                $address = Address::find($id);
+                $address->name = $DataRequests['name'];
+                $address->mobile_number = $DataRequests['mobile_number'];
+                $address->location = $DataRequests['location'];
+                $address->building_number = $DataRequests['building_number'];
+                $address->zone = $DataRequests['zone'];
+                $address->is_apartment = $DataRequests['is_apartment'];
+                $address->apartment_number = $DataRequests['apartment_number'];
+                $address->save();
+            }else{
+                Address::where('user_id',1)->where('is_default', 1)->update(['is_default'=> 0]);
+                $address = new Address();
+                $address->user_id = 1;
+                $address->is_default = 1;
+                $address->name = $DataRequests['name'];
+                $address->mobile_number = $DataRequests['mobile_number'];
+                $address->location = $DataRequests['location'];
+                $address->building_number = $DataRequests['building_number'];
+                $address->zone = $DataRequests['zone'];
+                $address->is_apartment = $DataRequests['is_apartment'];
+                $address->apartment_number = $DataRequests['apartment_number'];
+                $address->save();
+                UserCart::where('user_id', 1)->update(['delivery_address_id'=> $address->id]);
+            }
 
             return response()->json(array(
                 'success' => 1,
@@ -83,9 +96,9 @@ class AddressesController extends Controller
         if(count($addresses) > 0){
             foreach($addresses as $address){
                 if($address->is_apartment == 1){
-                    $apartment = true;
+                    $is_apartment = true;
                 }else{
-                    $apartment = false;
+                    $is_apartment = false;
                 }
                 if($address->is_default == 1){
                     $default = true;
@@ -99,7 +112,7 @@ class AddressesController extends Controller
                     'location' => $address->location,
                     'building_number' => $address->building_number,
                     'zone' => $address->zone,
-                    'is_apartment' => $apartment,
+                    'is_apartment' => $is_apartment,
                     'apartment_number' => $address->apartment_number,
                     'is_default' => $default
                 ];
@@ -159,7 +172,7 @@ class AddressesController extends Controller
                 $new_default_address->save();
                 UserCart::where('user_id', 1)->update(['delivery_address_id'=> $new_default_address->id]);
             }else{
-                UserCart::where('user_id', 1)->update(['delivery_address_id'=> -1]);
+                UserCart::where('user_id', 1)->update(['delivery_address_id'=> null]);
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200,
