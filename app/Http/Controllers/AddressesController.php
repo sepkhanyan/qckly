@@ -79,34 +79,42 @@ class AddressesController extends Controller
     public function getAddresses(Request $request)
     {
         $DataRequests = $request->all();
-        $addresses = Address::where('user_id', 1)->get();
-        foreach($addresses as $address){
-            if($address->is_apartment == 1){
-                $apartment = true;
-            }else{
-                $apartment = false;
+        $addresses = Address::where('user_id', 1)->orderby('created_at', 'desc')->get();
+        if(count($addresses) > 0){
+            foreach($addresses as $address){
+                if($address->is_apartment == 1){
+                    $apartment = true;
+                }else{
+                    $apartment = false;
+                }
+                if($address->is_default == 1){
+                    $default = true;
+                }else{
+                    $default = false;
+                }
+                $arr [] = [
+                    'address_id' => $address->id,
+                    'address_name' => $address->name,
+                    'mobile_number' => $address->mobile_number,
+                    'location' => $address->location,
+                    'building_number' => $address->building_number,
+                    'zone' => $address->zone,
+                    'is_apartment' => $apartment,
+                    'apartment_number' => $address->apartment_number,
+                    'is_default' => $default
+                ];
             }
-            if($address->is_default == 1){
-                $default = true;
-            }else{
-                $default = false;
-            }
-            $arr [] = [
-                'address_id' => $address->id,
-                'address_name' => $address->name,
-                'mobile_number' => $address->mobile_number,
-                'location' => $address->location,
-                'building_number' => $address->building_number,
-                'zone' => $address->zone,
-                'is_apartment' => $apartment,
-                'apartment_number' => $address->apartment_number,
-                'is_default' => $default
-            ];
+            return response()->json(array(
+                'success' => 1,
+                'status_code' => 200,
+                'data' => $arr));
+        }else{
+            return response()->json(array(
+                'success' => 1,
+                'status_code' => 200,
+                'message' => 'No address created!'));
         }
-        return response()->json(array(
-            'success' => 1,
-            'status_code' => 200,
-            'data' => $arr));
+
     }
 
     /**
