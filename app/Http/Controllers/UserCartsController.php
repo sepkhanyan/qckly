@@ -319,10 +319,12 @@ class UserCartsController extends Controller
      */
     public function showCart($id)
     {
+
         $cart = UserCart::where('id', $id)->with(['address', 'cartCollection' => function ($query) {
             $query->with(['cartItem', 'collection.subcategory']);
         }])->first();
         if($cart){
+            $cart_count = $cart->cartCollection->count();
             $address = (object) array();
             $address_id = -1;
             if($cart->address){
@@ -361,7 +363,7 @@ class UserCartsController extends Controller
                     foreach($categories as $category){
                         $items = [];
                         foreach($category->cartItem as $cartItem){
-                            $items [] =[
+                            $items [] = [
                                 'item_id' => $cartItem->item_id,
                                 'item_name' => $cartItem->menu->menu_name,
                                 'item_price' => $cartItem->menu->menu_price,
@@ -406,7 +408,7 @@ class UserCartsController extends Controller
                         'quantity' => $cart_collection->quantity,
                         'persons_count' => $persons_count,
                         'subtotal' => $cart_collection->price,
-                        'price_unit' => "QR"
+                        'price_unit' => "QR",
                     ];
                     $total += $cart_collection->price;
 
@@ -420,7 +422,8 @@ class UserCartsController extends Controller
                     'delivery_address' => $address,
                     'collections' => $collections,
                     'total' => $total,
-                    'price_unit' => 'QR'
+                    'price_unit' => 'QR',
+                    'cart_count' => $cart_count
                 ];
             }
             return response()->json(array(
