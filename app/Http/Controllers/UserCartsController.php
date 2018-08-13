@@ -834,6 +834,18 @@ class UserCartsController extends Controller
 
     }
 
+    public function deliveryAddress($id)
+    {
+        $address = Address::find($id);
+        $cart = UserCart::where('user_id', 1)->first();
+        $cart->delivery_address_id = $address->id;
+        $cart->save();
+
+        return response()->json(array(
+            'success' => 1,
+            'status_code' => 200));
+    }
+
 
 
     /**
