@@ -834,7 +834,7 @@ class UserCartsController extends Controller
 
     }
 
-    public function deliveryAddress($id)
+    public function changeDeliveryAddress($id)
     {
         $address = Address::find($id);
         $cart = UserCart::where('user_id', 1)->first();
