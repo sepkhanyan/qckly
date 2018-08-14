@@ -35,7 +35,7 @@ class OrdersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function makeOrder(Request $request)
+    public function completeOrder(Request $request)
     {
         $DataRequests = $request->all();
         $validator = \Validator::make($DataRequests, [
