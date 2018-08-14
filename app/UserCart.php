@@ -25,4 +25,9 @@ class UserCart extends Model
       return  $this->belongsTo('App\Address', 'delivery_address_id');
     }
 
+
+    public function order()
+    {
+        return $this->belongsTo('App\Order', 'cart_id');
+    }
 }

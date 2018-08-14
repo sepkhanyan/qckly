@@ -32,3 +32,4 @@ Route::get('/changeDeliveryAddress/{id}', 'UserCartsController@changeDeliveryAdd
 Route::post('/addAddress/{id?}', 'AddressesController@addAddress');
 Route::get('/getAddresses', 'AddressesController@getAddresses');
 Route::get('/deleteAddress/{id}', 'AddressesController@deleteAddress');
+Route::post('/makeOrder', 'OrdersController@makeOrder');

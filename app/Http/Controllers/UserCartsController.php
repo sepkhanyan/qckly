@@ -62,7 +62,7 @@ class UserCartsController extends Controller
             if(isset($DataRequests['special_instruction'])){
                 $special_instruction = $DataRequests['special_instruction'];
             }
-            $cart = UserCart::where('user_id', '=', 1)->first();
+            $cart = UserCart::where('user_id', '=', 1)->where('completed', 0)->first();
             if (!$cart) {
                 $validator = \Validator::make($DataRequests, [
                     'delivery_order_area' => 'required|integer',
@@ -840,7 +840,7 @@ class UserCartsController extends Controller
     public function changeDeliveryAddress($id)
     {
         $address = Address::find($id);
-        $cart = UserCart::where('user_id', 1)->first();
+        $cart = UserCart::where('user_id', 1)->where('completed', 0)->first();
         $cart->delivery_address_id = $address->id;
         $cart->save();
 
