@@ -127,7 +127,7 @@ class RegisterController extends Controller
                                 'sms_code' => $random_val,
                                 'sms_sended_date' => $date,
                                 'sms_count' => 1,
-                                'gruop_id' => 2,
+                                'group_id' => 2,
                                 'lang' => $request->header('Accept-Language'),
                                 'username' => '',
                             ]

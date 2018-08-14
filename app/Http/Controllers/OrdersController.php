@@ -75,8 +75,8 @@ class OrdersController extends Controller
             $arr = [
                 'order_id' => $order->id,
                 'transaction_id' => $order->transaction_id,
-                'Payment Type' => $payment,
-                'Total Price' => $order->total_price
+                'payment_type' => $payment,
+                'total_price' => $order->total_price
             ];
             return response()->json(array(
                 'success' => 1,
