@@ -14,9 +14,19 @@ class OrdersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function orderList()
     {
-        //
+        $orders = Order::where('user_id', 1)->orderby('created_at', 'desc')->get();
+//        $arr = [
+//            'order_id' => $order->id,
+//            'transaction_id' => $order->transaction_id,
+//            'payment_type' => $payment,
+//            'total_price' => $order->total_price
+//        ];
+        return response()->json(array(
+            'success' => 1,
+            'status_code' => 200,
+            'data' => $orders));
     }
 
     /**

@@ -324,7 +324,6 @@ class UserCartsController extends Controller
             $query->with(['cartItem', 'collection.subcategory']);
         }])->first();
         if($cart){
-            $cart_count = $cart->cartCollection->count();
             $address = (object) array();
             $address_id = -1;
             if($cart->address){
@@ -355,10 +354,10 @@ class UserCartsController extends Controller
                 $total = 0;
                 foreach($cart->cartCollection as $cart_collection){
                     $menu = [];
-                    $categories = Categories::whereHas('cartItem', function($query) use ($cart_collection){
-                        $query->where('collection_id', $cart_collection->collection_id);
-                    })->with(['cartItem'=>function ($x) use($cart_collection){
-                        $x->where('collection_id', $cart_collection->collection_id);
+                    $categories = Categories::whereHas('cartItem', function($query) use ($cart_collection, $cart){
+                        $query->where('collection_id', $cart_collection->collection_id)->where('cart_id', $cart->id);
+                    })->with(['cartItem'=>function ($x) use($cart_collection, $cart){
+                        $x->where('collection_id', $cart_collection->collection_id)->where('cart_id', $cart->id);
                     }])->get();
                     foreach($categories as $category){
                         $items = [];
@@ -423,7 +422,6 @@ class UserCartsController extends Controller
                     'collections' => $collections,
                     'total' => $total,
                     'price_unit' => 'QR',
-                    'cart_count' => $cart_count
                 ];
             }
             return response()->json(array(
@@ -437,6 +435,15 @@ class UserCartsController extends Controller
                 'data' => []));
         }
 
+    }
+
+    public function cartCount($id)
+    {
+        $cart = UserCart::where('id', $id)->with('cartCollection')->first();
+        if($cart){
+            $cart_count = $cart->cartCollection->count();
+            dd($cart_count);
+        }
     }
 
     public function collectionDetails(Request $request)

@@ -27,9 +27,11 @@ Route::post('/restaurantMenuItems', 'RestaurantsController@restaurantMenuItems')
 Route::post('/createCart', 'UserCartsController@createCart');
 Route::get('/collectionDetails', 'UserCartsController@collectionDetails');
 Route::get('/showCart/{id}', 'UserCartsController@showCart');
+Route::get('/cartCount/{id}', 'UserCartsController@cartCount');
 Route::post('/removeCart/{id}', 'UserCartsController@removeCart');
 Route::get('/changeDeliveryAddress/{id}', 'UserCartsController@changeDeliveryAddress');
 Route::post('/addAddress/{id?}', 'AddressesController@addAddress');
 Route::get('/getAddresses', 'AddressesController@getAddresses');
 Route::get('/deleteAddress/{id}', 'AddressesController@deleteAddress');
 Route::post('/completeOrder', 'OrdersController@completeOrder');
+Route::get('/orderList', 'OrdersController@orderList');
