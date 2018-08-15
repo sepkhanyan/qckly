@@ -16,7 +16,7 @@ class OrdersController extends Controller
      */
     public function orderList()
     {
-        $orders = Order::where('user_id', 1)->orderby('created_at', 'desc')->get();
+        $orders = Order::where('user_id', 1)->orderby('created_at', 'desc')->with('cart')->paginate(20);
 //        $arr = [
 //            'order_id' => $order->id,
 //            'transaction_id' => $order->transaction_id,

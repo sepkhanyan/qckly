@@ -621,9 +621,9 @@ class RestaurantsController extends Controller
                 $category_id = $DataRequests['category_id'];
                 $restaurants = $restaurants->whereHas('categoryRestaurant',function ($query) use ($category_id){
                     $query->where('category_id', $category_id);
-                })->paginate(20);
+                })->get();
             }else{
-                $restaurants = $restaurants->paginate(20);
+                $restaurants = $restaurants->get();
             }
 
             if(count($restaurants) > 0){

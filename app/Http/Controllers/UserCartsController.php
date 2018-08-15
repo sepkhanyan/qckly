@@ -437,12 +437,30 @@ class UserCartsController extends Controller
 
     }
 
-    public function cartCount($id)
+    public function cartCount()
     {
-        $cart = UserCart::where('id', $id)->with('cartCollection')->first();
+        $cart = UserCart::where('user_id', 1)->where('completed', 0)->with('cartCollection')->first();
         if($cart){
             $cart_count = $cart->cartCollection->count();
-            dd($cart_count);
+
+            $arr  = [
+                'cart_id' => $cart->id,
+                'cart_count' => $cart_count
+            ];
+
+            return response()->json(array(
+                'success' => 1,
+                'status_code' => 200,
+                'data' => $arr));
+        }else{
+            $arr  = [
+                'cart_count' => 0
+            ];
+
+            return response()->json(array(
+                'success' => 1,
+                'status_code' => 200,
+                'data' => $arr));
         }
     }
 
