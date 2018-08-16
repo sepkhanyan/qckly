@@ -18,7 +18,7 @@ class OrdersController extends Controller
      */
     public function orderList()
     {
-        $orders = Order::where('user_id', 1)->orderby('created_at', 'desc')->with('cart')->paginate(20);
+        $orders = Order::where('user_id', 1)->orderby('created_at', 'desc')->with('cart.address')->paginate(20);
         foreach($orders as $order){
                 if($order->cart->address->is_apartment == 1){
                     $is_apartment = true;
