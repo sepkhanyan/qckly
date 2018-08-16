@@ -15,7 +15,7 @@ class Order extends Model
 
     public function cart()
     {
-        return $this->hasMany('App\UserCart', 'cart_id');
+        return $this->belongsTo('App\UserCart', 'cart_id');
     }
 
     public function user()

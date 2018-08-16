@@ -12,14 +12,10 @@ class UserCartItem extends Model
     protected $fillable = ['cart_id','collection_id', 'item_id', 'price', 'quantity', 'menu_id'];
 
 
-    public function cart ()
-    {
-        return $this->belongsTo('App\UserCart', 'cart_id');
-    }
 
     public function cartCollection ()
     {
-        return $this->belongsTo('App\UserCartCollection', 'collection_id', 'collection_id');
+        return $this->belongsTo('App\UserCartCollection', 'cart_collection_id');
     }
 
 

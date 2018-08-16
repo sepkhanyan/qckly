@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Order;
 use App\UserCart;
 use App\User;
+use App\Categories;
+use Carbon\Carbon;
 
 class OrdersController extends Controller
 {
@@ -17,16 +19,136 @@ class OrdersController extends Controller
     public function orderList()
     {
         $orders = Order::where('user_id', 1)->orderby('created_at', 'desc')->with('cart')->paginate(20);
-//        $arr = [
-//            'order_id' => $order->id,
-//            'transaction_id' => $order->transaction_id,
-//            'payment_type' => $payment,
-//            'total_price' => $order->total_price
-//        ];
+        foreach($orders as $order){
+                if($order->cart->address->is_apartment == 1){
+                    $is_apartment = true;
+                }else{
+                    $is_apartment = false;
+                }
+                if($order->cart->address->is_default == 1){
+                    $default = true;
+                }else{
+                    $default = false;
+                }
+                $address_id = $order->cart->address->id;
+                $address = [
+                    'address_name' => $order->cart->address->name,
+                    'mobile_number' => $order->cart->address->mobile_number,
+                    'location' => $order->cart->address->location,
+                    'building_number' => $order->cart->address->location,
+                    'zone' => $order->cart->address->zone,
+                    'is_apartment' => $is_apartment,
+                    'apartment_number' => $order->cart->address->apartment_number,
+                    'is_default' => $default
+                ];
+            $total = 0;
+            $collections = [];
+            foreach($order->cart->cartCollection as $cart_collection){
+                $menu = [];
+                $categories = Categories::whereHas('cartItem', function($query) use ($cart_collection){
+                    $query->where('cart_collection_id', $cart_collection->id);
+                })->with(['cartItem' => function ($x) use($cart_collection){
+                    $x->where('cart_collection_id', $cart_collection->id);
+                }])->get();
+                foreach($categories as $category){
+                    $items = [];
+                    foreach($category->cartItem as $cartItem){
+                        $items [] = [
+                            'item_id' => $cartItem->item_id,
+                            'item_name' => $cartItem->menu->menu_name,
+                            'item_price' => $cartItem->menu->menu_price,
+                            'item_quantity' => $cartItem->quantity,
+                            'price_unit' => 'QR'
+                        ];
+                    }
+                    $menu [] = [
+                        'menu_id' => $category->id,
+                        'menu_name' => $category->name,
+                        'items' => $items
+                    ];
+                }
+                if($cart_collection->collection->price == null){
+                    $cart_collection->collection->price = '';
+                }
+                if($cart_collection->persons_count == null){
+                    $cart_collection->persons_count = '';
+                }
+                if($cart_collection->quantity == null){
+                    $cart_collection->quantity = '';
+                }
+                if($cart_collection->female_caterer == 1){
+                    $female_caterer = true;
+                }else{
+                    $female_caterer = false;
+                }
+                $persons_count = -1;
+                if($cart_collection->collection->subcategory_id == 2){
+                    $persons_count =  $cart_collection->persons_count;
+                }
+                $collections [] = [
+                    'restaurant_id' => $cart_collection->collection->restaurant->id,
+                    'restaurant_name' => $cart_collection->collection->restaurant->restaurant_name,
+                    'collection_id' => $cart_collection->collection_id,
+                    'collection_type_id' => $cart_collection->collection->subcategory_id,
+                    'collection_type' => $cart_collection->collection->subcategory->subcategory_en,
+                    'collection_name' => $cart_collection->collection->name,
+                    'collection_price' => $cart_collection->collection->price,
+                    'female_caterer' => $female_caterer,
+                    'special_instruction' => $cart_collection->special_instruction,
+                    'menu_items' => $menu,
+                    'quantity' => $cart_collection->quantity,
+                    'persons_count' => $persons_count,
+                    'subtotal' => $cart_collection->price,
+                    'price_unit' => "QR",
+                ];
+                $total += $cart_collection->price;
+            }
+
+            $cart   = [
+                'cart_id' => $order->cart->id,
+                'order_area' => $order->cart->delivery_order_area,
+                'order_date' => $order->cart->delivery_order_date,
+                'order_time' => $order->cart->delivery_order_time,
+                'delivery_address_id' => $address_id,
+                'delivery_address' => $address,
+                'collections' => $collections,
+                'total' => $total,
+                'price_unit' => 'QR',
+            ];
+
+            $datetime = explode(' ',$order->created_at);
+
+
+
+
+            $arr [] = [
+                'order_id' => $order->id,
+                'order_status' => $order->status,
+                'order_date' => $datetime[0],
+                'order_time' => $datetime[1],
+                'total_price' => $order->total_price,
+                'cart' => $cart
+            ];
+
+        }
+        $wholeData = [
+            "total" => count($orders),
+            "per_page" => 20,
+            "current_page" => $orders->currentPage(),
+            "next_page_url" => $orders->nextPageUrl(),
+            "prev_page_url" => $orders->previousPageUrl(),
+            "from" => $orders->firstItem(),
+            "to" => $orders->lastItem(),
+            "count" => $orders->total(),
+            "lastPage" => $orders->lastPage(),
+            'data' => $arr,
+        ];
+
+
         return response()->json(array(
             'success' => 1,
             'status_code' => 200,
-            'data' => $orders));
+            'data' => $wholeData));
     }
 
     /**

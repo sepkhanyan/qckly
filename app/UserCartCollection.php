@@ -18,8 +18,9 @@ class UserCartCollection extends Model
     }
     public function cartItem ()
     {
-        return $this->hasMany('App\UserCartItem', 'collection_id', 'collection_id');
+        return $this->hasMany('App\UserCartItem',  'cart_collection_id');
     }
+
 
 
     public function collection ()

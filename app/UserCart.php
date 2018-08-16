@@ -10,10 +10,6 @@ class UserCart extends Model
 
     protected $fillable = ['user_id', 'delivery_order_area', 'delivery_order_date', 'delivery_order_time'];
 
-    public function cartItem ()
-    {
-        return $this->hasMany('App\UserCartItem', 'cart_id');
-    }
 
     public function cartCollection()
     {
@@ -28,6 +24,6 @@ class UserCart extends Model
 
     public function order()
     {
-        return $this->belongsTo('App\Order', 'cart_id');
+        return $this->hasOne('App\Order', 'cart_id');
     }
 }
