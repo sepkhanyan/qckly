@@ -7,7 +7,6 @@ use App\Order;
 use App\UserCart;
 use App\User;
 use App\Categories;
-use Carbon\Carbon;
 
 class OrdersController extends Controller
 {
@@ -58,7 +57,7 @@ class OrdersController extends Controller
                             'item_name' => $cartItem->menu->menu_name,
                             'item_price' => $cartItem->menu->menu_price,
                             'item_quantity' => $cartItem->quantity,
-                            'price_unit' => 'QR'
+                            'item_price_unit' => 'QR'
                         ];
                     }
                     $menu [] = [
@@ -93,13 +92,14 @@ class OrdersController extends Controller
                     'collection_type' => $cart_collection->collection->subcategory->subcategory_en,
                     'collection_name' => $cart_collection->collection->name,
                     'collection_price' => $cart_collection->collection->price,
+                    'collection_price_unit' => 'QR',
                     'female_caterer' => $female_caterer,
                     'special_instruction' => $cart_collection->special_instruction,
                     'menu_items' => $menu,
                     'quantity' => $cart_collection->quantity,
                     'persons_count' => $persons_count,
                     'subtotal' => $cart_collection->price,
-                    'price_unit' => "QR",
+                    'subtotal_unit' => "QR",
                 ];
                 $total += $cart_collection->price;
             }
@@ -108,25 +108,23 @@ class OrdersController extends Controller
                 'cart_id' => $order->cart->id,
                 'order_area' => $order->cart->delivery_order_area,
                 'order_date' => $order->cart->delivery_order_date,
-                'order_time' => $order->cart->delivery_order_time,
+                'order_time' => date("g:i a", strtotime( $order->cart->delivery_order_time)),
                 'delivery_address_id' => $address_id,
                 'delivery_address' => $address,
                 'collections' => $collections,
                 'total' => $total,
-                'price_unit' => 'QR',
+                'total_unit' => 'QR',
             ];
 
             $datetime = explode(' ',$order->created_at);
-
-
-
 
             $arr [] = [
                 'order_id' => $order->id,
                 'order_status' => $order->status,
                 'order_date' => $datetime[0],
-                'order_time' => $datetime[1],
+                'order_time' => date("g:i a", strtotime($datetime[1])),
                 'total_price' => $order->total_price,
+                'total_price_unit' => 'QR',
                 'cart' => $cart
             ];
 
@@ -208,7 +206,8 @@ class OrdersController extends Controller
                 'order_id' => $order->id,
                 'transaction_id' => $order->transaction_id,
                 'payment_type' => $payment,
-                'total_price' => $order->total_price
+                'total_price' => $order->total_price,
+                'price_unit' => 'QR'
             ];
             return response()->json(array(
                 'success' => 1,

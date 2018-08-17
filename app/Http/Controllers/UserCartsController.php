@@ -354,7 +354,7 @@ class UserCartsController extends Controller
                                 'item_name' => $cartItem->menu->menu_name,
                                 'item_price' => $cartItem->menu->menu_price,
                                 'item_quantity' => $cartItem->quantity,
-                                'price_unit' => 'QR'
+                                'item_price_unit' => 'QR'
                             ];
                         }
                         $menu [] = [
@@ -389,13 +389,14 @@ class UserCartsController extends Controller
                         'collection_type' => $cart_collection->collection->subcategory->subcategory_en,
                         'collection_name' => $cart_collection->collection->name,
                         'collection_price' => $cart_collection->collection->price,
+                        'collection_price_unit' => 'QR',
                         'female_caterer' => $female_caterer,
                         'special_instruction' => $cart_collection->special_instruction,
                         'menu_items' => $menu,
                         'quantity' => $cart_collection->quantity,
                         'persons_count' => $persons_count,
                         'subtotal' => $cart_collection->price,
-                        'price_unit' => "QR",
+                        'subtotal_unit' => "QR",
                     ];
                     $total += $cart_collection->price;
 
@@ -404,12 +405,12 @@ class UserCartsController extends Controller
                     'cart_id' => $cart->id,
                     'order_area' => $cart->delivery_order_area,
                     'order_date' => $cart->delivery_order_date,
-                    'order_time' => $cart->delivery_order_time,
+                    'order_time' => date("g:i a", strtotime($cart->delivery_order_time)),
                     'delivery_address_id' => $address_id,
                     'delivery_address' => $address,
                     'collections' => $collections,
                     'total' => $total,
-                    'price_unit' => 'QR',
+                    'total_unit' => 'QR',
                 ];
             }
             return response()->json(array(
