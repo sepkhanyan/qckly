@@ -435,6 +435,7 @@ class RestaurantsController extends Controller
 
     public function availableRestaurants(Request $request)
     {
+
         $lang = $request->header('Accept-Language');
         $DataRequests = $request->all();
         $validator = \Validator::make($DataRequests, [
@@ -468,11 +469,8 @@ class RestaurantsController extends Controller
                 $restaurants = $restaurants->paginate(20);
             }
 
-
-
             if (count($restaurants)>0) {
                 foreach ($restaurants as $restaurant) {
-
                     foreach($restaurant->workingHour as $workingHour){
                         $opening = $workingHour->opening_time;
                         $closing = $workingHour->closing_time;
@@ -512,13 +510,21 @@ class RestaurantsController extends Controller
                         ];
 
                     }
+
+                    $rate_sum = 0;
+                    $review_count = $restaurant->rating->count();
+                    foreach($restaurant->rating as $rating){
+                        $rate_sum += $rating->rate_value;
+                    }
+                    $rating_count = $rate_sum / $review_count;
+
                     $arr [] = [
                         'restaurant_id' => $restaurant->id,
                         'restaurant_name' => $restaurant->restaurant_name,
                         'restaurant_image' => url('/') . '/images/' . $restaurant->restaurant_image,
                         'famous_images' => $famous,
-                        'ratings_count' => 0,
-                        'review_count' => 0,
+                        'ratings_count' => $rating_count,
+                        'review_count' => $review_count,
                         'availability_hours' => $opening  . '-' . $closing,
                         'description' => $restaurant->description,
                         'status' => $working_status,
