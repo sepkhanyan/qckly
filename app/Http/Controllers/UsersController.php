@@ -113,40 +113,54 @@ class UsersController extends Controller
         return redirect('/customers');
     }
 
-
-    public function userRegistration(Request $request)
+    public function login(Request $request)
     {
-        \Log::info($request->all());
+//        $password = $request->input('password');
+        $country_key = $request->input('country_key');
         $mobile = $request->input('mobile');
-        $DataRequests= $request->all();
+//        $newuser['password'] = Hash::make($password);
+//        $newuser['country_key'] = $mobile;
+        // $newuser['gruop_id'] = 2;
+        $newuser['lang'] = $request->header('Accept-Language');
+        $newuser = $request->all();
         $validator = \Validator::make($request->all(), [
             'mobile' => 'required|min:8|max:8'
         ]);
-
+        if ($mobile == '76524342' || $mobile == '41052196' || $mobile == '11004527' || $mobile == '98765432' || $mobile == '16262777'||$mobile == '63112689' ) {
+            return response()->json(['success' => 0,
+                'status_code' => 200,
+                'message' => \Lang::get('message.checkSmsSent')
+            ]);
+        }
         if ($validator->fails()) {
             return response()->json(array('success' => 1, 'status_code' => 400,
                 'message' => \Lang::get('message.invalid_inputs'),
                 'error_details' => $validator->messages()));
         } else {
-
             $client = User::where('mobile', $mobile)
-                ->where('staff_id', 2)
+                 ->where('group_id',0)
                 ->first();
-            $standard_numsets = array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
-            $devanagari_numsets = array("٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩");
-            $mobile = str_replace($devanagari_numsets, $standard_numsets, $mobile);
+            $standard_numsets = array("0","1","2","3","4","5","6","7","8","9");
+            $devanagari_numsets = array("٠","١","٢","٣","٤","٥","٦","٧","٨","٩");
+            $mobile = str_replace($devanagari_numsets,$standard_numsets, $mobile);
+            // $randomSmsValue = $this->AccessSms($mobile);
+            // $device_id = $request->get('userMacAddress');
+            // $device = $this->getSmsCount($device_id);
             if ($client) {
-                $random_val = rand(10000, 90000);
+                $random_val = rand(15000, 50000);
+                $date = Carbon::now()->format('Y-m-d');
                 $client->sms_code = $random_val;
-                $client->sms_sended_date = Carbon::now()->format('Y-m-d');
+//                $client->sms_sended_date = Carbon::now()->format('Y-m-d');
                 $client->save();
+                // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=Your%20Syaanh%20code%20is%20:%20$random_val&destination=00974$mobile&source=97772&mask=Syaanh";
+//                file($url);
                 return response()->json(['success' => 0,
                     'status_code' => 200,
                     'message' => \Lang::get('message.checkSmsSent')
                 ]);
-
             } else {
                 $validator = \Validator::make($request->all(), [
+//                    'country_key' => 'required',
                     'mobile' => 'required|min:8|max:8'
                 ]);
                 if ($validator->fails()) {
@@ -154,167 +168,42 @@ class UsersController extends Controller
                         \Lang::get('message.invalid_inputs'),
                         'error_details' => $validator->messages()));
                 } else {
-                    $random_val = rand(10000, 90000);
-                    $u_id = User::create(
-                        [
 
-                            'mobile' => $mobile,
-//                            'staff_id' => 2,
-//                            'salt' => '',
-                            'sms_code' => $random_val,
-//                          'sms_sended_date' => $date,
-                            'sms_count' => 1,
-//                            'username'=>'',
-//                            'email' => 'email@example.com',
-//                            'password' => bcrypt($password)
+                    try{
+                        $first = 0;
+                        $random_val = rand(15000, 50000);
+                        $date = Carbon::now();
+                        $u_id = User::create(
+                            [
+                                'country_key' => $country_key,
+                                'mobile' => $mobile,
+                                'sms_code' => $random_val,
+                                'lang' => $request->header('Accept-Language'),
+                                'username'=>'',
+                            ]
+                        );
+                        $date = Carbon::now()->format('Y-m-d');
+                        // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=Your%20Syaanh%20code%20is%20:%20$random_val&destination=00974$mobile&source=97772&mask=Syaanh";
+//                        file($url);
+                    }catch(\Exception $e){
 
-                        ]
-                    );
-                    try {
-//                        $first = 0;
-//                        $date = Carbon::now();
-
-
-                    } catch (\Exception $e) {
-
-
-
+                        return response()->json(['success' => 0,
+                            'status_code' => 200,
+                            'message' => \Lang::get('message.checkSms')]);
 
                     }
-
                     /// here will send code
                     if ($u_id) {
                         return response()->json(['success' => 0,
                             'status_code' => 200,
                             'message' => \Lang::get('message.checkSms')]);
-
                     }
                 }
             }
         }
     }
 
-    public function registerAsUser(Request $request)
-    {
 
-        \Log::info($request->all());
-        $DataRequests = $request->all();
-        $mobile = $request->input('mobile');
-        $password = bcrypt($request->input('password'));
-        $DataRequests['lang'] = $request->header('Accept-Language');
-        $validator = \Validator::make($request->all(), [
-            'mobile' => 'required|min:8|max:8'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(array('success' => 1, 'status_code' => 400,
-                'message' => \Lang::get('message.invalid_inputs'),
-                'error_details' => $validator->messages()));
-        } else {
-
-            $client = User::where('mobile', $mobile)->first();
-            $standard_numsets = array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
-            $devanagari_numsets = array("٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩");
-            $mobile = str_replace($devanagari_numsets, $standard_numsets, $mobile);
-            if ($client) {
-                $random_val = 123456;
-                $client->sms_code = $random_val;
-                $client->save();
-                return response()->json(['success' => 0,
-                    'status_code' => 200,
-                    'message' => \Lang::get('message.checkSmsSent')
-                ]);
-
-            } else {
-                $validator = \Validator::make($request->all(), [
-                    'mobile' => 'required|min:8|max:8'
-                ]);
-                if ($validator->fails()) {
-                    return response()->json(array('success' => 1, 'status_code' => 400,
-                        \Lang::get('message.invalid_inputs'),
-                        'error_details' => $validator->messages()));
-                } else {
-                    $random_val = 123456;
-                    $user = User::create(
-                        [
-                            'mobile' => $mobile,
-                            'sms_code' => $random_val,
-                            'sms_count' => 1,
-                            'password' => $password
-                        ]
-                    );
-
-                    /// here will send code
-                    if ($user) {
-                        return response()->json(['success' => 0,
-                            'status_code' => 200,
-                            'message' => \Lang::get('message.checkSms')]);
-
-                    }
-                }
-            }
-        }
-    }
-
-//
-//    public function login(Request $request)
-//    {
-//        \Log::info($request->all());
-//        $DataRequests = $request->all();
-//        $mobile = $request->input('mobile');
-//        $DataRequests['lang'] = $request->header('Accept-Language');
-//        $validator = \Validator::make($request->all(), [
-//            'mobile' => 'required|min:8|max:8'
-//        ]);
-//
-//        if ($validator->fails()) {
-//            return response()->json(array('success' => 1, 'status_code' => 400,
-//                'message' => \Lang::get('message.invalid_inputs'),
-//                'error_details' => $validator->messages()));
-//        } else {
-//
-//            $user = User::where('mobile', $mobile)->first();
-//            $standard_numsets = array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
-//            $devanagari_numsets = array("٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩");
-//            $mobile = str_replace($devanagari_numsets, $standard_numsets, $mobile);
-//            if ($user) {
-//                $random_val = 123456;
-//                $user->sms_code = $random_val;
-//                $user->save();
-//                return response()->json(['success' => 0,
-//                    'status_code' => 200,
-//                    'message' => \Lang::get('message.checkSmsSent')
-//                ]);
-//
-//            } else {
-//                $validator = \Validator::make($request->all(), [
-//                    'mobile' => 'required|min:8|max:8'
-//                ]);
-//                if ($validator->fails()) {
-//                    return response()->json(array('success' => 1, 'status_code' => 400,
-//                        \Lang::get('message.invalid_inputs'),
-//                        'error_details' => $validator->messages()));
-//                } else {
-//                    $random_val = 123456;
-//                    $user = User::create(
-//                        [
-//                            'mobile' => $mobile,
-//                            'sms_code' => $random_val,
-//                            'sms_count' => 1,
-//                        ]
-//                    );
-//
-//                    /// here will send code
-//                    if ($user) {
-//                        return response()->json(['success' => 0,
-//                            'status_code' => 200,
-//                            'message' => \Lang::get('message.checkSms')]);
-//
-//                    }
-//                }
-//            }
-//        }
-//    }
 
 //    public function submitcode(Request $request)
 //    {

@@ -19,7 +19,6 @@ class Restaurant extends Model
     }
 
 
-
     public function category()
     {
         return $this->belongsTo('App\RestaurantCategory', 'restaurant_category_id');
@@ -43,5 +42,10 @@ class Restaurant extends Model
     public function categoryRestaurant()
     {
         return $this->hasMany('App\CategoryRestaurant', 'restaurant_id');
+    }
+
+    public function rating()
+    {
+        return $this->hasMany('App\Rating', 'restaurant_id');
     }
 }
