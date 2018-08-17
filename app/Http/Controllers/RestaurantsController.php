@@ -516,7 +516,12 @@ class RestaurantsController extends Controller
                     foreach($restaurant->rating as $rating){
                         $rate_sum += $rating->rate_value;
                     }
-                    $rating_count = $rate_sum / $review_count;
+                    if($review_count){
+                        $rating_count = $rate_sum / $review_count;
+                    }else{
+                        $rating_count = 0;
+                    }
+
 
                     $arr [] = [
                         'restaurant_id' => $restaurant->id,
