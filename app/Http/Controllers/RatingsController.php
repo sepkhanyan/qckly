@@ -13,9 +13,41 @@ class RatingsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function reviews()
+    public function reviews(Request $request)
     {
-        dd(1);
+        $DataRequests = $request->all();
+        $validator = \Validator::make($DataRequests, [
+            'restaurant_id' => 'required|integer',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(array('success' => 1, 'status_code' => 400,
+                'message' => 'Invalid inputs',
+                'error_details' => $validator->messages()));
+        } else {
+            $restaurant_id = $DataRequests['restaurant_id'];
+        }
+        $reviews = Rating::where('restaurant_id', $restaurant_id)->get();
+        if(count($reviews) > 0){
+            foreach($reviews as $review){
+                $date = date("j F, Y", strtotime($review->created_at));
+                $arr [] = [
+                    'review_id' => $review->id,
+                    'rate_value' => $review->rate_value,
+                    'review' => $review->review,
+                    'review_date' => $date
+                ];
+            }
+            return response()->json(array(
+                'success' => 1,
+                'status_code' => 200,
+                'data' => $arr));
+        }else{
+            return response()->json(array(
+                'success' => 1,
+                'status_code' => 200,
+                'message' => 'No reviews!'));
+        }
+
     }
 
     /**
