@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Order;
 use App\Rating;
 use Illuminate\Http\Request;
 
@@ -12,9 +13,9 @@ class RatingsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function reviews()
     {
-        //
+        dd(1);
     }
 
     /**
@@ -46,14 +47,17 @@ class RatingsController extends Controller
         } else {
             $rates = $DataRequests['rates'];
             foreach($rates as $rate){
+
                 $rating = new Rating();
                 $rating->order_id = $rate['order_id'];
                 $rating->restaurant_id = $rate['restaurant_id'];
                 $rating->rate_value = $rate['rate_value'];
                 $rating->review = $rate['review'];
                 $rating->save();
+                $order = Order::where('id', $rate['order_id'])->first();
+                $order->is_rated = 1;
+                $order->save();
             }
-
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200));

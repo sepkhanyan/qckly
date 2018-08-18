@@ -522,7 +522,6 @@ class RestaurantsController extends Controller
                         $rating_count = 0;
                     }
 
-
                     $arr [] = [
                         'restaurant_id' => $restaurant->id,
                         'restaurant_name' => $restaurant->restaurant_name,
@@ -647,7 +646,6 @@ class RestaurantsController extends Controller
                     $menu_collection = [];
                     if (count($restaurant->collection) > 0) {
                         foreach ($restaurant->collection as $collection) {
-
                             $foodlist = [];
                             $foodlist_images = [];
                             if ($collection->is_available == 1) {
@@ -722,9 +720,12 @@ class RestaurantsController extends Controller
                                            $collection->max_qty = -1;
                                        }
                                 }
-                                $categories = Categories::whereHas('menu',function ($query) use ($restaurant_id){
-                                    $query->where('restaurant_id', $restaurant_id);
-                                })->get();
+
+                                $categories = Categories::with(['menu' => function ($query) use ($collection, $restaurant_id){
+                                    $query->where('restaurant_id', $restaurant_id)->with(['collectionItem' => function ($x) use ($collection){
+                                        $x->where('collection_id', $collection->id);
+                                    }]);
+                                }])->get();
 
                                 $menu = [];
                                 foreach($categories as $category){

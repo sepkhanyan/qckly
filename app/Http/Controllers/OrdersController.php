@@ -117,7 +117,11 @@ class OrdersController extends Controller
             ];
 
             $datetime = explode(' ',$order->created_at);
-
+            if($order->is_rated == 1){
+                $rated = true;
+            }else{
+                $rated = false;
+            }
             $arr [] = [
                 'order_id' => $order->id,
                 'order_status' => $order->status,
@@ -125,6 +129,7 @@ class OrdersController extends Controller
                 'order_time' => date("g:i a", strtotime($datetime[1])),
                 'total_price' => $order->total_price,
                 'total_price_unit' => 'QR',
+                'is_rated' => $rated,
                 'cart' => $cart
             ];
 
