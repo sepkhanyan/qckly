@@ -25,6 +25,6 @@ class Order extends Model
 
     public function rating()
     {
-        return $this->hasOne('App\Rating', 'order_id');
+        return $this->hasMany('App\Rating', 'order_id');
     }
 }

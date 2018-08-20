@@ -330,16 +330,18 @@ class RestaurantsController extends Controller
                     'category' => $category
                 ];
             }
+
+
             $wholeData = [
-                "total" => count($restaurants),
+                "total" => $restaurants->total(),
+                "count" => $restaurants->count(),
                 "per_page" => 20,
                 "current_page" => $restaurants->currentPage(),
                 "next_page_url" => $restaurants->nextPageUrl(),
                 "prev_page_url" => $restaurants->previousPageUrl(),
                 "from" => $restaurants->firstItem(),
                 "to" => $restaurants->lastItem(),
-                "count" => $restaurants->total(),
-                "lastPage" => $restaurants->lastPage(),
+                "last_page" => $restaurants->lastPage(),
                 'data' => $arr,
             ];
             return response()->json(array(
@@ -407,15 +409,15 @@ class RestaurantsController extends Controller
                 }
 
                 $wholeData = [
-                    "total" => count($restaurants),
+                    "total" => $restaurants->total(),
+                    "count" => $restaurants->count(),
                     "per_page" => 20,
                     "current_page" => $restaurants->currentPage(),
                     "next_page_url" => $restaurants->nextPageUrl(),
                     "prev_page_url" => $restaurants->previousPageUrl(),
                     "from" => $restaurants->firstItem(),
                     "to" => $restaurants->lastItem(),
-                    "count" => $restaurants->total(),
-                    "lastPage" => $restaurants->lastPage(),
+                    "last_page" => $restaurants->lastPage(),
                     'data' => $arr,
                 ];
 
@@ -529,26 +531,26 @@ class RestaurantsController extends Controller
                         'famous_images' => $famous,
                         'ratings_count' => $rating_count,
                         'review_count' => $review_count,
-                        'availability_hours' => $opening  . '-' . $closing,
+                        'availability_hours' => date("g:i a", strtotime( $opening))  . ' - ' . date("g:i a", strtotime( $closing)),
                         'description' => $restaurant->description,
                         'status' => $working_status,
                         'category' => $category
                     ];
 
                 }
+
                 $wholeData = [
-                    "total" => count($restaurants),
+                    "total" => $restaurants->total(),
+                    "count" => $restaurants->count(),
                     "per_page" => 20,
                     "current_page" => $restaurants->currentPage(),
                     "next_page_url" => $restaurants->nextPageUrl(),
                     "prev_page_url" => $restaurants->previousPageUrl(),
                     "from" => $restaurants->firstItem(),
                     "to" => $restaurants->lastItem(),
-                    "count" => $restaurants->total(),
-                    "lastPage" => $restaurants->lastPage(),
+                    "last_page" => $restaurants->lastPage(),
                     'data' => $arr,
                 ];
-
                     return response()->json(array(
                         'success'=> 1,
                         'status_code'=> 200 ,

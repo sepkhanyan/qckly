@@ -599,7 +599,7 @@ class UserCartsController extends Controller
                 'mealtime' => $collection->mealtime,
                 'collection_min_qty' => $collection->min_qty,
                 'collection_max_qty' => $collection->max_qty,
-                'price' => $collection->price,
+                'collection_price' => $collection->price,
                 'price_unit' => "QR",
                 'is_available' => $is_available,
                 'min_serve_to_person' => $collection->min_serve_to_person,

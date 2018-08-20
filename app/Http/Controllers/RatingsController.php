@@ -26,7 +26,9 @@ class RatingsController extends Controller
         } else {
             $restaurant_id = $DataRequests['restaurant_id'];
         }
-        $ratings = Rating::where('restaurant_id', $restaurant_id)->get();
+        $ratings = Rating::where('restaurant_id', $restaurant_id)
+            ->orderby('created_at', 'desc')
+            ->with('order.user')->paginate(20);
         if(count($ratings) > 0){
             foreach($ratings as $rating){
                 $date = date("j M, Y", strtotime($rating->created_at));
@@ -36,16 +38,32 @@ class RatingsController extends Controller
                     $review = '';
                 }
                 $arr [] = [
+                    'username' => $rating->order->user->username,
                     'review_id' => $rating->id,
                     'rate_value' => $rating->rate_value,
                     'review' => $review,
                     'review_date' => $date
                 ];
             }
+
+            $wholeData = [
+                "total" => $ratings->total(),
+                "count" => $ratings->count(),
+                "per_page" => 20,
+                "current_page" => $ratings->currentPage(),
+                "next_page_url" => $ratings->nextPageUrl(),
+                "prev_page_url" => $ratings->previousPageUrl(),
+                "from" => $ratings->firstItem(),
+                "to" => $ratings->lastItem(),
+                "last_page" => $ratings->lastPage(),
+                'data' => $arr,
+            ];
+
+
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'data' => $arr));
+                'data' => $wholeData));
         }else{
             return response()->json(array(
                 'success' => 1,

@@ -107,7 +107,7 @@ class OrdersController extends Controller
             $cart   = [
                 'cart_id' => $order->cart->id,
                 'order_area' => $order->cart->delivery_order_area,
-                'order_date' => $order->cart->delivery_order_date,
+                'order_date' => date("j M, Y", strtotime($order->cart->delivery_order_date)),
                 'order_time' => date("g:i a", strtotime( $order->cart->delivery_order_time)),
                 'delivery_address_id' => $address_id,
                 'delivery_address' => $address,
@@ -116,7 +116,6 @@ class OrdersController extends Controller
                 'total_unit' => 'QR',
             ];
 
-            $datetime = explode(' ',$order->created_at);
             if($order->is_rated == 1){
                 $rated = true;
             }else{
@@ -125,8 +124,8 @@ class OrdersController extends Controller
             $arr [] = [
                 'order_id' => $order->id,
                 'order_status' => $order->status,
-                'order_date' => $datetime[0],
-                'order_time' => date("g:i a", strtotime($datetime[1])),
+                'order_date' =>  date("j M, Y", strtotime($order->created_at)),
+                'order_time' => date("g:i a", strtotime($order->created_at)),
                 'total_price' => $order->total_price,
                 'total_price_unit' => 'QR',
                 'is_rated' => $rated,
@@ -134,16 +133,17 @@ class OrdersController extends Controller
             ];
 
         }
+
         $wholeData = [
-            "total" => count($orders),
+            "total" => $orders->total(),
+            "count" => $orders->count(),
             "per_page" => 20,
             "current_page" => $orders->currentPage(),
             "next_page_url" => $orders->nextPageUrl(),
             "prev_page_url" => $orders->previousPageUrl(),
             "from" => $orders->firstItem(),
             "to" => $orders->lastItem(),
-            "count" => $orders->total(),
-            "lastPage" => $orders->lastPage(),
+            "last_page" => $orders->lastPage(),
             'data' => $arr,
         ];
 
