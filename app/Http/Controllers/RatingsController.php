@@ -93,8 +93,10 @@ class RatingsController extends Controller
                 }
                 $rating->save();
                 $order = Order::where('id', $rate['order_id'])->first();
-                $order->is_rated = 1;
-                $order->save();
+                if($order){
+                    $order->is_rated = 1;
+                    $order->save();
+                }
             }
             return response()->json(array(
                 'success' => 1,
