@@ -29,7 +29,7 @@ class RatingsController extends Controller
         $ratings = Rating::where('restaurant_id', $restaurant_id)->get();
         if(count($ratings) > 0){
             foreach($ratings as $rating){
-                $date = date("j F, Y", strtotime($rating->created_at));
+                $date = date("j M, Y", strtotime($rating->created_at));
                 if(isset($rating->review)){
                     $review = $rating->review;
                 }else{
