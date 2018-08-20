@@ -26,14 +26,19 @@ class RatingsController extends Controller
         } else {
             $restaurant_id = $DataRequests['restaurant_id'];
         }
-        $reviews = Rating::where('restaurant_id', $restaurant_id)->get();
-        if(count($reviews) > 0){
-            foreach($reviews as $review){
-                $date = date("j F, Y", strtotime($review->created_at));
+        $ratings = Rating::where('restaurant_id', $restaurant_id)->get();
+        if(count($ratings) > 0){
+            foreach($ratings as $rating){
+                $date = date("j F, Y", strtotime($rating->created_at));
+                if(isset($rating->review)){
+                    $review = $rating->review;
+                }else{
+                    $review = '';
+                }
                 $arr [] = [
-                    'review_id' => $review->id,
-                    'rate_value' => $review->rate_value,
-                    'review' => $review->review,
+                    'review_id' => $rating->id,
+                    'rate_value' => $rating->rate_value,
+                    'review' => $review,
                     'review_date' => $date
                 ];
             }
@@ -79,12 +84,13 @@ class RatingsController extends Controller
         } else {
             $rates = $DataRequests['rates'];
             foreach($rates as $rate){
-
                 $rating = new Rating();
                 $rating->order_id = $rate['order_id'];
                 $rating->restaurant_id = $rate['restaurant_id'];
                 $rating->rate_value = $rate['rate_value'];
-                $rating->review = $rate['review'];
+                if(isset($rate['review'])){
+                    $rating->review = $rate['review'];
+                }
                 $rating->save();
                 $order = Order::where('id', $rate['order_id'])->first();
                 $order->is_rated = 1;
