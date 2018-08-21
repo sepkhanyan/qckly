@@ -59,7 +59,6 @@ class RatingsController extends Controller
                 'data' => $arr,
             ];
 
-
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,

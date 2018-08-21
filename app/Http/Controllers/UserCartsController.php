@@ -600,7 +600,7 @@ class UserCartsController extends Controller
                 'collection_min_qty' => $collection->min_qty,
                 'collection_max_qty' => $collection->max_qty,
                 'collection_price' => $collection->price,
-                'price_unit' => "QR",
+                'collection_price_unit' => "QR",
                 'is_available' => $is_available,
                 'min_serve_to_person' => $collection->min_serve_to_person,
                 'max_serve_to_person' => $collection->max_serve_to_person,
