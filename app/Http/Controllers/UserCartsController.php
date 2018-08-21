@@ -459,6 +459,7 @@ class UserCartsController extends Controller
         $validator = \Validator::make($DataRequests, [
             'collection_type' => 'required|integer',
             'collection_id' => 'required|integer',
+//            'restaurant_id' => 'required|integer'
         ]);
         if ($validator->fails()) {
             return response()->json(array('success' => 1, 'status_code' => 400,
@@ -467,6 +468,7 @@ class UserCartsController extends Controller
         } else {
             $collection_type = $DataRequests['collection_type'];
             $collection_id = $DataRequests['collection_id'];
+//            $restaurant_id = $DataRequests['restaurant_id'];
             $collection = Collection::where('id', $collection_id)->with('collectionItem.menu')->first();
             if ($collection->restaurant->female_caterer_available == 1) {
                 $female_caterer_available = true;
@@ -547,9 +549,10 @@ class UserCartsController extends Controller
                         $collection->max_qty = -1;
                     }
                 }
-                $categories = Categories::with(['menu'=>function ($query) use ($collection_id){
-                    $query->with(['collectionItem'=>function ($x) use($collection_id){
-                        $x->where('collection_id', $collection_id);}]);
+                $categories = Categories::with(['menu' => function ($query) use ($collection_id){
+                    $query->whereHas('collectionItem', function ($x) use($collection_id){
+                        $x->where('collection_id', $collection_id);
+                    });
                 }])->get();
                 $menu = [];
                 foreach($categories as $category){

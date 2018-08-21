@@ -724,7 +724,8 @@ class RestaurantsController extends Controller
                                 }
 
                                 $categories = Categories::with(['menu' => function ($query) use ($collection, $restaurant_id){
-                                    $query->where('restaurant_id', $restaurant_id)->with(['collectionItem' => function ($x) use ($collection){
+                                    $query->where('restaurant_id', $restaurant_id)
+                                        ->with(['collectionItem' => function ($x) use ($collection){
                                         $x->where('collection_id', $collection->id);
                                     }]);
                                 }])->get();
