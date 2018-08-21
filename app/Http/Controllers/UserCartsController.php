@@ -172,7 +172,7 @@ class UserCartsController extends Controller
                         $cart_collection->female_caterer = $female_caterer;
                         $cart_collection->special_instruction = $special_instruction;
                         $cart_collection->save();
-                        UserCartItem::where('cart_collection_id', $cart_collection->cart_collection_id)->delete();
+                        UserCartItem::where('cart_collection_id', $cart_collection->id)->delete();
                         foreach($menus as $menu){
                             $cart_item = new UserCartItem();
                             $cart_item->cart_collection_id = $cart_collection->id;
@@ -222,7 +222,7 @@ class UserCartsController extends Controller
                         $cart_collection->female_caterer = $female_caterer;
                         $cart_collection->special_instruction = $special_instruction;
                         $cart_collection->save();
-                        UserCartItem::where('cart_collection_id', $cart_collection->cart_collection_id)->delete();
+                        UserCartItem::where('cart_collection_id', $cart_collection->id)->delete();
                         foreach($menus as $menu){
                             $cart_item = new UserCartItem();
                             $cart_item->cart_collection_id = $cart_collection->id;
@@ -271,7 +271,7 @@ class UserCartsController extends Controller
                         $cart_collection->female_caterer = $female_caterer;
                         $cart_collection->special_instruction = $special_instruction;
                         $cart_collection->save();
-                        UserCartItem::where('cart_collection_id', $cart_collection->cart_collection_id)->delete();
+                        UserCartItem::where('cart_collection_id', $cart_collection->id)->delete();
                         foreach($menus as $menu){
                                 $cart_item = new UserCartItem();
                                 $cart_item->cart_collection_id = $cart_collection->id;
