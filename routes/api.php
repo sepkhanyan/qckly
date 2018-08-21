@@ -17,6 +17,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::group(['middleware' => 'auth:api'], function(){
+});
+
 Route::get('/areas', 'AreasController@getAreas');
 Route::get('/restaurants', 'RestaurantsController@getRestaurants');
 Route::post('/availableRestaurants', 'RestaurantsController@availableRestaurants');
@@ -38,3 +41,4 @@ Route::get('/orderList', 'OrdersController@orderList');
 Route::post('/rateOrder', 'RatingsController@rateOrder');
 Route::get('/reviews', 'RatingsController@reviews');
 Route::get('/login', 'UsersController@login');
+Route::get('/submitCode', 'UsersController@submitCode');
