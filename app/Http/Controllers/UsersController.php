@@ -115,6 +115,7 @@ class UsersController extends Controller
     public function login(Request $request)
     {
         $validator = \Validator::make($request->all(), [
+            'country_code' => 'required',
             'mobile_number' => 'required|min:8|max:8',
         ]);
         if ($validator->fails()) {
@@ -123,6 +124,7 @@ class UsersController extends Controller
                 'error_details' => $validator->messages()));
         } else {
             $mobile = $request->input('mobile_number');
+            $country_code = $request->input('country_code');
             if ($mobile == '76524342' || $mobile == '41052196' || $mobile == '11004527' || $mobile == '98765432' || $mobile == '16262777'||$mobile == '63112689' ) {
                 return response()->json(['success' => 0,
                     'status_code' => 200,
@@ -153,6 +155,7 @@ class UsersController extends Controller
                 ]);
             } else {
                 $validator = \Validator::make($request->all(), [
+                    'country_code' => 'required',
                     'mobile_number' => 'required|min:8|max:8'
                 ]);
                 if ($validator->fails()) {
@@ -166,6 +169,7 @@ class UsersController extends Controller
                         $date = Carbon::now();
                         $u_id = User::create(
                             [
+                                'country_code' => $country_code,
                                 'mobile_number' => $mobile,
                                 'otp' => $random_val,
                                 'lang' => $request->header('Accept-Language'),
@@ -197,6 +201,7 @@ class UsersController extends Controller
     public function submitOtp(Request $request)
     {
         $validator = \Validator::make($request->all(), [
+            'country_code' => 'required',
             'mobile_number' => 'required|min:8|max:8',
             'otp' => 'required|min:4|max:4'
         ]);
@@ -234,6 +239,7 @@ class UsersController extends Controller
                                 'username' => $update->username != null ? $update->username : '',
                                 'email' => $update->email != null ? $update->email : '',
                                 'image' => $update->image != '' ? url('/') . "/images/" . $update->image : '',
+                                'country_code' => $update->country_code,
                                 'mobile_number' => $update->mobile_number
                             ],
                             'api_token' => 'Bearer ' . $token,
@@ -258,6 +264,7 @@ class UsersController extends Controller
     public function resendOtp(Request $request)
     {
         $validator = \Validator::make($request->all(), [
+            'country_code' => 'required',
             'mobile_number' => 'required|min:8|max:8'
         ]);
         if ($validator->fails()) {
