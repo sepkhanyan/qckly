@@ -114,28 +114,21 @@ class UsersController extends Controller
 
     public function login(Request $request)
     {
-//        $password = $request->input('password');
-        $country_key = $request->input('country_key');
-        $mobile = $request->input('mobile_number');
-//        $newuser['password'] = Hash::make($password);
-//        $newuser['country_key'] = $mobile;
-        // $newuser['gruop_id'] = 2;
-        $newUser = $request->all();
-        $newUser['lang'] = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), [
-            'mobile_number' => 'required|min:8|max:8'
+            'mobile_number' => 'required|min:8|max:8',
         ]);
-        if ($mobile == '76524342' || $mobile == '41052196' || $mobile == '11004527' || $mobile == '98765432' || $mobile == '16262777'||$mobile == '63112689' ) {
-            return response()->json(['success' => 0,
-                'status_code' => 200,
-                'message' => \Lang::get('message.checkSmsSent')
-            ]);
-        }
         if ($validator->fails()) {
             return response()->json(array('success' => 1, 'status_code' => 400,
                 'message' => \Lang::get('message.invalid_inputs'),
                 'error_details' => $validator->messages()));
         } else {
+            $mobile = $request->input('mobile_number');
+            if ($mobile == '76524342' || $mobile == '41052196' || $mobile == '11004527' || $mobile == '98765432' || $mobile == '16262777'||$mobile == '63112689' ) {
+                return response()->json(['success' => 0,
+                    'status_code' => 200,
+                    'message' => \Lang::get('message.checkSmsSent')
+                ]);
+            }
             $client = User::where('mobile_number', $mobile)
                  ->where('group_id',0)
                 ->first();
@@ -160,7 +153,6 @@ class UsersController extends Controller
                 ]);
             } else {
                 $validator = \Validator::make($request->all(), [
-//                    'country_key' => 'required',
                     'mobile_number' => 'required|min:8|max:8'
                 ]);
                 if ($validator->fails()) {
@@ -168,15 +160,12 @@ class UsersController extends Controller
                         \Lang::get('message.invalid_inputs'),
                         'error_details' => $validator->messages()));
                 } else {
-
                     try{
-                        $first = 0;
 //                        $random_val = rand(1500, 5000);
                         $random_val = 1234;
                         $date = Carbon::now();
                         $u_id = User::create(
                             [
-//                                'country_key' => $country_key,
                                 'mobile_number' => $mobile,
                                 'otp' => $random_val,
                                 'lang' => $request->header('Accept-Language'),
@@ -197,7 +186,8 @@ class UsersController extends Controller
                     if ($u_id) {
                         return response()->json(['success' => 0,
                             'status_code' => 200,
-                            'message' => \Lang::get('message.checkSms')]);
+                            'message' => \Lang::get('message.checkSms'),
+                            'otp' => $random_val]);
                     }
                 }
             }
@@ -206,29 +196,27 @@ class UsersController extends Controller
 
     public function submitOtp(Request $request)
     {
-        $otp = intval($request->get('otp'));
-        $smsCode = User::where('otp', $otp)
-            ->where('mobile_number', $request->get('mobile_number'))->first();
-        $newUser['lang'] = $request->header('Accept-Language');
-        $newUser = $request->all();
-        ///=========create any token =============//
-        if ($smsCode) {
-            if ($smsCode->api_token != '') {
-                $token = $smsCode->api_token;
-            } else {
-                $user = User::first();
-                $token = md5(uniqid($user, true));
-            }
-        }
-        $validator = \Validator::make($newUser, [
-            'mobile_number' => 'required|min:8|max:8'
+        $validator = \Validator::make($request->all(), [
+            'mobile_number' => 'required|min:8|max:8',
+            'otp' => 'required|min:4|max:4'
         ]);
         if ($validator->fails()) {
             return response()->json(array('success' => 1, 'status_code' => 400,
-                \Lang::get('message.invalid_inputs'),
+                'message' => \Lang::get('message.invalid_inputs'),
                 'error_details' => $validator->messages()));
         } else {
+            $otp = intval($request->get('otp'));
+            $smsCode = User::where('otp', $otp)
+                ->where('mobile_number', $request->get('mobile_number'))->first();
+            ///=========create any token =============//
             if ($smsCode) {
+                if ($smsCode->api_token != '') {
+                    $token = $smsCode->api_token;
+                } else {
+                    $user = User::first();
+                    $token = md5(uniqid($user, true));
+                }
+
                 if ($smsCode->group_id == 0) {
                     $update = User::select("*")
                         ->where('otp', $otp)
@@ -237,6 +225,7 @@ class UsersController extends Controller
                     $update->api_token = $token;
                     $update->lang = $request->header('Accept-Language');
                     $update->save();
+
                     return response()->json(
                         array('success' => 0,
                             'status_code' => 200,
@@ -256,16 +245,18 @@ class UsersController extends Controller
                         'message' => \Lang::get('message.errorSms')
                     ]);
                 }
-
+            }else{
+                return response()->json([
+                    'success' => 1,
+                    'status_code' => 400,
+                    'message' => 'Wrong parameters!'
+                ]);
             }
         }
     }
 
     public function resendOtp(Request $request)
     {
-        $mobile = $request->input('mobile_number');
-        $newUser = $request->all();
-//        $newUser['lang'] = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), [
             'mobile_number' => 'required|min:8|max:8'
         ]);
@@ -274,6 +265,7 @@ class UsersController extends Controller
                 'message' => \Lang::get('message.invalid_inputs'),
                 'error_details' => $validator->messages()));
         } else {
+            $mobile = $request->input('mobile_number');
             $client = User::where('mobile_number', $mobile)
                 ->where('group_id',0)
                 ->first();
