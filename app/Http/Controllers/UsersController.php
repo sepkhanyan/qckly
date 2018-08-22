@@ -271,12 +271,6 @@ class UsersController extends Controller
         $validator = \Validator::make($request->all(), [
             'mobile_number' => 'required|min:8|max:8'
         ]);
-        if ($mobile == '76524342' || $mobile == '41052196' || $mobile == '11004527' || $mobile == '98765432' || $mobile == '16262777'||$mobile == '63112689' ) {
-            return response()->json(['success' => 0,
-                'status_code' => 200,
-                'message' => \Lang::get('message.checkSmsSent')
-            ]);
-        }
         if ($validator->fails()) {
             return response()->json(array('success' => 1, 'status_code' => 400,
                 'message' => \Lang::get('message.invalid_inputs'),
