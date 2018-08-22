@@ -41,4 +41,4 @@ Route::get('/orderList', 'OrdersController@orderList');
 Route::post('/rateOrder', 'RatingsController@rateOrder');
 Route::get('/reviews', 'RatingsController@reviews');
 Route::get('/login', 'UsersController@login');
-Route::get('/submitCode', 'UsersController@submitCode');
+Route::get('/submitOtp', 'UsersController@submitOtp');
