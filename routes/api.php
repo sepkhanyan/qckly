@@ -42,3 +42,4 @@ Route::post('/rateOrder', 'RatingsController@rateOrder');
 Route::get('/reviews', 'RatingsController@reviews');
 Route::get('/login', 'UsersController@login');
 Route::get('/submitOtp', 'UsersController@submitOtp');
+Route::get('/resendOtp', 'UsersController@resendOtp');

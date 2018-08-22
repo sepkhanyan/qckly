@@ -262,4 +262,45 @@ class UsersController extends Controller
         }
     }
 
+    public function resendOtp(Request $request)
+    {
+
+        $mobile = $request->input('mobile_number');
+        $newUser = $request->all();
+//        $newUser['lang'] = $request->header('Accept-Language');
+        $validator = \Validator::make($request->all(), [
+            'mobile_number' => 'required|min:8|max:8'
+        ]);
+        if ($mobile == '76524342' || $mobile == '41052196' || $mobile == '11004527' || $mobile == '98765432' || $mobile == '16262777'||$mobile == '63112689' ) {
+            return response()->json(['success' => 0,
+                'status_code' => 200,
+                'message' => \Lang::get('message.checkSmsSent')
+            ]);
+        }
+        if ($validator->fails()) {
+            return response()->json(array('success' => 1, 'status_code' => 400,
+                'message' => \Lang::get('message.invalid_inputs'),
+                'error_details' => $validator->messages()));
+        } else {
+            $client = User::where('mobile_number', $mobile)
+                ->where('group_id',0)
+                ->first();
+            $standardNumSets = array("0","1","2","3","4","5","6","7","8","9");
+            $devanagariNumSets = array("٠","١","٢","٣","٤","٥","٦","٧","٨","٩");
+            $mobile = str_replace($devanagariNumSets,$standardNumSets, $mobile);
+            if ($client) {
+                $random_val = rand(1500, 5000);
+                $date = Carbon::now()->format('Y-m-d');
+                $client->otp = $random_val;
+                $client->save();
+                // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=Your%20Syaanh%20code%20is%20:%20$random_val&destination=00974$mobile&source=97772&mask=Syaanh";
+//                file($url);
+                return response()->json(['success' => 0,
+                    'status_code' => 200,
+                    'message' => \Lang::get('message.checkSms')
+                ]);
+            }
+        }
+    }
+
 }
