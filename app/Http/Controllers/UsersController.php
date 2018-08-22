@@ -109,7 +109,6 @@ class UsersController extends Controller
         $id = $request->get('id');
         User::whereIn('id',$id)->delete();
 
-
         return redirect('/customers');
     }
 
@@ -264,7 +263,6 @@ class UsersController extends Controller
 
     public function resendOtp(Request $request)
     {
-
         $mobile = $request->input('mobile_number');
         $newUser = $request->all();
 //        $newUser['lang'] = $request->header('Accept-Language');
@@ -291,7 +289,8 @@ class UsersController extends Controller
 //                file($url);
                 return response()->json(['success' => 0,
                     'status_code' => 200,
-                    'message' => \Lang::get('message.checkSms')
+                    'message' => \Lang::get('message.checkSms'),
+                    'otp' => $random_val
                 ]);
             }
         }
