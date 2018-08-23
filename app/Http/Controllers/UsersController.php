@@ -300,6 +300,7 @@ class UsersController extends Controller
 
     public function completeProfile(Request $request)
     {
+        \Log::info($request->all());
         $validator = \Validator::make($request->all(), [
             'email' => 'required|string',
             'username' => 'required|string'
@@ -309,24 +310,59 @@ class UsersController extends Controller
                 'message' => \Lang::get('message.invalid_inputs'),
                 'error_details' => $validator->messages()));
         } else {
-            $token = str_replace("Bearer ","" ,$request->header('Authorization'));
-            $user = User::where('api_token',  '=',$token)->first();
-            $user->username = $request->input('username');
-            $user->email = $request->input('email');
-            if ($request->hasFile('image')) {
-                if(isset($user->image)){
-                    File::delete(public_path('images/' . $user->image));
+            $token = str_replace("Bearer ","" , $request->header('Authorization'));
+            $user = User::where('api_token', '=', $token)->first();
+            if($user){
+                $user->username = $request->input('username');
+                $user->email = $request->input('email');
+                if ($request->hasFile('image')) {
+                    if(isset($user->image)){
+                        File::delete(public_path('images/' . $user->image));
+                    }
+                    $image = $request->file('image');
+                    $name = time() . '.' . $image->getClientOriginalExtension();
+                    $destinationPath = public_path('/images');
+                    $image->move($destinationPath, $name);
+                    $user->image = $name;
                 }
-                $image = $request->file('image');
-                $name = time() . '.' . $image->getClientOriginalExtension();
-                $destinationPath = public_path('/images');
-                $image->move($destinationPath, $name);
-                $user->image = $name;
+                $user->save();
+                return response()->json(array(
+                    'success' => 1,
+                    'status_code' => 200));
+
+//            $base64_str = $request->get('image');
+//            if( $base64_str ){
+//                $image = base64_decode($base64_str);
+//                $image_name = uniqid ().'-image.png';
+//                $path = public_path() . '/images/' . $image_name;
+//                file_put_contents($path, $image);
+//
+//            }else{
+//                $image_name= '';
+//            }
             }
-            $user->save();
+
+
+        }
+    }
+
+    public function getUserDetails(Request $request)
+    {
+        $token = str_replace("Bearer ","" , $request->header('Authorization'));
+        $user = User::where('api_token', '=', $token)->first();
+        if($user){
+            $arr = [
+                'user_id' => $user->id,
+                'username' => $user->username,
+                'email' => $user->email,
+                'country_code' => $user->country_code,
+                'mobile_number' => $user->mobile_number,
+                'image' => url('/') . '/images/' . $user->image
+            ];
             return response()->json(array(
                 'success' => 1,
-                'status_code' => 200));
+                'status_code' => 200,
+                'data' => $arr));
         }
     }
 

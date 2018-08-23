@@ -42,3 +42,4 @@ Route::get('/login', 'UsersController@login');
 Route::get('/submitOtp', 'UsersController@submitOtp');
 Route::get('/resendOtp', 'UsersController@resendOtp');
 Route::post('/completeProfile', 'UsersController@completeProfile');
+Route::get('/getUserDetails', 'UsersController@getUserDetails');
