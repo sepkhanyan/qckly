@@ -40,4 +40,14 @@ class User extends Authenticatable
     {
         return  $this->hasMany('App\Order', 'user_id');
     }
+
+    public static function getUserByToken($api_token){
+        $token = str_replace("Bearer ","" ,$api_token);
+        $user = User::where('api_token', '=',$token)->first();
+
+        if($user){
+            return $user->id;
+        }
+        return false;
+    }
 }

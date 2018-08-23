@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+
 
 
 class UsersController extends Controller
@@ -292,6 +295,38 @@ class UsersController extends Controller
                     'otp' => $random_val
                 ]);
             }
+        }
+    }
+
+    public function completeProfile(Request $request)
+    {
+        $validator = \Validator::make($request->all(), [
+            'email' => 'required|string',
+            'username' => 'required|string'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(array('success' => 1, 'status_code' => 400,
+                'message' => \Lang::get('message.invalid_inputs'),
+                'error_details' => $validator->messages()));
+        } else {
+            $token = str_replace("Bearer ","" ,$request->header('Authorization'));
+            $user = User::where('api_token',  '=',$token)->first();
+            $user->username = $request->input('username');
+            $user->email = $request->input('email');
+            if ($request->hasFile('image')) {
+                if(isset($user->image)){
+                    File::delete(public_path('images/' . $user->image));
+                }
+                $image = $request->file('image');
+                $name = time() . '.' . $image->getClientOriginalExtension();
+                $destinationPath = public_path('/images');
+                $image->move($destinationPath, $name);
+                $user->image = $name;
+            }
+            $user->save();
+            return response()->json(array(
+                'success' => 1,
+                'status_code' => 200));
         }
     }
 
