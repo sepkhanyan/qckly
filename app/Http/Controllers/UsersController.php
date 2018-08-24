@@ -214,8 +214,10 @@ class UsersController extends Controller
                 'error_details' => $validator->messages()));
         } else {
             $otp = intval($request->get('otp'));
+//            $country_code = $request->input('country_code');
+            $mobile = $request->input('mobile_number');
             $smsCode = User::where('otp', $otp)
-                ->where('mobile_number', $request->get('mobile_number'))->first();
+                ->where('mobile_number', $mobile)->first();
             ///=========create any token =============//
             if ($smsCode) {
                 if ($smsCode->api_token != '') {
@@ -228,7 +230,7 @@ class UsersController extends Controller
                 if ($smsCode->group_id == 0) {
                     $update = User::select("*")
                         ->where('otp', $otp)
-                        ->where('mobile_number', $request->get('mobile_number'))
+                        ->where('mobile_number', $mobile)
                         ->first();
                     $update->api_token = $token;
                     $update->lang = $request->header('Accept-Language');
@@ -275,6 +277,7 @@ class UsersController extends Controller
                 'message' => \Lang::get('message.invalid_inputs'),
                 'error_details' => $validator->messages()));
         } else {
+//            $country_code = $request->input('country_code');
             $mobile = $request->input('mobile_number');
             $client = User::where('mobile_number', $mobile)
                 ->where('group_id',0)

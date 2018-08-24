@@ -44,6 +44,9 @@ class UserCartsController extends Controller
      */
     public function createCart(Request $request)
     {
+        \Log::info($request->all());
+        $token = str_replace("Bearer ","" , $request->header('Authorization'));
+        $user = User::where('api_token', '=', $token)->first();
         $DataRequests = $request->all();
         $validator = \Validator::make($DataRequests, [
             'collection_type' => 'required|integer',
@@ -62,7 +65,7 @@ class UserCartsController extends Controller
             if(isset($DataRequests['special_instruction'])){
                 $special_instruction = $DataRequests['special_instruction'];
             }
-            $cart = UserCart::where('user_id', '=', 1)->where('completed', 0)->first();
+            $cart = UserCart::where('user_id', '=', $user->id)->where('completed', 0)->first();
             if (!$cart) {
                 $validator = \Validator::make($DataRequests, [
                     'delivery_order_area' => 'required|integer',
@@ -78,7 +81,7 @@ class UserCartsController extends Controller
                     $delivery_date = $DataRequests['delivery_order_date'];
                     $delivery_time = $DataRequests['delivery_order_time'];
                     $cart = new UserCart();
-                    $cart->user_id = 1;
+                    $cart->user_id = $user->id;
                     $address = Address::where('user_id', 1)->where('is_default', 1)->first();
                     if($address){
                         $cart->delivery_address_id = $address->id;
