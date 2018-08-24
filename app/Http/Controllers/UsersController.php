@@ -348,6 +348,7 @@ class UsersController extends Controller
 
     public function getUserDetails(Request $request)
     {
+        \Log::info($request->all());
         $token = str_replace("Bearer ","" , $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->first();
         if($user){

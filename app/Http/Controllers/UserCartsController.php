@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Address;
 use App\Categories;
-use Auth;
 use App\Restaurant;
 use App\UserCart;
 use App\UserCartItem;
@@ -13,9 +12,10 @@ use App\Menus;
 use App\Collection;
 use App\CollectionItem;
 use Carbon\Carbon;
+use App\User;
 
 
-use Illuminate\Foundation\Auth\User;
+//use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 
 class UserCartsController extends Controller
@@ -426,26 +426,32 @@ class UserCartsController extends Controller
 
     }
 
-    public function cartCount()
+    public function cartCount(Request $request)
     {
-        $cart = UserCart::where('user_id', 1)->where('completed', 0)->with('cartCollection')->first();
-        if($cart){
-            $cart_count = $cart->cartCollection->count();
+        \Log::info($request->all());
+        $token = str_replace("Bearer ","" , $request->header('Authorization'));
+        $user = User::where('api_token', '=', $token)->with('cart.cartCollection')->first();
+//        $cart = UserCart::where('user_id', $user->id)->where('completed', 0)->with('cartCollection')->first();
+        if($user){
+            if($user->cart->count() > 0){
+                $cart = $user->cart->where('completed', 0)->first();
+                if($cart){
+                    $cart_count = $cart->cartCollection->count();
+                    $arr  = [
+                        'cart_id' => $cart->id,
+                        'cart_count' => $cart_count
+                    ];
+                }else{
+                    $arr  = [
+                        'cart_count' => 0
+                    ];
+                }
+            }else{
+                $arr  = [
+                    'cart_count' => 0
+                ];
 
-            $arr  = [
-                'cart_id' => $cart->id,
-                'cart_count' => $cart_count
-            ];
-
-            return response()->json(array(
-                'success' => 1,
-                'status_code' => 200,
-                'data' => $arr));
-        }else{
-            $arr  = [
-                'cart_count' => 0
-            ];
-
+            }
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,

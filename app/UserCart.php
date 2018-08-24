@@ -10,6 +10,10 @@ class UserCart extends Model
 
     protected $fillable = ['user_id', 'delivery_order_area', 'delivery_order_date', 'delivery_order_time'];
 
+    public function user()
+    {
+        return $this->belongsTo('App\User', 'user_id');
+    }
 
     public function cartCollection()
     {
