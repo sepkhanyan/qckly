@@ -306,10 +306,12 @@ class UserCartsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function showCart($id)
+    public function showCart(Request $request, $id)
     {
-
-        $cart = UserCart::where('id', $id)->with(['address', 'cartCollection' => function ($query) {
+        \Log::info($request->all());
+        $token = str_replace("Bearer ","" , $request->header('Authorization'));
+        $user = User::where('api_token', '=', $token)->first();
+        $cart = UserCart::where('id', $id)->where('user_id', $user->id)->with(['address', 'cartCollection' => function ($query) {
             $query->with(['cartItem', 'collection.subcategory']);
         }])->first();
         if($cart){
@@ -640,33 +642,39 @@ class UserCartsController extends Controller
 
     public function removeCart(Request $request, $id)
     {
-        $DataRequests = $request->all();
-        $cart = UserCart::find($id);
-       if(isset($DataRequests['collection_id'])){
-           $collection_id = $DataRequests['collection_id'];
-           UserCartCollection::where('cart_id', $cart->id)
-               ->where('collection_id', $collection_id)->delete();
-           $cart_collections = UserCartCollection::where('cart_id', $cart->id)->get();
-           if(count($cart_collections) > 0){
-               return response()->json(array(
-                   'success' => 1,
-                   'status_code' => 200,
-                   'message' => 'Collection deleted successfully!'));
-           }else{
-               $cart->delete();
-               return response()->json(array(
-                   'success' => 1,
-                   'status_code' => 200,
-                   'message' => 'Cart deleted successfully!'));
-           }
+        \Log::info($request->all());
+        $token = str_replace("Bearer ","" , $request->header('Authorization'));
+        $user = User::where('api_token', '=', $token)->with('cart.cartCollection')->first();
+        if($user){
+            $DataRequests = $request->all();
+            $cart = UserCart::where('id', $id)
+                ->where('user_id', $user->id)->first();
+            if(isset($DataRequests['collection_id'])){
+                $collection_id = $DataRequests['collection_id'];
+                UserCartCollection::where('cart_id', $cart->id)
+                    ->where('collection_id', $collection_id)->delete();
+                $cart_collections = UserCartCollection::where('cart_id', $cart->id)->get();
+                if(count($cart_collections) > 0){
+                    return response()->json(array(
+                        'success' => 1,
+                        'status_code' => 200,
+                        'message' => 'Collection deleted successfully!'));
+                }else{
+                    $cart->delete();
+                    return response()->json(array(
+                        'success' => 1,
+                        'status_code' => 200,
+                        'message' => 'Cart deleted successfully!'));
+                }
 
-       }else{
-           $cart->delete();
-           return response()->json(array(
-               'success' => 1,
-               'status_code' => 200,
-               'message' => 'Cart deleted successfully!'));
-       }
+            }else{
+                $cart->delete();
+                return response()->json(array(
+                    'success' => 1,
+                    'status_code' => 200,
+                    'message' => 'Cart deleted successfully!'));
+            }
+        }
 
     }
 
