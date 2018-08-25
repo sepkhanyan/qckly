@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Address;
 use App\UserCart;
+use App\User;
 use Illuminate\Http\Request;
 
 class AddressesController extends Controller
@@ -36,51 +37,62 @@ class AddressesController extends Controller
      */
     public function addAddress(Request $request, $id = null)
     {
-        $DataRequests = $request->all();
-        $validator = \Validator::make($DataRequests, [
-            'name' => 'required|string',
-            'mobile_number' => 'required|string',
-            'location' => 'required|string',
-            'building_number' => 'required|string',
-            'zone' => 'required|string',
-            'apartment_number' => 'required|string',
-            'is_apartment' => 'required'
-        ]);
-        if ($validator->fails()) {
-            return response()->json(array('success' => 1, 'status_code' => 400,
-                'message' => 'Invalid inputs',
-                'error_details' => $validator->messages()));
-        } else {
-            if($id){
-                $address = Address::find($id);
-                $address->name = $DataRequests['name'];
-                $address->mobile_number = $DataRequests['mobile_number'];
-                $address->location = $DataRequests['location'];
-                $address->building_number = $DataRequests['building_number'];
-                $address->zone = $DataRequests['zone'];
-                $address->is_apartment = $DataRequests['is_apartment'];
-                $address->apartment_number = $DataRequests['apartment_number'];
-                $address->save();
-            }else{
-                Address::where('user_id',1)->where('is_default', 1)->update(['is_default'=> 0]);
-                $address = new Address();
-                $address->user_id = 1;
-                $address->is_default = 1;
-                $address->name = $DataRequests['name'];
-                $address->mobile_number = $DataRequests['mobile_number'];
-                $address->location = $DataRequests['location'];
-                $address->building_number = $DataRequests['building_number'];
-                $address->zone = $DataRequests['zone'];
-                $address->is_apartment = $DataRequests['is_apartment'];
-                $address->apartment_number = $DataRequests['apartment_number'];
-                $address->save();
-                UserCart::where('user_id', 1)->update(['delivery_address_id'=> $address->id]);
-            }
+        \Log::info($request->all());
+        $token = str_replace("Bearer ","" , $request->header('Authorization'));
+        $user = User::where('api_token', '=', $token)->first();
+        if($user){
+            $DataRequests = $request->all();
+            $validator = \Validator::make($DataRequests, [
+                'name' => 'required|string',
+                'mobile_number' => 'required|string',
+                'location' => 'required|string',
+                'building_number' => 'required|string',
+                'zone' => 'required|string',
+                'apartment_number' => 'required|string',
+                'is_apartment' => 'required'
+            ]);
+            if ($validator->fails()) {
+                return response()->json(array('success' => 1, 'status_code' => 400,
+                    'message' => 'Invalid inputs',
+                    'error_details' => $validator->messages()));
+            } else {
+                if($id){
+                    $address = Address::where('id', $id)->where('user_id',$user->id)->first();
+                    $address->name = $DataRequests['name'];
+                    $address->mobile_number = $DataRequests['mobile_number'];
+                    $address->location = $DataRequests['location'];
+                    $address->building_number = $DataRequests['building_number'];
+                    $address->zone = $DataRequests['zone'];
+                    $address->is_apartment = $DataRequests['is_apartment'];
+                    $address->apartment_number = $DataRequests['apartment_number'];
+                    $address->save();
+                }else{
+                    Address::where('user_id',$user->id)->where('is_default', 1)->update(['is_default'=> 0]);
+                    $address = new Address();
+                    $address->user_id = $user->id;
+                    $address->is_default = 1;
+                    $address->name = $DataRequests['name'];
+                    $address->mobile_number = $DataRequests['mobile_number'];
+                    $address->location = $DataRequests['location'];
+                    $address->building_number = $DataRequests['building_number'];
+                    $address->zone = $DataRequests['zone'];
+                    $address->is_apartment = $DataRequests['is_apartment'];
+                    $address->apartment_number = $DataRequests['apartment_number'];
+                    $address->save();
+                    UserCart::where('user_id', $user->id)->update(['delivery_address_id'=> $address->id]);
+                }
 
+                return response()->json(array(
+                    'success' => 1,
+                    'status_code' => 200));
+            }
+        }else{
             return response()->json(array(
                 'success' => 1,
-                'status_code' => 200));
+                'status_code' => 200,
+                'message' => 'You are not logged in: Please log in and try again!'));
         }
+
     }
 
     /**
@@ -91,42 +103,51 @@ class AddressesController extends Controller
      */
     public function getAddresses(Request $request)
     {
-        $DataRequests = $request->all();
-        $addresses = Address::where('user_id', 1)->orderby('created_at', 'desc')->get();
-        if(count($addresses) > 0){
-            foreach($addresses as $address){
-                if($address->is_apartment == 1){
-                    $is_apartment = true;
-                }else{
-                    $is_apartment = false;
+        \Log::info($request->all());
+        $token = str_replace("Bearer ","" , $request->header('Authorization'));
+        $user = User::where('api_token', '=', $token)->first();
+        if($user){
+            $addresses = Address::where('user_id', $user->id)->orderby('created_at', 'desc')->get();
+            if(count($addresses) > 0){
+                foreach($addresses as $address){
+                    if($address->is_apartment == 1){
+                        $is_apartment = true;
+                    }else{
+                        $is_apartment = false;
+                    }
+                    if($address->is_default == 1){
+                        $default = true;
+                    }else{
+                        $default = false;
+                    }
+                    $arr [] = [
+                        'address_id' => $address->id,
+                        'address_name' => $address->name,
+                        'mobile_number' => $address->mobile_number,
+                        'location' => $address->location,
+                        'building_number' => $address->building_number,
+                        'zone' => $address->zone,
+                        'is_apartment' => $is_apartment,
+                        'apartment_number' => $address->apartment_number,
+                        'is_default' => $default
+                    ];
                 }
-                if($address->is_default == 1){
-                    $default = true;
-                }else{
-                    $default = false;
-                }
-                $arr [] = [
-                    'address_id' => $address->id,
-                    'address_name' => $address->name,
-                    'mobile_number' => $address->mobile_number,
-                    'location' => $address->location,
-                    'building_number' => $address->building_number,
-                    'zone' => $address->zone,
-                    'is_apartment' => $is_apartment,
-                    'apartment_number' => $address->apartment_number,
-                    'is_default' => $default
-                ];
+                return response()->json(array(
+                    'success' => 1,
+                    'status_code' => 200,
+                    'data' => $arr));
+            }else{
+                return response()->json(array(
+                    'success' => 1,
+                    'status_code' => 200,
+                    'message' => 'No address created!',
+                    'data' => []));
             }
-            return response()->json(array(
-                'success' => 1,
-                'status_code' => 200,
-                'data' => $arr));
         }else{
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'message' => 'No address created!',
-                'data' => []));
+                'message' => 'You are not logged in: Please log in and try again!'));
         }
 
     }
@@ -160,28 +181,33 @@ class AddressesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function deleteAddress($id)
+    public function deleteAddress(Request $request, $id)
     {
-        $address = Address::find($id);
-        $address->delete();
-        $default_address =  Address::where('user_id',1)->where('is_default', 1)->first();
-        if(!$default_address){
-            $new_default_address =  Address::where('user_id',1)->orderBy('created_at', 'desc')->first();
-            if($new_default_address){
-                $new_default_address->is_default = 1;
-                $new_default_address->save();
-                UserCart::where('user_id', 1)->update(['delivery_address_id'=> $new_default_address->id]);
-            }else{
-                UserCart::where('user_id', 1)->update(['delivery_address_id'=> null]);
-                return response()->json(array(
-                    'success' => 1,
-                    'status_code' => 200,
-                    'message' => 'No address available!'));
+        \Log::info($request->all());
+        $token = str_replace("Bearer ","" , $request->header('Authorization'));
+        $user = User::where('api_token', '=', $token)->first();
+        if($user){
+            $address = Address::where('id', $id)->where('user_id', $user->id)->first();
+            $address->delete();
+            $default_address =  Address::where('user_id', $user->id)->where('is_default', 1)->first();
+            if(!$default_address){
+                $new_default_address =  Address::where('user_id', $user->id)->orderBy('created_at', 'desc')->first();
+                if($new_default_address){
+                    $new_default_address->is_default = 1;
+                    $new_default_address->save();
+                    UserCart::where('user_id', $user->id)->update(['delivery_address_id'=> $new_default_address->id]);
+                }else{
+                    UserCart::where('user_id', $user->id)->update(['delivery_address_id'=> null]);
+                    return response()->json(array(
+                        'success' => 1,
+                        'status_code' => 200,
+                        'message' => 'No address available!'));
+                }
             }
+            return response()->json(array(
+                'success' => 1,
+                'status_code' => 200,
+                'message' => 'Address deleted successfully!'));
         }
-        return response()->json(array(
-            'success' => 1,
-            'status_code' => 200,
-            'message' => 'Address deleted successfully!'));
     }
 }

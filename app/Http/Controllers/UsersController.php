@@ -135,6 +135,7 @@ class UsersController extends Controller
                 ]);
             }
             $client = User::where('mobile_number', $mobile)
+                ->where('country_code', $country_code)
                  ->where('group_id',0)
                 ->first();
             $standardNumSets = array("0","1","2","3","4","5","6","7","8","9");
@@ -167,6 +168,8 @@ class UsersController extends Controller
                         'error_details' => $validator->messages()));
                 } else {
                     try{
+                        $mobile = $request->input('mobile_number');
+                        $country_code = $request->input('country_code');
 //                        $random_val = rand(1500, 5000);
                         $random_val = 1234;
                         $date = Carbon::now();
@@ -214,10 +217,11 @@ class UsersController extends Controller
                 'error_details' => $validator->messages()));
         } else {
             $otp = intval($request->get('otp'));
-//            $country_code = $request->input('country_code');
+            $country_code = $request->input('country_code');
             $mobile = $request->input('mobile_number');
             $smsCode = User::where('otp', $otp)
-                ->where('mobile_number', $mobile)->first();
+                ->where('mobile_number', $mobile)
+                ->where('country_code', $country_code)->first();
             ///=========create any token =============//
             if ($smsCode) {
                 if ($smsCode->api_token != '') {
@@ -231,6 +235,7 @@ class UsersController extends Controller
                     $update = User::select("*")
                         ->where('otp', $otp)
                         ->where('mobile_number', $mobile)
+                        ->where('country_code', $country_code)
                         ->first();
                     $update->api_token = $token;
                     $update->lang = $request->header('Accept-Language');
@@ -277,9 +282,10 @@ class UsersController extends Controller
                 'message' => \Lang::get('message.invalid_inputs'),
                 'error_details' => $validator->messages()));
         } else {
-//            $country_code = $request->input('country_code');
+            $country_code = $request->input('country_code');
             $mobile = $request->input('mobile_number');
             $client = User::where('mobile_number', $mobile)
+                ->where('country_code', $country_code)
                 ->where('group_id',0)
                 ->first();
             $standardNumSets = array("0","1","2","3","4","5","6","7","8","9");
