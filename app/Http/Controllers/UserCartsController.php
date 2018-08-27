@@ -317,122 +317,132 @@ class UserCartsController extends Controller
         \Log::info($request->all());
         $token = str_replace("Bearer ","" , $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->first();
-        $cart = UserCart::where('id', $id)->where('user_id', $user->id)->with(['address', 'cartCollection' => function ($query) {
-            $query->with(['cartItem', 'collection.subcategory']);
-        }])->first();
-        if($cart){
-            $address = (object) array();
-            $address_id = -1;
-            if($cart->address){
-                if($cart->address->is_apartment == 1){
-                    $is_apartment = true;
-                }else{
-                    $is_apartment = false;
+        if($user){
+            $cart = UserCart::where('id', $id)
+                ->where('user_id', $user->id)
+                ->where('completed', 0)
+                ->with(['address', 'cartCollection' => function ($query) {
+                    $query->with(['cartItem', 'collection.subcategory']);
+                }])->first();
+            if($cart){
+                $address = (object) array();
+                $address_id = -1;
+                if($cart->address){
+                    if($cart->address->is_apartment == 1){
+                        $is_apartment = true;
+                    }else{
+                        $is_apartment = false;
+                    }
+                    if($cart->address->is_default == 1){
+                        $default = true;
+                    }else{
+                        $default = false;
+                    }
+                    $address_id = $cart->address->id;
+                    $address = [
+                        'address_name' => $cart->address->name,
+                        'mobile_number' => $cart->address->mobile_number,
+                        'location' => $cart->address->location,
+                        'building_number' => $cart->address->location,
+                        'zone' => $cart->address->zone,
+                        'is_apartment' => $is_apartment,
+                        'apartment_number' => $cart->address->apartment_number,
+                        'is_default' => $default
+                    ];
                 }
-                if($cart->address->is_default == 1){
-                    $default = true;
-                }else{
-                    $default = false;
-                }
-                $address_id = $cart->address->id;
-                $address = [
-                    'address_name' => $cart->address->name,
-                    'mobile_number' => $cart->address->mobile_number,
-                    'location' => $cart->address->location,
-                    'building_number' => $cart->address->location,
-                    'zone' => $cart->address->zone,
-                    'is_apartment' => $is_apartment,
-                    'apartment_number' => $cart->address->apartment_number,
-                    'is_default' => $default
-                ];
-            }
 
 
-            if(count($cart->cartCollection ) > 0){
-                $total = 0;
-                foreach($cart->cartCollection as $cart_collection){
-                    $menu = [];
-                    $categories = Categories::whereHas('cartItem', function($query) use ($cart_collection){
-                        $query->where('cart_collection_id', $cart_collection->id);
-                    })->with(['cartItem'=>function ($x) use($cart_collection){
-                        $x->where('cart_collection_id', $cart_collection->id);
-                    }])->get();
-                    foreach($categories as $category){
-                        $items = [];
-                        foreach($category->cartItem as $cartItem){
-                            $items [] = [
-                                'item_id' => $cartItem->item_id,
-                                'item_name' => $cartItem->menu->menu_name,
-                                'item_price' => $cartItem->menu->menu_price,
-                                'item_quantity' => $cartItem->quantity,
-                                'item_price_unit' => 'QR'
+                if(count($cart->cartCollection ) > 0){
+                    $total = 0;
+                    foreach($cart->cartCollection as $cart_collection){
+                        $menu = [];
+                        $categories = Categories::whereHas('cartItem', function($query) use ($cart_collection){
+                            $query->where('cart_collection_id', $cart_collection->id);
+                        })->with(['cartItem'=>function ($x) use($cart_collection){
+                            $x->where('cart_collection_id', $cart_collection->id);
+                        }])->get();
+                        foreach($categories as $category){
+                            $items = [];
+                            foreach($category->cartItem as $cartItem){
+                                $items [] = [
+                                    'item_id' => $cartItem->item_id,
+                                    'item_name' => $cartItem->menu->menu_name,
+                                    'item_price' => $cartItem->menu->menu_price,
+                                    'item_quantity' => $cartItem->quantity,
+                                    'item_price_unit' => 'QR'
+                                ];
+                            }
+                            $menu [] = [
+                                'menu_id' => $category->id,
+                                'menu_name' => $category->name,
+                                'items' => $items
                             ];
                         }
-                        $menu [] = [
-                            'menu_id' => $category->id,
-                            'menu_name' => $category->name,
-                            'items' => $items
+                        if($cart_collection->collection->price == null){
+                            $cart_collection->collection->price = '';
+                        }
+                        if($cart_collection->persons_count == null){
+                            $cart_collection->persons_count = '';
+                        }
+                        if($cart_collection->quantity == null){
+                            $cart_collection->quantity = '';
+                        }
+                        if($cart_collection->female_caterer == 1){
+                            $female_caterer = true;
+                        }else{
+                            $female_caterer = false;
+                        }
+                        $persons_count = -1;
+                        if($cart_collection->collection->subcategory_id == 2){
+                            $persons_count =  $cart_collection->persons_count;
+                        }
+                        $collections [] = [
+                            'restaurant_id' => $cart_collection->collection->restaurant->id,
+                            'restaurant_name' => $cart_collection->collection->restaurant->restaurant_name,
+                            'collection_id' => $cart_collection->collection_id,
+                            'collection_type_id' => $cart_collection->collection->subcategory_id,
+                            'collection_type' => $cart_collection->collection->subcategory->subcategory_en,
+                            'collection_name' => $cart_collection->collection->name,
+                            'collection_price' => $cart_collection->collection->price,
+                            'collection_price_unit' => 'QR',
+                            'female_caterer' => $female_caterer,
+                            'special_instruction' => $cart_collection->special_instruction,
+                            'menu_items' => $menu,
+                            'quantity' => $cart_collection->quantity,
+                            'persons_count' => $persons_count,
+                            'subtotal' => $cart_collection->price,
+                            'subtotal_unit' => "QR",
                         ];
-                    }
-                    if($cart_collection->collection->price == null){
-                        $cart_collection->collection->price = '';
-                    }
-                    if($cart_collection->persons_count == null){
-                        $cart_collection->persons_count = '';
-                    }
-                    if($cart_collection->quantity == null){
-                        $cart_collection->quantity = '';
-                    }
-                    if($cart_collection->female_caterer == 1){
-                        $female_caterer = true;
-                    }else{
-                        $female_caterer = false;
-                    }
-                    $persons_count = -1;
-                    if($cart_collection->collection->subcategory_id == 2){
-                        $persons_count =  $cart_collection->persons_count;
-                    }
-                    $collections [] = [
-                        'restaurant_id' => $cart_collection->collection->restaurant->id,
-                        'restaurant_name' => $cart_collection->collection->restaurant->restaurant_name,
-                        'collection_id' => $cart_collection->collection_id,
-                        'collection_type_id' => $cart_collection->collection->subcategory_id,
-                        'collection_type' => $cart_collection->collection->subcategory->subcategory_en,
-                        'collection_name' => $cart_collection->collection->name,
-                        'collection_price' => $cart_collection->collection->price,
-                        'collection_price_unit' => 'QR',
-                        'female_caterer' => $female_caterer,
-                        'special_instruction' => $cart_collection->special_instruction,
-                        'menu_items' => $menu,
-                        'quantity' => $cart_collection->quantity,
-                        'persons_count' => $persons_count,
-                        'subtotal' => $cart_collection->price,
-                        'subtotal_unit' => "QR",
-                    ];
-                    $total += $cart_collection->price;
+                        $total += $cart_collection->price;
 
+                    }
+                    $arr  = [
+                        'cart_id' => $cart->id,
+                        'order_area' => $cart->delivery_order_area,
+                        'order_date' => $cart->delivery_order_date,
+                        'order_time' => date("g:i a", strtotime($cart->delivery_order_time)),
+                        'delivery_address_id' => $address_id,
+                        'delivery_address' => $address,
+                        'collections' => $collections,
+                        'total' => $total,
+                        'total_unit' => 'QR',
+                    ];
                 }
-                $arr  = [
-                    'cart_id' => $cart->id,
-                    'order_area' => $cart->delivery_order_area,
-                    'order_date' => $cart->delivery_order_date,
-                    'order_time' => date("g:i a", strtotime($cart->delivery_order_time)),
-                    'delivery_address_id' => $address_id,
-                    'delivery_address' => $address,
-                    'collections' => $collections,
-                    'total' => $total,
-                    'total_unit' => 'QR',
-                ];
+                return response()->json(array(
+                    'success' => 1,
+                    'status_code' => 200,
+                    'data' => $arr));
+            }else{
+                return response()->json(array(
+                    'success' => 1,
+                    'status_code' => 200,
+                    'data' => []));
             }
-            return response()->json(array(
-                'success' => 1,
-                'status_code' => 200,
-                'data' => $arr));
         }else{
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'data' => []));
+                'message' => 'You are not logged in: Please log in and try again.'));
         }
 
     }
