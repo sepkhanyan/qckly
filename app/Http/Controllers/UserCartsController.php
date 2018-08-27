@@ -300,7 +300,7 @@ class UserCartsController extends Controller
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'message' => 'You are not logged in: Please log in and try again!'));
+                'message' => 'You are not logged in: Please log in and try again.'));
         }
     }
 
@@ -476,6 +476,7 @@ class UserCartsController extends Controller
 
     public function collectionDetails(Request $request)
     {
+        \Log::info($request->all());
         $DataRequests = $request->all();
         $validator = \Validator::make($DataRequests, [
             'collection_type' => 'required|integer',
@@ -668,13 +669,13 @@ class UserCartsController extends Controller
                     return response()->json(array(
                         'success' => 1,
                         'status_code' => 200,
-                        'message' => 'Collection deleted successfully!'));
+                        'message' => 'Collection deleted successfully.'));
                 }else{
                     $cart->delete();
                     return response()->json(array(
                         'success' => 1,
                         'status_code' => 200,
-                        'message' => 'Cart deleted successfully!'));
+                        'message' => 'Cart deleted successfully.'));
                 }
 
             }else{
@@ -682,7 +683,7 @@ class UserCartsController extends Controller
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200,
-                    'message' => 'Cart deleted successfully!'));
+                    'message' => 'Cart deleted successfully.'));
             }
         }
 

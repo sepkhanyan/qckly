@@ -296,7 +296,8 @@ class RestaurantsController extends Controller
 
 
 
-    public function getRestaurants(Request $request){
+    public function getRestaurants(Request $request)
+    {
         $lang = $request->header('Accept-Language');
         $restaurants = Restaurant::with(['menu', 'categoryRestaurant'])->paginate(20);
         if(count($restaurants) > 0){
@@ -352,15 +353,16 @@ class RestaurantsController extends Controller
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'message' => 'No available restaurant!'));
+                'message' => 'No available restaurant.'));
         }
 
     }
 
 
 
-    public function getRestaurantByCategory(Request $request){
-
+    public function getRestaurantByCategory(Request $request)
+    {
+        \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $DataRequests = $request->all();
         $validator = \Validator::make($DataRequests, [
@@ -430,14 +432,14 @@ class RestaurantsController extends Controller
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200,
-                    'message' => 'No available restaurant!'));
+                    'message' => 'No available restaurant.'));
             }
         }
     }
 
     public function availableRestaurants(Request $request)
     {
-
+        \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $DataRequests = $request->all();
         $validator = \Validator::make($DataRequests, [
@@ -560,7 +562,7 @@ class RestaurantsController extends Controller
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200,
-                    'message' => 'No available restaurant!'));
+                    'message' => 'No available restaurant.'));
             }
         }
 
@@ -609,13 +611,14 @@ class RestaurantsController extends Controller
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'message' => 'No available restaurant!'));
+                'message' => 'No available restaurant.'));
         }
 
     }
 
     public function restaurantMenuItems(Request $request)
     {
+        \Log::info($request->all());
         $DataRequests = $request->all();
         $validator = \Validator::make($DataRequests, [
             'restaurant_id' => 'required',
@@ -805,7 +808,7 @@ class RestaurantsController extends Controller
                         return response()->json(array(
                             'success' => 1,
                             'status_code' => 200,
-                            'message' => 'No Collection!'));
+                            'message' => 'No collection.'));
                     }
 
                 }
@@ -819,7 +822,7 @@ class RestaurantsController extends Controller
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200,
-                    'message' => 'No available restaurant!'));
+                    'message' => 'No available restaurant.'));
             }
 
         }

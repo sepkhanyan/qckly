@@ -117,6 +117,7 @@ class UsersController extends Controller
 
     public function login(Request $request)
     {
+        \Log::info($request->all());
         $validator = \Validator::make($request->all(), [
             'country_code' => 'required',
             'mobile_number' => 'required|min:8|max:8',
@@ -207,6 +208,7 @@ class UsersController extends Controller
 
     public function submitOtp(Request $request)
     {
+        \Log::info($request->all());
         $validator = \Validator::make($request->all(), [
             'country_code' => 'required',
             'mobile_number' => 'required|min:8|max:8',
@@ -266,7 +268,7 @@ class UsersController extends Controller
                 return response()->json([
                     'success' => 1,
                     'status_code' => 400,
-                    'message' => 'Please enter valid otp!'
+                    'message' => 'Please enter valid otp.'
                 ]);
             }
         }
@@ -274,6 +276,7 @@ class UsersController extends Controller
 
     public function resendOtp(Request $request)
     {
+        \Log::info($request->all());
         $validator = \Validator::make($request->all(), [
             'country_code' => 'required',
             'mobile_number' => 'required|min:8|max:8'
@@ -311,22 +314,22 @@ class UsersController extends Controller
     public function completeProfile(Request $request)
     {
         \Log::info($request->all());
-        $validator = \Validator::make($request->all(), [
-            'email' => 'required|string',
-            'username' => 'required|string'
-        ]);
-        if ($validator->fails()) {
-            return response()->json(array('success' => 1, 'status_code' => 400,
-                'message' => \Lang::get('message.invalid_inputs'),
-                'error_details' => $validator->messages()));
-        } else {
-            $token = str_replace("Bearer ","" , $request->header('Authorization'));
-            $user = User::where('api_token', '=', $token)->first();
-            if($user){
+        $token = str_replace("Bearer ","" , $request->header('Authorization'));
+        $user = User::where('api_token', '=', $token)->first();
+        if($user) {
+            $validator = \Validator::make($request->all(), [
+                'email' => 'required|string',
+                'username' => 'required|string'
+            ]);
+            if ($validator->fails()) {
+                return response()->json(array('success' => 1, 'status_code' => 400,
+                    'message' => \Lang::get('message.invalid_inputs'),
+                    'error_details' => $validator->messages()));
+            } else {
                 $user->username = $request->input('username');
                 $user->email = $request->input('email');
                 if ($request->hasFile('image')) {
-                    if(isset($user->image)){
+                    if (isset($user->image)) {
                         File::delete(public_path('images/' . $user->image));
                     }
                     $image = $request->file('image');
@@ -350,9 +353,14 @@ class UsersController extends Controller
 //            }else{
 //                $image_name= '';
 //            }
+
+
             }
-
-
+        }else{
+            return response()->json(array(
+                'success' => 1,
+                'status_code' => 200,
+                'message' => 'You are not logged in: Please log in and try again.'));
         }
     }
 
@@ -364,11 +372,11 @@ class UsersController extends Controller
         if($user){
             $arr = [
                 'user_id' => $user->id,
-                'username' => $user->username,
-                'email' => $user->email,
+                'username' => $user->username != null ? $user->username : '',
+                'email' => $user->email != null ? $user->email : '',
+                'image' => $user->image != '' ? url('/') . "/images/" . $user->image : '',
                 'country_code' => $user->country_code,
                 'mobile_number' => $user->mobile_number,
-                'image' => url('/') . '/images/' . $user->image
             ];
             return response()->json(array(
                 'success' => 1,

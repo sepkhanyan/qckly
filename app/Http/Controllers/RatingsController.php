@@ -16,6 +16,7 @@ class RatingsController extends Controller
      */
     public function reviews(Request $request)
     {
+        \Log::info($request->all());
         $DataRequests = $request->all();
         $validator = \Validator::make($DataRequests, [
             'restaurant_id' => 'required|integer',
@@ -68,7 +69,7 @@ class RatingsController extends Controller
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'message' => 'No reviews!'));
+                'message' => 'No reviews.'));
         }
 
     }
@@ -91,34 +92,44 @@ class RatingsController extends Controller
      */
     public function rateOrder(Request $request)
     {
-        $DataRequests = $request->all();
-        $validator = \Validator::make($DataRequests, [
-            'rates' => 'required',
-        ]);
-        if ($validator->fails()) {
-            return response()->json(array('success' => 1, 'status_code' => 400,
-                'message' => 'Invalid inputs',
-                'error_details' => $validator->messages()));
-        } else {
-            $rates = $DataRequests['rates'];
-            foreach($rates as $rate){
-                $rating = new Rating();
-                $rating->order_id = $rate['order_id'];
-                $rating->restaurant_id = $rate['restaurant_id'];
-                $rating->rate_value = $rate['rate_value'];
-                if(isset($rate['review'])){
-                    $rating->review = $rate['review'];
+        \Log::info($request->all());
+        $token = str_replace("Bearer ","" , $request->header('Authorization'));
+        $user = User::where('api_token', '=', $token)->with('cart.cartCollection')->first();
+        if($user){
+            $DataRequests = $request->all();
+            $validator = \Validator::make($DataRequests, [
+                'rates' => 'required',
+            ]);
+            if ($validator->fails()) {
+                return response()->json(array('success' => 1, 'status_code' => 400,
+                    'message' => 'Invalid inputs',
+                    'error_details' => $validator->messages()));
+            } else {
+                $rates = $DataRequests['rates'];
+                foreach($rates as $rate){
+                    $rating = new Rating();
+                    $rating->order_id = $rate['order_id'];
+                    $rating->restaurant_id = $rate['restaurant_id'];
+                    $rating->rate_value = $rate['rate_value'];
+                    if(isset($rate['review'])){
+                        $rating->review = $rate['review'];
+                    }
+                    $rating->save();
+                    $order = Order::where('id', $rate['order_id'])->where('user_id', $user->id)->first();
+                    if($order){
+                        $order->is_rated = 1;
+                        $order->save();
+                    }
                 }
-                $rating->save();
-                $order = Order::where('id', $rate['order_id'])->first();
-                if($order){
-                    $order->is_rated = 1;
-                    $order->save();
-                }
+                return response()->json(array(
+                    'success' => 1,
+                    'status_code' => 200));
             }
+        }else{
             return response()->json(array(
                 'success' => 1,
-                'status_code' => 200));
+                'status_code' => 200,
+                'message' => 'You are not logged in: Please log in and try again.'));
         }
     }
 
