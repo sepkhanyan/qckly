@@ -115,28 +115,23 @@ class AreasController extends Controller
 
         return redirect('/areas');
     }
-   public function getAreas(Request $request){
+   public function getAreas(Request $request)
+   {
         $lang = $request->header('Accept-Language');
-
         $areas = Areas::all();
         foreach ($areas as $area){
             if ($lang == 'ar'){
                 $arr []=[
                     'area_id'=>$area->id,
                     'area_ar'=>$area->area_ar,
-
-
-                ];
+                    ];
             }else{
                 $arr []=[
                     'area_id'=>$area->id,
                     'area_en'=>$area->area_en,
-
-                ];
+                    ];
             }
-
         }
-
        if ($arr){
             return response()->json(array(
                 'success'=> 1,

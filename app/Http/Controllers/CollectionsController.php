@@ -147,7 +147,6 @@ class CollectionsController extends Controller
     public function update(Request $request, $id)
     {
         $collection = Collection::with('restaurant.menu')->find($id);
-
         $collection->subcategory_id = $request->input('subcategory');
         $collection->name = $request->input('name');
         $collection->description = $request->input('description');
@@ -170,7 +169,8 @@ class CollectionsController extends Controller
         $collection->save();
         $menus = $request->input('menu_item');
         foreach($menus as $menu){
-            $collection_item = CollectionItem::where('collection_id', $id)->first();
+            CollectionItem::where('collection_id', $id)->delete();
+            $collection_item = new CollectionItem();
             $collection_item->menu_id = $menu;
             $collection_item->min_count = $request->input('item_qty');
             $collection_item->max_count = $request->input('item_qty');

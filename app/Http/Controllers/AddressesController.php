@@ -90,7 +90,7 @@ class AddressesController extends Controller
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'message' => 'You are not logged in: Please log in and try again!'));
+                'message' => 'You are not logged in: Please log in and try again.'));
         }
 
     }
@@ -147,7 +147,7 @@ class AddressesController extends Controller
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'message' => 'You are not logged in: Please log in and try again!'));
+                'message' => 'You are not logged in: Please log in and try again.'));
         }
 
     }
@@ -201,13 +201,13 @@ class AddressesController extends Controller
                     return response()->json(array(
                         'success' => 1,
                         'status_code' => 200,
-                        'message' => 'No address available!'));
+                        'message' => 'No address available.'));
                 }
             }
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'message' => 'Address deleted successfully!'));
+                'message' => 'Address deleted successfully.'));
         }
     }
 }
