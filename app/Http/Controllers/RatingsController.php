@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Order;
 use App\Rating;
+use App\User;
 use Illuminate\Http\Request;
 
 class RatingsController extends Controller

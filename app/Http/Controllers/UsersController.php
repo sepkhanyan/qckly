@@ -155,7 +155,8 @@ class UsersController extends Controller
 //                file($url);
                 return response()->json(['success' => 0,
                     'status_code' => 200,
-                    'message' => \Lang::get('message.checkSmsSent')
+                    'message' => \Lang::get('message.checkSmsSent'),
+                    'otp' => $random_val
                 ]);
             } else {
                 $validator = \Validator::make($request->all(), [
@@ -265,7 +266,7 @@ class UsersController extends Controller
                 return response()->json([
                     'success' => 1,
                     'status_code' => 400,
-                    'message' => 'Wrong parameters!'
+                    'message' => 'Please enter valid otp!'
                 ]);
             }
         }
