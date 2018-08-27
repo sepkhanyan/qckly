@@ -161,7 +161,7 @@ class OrdersController extends Controller
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200,
-                    'message' => 'There are no orders right now, place your first order to see it here.'));
+                    'data' => []));
             }
         }else{
             return response()->json(array(
