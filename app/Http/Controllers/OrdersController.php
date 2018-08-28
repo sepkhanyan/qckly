@@ -161,7 +161,8 @@ class OrdersController extends Controller
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200,
-                    'data' => []));
+                    'data' => [],
+                    'message' => 'There are no orders right now, place your first order to see it here.'));
             }
         }else{
             return response()->json(array(
@@ -207,6 +208,13 @@ class OrdersController extends Controller
                 $cart_id = $DataRequests['cart_id'];
                 $payment_type = $DataRequests['payment_type'];
                 $price = $DataRequests['total_price'];
+                $cart = UserCart::where('user_id', $user->id)->where('id', $cart_id)->first();
+                if($cart->delivery_address_id == null){
+                    return response()->json(array(
+                        'success' => 1,
+                        'status_code' => 200,
+                        'message' => 'Please add an address.'));
+                }
                 $order = new Order();
                 $order->user_id = $user->id;
                 $order->cart_id = $cart_id;

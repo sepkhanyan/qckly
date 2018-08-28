@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\MenuRequest;
 use Auth;
 use DB;
-use App\Areas;
+use App\Area;
 use Illuminate\Http\Request;
 use App\Menus;
 use App\Restaurant;

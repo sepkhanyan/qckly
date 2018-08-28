@@ -24,12 +24,12 @@ class UsersController extends Controller
         /*if(isset($data['customer_status'])){
             $users = User::where('user_status',$data['customer_status'])->get();
         }*/
-        /*if(isset($data['customer_date'])){
-            $users = User::where('created_at',$data['customer_date'])->get();
-        }*/
+        if(isset($data['customer_date'])){
+            $customers = User::where('created_at',$data['customer_date'])->get();
+        }
         if(isset($data['customer_search'])){
             $customers = User::where('email','like',$data['customer_search'])
-                /*->orWhere('name','like',$data['customer_search'])*/->get();
+                ->orWhere('username','like',$data['customer_search'])->get();
         }
         return view('customers', ['customers' => $customers]);
     }
@@ -53,10 +53,11 @@ class UsersController extends Controller
     public function store(Request $request)
     {
         $customer = new User();
-        $customer->mobile = $request->input('telephone');
+        $customer->country_code = +974;
+        $customer->mobile_number = $request->input('telephone');
         $customer->email = $request->input('email');
-        $customer->password = bcrypt($request->input('telephone'));
-        $customer->sms_code = '123456';
+//        $customer->password = bcrypt($request->input('telephone'));
+        $customer->otp = '1234';
         $customer->save();
         return redirect('/customers');
     }
@@ -94,9 +95,11 @@ class UsersController extends Controller
     public function update(Request $request, $id)
     {
         $customer = User::find($id);
-        $customer->mobile = $request->input('telephone');
+        $customer->country_code = +974;
+        $customer->mobile_number = $request->input('telephone');
         $customer->email = $request->input('email');
-        $customer->password = bcrypt($request->input('telephone'));
+//        $customer->password = bcrypt($request->input('telephone'));
+        $customer->otp = '1234';
         $customer->save();
         return redirect('/customers');
     }

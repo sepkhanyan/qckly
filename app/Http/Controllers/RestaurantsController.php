@@ -6,7 +6,7 @@ use App\Http\Requests\RestaurantRequest;
 use Auth;
 use Illuminate\Http\Request;
 use App\Restaurant;
-use App\Areas;
+use App\Area;
 use App\WorkingHours;
 use App\Menus;
 use App\Categories;
@@ -49,7 +49,7 @@ class RestaurantsController extends Controller
      */
     public function create()
     {
-        $areas = Areas::all();
+        $areas = Area::all();
         $categories = RestaurantCategory::all();
         return view('new_restaurant', [
             'areas' => $areas,
@@ -167,7 +167,7 @@ class RestaurantsController extends Controller
     {
         $working = WorkingHours::where('restaurant_id', $id)->first();
         $restaurant = Restaurant::find($id);
-        $areas = Areas::all();
+        $areas = Area::all();
         $categories = RestaurantCategory::all();
         return view('restaurant_edit', [
             'restaurant' => $restaurant,

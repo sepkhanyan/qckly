@@ -31,7 +31,7 @@ class Restaurant extends Model
 
     public function area()
     {
-        return $this->belongsTo('App\Areas', 'restaurant_country_id');
+        return $this->belongsTo('App\Area', 'restaurant_country_id');
     }
 
     public function menu()

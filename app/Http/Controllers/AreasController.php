@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AreaRequest;
 use Auth;
 use Illuminate\Http\Request;
-use App\Areas;
+use App\Area;
 use App\Restaurant;
 use Illuminate\Support\Facades\File;
 
@@ -18,11 +18,11 @@ class AreasController extends Controller
      */
     public function index(Request $request)
     {
-        $areas = Areas::paginate(20);
+        $areas = Area::paginate(20);
         $data = $request->all();
 
         if(isset($data['area_search'])){
-            $areas = Areas::where('area_en','like',$data['area_search'])
+            $areas = Area::where('area_en','like',$data['area_search'])
                 ->orWhere('area_ar','like',$data['area_search'])->paginate(20);
         }
         return view('areas', ['areas' => $areas]);
@@ -47,7 +47,7 @@ class AreasController extends Controller
      */
     public function store(AreaRequest $request)
     {
-        $areas = new Areas();
+        $areas = new Area();
         $areas->area_en = $request->input('area_en');
         $areas->area_ar = $request->input('area_ar');
         $areas->save();
@@ -74,7 +74,7 @@ class AreasController extends Controller
      */
     public function update(AreaRequest $request, $id)
     {
-        $area = Areas::find($id);
+        $area = Area::find($id);
         $area->area_en = $request->input('area_en');
         $area->area_ar = $request->input('area_ar');
         $area->save();
@@ -89,7 +89,7 @@ class AreasController extends Controller
      */
     public function edit($id)
     {
-        $area = Areas::find($id);
+        $area = Area::find($id);
         return view('area_edit', ['area' => $area]);
     }
 
@@ -102,7 +102,7 @@ class AreasController extends Controller
     public function deleteAreas(Request $request)
     {
         $id = $request->get('id');
-        $areas = Areas::with('restaurant')->where('id',$id)->get();
+        $areas = Area::with('restaurant')->where('id',$id)->get();
         $images = [];
         foreach ($areas as $area) {
             foreach($area->restaurant as $restaurant){
@@ -110,7 +110,7 @@ class AreasController extends Controller
             }
         }
         File::delete($images);
-        Areas::whereIn('id',$id)->delete();
+        Area::whereIn('id',$id)->delete();
 
 
         return redirect('/areas');
@@ -118,7 +118,7 @@ class AreasController extends Controller
    public function getAreas(Request $request)
    {
         $lang = $request->header('Accept-Language');
-        $areas = Areas::all();
+        $areas = Area::all();
         foreach ($areas as $area){
             if ($lang == 'ar'){
                 $arr []=[

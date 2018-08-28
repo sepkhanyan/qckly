@@ -75,14 +75,8 @@
                                 </th>
                                 <th>
                                     <a class="sort" href="">
-                                        First Name
+                                        Name
                                         <i class="fa fa-sort"></i>
-                                    </a>
-                                </th>
-                                <th>
-                                    <a class="sort" href="">
-                                        Last Name
-                                        <i class="fa fa-sort>"></i>
                                     </a>
                                 </th>
                                 <th>
@@ -98,7 +92,6 @@
                                         <i class="fa fa-sort-"></i>
                                     </a>
                                 </th>
-                                <th class="text-center">Status</th>
                                 <th class="id">
                                     <a class="sort" href="">
                                         ID
@@ -120,12 +113,10 @@
                                             &nbsp;<i class="fa fa-arrow-right"></i>
                                         </a>
                                     </td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>{{$customer->username}}</td>
                                     <td>{{$customer->email}}</td>
-                                    <td>{{$customer->mobile}}</td>
-                                    <td>{{date("jS F, Y", strtotime($customer->created_at))}}</td>
-                                    <td class="text-center"></td>
+                                    <td>{{$customer->mobile_number}}</td>
+                                    <td>{{date("j M, Y", strtotime($customer->created_at))}}</td>
                                     <td>{{$customer->id}}</td>
                                 </tr>
                             @endforeach
