@@ -132,12 +132,12 @@ class UsersController extends Controller
         } else {
             $mobile = $request->input('mobile_number');
             $country_code = $request->input('country_code');
-            if ($mobile == '76524342' || $mobile == '41052196' || $mobile == '11004527' || $mobile == '98765432' || $mobile == '16262777'||$mobile == '63112689' ) {
-                return response()->json(['success' => 0,
-                    'status_code' => 200,
-                    'message' => \Lang::get('message.checkSmsSent')
-                ]);
-            }
+//            if ($mobile == '76524342' || $mobile == '41052196' || $mobile == '11004527' || $mobile == '98765432' || $mobile == '16262777'||$mobile == '63112689' ) {
+//                return response()->json(['success' => 0,
+//                    'status_code' => 200,
+//                    'message' => \Lang::get('message.checkSmsSent')
+//                ]);
+//            }
             $client = User::where('mobile_number', $mobile)
                 ->where('country_code', $country_code)
                  ->where('group_id',0)
