@@ -15,6 +15,17 @@ class OrdersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function index()
+    {
+
+//        $orders = Order::all();
+//        return view('orders', [
+//            'orders' => $orders
+//        ]);
+    }
+
+
     public function orderList(Request $request)
     {
         \Log::info($request->all());
@@ -177,10 +188,6 @@ class OrdersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -262,21 +269,12 @@ class OrdersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -285,10 +283,7 @@ class OrdersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+
 
     /**
      * Remove the specified resource from storage.
@@ -296,13 +291,5 @@ class OrdersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
-    }
 
-    public function getLastOrder()
-    {
-
-    }
 }

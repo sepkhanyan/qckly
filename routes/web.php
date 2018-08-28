@@ -63,11 +63,9 @@ Route::group(['middleware' => ['web', 'auth']], function (){
             Route::post('/delete/collection','CollectionsController@deleteCollection');
             Route::get('/collection/edit/{id}', 'CollectionsController@edit');
             Route::post('/collection/update/{id}', 'CollectionsController@update');
-
+//            Route::get('/orders','OrdersController@index');
 
         });
 });
 
-
-Route::get('/register-as-user','UsersController@registerAsUser');
 

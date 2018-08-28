@@ -22,7 +22,7 @@
                 @endforeach
             </select>
         </div>
-        @if(count($collections)>0)
+        @if(count($collections) > 0)
     </div>
     <div class="row content" >
         <div class="col-md-12">
@@ -42,13 +42,13 @@
                     </div>
                 </div>
                 <div class="panel-body panel-filter" style="display: none;">
-                    <form role="form" id="filter-form" accept-charset="utf-8" method="GET" action="{{url('/collections')}}">
+                    <form role="form" id="filter-form" accept-charset="utf-8" method="GET" action="{{url('/collections/' . $id)}}">
                         <div class="filter-bar">
                             <div class="form-inline">
                                 <div class="row">
                                     <div class="col-md-3 pull-right text-right">
                                         <div class="form-group">
-                                            <input type="text" name="menu_search" class="form-control input-sm" value="" placeholder="Search name, price or stock qty."/>&nbsp;&nbsp;&nbsp;
+                                            <input type="text" name="collection_search" class="form-control input-sm" value="" placeholder="Search name, price or mealtime."/>&nbsp;&nbsp;&nbsp;
                                         </div>
                                         <a class="btn btn-grey" onclick="filterList();" title="Search">
                                             <i class="fa fa-search"></i>
@@ -56,24 +56,17 @@
                                     </div>
                                     <div class="col-md-8 pull-left">
                                         <div class="form-group">
-                                            <select name="menu_category" class="form-control input-sm">
-                                                <option value="">View all categories</option>
-                                                {{--@foreach ($categories as $category)--}}
-                                                    {{--<option value="{{$category->id}}">{{$category->name}}</option>--}}
-                                                {{--@endforeach--}}
+                                            <select name="collection_type" class="form-control input-sm">
+                                                <option value="">View all types</option>
+                                                @foreach ($subcategories as $subcategory)
+                                                    <option value="{{$subcategory->id}}">{{$subcategory->subcategory_en}}</option>
+                                                @endforeach
                                             </select>&nbsp;
-                                        </div>
-                                        <div class="form-group">
-                                            <select name="menu_status" class="form-control input-sm">
-                                                <option value="">View all status</option>
-                                                <option value="1"  >Enabled</option>
-                                                <option value="0"  >Disabled</option>
-                                            </select>
                                         </div>
                                         <a class="btn btn-grey" onclick="filterList();" title="Filter">
                                             <i class="fa fa-filter"></i>
                                         </a>&nbsp;
-                                        {{--<a class="btn btn-grey" href="{{url('/menus/' . $id )}}" title="Clear">--}}
+                                        <a class="btn btn-grey" href="{{url('/collections/' . $id )}}" title="Clear">
                                             <i class="fa fa-times"></i>
                                         </a>
                                     </div>
@@ -117,13 +110,7 @@
                             </th>
                             <th>
                                 <a class="sort" href="">
-                                    Female Caterer Available
-                                    <i class="fa fa-sort"></i>
-                                </a>
-                            </th>
-                            <th>
-                                <a class="sort" href="">
-                                    Service Presentation
+                                    Mealtime
                                     <i class="fa fa-sort>"></i>
                                 </a>
                             </th>
@@ -146,16 +133,9 @@
                                     </td>
                                     <td>{{$collection->name}}</td>
                                     <td>{{$collection->description}}</td>
-                                    <td>{{$collection->subcategory->subcategory_name}}</td>
+                                    <td>{{$collection->subcategory->subcategory_en}}</td>
                                     <td>{{$collection->price}}</td>
-                                    <td>
-                                        @if($collection->female_caterer_available == 1)
-                                            Yes
-                                        @else
-                                            No
-                                        @endif
-                                    </td>
-                                    <td>{{$collection->service_presentation}}</td>
+                                    <td>{{$collection->mealtime}}</td>
                                     <td>{{$collection->id}}</td>
                                 </tr>
                         @endforeach

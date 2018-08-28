@@ -19,17 +19,30 @@ class CollectionsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id=null)
+    public function index(Request $request, $id=null)
     {
+        $subcategories = MenuSubcategory::all();
         $restaurants = Restaurant::all();
         $selectedRestaurant = Restaurant::find($id);
+        $data = $request->all();
         $collections = [];
         if($id){
             $collections = Collection::where('restaurant_id', $id)
-                ->with(['subcategory', 'collectionItem.menu'])->get();
+                ->with(['subcategory', 'collectionItem.menu']);
+            if(isset($data['collection_type'])){
+                $collections = $collections->where('subcategory_id',$data['collection_type']);
 
+            }
+            if(isset($data['collection_search'])){
+                $collections = $collections->where('name','like',$data['collection_search'])
+                    ->orWhere('price','like',$data['collection_search'])
+                    ->orWhere('mealtime','like',$data['collection_search']);
+            }
+            $collections = $collections->get();
         }
         return view('collections', [
+            'id' => $id,
+            'subcategories' => $subcategories,
             'collections' => $collections,
             'restaurants' => $restaurants,
             'selectedRestaurant' => $selectedRestaurant
@@ -85,7 +98,6 @@ class CollectionsController extends Controller
         $collection->max_time = $request->input('max_time');
         $collection->requirements = $request->input('requirements');
         $collection->is_available = $request->input('is_available');
-        $collection->notes = $request->input('notes');
         $collection->price = $request->input('collection_price');
         $collection->max_qty = $request->input('max_quantity');
         $collection->min_qty = $request->input('min_quantity');
@@ -158,7 +170,6 @@ class CollectionsController extends Controller
         $collection->max_time = $request->input('max_time');
         $collection->requirements = $request->input('requirements');
         $collection->is_available = $request->input('is_available');
-        $collection->notes = $request->input('notes');
         $collection->price = $request->input('collection_price');
         $collection->max_qty = $request->input('max_quantity');
         $collection->min_qty = $request->input('min_quantity');
