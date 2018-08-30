@@ -23,8 +23,8 @@ class Order extends Model
         return  $this->belongsTo('App\User', 'user_id');
     }
 
-    public function rating()
+    public function review()
     {
-        return $this->hasMany('App\Rating', 'order_id');
+        return $this->hasMany('App\Review', 'order_id');
     }
 }

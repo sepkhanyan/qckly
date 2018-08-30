@@ -26,10 +26,10 @@ class HomeController extends Controller
     {
         return view('home');
     }
-    public function test($value='')
-    {
-
-        return view('header');
-        
-    }
+//    public function test($value='')
+//    {
+//
+//        return view('header');
+//
+//    }
 }

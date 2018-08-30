@@ -1,4 +1,4 @@
-@extends('header')
+@extends('home')
 @section('content')
     <div class="page-header clearfix">
         <div class="page-action">

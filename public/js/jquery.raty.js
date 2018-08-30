@@ -1,5 +1,5 @@
 /*!
- * jQuery Raty - A Star Rating Plugin
+ * jQuery Raty - A Star Review Plugin
  *
  * The MIT License
  *

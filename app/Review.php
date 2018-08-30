@@ -6,8 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Review extends Model
 {
-    protected $fillable = ['customer_id', 'sale_id', 'sale_type', 'author', 'location_id', 'quality', 'delivery', 'service', 'review_text', 'date_added', 'review'];
-
-
     protected $table = 'reviews';
+
+
+    protected $fillable = ['order_id', 'restaurant_id', 'rate_value', 'review_text'];
+
+    public function order()
+    {
+        return $this->belongsTo('App\Order', 'order_id');
+    }
+
+    public function restaurant()
+    {
+        return $this->belongsTo('App\Restaurant', 'restaurant_id');
+    }
 }

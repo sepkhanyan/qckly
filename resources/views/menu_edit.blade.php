@@ -1,4 +1,4 @@
-@extends('header')
+@extends('home')
 @section('content')
     <div class="page-header clearfix">
         <div class="page-action">
@@ -30,24 +30,24 @@
                 {{ csrf_field() }}
                 <div class="tab-content">
                     <div id="general" class="tab-pane row wrap-all active">
-                        <div class="form-group{{ $errors->has('menu_name') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                             <label for="input-name" class="col-sm-3 control-label">Name</label>
                             <div class="col-sm-5">
-                                <input type="text" name="menu_name" id="input-name" class="form-control" value="{{ $menu->name }}">
-                                @if ($errors->has('menu_name'))
+                                <input type="text" name="name" id="input-name" class="form-control" value="{{ $menu->name }}">
+                                @if ($errors->has('name'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('menu_name') }}</strong>
+                                        <strong>{{ $errors->first('name') }}</strong>
                                     </span>
                                 @endif
                             </div>
                         </div>
-                        <div class="form-group{{ $errors->has('menu_description') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
                             <label for="input-description" class="col-sm-3 control-label">Description</label>
                             <div class="col-sm-5">
-                                <textarea name="menu_description" id="input-description" class="form-control" rows="5">{{ $menu->description }}</textarea>
-                                @if ($errors->has('menu_description'))
+                                <textarea name="description" id="input-description" class="form-control" rows="5">{{ $menu->description }}</textarea>
+                                @if ($errors->has('description'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('menu_description') }}</strong>
+                                        <strong>{{ $errors->first('description') }}</strong>
                                     </span>
                                 @endif
                             </div>
@@ -56,30 +56,30 @@
                             <label for="input-price" class="col-sm-3 control-label">Price</label>
                             <div class="col-sm-5">
                                 <div class="input-group">
-                                    <input type="text" name="menu_price" id="input-price" class="form-control" value="{{ $menu->price }}" />
+                                    <input type="text" name="price" id="input-price" class="form-control" value="{{ $menu->price }}" />
                                     <span class="input-group-addon">
                                         <i class="fa fa-money"></i>
                                     </span>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group{{ $errors->has('menu_category') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('category') ? ' has-error' : '' }}">
                             <label for="input-name" class="col-sm-3 control-label">Category</label>
                             <div class="col-sm-5">
-                                <select name="menu_category" id="category" class="form-control">
+                                <select name="category" id="category" class="form-control">
                                     <option value="">Select category</option>
                                     @foreach ($categories as $category)
                                         <option value="{{$category->id}}">{{$category->name}}</option>
                                     @endforeach
                                 </select>
-                                @if ($errors->has('menu_category'))
+                                @if ($errors->has('category'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('menu_category') }}</strong>
+                                        <strong>{{ $errors->first('category') }}</strong>
                                     </span>
                                 @endif
                             </div>
                         </div>
-                        <div class="form-group{{ $errors->has('menu_photo') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('image') ? ' has-error' : '' }}">
                             <label for="" class="col-sm-3 control-label">
                                 Image
                                 <span class="help-block">Select a file to update menu image, otherwise leave blank.</span>
@@ -91,10 +91,10 @@
                                     </div>
                                     <div class="caption">
                                         <span class="name text-center"></span>
-                                        <input type="file" name="menu_photo" class="form-control">
-                                        @if ($errors->has('menu_photo'))
+                                        <input type="file" name="image" class="form-control">
+                                        @if ($errors->has('image'))
                                             <span class="help-block">
-                                            <strong>{{ $errors->first('menu_photo') }}</strong>
+                                            <strong>{{ $errors->first('image') }}</strong>
                                         </span>
                                         @endif
                                         {{--<input type="hidden" name="menu_photo" value="" id="field" />
@@ -129,14 +129,11 @@
                                 <span class="help-block">Set what mealtime of day your customers can order this menu. Mealtimes can be managed under Localisation -> Mealtimes</span>
                             </label>
                             <div class="col-sm-5">
-                                <select name="mealtime_id" id="mealtime" class="form-control">
+                                <select name="mealtime" id="mealtime" class="form-control">
                                     <option value="0">Available all day</option>
-                                    <option value="12"  >Breakfast (07:00 - 10:00)</option>
-                                    <option value="14"  >Lunch (12:00 - 14:30)</option>
-                                    <option value="16"  >Dinner (18:00 - 20:00)</option>
-                                    <option value="18"  >Breakfast (07:00 - 10:00)</option>
-                                    <option value="20"  >Lunch (12:00 - 14:30)</option>
-                                    <option value="22"  >Dinner (18:00 - 20:00)</option>
+                                    <option value="1"  >Breakfast (07:00 - 10:00)</option>
+                                    <option value="2"  >Lunch (12:00 - 14:30)</option>
+                                    <option value="3"  >Dinner (18:00 - 20:00)</option>
                                 </select>
                             </div>
                         </div>
@@ -188,23 +185,23 @@
                             <div class="col-sm-5">
                                 <div class="btn-group btn-group-switch" data-toggle="buttons">
                                     <label class="btn btn-danger">
-                                        <input type="radio" name="menu_status" value="0" >
+                                        <input type="radio" name="status" value="0" >
                                         Disabled
                                     </label>
                                     <label class="btn btn-success active">
-                                        <input type="radio" name="menu_status" value="1"  checked="checked">
+                                        <input type="radio" name="status" value="1"  checked="checked">
                                         Enabled
                                     </label>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group{{ $errors->has('menu_priority') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('priority') ? ' has-error' : '' }}">
                             <label for="input-menu-priority" class="col-sm-3 control-label">Priority</label>
                             <div class="col-sm-5">
                                 <input type="text" name="menu_priority" id="input-menu-priority" class="form-control" value="{{ $menu->priority }}" />
-                                @if ($errors->has('menu_priority'))
+                                @if ($errors->has('priority'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('menu_priority') }}</strong>
+                                        <strong>{{ $errors->first('priority') }}</strong>
                                     </span>
                                 @endif
                             </div>

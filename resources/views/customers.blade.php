@@ -1,4 +1,4 @@
-@extends('header')
+@extends('home')
 @section('content')
 <div class="page-header">
     <div class="page-action">
@@ -103,6 +103,8 @@
                             <tbody>
 
                             @foreach($customers as $customer)
+
+                                @if($customer->admin != 1)
                                 <tr>
                                     <td class="action"><input type="checkbox" value="{{$customer->id}}" name="delete" />&nbsp;&nbsp;&nbsp;
                                         <a class="btn btn-edit" title="" href="{{ url('/customer/edit/' . $customer->id )}}">
@@ -119,6 +121,7 @@
                                     <td>{{date("j M, Y", strtotime($customer->created_at))}}</td>
                                     <td>{{$customer->id}}</td>
                                 </tr>
+                                @endif
                             @endforeach
 
                             </tbody>

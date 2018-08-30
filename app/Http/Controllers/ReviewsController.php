@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Order;
-use App\Rating;
+use App\Review;
 use App\User;
 use Illuminate\Http\Request;
 
-class RatingsController extends Controller
+class ReviewsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -28,36 +28,36 @@ class RatingsController extends Controller
         } else {
             $restaurant_id = $DataRequests['restaurant_id'];
         }
-        $ratings = Rating::where('restaurant_id', $restaurant_id)
+        $reviews = Review::where('restaurant_id', $restaurant_id)
             ->orderby('created_at', 'desc')
             ->with('order.user')->paginate(20);
-        if(count($ratings) > 0){
-            foreach($ratings as $rating){
-                $date = date("j M, Y", strtotime($rating->created_at));
-                if(isset($rating->review)){
-                    $review = $rating->review;
+        if(count($reviews) > 0){
+            foreach($reviews as $review){
+                $date = date("j M, Y", strtotime($review->created_at));
+                if(isset($review->review_text)){
+                    $review_text = $review->review_text;
                 }else{
-                    $review = '';
+                    $review_text = '';
                 }
                 $arr [] = [
-                    'username' => $rating->order->user->username,
-                    'review_id' => $rating->id,
-                    'rate_value' => $rating->rate_value,
-                    'review' => $review,
+                    'username' => $review->order->user->username,
+                    'review_id' => $review->id,
+                    'rate_value' => $review->rate_value,
+                    'review_text' => $review_text,
                     'review_date' => $date
                 ];
             }
 
             $wholeData = [
-                "total" => $ratings->total(),
-                "count" => $ratings->count(),
+                "total" => $reviews->total(),
+                "count" => $reviews->count(),
                 "per_page" => 20,
-                "current_page" => $ratings->currentPage(),
-                "next_page_url" => $ratings->nextPageUrl(),
-                "prev_page_url" => $ratings->previousPageUrl(),
-                "from" => $ratings->firstItem(),
-                "to" => $ratings->lastItem(),
-                "last_page" => $ratings->lastPage(),
+                "current_page" => $reviews->currentPage(),
+                "next_page_url" => $reviews->nextPageUrl(),
+                "prev_page_url" => $reviews->previousPageUrl(),
+                "from" => $reviews->firstItem(),
+                "to" => $reviews->lastItem(),
+                "last_page" => $reviews->lastPage(),
                 'data' => $arr,
             ];
 
@@ -98,24 +98,24 @@ class RatingsController extends Controller
         if($user){
             $DataRequests = $request->all();
             $validator = \Validator::make($DataRequests, [
-                'rates' => 'required',
+                'reviews' => 'required',
             ]);
             if ($validator->fails()) {
                 return response()->json(array('success' => 1, 'status_code' => 400,
                     'message' => 'Invalid inputs',
                     'error_details' => $validator->messages()));
             } else {
-                $rates = $DataRequests['rates'];
-                foreach($rates as $rate){
-                    $rating = new Rating();
-                    $rating->order_id = $rate['order_id'];
-                    $rating->restaurant_id = $rate['restaurant_id'];
-                    $rating->rate_value = $rate['rate_value'];
-                    if(isset($rate['review'])){
-                        $rating->review = $rate['review'];
+                $reviews = $DataRequests['reviews'];
+                foreach($reviews as $review){
+                    $rating = new Review();
+                    $rating->order_id = $review['order_id'];
+                    $rating->restaurant_id = $review['restaurant_id'];
+                    $rating->rate_value = $review['rate_value'];
+                    if(isset($review['review_text'])){
+                        $rating->review_text = $review['review_text'];
                     }
                     $rating->save();
-                    $order = Order::where('id', $rate['order_id'])->where('user_id', $user->id)->first();
+                    $order = Order::where('id', $review['order_id'])->where('user_id', $user->id)->first();
                     if($order){
                         $order->is_rated = 1;
                         $order->save();

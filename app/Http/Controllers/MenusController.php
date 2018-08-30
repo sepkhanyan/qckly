@@ -78,22 +78,22 @@ class MenusController extends Controller
     public function store(MenuRequest $request)
     {
         $menu = new Menu();
-        $image = $request->file('menu_photo');
+        $image = $request->file('image');
         $name = time() . '.' . $image->getClientOriginalExtension();
         $destinationPath = public_path('/images');
         $image->move($destinationPath, $name);
         $menu->image = $name;
-        $menu->name = $request->input('menu_name');
-        $menu->description = $request->input('menu_description');
-        $menu->price = $request->input('menu_price');
-        $menu->category_id = $request->input('menu_category');
+        $menu->name = $request->input('name');
+        $menu->description = $request->input('description');
+        $menu->price = $request->input('price');
+        $menu->category_id = $request->input('category');
         $menu->stock_qty = $request->input('stock_qty');
         $menu->minimum_qty = $request->input('minimum_qty');
         $menu->subtract_stock = $request->input('subtract_stock');
-        $menu->status = $request->input('menu_status');
-        $menu->priority = $request->input('menu_priority');
-        $menu->mealtime_id = $request->input('mealtime_id');
-        $menu->restaurant_id = $request->input('restaurant_name');
+        $menu->status = $request->input('status');
+        $menu->priority = $request->input('priority');
+        $menu->mealtime = $request->input('mealtime');
+        $menu->restaurant_id = $request->input('restaurant');
         $menu->famous = $request->input('famous');
         $menu->save();
         return redirect('/menus');
@@ -138,21 +138,21 @@ class MenusController extends Controller
     public function update(MenuRequest $request, $id)
     {
         $menu = Menu::find($id);
-        $menu->name = $request->input('menu_name');
-        $menu->description = $request->input('menu_description');
-        $menu->price = $request->input('menu_price');
-        $menu->category_id = $request->input('menu_category');
+        $menu->name = $request->input('name');
+        $menu->description = $request->input('description');
+        $menu->price = $request->input('price');
+        $menu->category_id = $request->input('category');
         $menu->stock_qty = $request->input('stock_qty');
         $menu->minimum_qty = $request->input('minimum_qty');
         $menu->subtract_stock = $request->input('subtract_stock');
-        $menu->status = $request->input('menu_status');
-        $menu->priority = $request->input('menu_priority');
-        $menu->mealtime_id = $request->input('mealtime_id');
+        $menu->status = $request->input('status');
+        $menu->priority = $request->input('priority');
+        $menu->mealtime = $request->input('mealtime');
         $menu->famous = $request->input('famous');
-        if ($request->hasFile('menu_photo')) {
+        if ($request->hasFile('image')) {
             $deletedImage = File::delete(public_path('images/' . $menu->image));
             if ($deletedImage) {
-                $image = $request->file('menu_photo');
+                $image = $request->file('image');
                 $name = time() . '.' . $image->getClientOriginalExtension();
                 $destinationPath = public_path('/images');
                 $image->move($destinationPath, $name);

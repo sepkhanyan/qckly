@@ -1,4 +1,4 @@
-@extends('header')
+@extends('home')
 @section('content')
   <div class="page-header">
         <div class="page-action">
@@ -112,7 +112,7 @@
                                 </th>
                                 <th>
                                     <a class="sort" href="">
-                                        Stock Qty
+                                        Image
                                         <i class="fa fa-sort>"></i>
                                     </a>
                                 </th>
@@ -143,7 +143,7 @@
                                     <td>{{$menu->name}}</td>
                                     <td>{{$menu->price}}</td>
                                     <td>{{$menu->category->name}}</td>
-                                    <td>{{$menu->stock_qty}}</td>
+                                    <td><img src="/images/{{$menu->image}}" width="50px" height="50px"></td>
                                     <td>
                                     @if($menu->status == 1)
                                         Enable
