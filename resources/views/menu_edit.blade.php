@@ -33,7 +33,7 @@
                         <div class="form-group{{ $errors->has('menu_name') ? ' has-error' : '' }}">
                             <label for="input-name" class="col-sm-3 control-label">Name</label>
                             <div class="col-sm-5">
-                                <input type="text" name="menu_name" id="input-name" class="form-control" value="{{ $menu->menu_name }}">
+                                <input type="text" name="menu_name" id="input-name" class="form-control" value="{{ $menu->name }}">
                                 @if ($errors->has('menu_name'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('menu_name') }}</strong>
@@ -44,7 +44,7 @@
                         <div class="form-group{{ $errors->has('menu_description') ? ' has-error' : '' }}">
                             <label for="input-description" class="col-sm-3 control-label">Description</label>
                             <div class="col-sm-5">
-                                <textarea name="menu_description" id="input-description" class="form-control" rows="5">{{ $menu->menu_description }}</textarea>
+                                <textarea name="menu_description" id="input-description" class="form-control" rows="5">{{ $menu->description }}</textarea>
                                 @if ($errors->has('menu_description'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('menu_description') }}</strong>
@@ -56,7 +56,7 @@
                             <label for="input-price" class="col-sm-3 control-label">Price</label>
                             <div class="col-sm-5">
                                 <div class="input-group">
-                                    <input type="text" name="menu_price" id="input-price" class="form-control" value="{{ $menu->menu_price }}" />
+                                    <input type="text" name="menu_price" id="input-price" class="form-control" value="{{ $menu->price }}" />
                                     <span class="input-group-addon">
                                         <i class="fa fa-money"></i>
                                     </span>
@@ -201,7 +201,7 @@
                         <div class="form-group{{ $errors->has('menu_priority') ? ' has-error' : '' }}">
                             <label for="input-menu-priority" class="col-sm-3 control-label">Priority</label>
                             <div class="col-sm-5">
-                                <input type="text" name="menu_priority" id="input-menu-priority" class="form-control" value="{{ $menu->menu_priority }}" />
+                                <input type="text" name="menu_priority" id="input-menu-priority" class="form-control" value="{{ $menu->priority }}" />
                                 @if ($errors->has('menu_priority'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('menu_priority') }}</strong>
@@ -343,7 +343,7 @@
             html += '	<input type="hidden" name="menu_options[' + option_row + '][priority]" id="" value="' + data.priority + '" />';
             html += '	<div class="form-group">';
             html += '		<label for="input-required" class="col-sm-3 control-label">Option Required';
-            html += '			<span class="help-block">Enable/Disable if customer must choose option.</span>';
+            html += '			<span class="help-block">Enable/Disable if customers must choose option.</span>';
             html += '		</label>';
             html += '		<div class="col-sm-5">';
             html += '			<div class="btn-group btn-group-switch" data-toggle="buttons">';

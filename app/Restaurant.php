@@ -26,7 +26,7 @@ class Restaurant extends Model
 
     public function workingHour()
     {
-        return $this->hasMany('App\WorkingHours', 'restaurant_id');
+        return $this->hasMany('App\WorkingHour', 'restaurant_id');
     }
 
     public function area()
@@ -36,7 +36,7 @@ class Restaurant extends Model
 
     public function menu()
     {
-        return $this->hasMany('App\Menus', 'restaurant_id','id');
+        return $this->hasMany('App\Menu', 'restaurant_id','id');
     }
 
     public function categoryRestaurant()

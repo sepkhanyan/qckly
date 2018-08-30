@@ -2,7 +2,7 @@
 @section('content')
     <div class="page-header">
         <div class="page-action">
-            <a href="{{ url('/new/restaurant_category') }}"  class="btn btn-primary">
+            <a href="{{ url('/restaurant_category/create') }}"  class="btn btn-primary">
                 <i class="fa fa-plus"></i>
                 New
             </a>

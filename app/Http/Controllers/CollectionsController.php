@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 
-use App\Categories;
+use App\Category;
 use App\CollectionItem;
 use Illuminate\Http\Request;
 use App\Collection;
 use App\Restaurant;
 use App\MenuSubcategory;
-use App\Menus;
+use App\Menu;
 use Carbon\Carbon;
 
 class CollectionsController extends Controller
@@ -59,17 +59,17 @@ class CollectionsController extends Controller
         $data = $request->all();
         $menus = [];
         if(isset($data['restaurant_name'])) {
-                $menus = Menus::where('restaurant_id', $data['restaurant_name']);
+                $menus = Menu::where('restaurant_id', $data['restaurant_name']);
             if(isset($data['category_name'])) {
-                $menus = $menus->where('menu_category_id', $data['category_name']);
+                $menus = $menus->where('category_id', $data['category_name']);
             }
             $menus = $menus->get();
         }
 
         $restaurants = Restaurant::all();
         $subcategories = MenuSubcategory::all();
-        $categories = Categories::all();
-        return view('new_collection', [
+        $categories = Category::all();
+        return view('collection_create', [
             'restaurants' => $restaurants,
             'subcategories' => $subcategories,
             'menus' => $menus,
@@ -109,7 +109,7 @@ class CollectionsController extends Controller
         $menus = $request->input('menu_item');
         foreach($menus as $menu){
             $collection_item = new CollectionItem();
-            $collection_item->menu_id = $menu;
+            $collection_item->item_id = $menu;
             $collection_item->min_count = $request->input('item_qty');
             $collection_item->max_count = $request->input('item_qty');
             $collection_item->collection_id = $collection->id;
@@ -142,7 +142,7 @@ class CollectionsController extends Controller
         $collection = Collection::with('restaurant.menu')->find($id);
         $menus = $collection->restaurant->menu;
         $subcategories = MenuSubcategory::all();
-        return view('edit_collection', [
+        return view('collection_edit', [
             'menus' => $menus,
             'collection' => $collection,
             'subcategories' => $subcategories,
@@ -179,19 +179,17 @@ class CollectionsController extends Controller
         $collection->allow_person_increase = $request->input('allow_person_increase');
         $collection->save();
         $menus = $request->input('menu_item');
-        foreach($menus as $menu){
-            CollectionItem::where('collection_id', $id)->delete();
-            $collection_item = new CollectionItem();
-            $collection_item->menu_id = $menu;
-            $collection_item->min_count = $request->input('item_qty');
-            $collection_item->max_count = $request->input('item_qty');
-            $collection_item->collection_id = $collection->id;
-            $collection_item->save();
+        if($menus){
+            foreach($menus as $menu){
+                CollectionItem::where('collection_id', $id)->delete();
+                $collection_item = new CollectionItem();
+                $collection_item->item_id = $menu;
+                $collection_item->min_count = $request->input('item_qty');
+                $collection_item->max_count = $request->input('item_qty');
+                $collection_item->collection_id = $collection->id;
+                $collection_item->save();
+            }
         }
-
-
-
-
 
         return redirect('/collections');
     }

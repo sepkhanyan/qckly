@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Order;
 use App\UserCart;
 use App\User;
-use App\Categories;
+use App\Category;
 
 class OrdersController extends Controller
 {
@@ -60,7 +60,7 @@ class OrdersController extends Controller
                     $collections = [];
                     foreach($order->cart->cartCollection as $cart_collection){
                         $menu = [];
-                        $categories = Categories::whereHas('cartItem', function($query) use ($cart_collection){
+                        $categories = Category::whereHas('cartItem', function($query) use ($cart_collection){
                             $query->where('cart_collection_id', $cart_collection->id);
                         })->with(['cartItem' => function ($x) use($cart_collection){
                             $x->where('cart_collection_id', $cart_collection->id);

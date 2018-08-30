@@ -3460,7 +3460,7 @@ $.widget( "ui.droppable", {
 		};
 	},
 
-	// Extension points just to make backcompat sane and avoid duplicating logic
+	// Extensions points just to make backcompat sane and avoid duplicating logic
 	// TODO: Remove in 1.13 along with call to it below
 	_addHoverClass: function() {
 		this._addClass( "ui-droppable-hover" );
@@ -9625,7 +9625,7 @@ function datepicker_getZindex( elem ) {
 }
 /* Date picker manager.
    Use the singleton instance of this class, $.datepicker, to interact with the date picker.
-   Settings for (groups of) date pickers are maintained in an instance object,
+   Setting for (groups of) date pickers are maintained in an instance object,
    allowing multiple different settings on the same page. */
 
 function Datepicker() {

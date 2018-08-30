@@ -32,7 +32,7 @@ class RestaurantCategoriesController extends Controller
      */
     public function create()
     {
-        return view('new_restaurant_category');
+        return view('restaurant_category_create');
     }
 
     /**

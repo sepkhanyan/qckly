@@ -7,9 +7,9 @@ use Auth;
 use DB;
 use App\Area;
 use Illuminate\Http\Request;
-use App\Menus;
+use App\Menu;
 use App\Restaurant;
-use App\Categories;
+use App\Category;
 use Illuminate\Support\Facades\File;
 
 class MenusController extends Controller
@@ -22,25 +22,25 @@ class MenusController extends Controller
     public function index($id = null, Request $request)
     {
 
-        $categories = Categories::all();
+        $categories = Category::all();
         $restaurants = Restaurant::all();
         $selectedRestaurant = Restaurant::find($id);
         $data = $request->all();
         $menus = [];
         if($id){
-            $menus = Menus::whereHas('restaurant',function ($query) use ($id){
+            $menus = Menu::whereHas('restaurant',function ($query) use ($id){
                 $query->where('restaurant_id', $id);})
                 ->with('category');
             if(isset($data['menu_status'])) {
-                $menus = $menus->where('menu_status', $data['menu_status']);
+                $menus = $menus->where('status', $data['menu_status']);
             }
             if(isset($data['menu_category'])){
-                $menus = $menus->where('menu_category_id',$data['menu_category']);
+                $menus = $menus->where('category_id',$data['menu_category']);
 
             }
             if(isset($data['menu_search'])){
-                $menus = $menus->where('menu_name','like',$data['menu_search'])
-                    ->orWhere('menu_price','like',$data['menu_search'])
+                $menus = $menus->where('name','like',$data['menu_search'])
+                    ->orWhere('price','like',$data['menu_search'])
                     ->orWhere('stock_qty','like',$data['menu_search']);
             }
             $menus = $menus->paginate(20);
@@ -62,8 +62,8 @@ class MenusController extends Controller
     public function create()
     {
         $restaurants = Restaurant::all();
-        $categories = Categories::all();
-        return view('new_menus', [
+        $categories = Category::all();
+        return view('menu_create', [
             'restaurants' => $restaurants,
             'categories' => $categories
         ]);
@@ -77,25 +77,25 @@ class MenusController extends Controller
      */
     public function store(MenuRequest $request)
     {
-        $menus = new Menus();
+        $menu = new Menu();
         $image = $request->file('menu_photo');
         $name = time() . '.' . $image->getClientOriginalExtension();
         $destinationPath = public_path('/images');
         $image->move($destinationPath, $name);
-        $menus->menu_photo = $name;
-        $menus->menu_name = $request->input('menu_name');
-        $menus->menu_description = $request->input('menu_description');
-        $menus->menu_price = $request->input('menu_price');
-        $menus->menu_category_id = $request->input('menu_category');
-        $menus->stock_qty = $request->input('stock_qty');
-        $menus->minimum_qty = $request->input('minimum_qty');
-        $menus->subtract_stock = $request->input('subtract_stock');
-        $menus->menu_status = $request->input('menu_status');
-        $menus->menu_priority = $request->input('menu_priority');
-        $menus->mealtime_id = $request->input('mealtime_id');
-        $menus->restaurant_id = $request->input('restaurant_name');
-        $menus->famous = $request->input('famous');
-        $menus->save();
+        $menu->image = $name;
+        $menu->name = $request->input('menu_name');
+        $menu->description = $request->input('menu_description');
+        $menu->price = $request->input('menu_price');
+        $menu->category_id = $request->input('menu_category');
+        $menu->stock_qty = $request->input('stock_qty');
+        $menu->minimum_qty = $request->input('minimum_qty');
+        $menu->subtract_stock = $request->input('subtract_stock');
+        $menu->status = $request->input('menu_status');
+        $menu->priority = $request->input('menu_priority');
+        $menu->mealtime_id = $request->input('mealtime_id');
+        $menu->restaurant_id = $request->input('restaurant_name');
+        $menu->famous = $request->input('famous');
+        $menu->save();
         return redirect('/menus');
     }
 
@@ -118,9 +118,9 @@ class MenusController extends Controller
      */
     public function edit($id)
     {
-        $menu = Menus::find($id);
+        $menu = Menu::find($id);
         $restaurants = Restaurant::all();
-        $categories = Categories::all();
+        $categories = Category::all();
         return view('menu_edit', [
             'restaurants' => $restaurants,
             'categories' => $categories,
@@ -137,29 +137,29 @@ class MenusController extends Controller
      */
     public function update(MenuRequest $request, $id)
     {
-        $menus = Menus::find($id);
-        $menus->menu_name = $request->input('menu_name');
-        $menus->menu_description = $request->input('menu_description');
-        $menus->menu_price = $request->input('menu_price');
-        $menus->menu_category_id = $request->input('menu_category');
-        $menus->stock_qty = $request->input('stock_qty');
-        $menus->minimum_qty = $request->input('minimum_qty');
-        $menus->subtract_stock = $request->input('subtract_stock');
-        $menus->menu_status = $request->input('menu_status');
-        $menus->menu_priority = $request->input('menu_priority');
-        $menus->mealtime_id = $request->input('mealtime_id');
-        $menus->famous = $request->input('famous');
+        $menu = Menu::find($id);
+        $menu->name = $request->input('menu_name');
+        $menu->description = $request->input('menu_description');
+        $menu->price = $request->input('menu_price');
+        $menu->category_id = $request->input('menu_category');
+        $menu->stock_qty = $request->input('stock_qty');
+        $menu->minimum_qty = $request->input('minimum_qty');
+        $menu->subtract_stock = $request->input('subtract_stock');
+        $menu->status = $request->input('menu_status');
+        $menu->priority = $request->input('menu_priority');
+        $menu->mealtime_id = $request->input('mealtime_id');
+        $menu->famous = $request->input('famous');
         if ($request->hasFile('menu_photo')) {
-            $deletedImage = File::delete(public_path('images/' . $menus->menu_photo));
+            $deletedImage = File::delete(public_path('images/' . $menu->image));
             if ($deletedImage) {
                 $image = $request->file('menu_photo');
                 $name = time() . '.' . $image->getClientOriginalExtension();
                 $destinationPath = public_path('/images');
                 $image->move($destinationPath, $name);
-                $menus->menu_photo = $name;
+                $menu->image = $name;
             }
         }
-        $menus->save();
+        $menu->save();
         return redirect('/menus');
     }
 
@@ -172,13 +172,13 @@ class MenusController extends Controller
     public function deleteMenus(Request $request)
     {
         $id = $request->get('id');
-        $menus = Menus::where('id',$id)->get();
+        $menus = Menu::where('id',$id)->get();
         $images = [];
         foreach ($menus as $menu) {
-            $images[] = public_path('images/' . $menu->menu_photo);
+            $images[] = public_path('images/' . $menu->image);
         }
         File::delete($images);
-        Menus::whereIn('id',$id)->delete();
+        Menu::whereIn('id',$id)->delete();
 
         return redirect('/menus');
     }

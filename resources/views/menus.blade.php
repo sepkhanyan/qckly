@@ -2,7 +2,7 @@
 @section('content')
   <div class="page-header">
         <div class="page-action">
-            <a href="{{ url('/new/menus') }}" class="btn btn-primary">
+            <a href="{{ url('/menu/create') }}" class="btn btn-primary">
                 <i class="fa fa-plus"></i>
                 New
             </a>
@@ -136,16 +136,16 @@
                                 <tr>
                                     <td class="action">
                                         <input type="checkbox" value="{{ $menu->id }}" name="delete" />
-                                        <a class="btn btn-edit" title="" href="{{ url('menu/edit/' . $menu->id )}}">
+                                        <a class="btn btn-edit" title="" href="{{ url('/menu/edit/' . $menu->id )}}">
                                             <i class="fa fa-pencil"></i>
                                         </a>&nbsp;&nbsp;
                                     </td>
-                                    <td>{{$menu->menu_name}}</td>
-                                    <td>{{$menu->menu_price}}</td>
+                                    <td>{{$menu->name}}</td>
+                                    <td>{{$menu->price}}</td>
                                     <td>{{$menu->category->name}}</td>
                                     <td>{{$menu->stock_qty}}</td>
                                     <td>
-                                    @if($menu->menu_status == 1)
+                                    @if($menu->status == 1)
                                         Enable
                                     @else
                                         Disable

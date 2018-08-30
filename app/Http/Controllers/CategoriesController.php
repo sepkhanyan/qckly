@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CategoryRequest;
 use Auth;
 use Illuminate\Http\Request;
-use App\Categories;
-use App\Menus;
+use App\Category;
+use App\Menu;
 use Illuminate\Support\Facades\File;
 
 class CategoriesController extends Controller
@@ -18,17 +18,17 @@ class CategoriesController extends Controller
      */
     public function index(Request $request)
     {
-        $categories = Categories::paginate(20);
+        $categories = Category::paginate(20);
         $data = $request->all();
         if(isset($data['category_status'])){
-            $categories = Categories::where('status',$data['category_status'])->paginate(20);
+            $categories = Category::where('status',$data['category_status'])->paginate(20);
         }
         if(isset($data['category_search'])){
-            $categories = Categories::where('name','like',$data['category_search'])
+            $categories = Category::where('name','like',$data['category_search'])
                 ->orWhere('status','like',$data['category_search'])
                 ->orWhere('description','like',$data['category_search'])->paginate(20);
         }
-            return view('categories', ['categories' => $categories]);
+            return view('menu_categories', ['categories' => $categories]);
 
     }
 
@@ -39,7 +39,7 @@ class CategoriesController extends Controller
      */
     public function create()
     {
-        return view('new_category');
+        return view('menu_category_create');
     }
 
     /**
@@ -51,7 +51,7 @@ class CategoriesController extends Controller
     public function store(CategoryRequest $request)
 
     {
-        $categories = new Categories();
+        $categories = new Category();
         $categories->name = $request->input('name');
         $categories->parent_id = $request->input('parent_id');
         $categories->description = $request->input('description');
@@ -82,8 +82,8 @@ class CategoriesController extends Controller
      */
     public function edit($id)
     {
-        $category = Categories::find($id);
-        return view('category_edit', ['category' => $category]);
+        $category = Category::find($id);
+        return view('menu_category_edit', ['category' => $category]);
     }
 
     /**
@@ -95,7 +95,7 @@ class CategoriesController extends Controller
      */
     public function update(CategoryRequest $request, $id)
     {
-        $category = Categories::find($id);
+        $category = Category::find($id);
         $category->name = $request->input('name');
         $category->parent_id = $request->input('parent_id');
         $category->description = $request->input('description');
@@ -114,13 +114,13 @@ class CategoriesController extends Controller
     public function deleteCategories(Request $request)
     {
         $id = $request->get('id');
-        $menus = Menus::where('menu_category_id',$id)->get();
+        $menus = Menu::where('menu_category_id',$id)->get();
         $images = [];
         foreach($menus as $menu){
                 $images [] = public_path('images/' . $menu->menu_photo);
         }
         File::delete($images);
-        Categories::whereIn('id',$id)->delete();
+        Category::whereIn('id',$id)->delete();
         return redirect('/categories');
     }
 }

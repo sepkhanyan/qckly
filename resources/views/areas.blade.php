@@ -2,7 +2,7 @@
 @section('content')
     <div class="page-header">
         <div class="page-action">
-            <a {{--data-toggle="modal" data-target="#addCost"--}} href="{{ url('/new/areas') }}" class="btn btn-primary">
+            <a {{--data-toggle="modal" data-target="#addCost"--}} href="{{ url('/area/create') }}" class="btn btn-primary">
                 <i class="fa fa-plus"></i>
                 New
             </a>
@@ -77,7 +77,7 @@
                                 <tr>
                                     <td class="action">
                                         <input type="checkbox" value="{{ $area->id }}" name="delete" />&nbsp;&nbsp;&nbsp;
-                                        <a class="btn btn-edit" title="" href="{{ url('area/edit/' . $area->id )}}">
+                                        <a class="btn btn-edit" title="" href="{{ url('/area/edit/' . $area->id )}}">
                                             <i class="fa fa-pencil"></i>
                                         </a>&nbsp;&nbsp;
                                     </td>

@@ -32,107 +32,102 @@
             </ul>
         </div>
 
-        <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST" action="{{ url('/customer/update/' . $user->user_id ) }}" >
+        <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST" action="{{ url('/customer/update/' . $customer->id ) }}" >
             {{ csrf_field() }}
             <div class="tab-content">
                 <div id="general" class="tab-pane row wrap-all active">
                     <div class="form-group">
-                        <label for="input-first-name" class="col-sm-3 control-label">First Name</label>
+                        <label for="input_name" class="col-sm-3 control-label">Name</label>
                         <div class="col-sm-5">
-                            <input type="text" name="first_name" id="input-first-name" class="form-control" value="" />
+                            <input type="text" name="name" id="input_name" class="form-control" value="{{$customer->username}}" />
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="input-last-name" class="col-sm-3 control-label">Last Name</label>
+                        <label for="input_email" class="col-sm-3 control-label">Email</label>
                         <div class="col-sm-5">
-                            <input type="text" name="last_name" id="input-last-name" class="form-control" value="" />
+                            <input type="text" name="email" id="input_email" class="form-control" value="{{$customer->email}}" />
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="input-email" class="col-sm-3 control-label">Email</label>
+                        <label for="input_telephone" class="col-sm-3 control-label">Telephone</label>
                         <div class="col-sm-5">
-                            <input type="text" name="email" id="input-email" class="form-control" value="" />
+                            <input type="text" name="telephone" id="input_telephone" class="form-control" value="{{$customer->mobile_number}}" />
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="input-telephone" class="col-sm-3 control-label">Telephone</label>
-                        <div class="col-sm-5">
-                            <input type="text" name="telephone" id="input-telephone" class="form-control" value="{{$user->mobile}}" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="input-password" class="col-sm-3 control-label">
+                        <label for="input_password" class="col-sm-3 control-label">
                             Password
                             <span class="help-block">Leave blank to leave password unchanged</span>
                         </label>
                         <div class="col-sm-5">
-                            <input type="password" name="password" id="input-password" class="form-control" value="" autocomplete="off" />
+                            <input type="password" name="password" id="input_password" class="form-control" value="" autocomplete="off" />
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="input-confirm-password" class="col-sm-3 control-label">Confirm Password</label>
+                        <label for="input_confirm_password" class="col-sm-3 control-label">Confirm Password</label>
                         <div class="col-sm-5">
-                            <input type="password" name="confirm_password" id="input-confirm-password" class="form-control" value="" />
+                            <input type="password" name="confirm_password" id="input_confirm_password" class="form-control" value="" />
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="input-security-question" class="col-sm-3 control-label">Security Question</label>
-                        <div class="col-sm-5">
-                            <select name="security_question_id" id="input-security-question" class="form-control">
-                                <option value="">— Select —</option>
-                                <option value="11" selected="selected">Whats your pets name?</option>
-                                <option value="12">What high school did you attend?</option>
-                                <option value="14">What is your mother's name?</option>
-                                <option value="15">What is your place of birth?</option>
-                                <option value="16">Whats your favourite teacher's name?</option>
-                                <option value="13">What is your father's middle name?</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="input-security-answer" class="col-sm-3 control-label">Security Answer</label>
-                        <div class="col-sm-5">
-                            <input type="text" name="security_answer" id="input-security-answer" class="form-control" value="" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="input-customer-group-id" class="col-sm-3 control-label">Customer Group</label>
-                        <div class="col-sm-5">
-                            <select name="customer_group_id" id="input-customer-group-id" class="form-control">
-                                <option value="11"  selected="selected" >Default</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="input-newsletter" class="col-sm-3 control-label">Newsletter</label>
-                        <div class="col-sm-5">
-                            <div id="input-newsletter" class="btn-group btn-group-switch" data-toggle="buttons">
-                                <label class="btn btn-danger active">
-                                    <input type="radio" name="newsletter" value="0"  checked="checked">
-                                    Un-subscribe
-                                </label>
-                                <label class="btn btn-success">
-                                    <input type="radio" name="newsletter" value="1" >
-                                    Subscribe
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="input-status" class="col-sm-3 control-label">Status</label>
-                        <div class="col-sm-5">
-                            <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                <label class="btn btn-danger">
-                                    <input type="radio" name="status" value="0" >
-                                    Disabled
-                                </label>
-                                <label class="btn btn-success active">
-                                    <input type="radio" name="status" value="1"  checked="checked">
-                                    Enabled
-                                </label>
-                            </div>
-                        </div>
-                    </div>
+                    {{--<div class="form-group">--}}
+                        {{--<label for="input-security-question" class="col-sm-3 control-label">Security Question</label>--}}
+                        {{--<div class="col-sm-5">--}}
+                            {{--<select name="security_question_id" id="input-security-question" class="form-control">--}}
+                                {{--<option value="">— Select —</option>--}}
+                                {{--<option value="11" selected="selected">Whats your pets name?</option>--}}
+                                {{--<option value="12">What high school did you attend?</option>--}}
+                                {{--<option value="14">What is your mother's name?</option>--}}
+                                {{--<option value="15">What is your place of birth?</option>--}}
+                                {{--<option value="16">Whats your favourite teacher's name?</option>--}}
+                                {{--<option value="13">What is your father's middle name?</option>--}}
+                            {{--</select>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+                    {{--<div class="form-group">--}}
+                        {{--<label for="input-security-answer" class="col-sm-3 control-label">Security Answer</label>--}}
+                        {{--<div class="col-sm-5">--}}
+                            {{--<input type="text" name="security_answer" id="input-security-answer" class="form-control" value="" />--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+                    {{--<div class="form-group">--}}
+                        {{--<label for="input-customercustomersd" class="col-sm-3 control-label">Customer Group</label>--}}
+                        {{--<div class="col-sm-5">--}}
+                            {{--<select name="customer_group_id" id="input-customercustomersd" class="form-control">--}}
+                                {{--<option value="0"  selected="selected" >Customer</option>--}}
+                                {{--<option value="1"  selected="selected" >Admin</option>--}}
+                            {{--</select>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+                    {{--<div class="form-group">--}}
+                        {{--<label for="input-newsletter" class="col-sm-3 control-label">Newsletter</label>--}}
+                        {{--<div class="col-sm-5">--}}
+                            {{--<div id="input-newsletter" class="btn-group btn-group-switch" data-toggle="buttons">--}}
+                                {{--<label class="btn btn-danger active">--}}
+                                    {{--<input type="radio" name="newsletter" value="0"  checked="checked">--}}
+                                    {{--Un-subscribe--}}
+                                {{--</label>--}}
+                                {{--<label class="btn btn-success">--}}
+                                    {{--<input type="radio" name="newsletter" value="1" >--}}
+                                    {{--Subscribe--}}
+                                {{--</label>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+                    {{--<div class="form-group">--}}
+                        {{--<label for="input-status" class="col-sm-3 control-label">Status</label>--}}
+                        {{--<div class="col-sm-5">--}}
+                            {{--<div class="btn-group btn-group-switch" data-toggle="buttons">--}}
+                                {{--<label class="btn btn-danger">--}}
+                                    {{--<input type="radio" name="status" value="0" >--}}
+                                    {{--Disabled--}}
+                                {{--</label>--}}
+                                {{--<label class="btn btn-success active">--}}
+                                    {{--<input type="radio" name="status" value="1"  checked="checked">--}}
+                                    {{--Enabled--}}
+                                {{--</label>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
                 </div>
 
                 <div id="addresses" class="tab-pane row wrap-all">

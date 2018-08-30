@@ -138,7 +138,7 @@ $(document).ready(function() {
         $.ajax({
 
             method: "POST",
-            url:"/delete/collection",
+            url:"/collection/delete",
             data:{id:checkValues,_token:token },
             success:function(data){
 
@@ -162,7 +162,7 @@ $(document).ready(function() {
         $.ajax({
 
             method: "POST",
-            url:"/delete/menu_subcategory",
+            url:"/menu_subcategory/delete",
             data:{id:checkValues,_token:token },
             success:function(data){
 
@@ -183,7 +183,7 @@ $(document).ready(function() {
         $.ajax({
 
             method: "POST",
-            url:"/delete/restaurant_category",
+            url:"/restaurant_category/delete",
             data:{id:checkValues,_token:token },
             success:function(data){
 
@@ -204,7 +204,7 @@ $(document).ready(function() {
             $.ajax({
 
                 method: "POST",
-                url:"/delete/restaurants",
+                url:"/restaurant/delete",
                 data:{id:checkValues,_token:token },
                 success:function(data){
 
@@ -224,7 +224,7 @@ $(document).ready(function() {
         $.ajax({
 
             method: "POST",
-            url:"/delete/areas",
+            url:"/area/delete",
             data:{id:checkValues,_token:token },
             success:function(data){
 
@@ -244,7 +244,7 @@ $(document).ready(function() {
         $.ajax({
 
             method: "POST",
-            url:"/delete/categories",
+            url:"/category/delete",
             data:{id:checkValues,_token:token },
             success:function(data){
 
@@ -264,7 +264,7 @@ $(document).ready(function() {
         $.ajax({
 
             method: "POST",
-            url:"/delete/customers",
+            url:"/customer/delete",
             data:{id:checkValues,_token:token },
             success:function(data){
 
@@ -284,7 +284,7 @@ $(document).ready(function() {
         $.ajax({
 
             method: "POST",
-            url:"/delete/menus",
+            url:"/menu/delete",
             data:{id:checkValues,_token:token },
             success:function(data){
 

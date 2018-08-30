@@ -546,7 +546,7 @@
 						{{--<div class="page-action">--}}
 							{{--<a href="#" class="btn btn-default">--}}
 								{{--<i class="fa fa-refresh"></i>--}}
-								{{--Chek Updates--}}
+								{{--Chek Update--}}
 							{{--</a>--}}
 				{{--</div>--}}
 				{{--</div>--}}

@@ -2,7 +2,7 @@
 @section('content')
     <div class="page-header">
         <div class="page-action">
-            <a  class="btn btn-primary"  href="{{ url('/new/collection') }}"{{--data-toggle="modal" data-target="#myModal"--}}>
+            <a  class="btn btn-primary"  href="{{ url('/collection/create') }}"{{--data-toggle="modal" data-target="#myModal"--}}>
                 <i class="fa fa-plus"></i>
                 New
             </a>

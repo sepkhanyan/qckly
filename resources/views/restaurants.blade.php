@@ -2,7 +2,7 @@
 @section('content')
     <div class="page-header">
         <div class="page-action">
-            <a href="{{ url('/new/restaurants') }}"  class="btn btn-primary">
+            <a href="{{ url('/restaurant/create') }}"  class="btn btn-primary">
                 <i class="fa fa-plus"></i>
                 New
             </a>
@@ -114,7 +114,7 @@
                                 <tr>
                                     <td class="action">
                                         <input type="checkbox" value="{{ $restaurant->id }}" name="delete" />&nbsp;&nbsp;&nbsp;
-                                        <a class="btn btn-edit" title="" href="{{ url('restaurant/edit/' . $restaurant->id )}}">
+                                        <a class="btn btn-edit" title="" href="{{ url('/restaurant/edit/' . $restaurant->id )}}">
                                             <i class="fa fa-pencil"></i>
                                         </a>&nbsp;&nbsp;
                                     </td>

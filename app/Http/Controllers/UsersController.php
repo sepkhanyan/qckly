@@ -41,7 +41,7 @@ class UsersController extends Controller
      */
     public function create()
     {
-        return view('new_customer');
+        return view('customer_create');
     }
 
     /**
@@ -53,11 +53,12 @@ class UsersController extends Controller
     public function store(Request $request)
     {
         $customer = new User();
+        $customer->username = $request->input('name');
         $customer->country_code = +974;
         $customer->mobile_number = $request->input('telephone');
         $customer->email = $request->input('email');
-//        $customer->password = bcrypt($request->input('telephone'));
         $customer->otp = '1234';
+        $customer->lang = 'en';
         $customer->save();
         return redirect('/customers');
     }
@@ -95,11 +96,12 @@ class UsersController extends Controller
     public function update(Request $request, $id)
     {
         $customer = User::find($id);
+        $customer->username = $request->input('name');
         $customer->country_code = +974;
         $customer->mobile_number = $request->input('telephone');
         $customer->email = $request->input('email');
-//        $customer->password = bcrypt($request->input('telephone'));
         $customer->otp = '1234';
+        $customer->lang = 'en';
         $customer->save();
         return redirect('/customers');
     }

@@ -2,7 +2,7 @@
 @section('content')
 <div class="page-header">
     <div class="page-action">
-        <a href="{{ url('/new/customers') }}" class="btn btn-primary">
+        <a href="{{ url('/customer/create') }}" class="btn btn-primary">
             <i class="fa fa-plus"></i>
             New
         </a>
@@ -104,8 +104,8 @@
 
                             @foreach($customers as $customer)
                                 <tr>
-                                    <td class="action"><input type="checkbox" value="{{$customer->user_id}}" name="delete" />&nbsp;&nbsp;&nbsp;
-                                        <a class="btn btn-edit" title="" href="{{ url('customer/edit/' . $customer->id )}}">
+                                    <td class="action"><input type="checkbox" value="{{$customer->id}}" name="delete" />&nbsp;&nbsp;&nbsp;
+                                        <a class="btn btn-edit" title="" href="{{ url('/customer/edit/' . $customer->id )}}">
                                             <i class="fa fa-pencil"></i>
                                         </a>&nbsp;&nbsp;
                                         <a class="btn btn-info " title=""  >

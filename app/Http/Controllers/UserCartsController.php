@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Address;
-use App\Categories;
+use App\Category;
 use App\Restaurant;
 use App\UserCart;
 use App\UserCartItem;
 use App\UserCartCollection;
-use App\Menus;
+use App\Menu;
 use App\Collection;
 use App\CollectionItem;
 use Carbon\Carbon;
@@ -119,7 +119,7 @@ class UserCartsController extends Controller
                             $collection_items = CollectionItem::where('collection_id', $collection_id)->with('menu')->get();
                             foreach ($collection_items as $collection_item) {
                                 $cart_item = new UserCartItem();
-                                $cart_item->menu_id = $collection_item->menu->menu_category_id;
+                                $cart_item->menu_id = $collection_item->menu->category_id;
                                 $cart_item->item_id = $collection_item->menu->id;
                                 $cart_item->quantity = $collection_item->min_count;
                                 $cart_item->cart_collection_id = $cart_collection->id;
@@ -356,7 +356,7 @@ class UserCartsController extends Controller
                     $total = 0;
                     foreach($cart->cartCollection as $cart_collection){
                         $menu = [];
-                        $categories = Categories::whereHas('cartItem', function($query) use ($cart_collection){
+                        $categories = Category::whereHas('cartItem', function($query) use ($cart_collection){
                             $query->where('cart_collection_id', $cart_collection->id);
                         })->with(['cartItem'=>function ($x) use($cart_collection){
                             $x->where('cart_collection_id', $cart_collection->id);
@@ -366,8 +366,8 @@ class UserCartsController extends Controller
                             foreach($category->cartItem as $cartItem){
                                 $items [] = [
                                     'item_id' => $cartItem->item_id,
-                                    'item_name' => $cartItem->menu->menu_name,
-                                    'item_price' => $cartItem->menu->menu_price,
+                                    'item_name' => $cartItem->menu->name,
+                                    'item_price' => $cartItem->menu->price,
                                     'item_quantity' => $cartItem->quantity,
                                     'item_price_unit' => 'QR'
                                 ];
@@ -523,20 +523,20 @@ class UserCartsController extends Controller
                 $items = [];
                 $menu = [];
                 foreach ($collection->collectionItem as $collection_item) {
-                    $foodlist [] = $collection_item->menu->menu_name;
-                    $image = url('/') . '/images/' . $collection_item->menu->menu_photo;
+                    $foodlist [] = $collection_item->menu->name;
+                    $image = url('/') . '/images/' . $collection_item->menu->image;
                     array_push($foodlist_images, $image);
-                    if ($collection_item->menu->menu_status == 1) {
+                    if ($collection_item->menu->status == 1) {
                         $status = true;
                     } else {
                         $status = false;
                     }
 
                     $items  [] = [
-                        'item_id' => $collection_item->menu_id,
-                        'item_name' => $collection_item->menu->menu_name,
+                        'item_id' => $collection_item->item_id,
+                        'item_name' => $collection_item->menu->name,
                         'item_qty' => $collection_item->min_count,
-                        'item_price' => $collection_item->menu->menu_price,
+                        'item_price' => $collection_item->menu->price,
                         'item_price_unit' => 'QR',
                         'item_availability' => $status
 
@@ -548,8 +548,8 @@ class UserCartsController extends Controller
                 ];
             }else{
                 foreach ($collection->collectionItem as $collection_item) {
-                    $foodlist [] = $collection_item->menu->menu_name;
-                    $image = url('/') . '/images/' . $collection_item->menu->menu_photo;
+                    $foodlist [] = $collection_item->menu->name;
+                    $image = url('/') . '/images/' . $collection_item->menu->image;
                     array_push($foodlist_images, $image);
                     $min_qty = $collection_item->min_count;
                     $max_qty = $collection_item->max_count;
@@ -581,7 +581,7 @@ class UserCartsController extends Controller
                         $collection->max_qty = -1;
                     }
                 }
-                $categories = Categories::with(['menu' => function ($query) use ($collection_id){
+                $categories = Category::with(['menu' => function ($query) use ($collection_id){
                     $query->whereHas('collectionItem', function ($x) use($collection_id){
                         $x->where('collection_id', $collection_id);
                     });
@@ -590,15 +590,15 @@ class UserCartsController extends Controller
                 foreach($categories as $category){
                     $items = [];
                     foreach($category->menu as $item){
-                        if ($item->menu_status == 1) {
+                        if ($item->status == 1) {
                             $status = true;
                         } else {
                             $status = false;
                         }
                         $items  [] = [
                             'item_id' => $item->id,
-                            'item_name' => $item->menu_name,
-                            'item_price' => $item->menu_price,
+                            'item_name' => $item->name,
+                            'item_price' => $item->price,
                             'item_price_unit' => 'QR',
                             'item_availability' => $status
 
@@ -645,7 +645,7 @@ class UserCartsController extends Controller
                 'food_list' => $foodlist,
                 'service_presentation' => $collection->service_presentation,
                 'instruction' => $collection->instruction,
-                'food_item_image' => url('/') . '/images/' . $collection_item->menu->menu_photo,
+                'food_item_image' => url('/') . '/images/' . $collection_item->menu->image,
                 'food_list_images' => $foodlist_images,
                 'setup_time' => $setup,
                 'requirement' => $requirement,
@@ -713,6 +713,11 @@ class UserCartsController extends Controller
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200));
+        }else{
+            return response()->json(array(
+                'success' => 1,
+                'status_code' => 200,
+                'message' => 'You are not logged in: Please log in and try again.'));
         }
 
     }

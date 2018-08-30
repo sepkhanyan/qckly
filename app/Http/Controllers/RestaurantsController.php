@@ -7,9 +7,9 @@ use Auth;
 use Illuminate\Http\Request;
 use App\Restaurant;
 use App\Area;
-use App\WorkingHours;
-use App\Menus;
-use App\Categories;
+use App\WorkingHour;
+use App\Menu;
+use App\Category;
 use App\RestaurantCategory;
 use App\CategoryRestaurant;
 use DB;
@@ -51,7 +51,7 @@ class RestaurantsController extends Controller
     {
         $areas = Area::all();
         $categories = RestaurantCategory::all();
-        return view('new_restaurant', [
+        return view('restaurant_create', [
             'areas' => $areas,
             'categories' => $categories
         ]);
@@ -115,7 +115,7 @@ class RestaurantsController extends Controller
 
         $days = $request->input('daily_days');
             foreach($days as $day){
-                $working = new WorkingHours();
+                $working = new WorkingHour();
                 $working->type = $request->input('opening_type');
                 $working->weekday = $day;
                 $working->opening_time = Carbon::parse("11:00 AM");
@@ -165,7 +165,7 @@ class RestaurantsController extends Controller
      */
     public function edit($id)
     {
-        $working = WorkingHours::where('restaurant_id', $id)->first();
+        $working = WorkingHour::where('restaurant_id', $id)->first();
         $restaurant = Restaurant::find($id);
         $areas = Area::all();
         $categories = RestaurantCategory::all();
@@ -243,9 +243,9 @@ class RestaurantsController extends Controller
 
         $days = $request->input('daily_days');
         if($days){
-            WorkingHours::where('restaurant_id', $id)->delete();
+            WorkingHour::where('restaurant_id', $id)->delete();
             foreach($days as $day){
-                $working = new WorkingHours();
+                $working = new WorkingHour();
                 $working->type = $request->input('opening_type');
                 $working->weekday = $day;
                 $working->opening_time = Carbon::parse("11:00 AM");
@@ -289,7 +289,7 @@ class RestaurantsController extends Controller
         foreach ($restaurants as $restaurant) {
 
             foreach($restaurant->menu as $menu){
-                $menu_images[] = public_path('images/' . $menu->menu_photo);
+                $menu_images[] = public_path('images/' . $menu->image);
             }
             $restaurant_images[] = public_path('images/' . $restaurant->restaurant_image);
         }
@@ -314,7 +314,7 @@ class RestaurantsController extends Controller
                 foreach($restaurant->menu as $menu){
 
                     if ($menu->famous == 1){
-                        $image = url('/').'/images/'. $menu->menu_photo;
+                        $image = url('/').'/images/'. $menu->image;
                         array_push($famous , $image);
                     }
                 }
@@ -391,7 +391,7 @@ class RestaurantsController extends Controller
                     foreach($restaurant->menu as $menu){
 
                         if ($menu->famous == 1){
-                            $image = url('/').'/images/'. $menu->menu_photo;
+                            $image = url('/').'/images/'. $menu->image;
                             array_push($famous , $image);
                         }
                     }
@@ -497,7 +497,7 @@ class RestaurantsController extends Controller
                     foreach($restaurant->menu as $menu){
 
                         if ($menu->famous == 1){
-                            $image = url('/').'/images/'. $menu->menu_photo;
+                            $image = url('/').'/images/'. $menu->image;
                             array_push($famous , $image);
                         }
                     }
@@ -581,15 +581,15 @@ class RestaurantsController extends Controller
             foreach($restaurants as $restaurant){
                 if(count($restaurant->menu) > 0){
                     foreach($restaurant->menu as $menu){
-                        if($menu->menu_status ==1){
+                        if($menu->status ==1){
                             $status = 'Enable';
                         }else{
                             $status = 'Disable';
                         }
                         $restaurant_menu [] = [
                             'menu_id' => $menu->id,
-                            'menu_name' => $menu->menu_name,
-                            'menu_price' => $menu->menu_price,
+                            'menu_name' => $menu->name,
+                            'menu_price' => $menu->price,
                             'menu_category' => $menu->category['name'],
                             'menu_stock_qty' => $menu->stock_qty,
                             'menu_status' => $status,
@@ -672,20 +672,21 @@ class RestaurantsController extends Controller
                                 $items = [];
                                 $menu = [];
                                 foreach ($collection->collectionItem as $collection_item) {
-                                    $foodlist [] = $collection_item->menu->menu_name;
-                                    $image = url('/') . '/images/' . $collection_item->menu->menu_photo;
+                                    $foodlist [] = $collection_item->menu->name;
+                                    $image = url('/') . '/images/' . $collection_item->menu->image;
                                     array_push($foodlist_images, $image);
-                                    if ($collection_item->menu->menu_status == 1) {
+                                    if ($collection_item->menu->status == 1) {
                                         $status = true;
                                     } else {
                                         $status = false;
                                     }
 
                                         $items  [] = [
-                                            'item_id' => $collection_item->menu_id,
-                                            'item_name' => $collection_item->menu->menu_name,
+                                            'item_id' => $collection_item->item_id,
+                                            'item_name' => $collection_item->menu->name,
+                                            'item_image' => url('/') . '/images/' .  $collection_item->menu->image,
                                             'item_qty' => $collection_item->min_count,
-                                            'item_price' => $collection_item->menu->menu_price,
+                                            'item_price' => $collection_item->menu->price,
                                             'item_price_unit' => 'QR',
                                             'item_availability' => $status
 
@@ -697,8 +698,8 @@ class RestaurantsController extends Controller
                                 ];
                             }else{
                                 foreach ($collection->collectionItem as $collection_item) {
-                                    $foodlist [] = $collection_item->menu->menu_name;
-                                    $image = url('/') . '/images/' . $collection_item->menu->menu_photo;
+                                    $foodlist [] = $collection_item->menu->name;
+                                    $image = url('/') . '/images/' . $collection_item->menu->image;
                                     array_push($foodlist_images, $image);
                                        $min_qty = $collection_item->min_count;
                                        $max_qty = $collection_item->max_count;
@@ -731,26 +732,27 @@ class RestaurantsController extends Controller
                                        }
                                 }
 
-                                $categories = Categories::with(['menu' => function ($query) use ($collection, $restaurant_id){
+                                $categories = Category::with(['menu' => function ($query) use ($collection, $restaurant_id){
                                     $query->where('restaurant_id', $restaurant_id)
-                                        ->with(['collectionItem' => function ($x) use ($collection){
+                                        ->whereHas('collectionItem', function ($x) use ($collection){
                                         $x->where('collection_id', $collection->id);
-                                    }]);
+                                    });
                                 }])->get();
 
                                 $menu = [];
                                 foreach($categories as $category){
                                     $items = [];
                                     foreach($category->menu as $item){
-                                        if ($item->menu_status == 1) {
+                                        if ($item->status == 1) {
                                             $status = true;
                                         } else {
                                             $status = false;
                                         }
                                         $items  [] = [
                                             'item_id' => $item->id,
-                                            'item_name' => $item->menu_name,
-                                            'item_price' => $item->menu_price,
+                                            'item_name' => $item->name,
+                                            'item_image' => url('/') . '/images/' .  $collection_item->menu->image,
+                                            'item_price' => $item->price,
                                             'item_price_unit' => 'QR',
                                             'item_availability' => $status
 
@@ -794,7 +796,7 @@ class RestaurantsController extends Controller
                                 'food_list' => $foodlist,
                                 'service_presentation' => $collection->service_presentation,
                                 'instruction' => $collection->instruction,
-                                'food_item_image' => url('/') . '/images/' . $collection_item->menu->menu_photo,
+                                'food_item_image' => url('/') . '/images/' . $collection_item->menu->image,
                                 'food_list_images' => $foodlist_images,
                                 'setup_time' => $setup,
                                 'requirement' => $requirement,

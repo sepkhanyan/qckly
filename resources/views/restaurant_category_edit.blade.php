@@ -27,7 +27,7 @@
                 </ul>
             </div>
 
-            <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST" action="{{ url('/restaurant_category/update/' . $category->restaurant_category_id) }}">
+            <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST" action="{{ url('/restaurant_category/update/' . $category->id) }}">
                 {{ csrf_field() }}
                 <div class="tab-content">
                     <div id="general" class="tab-pane row wrap-all active">
