@@ -50,20 +50,20 @@
                         <div class="form-group">
                             <label for="restaurant_category" class="col-sm-3 control-label">Category</label>
                             <div class="col-sm-5">
-                                <select name="restaurant_category[]" id="restaurant_category[]" class="form-control" tabindex="-1" multiple="multiple">
+                                <select name="category[]" id="category[]" class="form-control" tabindex="-1" multiple="multiple">
                                     @foreach($categories as $category)
                                         <option value="{{$category->id}}">{{$category->restaurant_category_name_en}}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group{{ $errors->has('restaurant_name') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                             <label for="input-name" class="col-sm-3 control-label">Name</label>
                             <div class="col-sm-5">
-                                <input type="text" name="restaurant_name" id="input-name" class="form-control" value="{{ $restaurant->restaurant_name }}" />
-                                @if ($errors->has('restaurant_name'))
+                                <input type="text" name="name" id="input-name" class="form-control" value="{{ $restaurant->name }}" />
+                                @if ($errors->has('name'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('restaurant_name') }}</strong>
+                                        <strong>{{ $errors->first('name') }}</strong>
                                     </span>
                                 @endif
                             </div>
@@ -71,7 +71,7 @@
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                             <label for="input-email" class="col-sm-3 control-label">Email</label>
                             <div class="col-sm-5">
-                                <input type="text" name="email" id="input-email" class="form-control" value="{{ $restaurant->restaurant_email }}" />
+                                <input type="text" name="email" id="input-email" class="form-control" value="{{ $restaurant->email }}" />
                                 @if ($errors->has('email'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('email') }}</strong>
@@ -82,7 +82,7 @@
                         <div class="form-group{{ $errors->has('telephone') ? ' has-error' : '' }}">
                             <label for="input-telephone" class="col-sm-3 control-label">Telephone</label>
                             <div class="col-sm-5">
-                                <input type="text" name="telephone" id="input-telephone" class="form-control" value="{{ $restaurant->restaurant_telephone }}" />
+                                <input type="text" name="telephone" id="input-telephone" class="form-control" value="{{ $restaurant->telephone }}" />
                                 @if ($errors->has('telephone'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('telephone') }}</strong>
@@ -92,30 +92,24 @@
                         </div>
 
                         <h4 class="tab-pane-title">Address</h4>
-                        <div class="form-group{{ $errors->has('address[address_1]') ? ' has-error' : '' }}">
-                            <label for="input-address-1" class="col-sm-3 control-label">Address 1</label>
+                        <div class="form-group{{ $errors->has('address') ? ' has-error' : '' }}">
+                            <label for="input-address" class="col-sm-3 control-label">Address</label>
                             <div class="col-sm-5">
-                                <input type="text" name="address[address_1]" id="input-address-1" class="form-control" value="{{ $restaurant->restaurant_address_1 }}" />
-                                @if ($errors->has('address[address_1]'))
+                                <input type="text" name="address" id="input-address" class="form-control" value="{{ $restaurant->address }}" />
+                                @if ($errors->has('address'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('address[address_1]') }}</strong>
+                                        <strong>{{ $errors->first('address') }}</strong>
                                     </span>
                                 @endif
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="input-address-2" class="col-sm-3 control-label">Address 2</label>
-                            <div class="col-sm-5">
-                                <input type="text" name="address[address_2]" id="input-address-2" class="form-control" value="" />
-                            </div>
-                        </div>
-                        <div class="form-group{{ $errors->has('address[city]') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('city') ? ' has-error' : '' }}">
                             <label for="input-city" class="col-sm-3 control-label">City</label>
                             <div class="col-sm-5">
-                                <input type="text" name="address[city]" id="input-city" class="form-control" value=" {{ $restaurant->restaurant_city }}" />
-                                @if ($errors->has('address[city]'))
+                                <input type="text" name="city" id="input-city" class="form-control" value=" {{ $restaurant->city }}" />
+                                @if ($errors->has('city'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('address[city]') }}</strong>
+                                        <strong>{{ $errors->first('city') }}</strong>
                                     </span>
                                 @endif
                             </div>
@@ -123,16 +117,16 @@
                         <div class="form-group">
                             <label for="input-state" class="col-sm-3 control-label">State</label>
                             <div class="col-sm-5">
-                                <input type="text" name="address[state]" id="input-state" class="form-control" value="" />
+                                <input type="text" name="state" id="input-state" class="form-control" value="" />
                             </div>
                         </div>
-                        <div class="form-group{{ $errors->has('address[postcode]') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('postcode') ? ' has-error' : '' }}">
                             <label for="input-postcode" class="col-sm-3 control-label">Postcode</label>
                             <div class="col-sm-5">
-                                <input type="text" name="address[postcode]" id="input-postcode" class="form-control" value="{{ $restaurant->restaurant_postcode }}" />
-                                @if ($errors->has('address[postcode]'))
+                                <input type="text" name="postcode" id="input-postcode" class="form-control" value="{{ $restaurant->postcode }}" />
+                                @if ($errors->has('postcode'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('address[postcode]') }}</strong>
+                                        <strong>{{ $errors->first('postcode') }}</strong>
                                     </span>
                                 @endif
                             </div>
@@ -141,7 +135,7 @@
                             <label for="input-country" class="col-sm-3 control-label">Country</label>
                             <div class="col-sm-5">
 
-                                <select name="address[country]" id="input-country" class="form-control">
+                                <select name="country" id="input-country" class="form-control">
                                     @foreach($areas as $area)
                                         <option value="{{$area->id}}">{{$area->area_en}}</option>
                                     @endforeach
@@ -166,24 +160,24 @@
                         <br />
 
                         <div id="lat-lng" style="display: none;">
-                            <div class="form-group{{ $errors->has('address[restaurant_lat]') ? ' has-error' : '' }}">
+                            <div class="form-group{{ $errors->has('latitude') ? ' has-error' : '' }}">
                                 <label for="input-address-latitude" class="col-sm-3 control-label">Latitude</label>
                                 <div class="col-sm-5">
-                                    <input type="text" name="address[restaurant_lat]" id="input-address-latitude" class="form-control" value="{{ $restaurant->restaurant_lat }}" />
-                                    @if ($errors->has('address[restaurant_lat]'))
+                                    <input type="text" name="latitude" id="input-address-latitude" class="form-control" value="{{ $restaurant->latitude}}" />
+                                    @if ($errors->has('latitude'))
                                         <span class="help-block">
-                                        <strong>{{ $errors->first('address[restaurant_lat]') }}</strong>
+                                        <strong>{{ $errors->first('latitude') }}</strong>
                                     </span>
                                     @endif
                                 </div>
                             </div>
-                            <div class="form-group{{ $errors->has('address[restaurant_lng]') ? ' has-error' : '' }}">
+                            <div class="form-group{{ $errors->has('longitude') ? ' has-error' : '' }}">
                                 <label for="input-address-longitude" class="col-sm-3 control-label">Longitude</label>
                                 <div class="col-sm-5">
-                                    <input type="text" name="address[restaurant_lng]" id="input-address-longitude" class="form-control" value="{{ $restaurant->restaurant_lng }}" />
-                                    @if ($errors->has('address[restaurant_lng]'))
+                                    <input type="text" name="longitude" id="input-address-longitude" class="form-control" value="{{ $restaurant->longitude}}" />
+                                    @if ($errors->has('longitude'))
                                         <span class="help-block">
-                                        <strong>{{ $errors->first('address[restaurant_lng]') }}</strong>
+                                        <strong>{{ $errors->first('longitude') }}</strong>
                                     </span>
                                     @endif
                                 </div>
@@ -228,7 +222,7 @@
                                     <div class="caption">
                                         <span class="name text-center"></span>
                                         {{--<input type="hidden" name="location_image" value="" id="field">--}}
-                                        <input type="file" name="restaurant_image" class="form-control">
+                                        <input type="file" name="image" class="form-control">
                                         {{--<p>
                                             <a id="select-image" class="btn btn-primary" onclick="mediaManager('field');"><i class="fa fa-picture-o"></i>&nbsp;&nbsp;Select</a>
                                             <a class="btn btn-danger" onclick="$('#thumb').attr('src', 'https://demo.tastyigniter.com/assets/images/data/no_photo.png'); $('#field').attr('value', ''); $(this).parent().parent().find('.name').html('');"><i class="fa fa-times-circle"></i>&nbsp;&nbsp;Remove </a>
@@ -242,11 +236,11 @@
                             <div class="col-sm-5">
                                 <div class="btn-group btn-group-switch" data-toggle="buttons">
                                     <label class="btn btn-danger">
-                                        <input type="radio" name="restaurant_status" value="0" >
+                                        <input type="radio" name="status" value="0" >
                                         Disabled
                                     </label>
                                     <label class="btn btn-success active">
-                                        <input type="radio" name="restaurant_status" value="1"  checked="checked">
+                                        <input type="radio" name="status" value="1"  checked="checked">
                                         Enabled
                                     </label>
                                 </div>

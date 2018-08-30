@@ -13,6 +13,6 @@ class Area extends Model
 
     public function restaurant()
     {
-        return $this->hasMany('App\Restaurant', 'restaurant_country_id');
+        return $this->hasMany('App\Restaurant', 'area_id');
     }
 }

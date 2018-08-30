@@ -21,7 +21,7 @@ class Restaurant extends Model
 
     public function category()
     {
-        return $this->belongsTo('App\RestaurantCategory', 'restaurant_category_id');
+        return $this->belongsTo('App\RestaurantCategory', 'category_id');
     }
 
     public function workingHour()
@@ -31,7 +31,7 @@ class Restaurant extends Model
 
     public function area()
     {
-        return $this->belongsTo('App\Area', 'restaurant_country_id');
+        return $this->belongsTo('App\Area', 'area_id');
     }
 
     public function menu()

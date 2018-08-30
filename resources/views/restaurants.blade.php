@@ -119,14 +119,14 @@
                                         </a>&nbsp;&nbsp;
                                     </td>
                                     <td>
-                                        <img src="/images/{{$restaurant->restaurant_image}}" width="30px" height="30px">
-                                        {{$restaurant->restaurant_name}}
+                                        <img src="/images/{{$restaurant->image}}" width="30px" height="30px">
+                                        {{$restaurant->name}}
                                     </td>
-                                    <td>{{$restaurant->restaurant_city}}</td>
-                                    <td>{{$restaurant->restaurant_state}}</td>
-                                    <td>{{$restaurant->restaurant_postcode}}</td>
-                                    <td>{{$restaurant->restaurant_telephone}}</td>
-                                    @if($restaurant->restaurant_status == 1)
+                                    <td>{{$restaurant->city}}</td>
+                                    <td>{{$restaurant->state}}</td>
+                                    <td>{{$restaurant->postcode}}</td>
+                                    <td>{{$restaurant->telephone}}</td>
+                                    @if($restaurant->status == 1)
                                     <td>Enable</td>
                                     @else
                                         <td>Disable</td>
