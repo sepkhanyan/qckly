@@ -6,10 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    protected $fillable = ['transaction_id', 'user_id', 'cart_id', 'payment_type', 'total_price'];
-
-
     protected $table = 'orders';
+
+
+    protected $fillable = [
+        'transaction_id',
+        'user_id',
+        'cart_id',
+        'payment_type',
+        'total_price'
+    ];
 
 
 

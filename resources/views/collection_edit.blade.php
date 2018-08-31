@@ -109,30 +109,6 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="input-setup" class="col-sm-3 control-label">Setup Time</label>
-                            <div class="col-sm-5">
-                                <div class="input-group">
-                                    <input type="text" name="setup_time" id="input-setup" class="form-control" value="{{$collection->setup_time}}" />
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="input-requirements" class="col-sm-3 control-label">Requirements</label>
-                            <div class="col-sm-5">
-                                <textarea name="requirements" id="input-requirements" class="form-control">{{$collection->requirements}}</textarea>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="input-max" class="col-sm-3 control-label">Max Time</label>
-                            <div class="col-sm-5">
-                                <div class="input-group">
-                                    <input type="text" name="max_time" id="input-max" class="form-control" value="{{$collection->max_time}}" />
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label for="is_available" class="col-sm-3 control-label">Is Available</label>
                             <div class="col-sm-5">
                                 <div class="btn-group btn-group-switch" data-toggle="buttons">
@@ -224,6 +200,32 @@
                                     <span class="input-group" id="add_item" style="display: none">
                                         <button class="btn btn-primary"  type="button" >Add</button>
                                     </span>
+                                </div>
+                            </div>
+                            <div style="display: none" id="setup">
+                                <div class="form-group">
+                                    <label for="input-setup" class="col-sm-3 control-label">Setup Time</label>
+                                    <div class="col-sm-5">
+                                        <div class="input-group">
+                                            <input type="text" name="setup_time" id="input-setup" class="form-control" value="" />
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-requirements" class="col-sm-3 control-label">Requirements</label>
+                                    <div class="col-sm-5">
+                                        <textarea name="requirements" id="input-requirements" class="form-control"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-max" class="col-sm-3 control-label">Max Time</label>
+                                    <div class="col-sm-5">
+                                        <div class="input-group">
+                                            <input type="text" name="max_time" id="input-max" class="form-control" value="" />
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

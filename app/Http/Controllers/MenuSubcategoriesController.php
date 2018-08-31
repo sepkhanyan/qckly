@@ -40,8 +40,8 @@ class MenuSubcategoriesController extends Controller
     public function store(Request $request)
     {
         $subcategory = New MenuSubcategory();
-        $subcategory->subcategory_en = $request->input('subcategory_en');
-        $subcategory->subcategory_ar = $request->input('subcategory_ar');
+        $subcategory->name_en = $request->input('subcategory_en');
+        $subcategory->name_ar = $request->input('subcategory_ar');
         $subcategory->save();
         return redirect('/menu_subcategories');
     }
@@ -79,8 +79,8 @@ class MenuSubcategoriesController extends Controller
     public function update(Request $request, $id)
     {
         $subcategory = MenuSubcategory::find($id);
-        $subcategory->subcategory_en = $request->input('subcategory_en');
-        $subcategory->subcategory_ar = $request->input('subcategory_ar');
+        $subcategory->name_en = $request->input('subcategory_en');
+        $subcategory->name_ar = $request->input('subcategory_ar');
         $subcategory->save();
         return redirect('/menu_subcategories');
     }

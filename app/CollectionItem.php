@@ -6,9 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class CollectionItem extends Model
 {
-    protected $fillable = ['collection_id', 'item_id', 'min_count', 'max_count', 'persons'];
-
     protected $table = 'collection_items';
+
+
+    protected $fillable = [
+        'collection_id',
+        'item_id',
+        'min_count',
+        'max_count'
+    ];
 
 
     public function collection()

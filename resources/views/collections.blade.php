@@ -18,7 +18,7 @@
             <select name="restaurant_name" id="menus" class="form-control" tabindex="-1" title="" onchange="top.location.href = this.options[this.selectedIndex].value">
                 <option value>Select Restaurant</option>
                 @foreach($restaurants as $restaurant)
-                    <option value="{{url('/collections/' . $restaurant->id)}}">{{$restaurant->restaurant_name}},{{$restaurant->restaurant_city}},{{$restaurant->restaurant_address_1}}</option>
+                    <option value="{{url('/collections/' . $restaurant->id)}}">{{$restaurant->name}},{{$restaurant->city}},{{$restaurant->address}}</option>
                 @endforeach
             </select>
         </div>
@@ -29,10 +29,10 @@
             <div class="panel panel-default panel-table">
                 <div class="panel-heading">
                     <h2>
-                        <img src="/images/{{$selectedRestaurant->restaurant_image}}" width="50px" height="50px">
-                        {{$selectedRestaurant->restaurant_name}},
-                        {{$selectedRestaurant->restaurant_city}},
-                        {{$selectedRestaurant->restaurant_address_1}}
+                        <img src="/images/{{$selectedRestaurant->image}}" width="50px" height="50px">
+                        {{$selectedRestaurant->name}},
+                        {{$selectedRestaurant->city}},
+                        {{$selectedRestaurant->address}}
                     </h2>
                     <h3 class="panel-title">Collections</h3>
                     <div class="pull-right">

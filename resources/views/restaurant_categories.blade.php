@@ -84,8 +84,8 @@
                                             <i class="fa fa-pencil"></i>
                                         </a>&nbsp;&nbsp;
                                     </td>
-                                    <td>{{$category->restaurant_category_name_en}}</td>
-                                    <td>{{$category->restaurant_category_name_ar}}</td>
+                                    <td>{{$category->name_en}}</td>
+                                    <td>{{$category->name_ar}}</td>
                                     <td>{{$category->id}}</td>
                                 </tr>
                             @endforeach

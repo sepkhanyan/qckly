@@ -9,8 +9,12 @@ class CategoryRestaurant extends Model
     protected $table = 'category_restaurant';
 
 
-
-    protected $fillable = ['category_id', 'restaurant_id', 'category_name_ar', 'category_name_en'];
+    protected $fillable = [
+        'category_id',
+        'restaurant_id',
+        'name_ar',
+        'name_en'
+    ];
 
     public function restaurant()
     {

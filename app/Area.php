@@ -6,10 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Area extends Model
 {
-    protected $fillable = ['area_en', 'area_ar'];
-
-
     protected $table = 'areas';
+
+
+    protected $fillable = [
+        'area_en',
+        'area_ar'
+    ];
+
 
     public function restaurant()
     {

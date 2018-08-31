@@ -401,7 +401,7 @@ class UserCartsController extends Controller
                             'restaurant_name' => $cart_collection->collection->restaurant->name,
                             'collection_id' => $cart_collection->collection_id,
                             'collection_type_id' => $cart_collection->collection->subcategory_id,
-                            'collection_type' => $cart_collection->collection->subcategory->subcategory_en,
+                            'collection_type' => $cart_collection->collection->subcategory->name_en,
                             'collection_name' => $cart_collection->collection->name,
                             'collection_price' => $cart_collection->collection->price,
                             'collection_price_unit' => 'QR',
@@ -518,7 +518,19 @@ class UserCartsController extends Controller
             $max = '';
             $requirement = '';
             $max_persons = -1;
+            $min_serve = -1;
+            $max_serve = -1;
+            $collection_min = -1;
+            $collection_max = -1;
             $person_increase = false;
+            if($collection_type != 4){
+                $min_serve = $collection->min_serve_to_person;
+                $max_serve = $collection->max_serve_to_person;
+            }
+            if($collection_type != 2 && $collection_type != 4){
+                $collection_min = $collection->min_qty;
+                $collection_max = $collection->max_qty;
+            }
             if($collection_type == 1){
                 $items = [];
                 $menu = [];
@@ -577,8 +589,6 @@ class UserCartsController extends Controller
                             $max = floor($max_hours) . " hours";
                         }
                         $requirement = $collection->requirements;
-                        $collection->min_qty = -1;
-                        $collection->max_qty = -1;
                     }
                 }
                 $categories = Category::with(['menu' => function ($query) use ($collection_id){
@@ -617,8 +627,6 @@ class UserCartsController extends Controller
                 }
                 if($collection->subcategory_id == 4){
                     $collection->price = 0;
-                    $collection->min_serve_to_person = -1;
-                    $collection->max_serve_to_person = -1;
                 }
 
             }
@@ -629,16 +637,16 @@ class UserCartsController extends Controller
                 'collection_name' => $collection->name,
                 'collection_description' => $collection->description,
                 'collection_type_id' => $collection->subcategory_id,
-                'collection_type' => $collection->subcategory->subcategory_en,
+                'collection_type' => $collection->subcategory->name_en,
                 'female_caterer_available' => $female_caterer_available,
                 'mealtime' => $collection->mealtime,
-                'collection_min_qty' => $collection->min_qty,
-                'collection_max_qty' => $collection->max_qty,
+                'collection_min_qty' => $collection_min,
+                'collection_max_qty' => $collection_max,
                 'collection_price' => $collection->price,
                 'collection_price_unit' => "QR",
                 'is_available' => $is_available,
-                'min_serve_to_person' => $collection->min_serve_to_person,
-                'max_serve_to_person' => $collection->max_serve_to_person,
+                'min_serve_to_person' => $min_serve,
+                'max_serve_to_person' => $max_serve,
                 'allow_person_increase' => $person_increase,
                 'persons_max_count' => $max_persons,
                 'service_provide' => $collection->service_provide,

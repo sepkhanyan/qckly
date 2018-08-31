@@ -6,15 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class CustomerGroup extends Model
 {
-    protected $fillable = ['group_name', 'description', 'approval'];
-
-
-
     protected $primaryKey = 'customer_group_id';
 
 
-
     protected $table = 'customers_groups';
+
+
+    protected $fillable = [
+        'group_name',
+        'description',
+        'approval'
+    ];
+
 
     public function customer()
     {

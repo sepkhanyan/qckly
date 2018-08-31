@@ -19,8 +19,8 @@ class RestaurantCategoriesController extends Controller
         $categories = RestaurantCategory::paginate(20);
         $data = $request->all();
         if(isset($data['restaurant_category_search'])){
-            $categories = RestaurantCategory::where('restaurant_category_name_en','like',$data['restaurant_category_search'])
-                ->orWhere('restaurant_category_name_ar','like',$data['restaurant_category_search'])->paginate(15);
+            $categories = RestaurantCategory::where('name_en','like',$data['restaurant_category_search'])
+                ->orWhere('name_ar','like',$data['restaurant_category_search'])->paginate(15);
         }
         return view('restaurant_categories', ['categories' => $categories]);
     }
@@ -44,8 +44,8 @@ class RestaurantCategoriesController extends Controller
     public function store(Request $request)
     {
         $categories = new RestaurantCategory();
-        $categories->restaurant_category_name_en = $request->input('name_en');
-        $categories->restaurant_category_name_ar = $request->input('name_ar');
+        $categories->name_en = $request->input('name_en');
+        $categories->name_ar = $request->input('name_ar');
         $categories->save();
         if ($categories) {
             return redirect('/restaurant_categories');
@@ -85,8 +85,8 @@ class RestaurantCategoriesController extends Controller
     public function update(Request $request, $id)
     {
         $category = RestaurantCategory::find($id);
-        $category->restaurant_category_name_en = $request->input('name_en');
-        $category->restaurant_category_name_ar = $request->input('name_ar');
+        $category->name_en = $request->input('name_en');
+        $category->name_ar = $request->input('name_ar');
         $category->save();
         return redirect('/restaurant_categories');
     }
@@ -123,12 +123,12 @@ class RestaurantCategoriesController extends Controller
             if ($lang == 'ar'){
                 $arr [] = [
                     'category_id' => $category->id,
-                    'category_name' => $category->restaurant_category_name_ar,
+                    'category_name' => $category->name_ar,
                 ];
             }else{
                 $arr [] = [
                     'category_id' => $category->id,
-                    'category_name' => $category->restaurant_category_name_en,
+                    'category_name' => $category->name_en,
                 ];
             }
 

@@ -31,13 +31,13 @@
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="en">Subcategory En</label>
                             <div class="col-sm-8">
-                                <input class="form-control" type="text" id="en" name="subcategory_en" style="width: 50%" value="{{$subcategory->subcategory_en}}">
+                                <input class="form-control" type="text" id="en" name="subcategory_en" style="width: 50%" value="{{$subcategory->name_en}}">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-sm-2" for="ar">Subcategory Ar</label>
                             <div class="col-sm-8">
-                                <input class="form-control" type="text" id="ar" name="subcategory_ar" style="width: 50%" value="{{$subcategory->subcategory_ar}}">
+                                <input class="form-control" type="text" id="ar" name="subcategory_ar" style="width: 50%" value="{{$subcategory->name_ar}}">
                             </div>
                         </div>
                     </div>

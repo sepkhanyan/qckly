@@ -9,7 +9,14 @@ class WorkingHour extends Model
     protected $table = 'working_hours';
 
 
-    protected $fillable = ['weekday', 'opening_time', 'closing_time', 'status', 'type', 'restaurant_id'];
+    protected $fillable = [
+        'weekday',
+        'opening_time',
+        'closing_time',
+        'status',
+        'type',
+        'restaurant_id'
+    ];
 
 
     public function restaurant()

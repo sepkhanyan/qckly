@@ -6,8 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Permalink extends Model
 {
-    protected $fillable = ['slug', 'controller', 'query'];
+    protected $table = 'permalinks';
 
 
-    protected $table = 'pages';
+    protected $fillable = [
+        'slug',
+        'controller',
+        'query'
+    ];
+
 }

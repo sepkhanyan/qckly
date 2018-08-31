@@ -102,8 +102,8 @@ class RestaurantsController extends Controller
             $categoryRestaurant = new CategoryRestaurant();
             $categoryRestaurant->restaurant_id = $restaurant->id;
             $categoryRestaurant->category_id = $category;
-            $categoryRestaurant->category_name_en = $en;
-            $categoryRestaurant->category_name_ar = $ar;
+            $categoryRestaurant->name_en = $en;
+            $categoryRestaurant->name_ar = $ar;
             $categoryRestaurant->save();
         }
 
@@ -223,8 +223,8 @@ class RestaurantsController extends Controller
                 $categoryRestaurant = new CategoryRestaurant();
                 $categoryRestaurant->restaurant_id = $restaurant->id;
                 $categoryRestaurant->category_id = $category;
-                $categoryRestaurant->category_name_en = $en;
-                $categoryRestaurant->category_name_ar = $ar;
+                $categoryRestaurant->name_en = $en;
+                $categoryRestaurant->name_ar = $ar;
                 $categoryRestaurant->save();
             }
         }
@@ -309,10 +309,10 @@ class RestaurantsController extends Controller
                 $category= [];
                 foreach($restaurant->categoryRestaurant as $categoryRestaurant){
                     if($lang == 'ar'){
-                        $ar = $categoryRestaurant['category_name_ar'];
+                        $ar = $categoryRestaurant['name_ar'];
                         array_push( $category,$ar);
                     }else{
-                        $en = $categoryRestaurant['category_name_en'];
+                        $en = $categoryRestaurant['name_en'];
                         array_push( $category,$en);
                     }
                 }
@@ -387,10 +387,10 @@ class RestaurantsController extends Controller
                     $category= [];
                     foreach($restaurant->categoryRestaurant as $categoryRestaurant){
                         if($lang == 'ar'){
-                            $ar = $categoryRestaurant['category_name_ar'];
+                            $ar = $categoryRestaurant['name_ar'];
                             array_push( $category,$ar);
                         }else{
-                            $en = $categoryRestaurant['category_name_en'];
+                            $en = $categoryRestaurant['name_en'];
                             array_push( $category,$en);
                         }
                     }
@@ -494,10 +494,10 @@ class RestaurantsController extends Controller
                     foreach($restaurant->categoryRestaurant as $categoryRestaurant){
                         $id = $categoryRestaurant->category_id;
                         if($lang == 'ar'){
-                            $name= $categoryRestaurant->category_name_ar;
+                            $name= $categoryRestaurant->name_ar;
 
                         }else{
-                            $name = $categoryRestaurant->category_name_en;
+                            $name = $categoryRestaurant->name_en;
 
                         }
 
@@ -655,7 +655,19 @@ class RestaurantsController extends Controller
                             $max = '';
                             $requirement = '';
                             $max_persons = -1;
+                            $min_serve = -1;
+                            $max_serve = -1;
+                            $collection_max = -1;
+                            $collection_min = -1;
                             $person_increase = false;
+                            if($collection->subcategory_id != 4){
+                                $min_serve = $collection->min_serve_to_person;
+                                $max_serve = $collection->max_serve_to_person;
+                            }
+                            if($collection->subcategory_id != 2 && $collection->subcategory_id != 4){
+                                $collection_min = $collection->min_qty;
+                                $collection_max = $collection->max_qty;
+                            }
                             if($collection->subcategory_id == 1){
                                 $items = [];
                                 $menu = [];
@@ -715,8 +727,6 @@ class RestaurantsController extends Controller
                                                $max = floor($max_hours) . " hours";
                                            }
                                            $requirement = $collection->requirements;
-                                           $collection->min_qty = -1;
-                                           $collection->max_qty = -1;
                                        }
                                 }
 
@@ -759,8 +769,6 @@ class RestaurantsController extends Controller
                                 }
                                 if($collection->subcategory_id == 4){
                                     $collection->price = 0;
-                                    $collection->min_serve_to_person = -1;
-                                    $collection->max_serve_to_person = -1;
                                 }
                             }
                             $menu_collection [] = [
@@ -768,16 +776,16 @@ class RestaurantsController extends Controller
                                 'collection_name' => $collection->name,
                                 'collection_description' => $collection->description,
                                 'collection_type_id' => $collection->subcategory_id,
-                                'collection_type' => $collection->subcategory->subcategory_en,
+                                'collection_type' => $collection->subcategory->name_en,
                                 'female_caterer_available' => $female_caterer_available,
                                 'mealtime' => $collection->mealtime,
-                                'collection_min_qty' => $collection->min_qty,
-                                'collection_max_qty' => $collection->max_qty,
+                                'collection_min_qty' => $collection_min,
+                                'collection_max_qty' => $collection_max,
                                 'collection_price' => $collection->price,
                                 'collection_price_unit' => "QR",
                                 'is_available' => $is_available,
-                                'min_serve_to_person' => $collection->min_serve_to_person,
-                                'max_serve_to_person' => $collection->max_serve_to_person,
+                                'min_serve_to_person' => $min_serve,
+                                'max_serve_to_person' => $max_serve,
                                 'allow_person_increase' => $person_increase,
                                 'persons_max_count' => $max_persons,
                                 'service_provide' => $collection->service_provide,

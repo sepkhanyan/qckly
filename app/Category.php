@@ -6,9 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
-    protected $fillable = ['name', 'description', 'status', 'parent_id', 'priority', 'image'];
-
     protected $table = 'categories';
+
+
+    protected $fillable = [
+        'name',
+        'description',
+        'status',
+        'parent_id',
+        'priority',
+        'image'
+    ];
+
 
 
     public function menu()
@@ -21,8 +30,4 @@ class Category extends Model
         return $this->hasMany('App\UserCartItem', 'menu_id');
     }
 
-//    public function cartMenu ()
-//    {
-//        return $this->hasMany('App\Category', 'menu_id');
-//    }
 }

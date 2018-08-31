@@ -6,8 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Permission extends Model
 {
-    protected $fillable = ['name', 'description', 'action', 'status'];
-
-
     protected $table = 'permissions';
+
+
+    protected $fillable = [
+        'name',
+        'description',
+        'action',
+        'status'
+    ];
+
 }

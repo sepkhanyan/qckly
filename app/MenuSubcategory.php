@@ -6,10 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class MenuSubcategory extends Model
 {
-    protected $fillable = ['subcategory_en', 'subcategory_ar'];
-
-
     protected $table = 'menu_subcategories';
+
+
+    protected $fillable = [
+        'name_en',
+        'name_ar'
+    ];
+
 
     public function collection()
     {

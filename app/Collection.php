@@ -6,9 +6,30 @@ use Illuminate\Database\Eloquent\Model;
 
 class Collection extends Model
 {
-    protected $fillable = ['restaurant_id', 'subcategory_id', 'is_available', 'notes', 'price', 'name'];
-
     protected $table = 'collections';
+
+
+    protected $fillable = [
+        'restaurant_id',
+        'subcategory_id',
+        'is_available',
+        'price', 'name',
+        'service_provide',
+        'instruction',
+        'setup_time',
+        'max_time',
+        'requirements',
+        'service_presentation',
+        'description',
+        'mealtime',
+        'max_qty',
+        'min_qty',
+        'persons_max_count',
+        'allow_person_increase',
+        'min_serve_to_person',
+        'max_serve_to_person'
+    ];
+
 
     public function restaurant()
     {

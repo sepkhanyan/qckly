@@ -9,7 +9,14 @@ class Review extends Model
     protected $table = 'reviews';
 
 
-    protected $fillable = ['order_id', 'restaurant_id', 'rate_value', 'review_text'];
+    protected $fillable = [
+        'order_id',
+        'restaurant_id',
+        'rate_value',
+        'review_text'
+    ];
+
+
 
     public function order()
     {

@@ -26,7 +26,6 @@ Route::group(['middleware' => ['web', 'auth']], function (){
         });
         Route::get('/areas', 'AreasController@index');
         Route::group(['prefix' => 'area'], function () {
-            Route::get('create', 'AreasController@create');
             Route::get('store', 'AreasController@store');
             Route::get('edit/{id}', 'AreasController@edit');
             Route::post('update/{id}', 'AreasController@update');

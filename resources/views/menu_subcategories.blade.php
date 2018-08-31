@@ -80,8 +80,8 @@
                                             <i class="fa fa-pencil"></i>
                                         </a>&nbsp;&nbsp;
                                     </td>
-                                    <td>{{$subcategory->subcategory_en}}</td>
-                                    <td>{{$subcategory->subcategory_ar}}</td>
+                                    <td>{{$subcategory->name_en}}</td>
+                                    <td>{{$subcategory->name_ar}}</td>
                                     <td>{{$subcategory->id}}</td>
                                 </tr>
                             @endforeach
@@ -90,11 +90,10 @@
                         </table>
                     </div>
                </form>
-
             </div>
         </div>
     </div>
-    <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal fade" id="myModal" role="dialog" tabindex="-1" >
         <form role="form" id="edit-form" class="form-horizontal"  accept-charset="utf-8" method="GET" action="{{ url('/menu_subcategory/store') }}">
             {{ csrf_field() }}
             <div class="modal-dialog" >
@@ -104,15 +103,19 @@
                         <h4 class="modal-title"> Add Subcategory</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="md-form mb-5" style="width: 400px">
-                            <label class="control-label" for="en">Subcategory En</label>
-                            <input type="text" id="en" name="subcategory_en">
+                        <div class="form-group" style="margin: 5px">
+                            <label class="control-label col-sm-2" for="en">Sub En</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" type="text" id="en" name="subcategory_en">
+                            </div>
                         </div>
                     </div>
                     <div class="modal-body">
-                        <div class="md-form mb-5" style="width: 400px">
-                            <label class="control-label" for="ar">Subcategory Ar</label>
-                            <input type="text" id="ar" name="subcategory_ar">
+                        <div class="form-group" style="margin: 5px">
+                            <label class="control-label col-sm-2" for="ar">Sub Ar</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" type="text" id="ar" name="subcategory_ar">
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">

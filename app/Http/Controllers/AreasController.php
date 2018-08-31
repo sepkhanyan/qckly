@@ -36,7 +36,7 @@ class AreasController extends Controller
      */
     public function create()
     {
-        return view('area_create');
+       //
     }
 
     /**

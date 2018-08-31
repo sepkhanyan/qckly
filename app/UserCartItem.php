@@ -9,7 +9,14 @@ class UserCartItem extends Model
     protected $table = 'user_cart_items';
 
 
-    protected $fillable = ['cart_id','collection_id', 'item_id', 'price', 'quantity', 'menu_id'];
+    protected $fillable = [
+        'cart_id',
+        'collection_id',
+        'item_id',
+        'price',
+        'quantity',
+        'menu_id'
+    ];
 
 
 
@@ -24,10 +31,13 @@ class UserCartItem extends Model
         return $this->belongsTo('App\Menu', 'item_id');
     }
 
+
     public function category ()
     {
         return $this->belongsTo('App\Category', 'menu_id');
     }
+
+
     public function collection ()
     {
         return $this->belongsTo('App\Collection', 'collection_id');

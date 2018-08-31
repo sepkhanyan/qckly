@@ -25,7 +25,7 @@
                                         <select name="restaurant_name" id="restaurant" class="form-control" tabindex="-1" title=""  >
                                             <option value=" ">Select Restaurant</option>
                                             @foreach($restaurants as $restaurant)
-                                                <option value="{{$restaurant->id}}">{{$restaurant->restaurant_name}},{{$restaurant->restaurant_city}},{{$restaurant->restaurant_address_1}}</option>
+                                                <option value="{{$restaurant->id}}">{{$restaurant->name}},{{$restaurant->city}},{{$restaurant->address}}</option>
                                             @endforeach
                                         </select>
 
@@ -118,30 +118,6 @@
                                     <textarea name="instructions" id="notes" class="form-control" ></textarea>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="input-setup" class="col-sm-3 control-label">Setup Time</label>
-                                <div class="col-sm-5">
-                                    <div class="input-group">
-                                        <input type="text" name="setup_time" id="input-setup" class="form-control" value="" />
-                                    </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="input-requirements" class="col-sm-3 control-label">Requirements</label>
-                                <div class="col-sm-5">
-                                    <textarea name="requirements" id="input-requirements" class="form-control"></textarea>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="input-max" class="col-sm-3 control-label">Max Time</label>
-                                <div class="col-sm-5">
-                                    <div class="input-group">
-                                        <input type="text" name="max_time" id="input-max" class="form-control" value="" />
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
                         <div class="form-group">
                             <label for="is_available" class="col-sm-3 control-label">Is Available</label>
                             <div class="col-sm-5">
@@ -185,8 +161,8 @@
                                     <label class="col-sm-3 control-label">Quantity</label>
                                     <div class="col-sm-5">
                                         <div class="input-group" id="collection_qty" style="width: 200px; display: none">
-                                            <input type="text" name="max_quantity" class="form-control"  placeholder="Collection max quantity" >
                                             <input type="text" name="min_quantity" class="form-control"  placeholder="Collection min quantity" >
+                                            <input type="text" name="max_quantity" class="form-control"  placeholder="Collection max quantity" >
                                         </div>
                                         <div class="input-group" id="persons_qty" style="display: none; width: 200px;">
                                             <input type="text" name="min_serve_to_person" class="form-control"  placeholder="Serve to person(min)" >
@@ -204,7 +180,7 @@
                                                 NO
                                             </label>
                                             <label class="btn btn-success">
-                                                <input type="radio" name="is_available" value="1" >
+                                                <input type="radio" name="allow_person_increase" value="1" >
                                                 YES
                                             </label>
                                         </div>
@@ -235,6 +211,32 @@
                                     <span class="input-group" id="add_item" style="display: none">
                                         <button class="btn btn-primary"  type="button" >Add</button>
                                     </span>
+                                </div>
+                            </div>
+                            <div style="display: none" id="setup">
+                                <div class="form-group">
+                                    <label for="input-setup" class="col-sm-3 control-label">Setup Time</label>
+                                    <div class="col-sm-5">
+                                        <div class="input-group">
+                                            <input type="text" name="setup_time" id="input-setup" class="form-control" value="" />
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-requirements" class="col-sm-3 control-label">Requirements</label>
+                                    <div class="col-sm-5">
+                                        <textarea name="requirements" id="input-requirements" class="form-control"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-max" class="col-sm-3 control-label">Max Time</label>
+                                    <div class="col-sm-5">
+                                        <div class="input-group">
+                                            <input type="text" name="max_time" id="input-max" class="form-control" value="" />
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
