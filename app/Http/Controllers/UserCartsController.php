@@ -398,7 +398,7 @@ class UserCartsController extends Controller
                         }
                         $collections [] = [
                             'restaurant_id' => $cart_collection->collection->restaurant->id,
-                            'restaurant_name' => $cart_collection->collection->restaurant->restaurant_name,
+                            'restaurant_name' => $cart_collection->collection->restaurant->name,
                             'collection_id' => $cart_collection->collection_id,
                             'collection_type_id' => $cart_collection->collection->subcategory_id,
                             'collection_type' => $cart_collection->collection->subcategory->subcategory_en,
@@ -624,7 +624,7 @@ class UserCartsController extends Controller
             }
             $menu_collection [] = [
                 'restaurant_id' => $collection->restaurant->id,
-                'restaurant_name' => $collection->restaurant->restaurant_name,
+                'restaurant_name' => $collection->restaurant->name,
                 'collection_id' => $collection->id,
                 'collection_name' => $collection->name,
                 'collection_description' => $collection->description,

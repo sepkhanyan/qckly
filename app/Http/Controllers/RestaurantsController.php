@@ -555,7 +555,7 @@ class RestaurantsController extends Controller
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200,
-                    'message' => 'No available restaurant.'));
+                    'message' => 'There is no any Restaurant found. Please select other Area, Date and Time.					'));
             }
         }
 
