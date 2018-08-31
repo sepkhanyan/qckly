@@ -18,7 +18,6 @@ class ChangeColumnsFromCollectionsTable extends Migration
             $table->integer('max_time')->nullable()->change();
             $table->text('requirements')->nullable()->change();
             $table->dropForeign(['menu_id']);
-            $table->dropColumn('menu_id');
         });
     }
 
@@ -33,7 +32,6 @@ class ChangeColumnsFromCollectionsTable extends Migration
             $table->integer('setup_time')->nullable(false)->change();
             $table->integer('max_time')->nullable(false)->change();
             $table->text('requirements')->nullable(false)->change();
-            $table->integer('menu_id');
         });
     }
 }
