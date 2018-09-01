@@ -23,7 +23,7 @@ $(document).ready(function() {
     });
 
     $(document).ready(function () {
-        var $updateModal = $('#modalEditSubcategory');
+        var $updateModal = $('#modalEditCollectionCategory');
         $('.list-item-update').on('click', function (evn) { // this is the "a" tag
             evn.preventDefault();
 
@@ -33,7 +33,7 @@ $(document).ready(function() {
 
             $updateModal.find('.confirm-btn').on('click', function (e) {
                 e.preventDefault();
-                var submitUrl = '/menu_subcategory/update/' + resourceId,
+                var submitUrl = '/collection_category/update/' + resourceId,
                     form = $('#edit-form'); // change with your form
 
                 form.attr('action', submitUrl);
@@ -119,7 +119,7 @@ $(document).ready(function() {
     });
 
 
-    $('#subcategory').change(function(){
+    $('#category').change(function(){
         if ($(this).val() == 3 || $(this).val() == 4 || $(this).val() == 2)
         {
             $('#menu_item').attr('multiple','multiple');
@@ -130,9 +130,9 @@ $(document).ready(function() {
         }
     });
 
-    $('#subcategory').click(function() {
+    $('#category').click(function() {
         $('#items'). slideDown('fast');
-        if($('select[name=subcategory]').val() == 1){
+        if($('select[name=category]').val() == 1){
             $('#persons_qty'). slideDown('fast');
             $('#max_person'). slideUp('fast');
             $('#collection_qty'). slideDown('fast');
@@ -140,7 +140,7 @@ $(document).ready(function() {
             $('#item_count'). slideDown('fast');
             $('#person_increase'). slideUp('fast');
             $('#setup'). slideUp('fast');
-        }else if($('select[name=subcategory]').val() == 2){
+        }else if($('select[name=category]').val() == 2){
             $('#collection_qty'). slideUp('fast');
             $('#persons_qty'). slideDown('fast');
             $('#max_person'). slideDown('fast');
@@ -148,7 +148,7 @@ $(document).ready(function() {
             $('#item_count'). slideDown('fast');
             $('#person_increase'). slideDown('fast');
             $('#setup'). slideDown('fast');
-        }else if($('select[name=subcategory]').val() == 3){
+        }else if($('select[name=category]').val() == 3){
             $('#collection_qty'). slideDown('fast');
             $('#persons_qty'). slideDown('fast');
             $('#max_person'). slideUp('fast');
@@ -156,7 +156,7 @@ $(document).ready(function() {
             $('#item_count'). slideDown('fast');
             $('#person_increase'). slideUp('fast');
             $('#setup'). slideUp('fast');
-        }else if($('select[name=subcategory]').val() == 4){
+        }else if($('select[name=category]').val() == 4){
             $('#items_container'). slideDown('fast');
             $('#collection_qty'). slideUp('fast');
             $('#persons_qty'). slideUp('fast');
@@ -205,7 +205,7 @@ $(document).ready(function() {
 
 
 
-    $('#delete_menu_subcategory').click(function() {
+    $('#delete_collection_category').click(function() {
         window.checkValues = $('input[name=delete]:checked').map(function () {
             return $(this).val();
         }).get();
@@ -215,7 +215,7 @@ $(document).ready(function() {
         $.ajax({
 
             method: "POST",
-            url:"/menu_subcategory/delete",
+            url:"/collection_category/delete",
             data:{id:checkValues,_token:token },
             success:function(data){
 

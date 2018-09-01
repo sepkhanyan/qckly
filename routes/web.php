@@ -52,11 +52,11 @@ Route::group(['middleware' => ['web', 'auth']], function (){
             Route::post('update/{id}', 'CategoriesController@update');
             Route::post('delete', 'CategoriesController@deleteCategories');
         });
-        Route::get('/menu_subcategories', 'MenuSubcategoriesController@index');
-        Route::group(['prefix' => 'menu_subcategory'], function () {
-            Route::get('store', 'MenuSubcategoriesController@store');
-            Route::post('update/{id}', 'MenuSubcategoriesController@update');
-            Route::post('delete', 'MenuSubcategoriesController@deleteSubcategory');
+        Route::get('/collection_categories', 'CollectionCategoriesController@index');
+        Route::group(['prefix' => 'collection_category'], function () {
+            Route::get('store', 'CollectionCategoriesController@store');
+            Route::post('update/{id}', 'CollectionCategoriesController@update');
+            Route::post('delete', 'CollectionCategoriesController@deleteCategory');
         });
         Route::get('/menus/{id?}', 'MenusController@index');
         Route::group(['prefix' => 'menu'], function () {

@@ -8,7 +8,7 @@ use App\CollectionItem;
 use Illuminate\Http\Request;
 use App\Collection;
 use App\Restaurant;
-use App\MenuSubcategory;
+use App\CollectionCategory;
 use App\Menu;
 use Carbon\Carbon;
 
@@ -21,16 +21,16 @@ class CollectionsController extends Controller
      */
     public function index(Request $request, $id=null)
     {
-        $subcategories = MenuSubcategory::all();
+        $categories = CollectionCategory::all();
         $restaurants = Restaurant::all();
         $selectedRestaurant = Restaurant::find($id);
         $data = $request->all();
         $collections = [];
         if($id){
             $collections = Collection::where('restaurant_id', $id)
-                ->with(['subcategory', 'collectionItem.menu']);
+                ->with(['category', 'collectionItem.menu']);
             if(isset($data['collection_type'])){
-                $collections = $collections->where('subcategory_id',$data['collection_type']);
+                $collections = $collections->where('category_id',$data['collection_type']);
 
             }
             if(isset($data['collection_search'])){
@@ -42,7 +42,7 @@ class CollectionsController extends Controller
         }
         return view('collections', [
             'id' => $id,
-            'subcategories' => $subcategories,
+            'categories' => $categories,
             'collections' => $collections,
             'restaurants' => $restaurants,
             'selectedRestaurant' => $selectedRestaurant
@@ -60,20 +60,20 @@ class CollectionsController extends Controller
         $menus = [];
         if(isset($data['restaurant_name'])) {
                 $menus = Menu::where('restaurant_id', $data['restaurant_name']);
-            if(isset($data['category_name'])) {
-                $menus = $menus->where('category_id', $data['category_name']);
+            if(isset($data['menu_category_name'])) {
+                $menus = $menus->where('category_id', $data['menu_category_name']);
             }
             $menus = $menus->get();
         }
 
         $restaurants = Restaurant::all();
-        $subcategories = MenuSubcategory::all();
-        $categories = Category::all();
+        $categories = CollectionCategory::all();
+        $menu_categories = Category::all();
         return view('collection_create', [
             'restaurants' => $restaurants,
-            'subcategories' => $subcategories,
+            'categories' => $categories,
             'menus' => $menus,
-            'categories' => $categories
+            'menu_categories' => $menu_categories
         ]);
     }
 
@@ -87,7 +87,7 @@ class CollectionsController extends Controller
     {
         $collection = New Collection();
         $collection->restaurant_id = $request->input('restaurant_name');
-        $collection->subcategory_id = $request->input('subcategory');
+        $collection->category_id = $request->input('category');
         $collection->name = $request->input('name');
         $collection->description = $request->input('description');
         $collection->mealtime = $request->input('mealtime');
@@ -141,11 +141,11 @@ class CollectionsController extends Controller
 
         $collection = Collection::with('restaurant.menu')->find($id);
         $menus = $collection->restaurant->menu;
-        $subcategories = MenuSubcategory::all();
+        $categories = CollectionCategory::all();
         return view('collection_edit', [
             'menus' => $menus,
             'collection' => $collection,
-            'subcategories' => $subcategories,
+            'categories' => $categories,
         ]);
     }
 
@@ -159,7 +159,7 @@ class CollectionsController extends Controller
     public function update(Request $request, $id)
     {
         $collection = Collection::with('restaurant.menu')->find($id);
-        $collection->subcategory_id = $request->input('subcategory');
+        $collection->category_id = $request->input('category');
         $collection->name = $request->input('name');
         $collection->description = $request->input('description');
         $collection->mealtime = $request->input('mealtime');

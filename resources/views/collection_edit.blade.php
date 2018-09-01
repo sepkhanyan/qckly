@@ -16,38 +16,6 @@
         </div>
     </div>
     <div class="row content">
-        {{--<form role="form" id="filter-form" accept-charset="utf-8" method="GET" action="">--}}
-            {{--<div class="filter-bar">--}}
-                {{--<div class="row">--}}
-                    {{--<div class="form-group">--}}
-                        {{--<label for="restaurant" class="col-sm-3 control-label">Restaurant</label>--}}
-                        {{--<div class="col-sm-5">--}}
-                            {{--<select name="restaurant_name" id="restaurant" class="form-control" tabindex="-1" title=""  >--}}
-                                {{--@foreach($restaurants as $restaurant)--}}
-                                    {{--<option value="{{$restaurant->id}}">{{$restaurant->restaurant_name}},{{$restaurant->restaurant_city}},{{$restaurant->restaurant_address_1}}</option>--}}
-                                {{--@endforeach--}}
-                            {{--</select>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
-                {{--<div>--}}
-                    {{--<div class="form-group">--}}
-                        {{--<label for="input-name" class="col-sm-3 control-label">Category</label>--}}
-                        {{--<div class="col-sm-5">--}}
-                            {{--<select name="category_name" id="category" class="form-control">--}}
-                                {{--@foreach ($categories as $category)--}}
-                                    {{--<option value="{{$category->id}}" >{{$category->name}}</option>--}}
-                                {{--@endforeach--}}
-                            {{--</select>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
-
-                {{--</div>--}}
-                {{--<a class="btn btn-grey" onclick="filterList();" title="Filter">--}}
-                    {{--Choose--}}
-                {{--</a>--}}
-            {{--</div>--}}
-        {{--</form>--}}
         <div class="col-md-12">
             <div class="row wrap-vertical">
                 <ul id="nav-tabs" class="nav nav-tabs">
@@ -62,16 +30,6 @@
                 <div id="general" class="tab-pane row wrap-all active">
                     <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST" action="{{ url('/collection/update/' . $collection->id) }}" enctype="multipart/form-data">
                         {{ csrf_field() }}
-                        {{--<div class="form-group">--}}
-                            {{--<label for="restaurant" class="col-sm-3 control-label">Restaurant</label>--}}
-                            {{--<div class="col-sm-5">--}}
-                                {{--<select name="restaurant_name" id="restaurant" class="form-control" tabindex="-1" title=""  >--}}
-                                    {{--@foreach($restaurants as $restaurant)--}}
-                                        {{--<option value="{{$restaurant->id}}">{{$restaurant->restaurant_name}},{{$restaurant->restaurant_city}},{{$restaurant->restaurant_address_1}}</option>--}}
-                                    {{--@endforeach--}}
-                                {{--</select>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
                         <div class="form-group">
                             <label for="input-name" class="col-sm-3 control-label">Name</label>
                             <div class="col-sm-5">
@@ -135,12 +93,12 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="input-name" class="col-sm-3 control-label">Subcategory</label>
+                            <label for="input-name" class="col-sm-3 control-label">Category</label>
                             <div class="col-sm-5">
-                                <select name="subcategory" id="subcategory" class="form-control">
-                                    <option value="">Select subcategory</option>
-                                    @foreach ($subcategories as $subcategory)
-                                        <option value="{{$subcategory->id}}" >{{$subcategory->subcategory_en}}</option>
+                                <select name="category" id="category" class="form-control">
+                                    <option value="">Select Category</option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{$category->id}}" >{{$category->name_en}}</option>
                                     @endforeach
                                 </select>
                             </div>

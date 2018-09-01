@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class MenuSubcategory extends Model
+class CollectionCategory extends Model
 {
-    protected $table = 'menu_subcategories';
+    protected $table = 'collection_categories';
 
 
     protected $fillable = [
@@ -17,7 +17,7 @@ class MenuSubcategory extends Model
 
     public function collection()
     {
-        return $this->hasMany('App\Collection', 'subcategory_id');
+        return $this->hasMany('App\Collection', 'category_id');
     }
 
 

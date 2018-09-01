@@ -36,9 +36,9 @@ class Collection extends Model
         return $this->belongsTo('App\Restaurant', 'restaurant_id');
     }
 
-    public function subcategory()
+    public function category()
     {
-        return $this->belongsTo('App\MenuSubcategory', 'subcategory_id');
+        return $this->belongsTo('App\CollectionCategory', 'category_id');
     }
 
     public function collectionItem()

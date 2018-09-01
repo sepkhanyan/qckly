@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\MenuSubcategory;
+use App\CollectionCategory;
 use Illuminate\Http\Request;
 
 
-class MenuSubcategoriesController extends Controller
+class CollectionCategoriesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,8 @@ class MenuSubcategoriesController extends Controller
      */
     public function index()
     {
-        $subcategories = MenuSubcategory::all();
-        return view('menu_subcategories', ['subcategories' => $subcategories]);
+        $categories = CollectionCategory::all();
+        return view('collection_categories', ['categories' => $categories]);
     }
 
     /**
@@ -39,11 +39,11 @@ class MenuSubcategoriesController extends Controller
 
     public function store(Request $request)
     {
-        $subcategory = New MenuSubcategory();
-        $subcategory->name_en = $request->input('subcategory_en');
-        $subcategory->name_ar = $request->input('subcategory_ar');
-        $subcategory->save();
-        return redirect('/menu_subcategories');
+        $category = New CollectionCategory();
+        $category->name_en = $request->input('category_en');
+        $category->name_ar = $request->input('category_ar');
+        $category->save();
+        return redirect('/collection_categories');
     }
 
     /**
@@ -77,11 +77,11 @@ class MenuSubcategoriesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $subcategory = MenuSubcategory::find($id);
-        $subcategory->name_en = $request->input('subcategory_en');
-        $subcategory->name_ar = $request->input('subcategory_ar');
-        $subcategory->save();
-        return redirect('/menu_subcategories');
+        $category = CollectionCategory::find($id);
+        $category->name_en = $request->input('category_en');
+        $category->name_ar = $request->input('category_ar');
+        $category->save();
+        return redirect('/collection_categories');
     }
 
     /**
@@ -90,11 +90,11 @@ class MenuSubcategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function deleteSubcategory(Request $request)
+    public function deleteCategory(Request $request)
     {
         $id = $request->get('id');
-        MenuSubcategory::whereIn('id',$id)->delete();
-        return redirect('/menu_subcategories');
+        CollectionCategory::whereIn('id',$id)->delete();
+        return redirect('/collection_categories');
 
     }
 }

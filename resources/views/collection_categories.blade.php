@@ -2,11 +2,11 @@
 @section('content')
     <div class="page-header">
         <div class="page-action">
-            <a  href="" class="btn btn-primary"  data-toggle="modal" data-target="#modalCreateSubcategory">
+            <a  href="" class="btn btn-primary"  data-toggle="modal" data-target="#modalCreateCollectionCategory">
                 <i class="fa fa-plus"></i>
                 New
             </a>
-            <a class="btn btn-danger " id="delete_menu_subcategory">
+            <a class="btn btn-danger " id="delete_collection_category">
                 <i class="fa fa-trash-o"></i>
                 Delete
             </a>
@@ -16,7 +16,7 @@
         <div class="col-md-12">
             <div class="panel panel-default panel-table">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Menu Subcategories</h3>
+                    <h3 class="panel-title">Collection Categories</h3>
                     <div class="pull-right">
                         <button class="btn btn-filter btn-xs"><i class="fa fa-filter"></i></button>
                     </div>
@@ -28,7 +28,7 @@
                                 <div class="row">
                                     <div class="col-md-8 pull-left">
                                         <div class="form-group">
-                                            <input type="text" name="menu_subcategory_search" class="form-control input-sm" value="" placeholder="Search subcategory." />&nbsp;&nbsp;&nbsp;
+                                            <input type="text" name="collection_category_search" class="form-control input-sm" value="" placeholder="Search category." />&nbsp;&nbsp;&nbsp;
                                         </div>
                                         <a class="btn btn-grey" onclick="filterList();" title="Search">
                                             <i class="fa fa-search"></i>
@@ -53,13 +53,13 @@
                                 </th>
                                 <th>
                                     <a class="sort" href="">
-                                        Subcategory En
+                                        Category En
                                         <i class="fa fa-sort"></i>
                                     </a>
                                 </th>
                                 <th>
                                     <a class="sort" href="">
-                                        Subcategory Ar
+                                        Category Ar
                                         <i class="fa fa-sort"></i>
                                     </a>
                                 </th>
@@ -72,17 +72,17 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($subcategories as $subcategory)
+                            @foreach($categories as $category)
                                 <tr>
                                     <td class="action">
-                                        <input type="checkbox" value="{{ $subcategory->id }}" name="delete" />
-                                        <a class="btn btn-edit"  href="#" data-toggle="modal" data-target="#modalEditSubcategory" type="button"  data-item-id="{{$subcategory->id}}">
+                                        <input type="checkbox" value="{{ $category->id }}" name="delete" />
+                                        <a class="btn btn-edit"  href="#" data-toggle="modal" data-target="#modalEditCollectionCategory" type="button"  data-item-id="{{$category->id}}">
                                             <i class="fa fa-pencil"></i>
                                         </a>&nbsp;&nbsp;&nbsp;
                                     </td>
-                                    <td>{{$subcategory->name_en}}</td>
-                                    <td>{{$subcategory->name_ar}}</td>
-                                    <td>{{$subcategory->id}}</td>
+                                    <td>{{$category->name_en}}</td>
+                                    <td>{{$category->name_ar}}</td>
+                                    <td>{{$category->id}}</td>
                                 </tr>
                             @endforeach
 
@@ -93,28 +93,28 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="modalCreateSubcategory" role="dialog" tabindex="-1" >
-        <form role="form" id="edit-form" class="form-horizontal"  accept-charset="utf-8" method="GET" action="{{ url('/menu_subcategory/store') }}">
+    <div class="modal fade" id="modalCreateCollectionCategory" role="dialog" tabindex="-1" >
+        <form role="form" id="edit-form" class="form-horizontal"  accept-charset="utf-8" method="GET" action="{{ url('/collection_category/store') }}">
             {{ csrf_field() }}
             <div class="modal-dialog" >
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" >&times;</button>
-                        <h4 class="modal-title"> Add Subcategory</h4>
+                        <h4 class="modal-title"> Add Category</h4>
                     </div>
                     <div class="modal-body">
                         <div class="form-group" style="margin: 5px">
-                            <label class="control-label col-sm-2" for="en">Sub En</label>
+                            <label class="control-label col-sm-2" for="en">Category En</label>
                             <div class="col-sm-8">
-                                <input class="form-control" type="text" id="en" name="subcategory_en">
+                                <input class="form-control" type="text" id="en" name="category_en">
                             </div>
                         </div>
                     </div>
                     <div class="modal-body">
                         <div class="form-group" style="margin: 5px">
-                            <label class="control-label col-sm-2" for="ar">Sub Ar</label>
+                            <label class="control-label col-sm-2" for="ar">Category Ar</label>
                             <div class="col-sm-8">
-                                <input class="form-control" type="text" id="ar" name="subcategory_ar">
+                                <input class="form-control" type="text" id="ar" name="category_ar">
                             </div>
                         </div>
                     </div>
@@ -126,28 +126,28 @@
             </div>
         </form>
     </div>
-    <div class="modal fade" id="modalEditSubcategory" role="dialog" tabindex="-1" >
-        <form role="form" id="edit-form" class="form-horizontal"  accept-charset="utf-8" method="POST" action="{{ url('/menu_subcategory/update/' . $subcategory->id ) }}">
+    <div class="modal fade" id="modalEditCollectionCategory" role="dialog" tabindex="-1" >
+        <form role="form" id="edit-form" class="form-horizontal"  accept-charset="utf-8" method="POST" action="{{ url('/collection_category/update/' . $category->id ) }}">
             {{ csrf_field() }}
             <div class="modal-dialog" >
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" >&times;</button>
-                        <h4 class="modal-title"> Edit Subcategory</h4>
+                        <h4 class="modal-title"> Edit Category</h4>
                     </div>
                     <div class="modal-body">
                         <div class="form-group" style="margin: 5px">
-                            <label class="control-label col-sm-2" for="en">Sub En</label>
+                            <label class="control-label col-sm-2" for="en">Category En</label>
                             <div class="col-sm-8">
-                                <input class="form-control" type="text" id="en" name="subcategory_en" value="{{$subcategory->name_en}}">
+                                <input class="form-control" type="text" id="en" name="category_en" value="{{$category->name_en}}">
                             </div>
                         </div>
                     </div>
                     <div class="modal-body">
                         <div class="form-group" style="margin: 5px">
-                            <label class="control-label col-sm-2" for="ar">Sub Ar</label>
+                            <label class="control-label col-sm-2" for="ar">Category Ar</label>
                             <div class="col-sm-8">
-                                <input class="form-control" type="text" id="ar" name="subcategory_ar" value="{{$subcategory->name_ar}}">
+                                <input class="form-control" type="text" id="ar" name="category_ar" value="{{$category->name_ar}}">
                             </div>
                         </div>
                     </div>

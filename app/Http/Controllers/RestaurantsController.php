@@ -624,7 +624,7 @@ class RestaurantsController extends Controller
             $restaurant_id = $DataRequests['restaurant_id'];
 
             $restaurants = Restaurant::where('id', $restaurant_id)
-                ->with(['menu.category' ,'collection.subcategory', 'collection.collectionItem']);
+                ->with(['menu.category' ,'collection.category', 'collection.collectionItem']);
             if(isset($DataRequests['category_id'])){
                 $category_id = $DataRequests['category_id'];
                 $restaurants = $restaurants->whereHas('categoryRestaurant',function ($query) use ($category_id){
@@ -660,15 +660,15 @@ class RestaurantsController extends Controller
                             $collection_max = -1;
                             $collection_min = -1;
                             $person_increase = false;
-                            if($collection->subcategory_id != 4){
+                            if($collection->category_id != 4){
                                 $min_serve = $collection->min_serve_to_person;
                                 $max_serve = $collection->max_serve_to_person;
                             }
-                            if($collection->subcategory_id != 2 && $collection->subcategory_id != 4){
+                            if($collection->category_id != 2 && $collection->category_id != 4){
                                 $collection_min = $collection->min_qty;
                                 $collection_max = $collection->max_qty;
                             }
-                            if($collection->subcategory_id == 1){
+                            if($collection->category_id == 1){
                                 $items = [];
                                 $menu = [];
                                 foreach ($collection->collectionItem as $collection_item) {
@@ -703,7 +703,7 @@ class RestaurantsController extends Controller
                                     array_push($foodlist_images, $image);
                                        $min_qty = $collection_item->min_count;
                                        $max_qty = $collection_item->max_count;
-                                       if($collection->subcategory_id == 2){
+                                       if($collection->category_id == 2){
                                            if($collection->allow_person_increase == 1){
                                                $person_increase = true;
                                            }else{
@@ -775,8 +775,8 @@ class RestaurantsController extends Controller
                                 'collection_id' => $collection->id,
                                 'collection_name' => $collection->name,
                                 'collection_description' => $collection->description,
-                                'collection_type_id' => $collection->subcategory_id,
-                                'collection_type' => $collection->subcategory->name_en,
+                                'collection_type_id' => $collection->category_id,
+                                'collection_type' => $collection->category->name_en,
                                 'female_caterer_available' => $female_caterer_available,
                                 'mealtime' => $collection->mealtime,
                                 'collection_min_qty' => $collection_min,

@@ -58,8 +58,8 @@
                                         <div class="form-group">
                                             <select name="collection_type" class="form-control input-sm">
                                                 <option value="">View all types</option>
-                                                @foreach ($subcategories as $subcategory)
-                                                    <option value="{{$subcategory->id}}">{{$subcategory->subcategory_en}}</option>
+                                                @foreach ($categories as $category)
+                                                    <option value="{{$category->id}}">{{$category->name_en}}</option>
                                                 @endforeach
                                             </select>&nbsp;
                                         </div>
@@ -133,7 +133,7 @@
                                     </td>
                                     <td>{{$collection->name}}</td>
                                     <td>{{$collection->description}}</td>
-                                    <td>{{$collection->subcategory->subcategory_en}}</td>
+                                    <td>{{$collection->category->name_en}}</td>
                                     <td>{{$collection->price}}</td>
                                     <td>{{$collection->mealtime}}</td>
                                     <td>{{$collection->id}}</td>

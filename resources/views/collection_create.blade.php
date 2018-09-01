@@ -34,12 +34,12 @@
                         </div>
                     <div>
                         <div class="form-group">
-                                <label for="input-name" class="col-sm-3 control-label">Category</label>
+                                <label for="input-name" class="col-sm-3 control-label">Menu Category</label>
                                 <div class="col-sm-5">
-                                    <select name="category_name" id="category" class="form-control">
+                                    <select name="menu_category_name" id="menu_category" class="form-control">
                                         <option value=" ">Select Category</option>
-                                        @foreach ($categories as $category)
-                                            <option value="{{$category->id}}" >{{$category->name}}</option>
+                                        @foreach ($menu_categories as $menu_category)
+                                            <option value="{{$menu_category->id}}" >{{$menu_category->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -70,7 +70,7 @@
                                 <div class="col-sm-5">
                                     <select name="restaurant_name" id="restaurant" class="form-control" tabindex="-1" title=""  >
                                         @foreach($restaurants as $restaurant)
-                                            <option value="{{$restaurant->id}}">{{$restaurant->restaurant_name}},{{$restaurant->restaurant_city}},{{$restaurant->restaurant_address_1}}</option>
+                                            <option value="{{$restaurant->id}}">{{$restaurant->name}},{{$restaurant->city}},{{$restaurant->address}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -145,12 +145,12 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="input-name" class="col-sm-3 control-label">Subcategory</label>
+                            <label for="input-name" class="col-sm-3 control-label">Category</label>
                             <div class="col-sm-5">
-                                <select name="subcategory" id="subcategory" class="form-control">
-                                    <option value="">Select subcategory</option>
-                                    @foreach ($subcategories as $subcategory)
-                                        <option value="{{$subcategory->id}}" >{{$subcategory->subcategory_en}}</option>
+                                <select name="category" id="category" class="form-control">
+                                    <option value="">Select Category</option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{$category->id}}" >{{$category->name_en}}</option>
                                     @endforeach
                                 </select>
                             </div>

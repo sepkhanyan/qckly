@@ -156,7 +156,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="{{url('/collections')}}" class=menu_collections"">
+                                <a href="{{url('/collections')}}" class="menu_collections">
                                     <i class="fa fa-square-o fa-fw "></i>
                                     Collections
                                 </a>
@@ -168,15 +168,15 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ url('/categories') }}" class="categories">
+                                <a href="{{ url('/categories') }}" class="menu-categories">
                                     <i class="fa fa-square-o fa-fw"></i>
-                                    Categories
+                                    Menu Categories
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ url('/menu_subcategories') }}" class="subcategories">
+                                <a href="{{ url('/collection_categories') }}" class="collection-categories">
                                     <i class="fa fa-square-o fa-fw"></i>
-                                    Subcategories
+                                    Collection Categories
                                 </a>
                             </li>
                         </ul>
