@@ -65,8 +65,7 @@ class MenuSubcategoriesController extends Controller
      */
     public function edit($id)
     {
-        $subcategory = MenuSubcategory::find($id);
-        return view('menu_subcategory_edit', ['subcategory' => $subcategory]);
+        //
     }
 
     /**

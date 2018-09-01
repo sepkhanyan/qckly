@@ -2,10 +2,11 @@
 @section('content')
     <div class="page-header">
         <div class="page-action">
-            <a href="{{ url('/restaurant_category/create') }}"  class="btn btn-primary">
+            <a  href="" class="btn btn-primary"  data-toggle="modal" data-target="#modalCreateRestaurantCategory">
                 <i class="fa fa-plus"></i>
                 New
             </a>
+
             <a class="btn btn-danger" id="delete_restaurant_category">
                 <i class="fa fa-trash-o"></i>
                 Delete
@@ -80,9 +81,9 @@
                                 <tr>
                                     <td class="action">
                                         <input type="checkbox" value="{{ $category->id }}" name="delete" />
-                                        <a class="btn btn-edit" title="" href="{{ url('restaurant_category/edit/' . $category->id )}}">
+                                        <a class="btn btn-edit"  href="#" data-toggle="modal" data-target="#modalEditRestaurantCategory" type="button"  data-item-id="{{$category->id}}">
                                             <i class="fa fa-pencil"></i>
-                                        </a>&nbsp;&nbsp;
+                                        </a>&nbsp;&nbsp;&nbsp;
                                     </td>
                                     <td>{{$category->name_en}}</td>
                                     <td>{{$category->name_ar}}</td>
@@ -99,6 +100,72 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="modal fade" id="modalCreateRestaurantCategory" role="dialog" tabindex="-1" >
+        <form role="form" id="edit-form" class="form-horizontal"  accept-charset="utf-8" method="GET" action="{{ url('/restaurant_category/store') }}">
+            {{ csrf_field() }}
+            <div class="modal-dialog" >
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" >&times;</button>
+                        <h4 class="modal-title"> Add Category</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group" style="margin: 5px">
+                            <label class="control-label col-sm-2" for="en">Category En</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" type="text" id="en" name="name_en">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group" style="margin: 5px">
+                            <label class="control-label col-sm-2" for="ar">Category Ar</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" type="text" id="ar" name="name_ar">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit"  class="btn btn-primary">Add</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal fade" id="modalEditRestaurantCategory" role="dialog" tabindex="-1" >
+        <form role="form" id="edit-form" class="form-horizontal"  accept-charset="utf-8" method="POST" action="{{ url('/restaurant_category/update/' . $category->id ) }}">
+            {{ csrf_field() }}
+            <div class="modal-dialog" >
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" >&times;</button>
+                        <h4 class="modal-title"> Edit Category</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group" style="margin: 5px">
+                            <label class="control-label col-sm-2" for="en">Category En</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" type="text" id="en" name="name_en" value="{{$category->name_en}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group" style="margin: 5px">
+                            <label class="control-label col-sm-2" for="ar">Category Ar</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" type="text" id="ar" name="name_ar" value="{{$category->name_ar}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit"  class="btn btn-primary">Update</button>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
     </form>
     </div>

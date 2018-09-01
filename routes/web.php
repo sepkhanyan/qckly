@@ -27,7 +27,6 @@ Route::group(['middleware' => ['web', 'auth']], function (){
         Route::get('/areas', 'AreasController@index');
         Route::group(['prefix' => 'area'], function () {
             Route::get('store', 'AreasController@store');
-            Route::get('edit/{id}', 'AreasController@edit');
             Route::post('update/{id}', 'AreasController@update');
             Route::post('delete', 'AreasController@deleteAreas');
         });
@@ -41,9 +40,7 @@ Route::group(['middleware' => ['web', 'auth']], function (){
         });
         Route::get('/restaurant_categories', 'RestaurantCategoriesController@index');
         Route::group(['prefix' => 'restaurant_category'], function () {
-            Route::get('create', 'RestaurantCategoriesController@create');
-            Route::post('store', 'RestaurantCategoriesController@store');
-            Route::get('edit/{id}', 'RestaurantCategoriesController@edit');
+            Route::get('store', 'RestaurantCategoriesController@store');
             Route::post('update/{id}', 'RestaurantCategoriesController@update');
             Route::post('delete', 'RestaurantCategoriesController@deleteRestaurantCategory');
         });
@@ -58,7 +55,6 @@ Route::group(['middleware' => ['web', 'auth']], function (){
         Route::get('/menu_subcategories', 'MenuSubcategoriesController@index');
         Route::group(['prefix' => 'menu_subcategory'], function () {
             Route::get('store', 'MenuSubcategoriesController@store');
-            Route::get('edit/{id}', 'MenuSubcategoriesController@edit');
             Route::post('update/{id}', 'MenuSubcategoriesController@update');
             Route::post('delete', 'MenuSubcategoriesController@deleteSubcategory');
         });

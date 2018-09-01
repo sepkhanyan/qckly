@@ -1,17 +1,66 @@
 $(document).ready(function() {
 
     var token = $('[name=csrf-token]').attr('content');
-    // $('body').on('click', '#button_add_area', function() {
-    //     $('#addNote').modal('show');
-    //     var type = $(this).attr('data-type');
-    //     $.ajax({
-    //         url: '/areas/store/' + type,
-    //         method: 'GET',
-    //         success: function(result) {
-    //
-    //         }
-    //     })
-    // });
+
+    $(document).ready(function () {
+        var $updateModal = $('#modalEditArea');
+        $('.list-item-update').on('click', function (evn) { // this is the "a" tag
+            evn.preventDefault();
+
+            $updateModal.modal('show');
+            var resourceId = $(this).data('data-item-id'),
+                $pressedButton = $(this);
+
+            $updateModal.find('.confirm-btn').on('click', function (e) {
+                e.preventDefault();
+                var submitUrl = '/area/update/' + resourceId,
+                    form = $('#edit-form'); // change with your form
+
+                form.attr('action', submitUrl);
+                form.submit();
+            });
+        });
+    });
+
+    $(document).ready(function () {
+        var $updateModal = $('#modalEditSubcategory');
+        $('.list-item-update').on('click', function (evn) { // this is the "a" tag
+            evn.preventDefault();
+
+            $updateModal.modal('show');
+            var resourceId = $(this).data('data-item-id'),
+                $pressedButton = $(this);
+
+            $updateModal.find('.confirm-btn').on('click', function (e) {
+                e.preventDefault();
+                var submitUrl = '/menu_subcategory/update/' + resourceId,
+                    form = $('#edit-form'); // change with your form
+
+                form.attr('action', submitUrl);
+                form.submit();
+            });
+        });
+    });
+
+    $(document).ready(function () {
+        var $updateModal = $('#modalEditRestaurantCategory');
+        $('.list-item-update').on('click', function (evn) { // this is the "a" tag
+            evn.preventDefault();
+
+            $updateModal.modal('show');
+            var resourceId = $(this).data('data-item-id'),
+                $pressedButton = $(this);
+
+            $updateModal.find('.confirm-btn').on('click', function (e) {
+                e.preventDefault();
+                var submitUrl = '/restaurant_category/update/' + resourceId,
+                    form = $('#edit-form'); // change with your form
+
+                form.attr('action', submitUrl);
+                form.submit();
+            });
+        });
+    });
 
 
 

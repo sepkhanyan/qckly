@@ -32,7 +32,7 @@ class RestaurantCategoriesController extends Controller
      */
     public function create()
     {
-        return view('restaurant_category_create');
+        //
     }
 
     /**
@@ -71,8 +71,7 @@ class RestaurantCategoriesController extends Controller
      */
     public function edit($id)
     {
-        $category = RestaurantCategory::find($id);
-        return view('restaurant_category_edit', ['category' => $category]);
+        //
     }
 
     /**

@@ -89,8 +89,7 @@ class AreasController extends Controller
      */
     public function edit($id)
     {
-        $area = Area::find($id);
-        return view('area_edit', ['area' => $area]);
+        //
     }
 
     /**

@@ -2,7 +2,7 @@
 @section('content')
     <div class="page-header">
         <div class="page-action">
-            <a  href="" class="btn btn-primary"  data-toggle="modal" data-target="#myModal">
+            <a  href="" class="btn btn-primary"  data-toggle="modal" data-target="#modalCreateSubcategory">
                 <i class="fa fa-plus"></i>
                 New
             </a>
@@ -76,9 +76,9 @@
                                 <tr>
                                     <td class="action">
                                         <input type="checkbox" value="{{ $subcategory->id }}" name="delete" />
-                                        <a class="btn btn-edit" title="" href="{{ url('/menu_subcategory/edit/' . $subcategory->id )}}">
+                                        <a class="btn btn-edit"  href="#" data-toggle="modal" data-target="#modalEditSubcategory" type="button"  data-item-id="{{$subcategory->id}}">
                                             <i class="fa fa-pencil"></i>
-                                        </a>&nbsp;&nbsp;
+                                        </a>&nbsp;&nbsp;&nbsp;
                                     </td>
                                     <td>{{$subcategory->name_en}}</td>
                                     <td>{{$subcategory->name_ar}}</td>
@@ -93,7 +93,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="myModal" role="dialog" tabindex="-1" >
+    <div class="modal fade" id="modalCreateSubcategory" role="dialog" tabindex="-1" >
         <form role="form" id="edit-form" class="form-horizontal"  accept-charset="utf-8" method="GET" action="{{ url('/menu_subcategory/store') }}">
             {{ csrf_field() }}
             <div class="modal-dialog" >
@@ -121,6 +121,39 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         <button type="submit"  class="btn btn-primary">Add</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal fade" id="modalEditSubcategory" role="dialog" tabindex="-1" >
+        <form role="form" id="edit-form" class="form-horizontal"  accept-charset="utf-8" method="POST" action="{{ url('/menu_subcategory/update/' . $subcategory->id ) }}">
+            {{ csrf_field() }}
+            <div class="modal-dialog" >
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" >&times;</button>
+                        <h4 class="modal-title"> Edit Subcategory</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group" style="margin: 5px">
+                            <label class="control-label col-sm-2" for="en">Sub En</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" type="text" id="en" name="subcategory_en" value="{{$subcategory->name_en}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group" style="margin: 5px">
+                            <label class="control-label col-sm-2" for="ar">Sub Ar</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" type="text" id="ar" name="subcategory_ar" value="{{$subcategory->name_ar}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit"  class="btn btn-primary">Update</button>
                     </div>
                 </div>
             </div>
