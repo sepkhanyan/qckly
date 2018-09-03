@@ -289,13 +289,13 @@ class UserCartsController extends Controller
                     }
                 }
                 $arr = [
-                    'cart_id' => $cart->id,
-                    'message' => 'Collections added to cart successfully.'
+                    'cart_id' => $cart->id
                 ];
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200,
-                    'data' => $arr));
+                    'data' => $arr,
+                    'message' => 'Collections added to cart successfully.'));
             }
         }else{
             return response()->json(array(

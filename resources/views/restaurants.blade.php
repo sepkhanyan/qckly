@@ -72,19 +72,19 @@
                                 </th>
                                 <th>
                                     <a class="sort" href="">
-                                        City
+                                        Description
                                         <i class="fa fa-sort>"></i>
                                     </a>
                                 </th>
                                 <th>
                                     <a class="sort" href="">
-                                        State
+                                        Area
                                         <i class="fa fa-sort"></i>
                                     </a>
                                 </th>
                                 <th>
                                     <a class="sort" href="">
-                                        Postcode
+                                        City
                                         <i class="fa fa-sort>"></i>
                                     </a>
                                 </th>
@@ -122,9 +122,9 @@
                                         <img src="/images/{{$restaurant->image}}" width="30px" height="30px">
                                         {{$restaurant->name}}
                                     </td>
+                                    <td>{{$restaurant->description}}</td>
+                                    <td>{{$restaurant->area->area_en}}</td>
                                     <td>{{$restaurant->city}}</td>
-                                    <td>{{$restaurant->state}}</td>
-                                    <td>{{$restaurant->postcode}}</td>
                                     <td>{{$restaurant->telephone}}</td>
                                     @if($restaurant->status == 1)
                                     <td>Enable</td>

@@ -18,7 +18,7 @@
             <select name="restaurant_name" id="menus" class="form-control" tabindex="-1" title="" onchange="top.location.href = this.options[this.selectedIndex].value">
                 <option value>Select Restaurant</option>
                 @foreach($restaurants as $restaurant)
-                    <option value="{{url('/menus/' . $restaurant->id)}}">{{$restaurant->name}},{{$restaurant->city}},{{$restaurant->address}}</option>
+                    <option value="{{url('/menus/' . $restaurant->id)}}">{{$restaurant->name}},{{$restaurant->area->area_en}},{{$restaurant->city}},{{$restaurant->address}}</option>
                 @endforeach
             </select>
         </div>
