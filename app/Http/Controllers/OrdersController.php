@@ -97,15 +97,15 @@ class OrdersController extends Controller
                             $female_caterer = false;
                         }
                         $persons_count = -1;
-                        if($cart_collection->collection->subcategory_id == 2){
+                        if($cart_collection->collection->category_id == 2){
                             $persons_count =  $cart_collection->persons_count;
                         }
                         $collections [] = [
                             'restaurant_id' => $cart_collection->collection->restaurant->id,
                             'restaurant_name' => $cart_collection->collection->restaurant->name,
                             'collection_id' => $cart_collection->collection_id,
-                            'collection_type_id' => $cart_collection->collection->subcategory_id,
-                            'collection_type' => $cart_collection->collection->subcategory->subcategory_en,
+                            'collection_type_id' => $cart_collection->collection->category_id,
+                            'collection_type' => $cart_collection->collection->category->name_en,
                             'collection_name' => $cart_collection->collection->name,
                             'collection_price' => $cart_collection->collection->price,
                             'collection_price_unit' => 'QR',
