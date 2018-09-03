@@ -35,7 +35,7 @@
                             <div class="col-sm-5">
                                 <select name="restaurant" id="restaurant" class="form-control" tabindex="-1" title="">
                                     @foreach($restaurants as $restaurant)
-                                        <option value="{{$restaurant->id}}">{{$restaurant->restaurant_name}},{{$restaurant->restaurant_city}},{{$restaurant->restaurant_address_1}}</option>
+                                        <option value="{{$restaurant->id}}">{{$restaurant->name}},{{$restaurant->city}},{{$restaurant->address}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -136,7 +136,6 @@
                         <div class="form-group">
                             <label for="input-mealtime" class="col-sm-3 control-label">
                                 Mealtime
-                                <span class="help-block">Set what mealtime of day your customers can order this menu. Mealtimes can be managed under Localisation -> Mealtimes</span>
                             </label>
                             <div class="col-sm-5">
                                 <select name="mealtime" id="mealtime" class="form-control">
@@ -147,49 +146,49 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group{{ $errors->has('stock_qty') ? ' has-error' : '' }}">
-                            <label for="input-stock" class="col-sm-3 control-label">
-                                Stock Quantity
-                                <span class="help-block">Set to 0 for unlimited stock quantity.</span>
-                            </label>
-                            <div class="col-sm-5">
-                                <input type="text" name="stock_qty" id="input-stock" class="form-control" value="{{ old('stock_qty') }}" />
-                                @if ($errors->has('stock_qty'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('stock_qty') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="form-group{{ $errors->has('minimum_qty') ? ' has-error' : '' }}">
-                            <label for="input-minimum" class="col-sm-3 control-label">
-                                Minimum Quantity
-                                <span class="help-block">The minimum quantity that can be ordered. Default is 1, unless set otherwise.</span>
-                            </label>
-                            <div class="col-sm-5">
-                                <input type="text" name="minimum_qty" id="input-minimum" class="form-control" value="1" />
-                                @if ($errors->has('minimum_qty'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('minimum_qty') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="input-subtract-stock" class="col-sm-3 control-label">Subtract Stock</label>
-                            <div class="col-sm-5">
-                                <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                    <label class="btn btn-danger active">
-                                        <input type="radio" name="subtract_stock" value="0"  checked="checked">
-                                        NO
-                                    </label>
-                                    <label class="btn btn-success">
-                                        <input type="radio" name="subtract_stock" value="1" >
-                                        YES
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
+                        {{--<div class="form-group{{ $errors->has('stock_qty') ? ' has-error' : '' }}">--}}
+                            {{--<label for="input-stock" class="col-sm-3 control-label">--}}
+                                {{--Stock Quantity--}}
+                                {{--<span class="help-block">Set to 0 for unlimited stock quantity.</span>--}}
+                            {{--</label>--}}
+                            {{--<div class="col-sm-5">--}}
+                                {{--<input type="text" name="stock_qty" id="input-stock" class="form-control" value="{{ old('stock_qty') }}" />--}}
+                                {{--@if ($errors->has('stock_qty'))--}}
+                                    {{--<span class="help-block">--}}
+                                        {{--<strong>{{ $errors->first('stock_qty') }}</strong>--}}
+                                    {{--</span>--}}
+                                {{--@endif--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                        {{--<div class="form-group{{ $errors->has('minimum_qty') ? ' has-error' : '' }}">--}}
+                            {{--<label for="input-minimum" class="col-sm-3 control-label">--}}
+                                {{--Minimum Quantity--}}
+                                {{--<span class="help-block">The minimum quantity that can be ordered. Default is 1, unless set otherwise.</span>--}}
+                            {{--</label>--}}
+                            {{--<div class="col-sm-5">--}}
+                                {{--<input type="text" name="minimum_qty" id="input-minimum" class="form-control" value="1" />--}}
+                                {{--@if ($errors->has('minimum_qty'))--}}
+                                    {{--<span class="help-block">--}}
+                                        {{--<strong>{{ $errors->first('minimum_qty') }}</strong>--}}
+                                    {{--</span>--}}
+                                {{--@endif--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                        {{--<div class="form-group">--}}
+                            {{--<label for="input-subtract-stock" class="col-sm-3 control-label">Subtract Stock</label>--}}
+                            {{--<div class="col-sm-5">--}}
+                                {{--<div class="btn-group btn-group-switch" data-toggle="buttons">--}}
+                                    {{--<label class="btn btn-danger active">--}}
+                                        {{--<input type="radio" name="subtract_stock" value="0"  checked="checked">--}}
+                                        {{--NO--}}
+                                    {{--</label>--}}
+                                    {{--<label class="btn btn-success">--}}
+                                        {{--<input type="radio" name="subtract_stock" value="1" >--}}
+                                        {{--YES--}}
+                                    {{--</label>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
                         <div class="form-group">
                             <label for="input-status" class="col-sm-3 control-label">Status</label>
                             <div class="col-sm-5">

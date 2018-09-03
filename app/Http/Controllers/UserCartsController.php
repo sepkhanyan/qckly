@@ -290,6 +290,7 @@ class UserCartsController extends Controller
                 }
                 $arr = [
                     'cart_id' => $cart->id,
+                    'message' => 'Collections added to cart successfully.'
                 ];
                 return response()->json(array(
                     'success' => 1,

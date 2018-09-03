@@ -1,28 +1,4 @@
-{{--@extends('layouts.app')--}}
-
-{{--@section('content')--}}
-{{--<div class="container">--}}
-    {{--<div class="row justify-content-center">--}}
-        {{--<div class="col-md-8">--}}
-            {{--<div class="card">--}}
-                {{--<div class="card-header">Dashboard</div>--}}
-
-                {{--<div class="card-body">--}}
-                    {{--@if (session('status'))--}}
-                        {{--<div class="alert alert-success">--}}
-                            {{--{{ session('status') }}--}}
-                        {{--</div>--}}
-                    {{--@endif--}}
-
-                    {{--You are logged in!--}}
-                {{--</div>--}}
-            {{--</div>--}}
-        {{--</div>--}}
-    {{--</div>--}}
-{{--</div>--}}
-{{--@endsection--}}
-
-        <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
@@ -30,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Header</title>
-
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     {{--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">--}}
@@ -53,9 +28,6 @@
     <script src="{{ asset('js/metisMenu.min.js') }}" ></script>
     <script src="{{ asset('js/select2.js') }}" ></script>
     <script src="{{ asset('js/common.js') }}" ></script>
-
-
-
 
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
@@ -101,11 +73,10 @@
         <div class="navbar-header">
             <div class="navbar-brand">
                 <div class="navbar-logo col-xs-3">
-                    <img class="logo-image" alt="TastyIgniter" title="TastyIgniter" src="https://demo.tastyigniter.com/admin/views/themes/tastyigniter-blue/images/tastyigniter-logo.png"/>
+                    {{--<img class="logo-image" alt="TastyIgniter" title="TastyIgniter" src="https://demo.tastyigniter.com/admin/views/themes/tastyigniter-blue/images/tastyigniter-logo.png"/>--}}
                 </div>
                 <div class="navbar-logo col-xs-9">
-                    <img class="logo-text" alt="TastyIgniter" title="TastyIgniter" src="https://demo.tastyigniter.com/admin/views/themes/tastyigniter-blue/images/tastyigniter-logo-text.png"/>
-                    <!--						<a class="logo-text" href="--><!--">--><!--</a>-->
+                    {{--<img class="logo-text" alt="TastyIgniter" title="TastyIgniter" src="https://demo.tastyigniter.com/admin/views/themes/tastyigniter-blue/images/tastyigniter-logo-text.png"/>--}}
                 </div>
             </div>
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -114,15 +85,12 @@
                 <span class="icon-bar"></span>
             </button>
             <span class="icon-bar"></span>
-
         </div>
-
-
         <div class="navbar-default sidebar" role="navigation">
             <div class="sidebar-nav navbar-collapse">
                 <ul class="nav" id="side-menu">
                     <li>
-                        <a class="dashboard admin active" href="#">
+                        <a class="dashboard admin active" href="{{ url('/') }}">
                             <i class="fa fa-dashboard fa-fw"></i>
                             <span class="content">Dashboard</span>
                         </a>
@@ -194,18 +162,18 @@
                                     Orders
                                 </a>
                             </li>
-                            <li>
-                                <a href="#" class="reservations">
-                                    <i class="fa fa-square-o fa-fw"></i>
-                                    Reservations
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="coupons">
-                                    <i class="fa fa-square-o fa-fw"></i>
-                                    Coupons
-                                </a>
-                            </li>
+                            {{--<li>--}}
+                                {{--<a href="#" class="reservations">--}}
+                                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                                    {{--Reservations--}}
+                                {{--</a>--}}
+                            {{--</li>--}}
+                            {{--<li>--}}
+                                {{--<a href="#" class="coupons">--}}
+                                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                                    {{--Coupons--}}
+                                {{--</a>--}}
+                            {{--</li>--}}
                         </ul>
                     </li>
                     <li>
@@ -221,18 +189,18 @@
                                     Reviews
                                 </a>
                             </li>
-                            <li>
-                                <a href="#" class="messages">
-                                    <i class="fa fa-square-o fa-fw"></i>
-                                    Messages
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="banners">
-                                    <i class="fa fa-square-o fa-fw"></i>
-                                    Banners
-                                </a>
-                            </li>
+                            {{--<li>--}}
+                                {{--<a href="#" class="messages">--}}
+                                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                                    {{--Messages--}}
+                                {{--</a>--}}
+                            {{--</li>--}}
+                            {{--<li>--}}
+                                {{--<a href="#" class="banners">--}}
+                                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                                    {{--Banners--}}
+                                {{--</a>--}}
+                            {{--</li>--}}
                         </ul>
 
                     </li>
@@ -271,53 +239,53 @@
                                     Customers
                                 </a>
                             </li>
-                            <li>
-                                <a href="#" class="customer_groups">
-                                    <i class="fa fa-square-o fa-fw"></i>
-                                    Customer Groups
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="activities">
-                                    <i class="fa fa-square-o fa-fw"></i>
-                                    Activities
-                                </a>
-                            </li>
+                            {{--<li>--}}
+                                {{--<a href="#" class="customer_groups">--}}
+                                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                                    {{--Customer Groups--}}
+                                {{--</a>--}}
+                            {{--</li>--}}
+                            {{--<li>--}}
+                                {{--<a href="#" class="activities">--}}
+                                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                                    {{--Activities--}}
+                                {{--</a>--}}
+                            {{--</li>--}}
                         </ul>
                     </li>
-                    <li>
-                        <a href="#" class="extensions">
-                            <i class="fa fa-puzzle-piece fa-fw"></i>
-                            <span class="content">Extensions</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="design">
-                            <i class="fa fa-paint-brush fa-fw"></i>
-                            <span class="content">Design</span>
-                            <span class="fa arrow"></span>
-                        </a>
-                        <ul class="nav nav-second-level collapse">
-                            <li>
-                                <a href="#" class="pages">
-                                    <i class="fa fa-square-o fa-fw"></i>
-                                    Pages
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="layouts">
-                                    <i class="fa fa-square-o fa-fw"></i>
-                                    Layouts
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="mail_templates">
-                                    <i class="fa fa-square-o fa-fw"></i>
-                                    Mail Templates
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+                    {{--<li>--}}
+                        {{--<a href="#" class="extensions">--}}
+                            {{--<i class="fa fa-puzzle-piece fa-fw"></i>--}}
+                            {{--<span class="content">Extensions</span>--}}
+                        {{--</a>--}}
+                    {{--</li>--}}
+                    {{--<li>--}}
+                        {{--<a class="design">--}}
+                            {{--<i class="fa fa-paint-brush fa-fw"></i>--}}
+                            {{--<span class="content">Design</span>--}}
+                            {{--<span class="fa arrow"></span>--}}
+                        {{--</a>--}}
+                        {{--<ul class="nav nav-second-level collapse">--}}
+                            {{--<li>--}}
+                                {{--<a href="#" class="pages">--}}
+                                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                                    {{--Pages--}}
+                                {{--</a>--}}
+                            {{--</li>--}}
+                            {{--<li>--}}
+                                {{--<a href="#" class="layouts">--}}
+                                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                                    {{--Layouts--}}
+                                {{--</a>--}}
+                            {{--</li>--}}
+                            {{--<li>--}}
+                                {{--<a href="#" class="mail_templates">--}}
+                                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                                    {{--Mail Templates--}}
+                                {{--</a>--}}
+                            {{--</li>--}}
+                        {{--</ul>--}}
+                    {{--</li>--}}
                     <li>
                         <a class="locations">
                             <i class="fa fa-globe fa-fw"></i>
@@ -371,18 +339,18 @@
                             <span class="fa arrow"></span>
                         </a>
                         <ul class="nav nav-second-level collapse">
-                            <li>
-                                <a href="#" class="settings">
-                                    <i class="fa fa-square-o fa-fw"></i>
-                                    Settings
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="permissions">
-                                    <i class="fa fa-square-o fa-fw"></i>
-                                    Permissions
-                                </a>
-                            </li>
+                            {{--<li>--}}
+                                {{--<a href="#" class="settings">--}}
+                                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                                    {{--Settings--}}
+                                {{--</a>--}}
+                            {{--</li>--}}
+                            {{--<li>--}}
+                                {{--<a href="#" class="permissions">--}}
+                                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                                    {{--Permissions--}}
+                                {{--</a>--}}
+                            {{--</li>--}}
                             <li>
                                 <a class="tools">
                                     <i class="fa fa-square-o fa-fw"></i>
@@ -409,7 +377,6 @@
                 </ul>
             </div>
         </div>
-
         <ul class="nav navbar-top-links navbar-right">
             <li class="dropdown">
                 <a class="front-end" title href="#"  data-original-title="Storefront">
@@ -446,10 +413,9 @@
                                 <div class="clearfix">
                                     <div class="activity-body">
                                         <i class="fa fa-tasks fa-fw bg-primary"></i>
-
                                         <span class="activity-time text-muted small">
-													<span class="small"></span>
-												</span>
+                                            <span class="small"></span>
+                                        </span>
                                     </div>
                                 </div>
                             </li>
@@ -459,8 +425,8 @@
                                     <div class="activity-body">
                                         <i class="fa fa-tasks fa-fw bg-primary"></i>
                                         <span class="activity-time text-muted small">
-													<span class="small"></span>
-												</span>
+                                            <span class="small"></span>
+                                        </span>
                                     </div>
                                 </div>
                             </li>
@@ -468,13 +434,12 @@
                             <li class="unread">
                                 <div class="activity-body">
                                     <i class="fa fa-tasks fa-fw bg-primary"></i>
-
                                     <a >
-                                        <b>#20992.</b>
+                                        <b></b>
                                     </a>
                                     <span class="activity-time text-muted small">
-												<span class="small"></span>
-											</span>
+                                        <span class="small"></span>
+                                    </span>
                                 </div>
                             </li>
                             <li class="divider"></li>
@@ -509,12 +474,12 @@
                                 <img class="img-rounded" src="https://www.gravatar.com/avatar/7c4ff521986b4ff8d29440beec01972d.png?s=48&d=mm">
                             </div>
                             <div class="col-xs-12 wrap-none wrap-top wrap-right">
-										<span>
-											<strong>Demo Adminm</strong>
-										</span>
+                                <span>
+                                    <strong>Demo Adminm</strong>
+                                </span>
                                 <span class="small">
-											<i>(demo)</i>
-										</span>
+                                    <i>(demo)</i>
+                                </span>
                                 <br>
                                 <span class="small text-uppercase">Demo</span>
                                 <span></span>
@@ -543,7 +508,7 @@
                     <li>
                         <a href="#" >
                             <i class="fa fa-info-circle fa-fw"></i>
-                            &nbsp;&nbsp;About TastyIgniter
+                            &nbsp;&nbsp;About Qckly
                         </a>
                     </li>
                     <li>
@@ -565,7 +530,6 @@
         {{--<h1 class="navbar-heading">Dashboard</h1>--}}
     </nav>
     <div id="page-wrapper" style="height: 100%;">
-
         {{--<div class="page-header clearfix">--}}
         {{--<div class="page-action">--}}
         {{--<a href="#" class="btn btn-default">--}}
@@ -576,34 +540,24 @@
         {{--</div>--}}
         @yield('content')
     </div>
-
 </div>
-
 {{--<div id="notification"></div>
 <div class="row content dashboard">
     <div class="col-md-12">
         <div class="row mini-statistics">
-
-
         </div>
         <div class="row statistics"></div>
         <div></div>
         <div class="panel panel-default panel-orders"></div>
     </div>
 </div>
-
-
     <div class="collapse" id="context-help-wrap">
         <div class="well"></div>
     </div>
-
-
 <div id="notification">
 </div>
 </div>
-
 </div>--}}
-
 </body>
 </html>
 

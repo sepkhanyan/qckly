@@ -83,21 +83,21 @@ class RestaurantsController extends Controller
         $restaurant->latitude = $request->input('latitude');
         $restaurant->longitude = $request->input('longitude');
         $restaurant->description = $request->input('description');
-        $restaurant->offer_delivery = $request->input('offer_delivery');
-        $restaurant->offer_collection = $request->input('offer_collection');
-        $restaurant->delivery_time = $request->input('delivery_time');
-        $restaurant->last_order_time = $request->input('last_order_time');
-        $restaurant->reservation_interval = $request->input('reservation_time_interval');
-        $restaurant->reservation_turn = $request->input('reservation_stay_time');
-        $restaurant->collection_time = $request->input('collection_time');
+//        $restaurant->offer_delivery = $request->input('offer_delivery');
+//        $restaurant->offer_collection = $request->input('offer_collection');
+//        $restaurant->delivery_time = $request->input('delivery_time');
+//        $restaurant->last_order_time = $request->input('last_order_time');
+//        $restaurant->reservation_interval = $request->input('reservation_time_interval');
+//        $restaurant->reservation_turn = $request->input('reservation_stay_time');
+//        $restaurant->collection_time = $request->input('collection_time');
         $restaurant->status = $request->input('status');
         $restaurant->save();
         $categories = $request->input('category');
         foreach($categories as $category){
             $restaurantCategories = RestaurantCategory::where('id',$category)->get();
             foreach($restaurantCategories as $restaurantCategory){
-               $en = $restaurantCategory->restaurant_category_name_en;
-               $ar = $restaurantCategory->restaurant_category_name_ar;
+               $en = $restaurantCategory->name_en;
+               $ar = $restaurantCategory->name_ar;
             }
             $categoryRestaurant = new CategoryRestaurant();
             $categoryRestaurant->restaurant_id = $restaurant->id;
@@ -192,13 +192,13 @@ class RestaurantsController extends Controller
         $restaurant->latitude = $request->input('latitude');
         $restaurant->longitude = $request->input('longitude');
         $restaurant->description = $request->input('description');
-        $restaurant->offer_delivery = $request->input('offer_delivery');
-        $restaurant->offer_collection = $request->input('offer_collection');
-        $restaurant->delivery_time = $request->input('delivery_time');
-        $restaurant->last_order_time = $request->input('last_order_time');
-        $restaurant->reservation_interval = $request->input('reservation_time_interval');
-        $restaurant->reservation_turn = $request->input('reservation_stay_time');
-        $restaurant->collection_time = $request->input('collection_time');
+//        $restaurant->offer_delivery = $request->input('offer_delivery');
+//        $restaurant->offer_collection = $request->input('offer_collection');
+//        $restaurant->delivery_time = $request->input('delivery_time');
+//        $restaurant->last_order_time = $request->input('last_order_time');
+//        $restaurant->reservation_interval = $request->input('reservation_time_interval');
+//        $restaurant->reservation_turn = $request->input('reservation_stay_time');
+//        $restaurant->collection_time = $request->input('collection_time');
         $restaurant->status = $request->input('status');
         if ($request->hasFile('image')) {
             $deletedImage = File::delete(public_path('images/' . $restaurant->image));
@@ -217,8 +217,8 @@ class RestaurantsController extends Controller
             foreach($categories as $category){
                 $restaurantCategories = RestaurantCategory::where('id',$category)->get();
                 foreach($restaurantCategories as $restaurantCategory){
-                    $en = $restaurantCategory->restaurant_category_name_en;
-                    $ar = $restaurantCategory->restaurant_category_name_ar;
+                    $en = $restaurantCategory->name_en;
+                    $ar = $restaurantCategory->name_ar;
                 }
                 $categoryRestaurant = new CategoryRestaurant();
                 $categoryRestaurant->restaurant_id = $restaurant->id;

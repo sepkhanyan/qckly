@@ -33,10 +33,9 @@
                                         <a class="btn btn-grey" onclick="filterList();" title="Search">
                                             <i class="fa fa-search"></i>
                                         </a>
-                                        <a class="btn btn-grey" href="}}" title="Clear">
+                                        <a class="btn btn-grey" href="{{url('/collection_categories')}}" title="Clear">
                                             <i class="fa fa-times"></i>
                                         </a>
-
                                     </div>
                                 </div>
                             </div>
@@ -85,7 +84,6 @@
                                     <td>{{$category->id}}</td>
                                 </tr>
                             @endforeach
-
                             </tbody>
                         </table>
                     </div>
@@ -159,7 +157,6 @@
             </div>
         </form>
     </div>
-
     <script type="text/javascript">
         function filterList() {
             $('#filter-form').submit();

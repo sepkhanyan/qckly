@@ -28,7 +28,6 @@
                                                 <option value="{{$restaurant->id}}">{{$restaurant->name}},{{$restaurant->city}},{{$restaurant->address}}</option>
                                             @endforeach
                                         </select>
-
                                     </div>
                                 </div>
                         </div>
@@ -75,10 +74,15 @@
                                     </select>
                                 </div>
                             </div>
-                        <div class="form-group">
+                        <div class="form-group {{ $errors->has('name') ? ' has-error' : '' }}">
                             <label for="input-name" class="col-sm-3 control-label">Name</label>
                             <div class="col-sm-5">
-                                <input type="text" name="name" id="input-name" class="form-control" value="">
+                                <input type="text" name="name" id="input-name" class="form-control" value="{{ old('name') }}">
+                                @if ($errors->has('name'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('name') }}</strong>
+                                    </span>
+                                @endif
                             </div>
                         </div>
                             <div class="form-group">
@@ -103,19 +107,19 @@
                             <div class="form-group">
                                 <label for="service" class="col-sm-3 control-label">Service Provide</label>
                                 <div class="col-sm-5">
-                                    <textarea name="service_provide"  class="form-control" id="service"></textarea>
+                                    <textarea name="service_provide"  class="form-control" id="service">{{ old('service_provide') }}</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="presentation" class="col-sm-3 control-label">Service Presentation</label>
                                 <div class="col-sm-5">
-                                    <textarea name="service_presentation"  class="form-control" id="presentation"></textarea>
+                                    <textarea name="service_presentation"  class="form-control" id="presentation">{{ old('service_presentation') }}</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="instructions" class="col-sm-3 control-label">Instruction</label>
                                 <div class="col-sm-5">
-                                    <textarea name="instructions" id="notes" class="form-control" ></textarea>
+                                    <textarea name="instructions" id="notes" class="form-control" >{{ old('instructions') }}</textarea>
                                 </div>
                             </div>
                         <div class="form-group">
@@ -137,7 +141,7 @@
                             <label for="input-price" class="col-sm-3 control-label">Price</label>
                             <div class="col-sm-5">
                                 <div class="input-group">
-                                    <input type="text" name="collection_price" id="input-price" class="form-control" value="" />
+                                    <input type="text" name="collection_price" id="input-price" class="form-control" value="{{ old('collection_price') }}" />
                                     <span class="input-group-addon">
                                         <i class="fa fa-money"></i>
                                     </span>
@@ -161,13 +165,13 @@
                                     <label class="col-sm-3 control-label">Quantity</label>
                                     <div class="col-sm-5">
                                         <div class="input-group" id="collection_qty" style="width: 200px; display: none">
-                                            <input type="text" name="min_quantity" class="form-control"  placeholder="Collection min quantity" >
-                                            <input type="text" name="max_quantity" class="form-control"  placeholder="Collection max quantity" >
+                                            <input type="text" name="min_quantity" class="form-control"  placeholder="Collection min quantity" value="{{ old('min_quantity') }}">
+                                            <input type="text" name="max_quantity" class="form-control"  placeholder="Collection max quantity" value="{{ old('max_quantity') }}">
                                         </div>
                                         <div class="input-group" id="persons_qty" style="display: none; width: 200px;">
-                                            <input type="text" name="min_serve_to_person" class="form-control"  placeholder="Serve to person(min)" >
-                                            <input type="text" name="max_serve_to_person" class="form-control"  placeholder="Serve to person(max)">
-                                            <input type="text" name="persons_max_count" id="max_person" class="form-control"  placeholder="Persons max count">
+                                            <input type="text" name="min_serve_to_person" class="form-control"  placeholder="Serve to person(min)" value="{{ old('min_serve_to_person') }}">
+                                            <input type="text" name="max_serve_to_person" class="form-control"  placeholder="Serve to person(max)" value="{{ old('max_serve_to_person') }}">
+                                            <input type="text" name="persons_max_count" id="max_person" class="form-control"  placeholder="Persons max count" value="{{ old('persons_max_count') }}">
                                         </div>
                                     </div>
                                 </div>
@@ -198,7 +202,7 @@
                                             @endforeach
                                         </select>
                                         <span  id="item_count" style="display: none">
-                                           <input type="text" name="item_qty"  placeholder="Quantity">
+                                           <input type="text" name="item_qty"  placeholder="Quantity" value="{{ old('item_qty') }}">
                                         </span>
 
                                     </div>
@@ -218,7 +222,7 @@
                                     <label for="input-setup" class="col-sm-3 control-label">Setup Time</label>
                                     <div class="col-sm-5">
                                         <div class="input-group">
-                                            <input type="text" name="setup_time" id="input-setup" class="form-control" value="" />
+                                            <input type="text" name="setup_time" id="input-setup" class="form-control" value="{{ old('setup_time') }}" />
                                             </span>
                                         </div>
                                     </div>
@@ -226,14 +230,14 @@
                                 <div class="form-group">
                                     <label for="input-requirements" class="col-sm-3 control-label">Requirements</label>
                                     <div class="col-sm-5">
-                                        <textarea name="requirements" id="input-requirements" class="form-control"></textarea>
+                                        <textarea name="requirements" id="input-requirements" class="form-control">{{ old('requirements') }}</textarea>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="input-max" class="col-sm-3 control-label">Max Time</label>
                                     <div class="col-sm-5">
                                         <div class="input-group">
-                                            <input type="text" name="max_time" id="input-max" class="form-control" value="" />
+                                            <input type="text" name="max_time" id="input-max" class="form-control" value="{{ old('max_time') }}" />
                                             </span>
                                         </div>
                                     </div>

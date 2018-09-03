@@ -36,7 +36,6 @@
                                         <a class="btn btn-grey" href="{{url('/areas')}}" title="Clear">
                                             <i class="fa fa-times"></i>
                                         </a>
-
                                     </div>
                                 </div>
                             </div>
@@ -72,7 +71,6 @@
                             </tr>
                             </thead>
                             <tbody>
-
                             @foreach($areas as $area)
                                 <tr>
                                     <td class="action">
@@ -86,7 +84,6 @@
                                     <td>{{$area->id}}</td>
                                 </tr>
                             @endforeach
-
                             </tbody>
                         </table>
                         {{ $areas->links() }}

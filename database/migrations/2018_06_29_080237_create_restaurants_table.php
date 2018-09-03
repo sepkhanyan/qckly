@@ -27,19 +27,14 @@ class CreateRestaurantsTable extends Migration
             $table->string('restaurant_telephone', 32);
             $table->float('restaurant_lat', 10,6);
             $table->float('restaurant_lng', 10,6);
-            /*$table->integer('location_radius');
-            $table->text('covered_area');*/
             $table->tinyInteger('offer_delivery');
             $table->tinyInteger('offer_collection');
             $table->integer('delivery_time');
             $table->integer('last_order_time');
-            /*$table->decimal('delivery_charge',15,2);
-            $table->decimal('min_delivery_total',15,2);*/
             $table->integer('reservation_interval');
             $table->integer('reservation_turn');
             $table->integer('collection_time');
             $table->tinyInteger('restaurant_status');
-            /*$table->text('options');*/
             $table->string('restaurant_image', 255);
             $table->timestamps();
         });

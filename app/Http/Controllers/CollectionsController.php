@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Http\Requests\CollectionRequest;
 use App\Category;
 use App\CollectionItem;
 use Illuminate\Http\Request;
@@ -83,7 +83,7 @@ class CollectionsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CollectionRequest $request)
     {
         $collection = New Collection();
         $collection->restaurant_id = $request->input('restaurant_name');
