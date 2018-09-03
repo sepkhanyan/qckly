@@ -105,6 +105,21 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label for="female_caterer_available" class="col-sm-3 control-label">Female Caterer Available</label>
+                                <div class="col-sm-5">
+                                    <div class="btn-group btn-group-switch" data-toggle="buttons">
+                                        <label class="btn btn-danger active">
+                                            <input type="radio" name="female_caterer_available" value="0"  checked="checked">
+                                            NO
+                                        </label>
+                                        <label class="btn btn-success">
+                                            <input type="radio" name="female_caterer_available" value="1" >
+                                            YES
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label for="service" class="col-sm-3 control-label">Service Provide</label>
                                 <div class="col-sm-5">
                                     <textarea name="service_provide"  class="form-control" id="service">{{ old('service_provide') }}</textarea>

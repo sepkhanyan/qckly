@@ -501,7 +501,7 @@ class UserCartsController extends Controller
             $collection_type = $DataRequests['collection_type'];
             $collection_id = $DataRequests['collection_id'];
             $collection = Collection::where('id', $collection_id)->with('collectionItem.menu')->first();
-            if ($collection->restaurant->female_caterer_available == 1) {
+            if ($collection->female_caterer_available == 1) {
                 $female_caterer_available = true;
             } else {
                 $female_caterer_available = false;

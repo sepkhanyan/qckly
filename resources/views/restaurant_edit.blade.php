@@ -197,19 +197,19 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="input-slug" class="col-sm-3 control-label">
-                                Permalink Slug
-                                <span class="help-block">Use ONLY alpha-numeric lowercase characters, underscores or dashes and make sure it is unique GLOBALLY.</span>
-                            </label>
-                            <div class="col-sm-5">
-                                <div class="input-group">
-                                    <span class="input-group-addon text-sm">https://demo.tastyigniter.com/local/</span>
-                                    <input type="hidden" name="permalink[permalink_id]" value="0"/>
-                                    <input type="text" name="permalink[slug]" id="input-slug" class="form-control" value=""/>
-                                </div>
-                            </div>
-                        </div>
+                        {{--<div class="form-group">--}}
+                            {{--<label for="input-slug" class="col-sm-3 control-label">--}}
+                                {{--Permalink Slug--}}
+                                {{--<span class="help-block">Use ONLY alpha-numeric lowercase characters, underscores or dashes and make sure it is unique GLOBALLY.</span>--}}
+                            {{--</label>--}}
+                            {{--<div class="col-sm-5">--}}
+                                {{--<div class="input-group">--}}
+                                    {{--<span class="input-group-addon text-sm">https://demo.tastyigniter.com/local/</span>--}}
+                                    {{--<input type="hidden" name="permalink[permalink_id]" value="0"/>--}}
+                                    {{--<input type="text" name="permalink[slug]" id="input-slug" class="form-control" value=""/>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
                         <div class="form-group">
                             <label for="" class="col-sm-3 control-label">Image
                                 <span class="help-block">Select an image to use as the location logo, this image is displayed in the restaurant list.</span>
@@ -561,21 +561,6 @@
                                             </label>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="female_caterer_available" class="col-sm-3 control-label">Female Caterer Available</label>
-                            <div class="col-sm-5">
-                                <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                    <label class="btn btn-danger active">
-                                        <input type="radio" name="female_caterer_available" value="0"  checked="checked">
-                                        NO
-                                    </label>
-                                    <label class="btn btn-success">
-                                        <input type="radio" name="female_caterer_available" value="1" >
-                                        YES
-                                    </label>
                                 </div>
                             </div>
                         </div>

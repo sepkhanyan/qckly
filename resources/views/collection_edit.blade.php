@@ -43,9 +43,31 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="input-mealtime" class="col-sm-3 control-label">Mealtime</label>
+                            <label for="input-mealtime" class="col-sm-3 control-label">
+                                Mealtime
+                            </label>
                             <div class="col-sm-5">
-                                <input type="text" name="mealtime" id="input-mealtime" class="form-control" value="{{$collection->mealtime}}">
+                                <select name="mealtime" id="mealtime" class="form-control">
+                                    <option value="Available all day">Available all day</option>
+                                    <option value="Breakfast"  >Breakfast (07:00 - 10:00)</option>
+                                    <option value="Lunch"  >Lunch (12:00 - 14:30)</option>
+                                    <option value="Dinner"  >Dinner (18:00 - 20:00)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="female_caterer_available" class="col-sm-3 control-label">Female Caterer Available</label>
+                            <div class="col-sm-5">
+                                <div class="btn-group btn-group-switch" data-toggle="buttons">
+                                    <label class="btn btn-danger active">
+                                        <input type="radio" name="female_caterer_available" value="0"  checked="checked">
+                                        NO
+                                    </label>
+                                    <label class="btn btn-success">
+                                        <input type="radio" name="female_caterer_available" value="1" >
+                                        YES
+                                    </label>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">

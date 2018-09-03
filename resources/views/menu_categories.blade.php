@@ -76,18 +76,18 @@
                                         <i class="fa fa-sort>"></i>
                                     </a>
                                 </th>
-                                <th>
-                                    <a class="sort" href="">
-                                        Parent
-                                        <i class="fa fa-sort"></i>
-                                    </a>
-                                </th>
-                                <th>
-                                    <a class="sort" href="">
-                                        Priority
-                                        <i class="fa fa-sort>"></i>
-                                    </a>
-                                </th>
+                                {{--<th>--}}
+                                    {{--<a class="sort" href="">--}}
+                                        {{--Parent--}}
+                                        {{--<i class="fa fa-sort"></i>--}}
+                                    {{--</a>--}}
+                                {{--</th>--}}
+                                {{--<th>--}}
+                                    {{--<a class="sort" href="">--}}
+                                        {{--Priority--}}
+                                        {{--<i class="fa fa-sort>"></i>--}}
+                                    {{--</a>--}}
+                                {{--</th>--}}
                                 <th>
                                     <a class="sort" href="">
                                         Status
@@ -114,8 +114,8 @@
                                     </td>
                                     <td>{{$category->name}}</td>
                                     <td>{{$category->description}}</td>
-                                    <td>{{$category->parent_id}}</td>
-                                    <td>{{$category->priority}}</td>
+                                    {{--<td>{{$category->parent_id}}</td>--}}
+                                    {{--<td>{{$category->priority}}</td>--}}
                                     @if($category->status == 1)
                                         <td>Enable</td>
                                     @else

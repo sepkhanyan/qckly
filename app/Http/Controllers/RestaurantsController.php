@@ -33,10 +33,9 @@ class RestaurantsController extends Controller
             $restaurants = Restaurant::where('status',$data['restaurant_status'])->paginate(20);
         }
         if(isset($data['restaurant_search'])){
-            $restaurants = Restaurant::where('restaurant_name','like',$data['restaurant_search'])
+            $restaurants = Restaurant::where('name','like',$data['restaurant_search'])
                 ->orWhere('city','like',$data['restaurant_search'])
-                ->orWhere('postcode','like',$data['restaurant_search'])
-                ->orWhere('state','like',$data['restaurant_search'])->paginate(20);
+                ->orWhere('description','like',$data['restaurant_search'])->paginate(20);
         }
 
         return view('restaurants', ['restaurants' => $restaurants]);
@@ -74,7 +73,6 @@ class RestaurantsController extends Controller
         $restaurant->name = $request->input('name');
         $restaurant->email = $request->input('email');
         $restaurant->telephone = $request->input('telephone');
-        $restaurant->female_caterer_available = $request->input('female_caterer_available');
         $restaurant->address = $request->input('address');
         $restaurant->city = $request->input('city');
         $restaurant->state = $request->input('state');
@@ -184,7 +182,6 @@ class RestaurantsController extends Controller
         $restaurant->name = $request->input('name');
         $restaurant->email = $request->input('email');
         $restaurant->telephone = $request->input('telephone');
-        $restaurant->female_caterer_available = $request->input('female_caterer_available');
         $restaurant->address =  $request->input('address');
         $restaurant->city = $request->input('city');
         $restaurant->state = $request->input('city');
@@ -636,14 +633,14 @@ class RestaurantsController extends Controller
 
             if(count($restaurants) > 0){
                 foreach($restaurants as $restaurant) {
-                    if ($restaurant->female_caterer_available == 1) {
-                        $female_caterer_available = true;
-                    } else {
-                        $female_caterer_available = false;
-                    }
                     $menu_collection = [];
                     if (count($restaurant->collection) > 0) {
                         foreach ($restaurant->collection as $collection) {
+                            if ($collection->female_caterer_available == 1) {
+                                $female_caterer_available = true;
+                            } else {
+                                $female_caterer_available = false;
+                            }
                             $foodlist = [];
                             $foodlist_images = [];
                             if ($collection->is_available == 1) {
@@ -791,7 +788,7 @@ class RestaurantsController extends Controller
                                 'service_provide' => $collection->service_provide,
                                 'food_list' => $foodlist,
                                 'service_presentation' => $collection->service_presentation,
-                                'instruction' => $collection->instruction,
+                                'special_instruction' => '',
                                 'food_item_image' => url('/') . '/images/' . $collection_item->menu->image,
                                 'food_list_images' => $foodlist_images,
                                 'setup_time' => $setup,

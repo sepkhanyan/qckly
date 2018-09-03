@@ -30,7 +30,7 @@
                                 <div class="row">
                                     <div class="col-md-3 pull-right text-right">
                                         <div class="form-group">
-                                            <input type="text" name="restaurant_search" class="form-control input-sm" value="" placeholder="Search name, city, state or postcode." />&nbsp;&nbsp;&nbsp;
+                                            <input type="text" name="restaurant_search" class="form-control input-sm" value="" placeholder="Search name, description or city." />&nbsp;&nbsp;&nbsp;
                                         </div>
                                         <a class="btn btn-grey" onclick="filterList();" title="Search">
                                             <i class="fa fa-search"></i>
@@ -90,6 +90,12 @@
                                 </th>
                                 <th>
                                     <a class="sort" href="">
+                                        Address
+                                        <i class="fa fa-sort>"></i>
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="sort" href="">
                                         Telephone
                                         <i class="fa fa-sort"></i>
                                     </a>
@@ -125,6 +131,7 @@
                                     <td>{{$restaurant->description}}</td>
                                     <td>{{$restaurant->area->area_en}}</td>
                                     <td>{{$restaurant->city}}</td>
+                                    <td>{{$restaurant->address}}</td>
                                     <td>{{$restaurant->telephone}}</td>
                                     @if($restaurant->status == 1)
                                     <td>Enable</td>

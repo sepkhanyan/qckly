@@ -91,9 +91,9 @@ class CollectionsController extends Controller
         $collection->name = $request->input('name');
         $collection->description = $request->input('description');
         $collection->mealtime = $request->input('mealtime');
+        $collection->female_caterer_available = $request->input('female_caterer_available');
         $collection->service_provide = $request->input('service_provide');
         $collection->service_presentation = $request->input('service_presentation');
-        $collection->instruction = $request->input('instructions');
         $collection->setup_time = $request->input('setup_time');
         $collection->max_time = $request->input('max_time');
         $collection->requirements = $request->input('requirements');
@@ -163,9 +163,9 @@ class CollectionsController extends Controller
         $collection->name = $request->input('name');
         $collection->description = $request->input('description');
         $collection->mealtime = $request->input('mealtime');
+        $collection->female_caterer_available = $request->input('female_caterer_available');
         $collection->service_provide = $request->input('service_provide');
         $collection->service_presentation = $request->input('service_presentation');
-        $collection->instruction = $request->input('instructions');
         $collection->setup_time = $request->input('setup_time');
         $collection->max_time = $request->input('max_time');
         $collection->requirements = $request->input('requirements');
