@@ -25,7 +25,6 @@ class CategoriesController extends Controller
         }
         if(isset($data['category_search'])){
             $categories = Category::where('name','like',$data['category_search'])
-                ->orWhere('status','like',$data['category_search'])
                 ->orWhere('description','like',$data['category_search'])->paginate(20);
         }
             return view('menu_categories', ['categories' => $categories]);
@@ -53,10 +52,8 @@ class CategoriesController extends Controller
     {
         $categories = new Category();
         $categories->name = $request->input('name');
-        $categories->parent_id = $request->input('parent_id');
         $categories->description = $request->input('description');
         $categories->status = $request->input('status');
-        $categories->priority = $request->input('priority');
         $categories->save();
         if ($categories) {
             return redirect('/categories');
@@ -97,10 +94,8 @@ class CategoriesController extends Controller
     {
         $category = Category::find($id);
         $category->name = $request->input('name');
-        $category->parent_id = $request->input('parent_id');
         $category->description = $request->input('description');
         $category->status = $request->input('status');
-        $category->priority = $request->input('priority');
         $category->save();
         return redirect('/categories');
     }
@@ -114,10 +109,10 @@ class CategoriesController extends Controller
     public function deleteCategories(Request $request)
     {
         $id = $request->get('id');
-        $menus = Menu::where('menu_category_id',$id)->get();
+        $menus = Menu::where('category_id',$id)->get();
         $images = [];
         foreach($menus as $menu){
-                $images [] = public_path('images/' . $menu->menu_photo);
+                $images [] = public_path('images/' . $menu->image);
         }
         File::delete($images);
         Category::whereIn('id',$id)->delete();

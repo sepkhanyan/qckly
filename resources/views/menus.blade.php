@@ -49,7 +49,7 @@
                                 <div class="row">
                                     <div class="col-md-3 pull-right text-right">
                                         <div class="form-group">
-                                            <input type="text" name="menu_search" class="form-control input-sm" value="" placeholder="Search name, price or stock qty."/>&nbsp;&nbsp;&nbsp;
+                                            <input type="text" name="menu_search" class="form-control input-sm" value="" placeholder="Search name, price or description."/>&nbsp;&nbsp;&nbsp;
                                         </div>
                                         <a class="btn btn-grey" onclick="filterList();" title="Search">
                                             <i class="fa fa-search"></i>
@@ -100,6 +100,12 @@
                                 </th>
                                 <th>
                                     <a class="sort" href="">
+                                        Description
+                                        <i class="fa fa-sort"></i>
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="sort" href="">
                                         Price
                                         <i class="fa fa-sort>"></i>
                                     </a>
@@ -108,12 +114,6 @@
                                     <a class="sort" href="">
                                         Category
                                         <i class="fa fa-sort"></i>
-                                    </a>
-                                </th>
-                                <th>
-                                    <a class="sort" href="">
-                                        Image
-                                        <i class="fa fa-sort>"></i>
                                     </a>
                                 </th>
                                 <th>
@@ -141,9 +141,9 @@
                                         </a>&nbsp;&nbsp;
                                     </td>
                                     <td>{{$menu->name}}</td>
+                                    <td>{{$menu->description}}</td>
                                     <td>{{$menu->price}}</td>
                                     <td>{{$menu->category->name}}</td>
-                                    <td><img src="/images/{{$menu->image}}" width="50px" height="50px"></td>
                                     <td>
                                     @if($menu->status == 1)
                                         Enable

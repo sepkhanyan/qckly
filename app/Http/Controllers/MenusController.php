@@ -41,7 +41,7 @@ class MenusController extends Controller
             if(isset($data['menu_search'])){
                 $menus = $menus->where('name','like',$data['menu_search'])
                     ->orWhere('price','like',$data['menu_search'])
-                    ->orWhere('stock_qty','like',$data['menu_search']);
+                    ->orWhere('description','like',$data['menu_search']);
             }
             $menus = $menus->paginate(20);
         }
@@ -87,12 +87,12 @@ class MenusController extends Controller
         $menu->description = $request->input('description');
         $menu->price = $request->input('price');
         $menu->category_id = $request->input('category');
-        $menu->stock_qty = $request->input('stock_qty');
-        $menu->minimum_qty = $request->input('minimum_qty');
-        $menu->subtract_stock = $request->input('subtract_stock');
+//        $menu->stock_qty = $request->input('stock_qty');
+//        $menu->minimum_qty = $request->input('minimum_qty');
+//        $menu->subtract_stock = $request->input('subtract_stock');
         $menu->status = $request->input('status');
-        $menu->priority = $request->input('priority');
-        $menu->mealtime = $request->input('mealtime');
+//        $menu->priority = $request->input('priority');
+//        $menu->mealtime = $request->input('mealtime');
         $menu->restaurant_id = $request->input('restaurant');
         $menu->famous = $request->input('famous');
         $menu->save();
@@ -142,12 +142,12 @@ class MenusController extends Controller
         $menu->description = $request->input('description');
         $menu->price = $request->input('price');
         $menu->category_id = $request->input('category');
-        $menu->stock_qty = $request->input('stock_qty');
-        $menu->minimum_qty = $request->input('minimum_qty');
-        $menu->subtract_stock = $request->input('subtract_stock');
+//        $menu->stock_qty = $request->input('stock_qty');
+//        $menu->minimum_qty = $request->input('minimum_qty');
+//        $menu->subtract_stock = $request->input('subtract_stock');
         $menu->status = $request->input('status');
-        $menu->priority = $request->input('priority');
-        $menu->mealtime = $request->input('mealtime');
+//        $menu->priority = $request->input('priority');
+//        $menu->mealtime = $request->input('mealtime');
         $menu->famous = $request->input('famous');
         if ($request->hasFile('image')) {
             $deletedImage = File::delete(public_path('images/' . $menu->image));

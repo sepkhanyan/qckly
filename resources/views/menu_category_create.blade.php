@@ -42,19 +42,9 @@
                             @endif
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="input-slug" class="col-sm-3 control-label">
-                            Permalink Slug
-                            <span class="help-block">Use ONLY alpha-numeric lowercase characters, underscores or dashes and make sure it is unique GLOBALLY.</span>
-                        </label>
-                        <div class="col-sm-5">
-                            <input type="hidden" name="permalink[permalink_id]" value="0">
-                            <input type="text" name="permalink[slug]" id="input-slug" class="form-control" value="">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="input-name" class="col-sm-3 control-label">Parent</label>
-                        <div class="col-sm-5">
+                    {{--<div class="form-group">--}}
+                        {{--<label for="input-name" class="col-sm-3 control-label">Parent</label>--}}
+                        {{--<div class="col-sm-5">--}}
                             {{--<div class="select2-container form-control" id="s2id_category">--}}
                                 {{--<a href="javascript:void(0)" class="select2-choice" tabindex="-1">--}}
                                     {{--<span class="select2-chosen" id="select2-chosen-1">None</span>--}}
@@ -66,28 +56,28 @@
                                 {{--<label for="s2id_autogen1" class="select2-offscreen"></label>--}}
                                 {{--<input class="select2-focusser select2-offscreen" type="text" aria-haspopup="true" role="button" aria-labelledby="select2-chosen-1" id="s2id_autogen1">--}}
                             {{--</div>--}}
-                            <select name="parent_id" id="category" class="form-control" tabindex="-1" title="">
-                                <option value="">None</option>
-                                <option value="16">Main Course</option>
-                                <option value="15">Appetizer</option>
-                                <option value="17">Salads</option>
-                                <option value="18">Seafoods</option>
-                                <option value="19">Traditional</option>
-                                <option value="20">Vegetarian</option>
-                                <option value="21">Soups</option>
-                                <option value="22">Desserts</option>
-                                <option value="23">Drinks</option>
-                                <option value="24">Specials</option>
-                                <option value="26">Rice Dishes</option>
-                                <option value="44">Pizza</option>
-                                <option value="46">Lanches</option>
-                                <option value="48">burger</option>
-                                <option value="49">Chicken</option>
-                                <option value="50">Chinese food</option>
-                                <option value="51">Biryani</option>
-                            </select>
-                        </div>
-                    </div>
+                            {{--<select name="parent_id" id="category" class="form-control" tabindex="-1" title="">--}}
+                                {{--<option value="">None</option>--}}
+                                {{--<option value="16">Main Course</option>--}}
+                                {{--<option value="15">Appetizer</option>--}}
+                                {{--<option value="17">Salads</option>--}}
+                                {{--<option value="18">Seafoods</option>--}}
+                                {{--<option value="19">Traditional</option>--}}
+                                {{--<option value="20">Vegetarian</option>--}}
+                                {{--<option value="21">Soups</option>--}}
+                                {{--<option value="22">Desserts</option>--}}
+                                {{--<option value="23">Drinks</option>--}}
+                                {{--<option value="24">Specials</option>--}}
+                                {{--<option value="26">Rice Dishes</option>--}}
+                                {{--<option value="44">Pizza</option>--}}
+                                {{--<option value="46">Lanches</option>--}}
+                                {{--<option value="48">burger</option>--}}
+                                {{--<option value="49">Chicken</option>--}}
+                                {{--<option value="50">Chinese food</option>--}}
+                                {{--<option value="51">Biryani</option>--}}
+                            {{--</select>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
                     <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
                         <label for="input-description" class="col-sm-3 control-label">Description</label>
                         <div class="col-sm-5">
@@ -121,17 +111,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group{{ $errors->has('priority') ? ' has-error' : '' }}">
-                        <label for="input-priority" class="col-sm-3 control-label">Priority</label>
-                        <div class="col-sm-5">
-                            <input type="text" name="priority" id="input-priority" class="form-control" value="{{ old('priority') }}">
-                            @if ($errors->has('priority'))
-                                <span class="help-block">
-                                        <strong>{{ $errors->first('priority') }}</strong>
-                                    </span>
-                            @endif
-                        </div>
-                    </div>
+                    {{--<div class="form-group{{ $errors->has('priority') ? ' has-error' : '' }}">--}}
+                        {{--<label for="input-priority" class="col-sm-3 control-label">Priority</label>--}}
+                        {{--<div class="col-sm-5">--}}
+                            {{--<input type="text" name="priority" id="input-priority" class="form-control" value="{{ old('priority') }}">--}}
+                            {{--@if ($errors->has('priority'))--}}
+                                {{--<span class="help-block">--}}
+                                        {{--<strong>{{ $errors->first('priority') }}</strong>--}}
+                                    {{--</span>--}}
+                            {{--@endif--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
                     <div class="form-group">
                         <label for="input-status" class="col-sm-3 control-label">Status</label>
                         <div class="col-sm-5">

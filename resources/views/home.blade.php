@@ -129,12 +129,12 @@
                                     Collections
                                 </a>
                             </li>
-                            <li>
-                                <a href="#" class="menu_options">
-                                    <i class="fa fa-square-o fa-fw"></i>
-                                    Options
-                                </a>
-                            </li>
+                            {{--<li>--}}
+                                {{--<a href="#" class="menu_options">--}}
+                                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                                    {{--Options--}}
+                                {{--</a>--}}
+                            {{--</li>--}}
                             <li>
                                 <a href="{{ url('/categories') }}" class="menu-categories">
                                     <i class="fa fa-square-o fa-fw"></i>

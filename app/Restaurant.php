@@ -21,16 +21,8 @@ class Restaurant extends Model
         'telephone',
         'latitude',
         'longitude',
-        'offer_delivery',
-        'offer_collection',
-        'delivery_time',
-        'last_order_time',
-        'reservation_interval',
-        'reservation_turn',
-        'collection_time',
         'status',
         'image',
-        'female_caterer_available'
     ];
 
 

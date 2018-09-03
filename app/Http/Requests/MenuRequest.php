@@ -27,9 +27,6 @@ class MenuRequest extends FormRequest
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'category' => 'required|integer',
-            'stock_qty' => 'required|integer',
-            'minimum_qty' => 'required|integer',
-            'priority' => 'required|integer',
             'image' => 'required|image'
 
         ];
@@ -38,10 +35,6 @@ class MenuRequest extends FormRequest
                 'name' => 'required|string|max:255',
                 'description' => 'required|string',
                 'category' => 'required|integer',
-                'stock_qty' => 'required|integer',
-                'minimum_qty' => 'required|integer',
-                'priority' => 'required|integer',
-
             ];
         }
         return $rules;

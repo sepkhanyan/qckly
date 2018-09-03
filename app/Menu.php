@@ -15,12 +15,7 @@ class Menu extends Model
         'price',
         'image',
         'category_id',
-        'stock_qty',
-        'minimum_qty',
-        'subtract_stock',
         'status',
-        'priority',
-        'mealtime',
         'famous'
     ];
 
