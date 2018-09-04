@@ -73,7 +73,7 @@
         <div class="navbar-header">
             <div class="navbar-brand">
                 <div class="navbar-logo col-xs-3">
-                    {{--<img class="logo-image" alt="TastyIgniter" title="TastyIgniter" src="https://demo.tastyigniter.com/admin/views/themes/tastyigniter-blue/images/tastyigniter-logo.png"/>--}}
+                    <img class="logo-image" alt="Qckly" title="Qckly" src="https://demo.tastyigniter.com/admin/views/themes/tastyigniter-blue/images/tastyigniter-logo.png"/>
                 </div>
                 <div class="navbar-logo col-xs-9">
                     {{--<img class="logo-text" alt="TastyIgniter" title="TastyIgniter" src="https://demo.tastyigniter.com/admin/views/themes/tastyigniter-blue/images/tastyigniter-logo-text.png"/>--}}
@@ -94,21 +94,6 @@
                             <i class="fa fa-dashboard fa-fw"></i>
                             <span class="content">Dashboard</span>
                         </a>
-                    </li>
-                    <li>
-                        <a class="kitchen">
-                            <i class="fa fa-map-marker fa-fw"></i>
-                            <span class="content ">Areas</span>
-                            <span class="fa arrow"></span>
-                        </a>
-                        <ul class="nav nav-second-level collapse">
-                            <li>
-                                <a href="{{ url('/areas') }}" class=menus"">
-                                    <i class="fa fa-square-o fa-fw "></i>
-                                    Areas
-                                </a>
-                            </li>
-                        </ul>
                     </li>
                     <li>
                         <a class="kitchen">
@@ -202,9 +187,24 @@
                                 {{--</a>--}}
                             {{--</li>--}}
                         </ul>
-
                     </li>
-                    <li>
+                    @if(Auth::user()->admin == 1)
+                        <li>
+                            <a class="kitchen">
+                                <i class="fa fa-map-marker fa-fw"></i>
+                                <span class="content ">Areas</span>
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level collapse">
+                                <li>
+                                    <a href="{{ url('/areas') }}" class=menus"">
+                                        <i class="fa fa-square-o fa-fw "></i>
+                                        Areas
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
                         <a class="restaurant">
                             <i class="fa fa-map-marker fa-fw"></i>
                             <span class="content">Restaurants</span>
@@ -223,15 +223,14 @@
                                     Categories
                                 </a>
                             </li>
-
                         </ul>
-                    </li>
-                    <li>
-                        <a class="users">
-                            <i class="fa fa-user fa-fw"></i>
-                            <span class="content">Users</span>
-                            <span class="fa arrow"></span>
-                        </a>
+                        </li>
+                        <li>
+                            <a class="users">
+                                <i class="fa fa-user fa-fw"></i>
+                                <span class="content">Users</span>
+                                <span class="fa arrow"></span>
+                            </a>
                         <ul class="nav nav-second-level collapse">
                             <li>
                                 <a href="{{ url('/customers') }}" class="customers">
@@ -252,7 +251,7 @@
                                 {{--</a>--}}
                             {{--</li>--}}
                         </ul>
-                    </li>
+                        </li>
                     {{--<li>--}}
                         {{--<a href="#" class="extensions">--}}
                             {{--<i class="fa fa-puzzle-piece fa-fw"></i>--}}
@@ -286,12 +285,11 @@
                             {{--</li>--}}
                         {{--</ul>--}}
                     {{--</li>--}}
-                    <li>
-                        <a class="locations">
-                            <i class="fa fa-globe fa-fw"></i>
-                            <span class="content">Localisation</span>
-                            <span class="fa arrow"></span>
-
+                        <li>
+                            <a class="locations">
+                                <i class="fa fa-globe fa-fw"></i>
+                                <span class="content">Localisation</span>
+                                <span class="fa arrow"></span>
                         </a>
                         <ul class="nav nav-second-level collapse">
                             <li>
@@ -332,6 +330,7 @@
                             </li>
                         </ul>
                     </li>
+                    @endif
                     <li>
                         <a class="system">
                             <i class="fa fa-cog fa-fw"></i>
@@ -530,14 +529,6 @@
         {{--<h1 class="navbar-heading">Dashboard</h1>--}}
     </nav>
     <div id="page-wrapper" style="height: 100%;">
-        {{--<div class="page-header clearfix">--}}
-        {{--<div class="page-action">--}}
-        {{--<a href="#" class="btn btn-default">--}}
-        {{--<i class="fa fa-refresh"></i>--}}
-        {{--Chek Update--}}
-        {{--</a>--}}
-        {{--</div>--}}
-        {{--</div>--}}
         @yield('content')
     </div>
 </div>

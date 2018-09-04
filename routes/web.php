@@ -15,7 +15,7 @@
 Auth::routes();
 Route::group(['middleware' => ['web', 'auth']], function (){
     Route::group(['middleware' => 'admin'],function(){
-        Route::get('/', 'HomeController@index')->name('home');
+        Route::get('/', 'RestaurantsController@index')->name('home');
         Route::get('/customers', 'UsersController@index');
         Route::group(['prefix' => 'customer'], function () {
             Route::get('create', 'UsersController@create');

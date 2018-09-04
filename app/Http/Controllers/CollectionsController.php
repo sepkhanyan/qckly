@@ -11,6 +11,8 @@ use App\Restaurant;
 use App\CollectionCategory;
 use App\Menu;
 use Carbon\Carbon;
+use Auth;
+use App\User;
 
 class CollectionsController extends Controller
 {
@@ -21,6 +23,7 @@ class CollectionsController extends Controller
      */
     public function index(Request $request, $id=null)
     {
+        $user = Auth::user();
         $categories = CollectionCategory::all();
         $restaurants = Restaurant::all();
         $selectedRestaurant = Restaurant::find($id);
@@ -40,12 +43,18 @@ class CollectionsController extends Controller
             }
             $collections = $collections->get();
         }
+        if($user->admin == 2){
+            $user = $user->load('restaurant');
+            $restaurant = $user->restaurant;
+            $selectedRestaurant = Restaurant::find($restaurant->id);
+            $collections = Collection::where('restaurant_id', $restaurant->id)->get();
+        }
         return view('collections', [
             'id' => $id,
             'categories' => $categories,
             'collections' => $collections,
             'restaurants' => $restaurants,
-            'selectedRestaurant' => $selectedRestaurant
+            'selectedRestaurant' => $selectedRestaurant,
         ]);
     }
 
@@ -57,7 +66,9 @@ class CollectionsController extends Controller
     public function create(Request $request)
     {
         $data = $request->all();
+        $user = Auth::user();
         $menus = [];
+        $restaurants = Restaurant::all();
         if(isset($data['restaurant_name'])) {
                 $menus = Menu::where('restaurant_id', $data['restaurant_name']);
             if(isset($data['menu_category_name'])) {
@@ -65,10 +76,13 @@ class CollectionsController extends Controller
             }
             $menus = $menus->get();
         }
-
-        $restaurants = Restaurant::all();
         $categories = CollectionCategory::all();
         $menu_categories = Category::all();
+        if($user->admin == 2){
+            $user = $user->load('restaurant');
+            $restaurant = $user->restaurant;
+            $menus = Menu::where('restaurant_id', $restaurant->id)->get();
+        }
         return view('collection_create', [
             'restaurants' => $restaurants,
             'categories' => $categories,
@@ -85,8 +99,14 @@ class CollectionsController extends Controller
      */
     public function store(CollectionRequest $request)
     {
+        $user = Auth::user();
         $collection = New Collection();
-        $collection->restaurant_id = $request->input('restaurant_name');
+        $collection->restaurant_id = $request->input('restaurant');
+        if($user->admin == 2){
+            $user = $user->load('restaurant');
+            $restaurant = $user->restaurant;
+            $collection->restaurant_id = $restaurant->id;
+        }
         $collection->category_id = $request->input('category');
         $collection->name = $request->input('name');
         $collection->description = $request->input('description');
@@ -180,8 +200,8 @@ class CollectionsController extends Controller
         $collection->save();
         $menus = $request->input('menu_item');
         if($menus){
+            CollectionItem::where('collection_id', $id)->delete();
             foreach($menus as $menu){
-                CollectionItem::where('collection_id', $id)->delete();
                 $collection_item = new CollectionItem();
                 $collection_item->item_id = $menu;
                 $collection_item->min_count = $request->input('item_qty');

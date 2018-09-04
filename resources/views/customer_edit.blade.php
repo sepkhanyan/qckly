@@ -49,6 +49,12 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label for="input_country_code" class="col-sm-3 control-label">Country Code</label>
+                        <div class="col-sm-5">
+                            <input type="text" name="country_code" id="input_country_code" class="form-control" value="" />
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label for="input_telephone" class="col-sm-3 control-label">Telephone</label>
                         <div class="col-sm-5">
                             <input type="text" name="telephone" id="input_telephone" class="form-control" value="{{$customer->mobile_number}}" />

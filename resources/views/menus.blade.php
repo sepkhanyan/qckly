@@ -12,19 +12,20 @@
             </a>
         </div>
     </div>
-    <div class="form-group">
-        <label for="input-name" class="col-sm-3 control-label">Restaurants</label>
-        <div class="col-sm-5">
-            <select name="restaurant_name" id="menus" class="form-control" tabindex="-1" title="" onchange="top.location.href = this.options[this.selectedIndex].value">
-                <option value>Select Restaurant</option>
-                @foreach($restaurants as $restaurant)
-                    <option value="{{url('/menus/' . $restaurant->id)}}">{{$restaurant->name}},{{$restaurant->area->area_en}},{{$restaurant->city}},{{$restaurant->address}}</option>
-                @endforeach
-            </select>
-        </div>
-       @if(count($menus)>0)
-  </div>
-
+  @if(Auth::user()->admin == 1)
+      <div class="form-group">
+          <label for="input-name" class="col-sm-3 control-label">Restaurants</label>
+          <div class="col-sm-5">
+              <select name="restaurant_name" id="input-name" class="form-control" tabindex="-1" title="" onchange="top.location.href = this.options[this.selectedIndex].value">
+                  <option value>Select Restaurant</option>
+                  @foreach($restaurants as $restaurant)
+                      <option value="{{url('/menus/' . $restaurant->id)}}">{{$restaurant->name}},{{$restaurant->area->area_en}},{{$restaurant->city}},{{$restaurant->address}}</option>
+                  @endforeach
+              </select>
+          </div>
+      </div>
+  @endif
+  @if(count($menus)>0)
     <div class="row content" >
         <div class="col-md-12">
             <div class="panel panel-default panel-table">

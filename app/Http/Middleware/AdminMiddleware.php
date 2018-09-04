@@ -15,7 +15,7 @@ class AdminMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if ($request->admin == 1) {
+        if ($request->admin == 1 || $request->admin == 2) {
             return redirect('/');
         }
 

@@ -20,7 +20,10 @@
             <div class="row wrap-vertical">
                 <ul id="nav-tabs" class="nav nav-tabs">
                     <li class="active">
-                        <a href="#general" data-toggle="tab" >Location</a>
+                        <a href="#general" data-toggle="tab" >Manager</a>
+                    </li>
+                    <li>
+                        <a href="#location" data-toggle="tab">Location</a>
                     </li>
                     <li>
                         <a href="#data" data-toggle="tab" >Data</a>
@@ -46,6 +49,47 @@
                 {{ csrf_field() }}
                 <div class="tab-content">
                     <div id="general" class="tab-pane row wrap-all active">
+                        <div class="form-group">
+                            <label for="input_manager_name" class="col-sm-3 control-label">Name</label>
+                            <div class="col-sm-5">
+                                <input type="text" name="manager_name" id="input_manager_name" class="form-control" value="" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="input_manager_email" class="col-sm-3 control-label">Email</label>
+                            <div class="col-sm-5">
+                                <input type="text" name="manager_email" id="input_manager_email" class="form-control" value="" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="input_country_code" class="col-sm-3 control-label">Country Code</label>
+                            <div class="col-sm-5">
+                                <input type="text" name="country_code" id="input_country_code" class="form-control" value="" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="input_manager_telephone" class="col-sm-3 control-label">Telephone</label>
+                            <div class="col-sm-5">
+                                <input type="text" name="manager_telephone" id="input_manager_telephone" class="form-control" value="" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="input_password" class="col-sm-3 control-label">
+                                Password
+                                <span class="help-block">Leave blank to leave password unchanged</span>
+                            </label>
+                            <div class="col-sm-5">
+                                <input type="password" name="password" id="input_password" class="form-control" value="" autocomplete="off" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="input_confirm_password" class="col-sm-3 control-label">Confirm Password</label>
+                            <div class="col-sm-5">
+                                <input type="password" name="confirm_password" id="input_confirm_password" class="form-control" value="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div id="location" class="tab-pane row wrap-all">
                         <h4 class="tab-pane-title">Basic</h4>
                         <div class="form-group">
                             <label for="restaurant_category" class="col-sm-3 control-label">Category</label>
@@ -137,7 +181,7 @@
 
                                 <select name="country" id="input-country" class="form-control">
                                     @foreach($areas as $area)
-                                    <option value="{{$area->id}}">{{$area->area_en}}</option>
+                                        <option value="{{$area->id}}">{{$area->area_en}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -184,7 +228,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div id="data" class="tab-pane row wrap-all">
                         <div class="form-group{{ $errors->has('description]') ? ' has-error' : '' }}">
                             <label for="input-description" class="col-sm-3 control-label">Description</label>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\RestaurantRequest;
 use Auth;
 use Illuminate\Http\Request;
+use App\User;
 use App\Restaurant;
 use App\Area;
 use App\WorkingHour;
@@ -27,7 +28,11 @@ class RestaurantsController extends Controller
      */
     public function index(Request $request)
     {
+        $user = Auth::user();
         $restaurants = Restaurant::paginate(20);
+        if($user->admin == 2){
+            $restaurants = Restaurant::where('user_id', $user->id)->paginate(20);
+        }
         $data = $request->all();
         if(isset($data['restaurant_status'])){
             $restaurants = Restaurant::where('status',$data['restaurant_status'])->paginate(20);
@@ -52,7 +57,7 @@ class RestaurantsController extends Controller
         $categories = RestaurantCategory::all();
         return view('restaurant_create', [
             'areas' => $areas,
-            'categories' => $categories
+            'categories' => $categories,
         ]);
     }
 
@@ -64,12 +69,23 @@ class RestaurantsController extends Controller
      */
     public function store(Request $request)
     {
+        $manager = new User();
+        $manager->username = $request->input('manager_name');
+        $manager->password = bcrypt($request->input('password'));
+        $manager->country_code = $request->input('country_code');
+        $manager->mobile_number = $request->input('manager_telephone');
+        $manager->email = $request->input('manager_email');
+        $manager->otp = rand(1500, 5000);
+        $manager->lang = 'en';
+        $manager->admin = 2;
+        $manager->save();
         $restaurant = new Restaurant();
         $image = $request->file('image');
         $name = time() . '.' . $image->getClientOriginalExtension();
         $destinationPath = public_path('/images');
         $image->move($destinationPath, $name);
         $restaurant->image = $name;
+        $restaurant->user_id = $manager->id;
         $restaurant->name = $request->input('name');
         $restaurant->email = $request->input('email');
         $restaurant->telephone = $request->input('telephone');
@@ -695,8 +711,8 @@ class RestaurantsController extends Controller
                                 ];
                             }else{
                                 foreach ($collection->collectionItem as $collection_item) {
-                                    $foodlist [] = $collection_item->menu->name;
-                                    $image = url('/') . '/images/' . $collection_item->menu->image;
+                                    $foodlist [] = $collection_item->menu['name'];
+                                    $image = url('/') . '/images/' . $collection_item->menu['image'];
                                     array_push($foodlist_images, $image);
                                        $min_qty = $collection_item->min_count;
                                        $max_qty = $collection_item->max_count;
@@ -715,7 +731,6 @@ class RestaurantsController extends Controller
                                            } else {
                                                $setup = floor($setup_hours) . " hours";
                                            }
-
                                            $max_hours = $collection->max_time / 60;
                                            $max_minutes = $collection->max_time % 60;
                                            if ($max_minutes > 0) {
@@ -726,7 +741,6 @@ class RestaurantsController extends Controller
                                            $requirement = $collection->requirements;
                                        }
                                 }
-
                                 $categories = Category::with(['menu' => function ($query) use ($collection, $restaurant_id){
                                     $query->where('restaurant_id', $restaurant_id)
                                         ->whereHas('collectionItem', function ($x) use ($collection){
@@ -746,7 +760,7 @@ class RestaurantsController extends Controller
                                         $items  [] = [
                                             'item_id' => $item->id,
                                             'item_name' => $item->name,
-                                            'item_image' => url('/') . '/images/' .  $collection_item->menu->image,
+                                            'item_image' => url('/') . '/images/' .  $collection_item->menu['image'],
                                             'item_price' => $item->price,
                                             'item_price_unit' => 'QR',
                                             'item_availability' => $status
@@ -789,7 +803,7 @@ class RestaurantsController extends Controller
                                 'food_list' => $foodlist,
                                 'service_presentation' => $collection->service_presentation,
                                 'special_instruction' => '',
-                                'food_item_image' => url('/') . '/images/' . $collection_item->menu->image,
+                                'food_item_image' => url('/') . '/images/' . $collection_item->menu['image'],
                                 'food_list_images' => $foodlist_images,
                                 'setup_time' => $setup,
                                 'requirement' => $requirement,

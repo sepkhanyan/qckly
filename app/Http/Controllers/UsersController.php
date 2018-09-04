@@ -54,10 +54,11 @@ class UsersController extends Controller
     {
         $customer = new User();
         $customer->username = $request->input('name');
-        $customer->country_code = +974;
+        $customer->password = bcrypt($request->input('password'));
+        $customer->country_code = $request->input('country_code');
         $customer->mobile_number = $request->input('telephone');
         $customer->email = $request->input('email');
-        $customer->otp = '1234';
+        $customer->otp = rand(1500, 5000);
         $customer->lang = 'en';
         $customer->save();
         return redirect('/customers');
@@ -97,10 +98,11 @@ class UsersController extends Controller
     {
         $customer = User::find($id);
         $customer->username = $request->input('name');
-        $customer->country_code = +974;
+        $customer->password = bcrypt($request->input('password'));
+        $customer->country_code = $request->input('country_code');
         $customer->mobile_number = $request->input('telephone');
         $customer->email = $request->input('email');
-        $customer->otp = '1234';
+        $customer->otp = rand(1500, 5000);
         $customer->lang = 'en';
         $customer->save();
         return redirect('/customers');

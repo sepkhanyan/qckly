@@ -16,6 +16,8 @@
         </div>
     </div>
     <div class="row content">
+        @if($user = Auth::user()->admin == 1)
+
             <form role="form" id="filter-form" accept-charset="utf-8" method="GET" action="">
                 <div class="filter-bar">
                         <div class="row">
@@ -32,24 +34,24 @@
                                 </div>
                         </div>
                     <div>
-                        <div class="form-group">
-                                <label for="input-name" class="col-sm-3 control-label">Menu Category</label>
-                                <div class="col-sm-5">
-                                    <select name="menu_category_name" id="menu_category" class="form-control">
-                                        <option value=" ">Select Category</option>
-                                        @foreach ($menu_categories as $menu_category)
-                                            <option value="{{$menu_category->id}}" >{{$menu_category->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-
-                        </div>
+                        {{--<div class="form-group">--}}
+                                {{--<label for="input-name" class="col-sm-3 control-label">Menu Category</label>--}}
+                                {{--<div class="col-sm-5">--}}
+                                    {{--<select name="menu_category_name" id="menu_category" class="form-control">--}}
+                                        {{--<option value=" ">Select Category</option>--}}
+                                        {{--@foreach ($menu_categories as $menu_category)--}}
+                                            {{--<option value="{{$menu_category->id}}" >{{$menu_category->name}}</option>--}}
+                                        {{--@endforeach--}}
+                                    {{--</select>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                    </div>
                     <a class="btn btn-grey" onclick="filterList();" title="Filter">
                         Choose
                     </a>
                 </div>
             </form>
+        @endif
         <div class="col-md-12">
             <div class="row wrap-vertical">
                 <ul id="nav-tabs" class="nav nav-tabs">
@@ -64,17 +66,19 @@
                     <div id="general" class="tab-pane row wrap-all active">
                         <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="GET" action="{{ url('/collection/store') }}">
                             {{ csrf_field() }}
+                            @if(Auth::user()->admin == 1)
                             <div class="form-group">
                                 <label for="restaurant" class="col-sm-3 control-label">Restaurant</label>
                                 <div class="col-sm-5">
-                                    <select name="restaurant_name" id="restaurant" class="form-control" tabindex="-1" title=""  >
+                                    <select name="restaurant" id="restaurant" class="form-control" tabindex="-1" title=""  >
                                         @foreach($restaurants as $restaurant)
                                             <option value="{{$restaurant->id}}">{{$restaurant->name}},{{$restaurant->city}},{{$restaurant->address}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
-                        <div class="form-group {{ $errors->has('name') ? ' has-error' : '' }}">
+                            @endif
+                            <div class="form-group {{ $errors->has('name') ? ' has-error' : '' }}">
                             <label for="input-name" class="col-sm-3 control-label">Name</label>
                             <div class="col-sm-5">
                                 <input type="text" name="name" id="input-name" class="form-control" value="{{ old('name') }}">
@@ -84,7 +88,7 @@
                                     </span>
                                 @endif
                             </div>
-                        </div>
+                            </div>
                             <div class="form-group">
                                 <label for="input-description" class="col-sm-3 control-label">Description</label>
                                 <div class="col-sm-5">
@@ -132,12 +136,6 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="instructions" class="col-sm-3 control-label">Instruction</label>
-                                <div class="col-sm-5">
-                                    <textarea name="instructions" id="notes" class="form-control" >{{ old('instructions') }}</textarea>
-                                </div>
-                            </div>
-                        <div class="form-group">
                             <label for="is_available" class="col-sm-3 control-label">Is Available</label>
                             <div class="col-sm-5">
                                 <div class="btn-group btn-group-switch" data-toggle="buttons">

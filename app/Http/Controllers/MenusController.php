@@ -6,6 +6,7 @@ use App\Http\Requests\MenuRequest;
 use Auth;
 use DB;
 use App\Area;
+use App\User;
 use Illuminate\Http\Request;
 use App\Menu;
 use App\Restaurant;
@@ -21,7 +22,7 @@ class MenusController extends Controller
      */
     public function index($id = null, Request $request)
     {
-
+        $user = Auth::user();
         $categories = Category::all();
         $restaurants = Restaurant::all();
         $selectedRestaurant = Restaurant::find($id);
@@ -45,6 +46,12 @@ class MenusController extends Controller
             }
             $menus = $menus->paginate(20);
         }
+        if($user->admin == 2){
+            $user = $user->load('restaurant');
+            $restaurant = $user->restaurant;
+            $selectedRestaurant = Restaurant::find($restaurant->id);
+            $menus = Menu::where('restaurant_id', $restaurant->id)->paginate(20);
+        }
         return view('menus', [
             'id' => $id,
             'menus' => $menus,
@@ -61,7 +68,11 @@ class MenusController extends Controller
      */
     public function create()
     {
+        $user = Auth::user();
         $restaurants = Restaurant::all();
+        if($user->admin == 1){
+            $restaurants = Restaurant::all();
+        }
         $categories = Category::all();
         return view('menu_create', [
             'restaurants' => $restaurants,
@@ -78,6 +89,13 @@ class MenusController extends Controller
     public function store(MenuRequest $request)
     {
         $menu = new Menu();
+        $user = Auth::user();
+        if($user->admin == 2){
+            $user = $user->load('restaurant');
+            $menu->restaurant_id = $user->restaurant->id;
+        }else{
+            $menu->restaurant_id = $request->input('restaurant');
+        }
         $image = $request->file('image');
         $name = time() . '.' . $image->getClientOriginalExtension();
         $destinationPath = public_path('/images');
@@ -93,7 +111,6 @@ class MenusController extends Controller
         $menu->status = $request->input('status');
 //        $menu->priority = $request->input('priority');
 //        $menu->mealtime = $request->input('mealtime');
-        $menu->restaurant_id = $request->input('restaurant');
         $menu->famous = $request->input('famous');
         $menu->save();
         return redirect('/menus');
@@ -119,10 +136,10 @@ class MenusController extends Controller
     public function edit($id)
     {
         $menu = Menu::find($id);
-        $restaurants = Restaurant::all();
+//        $restaurants = Restaurant::all();
         $categories = Category::all();
         return view('menu_edit', [
-            'restaurants' => $restaurants,
+//            'restaurants' => $restaurants,
             'categories' => $categories,
             'menu' => $menu
         ]);
@@ -142,6 +159,7 @@ class MenusController extends Controller
         $menu->description = $request->input('description');
         $menu->price = $request->input('price');
         $menu->category_id = $request->input('category');
+        $menu->restaurant_id = Auth::user()->restaurant->id;
 //        $menu->stock_qty = $request->input('stock_qty');
 //        $menu->minimum_qty = $request->input('minimum_qty');
 //        $menu->subtract_stock = $request->input('subtract_stock');

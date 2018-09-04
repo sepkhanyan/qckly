@@ -83,12 +83,6 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="instructions" class="col-sm-3 control-label">Instruction</label>
-                            <div class="col-sm-5">
-                                <textarea name="instructions" id="notes" class="form-control" >{{$collection->instruction}}</textarea>
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label for="is_available" class="col-sm-3 control-label">Is Available</label>
                             <div class="col-sm-5">
                                 <div class="btn-group btn-group-switch" data-toggle="buttons">

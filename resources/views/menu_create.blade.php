@@ -30,6 +30,7 @@
                 {{ csrf_field() }}
                 <div class="tab-content">
                     <div id="general" class="tab-pane row wrap-all active">
+                        @if(Auth::user()->admin == 1)
                         <div class="form-group">
                             <label for="restaurant" class="col-sm-3 control-label">Restaurant</label>
                             <div class="col-sm-5">
@@ -40,6 +41,7 @@
                                 </select>
                             </div>
                         </div>
+                        @endif
                         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                             <label for="input-name" class="col-sm-3 control-label">Name</label>
                             <div class="col-sm-5">

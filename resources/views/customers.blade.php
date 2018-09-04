@@ -85,7 +85,18 @@
                                         <i class="fa fa-sort"></i>
                                     </a>
                                 </th>
-                                <th>Telephone</th>
+                                <th>
+                                    <a class="sort" href="">
+                                        Country Code
+                                        <i class="fa fa-sort-"></i>
+                                    </a>
+                                </th>
+                                <th>
+                                    <a class="sort" href="">
+                                        Telephone
+                                        <i class="fa fa-sort-"></i>
+                                    </a>
+                                </th>
                                 <th>
                                     <a class="sort" href="">
                                         Date Registered
@@ -117,6 +128,7 @@
                                     </td>
                                     <td>{{$customer->username}}</td>
                                     <td>{{$customer->email}}</td>
+                                    <td>{{$customer->country_code}}</td>
                                     <td>{{$customer->mobile_number}}</td>
                                     <td>{{date("j M, Y", strtotime($customer->created_at))}}</td>
                                     <td>{{$customer->id}}</td>

@@ -23,6 +23,7 @@ class Restaurant extends Model
         'longitude',
         'status',
         'image',
+        'user_id'
     ];
 
 
@@ -50,7 +51,7 @@ class Restaurant extends Model
 
     public function menu()
     {
-        return $this->hasMany('App\Menu', 'restaurant_id','id');
+        return $this->hasMany('App\Menu', 'restaurant_id');
     }
 
     public function categoryRestaurant()
@@ -61,5 +62,10 @@ class Restaurant extends Model
     public function review()
     {
         return $this->hasMany('App\Review', 'restaurant_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo('App\User', 'user_id');
     }
 }
