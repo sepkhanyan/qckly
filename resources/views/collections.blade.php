@@ -1,5 +1,9 @@
 @extends('home')
 @section('content')
+    <a  class="btn btn-primary"  href="{{ url('/collection/create') }}">
+        <i class="fa fa-plus"></i>
+        New
+    </a>
     @if(Auth::user()->admin == 1)
             <div class="col-md-12">
                     <div class="col-sm-5">
