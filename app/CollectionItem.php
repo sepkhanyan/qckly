@@ -11,9 +11,9 @@ class CollectionItem extends Model
 
     protected $fillable = [
         'collection_id',
+        'collection_menu_id',
         'item_id',
-        'min_count',
-        'max_count'
+        'quantity',
     ];
 
 
@@ -25,5 +25,15 @@ class CollectionItem extends Model
     public function menu()
     {
         return $this->belongsTo('App\Menu', 'item_id');
+    }
+
+    public function collectionMenu()
+    {
+        return $this->belongsTo('App\CollectionMenu', 'collection_menu_id', 'menu_id');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo('App\Category', 'collection_menu_id');
     }
 }

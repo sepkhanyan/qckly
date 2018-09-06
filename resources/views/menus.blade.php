@@ -1,20 +1,7 @@
 @extends('home')
 @section('content')
-  <div class="page-header">
-        <div class="page-action">
-            <a href="{{ url('/menu/create') }}" class="btn btn-primary">
-                <i class="fa fa-plus"></i>
-                New
-            </a>
-            <a class="btn btn-danger " id="delete_menu">
-                <i class="fa fa-trash-o"></i>
-                Delete
-            </a>
-        </div>
-    </div>
   @if(Auth::user()->admin == 1)
-      <div class="form-group">
-          <label for="input-name" class="col-sm-3 control-label">Restaurants</label>
+      <div class="col-md-12">
           <div class="col-sm-5">
               <select name="restaurant_name" id="input-name" class="form-control" tabindex="-1" title="" onchange="top.location.href = this.options[this.selectedIndex].value">
                   <option value>Select Restaurant</option>
@@ -83,6 +70,25 @@
                             </div>
                         </div>
                     </form>
+                </div>
+            </div>
+            <div class="page-header">
+                <div class="page-action">
+                    @if(Auth::user()->admin == 1)
+                        <a  class="btn btn-primary"  href="{{ url('/menu/create/' . $selectedRestaurant->id) }}">
+                            <i class="fa fa-plus"></i>
+                            New
+                        </a>
+                    @else
+                        <a  class="btn btn-primary"  href="{{ url('/menu/create') }}">
+                            <i class="fa fa-plus"></i>
+                            New
+                        </a>
+                    @endif
+                    <a class="btn btn-danger " id="delete_menu">
+                        <i class="fa fa-trash-o"></i>
+                        Delete
+                    </a>
                 </div>
             </div>
                 <form role="form" id="list-form" accept-charset="utf-8" method="POST" action="">

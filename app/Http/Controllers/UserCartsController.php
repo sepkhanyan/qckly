@@ -13,6 +13,7 @@ use App\Collection;
 use App\CollectionItem;
 use Carbon\Carbon;
 use App\User;
+use App\CollectionMenu;
 
 
 //use Illuminate\Foundation\Auth\User;
@@ -121,7 +122,7 @@ class UserCartsController extends Controller
                                 $cart_item = new UserCartItem();
                                 $cart_item->menu_id = $collection_item->menu->category_id;
                                 $cart_item->item_id = $collection_item->menu->id;
-                                $cart_item->quantity = $collection_item->min_count;
+                                $cart_item->quantity = $collection_item->quantity;
                                 $cart_item->cart_collection_id = $cart_collection->id;
                                 $cart_item->save();
                             }
@@ -359,7 +360,7 @@ class UserCartsController extends Controller
                         $menu = [];
                         $categories = Category::whereHas('cartItem', function($query) use ($cart_collection){
                             $query->where('cart_collection_id', $cart_collection->id);
-                        })->with(['cartItem'=>function ($x) use($cart_collection){
+                        })->with(['cartItem' => function ($x) use($cart_collection){
                             $x->where('cart_collection_id', $cart_collection->id);
                         }])->get();
                         foreach($categories as $category){
@@ -546,7 +547,7 @@ class UserCartsController extends Controller
                     $items  [] = [
                         'item_id' => $collection_item->item_id,
                         'item_name' => $collection_item->menu->name,
-                        'item_qty' => $collection_item->min_count,
+                        'item_qty' => $collection_item->quantity,
                         'item_price' => $collection_item->menu->price,
                         'item_price_unit' => 'QR',
                         'item_availability' => $status
@@ -558,74 +559,75 @@ class UserCartsController extends Controller
                     'items' => $items,
                 ];
             }else{
-                foreach ($collection->collectionItem as $collection_item) {
-                    $foodlist [] = $collection_item->menu->name;
-                    $image = url('/') . '/images/' . $collection_item->menu->image;
-                    array_push($foodlist_images, $image);
-                    $min_qty = $collection_item->min_count;
-                    $max_qty = $collection_item->max_count;
-                    if($collection->subcategory_id == 2){
-                        if($collection->allow_person_increase == 1){
-                            $person_increase = true;
-                        }else{
-                            $person_increase = false;
-                        }
-                        $max_persons = $collection->persons_max_count;
-
-                        $setup_hours = $collection->setup_time / 60;
-                        $setup_minutes = $collection->setup_time % 60;
-                        if ($setup_minutes > 0) {
-                            $setup = floor($setup_hours) . " hours " . ($setup_minutes) . " minutes";
-                        } else {
-                            $setup = floor($setup_hours) . " hours";
-                        }
-
-                        $max_hours = $collection->max_time / 60;
-                        $max_minutes = $collection->max_time % 60;
-                        if ($max_minutes > 0) {
-                            $max = floor($max_hours) . " hours " . ($max_minutes) . " minutes";
-                        } else {
-                            $max = floor($max_hours) . " hours";
-                        }
-                        $requirement = $collection->requirements;
-                    }
-                }
-                $categories = Category::with(['menu' => function ($query) use ($collection_id){
-                    $query->whereHas('collectionItem', function ($x) use($collection_id){
-                        $x->where('collection_id', $collection_id);
-                    });
-                }])->get();
+                $menu_min_qty = -1;
+                $menu_max_qty = -1;
                 $menu = [];
-                foreach($categories as $category){
+                $collectionMenus = CollectionMenu::where('collection_id', $collection->id)->with(['collectionItem' => function ($query) use($collection){
+                    $query->where('collection_id', $collection->id);
+                }])->get();
+                foreach ($collectionMenus as $collectionMenu) {
                     $items = [];
-                    foreach($category->menu as $item){
-                        if ($item->status == 1) {
+                    if($collection->category_id !=4 && $collection->category_id !=1){
+                        $menu_min_qty = $collectionMenu->min_qty;
+                        $menu_max_qty = $collectionMenu->max_qty;
+                    }
+                    foreach($collectionMenu->collectionItem as $collection_item){
+                        $foodlist [] = $collection_item->menu['name'];
+                        $image = url('/') . '/images/' . $collection_item->menu['image'];
+                        array_push($foodlist_images, $image);
+                        if($collection->category_id == 2){
+                            if($collection->allow_person_increase == 1){
+                                $person_increase = true;
+                            }else{
+                                $person_increase = false;
+                            }
+                            $max_persons = $collection->persons_max_count;
+
+                            $setup_hours = $collection->setup_time / 60;
+                            $setup_minutes = $collection->setup_time % 60;
+                            if ($setup_minutes > 0) {
+                                $setup = floor($setup_hours) . " hours " . ($setup_minutes) . " minutes";
+                            } else {
+                                $setup = floor($setup_hours) . " hours";
+                            }
+                            $max_hours = $collection->max_time / 60;
+                            $max_minutes = $collection->max_time % 60;
+                            if ($max_minutes > 0) {
+                                $max = floor($max_hours) . " hours " . ($max_minutes) . " minutes";
+                            } else {
+                                $max = floor($max_hours) . " hours";
+                            }
+                            $requirement = $collection->requirements;
+                        }
+
+
+                        if ($collection_item->menu->status == 1) {
                             $status = true;
                         } else {
                             $status = false;
                         }
-                        $items  [] = [
-                            'item_id' => $item->id,
-                            'item_name' => $item->name,
-                            'item_price' => $item->price,
+                        $items [] = [
+                            'item_id' => $collection_item->menu->id,
+                            'item_name' => $collection_item->menu->name,
+                            'item_image' => url('/') . '/images/' .  $collection_item->menu->image,
+                            'item_price' => $collection_item->menu->price,
                             'item_price_unit' => 'QR',
                             'item_availability' => $status
 
                         ];
                     }
+
                     usort($items, function ($item1, $item2) {
                         return $item2['item_availability'] <=> $item1['item_availability'];
                     });
                     $menu [] = [
-                        'menu_id' => $category->id,
-                        'menu_name' => $category->name,
-                        'menu_min_qty' => $min_qty,
-                        'menu_max_qty' => $max_qty,
+                        'menu_id' => $collectionMenu->category->id,
+                        'menu_name' => $collectionMenu->category->name,
+                        'menu_min_qty' => $menu_min_qty,
+                        'menu_max_qty' => $menu_max_qty,
                         'items' => $items,
                     ];
-                }
-                if($collection->subcategory_id == 4){
-                    $collection->price = 0;
+
                 }
 
             }
@@ -651,7 +653,7 @@ class UserCartsController extends Controller
                 'service_provide' => $collection->service_provide,
                 'food_list' => $foodlist,
                 'service_presentation' => $collection->service_presentation,
-                'instruction' => $collection->instruction,
+                'special_instruction' => '',
                 'food_item_image' => url('/') . '/images/' . $collection_item->menu->image,
                 'food_list_images' => $foodlist_images,
                 'setup_time' => $setup,

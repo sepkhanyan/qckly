@@ -28,4 +28,13 @@ class Category extends Model
         return $this->hasMany('App\UserCartItem', 'menu_id');
     }
 
+    public function collectionItem()
+    {
+        return $this->hasMany('App\CollectionMenu', 'menu_id');
+    }
+    public function collectionMenu()
+    {
+        return $this->hasMany('App\CollectionItem', 'collection_menu_id');
+    }
+
 }

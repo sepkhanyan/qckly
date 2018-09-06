@@ -31,16 +31,7 @@
                 <div class="tab-content">
                     <div id="general" class="tab-pane row wrap-all active">
                         @if(Auth::user()->admin == 1)
-                        <div class="form-group">
-                            <label for="restaurant" class="col-sm-3 control-label">Restaurant</label>
-                            <div class="col-sm-5">
-                                <select name="restaurant" id="restaurant" class="form-control" tabindex="-1" title="">
-                                    @foreach($restaurants as $restaurant)
-                                        <option value="{{$restaurant->id}}">{{$restaurant->name}},{{$restaurant->city}},{{$restaurant->address}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
+                            <input type="hidden" name="restaurant" value="{{$restaurant->id}}">
                         @endif
                         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                             <label for="input-name" class="col-sm-3 control-label">Name</label>

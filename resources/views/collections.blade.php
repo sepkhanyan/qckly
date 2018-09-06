@@ -1,29 +1,16 @@
 @extends('home')
 @section('content')
-    <div class="page-header">
-        <div class="page-action">
-            <a  class="btn btn-primary"  href="{{ url('/collection/create') }}"{{--data-toggle="modal" data-target="#myModal"--}}>
-                <i class="fa fa-plus"></i>
-                New
-            </a>
-            <a class="btn btn-danger " id="delete_collection">
-                <i class="fa fa-trash-o"></i>
-                Delete
-            </a>
-        </div>
-    </div>
     @if(Auth::user()->admin == 1)
-    <div class="form-group">
-        <label for="input-name" class="col-sm-3 control-label">Restaurants</label>
-        <div class="col-sm-5">
-            <select name="restaurant_name" id="input-name" class="form-control" tabindex="-1" title="" onchange="top.location.href = this.options[this.selectedIndex].value">
-                <option value>Select Restaurant</option>
-                @foreach($restaurants as $restaurant)
-                    <option value="{{url('/collections/' . $restaurant->id)}}">{{$restaurant->name}},{{$restaurant->area->area_en}},{{$restaurant->city}},{{$restaurant->address}}</option>
-                @endforeach
-            </select>
-        </div>
-    </div>
+            <div class="col-md-12">
+                    <div class="col-sm-5">
+                        <select name="restaurant_name" id="input-name" class="form-control" tabindex="-1" title="" onchange="top.location.href = this.options[this.selectedIndex].value">
+                            <option value>Select Restaurant</option>
+                            @foreach($restaurants as $restaurant)
+                                <option value="{{url('/collections/' . $restaurant->id)}}">{{$restaurant->name}},{{$restaurant->area->area_en}},{{$restaurant->city}},{{$restaurant->address}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+            </div>
     @endif
     @if(count($collections) > 0)
     <div class="row content" >
@@ -34,7 +21,6 @@
                         <img src="/images/{{$selectedRestaurant->image}}" width="50px" height="50px">
                         {{$selectedRestaurant->name}},{{$selectedRestaurant->area->area_en}},{{$selectedRestaurant->city}},{{$selectedRestaurant->address}}
                     </h2>
-                    <h3 class="panel-title">Collections</h3>
                     <div class="pull-right">
                         <button class="btn btn-filter btn-xs">
                             <i class="fa fa-filter"></i>
@@ -76,8 +62,28 @@
                     </form>
                 </div>
             </div>
+            <div class="page-header">
+                <div class="page-action">
+                    @if(Auth::user()->admin == 1)
+                    <a  class="btn btn-primary"  href="{{ url('/collection/create/' . $selectedRestaurant->id) }}">
+                        <i class="fa fa-plus"></i>
+                        New
+                    </a>
+                    @else
+                        <a  class="btn btn-primary"  href="{{ url('/collection/create') }}">
+                            <i class="fa fa-plus"></i>
+                            New
+                        </a>
+                    @endif
+                    <a class="btn btn-danger " id="delete_collection">
+                        <i class="fa fa-trash-o"></i>
+                        Delete
+                    </a>
+                </div>
+            </div>
             <form role="form" id="list-form" accept-charset="utf-8" method="POST" action="">
                 <div class="table-responsive">
+                    <h2>Collections</h2>
                     <table border="0" class="table table-striped table-border">
                         <thead>
                         <tr>

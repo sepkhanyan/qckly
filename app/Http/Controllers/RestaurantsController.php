@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\CollectionMenu;
 use App\Http\Requests\RestaurantRequest;
 use Auth;
 use Illuminate\Http\Request;
@@ -73,9 +74,9 @@ class RestaurantsController extends Controller
         $manager->username = $request->input('manager_name');
         $manager->password = bcrypt($request->input('password'));
         $manager->country_code = $request->input('country_code');
-        $manager->mobile_number = $request->input('manager_telephone');
-        $manager->email = $request->input('manager_email');
-        $manager->otp = rand(1500, 5000);
+        $manager->mobile_number = $request->input('telephone');
+        $manager->email = $request->input('email');
+        $manager->otp = rand(15000, 50000);
         $manager->lang = 'en';
         $manager->admin = 2;
         $manager->save();
@@ -97,13 +98,6 @@ class RestaurantsController extends Controller
         $restaurant->latitude = $request->input('latitude');
         $restaurant->longitude = $request->input('longitude');
         $restaurant->description = $request->input('description');
-//        $restaurant->offer_delivery = $request->input('offer_delivery');
-//        $restaurant->offer_collection = $request->input('offer_collection');
-//        $restaurant->delivery_time = $request->input('delivery_time');
-//        $restaurant->last_order_time = $request->input('last_order_time');
-//        $restaurant->reservation_interval = $request->input('reservation_time_interval');
-//        $restaurant->reservation_turn = $request->input('reservation_stay_time');
-//        $restaurant->collection_time = $request->input('collection_time');
         $restaurant->status = $request->input('status');
         $restaurant->save();
         $categories = $request->input('category');
@@ -205,13 +199,6 @@ class RestaurantsController extends Controller
         $restaurant->latitude = $request->input('latitude');
         $restaurant->longitude = $request->input('longitude');
         $restaurant->description = $request->input('description');
-//        $restaurant->offer_delivery = $request->input('offer_delivery');
-//        $restaurant->offer_collection = $request->input('offer_collection');
-//        $restaurant->delivery_time = $request->input('delivery_time');
-//        $restaurant->last_order_time = $request->input('last_order_time');
-//        $restaurant->reservation_interval = $request->input('reservation_time_interval');
-//        $restaurant->reservation_turn = $request->input('reservation_stay_time');
-//        $restaurant->collection_time = $request->input('collection_time');
         $restaurant->status = $request->input('status');
         if ($request->hasFile('image')) {
             $deletedImage = File::delete(public_path('images/' . $restaurant->image));
@@ -637,7 +624,7 @@ class RestaurantsController extends Controller
             $restaurant_id = $DataRequests['restaurant_id'];
 
             $restaurants = Restaurant::where('id', $restaurant_id)
-                ->with(['menu.category' ,'collection.category', 'collection.collectionItem']);
+                ->with(['menu.category' ,'collection.category', 'collection.collectionItem', 'collection.collectionMenu']);
             if(isset($DataRequests['category_id'])){
                 $category_id = $DataRequests['category_id'];
                 $restaurants = $restaurants->whereHas('categoryRestaurant',function ($query) use ($category_id){
@@ -649,8 +636,8 @@ class RestaurantsController extends Controller
 
             if(count($restaurants) > 0){
                 foreach($restaurants as $restaurant) {
-                    $menu_collection = [];
                     if (count($restaurant->collection) > 0) {
+                        $menu_collection = [];
                         foreach ($restaurant->collection as $collection) {
                             if ($collection->female_caterer_available == 1) {
                                 $female_caterer_available = true;
@@ -673,14 +660,17 @@ class RestaurantsController extends Controller
                             $collection_max = -1;
                             $collection_min = -1;
                             $person_increase = false;
+                            $collection_price = 0;
                             if($collection->category_id != 4){
                                 $min_serve = $collection->min_serve_to_person;
                                 $max_serve = $collection->max_serve_to_person;
+                                $collection_price = $collection->price;
                             }
                             if($collection->category_id != 2 && $collection->category_id != 4){
                                 $collection_min = $collection->min_qty;
                                 $collection_max = $collection->max_qty;
                             }
+
                             if($collection->category_id == 1){
                                 $items = [];
                                 $menu = [];
@@ -698,7 +688,7 @@ class RestaurantsController extends Controller
                                             'item_id' => $collection_item->item_id,
                                             'item_name' => $collection_item->menu->name,
                                             'item_image' => url('/') . '/images/' .  $collection_item->menu->image,
-                                            'item_qty' => $collection_item->min_count,
+                                            'item_qty' => $collection_item->quantity,
                                             'item_price' => $collection_item->menu->price,
                                             'item_price_unit' => 'QR',
                                             'item_availability' => $status
@@ -710,77 +700,83 @@ class RestaurantsController extends Controller
                                     'items' => $items,
                                 ];
                             }else{
-                                foreach ($collection->collectionItem as $collection_item) {
-                                    $foodlist [] = $collection_item->menu['name'];
-                                    $image = url('/') . '/images/' . $collection_item->menu['image'];
-                                    array_push($foodlist_images, $image);
-                                       $min_qty = $collection_item->min_count;
-                                       $max_qty = $collection_item->max_count;
-                                       if($collection->category_id == 2){
-                                           if($collection->allow_person_increase == 1){
-                                               $person_increase = true;
-                                           }else{
-                                               $person_increase = false;
-                                           }
-                                           $max_persons = $collection->persons_max_count;
-
-                                           $setup_hours = $collection->setup_time / 60;
-                                           $setup_minutes = $collection->setup_time % 60;
-                                           if ($setup_minutes > 0) {
-                                               $setup = floor($setup_hours) . " hours " . ($setup_minutes) . " minutes";
-                                           } else {
-                                               $setup = floor($setup_hours) . " hours";
-                                           }
-                                           $max_hours = $collection->max_time / 60;
-                                           $max_minutes = $collection->max_time % 60;
-                                           if ($max_minutes > 0) {
-                                               $max = floor($max_hours) . " hours " . ($max_minutes) . " minutes";
-                                           } else {
-                                               $max = floor($max_hours) . " hours";
-                                           }
-                                           $requirement = $collection->requirements;
-                                       }
-                                }
-                                $categories = Category::with(['menu' => function ($query) use ($collection, $restaurant_id){
-                                    $query->where('restaurant_id', $restaurant_id)
-                                        ->whereHas('collectionItem', function ($x) use ($collection){
-                                        $x->where('collection_id', $collection->id);
-                                    });
-                                }])->get();
-
+                                $menu_min_qty = -1;
+                                $menu_max_qty = -1;
                                 $menu = [];
-                                foreach($categories as $category){
+                                $collectionMenus = CollectionMenu::where('collection_id', $collection->id)->with(['collectionItem' => function ($query) use($collection){
+                                    $query->where('collection_id', $collection->id);
+                                }])->get();
+                                foreach ($collectionMenus as $collectionMenu) {
                                     $items = [];
-                                    foreach($category->menu as $item){
-                                        if ($item->status == 1) {
+                                    if($collection->category_id !=4 && $collection->category_id !=1){
+                                        $menu_min_qty = $collectionMenu->min_qty;
+                                        $menu_max_qty = $collectionMenu->max_qty;
+                                    }
+                                    foreach($collectionMenu->collectionItem as $collection_item){
+                                        $foodlist [] = $collection_item->menu['name'];
+                                        $image = url('/') . '/images/' . $collection_item->menu['image'];
+                                        array_push($foodlist_images, $image);
+                                        if($collection->category_id == 2){
+                                            if($collection->allow_person_increase == 1){
+                                                $person_increase = true;
+                                            }else{
+                                                $person_increase = false;
+                                            }
+                                            $max_persons = $collection->persons_max_count;
+
+                                            $setup_hours = $collection->setup_time / 60;
+                                            $setup_minutes = $collection->setup_time % 60;
+                                            if ($setup_minutes > 0) {
+                                                $setup = floor($setup_hours) . " hours " . ($setup_minutes) . " minutes";
+                                            } else {
+                                                $setup = floor($setup_hours) . " hours";
+                                            }
+                                            $max_hours = $collection->max_time / 60;
+                                            $max_minutes = $collection->max_time % 60;
+                                            if ($max_minutes > 0) {
+                                                $max = floor($max_hours) . " hours " . ($max_minutes) . " minutes";
+                                            } else {
+                                                $max = floor($max_hours) . " hours";
+                                            }
+                                            $requirement = $collection->requirements;
+                                        }
+
+
+                                        if ($collection_item->menu->status == 1) {
                                             $status = true;
                                         } else {
                                             $status = false;
                                         }
-                                        $items  [] = [
-                                            'item_id' => $item->id,
-                                            'item_name' => $item->name,
-                                            'item_image' => url('/') . '/images/' .  $collection_item->menu['image'],
-                                            'item_price' => $item->price,
+                                        $items [] = [
+                                            'item_id' => $collection_item->menu->id,
+                                            'item_name' => $collection_item->menu->name,
+                                            'item_image' => url('/') . '/images/' .  $collection_item->menu->image,
+                                            'item_price' => $collection_item->menu->price,
                                             'item_price_unit' => 'QR',
                                             'item_availability' => $status
 
                                         ];
                                     }
+
                                     usort($items, function ($item1, $item2) {
                                         return $item2['item_availability'] <=> $item1['item_availability'];
                                     });
                                     $menu [] = [
-                                        'menu_id' => $category->id,
-                                        'menu_name' => $category->name,
-                                        'menu_min_qty' => $min_qty,
-                                        'menu_max_qty' => $max_qty,
+                                        'menu_id' => $collectionMenu->category->id,
+                                        'menu_name' => $collectionMenu->category->name,
+                                        'menu_min_qty' => $menu_min_qty,
+                                        'menu_max_qty' => $menu_max_qty,
                                         'items' => $items,
                                     ];
+
                                 }
-                                if($collection->subcategory_id == 4){
-                                    $collection->price = 0;
-                                }
+//                                $categories = Category::with(['menu' => function ($query) use ($collection, $restaurant_id){
+//                                    $query->where('restaurant_id', $restaurant_id)
+//                                        ->whereHas('collectionItem', function ($x) use ($collection){
+//                                        $x->where('collection_id', $collection->id);
+//                                    });
+//                                }])->get();
+
                             }
                             $menu_collection [] = [
                                 'collection_id' => $collection->id,
@@ -792,7 +788,7 @@ class RestaurantsController extends Controller
                                 'mealtime' => $collection->mealtime,
                                 'collection_min_qty' => $collection_min,
                                 'collection_max_qty' => $collection_max,
-                                'collection_price' => $collection->price,
+                                'collection_price' => $collection_price,
                                 'collection_price_unit' => "QR",
                                 'is_available' => $is_available,
                                 'min_serve_to_person' => $min_serve,

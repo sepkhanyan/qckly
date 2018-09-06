@@ -150,32 +150,59 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group" id="items_container">
-                                    <label for="menu_item" class="col-sm-3 control-label">Menu Item</label>
-                                    <div class="col-sm-5" id="item">
-                                        <select  name="menu_item[]" id="menu_item"  tabindex="-1" >
-                                            <option value="">Select menu item</option>
-                                            @foreach ($menus as $menu)
-                                                <option value="{{$menu->id}}">
-                                                    {{$menu->name}}
-                                                </option>
+                                <div class="form-group">
+                                    <label for="" class="col-sm-3 control-label">Menu Items</label>
+                                    <div class="col-sm-5">
+                                        <div class="page-header clearfix" id="all">
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" onclick="$('input[name*=\'menu\']').prop('checked', this.checked);">
+                                                    <b>Select All</b>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        @foreach($menu_categories as $menu_category)
+                                            {{--<label class="container">--}}
+                                            <label for="">
+                                                {{$menu_category->name}}
+                                                <input type="hidden" name="menu[]" value="{{$menu_category->id}}">
+                                            </label>
+                                            <label for="menu_min_qty">
+                                                <input type="text" class="form-control" name="menu_min_qty[]" id="menu_min_qty" placeholder="Menu Min Quantity">
+                                            </label>
+                                            <label for="menu_max_qty">
+                                                <input type="text" class="form-control" name="menu_max_qty[]" id="menu_max_qty" placeholder="Menu Max Quantity">
+                                            </label>
+                                            @foreach($menu_category->menu as $menu)
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" name="menu_item[]" value="{{$menu->id}}">
+                                                        {{$menu->name}}
+                                                    </label>
+                                                </div>
                                             @endforeach
-                                            <span  id="item_count" style="display: none">
-                                                <input type="text" name="item_qty"  placeholder="Quantity">
-                                            </span>
-                                        </select>
+                                            <br>
+                                        @endforeach
                                     </div>
                                 </div>
-                            </div>
+                                {{--<div class="form-group" id="items_container">--}}
+                                    {{--<label for="menu_item" class="col-sm-3 control-label">Menu Item</label>--}}
+                                    {{--<div class="col-sm-5" id="item">--}}
+                                        {{--<select  name="menu_item[]" id="menu_item"  tabindex="-1" >--}}
+                                            {{--<option value="">Select menu item</option>--}}
+                                            {{--@foreach ($menus as $menu)--}}
+                                                {{--<option value="{{$menu->id}}">--}}
+                                                    {{--{{$menu->name}}--}}
+                                                {{--</option>--}}
+                                            {{--@endforeach--}}
+                                            {{--<span  id="item_count" style="display: none">--}}
+                                                {{--<input type="text" name="item_qty"  placeholder="Quantity">--}}
+                                            {{--</span>--}}
+                                        {{--</select>--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
 
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label"></label>
-                                <div class="col-sm-5">
-                                    <span class="input-group" id="add_item" style="display: none">
-                                        <button class="btn btn-primary"  type="button" >Add</button>
-                                    </span>
-                                </div>
-                            </div>
                             <div style="display: none" id="setup">
                                 <div class="form-group">
                                     <label for="input-setup" class="col-sm-3 control-label">Setup Time</label>
@@ -202,6 +229,7 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
                         </div>
                     </form>
                 </div>

@@ -119,16 +119,16 @@ $(document).ready(function() {
     });
 
 
-    $('#category').change(function(){
-        if ($(this).val() == 3 || $(this).val() == 4 || $(this).val() == 2)
-        {
-            $('#menu_item').attr('multiple','multiple');
-        }
-        else
-        {
-            $('#menu_item').removeAttr('multiple');
-        }
-    });
+    // $('#category').change(function(){
+    //     if ($(this).val() == 3 || $(this).val() == 4 || $(this).val() == 2)
+    //     {
+    //         $('#menu_item').attr('multiple','multiple');
+    //     }
+    //     else
+    //     {
+    //         $('#menu_item').removeAttr('multiple');
+    //     }
+    // });
 
     $('#category').click(function() {
         $('#items'). slideDown('fast');
@@ -140,6 +140,7 @@ $(document).ready(function() {
             $('#item_count'). slideDown('fast');
             $('#person_increase'). slideUp('fast');
             $('#setup'). slideUp('fast');
+            $('#all'). slideUp('fast');
         }else if($('select[name=category]').val() == 2){
             $('#collection_qty'). slideUp('fast');
             $('#persons_qty'). slideDown('fast');
@@ -148,6 +149,7 @@ $(document).ready(function() {
             $('#item_count'). slideDown('fast');
             $('#person_increase'). slideDown('fast');
             $('#setup'). slideDown('fast');
+            $('#all'). slideDown('fast');
         }else if($('select[name=category]').val() == 3){
             $('#collection_qty'). slideDown('fast');
             $('#persons_qty'). slideDown('fast');
@@ -156,6 +158,7 @@ $(document).ready(function() {
             $('#item_count'). slideDown('fast');
             $('#person_increase'). slideUp('fast');
             $('#setup'). slideUp('fast');
+            $('#all'). slideDown('fast');
         }else if($('select[name=category]').val() == 4){
             $('#items_container'). slideDown('fast');
             $('#collection_qty'). slideUp('fast');
@@ -165,16 +168,16 @@ $(document).ready(function() {
             $('#item_count'). slideUp('fast');
             $('#person_increase'). slideUp('fast');
             $('#setup'). slideUp('fast');
+            $('#all'). slideDown('fast');
         }
-
     });
-
-    $("#add_item").click(function(){
-        var original = $(".js-select");
-        var clone = original.clone();
-        clone.select2();
-        $("#items_container").clone().appendTo("#selection");
-    });
+    //
+    // $("#add_item").click(function(){
+    //     var original = $(".js-select");
+    //     var clone = original.clone();
+    //     clone.select2();
+    //     $("#items_container").clone().appendTo("#selection");
+    // });
 
 
 

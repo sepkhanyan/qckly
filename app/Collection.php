@@ -41,6 +41,10 @@ class Collection extends Model
     {
         return $this->belongsTo('App\CollectionCategory', 'category_id');
     }
+    public function collectionMenu()
+    {
+        return $this->hasMany('App\CollectionMenu', 'collection_id');
+    }
 
     public function collectionItem()
     {

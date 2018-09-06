@@ -60,7 +60,7 @@ Route::group(['middleware' => ['web', 'auth']], function (){
         });
         Route::get('/menus/{id?}', 'MenusController@index');
         Route::group(['prefix' => 'menu'], function () {
-            Route::get('create', 'MenusController@create');
+            Route::get('create/{id?}', 'MenusController@create');
             Route::post('store', 'MenusController@store');
             Route::get('edit/{id}', 'MenusController@edit');
             Route::post('update/{id}', 'MenusController@update');
@@ -68,7 +68,7 @@ Route::group(['middleware' => ['web', 'auth']], function (){
         });
         Route::get('/collections/{id?}','CollectionsController@index');
         Route::group(['prefix' => 'collection'], function () {
-            Route::get('create','CollectionsController@create');
+            Route::get('create/{id?}','CollectionsController@create');
             Route::get('store','CollectionsController@store');
             Route::get('edit/{id}', 'CollectionsController@edit');
             Route::post('update/{id}', 'CollectionsController@update');

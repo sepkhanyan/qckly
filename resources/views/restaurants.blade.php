@@ -1,5 +1,6 @@
 @extends('home')
 @section('content')
+    @if(Auth::user()->admin == 1)
     <div class="page-header">
         <div class="page-action">
             <a href="{{ url('/restaurant/create') }}"  class="btn btn-primary">
@@ -12,6 +13,7 @@
             </a>
         </div>
     </div>
+    @endif
     <div class="row content">
         <div class="col-md-12">
             <div class="panel panel-default panel-table">

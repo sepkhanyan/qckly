@@ -66,16 +66,17 @@ class MenusController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id = null)
     {
         $user = Auth::user();
-        $restaurants = Restaurant::all();
-        if($user->admin == 1){
-            $restaurants = Restaurant::all();
+        $restaurant = Restaurant::where('id', $id)->first();
+        if($user->admin == 2){
+            $user = $user->load('restaurant');
+            $restaurant = $user->restaurant;
         }
         $categories = Category::all();
         return view('menu_create', [
-            'restaurants' => $restaurants,
+            'restaurant' => $restaurant,
             'categories' => $categories
         ]);
     }
@@ -88,13 +89,12 @@ class MenusController extends Controller
      */
     public function store(MenuRequest $request)
     {
-        $menu = new Menu();
         $user = Auth::user();
+        $menu = new Menu();
+        $menu->restaurant_id = $request->input('restaurant');
         if($user->admin == 2){
             $user = $user->load('restaurant');
             $menu->restaurant_id = $user->restaurant->id;
-        }else{
-            $menu->restaurant_id = $request->input('restaurant');
         }
         $image = $request->file('image');
         $name = time() . '.' . $image->getClientOriginalExtension();
@@ -105,12 +105,7 @@ class MenusController extends Controller
         $menu->description = $request->input('description');
         $menu->price = $request->input('price');
         $menu->category_id = $request->input('category');
-//        $menu->stock_qty = $request->input('stock_qty');
-//        $menu->minimum_qty = $request->input('minimum_qty');
-//        $menu->subtract_stock = $request->input('subtract_stock');
         $menu->status = $request->input('status');
-//        $menu->priority = $request->input('priority');
-//        $menu->mealtime = $request->input('mealtime');
         $menu->famous = $request->input('famous');
         $menu->save();
         return redirect('/menus');
@@ -136,10 +131,8 @@ class MenusController extends Controller
     public function edit($id)
     {
         $menu = Menu::find($id);
-//        $restaurants = Restaurant::all();
         $categories = Category::all();
         return view('menu_edit', [
-//            'restaurants' => $restaurants,
             'categories' => $categories,
             'menu' => $menu
         ]);
@@ -160,12 +153,7 @@ class MenusController extends Controller
         $menu->price = $request->input('price');
         $menu->category_id = $request->input('category');
         $menu->restaurant_id = Auth::user()->restaurant->id;
-//        $menu->stock_qty = $request->input('stock_qty');
-//        $menu->minimum_qty = $request->input('minimum_qty');
-//        $menu->subtract_stock = $request->input('subtract_stock');
         $menu->status = $request->input('status');
-//        $menu->priority = $request->input('priority');
-//        $menu->mealtime = $request->input('mealtime');
         $menu->famous = $request->input('famous');
         if ($request->hasFile('image')) {
             $deletedImage = File::delete(public_path('images/' . $menu->image));

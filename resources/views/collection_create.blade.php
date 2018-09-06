@@ -16,24 +16,24 @@
         </div>
     </div>
     <div class="row content">
-        @if($user = Auth::user()->admin == 1)
+        {{--@if($user = Auth::user()->admin == 1)--}}
 
-            <form role="form" id="filter-form" accept-charset="utf-8" method="GET" action="">
-                <div class="filter-bar">
-                        <div class="row">
-                                <div class="form-group">
-                                    <label for="restaurant" class="col-sm-3 control-label">Restaurant</label>
-                                    <div class="col-sm-5">
-                                        <select name="restaurant_name" id="restaurant" class="form-control" tabindex="-1" title=""  >
-                                            <option value=" ">Select Restaurant</option>
-                                            @foreach($restaurants as $restaurant)
-                                                <option value="{{$restaurant->id}}">{{$restaurant->name}},{{$restaurant->city}},{{$restaurant->address}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                        </div>
-                    <div>
+            {{--<form role="form" id="filter-form" accept-charset="utf-8" method="GET" action="">--}}
+                {{--<div class="filter-bar">--}}
+                        {{--<div class="row">--}}
+                                {{--<div class="form-group">--}}
+                                    {{--<label for="restaurant" class="col-sm-3 control-label">Restaurant</label>--}}
+                                    {{--<div class="col-sm-5">--}}
+                                        {{--<select name="restaurant_name" id="restaurant" class="form-control" tabindex="-1" title=""  >--}}
+                                            {{--<option value=" ">Select Restaurant</option>--}}
+                                            {{--@foreach($restaurants as $restaurant)--}}
+                                                {{--<option value="{{$restaurant->id}}">{{$restaurant->name}},{{$restaurant->city}},{{$restaurant->address}}</option>--}}
+                                            {{--@endforeach--}}
+                                        {{--</select>--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
+                        {{--</div>--}}
+                    {{--<div>--}}
                         {{--<div class="form-group">--}}
                                 {{--<label for="input-name" class="col-sm-3 control-label">Menu Category</label>--}}
                                 {{--<div class="col-sm-5">--}}
@@ -45,13 +45,13 @@
                                     {{--</select>--}}
                                 {{--</div>--}}
                             {{--</div>--}}
-                    </div>
-                    <a class="btn btn-grey" onclick="filterList();" title="Filter">
-                        Choose
-                    </a>
-                </div>
-            </form>
-        @endif
+                    {{--</div>--}}
+                    {{--<a class="btn btn-grey" onclick="filterList();" title="Filter">--}}
+                        {{--Choose--}}
+                    {{--</a>--}}
+                {{--</div>--}}
+            {{--</form>--}}
+        {{--@endif--}}
         <div class="col-md-12">
             <div class="row wrap-vertical">
                 <ul id="nav-tabs" class="nav nav-tabs">
@@ -67,16 +67,17 @@
                         <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="GET" action="{{ url('/collection/store') }}">
                             {{ csrf_field() }}
                             @if(Auth::user()->admin == 1)
-                            <div class="form-group">
-                                <label for="restaurant" class="col-sm-3 control-label">Restaurant</label>
-                                <div class="col-sm-5">
-                                    <select name="restaurant" id="restaurant" class="form-control" tabindex="-1" title=""  >
-                                        @foreach($restaurants as $restaurant)
-                                            <option value="{{$restaurant->id}}">{{$restaurant->name}},{{$restaurant->city}},{{$restaurant->address}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
+                                <input type="hidden" name="restaurant" value="{{$restaurant->id}}">
+                            {{--<div class="form-group">--}}
+                                {{--<label for="restaurant" class="col-sm-3 control-label">Restaurant</label>--}}
+                                {{--<div class="col-sm-5">--}}
+                                    {{--<select name="restaurant" id="restaurant" class="form-control" tabindex="-1" title=""  >--}}
+                                        {{--@foreach($restaurants as $restaurant)--}}
+                                            {{--<option value="{{$restaurant->id}}">{{$restaurant->name}},{{$restaurant->city}},{{$restaurant->address}}</option>--}}
+                                        {{--@endforeach--}}
+                                    {{--</select>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
                             @endif
                             <div class="form-group {{ $errors->has('name') ? ' has-error' : '' }}">
                             <label for="input-name" class="col-sm-3 control-label">Name</label>
@@ -203,32 +204,55 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group" id="items_container">
-                                    <label for="menu_item" class="col-sm-3 control-label">Menu Item</label>
-                                    <div class="col-sm-5" id="item">
-                                        <select  name="menu_item[]" id="menu_item"  tabindex="-1" >
-                                            <option value="">Select menu item</option>
-                                            @foreach ($menus as $menu)
-                                                <option value="{{$menu->id}}">
-                                                    {{$menu->name}}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        <span  id="item_count" style="display: none">
-                                           <input type="text" name="item_qty"  placeholder="Quantity" value="{{ old('item_qty') }}">
-                                        </span>
-
+                                <div class="form-group">
+                                    <label for="" class="col-sm-3 control-label">Menu Items</label>
+                                    <div class="col-sm-5">
+                                        <div class="page-header clearfix" id="all">
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" onclick="$('input[name*=\'menu\']').prop('checked', this.checked);">
+                                                    <b>Select All</b>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    @foreach($menu_categories as $menu_category)
+                                            {{--<label class="container">--}}
+                                            <label for="">
+                                                {{$menu_category->name}}
+                                                <input type="hidden" name="menu[]" value="{{$menu_category->id}}">
+                                            </label>
+                                            <label for="menu_min_qty">
+                                                <input type="text" class="form-control" name="menu_min_qty[]" id="menu_min_qty" placeholder="Menu Min Quantity">
+                                            </label>
+                                            <label for="menu_max_qty">
+                                                <input type="text" class="form-control" name="menu_max_qty[]" id="menu_max_qty" placeholder="Menu Max Quantity">
+                                            </label>
+                                                @foreach($menu_category->menu as $menu)
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input type="checkbox" name="menu_item[]" value="{{$menu->id}}">
+                                                            {{$menu->name}}
+                                                        </label>
+                                                    </div>
+                                                @endforeach
+                                                    <br>
+                                        @endforeach
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label"></label>
-                                <div class="col-sm-5">
-                                    <span class="input-group" id="add_item" style="display: none">
-                                        <button class="btn btn-primary"  type="button" >Add</button>
-                                    </span>
-                                </div>
+                                {{--<div class="form-group" id="items_container">--}}
+                                    {{--<label for="menu_item" class="col-sm-3 control-label">Menu Item</label>--}}
+                                        {{--<select  name="menu_item[]" id="menu_item"  tabindex="-1" >--}}
+                                            {{--<option value="">Select menu item</option>--}}
+                                            {{--@foreach ($menu_categories as $menu_category)--}}
+                                                {{--<option value="{{$menu_category->id}}">--}}
+                                                    {{--{{$menu_category->name}}--}}
+                                                {{--</option>--}}
+                                            {{--@endforeach--}}
+                                        {{--</select>--}}
+                                        {{--<span  id="item_count" style="display: none">--}}
+                                           {{--<input type="text" name="item_qty"  placeholder="Quantity" value="{{ old('item_qty') }}">--}}
+                                        {{--</span>--}}
+                                {{--</div>--}}
                             </div>
                             <div style="display: none" id="setup">
                                 <div class="form-group">
@@ -262,9 +286,15 @@
                 </div>
         </div>
     </div>
-    <script type="text/javascript">
-        function filterList() {
-            $('#filter-form').submit();
-        }
-    </script>
+
+    {{--<script type="text/javascript">--}}
+        {{--window.onload = () => {--}}
+            {{--//add event listener to prevent the default behavior--}}
+            {{--const mouseOnlyNumberInputField = document.getElementById("mouse-only-number-input");--}}
+            {{--mouseOnlyNumberInputField.addEventListener("keypress", (event) => {--}}
+                {{--event.preventDefault();--}}
+            {{--});--}}
+        {{--}--}}
+    {{--</script>--}}
+
 @endsection
