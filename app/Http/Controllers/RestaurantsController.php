@@ -576,10 +576,9 @@ class RestaurantsController extends Controller
                         }
                         $restaurant_menu [] = [
                             'menu_id' => $menu->id,
-                            'menu_name' => $menu->name,
+                            'menu_name' => $menu->name_en,
                             'menu_price' => $menu->price,
-                            'menu_category' => $menu->category['name'],
-                            'menu_stock_qty' => $menu->stock_qty,
+                            'menu_category' => $menu->category['name_en'],
                             'menu_status' => $status,
                         ];
                     }
@@ -675,7 +674,7 @@ class RestaurantsController extends Controller
                                 $items = [];
                                 $menu = [];
                                 foreach ($collection->collectionItem as $collection_item) {
-                                    $foodlist [] = $collection_item->menu->name;
+                                    $foodlist [] = $collection_item->menu->name_en;
                                     $image = url('/') . '/images/' . $collection_item->menu->image;
                                     array_push($foodlist_images, $image);
                                     if ($collection_item->menu->status == 1) {
@@ -686,7 +685,7 @@ class RestaurantsController extends Controller
 
                                         $items  [] = [
                                             'item_id' => $collection_item->item_id,
-                                            'item_name' => $collection_item->menu->name,
+                                            'item_name' => $collection_item->menu->name_en,
                                             'item_image' => url('/') . '/images/' .  $collection_item->menu->image,
                                             'item_qty' => $collection_item->quantity,
                                             'item_price' => $collection_item->menu->price,
@@ -713,7 +712,7 @@ class RestaurantsController extends Controller
                                         $menu_max_qty = $collectionMenu->max_qty;
                                     }
                                     foreach($collectionMenu->collectionItem as $collection_item){
-                                        $foodlist [] = $collection_item->menu->name;
+                                        $foodlist [] = $collection_item->menu->name_en;
                                         $image = url('/') . '/images/' . $collection_item->menu->image;
                                         array_push($foodlist_images, $image);
                                         if($collection->category_id == 2){
@@ -749,7 +748,7 @@ class RestaurantsController extends Controller
                                         }
                                         $items [] = [
                                             'item_id' => $collection_item->menu->id,
-                                            'item_name' => $collection_item->menu->name,
+                                            'item_name' => $collection_item->menu->name_en,
                                             'item_image' => url('/') . '/images/' .  $collection_item->menu->image,
                                             'item_price' => $collection_item->menu->price,
                                             'item_price_unit' => 'QR',
@@ -763,7 +762,7 @@ class RestaurantsController extends Controller
                                     });
                                     $menu [] = [
                                         'menu_id' => $collectionMenu->category->id,
-                                        'menu_name' => $collectionMenu->category->name,
+                                        'menu_name' => $collectionMenu->category->name_en,
                                         'menu_min_qty' => $menu_min_qty,
                                         'menu_max_qty' => $menu_max_qty,
                                         'items' => $items,

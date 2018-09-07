@@ -137,7 +137,7 @@ class CollectionsController extends Controller
                 $collection_menu->collection_id = $collection->id;
                 $collection_menu->menu_id = $menu_id;
                 $menu = Category::where('id', $menu_id)->first();
-                $collection_menu->name = $menu->name;
+                $collection_menu->name = $menu->name_en;
                 $collection_menu->min_qty = $min_qty;
                 $collection_menu->max_qty = $max_qty;
                 $collection_menu->save();
@@ -242,7 +242,7 @@ class CollectionsController extends Controller
                     $collection_menu->collection_id = $collection->id;
                     $collection_menu->menu_id = $menu_id;
                     $menu = Category::where('id', $menu_id)->first();
-                    $collection_menu->name = $menu->name;
+                    $collection_menu->name = $menu->name_en;
                     $collection_menu->min_qty = $min_qty;
                     $collection_menu->max_qty = $max_qty;
                     $collection_menu->save();

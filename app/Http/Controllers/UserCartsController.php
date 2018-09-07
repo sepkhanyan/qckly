@@ -368,7 +368,7 @@ class UserCartsController extends Controller
                             foreach($category->cartItem as $cartItem){
                                 $items [] = [
                                     'item_id' => $cartItem->item_id,
-                                    'item_name' => $cartItem->menu->name,
+                                    'item_name' => $cartItem->menu->name_en,
                                     'item_price' => $cartItem->menu->price,
                                     'item_quantity' => $cartItem->quantity,
                                     'item_price_unit' => 'QR'
@@ -376,7 +376,7 @@ class UserCartsController extends Controller
                             }
                             $menu [] = [
                                 'menu_id' => $category->id,
-                                'menu_name' => $category->name,
+                                'menu_name' => $category->name_en,
                                 'items' => $items
                             ];
                         }
@@ -542,7 +542,7 @@ class UserCartsController extends Controller
                 $items = [];
                 $menu = [];
                 foreach ($collection->collectionItem as $collection_item) {
-                    $foodlist [] = $collection_item->menu->name;
+                    $foodlist [] = $collection_item->menu->name_en;
                     $image = url('/') . '/images/' . $collection_item->menu->image;
                     array_push($foodlist_images, $image);
                     if ($collection_item->menu->status == 1) {
@@ -553,7 +553,7 @@ class UserCartsController extends Controller
 
                     $items  [] = [
                         'item_id' => $collection_item->item_id,
-                        'item_name' => $collection_item->menu->name,
+                        'item_name' => $collection_item->menu->name_en,
                         'item_qty' => $collection_item->quantity,
                         'item_price' => $collection_item->menu->price,
                         'item_price_unit' => 'QR',
@@ -579,8 +579,8 @@ class UserCartsController extends Controller
                         $menu_max_qty = $collectionMenu->max_qty;
                     }
                     foreach($collectionMenu->collectionItem as $collection_item){
-                        $foodlist [] = $collection_item->menu['name'];
-                        $image = url('/') . '/images/' . $collection_item->menu['image'];
+                        $foodlist [] = $collection_item->menu->name_en;
+                        $image = url('/') . '/images/' . $collection_item->menu->image;
                         array_push($foodlist_images, $image);
                         if($collection->category_id == 2){
                             if($collection->allow_person_increase == 1){
@@ -615,7 +615,7 @@ class UserCartsController extends Controller
                         }
                         $items [] = [
                             'item_id' => $collection_item->menu->id,
-                            'item_name' => $collection_item->menu->name,
+                            'item_name' => $collection_item->menu->name_en,
                             'item_image' => url('/') . '/images/' .  $collection_item->menu->image,
                             'item_price' => $collection_item->menu->price,
                             'item_price_unit' => 'QR',
@@ -629,7 +629,7 @@ class UserCartsController extends Controller
                     });
                     $menu [] = [
                         'menu_id' => $collectionMenu->category->id,
-                        'menu_name' => $collectionMenu->category->name,
+                        'menu_name' => $collectionMenu->category->name_en,
                         'menu_min_qty' => $menu_min_qty,
                         'menu_max_qty' => $menu_max_qty,
                         'items' => $items,
