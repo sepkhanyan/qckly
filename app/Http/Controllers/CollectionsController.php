@@ -27,9 +27,9 @@ class CollectionsController extends Controller
         $user = Auth::user();
         $categories = CollectionCategory::all();
         $restaurants = Restaurant::all();
-        $selectedRestaurant = Restaurant::find($id);
         $data = $request->all();
         $collections = [];
+        $selectedRestaurant = [];
         if($id){
             $collections = Collection::where('restaurant_id', $id)
                 ->with(['category', 'collectionItem.menu']);
@@ -42,6 +42,7 @@ class CollectionsController extends Controller
                     ->orWhere('price','like',$data['collection_search'])
                     ->orWhere('mealtime','like',$data['collection_search']);
             }
+            $selectedRestaurant = Restaurant::find($id);
             $collections = $collections->get();
         }
         if($user->admin == 2){

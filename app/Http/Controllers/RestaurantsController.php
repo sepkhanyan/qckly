@@ -713,8 +713,8 @@ class RestaurantsController extends Controller
                                         $menu_max_qty = $collectionMenu->max_qty;
                                     }
                                     foreach($collectionMenu->collectionItem as $collection_item){
-                                        $foodlist [] = $collection_item->menu['name'];
-                                        $image = url('/') . '/images/' . $collection_item->menu['image'];
+                                        $foodlist [] = $collection_item->menu->name;
+                                        $image = url('/') . '/images/' . $collection_item->menu->image;
                                         array_push($foodlist_images, $image);
                                         if($collection->category_id == 2){
                                             if($collection->allow_person_increase == 1){
@@ -799,7 +799,7 @@ class RestaurantsController extends Controller
                                 'food_list' => $foodlist,
                                 'service_presentation' => $collection->service_presentation,
                                 'special_instruction' => '',
-                                'food_item_image' => url('/') . '/images/' . $collection_item->menu['image'],
+                                'food_item_image' => url('/') . '/images/' . $collection_item->menu->image,
                                 'food_list_images' => $foodlist_images,
                                 'setup_time' => $setup,
                                 'requirement' => $requirement,

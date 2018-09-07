@@ -170,6 +170,25 @@
             </div>
         </div>
     </div>
+  @else
+      @if($selectedRestaurant)
+          <div class="page-header">
+              <div class="page-action">
+                  <h2>No Collections</h2>
+                  @if(Auth::user()->admin == 1)
+                      <a  class="btn btn-primary"  href="{{ url('/menu/create/' . $selectedRestaurant->id) }}">
+                          <i class="fa fa-plus"></i>
+                          New
+                      </a>
+                  @else
+                      <a  class="btn btn-primary"  href="{{ url('/menu/create') }}">
+                          <i class="fa fa-plus"></i>
+                          New
+                      </a>
+              </div>
+          </div>
+      @endif
+  @endif
        @endif
     <script type="text/javascript">
         function filterList() {

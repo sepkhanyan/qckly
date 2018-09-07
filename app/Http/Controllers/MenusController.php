@@ -25,7 +25,7 @@ class MenusController extends Controller
         $user = Auth::user();
         $categories = Category::all();
         $restaurants = Restaurant::all();
-        $selectedRestaurant = Restaurant::find($id);
+        $selectedRestaurant = [];
         $data = $request->all();
         $menus = [];
         if($id){
@@ -44,6 +44,7 @@ class MenusController extends Controller
                     ->orWhere('price','like',$data['menu_search'])
                     ->orWhere('description','like',$data['menu_search']);
             }
+            $selectedRestaurant = Restaurant::find($id);
             $menus = $menus->paginate(20);
         }
         if($user->admin == 2){

@@ -171,6 +171,10 @@ $(document).ready(function() {
             $('#all'). slideDown('fast');
         }
     });
+
+    $('#menu_item').click(function() {
+        $('#menu_item_qty'). slideDown('fast');
+    });
     //
     // $("#add_item").click(function(){
     //     var original = $(".js-select");

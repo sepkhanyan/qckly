@@ -1,9 +1,5 @@
 @extends('home')
 @section('content')
-    <a  class="btn btn-primary"  href="{{ url('/collection/create') }}">
-        <i class="fa fa-plus"></i>
-        New
-    </a>
     @if(Auth::user()->admin == 1)
             <div class="col-md-12">
                     <div class="col-sm-5">
@@ -155,60 +151,31 @@
             </form>
         </div>
     </div>
-    {{--<div class="page-action">--}}
-        {{--<a  class="btn btn-primary"  href=""data-toggle="modal" data-target="#myModal">--}}
-            {{--<i class="fa fa-plus"></i>--}}
-            {{--Add--}}
-        {{--</a>--}}
-    {{--</div>--}}
-    {{--<div class="modal fade" id="myModal" role="dialog">--}}
-        {{--<form  accept-charset="utf-8" method="GET" action="{{ url('/collection_items/store') }}">--}}
-            {{--<div class="modal-dialog" >--}}
-                {{--<div class="modal-content">--}}
-                    {{--<div class="modal-header">--}}
-                        {{--<button type="button" class="close" data-dismiss="modal" >&times;</button>--}}
-                        {{--<h4 class="modal-title"> Add Collection Items</h4>--}}
-                    {{--</div>--}}
-                    {{--<div class="modal-body">--}}
-                        {{--<div class="md-form mb-5">--}}
-                            {{--<label for="menu_item" class="control-label">Menu item</label>--}}
-                            {{--<div style="width: 400px">--}}
-                                {{--<select name="menu_item" id="menu_item" class="form-control" tabindex="-1" title="">--}}
-                                    {{--<option value="">a</option>--}}
-                                {{--</select>--}}
-                                {{--<label for="restaurant" class="control-label">Quantity</label>--}}
-                            {{--</div>--}}
-                            {{--<div style="width: 50px">--}}
-                                {{--<input type="text" name="area_en" class="form-control" id="area-en">--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-
-                    {{--</div>--}}
-
-                    {{--<div class="modal-footer">--}}
-                        {{--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>--}}
-                        {{--<button type="submit"  class="btn btn-primary">Add Collection</button>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
-
-            {{--</div>--}}
-
-        {{--</form>--}}
-    {{--</div>--}}
+        @else
+        @if($selectedRestaurant)
+            <div class="page-header">
+                <div class="page-action">
+            <h2>No Collections</h2>
+            @if(Auth::user()->admin == 1)
+                <a  class="btn btn-primary"  href="{{ url('/collection/create/' . $selectedRestaurant->id) }}">
+                    <i class="fa fa-plus"></i>
+                    New
+                </a>
+            @else
+                <a  class="btn btn-primary"  href="{{ url('/collection/create') }}">
+                    <i class="fa fa-plus"></i>
+                    New
+                </a>
+                </div>
+            </div>
+            @endif
+            @endif
     @endif
     <script type="text/javascript">
         function filterList() {
             $('#filter-form').submit();
         }
     </script>
-    {{--<div id="footer" class="">
-        <div class="row navbar-footer">
-            <div class="col-sm-12 text-version">
-                <p class="col-xs-9 wrap-none">Thank you for using <a target="_blank" href="http://tastyigniter.com">TastyIgniter</a></p>
-                <p class="col-xs-3 text-right wrap-none">Version 2.1.1</p>
-            </div>
-        </div>
-    </div>--}}
     <script type="text/javascript">
         $(document).ready(function() {
             if (document.location.toString().toLowerCase().indexOf(active_menu, 1) != -1) {

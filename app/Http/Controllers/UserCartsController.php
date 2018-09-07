@@ -381,23 +381,30 @@ class UserCartsController extends Controller
                             ];
                         }
                         if($cart_collection->collection->price == null){
-                            $cart_collection->collection->price = '';
+                            $collection_price = '';
+                        }else{
+                            $collection_price = $cart_collection->collection->price;
                         }
                         if($cart_collection->persons_count == null){
-                            $cart_collection->persons_count = '';
+                            $persons_count = -1;
+                        }else{
+                            $persons_count = $cart_collection->persons_count;
                         }
                         if($cart_collection->quantity == null){
-                            $cart_collection->quantity = '';
+                            $quantity = '';
+                        }else{
+                            $quantity = $cart_collection->quantity;
                         }
                         if($cart_collection->female_caterer == 1){
                             $female_caterer = true;
                         }else{
                             $female_caterer = false;
                         }
-                        $persons_count = -1;
-                        if($cart_collection->collection->category_id == 2){
-                            $persons_count =  $cart_collection->persons_count;
-                        }
+
+//                        $persons_count = -1;
+//                        if($cart_collection->collection->category_id == 2){
+//                            $persons_count =  $cart_collection->persons_count;
+//                        }
                         $collections [] = [
                             'restaurant_id' => $cart_collection->collection->restaurant->id,
                             'restaurant_name' => $cart_collection->collection->restaurant->name,
@@ -405,12 +412,12 @@ class UserCartsController extends Controller
                             'collection_type_id' => $cart_collection->collection->category_id,
                             'collection_type' => $cart_collection->collection->category->name_en,
                             'collection_name' => $cart_collection->collection->name,
-                            'collection_price' => $cart_collection->collection->price,
+                            'collection_price' => $collection_price,
                             'collection_price_unit' => 'QR',
                             'female_caterer' => $female_caterer,
                             'special_instruction' => $cart_collection->special_instruction,
                             'menu_items' => $menu,
-                            'quantity' => $cart_collection->quantity,
+                            'quantity' => $quantity,
                             'persons_count' => $persons_count,
                             'subtotal' => $cart_collection->price,
                             'subtotal_unit' => "QR",

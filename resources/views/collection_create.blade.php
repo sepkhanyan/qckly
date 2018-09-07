@@ -218,41 +218,31 @@
                                     @foreach($menu_categories as $menu_category)
                                             {{--<label class="container">--}}
                                             <label for="">
-                                                {{$menu_category->name}}
+                                                <h4>{{$menu_category->name}}</h4>
                                                 <input type="hidden" name="menu[]" value="{{$menu_category->id}}">
                                             </label>
+                                            <span class="help-block">Needed for "Fixed quantity by person" and "Customised platter" collections.</span>
                                             <label for="menu_min_qty">
-                                                <input type="text" class="form-control" name="menu_min_qty[]" id="menu_min_qty" placeholder="Menu Min Quantity">
+                                                <input type="number" class="form-control" name="menu_min_qty[]" id="menu_min_qty" placeholder="Menu Min Quantity" min="1">
                                             </label>
                                             <label for="menu_max_qty">
-                                                <input type="text" class="form-control" name="menu_max_qty[]" id="menu_max_qty" placeholder="Menu Max Quantity">
+                                                <input type="number" class="form-control" name="menu_max_qty[]" id="menu_max_qty" placeholder="Menu Max Quantity" min="1">
                                             </label>
                                                 @foreach($menu_category->menu as $menu)
-                                                    <div class="checkbox">
+                                                    <div class="checkbox" id="menu_items">
                                                         <label>
                                                             <input type="checkbox" name="menu_item[]" value="{{$menu->id}}">
                                                             {{$menu->name}}
                                                         </label>
+                                                        {{--<label for="menu_item_qty">--}}
+                                                            {{--<input type="number" min="1" class="form-control" name="menu_item_qty[]" id="menu_item_qty" placeholder="Quantity" style="width: 55%; height: 30px;">--}}
+                                                        {{--</label>--}}
                                                     </div>
                                                 @endforeach
                                                     <br>
                                         @endforeach
                                     </div>
                                 </div>
-                                {{--<div class="form-group" id="items_container">--}}
-                                    {{--<label for="menu_item" class="col-sm-3 control-label">Menu Item</label>--}}
-                                        {{--<select  name="menu_item[]" id="menu_item"  tabindex="-1" >--}}
-                                            {{--<option value="">Select menu item</option>--}}
-                                            {{--@foreach ($menu_categories as $menu_category)--}}
-                                                {{--<option value="{{$menu_category->id}}">--}}
-                                                    {{--{{$menu_category->name}}--}}
-                                                {{--</option>--}}
-                                            {{--@endforeach--}}
-                                        {{--</select>--}}
-                                        {{--<span  id="item_count" style="display: none">--}}
-                                           {{--<input type="text" name="item_qty"  placeholder="Quantity" value="{{ old('item_qty') }}">--}}
-                                        {{--</span>--}}
-                                {{--</div>--}}
                             </div>
                             <div style="display: none" id="setup">
                                 <div class="form-group">
@@ -286,7 +276,43 @@
                 </div>
         </div>
     </div>
+    <style>
+        .button {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 16px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            -webkit-transition-duration: 0.4s; /* Safari */
+            transition-duration: 0.4s;
+            cursor: pointer;
+        }
 
+        .button1 {
+            background-color: white;
+            color: black;
+            border: 2px solid #555555;
+        }
+
+        .button1:hover {
+            background-color: #555555;
+            color: white;
+        }
+    </style>
+    {{--<script>--}}
+        {{--function menuItems() {--}}
+            {{--var x = document.getElementById("items");--}}
+            {{--if (x.style.display === "none") {--}}
+                {{--x.style.display = "block";--}}
+            {{--} else {--}}
+                {{--x.style.display = "none";--}}
+            {{--}--}}
+        {{--}--}}
+    {{--</script>--}}
     {{--<script type="text/javascript">--}}
         {{--window.onload = () => {--}}
             {{--//add event listener to prevent the default behavior--}}
