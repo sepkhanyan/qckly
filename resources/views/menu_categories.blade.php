@@ -100,8 +100,8 @@
                                             <i class="fa fa-pencil"></i>
                                         </a>&nbsp;&nbsp;
                                     </td>
-                                    <td>{{$category->name}}</td>
-                                    <td>{{$category->description}}</td>
+                                    <td>{{$category->name_en}}</td>
+                                    <td>{{$category->description_en}}</td>
                                     @if($category->status == 1)
                                         <td>Enable</td>
                                     @else

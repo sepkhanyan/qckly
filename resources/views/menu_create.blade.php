@@ -72,7 +72,7 @@
                                 <select name="category" id="input-category" class="form-control">
                                     <option value="">Select category</option>
                                     @foreach ($categories as $category)
-                                        <option value="{{$category->id}}">{{$category->name}}</option>
+                                        <option value="{{$category->id}}">{{$category->name_en}}</option>
                                     @endforeach
                                 </select>
                                 @if ($errors->has('category'))

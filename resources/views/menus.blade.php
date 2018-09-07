@@ -150,7 +150,7 @@
                                     <td>{{$menu->name}}</td>
                                     <td>{{$menu->description}}</td>
                                     <td>{{$menu->price}}</td>
-                                    <td>{{$menu->category->name}}</td>
+                                    <td>{{$menu->category->name_en}}</td>
                                     <td>
                                     @if($menu->status == 1)
                                         Enable

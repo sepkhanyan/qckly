@@ -162,11 +162,11 @@
                                             </div>
                                         </div>
                                         @foreach($menu_categories as $menu_category)
-                                            {{--<label class="container">--}}
                                             <label for="">
-                                                {{$menu_category->name}}
+                                                <h4>{{$menu_category->name}}</h4>
                                                 <input type="hidden" name="menu[]" value="{{$menu_category->id}}">
                                             </label>
+                                            <span class="help-block">Needed for "Fixed quantity by person" and "Customised platter" collections.</span>
                                             <label for="menu_min_qty">
                                                 <input type="text" class="form-control" name="menu_min_qty[]" id="menu_min_qty" placeholder="Menu Min Quantity">
                                             </label>
@@ -185,24 +185,6 @@
                                         @endforeach
                                     </div>
                                 </div>
-                                {{--<div class="form-group" id="items_container">--}}
-                                    {{--<label for="menu_item" class="col-sm-3 control-label">Menu Item</label>--}}
-                                    {{--<div class="col-sm-5" id="item">--}}
-                                        {{--<select  name="menu_item[]" id="menu_item"  tabindex="-1" >--}}
-                                            {{--<option value="">Select menu item</option>--}}
-                                            {{--@foreach ($menus as $menu)--}}
-                                                {{--<option value="{{$menu->id}}">--}}
-                                                    {{--{{$menu->name}}--}}
-                                                {{--</option>--}}
-                                            {{--@endforeach--}}
-                                            {{--<span  id="item_count" style="display: none">--}}
-                                                {{--<input type="text" name="item_qty"  placeholder="Quantity">--}}
-                                            {{--</span>--}}
-                                        {{--</select>--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-
                             <div style="display: none" id="setup">
                                 <div class="form-group">
                                     <label for="input-setup" class="col-sm-3 control-label">Setup Time</label>

@@ -21,8 +21,14 @@
                 <ul id="nav-tabs" class="nav nav-tabs">
                     <li class="active">
                         <a href="#general" data-toggle="tab">
-                            Category Details
+                            Details En
                         </a>
+                    </li>
+                    <li>
+                        <a href="#details_ar" data-toggle="tab">Details Ar</a>
+                    </li>
+                    <li>
+                        <a href="#data" data-toggle="tab">Data</a>
                     </li>
                 </ul>
             </div>
@@ -31,74 +37,54 @@
                 {{ csrf_field() }}
                 <div class="tab-content">
                     <div id="general" class="tab-pane row wrap-all active">
-                        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                            <label for="input-name" class="col-sm-3 control-label">Name</label>
+                        <div class="form-group{{ $errors->has('name_en') ? ' has-error' : '' }}">
+                            <label for="input_name_en" class="col-sm-3 control-label">Name</label>
                             <div class="col-sm-5">
-                                <input type="text" name="name" id="input-name" class="form-control" value="{{ $category->name }}">
-                                @if ($errors->has('name'))
+                                <input type="text" name="name_en" id="input_name_en" class="form-control" value="{{ $category->name_en }}">
+                                @if ($errors->has('name_en'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('name') }}</strong>
+                                        <strong>{{ $errors->first('name_en') }}</strong>
                                     </span>
                                 @endif
                             </div>
                         </div>
-                        {{--<div class="form-group">--}}
-                            {{--<label for="input-slug" class="col-sm-3 control-label">--}}
-                                {{--Permalink Slug--}}
-                                {{--<span class="help-block">Use ONLY alpha-numeric lowercase characters, underscores or dashes and make sure it is unique GLOBALLY.</span>--}}
-                            {{--</label>--}}
-                            {{--<div class="col-sm-5">--}}
-                                {{--<input type="hidden" name="permalink[permalink_id]" value="0">--}}
-                                {{--<input type="text" name="permalink[slug]" id="input-slug" class="form-control" value="">--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        {{--<div class="form-group">--}}
-                            {{--<label for="input-name" class="col-sm-3 control-label">Parent</label>--}}
-                            {{--<div class="col-sm-5">--}}
-                                {{--<div class="select2-container form-control" id="s2id_category">--}}
-                                {{--<a href="javascript:void(0)" class="select2-choice" tabindex="-1">--}}
-                                {{--<span class="select2-chosen" id="select2-chosen-1">None</span>--}}
-                                {{--<abbr class="select2-search-choice-close"></abbr>--}}
-                                {{--<span class="select2-arrow" role="presentation">--}}
-                                {{--<b role="presentation"></b>--}}
-                                {{--</span>--}}
-                                {{--</a>--}}
-                                {{--<label for="s2id_autogen1" class="select2-offscreen"></label>--}}
-                                {{--<input class="select2-focusser select2-offscreen" type="text" aria-haspopup="true" role="button" aria-labelledby="select2-chosen-1" id="s2id_autogen1">--}}
-                                {{--</div>--}}
-                                {{--<select name="parent_id" id="category" class="form-control" tabindex="-1" title="">--}}
-                                    {{--<option value="">None</option>--}}
-                                    {{--<option value="16">Main Course</option>--}}
-                                    {{--<option value="15">Appetizer</option>--}}
-                                    {{--<option value="17">Salads</option>--}}
-                                    {{--<option value="18">Seafoods</option>--}}
-                                    {{--<option value="19">Traditional</option>--}}
-                                    {{--<option value="20">Vegetarian</option>--}}
-                                    {{--<option value="21">Soups</option>--}}
-                                    {{--<option value="22">Desserts</option>--}}
-                                    {{--<option value="23">Drinks</option>--}}
-                                    {{--<option value="24">Specials</option>--}}
-                                    {{--<option value="26">Rice Dishes</option>--}}
-                                    {{--<option value="44">Pizza</option>--}}
-                                    {{--<option value="46">Lanches</option>--}}
-                                    {{--<option value="48">burger</option>--}}
-                                    {{--<option value="49">Chicken</option>--}}
-                                    {{--<option value="50">Chinese food</option>--}}
-                                    {{--<option value="51">Biryani</option>--}}
-                                {{--</select>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
-                            <label for="input-description" class="col-sm-3 control-label">Description</label>
+                        <div class="form-group{{ $errors->has('description_en') ? ' has-error' : '' }}">
+                            <label for="input_description_en" class="col-sm-3 control-label">Description</label>
                             <div class="col-sm-5">
-                                <textarea name="description" id="input-description" class="form-control" rows="7">{{ $category->description }}</textarea>
-                                @if ($errors->has('description'))
+                                <textarea name="description_en" id="input_description_en" class="form-control" rows="7">{{ $category->description_en }}</textarea>
+                                @if ($errors->has('description_en'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('description') }}</strong>
+                                    <strong>{{ $errors->first('description_en') }}</strong>
+                                </span>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    <div id="details_ar" class="tab-pane row wrap-all">
+                        <div class="form-group{{ $errors->has('name_ar') ? ' has-error' : '' }}">
+                            <label for="input_name_ar" class="col-sm-3 control-label">Name</label>
+                            <div class="col-sm-5">
+                                <input type="text" name="name_ar" id="input_name_ar" class="form-control" value="{{ $category->name_ar }}">
+                                @if ($errors->has('name_ar'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('name_ar') }}</strong>
                                     </span>
                                 @endif
                             </div>
                         </div>
+                        <div class="form-group{{ $errors->has('description_ar') ? ' has-error' : '' }}">
+                            <label for="input_description_ar" class="col-sm-3 control-label">Description</label>
+                            <div class="col-sm-5">
+                                <textarea name="description_ar" id="input_description_ar" class="form-control" rows="7">{{ $category->description_ar}}</textarea>
+                                @if ($errors->has('description_ar'))
+                                    <span class="help-block">
+                                    <strong>{{ $errors->first('description_ar') }}</strong>
+                                </span>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    <div id="data" class="tab-pane row wrap-all">
                         <div class="form-group">
                             <label for="" class="col-sm-3 control-label">
                                 Image
@@ -121,21 +107,11 @@
                                 </div>
                             </div>
                         </div>
-                        {{--<div class="form-group{{ $errors->has('priority') ? ' has-error' : '' }}">--}}
-                            {{--<label for="input-priority" class="col-sm-3 control-label">Priority</label>--}}
-                            {{--<div class="col-sm-5">--}}
-                                {{--<input type="text" name="priority" id="input-priority" class="form-control" value="{{ $category->priority }}">--}}
-                                {{--@if ($errors->has('description'))--}}
-                                    {{--<span class="help-block">--}}
-                                        {{--<strong>{{ $errors->first('priority') }}</strong>--}}
-                                    {{--</span>--}}
-                                {{--@endif--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
                         <div class="form-group">
                             <label for="input-status" class="col-sm-3 control-label">Status</label>
                             <div class="col-sm-5">
                                 <div class="btn-group btn-group-switch" data-toggle="buttons">
+                                    @if($category->status == 0)
                                     <label class="btn btn-danger active">
                                         <input type="radio" name="status" value="0" checked="checked">
                                         Disabled
@@ -144,6 +120,16 @@
                                         <input type="radio" name="status" value="1">
                                         Enabled
                                     </label>
+                                        @else
+                                        <label class="btn btn-danger ">
+                                            <input type="radio" name="status" value="0">
+                                            Disabled
+                                        </label>
+                                        <label class="btn btn-success active">
+                                            <input type="radio" name="status" value="1"  checked="checked">
+                                            Enabled
+                                        </label>
+                                        @endif
                                 </div>
                             </div>
                         </div>

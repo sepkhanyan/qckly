@@ -50,12 +50,14 @@ class CategoriesController extends Controller
     public function store(CategoryRequest $request)
 
     {
-        $categories = new Category();
-        $categories->name = $request->input('name');
-        $categories->description = $request->input('description');
-        $categories->status = $request->input('status');
-        $categories->save();
-        if ($categories) {
+        $category = new Category();
+        $category->name_en = $request->input('name_en');
+        $category->description_en = $request->input('description_en');
+        $category->name_ar = $request->input('name_ar');
+        $category->description_ar = $request->input('description_ar');
+        $category->status = $request->input('status');
+        $category->save();
+        if ($category) {
             return redirect('/categories');
         }
     }
@@ -93,8 +95,10 @@ class CategoriesController extends Controller
     public function update(CategoryRequest $request, $id)
     {
         $category = Category::find($id);
-        $category->name = $request->input('name');
-        $category->description = $request->input('description');
+        $category->name_en = $request->input('name_en');
+        $category->description_en = $request->input('description_en');
+        $category->name_ar = $request->input('name_ar');
+        $category->description_ar = $request->input('description_ar');
         $category->status = $request->input('status');
         $category->save();
         return redirect('/categories');
