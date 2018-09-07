@@ -24,16 +24,22 @@ class MenuRequest extends FormRequest
     public function rules()
     {
         $rules =   [
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
+            'name_en' => 'required|string|max:255',
+            'description_en' => 'required|string',
+            'name_ar' => 'required|string|max:255',
+            'description_ar' => 'required|string',
+            'price' => 'required|numeric',
             'category' => 'required|integer',
             'image' => 'required|image'
 
         ];
         if ($this->id) {
             $rules = [
-                'name' => 'required|string|max:255',
-                'description' => 'required|string',
+                'name_en' => 'required|string|max:255',
+                'description_en' => 'required|string',
+                'name_ar' => 'required|string|max:255',
+                'description_ar' => 'required|string',
+                'price' => 'required|numeric',
                 'category' => 'required|integer',
             ];
         }

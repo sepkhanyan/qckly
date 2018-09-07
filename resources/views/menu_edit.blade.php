@@ -29,44 +29,71 @@
                 {{ csrf_field() }}
                 <div class="tab-content">
                     <div id="general" class="tab-pane row wrap-all active">
-                        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                            <label for="input-name" class="col-sm-3 control-label">Name</label>
+                        <div class="form-group{{ $errors->has('name_en') ? ' has-error' : '' }}">
+                            <label for="input_name_en" class="col-sm-3 control-label">Name En</label>
                             <div class="col-sm-5">
-                                <input type="text" name="name" id="input-name" class="form-control" value="{{ $menu->name }}">
-                                @if ($errors->has('name'))
+                                <input type="text" name="name_en" id="input_name_en" class="form-control" value="{{ $menu->name_en }}">
+                                @if ($errors->has('name_en'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('name') }}</strong>
+                                        <strong>{{ $errors->first('name_en') }}</strong>
                                     </span>
                                 @endif
                             </div>
                         </div>
-                        <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
-                            <label for="input-description" class="col-sm-3 control-label">Description</label>
+                        <div class="form-group{{ $errors->has('description_en') ? ' has-error' : '' }}">
+                            <label for="input_description_en" class="col-sm-3 control-label">Description En</label>
                             <div class="col-sm-5">
-                                <textarea name="description" id="input-description" class="form-control" rows="5">{{ $menu->description }}</textarea>
-                                @if ($errors->has('description'))
+                                <textarea name="description_en" id="input_description_en" class="form-control" rows="5">{{ $menu->description_en }}</textarea>
+                                @if ($errors->has('description_en'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('description') }}</strong>
+                                        <strong>{{ $errors->first('description_en') }}</strong>
                                     </span>
                                 @endif
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="input-price" class="col-sm-3 control-label">Price</label>
+                        <div class="form-group{{ $errors->has('name_ar') ? ' has-error' : '' }}">
+                            <label for="input_name_ar" class="col-sm-3 control-label">Name Ar</label>
+                            <div class="col-sm-5">
+                                <input type="text" name="name_ar" id="input_name_ar" class="form-control" value="{{ $menu->name_ar }}">
+                                @if ($errors->has('name_ar'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('name_ar') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="form-group{{ $errors->has('description_ar') ? ' has-error' : '' }}">
+                            <label for="input_description_ar" class="col-sm-3 control-label">Description Ar</label>
+                            <div class="col-sm-5">
+                                <textarea name="description_ar" id="input_description_ar" class="form-control" rows="5">{{ $menu->description_ar }}</textarea>
+                                @if ($errors->has('description_ar'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('description_ar') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="form-group{{ $errors->has('price') ? ' has-error' : '' }}">
+                            <label for="input_price" class="col-sm-3 control-label">Price</label>
                             <div class="col-sm-5">
                                 <div class="input-group">
-                                    <input type="text" name="price" id="input-price" class="form-control" value="{{ $menu->price }}" />
+                                    <input type="text" name="price" id="input_price" class="form-control" value="{{ $menu->price }}" />
                                     <span class="input-group-addon">
                                         <i class="fa fa-money"></i>
                                     </span>
                                 </div>
+                                @if ($errors->has('price'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('price') }}</strong>
+                                    </span>
+                                @endif
                             </div>
                         </div>
                         <div class="form-group{{ $errors->has('category') ? ' has-error' : '' }}">
                             <label for="input-name" class="col-sm-3 control-label">Category</label>
                             <div class="col-sm-5">
                                 <select name="category" id="category" class="form-control">
-                                    <option value="">Select category</option>
+                                    <option value="{{$menu->category->id}}">{{$menu->category->name_en}}</option>
                                     @foreach ($categories as $category)
                                         <option value="{{$category->id}}">{{$category->name_en}}</option>
                                     @endforeach
@@ -82,6 +109,7 @@
                             <label for="famous" class="col-sm-3 control-label">Famous</label>
                             <div class="col-sm-5">
                                 <div class="btn-group btn-group-switch" data-toggle="buttons">
+                                    @if($menu->famous == 1)
                                     <label class="btn btn-danger">
                                         <input type="radio" name="famous" value="0"  >
                                         Disabled
@@ -90,6 +118,16 @@
                                         <input type="radio" name="famous" value="1"  checked="checked">
                                         Enabled
                                     </label>
+                                        @else
+                                        <label class="btn btn-danger  active">
+                                            <input type="radio" name="famous" value="0"  checked="checked" >
+                                            Disabled
+                                        </label>
+                                        <label class="btn btn-success">
+                                            <input type="radio" name="famous" value="1" >
+                                            Enabled
+                                        </label>
+                                        @endif
                                 </div>
                             </div>
                         </div>
@@ -124,6 +162,7 @@
                             <label for="input-status" class="col-sm-3 control-label">Status</label>
                             <div class="col-sm-5">
                                 <div class="btn-group btn-group-switch" data-toggle="buttons">
+                                    @if($menu->status == 1)
                                     <label class="btn btn-danger">
                                         <input type="radio" name="status" value="0" >
                                         Disabled
@@ -132,6 +171,16 @@
                                         <input type="radio" name="status" value="1"  checked="checked">
                                         Enabled
                                     </label>
+                                        @else
+                                        <label class="btn btn-danger active">
+                                            <input type="radio" name="status" value="0" checked="checked">
+                                            Disabled
+                                        </label>
+                                        <label class="btn btn-success ">
+                                            <input type="radio" name="status" value="1"  >
+                                            Enabled
+                                        </label>
+                                        @endif
                                 </div>
                             </div>
                         </div>

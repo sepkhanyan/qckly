@@ -102,8 +102,10 @@ class MenusController extends Controller
         $destinationPath = public_path('/images');
         $image->move($destinationPath, $name);
         $menu->image = $name;
-        $menu->name = $request->input('name');
-        $menu->description = $request->input('description');
+        $menu->name_en = $request->input('name_en');
+        $menu->description_en = $request->input('description_en');
+        $menu->name_ar = $request->input('name_ar');
+        $menu->description_ar = $request->input('description_ar');
         $menu->price = $request->input('price');
         $menu->category_id = $request->input('category');
         $menu->status = $request->input('status');
@@ -149,11 +151,12 @@ class MenusController extends Controller
     public function update(MenuRequest $request, $id)
     {
         $menu = Menu::find($id);
-        $menu->name = $request->input('name');
-        $menu->description = $request->input('description');
+        $menu->name_en = $request->input('name_en');
+        $menu->description_en = $request->input('description_en');
+        $menu->name_ar = $request->input('name_ar');
+        $menu->description_ar = $request->input('description_ar');
         $menu->price = $request->input('price');
         $menu->category_id = $request->input('category');
-        $menu->restaurant_id = Auth::user()->restaurant->id;
         $menu->status = $request->input('status');
         $menu->famous = $request->input('famous');
         if ($request->hasFile('image')) {

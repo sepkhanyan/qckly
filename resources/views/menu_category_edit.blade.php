@@ -21,14 +21,8 @@
                 <ul id="nav-tabs" class="nav nav-tabs">
                     <li class="active">
                         <a href="#general" data-toggle="tab">
-                            Details En
+                           Category Details
                         </a>
-                    </li>
-                    <li>
-                        <a href="#details_ar" data-toggle="tab">Details Ar</a>
-                    </li>
-                    <li>
-                        <a href="#data" data-toggle="tab">Data</a>
                     </li>
                 </ul>
             </div>
@@ -38,7 +32,7 @@
                 <div class="tab-content">
                     <div id="general" class="tab-pane row wrap-all active">
                         <div class="form-group{{ $errors->has('name_en') ? ' has-error' : '' }}">
-                            <label for="input_name_en" class="col-sm-3 control-label">Name</label>
+                            <label for="input_name_en" class="col-sm-3 control-label">Name En</label>
                             <div class="col-sm-5">
                                 <input type="text" name="name_en" id="input_name_en" class="form-control" value="{{ $category->name_en }}">
                                 @if ($errors->has('name_en'))
@@ -49,7 +43,7 @@
                             </div>
                         </div>
                         <div class="form-group{{ $errors->has('description_en') ? ' has-error' : '' }}">
-                            <label for="input_description_en" class="col-sm-3 control-label">Description</label>
+                            <label for="input_description_en" class="col-sm-3 control-label">Description En</label>
                             <div class="col-sm-5">
                                 <textarea name="description_en" id="input_description_en" class="form-control" rows="7">{{ $category->description_en }}</textarea>
                                 @if ($errors->has('description_en'))
@@ -59,10 +53,8 @@
                                 @endif
                             </div>
                         </div>
-                    </div>
-                    <div id="details_ar" class="tab-pane row wrap-all">
                         <div class="form-group{{ $errors->has('name_ar') ? ' has-error' : '' }}">
-                            <label for="input_name_ar" class="col-sm-3 control-label">Name</label>
+                            <label for="input_name_ar" class="col-sm-3 control-label">Name Ar</label>
                             <div class="col-sm-5">
                                 <input type="text" name="name_ar" id="input_name_ar" class="form-control" value="{{ $category->name_ar }}">
                                 @if ($errors->has('name_ar'))
@@ -73,7 +65,7 @@
                             </div>
                         </div>
                         <div class="form-group{{ $errors->has('description_ar') ? ' has-error' : '' }}">
-                            <label for="input_description_ar" class="col-sm-3 control-label">Description</label>
+                            <label for="input_description_ar" class="col-sm-3 control-label">Description Ar</label>
                             <div class="col-sm-5">
                                 <textarea name="description_ar" id="input_description_ar" class="form-control" rows="7">{{ $category->description_ar}}</textarea>
                                 @if ($errors->has('description_ar'))
@@ -83,8 +75,6 @@
                                 @endif
                             </div>
                         </div>
-                    </div>
-                    <div id="data" class="tab-pane row wrap-all">
                         <div class="form-group">
                             <label for="" class="col-sm-3 control-label">
                                 Image

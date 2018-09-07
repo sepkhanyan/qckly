@@ -48,7 +48,7 @@
                                             <select name="menu_category" class="form-control input-sm">
                                                 <option value="">View all categories</option>
                                                 @foreach ($categories as $category)
-                                                    <option value="{{$category->id}}">{{$category->name}}</option>
+                                                    <option value="{{$category->id}}">{{$category->name_en}}</option>
                                                 @endforeach
                                             </select>&nbsp;
                                         </div>
@@ -147,8 +147,8 @@
                                             <i class="fa fa-pencil"></i>
                                         </a>&nbsp;&nbsp;
                                     </td>
-                                    <td>{{$menu->name}}</td>
-                                    <td>{{$menu->description}}</td>
+                                    <td>{{$menu->name_en}}</td>
+                                    <td>{{$menu->description_en}}</td>
                                     <td>{{$menu->price}}</td>
                                     <td>{{$menu->category->name_en}}</td>
                                     <td>
