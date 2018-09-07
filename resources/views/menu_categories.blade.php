@@ -1,5 +1,6 @@
 @extends('home')
 @section('content')
+    @if(Auth::user()->admin == 1)
     <div class="page-header">
         <div class="page-action">
             <a href="{{ url('/category/create') }}"  class="btn btn-primary">
@@ -12,6 +13,7 @@
             </a>
         </div>
     </div>
+    @endif
     <div class="row content">
         <div class="col-md-12">
             <div class="panel panel-default panel-table">
@@ -61,9 +63,11 @@
                         <table border="0" class="table table-striped table-border">
                             <thead>
                             <tr>
+                                @if(Auth::user()->admin == 1)
                                 <th class="action action-three">
                                     <input type="checkbox" onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">
                                 </th>
+                                @endif
                                 <th>
                                     <a class="sort" href="">
                                         Name
@@ -94,12 +98,14 @@
 
                             @foreach($categories as $category)
                                 <tr>
+                                    @if(Auth::user()->admin == 1)
                                     <td class="action">
                                         <input type="checkbox" value="{{ $category->id }}" name="delete" />
                                         <a class="btn btn-edit" title="" href="{{ url('category/edit/' . $category->id )}}">
                                             <i class="fa fa-pencil"></i>
                                         </a>&nbsp;&nbsp;
                                     </td>
+                                    @endif
                                     <td>{{$category->name_en}}</td>
                                     <td>{{$category->description_en}}</td>
                                     @if($category->status == 1)

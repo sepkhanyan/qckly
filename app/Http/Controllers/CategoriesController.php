@@ -38,7 +38,12 @@ class CategoriesController extends Controller
      */
     public function create()
     {
-        return view('menu_category_create');
+        $user = Auth::user();
+        if($user->admin == 1){
+            return view('menu_category_create');
+        }else{
+            return redirect('categories');
+        }
     }
 
     /**
@@ -50,16 +55,22 @@ class CategoriesController extends Controller
     public function store(CategoryRequest $request)
 
     {
-        $category = new Category();
-        $category->name_en = $request->input('name_en');
-        $category->description_en = $request->input('description_en');
-        $category->name_ar = $request->input('name_ar');
-        $category->description_ar = $request->input('description_ar');
-        $category->status = $request->input('status');
-        $category->save();
-        if ($category) {
-            return redirect('/categories');
+        $user = Auth::user();
+        if($user->admin == 1){
+            $category = new Category();
+            $category->name_en = $request->input('name_en');
+            $category->description_en = $request->input('description_en');
+            $category->name_ar = $request->input('name_ar');
+            $category->description_ar = $request->input('description_ar');
+            $category->status = $request->input('status');
+            $category->save();
+            if ($category) {
+                return redirect('/categories');
+            }
+        }else{
+            return redirect('categories');
         }
+
     }
 
     /**
@@ -81,8 +92,13 @@ class CategoriesController extends Controller
      */
     public function edit($id)
     {
-        $category = Category::find($id);
-        return view('menu_category_edit', ['category' => $category]);
+        $user = Auth::user();
+        if($user->admin == 1){
+            $category = Category::find($id);
+            return view('menu_category_edit', ['category' => $category]);
+        }else{
+            return redirect('categories');
+        }
     }
 
     /**
@@ -94,14 +110,20 @@ class CategoriesController extends Controller
      */
     public function update(CategoryRequest $request, $id)
     {
-        $category = Category::find($id);
-        $category->name_en = $request->input('name_en');
-        $category->description_en = $request->input('description_en');
-        $category->name_ar = $request->input('name_ar');
-        $category->description_ar = $request->input('description_ar');
-        $category->status = $request->input('status');
-        $category->save();
-        return redirect('/categories');
+        $user = Auth::user();
+        if($user->admin == 1){
+            $category = Category::find($id);
+            $category->name_en = $request->input('name_en');
+            $category->description_en = $request->input('description_en');
+            $category->name_ar = $request->input('name_ar');
+            $category->description_ar = $request->input('description_ar');
+            $category->status = $request->input('status');
+            $category->save();
+            return redirect('/categories');
+        }else{
+            return redirect('categories');
+        }
+
     }
 
     /**
@@ -112,14 +134,20 @@ class CategoriesController extends Controller
      */
     public function deleteCategories(Request $request)
     {
-        $id = $request->get('id');
-        $menus = Menu::where('category_id',$id)->get();
-        $images = [];
-        foreach($menus as $menu){
+        $user = Auth::user();
+        if($user->admin == 1){
+            $id = $request->get('id');
+            $menus = Menu::where('category_id',$id)->get();
+            $images = [];
+            foreach($menus as $menu){
                 $images [] = public_path('images/' . $menu->image);
+            }
+            File::delete($images);
+            Category::whereIn('id',$id)->delete();
+            return redirect('/categories');
+        }else{
+            return redirect('categories');
         }
-        File::delete($images);
-        Category::whereIn('id',$id)->delete();
-        return redirect('/categories');
+
     }
 }

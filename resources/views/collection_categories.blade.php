@@ -1,5 +1,6 @@
 @extends('home')
 @section('content')
+    @if(Auth::user()->admin == 1)
     <div class="page-header">
         <div class="page-action">
             <a  href="" class="btn btn-primary"  data-toggle="modal" data-target="#modalCreateCollectionCategory">
@@ -12,6 +13,7 @@
             </a>
         </div>
     </div>
+    @endif
     <div class="row content">
         <div class="col-md-12">
             <div class="panel panel-default panel-table">
@@ -47,9 +49,11 @@
                         <table border="0" class="table table-striped table-border">
                             <thead>
                             <tr>
+                                @if(Auth::user()->admin == 1)
                                 <th class="action action-three">
                                     <input type="checkbox" onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">
                                 </th>
+                                @endif
                                 <th>
                                     <a class="sort" href="">
                                         Category En
@@ -73,12 +77,14 @@
                             <tbody>
                             @foreach($categories as $category)
                                 <tr>
+                                    @if(Auth::user()->admin == 1)
                                     <td class="action">
                                         <input type="checkbox" value="{{ $category->id }}" name="delete" />
                                         <a class="btn btn-edit"  href="#" data-toggle="modal" data-target="#modalEditCollectionCategory" type="button"  data-item-id="{{$category->id}}">
                                             <i class="fa fa-pencil"></i>
                                         </a>&nbsp;&nbsp;&nbsp;
                                     </td>
+                                    @endif
                                     <td>{{$category->name_en}}</td>
                                     <td>{{$category->name_ar}}</td>
                                     <td>{{$category->id}}</td>
@@ -91,6 +97,7 @@
             </div>
         </div>
     </div>
+    @if(Auth::user()->admin == 1)
     <div class="modal fade" id="modalCreateCollectionCategory" role="dialog" tabindex="-1" >
         <form role="form" id="edit-form" class="form-horizontal"  accept-charset="utf-8" method="GET" action="{{ url('/collection_category/store') }}">
             {{ csrf_field() }}
@@ -157,6 +164,7 @@
             </div>
         </form>
     </div>
+    @endif
     <script type="text/javascript">
         function filterList() {
             $('#filter-form').submit();

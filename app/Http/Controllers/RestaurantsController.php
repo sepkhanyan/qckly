@@ -54,12 +54,17 @@ class RestaurantsController extends Controller
      */
     public function create()
     {
-        $areas = Area::all();
-        $categories = RestaurantCategory::all();
-        return view('restaurant_create', [
-            'areas' => $areas,
-            'categories' => $categories,
-        ]);
+        $user = Auth::user();
+        if($user->admin == 1){
+            $areas = Area::all();
+            $categories = RestaurantCategory::all();
+            return view('restaurant_create', [
+                'areas' => $areas,
+                'categories' => $categories,
+            ]);
+        }else{
+            return redirect('restaurants');
+        }
     }
 
     /**
@@ -70,52 +75,54 @@ class RestaurantsController extends Controller
      */
     public function store(Request $request)
     {
-        $manager = new User();
-        $manager->username = $request->input('manager_name');
-        $manager->password = bcrypt($request->input('password'));
-        $manager->country_code = $request->input('country_code');
-        $manager->mobile_number = $request->input('telephone');
-        $manager->email = $request->input('email');
-        $manager->otp = rand(15000, 50000);
-        $manager->lang = 'en';
-        $manager->admin = 2;
-        $manager->save();
-        $restaurant = new Restaurant();
-        $image = $request->file('image');
-        $name = time() . '.' . $image->getClientOriginalExtension();
-        $destinationPath = public_path('/images');
-        $image->move($destinationPath, $name);
-        $restaurant->image = $name;
-        $restaurant->user_id = $manager->id;
-        $restaurant->name = $request->input('name');
-        $restaurant->email = $request->input('email');
-        $restaurant->telephone = $request->input('telephone');
-        $restaurant->address = $request->input('address');
-        $restaurant->city = $request->input('city');
-        $restaurant->state = $request->input('state');
-        $restaurant->postcode = $request->input('postcode');
-        $restaurant->area_id = $request->input('country');
-        $restaurant->latitude = $request->input('latitude');
-        $restaurant->longitude = $request->input('longitude');
-        $restaurant->description = $request->input('description');
-        $restaurant->status = $request->input('status');
-        $restaurant->save();
-        $categories = $request->input('category');
-        foreach($categories as $category){
-            $restaurantCategories = RestaurantCategory::where('id',$category)->get();
-            foreach($restaurantCategories as $restaurantCategory){
-               $en = $restaurantCategory->name_en;
-               $ar = $restaurantCategory->name_ar;
+        $user = Auth::user();
+        if($user->admin == 1){
+            $manager = new User();
+            $manager->username = $request->input('manager_name');
+            $manager->password = bcrypt($request->input('password'));
+            $manager->country_code = $request->input('country_code');
+            $manager->mobile_number = $request->input('telephone');
+            $manager->email = $request->input('email');
+            $manager->otp = rand(15000, 50000);
+            $manager->lang = 'en';
+            $manager->admin = 2;
+            $manager->save();
+            $restaurant = new Restaurant();
+            $image = $request->file('image');
+            $name = time() . '.' . $image->getClientOriginalExtension();
+            $destinationPath = public_path('/images');
+            $image->move($destinationPath, $name);
+            $restaurant->image = $name;
+            $restaurant->user_id = $manager->id;
+            $restaurant->name = $request->input('name');
+            $restaurant->email = $request->input('email');
+            $restaurant->telephone = $request->input('telephone');
+            $restaurant->address = $request->input('address');
+            $restaurant->city = $request->input('city');
+            $restaurant->state = $request->input('state');
+            $restaurant->postcode = $request->input('postcode');
+            $restaurant->area_id = $request->input('country');
+            $restaurant->latitude = $request->input('latitude');
+            $restaurant->longitude = $request->input('longitude');
+            $restaurant->description = $request->input('description');
+            $restaurant->status = $request->input('status');
+            $restaurant->save();
+            $categories = $request->input('category');
+            foreach($categories as $category){
+                $restaurantCategories = RestaurantCategory::where('id',$category)->get();
+                foreach($restaurantCategories as $restaurantCategory){
+                    $en = $restaurantCategory->name_en;
+                    $ar = $restaurantCategory->name_ar;
+                }
+                $categoryRestaurant = new CategoryRestaurant();
+                $categoryRestaurant->restaurant_id = $restaurant->id;
+                $categoryRestaurant->category_id = $category;
+                $categoryRestaurant->name_en = $en;
+                $categoryRestaurant->name_ar = $ar;
+                $categoryRestaurant->save();
             }
-            $categoryRestaurant = new CategoryRestaurant();
-            $categoryRestaurant->restaurant_id = $restaurant->id;
-            $categoryRestaurant->category_id = $category;
-            $categoryRestaurant->name_en = $en;
-            $categoryRestaurant->name_ar = $ar;
-            $categoryRestaurant->save();
-        }
 
-        $days = $request->input('daily_days');
+            $days = $request->input('daily_days');
             foreach($days as $day){
                 $working = new WorkingHour();
                 $working->type = $request->input('opening_type');
@@ -143,8 +150,11 @@ class RestaurantsController extends Controller
             }
 
 
-        if ($restaurant) {
-            return redirect('/restaurants');
+            if ($restaurant) {
+                return redirect('/restaurants');
+            }
+        }else{
+            return redirect('restaurants');
         }
     }
 
@@ -167,10 +177,19 @@ class RestaurantsController extends Controller
      */
     public function edit($id)
     {
+        $user = Auth::user();
         $working = WorkingHour::where('restaurant_id', $id)->first();
         $restaurant = Restaurant::find($id);
         $areas = Area::all();
         $categories = RestaurantCategory::all();
+        if($user->admin == 2){
+            $user = $user->load('restaurant');
+            if($user->restaurant->id == $id){
+                $restaurant = Restaurant::find($id);
+            }else{
+                return redirect('restaurants');
+            }
+        }
         return view('restaurant_edit', [
             'restaurant' => $restaurant,
             'areas' => $areas,
@@ -188,7 +207,17 @@ class RestaurantsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $restaurant = Restaurant::find($id);
+        $user = Auth::user();
+        if($user->admin == 2){
+            $user = $user->load('restaurant');
+            if($user->restaurant->id == $id){
+                $restaurant = Restaurant::find($id);
+            }else{
+                return redirect('restaurants');
+            }
+        }else{
+            $restaurant = Restaurant::find($id);
+        }
         $restaurant->name = $request->input('name');
         $restaurant->email = $request->input('email');
         $restaurant->telephone = $request->input('telephone');
@@ -270,21 +299,26 @@ class RestaurantsController extends Controller
      */
     public function deleteRestaurants(Request $request)
     {
-        $id = $request->get('id');
-        $restaurants = Restaurant::with('menu')->where('id',$id)->get();
-        $restaurant_images = [];
-        $menu_images = [];
-        foreach ($restaurants as $restaurant) {
+        $user = Auth::user();
+        if($user->admin == 1){
+            $id = $request->get('id');
+            $restaurants = Restaurant::with('menu')->where('id',$id)->get();
+            $restaurant_images = [];
+            $menu_images = [];
+            foreach ($restaurants as $restaurant) {
 
-            foreach($restaurant->menu as $menu){
-                $menu_images[] = public_path('images/' . $menu->image);
+                foreach($restaurant->menu as $menu){
+                    $menu_images[] = public_path('images/' . $menu->image);
+                }
+                $restaurant_images[] = public_path('images/' . $restaurant->image);
             }
-            $restaurant_images[] = public_path('images/' . $restaurant->image);
+            File::delete($menu_images);
+            File::delete($restaurant_images);
+            Restaurant::whereIn('id',$id)->delete();
+            return redirect('/restaurants');
+        }else{
+            return redirect('/restaurants');
         }
-        File::delete($menu_images);
-        File::delete($restaurant_images);
-        Restaurant::whereIn('id',$id)->delete();
-        return redirect('/restaurants');
     }
 
 

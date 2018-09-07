@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\CollectionCategory;
 use Illuminate\Http\Request;
+use Auth;
 
 
 class CollectionCategoriesController extends Controller
@@ -39,11 +40,17 @@ class CollectionCategoriesController extends Controller
 
     public function store(Request $request)
     {
-        $category = New CollectionCategory();
-        $category->name_en = $request->input('category_en');
-        $category->name_ar = $request->input('category_ar');
-        $category->save();
-        return redirect('/collection_categories');
+        $user = Auth::user();
+        if($user->admin == 1){
+            $category = New CollectionCategory();
+            $category->name_en = $request->input('category_en');
+            $category->name_ar = $request->input('category_ar');
+            $category->save();
+            return redirect('/collection_categories');
+        }else{
+            return redirect('collection_categories');
+        }
+
     }
 
     /**
@@ -77,11 +84,16 @@ class CollectionCategoriesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $category = CollectionCategory::find($id);
-        $category->name_en = $request->input('category_en');
-        $category->name_ar = $request->input('category_ar');
-        $category->save();
-        return redirect('/collection_categories');
+        $user = Auth::user();
+        if($user->admin == 1){
+            $category = CollectionCategory::find($id);
+            $category->name_en = $request->input('category_en');
+            $category->name_ar = $request->input('category_ar');
+            $category->save();
+            return redirect('/collection_categories');
+        }else{
+            return redirect('collection_categories');
+        }
     }
 
     /**
@@ -92,9 +104,15 @@ class CollectionCategoriesController extends Controller
      */
     public function deleteCategory(Request $request)
     {
-        $id = $request->get('id');
-        CollectionCategory::whereIn('id',$id)->delete();
-        return redirect('/collection_categories');
+        $user = Auth::user();
+        if($user->admin == 1){
+            $id = $request->get('id');
+            CollectionCategory::whereIn('id',$id)->delete();
+            return redirect('/collection_categories');
+        }else{
+            return redirect('collection_categories');
+        }
+
 
     }
 }
