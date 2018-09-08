@@ -30,6 +30,13 @@ Route::group(['middleware' => ['web', 'auth']], function (){
             Route::post('update/{id}', 'AreasController@update');
             Route::post('delete', 'AreasController@deleteAreas');
         });
+        Route::get('/mealtimes', 'MealtimesController@index');
+        Route::group(['prefix' => 'mealtime'], function () {
+            Route::get('store', 'MealtimesController@store');
+            Route::post('edit/{id}', 'MealtimesController@edit');
+            Route::post('update/{id}', 'MealtimesController@update');
+            Route::post('delete', 'MealtimesController@deleteMealtimes');
+        });
         Route::get('/restaurants', 'RestaurantsController@index');
         Route::group(['prefix' => 'restaurant'], function () {
             Route::get('create', 'RestaurantsController@create');

@@ -125,6 +125,7 @@
             </div>
         </form>
     </div>
+    @if(isset($area->id))
     <div class="modal fade" id="modalEditArea" role="dialog" tabindex="-1" >
         <form role="form" id="edit-form" class="form-horizontal"  accept-charset="utf-8" method="POST" action="{{ url('/area/update/' . $area->id) }}">
             {{ csrf_field() }}
@@ -158,6 +159,7 @@
             </div>
         </form>
     </div>
+    @endif
     </form>
     </div>
     <script type="text/javascript">

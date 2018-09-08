@@ -1024,7 +1024,6 @@
             </form>
         </div>
     </div>
-
     <script type="text/javascript">
         $('input[name=\'table\']').select2({
             placeholder: 'Start typing...',

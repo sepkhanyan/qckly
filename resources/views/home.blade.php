@@ -173,6 +173,12 @@
                         </a>
                         <ul class="nav nav-second-level collapse">
                             <li>
+                                <a href="{{url('/mealtimes')}}" class=menus"">
+                                    <i class="fa fa-square-o fa-fw "></i>
+                                    Mealtimes
+                                </a>
+                            </li>
+                            <li>
                                 <a href="{{url('/menus')}}" class=menus"">
                                     <i class="fa fa-square-o fa-fw "></i>
                                     Menus

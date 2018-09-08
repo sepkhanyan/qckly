@@ -10,10 +10,10 @@ class Mealtime extends Model
 
 
     protected $fillable = [
-        'mealtime_name',
+        'name_en',
+        'name_ar',
         'start_time',
         'end_time',
-        'mealtime_status'
     ];
 
 }

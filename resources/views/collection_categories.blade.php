@@ -131,6 +131,7 @@
             </div>
         </form>
     </div>
+    @if(isset($category->id))
     <div class="modal fade" id="modalEditCollectionCategory" role="dialog" tabindex="-1" >
         <form role="form" id="edit-form" class="form-horizontal"  accept-charset="utf-8" method="POST" action="{{ url('/collection_category/update/' . $category->id ) }}">
             {{ csrf_field() }}
@@ -164,6 +165,7 @@
             </div>
         </form>
     </div>
+        @endif
     @endif
     <script type="text/javascript">
         function filterList() {

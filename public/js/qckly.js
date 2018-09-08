@@ -22,6 +22,27 @@ $(document).ready(function() {
         });
     });
 
+
+    $(document).ready(function () {
+        var $updateModal = $('#modalEditMealtime');
+        $('.list-item-update').on('click', function (evn) { // this is the "a" tag
+            evn.preventDefault();
+
+            $updateModal.modal('show');
+            var resourceId = $(this).data('data-item-id'),
+                $pressedButton = $(this);
+
+            $updateModal.find('.confirm-btn').on('click', function (e) {
+                e.preventDefault();
+                var submitUrl = '/mealtime/update/' + resourceId,
+                    form = $('#edit-form'); // change with your form
+
+                form.attr('action', submitUrl);
+                form.submit();
+            });
+        });
+    });
+
     $(document).ready(function () {
         var $updateModal = $('#modalEditCollectionCategory');
         $('.list-item-update').on('click', function (evn) { // this is the "a" tag
@@ -187,6 +208,26 @@ $(document).ready(function() {
 
 
 
+    $('#delete_mealtime').click(function() {
+        window.checkValues = $('input[name=delete]:checked').map(function () {
+            return $(this).val();
+        }).get();
+        console.log(checkValues);
+
+
+        $.ajax({
+
+            method: "POST",
+            url:"/mealtime/delete",
+            data:{id:checkValues,_token:token },
+            success:function(data){
+
+                window.location.reload();
+            }
+
+        });
+
+    });
 
     $('#delete_collection').click(function() {
         window.checkValues = $('input[name=delete]:checked').map(function () {

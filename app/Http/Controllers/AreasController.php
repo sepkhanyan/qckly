@@ -114,6 +114,8 @@ class AreasController extends Controller
 
         return redirect('/areas');
     }
+
+
    public function getAreas(Request $request)
    {
         $lang = $request->header('Accept-Language');
