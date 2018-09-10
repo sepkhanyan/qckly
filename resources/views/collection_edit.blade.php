@@ -198,7 +198,7 @@
                         </div>
                         <div style="display: none" id="items">
                             <div id="selection">
-                                <div class="form-group" id="price" style="display: none">
+                                <div class="form-group" id="price">
                                     <label for="input-price" class="col-sm-3 control-label">Price</label>
                                     <div class="col-sm-5">
                                         <div class="input-group">

@@ -141,7 +141,7 @@
                                     <td>{{$collection->description_en}}</td>
                                     <td>{{$collection->category->name_en}}</td>
                                     <td>{{$collection->price}}</td>
-                                    <td>{{$collection->mealtime}}</td>
+                                    <td>{{$collection->mealtime->name_en}}</td>
                                     <td>{{$collection->id}}</td>
                                 </tr>
                         @endforeach

@@ -225,7 +225,7 @@
                         </div>
                         <div style="display: none" id="items">
                             <div id="selection">
-                                <div class="form-group" id="price" style="display: none">
+                                <div class="form-group" id="price">
                                     <label for="input-price" class="col-sm-3 control-label">Price</label>
                                     <div class="col-sm-5">
                                         <div class="input-group">
@@ -277,7 +277,7 @@
                                             </div>
                                         </div>
                                     @foreach($menu_categories as $menu_category)
-                                            {{--<label class="container">--}}
+
                                             <label for="">
                                                 <h4>{{$menu_category->name_en}}</h4>
                                                 <input type="hidden" name="menu[]" value="{{$menu_category->id}}">
@@ -295,9 +295,6 @@
                                                             <input type="checkbox" name="menu_item[]" value="{{$menu->id}}">
                                                             {{$menu->name_en}}
                                                         </label>
-                                                        {{--<label for="menu_item_qty">--}}
-                                                            {{--<input type="number" min="1" class="form-control" name="menu_item_qty[]" id="menu_item_qty" placeholder="Quantity" style="width: 55%; height: 30px;">--}}
-                                                        {{--</label>--}}
                                                     </div>
                                                 @endforeach
                                                     <br>

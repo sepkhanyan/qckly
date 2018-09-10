@@ -33,6 +33,8 @@ class CollectionRequest extends FormRequest
             'service_presentation_en' => 'required|string',
             'service_presentation_ar' => 'required|string',
             'category' => 'required|integer',
+            'menu_min_qty' => 'integer|min:1|max:9',
+            'menu_max_qty' => 'integer|min:1|max:9',
 
         ];
         return $rules;

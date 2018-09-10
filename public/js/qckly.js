@@ -156,59 +156,45 @@ $(document).ready(function() {
     $('#category').click(function() {
         $('#items'). slideDown('fast');
         if($('select[name=category]').val() == 1){
+            $('#price'). slideDown('fast');
             $('#persons_qty'). slideDown('fast');
             $('#max_person'). slideUp('fast');
             $('#collection_qty'). slideDown('fast');
-            $('#add_item'). slideDown('fast');
             $('#item_count'). slideDown('fast');
-            $('#price'). slideDown('fast');
             $('#person_increase'). slideUp('fast');
             $('#setup'). slideUp('fast');
             $('#all'). slideUp('fast');
         }else if($('select[name=category]').val() == 2){
+            $('#price'). slideDown('fast');
             $('#collection_qty'). slideUp('fast');
             $('#persons_qty'). slideDown('fast');
             $('#max_person'). slideDown('fast');
-            $('#add_item'). slideUp('fast');
             $('#item_count'). slideDown('fast');
             $('#person_increase'). slideDown('fast');
             $('#setup'). slideDown('fast');
             $('#all'). slideDown('fast');
-            $('#price'). slideDown('fast');
         }else if($('select[name=category]').val() == 3){
+            $('#price'). slideDown('fast');
             $('#collection_qty'). slideDown('fast');
             $('#persons_qty'). slideDown('fast');
             $('#max_person'). slideUp('fast');
-            $('#add_item'). slideUp('fast');
             $('#item_count'). slideDown('fast');
             $('#person_increase'). slideUp('fast');
             $('#setup'). slideUp('fast');
             $('#all'). slideDown('fast');
-            $('#price'). slideDown('fast');
         }else if($('select[name=category]').val() == 4){
+            $('#price'). slideUp('fast');
             $('#items_container'). slideDown('fast');
             $('#collection_qty'). slideUp('fast');
             $('#persons_qty'). slideUp('fast');
             $('#max_person'). slideUp('fast');
-            $('#add_item'). slideUp('fast');
             $('#item_count'). slideUp('fast');
             $('#person_increase'). slideUp('fast');
             $('#setup'). slideUp('fast');
             $('#all'). slideDown('fast');
-            $('#price'). slideUp('fast');
         }
     });
 
-    $('#menu_item').click(function() {
-        $('#menu_item_qty'). slideDown('fast');
-    });
-    //
-    // $("#add_item").click(function(){
-    //     var original = $(".js-select");
-    //     var clone = original.clone();
-    //     clone.select2();
-    //     $("#items_container").clone().appendTo("#selection");
-    // });
 
 
 
