@@ -1,5 +1,6 @@
 @extends('home')
 @section('content')
+    @if(Auth::user()->admin == 1)
     <div class="page-header">
         <div class="page-action">
             <a data-toggle="modal" data-target="#modalCreateMealtime" href="" class="btn btn-primary">
@@ -12,14 +13,15 @@
             </a>
         </div>
     </div>
+    @endif
     <div class="row content">
         <div class="col-md-12">
             <div class="panel panel-default panel-table">
                 <div class="panel-heading">
                     <h3 class="panel-title">Mealtimes</h3>
-                    <div class="pull-right">
-                        <button class="btn btn-filter btn-xs"><i class="fa fa-filter"></i></button>
-                    </div>
+                    {{--<div class="pull-right">--}}
+                        {{--<button class="btn btn-filter btn-xs"><i class="fa fa-filter"></i></button>--}}
+                    {{--</div>--}}
                 </div>
                 {{--<div class="panel-body panel-filter" style="display: none">--}}
                     {{--<form role="form" id="filter-form" accept-charset="utf-8" method="GET" action="{{url('/mealtimes')}}">--}}
@@ -47,25 +49,27 @@
                         <table border="0" class="table table-striped table-border">
                             <thead>
                             <tr>
+                                @if(Auth::user()->admin == 1)
                                 <th class="action action-three">
                                     <input type="checkbox" onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">
                                 </th>
+                                @endif
                                 <th>
                                     <a class="sort" href="">
                                         Name
-                                        <i class="fa fa-sort"></i>
+
                                     </a>
                                 </th>
                                 <th>
                                     <a class="sort" href="">
                                         Time
-                                        <i class="fa fa-sort"></i>
+
                                     </a>
                                 </th>
                                 <th>
                                     <a class="sort" href="">
                                         ID
-                                        <i class="fa fa-sort>"></i>
+
                                     </a>
                                 </th>
                             </tr>
@@ -73,12 +77,14 @@
                             <tbody>
                             @foreach($mealtimes as $mealtime)
                                 <tr>
+                                    @if(Auth::user()->admin == 1)
                                     <td class="action">
                                         <input type="checkbox" value="{{ $mealtime->id }}" name="delete" />&nbsp;&nbsp;&nbsp;
                                         <a class="btn btn-edit"  href="#" data-toggle="modal" data-target="#modalEditMealtime" type="button"  data-item-id="{{$mealtime->id}}">
                                             <i class="fa fa-pencil"></i>
                                         </a>&nbsp;&nbsp;
                                     </td>
+                                    @endif
                                     <td>{{$mealtime->name_en}}</td>
                                     <td>{{date("g:i A", strtotime($mealtime->start_time)) . ' - ' . date("g:i A", strtotime($mealtime->end_time))}}</td>
                                     <td>{{$mealtime->id}}</td>
@@ -91,6 +97,7 @@
             </div>
         </div>
     </div>
+    @if(Auth::user()->admin == 1)
     <div class="modal fade" id="modalCreateMealtime" role="dialog" tabindex="-1" >
         <form role="form" id="edit-form" class="form-horizontal"  accept-charset="utf-8" method="GET" action="{{ url('/mealtime/store') }}">
             {{ csrf_field() }}
@@ -187,6 +194,7 @@
             </div>
         </form>
     </div>
+    @endif
     </form>
     </div>
     <script type="text/javascript">

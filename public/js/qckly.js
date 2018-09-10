@@ -2,6 +2,8 @@ $(document).ready(function() {
 
     var token = $('[name=csrf-token]').attr('content');
 
+
+
     $(document).ready(function () {
         var $updateModal = $('#modalEditArea');
         $('.list-item-update').on('click', function (evn) { // this is the "a" tag
@@ -159,6 +161,7 @@ $(document).ready(function() {
             $('#collection_qty'). slideDown('fast');
             $('#add_item'). slideDown('fast');
             $('#item_count'). slideDown('fast');
+            $('#price'). slideDown('fast');
             $('#person_increase'). slideUp('fast');
             $('#setup'). slideUp('fast');
             $('#all'). slideUp('fast');
@@ -171,6 +174,7 @@ $(document).ready(function() {
             $('#person_increase'). slideDown('fast');
             $('#setup'). slideDown('fast');
             $('#all'). slideDown('fast');
+            $('#price'). slideDown('fast');
         }else if($('select[name=category]').val() == 3){
             $('#collection_qty'). slideDown('fast');
             $('#persons_qty'). slideDown('fast');
@@ -180,6 +184,7 @@ $(document).ready(function() {
             $('#person_increase'). slideUp('fast');
             $('#setup'). slideUp('fast');
             $('#all'). slideDown('fast');
+            $('#price'). slideDown('fast');
         }else if($('select[name=category]').val() == 4){
             $('#items_container'). slideDown('fast');
             $('#collection_qty'). slideUp('fast');
@@ -190,6 +195,7 @@ $(document).ready(function() {
             $('#person_increase'). slideUp('fast');
             $('#setup'). slideUp('fast');
             $('#all'). slideDown('fast');
+            $('#price'). slideUp('fast');
         }
     });
 

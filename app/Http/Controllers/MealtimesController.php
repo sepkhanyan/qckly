@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mealtime;
 use Illuminate\Http\Request;
+use Auth;
 
 class MealtimesController extends Controller
 {
@@ -36,13 +37,19 @@ class MealtimesController extends Controller
      */
     public function store(Request $request)
     {
-        $mealtime = new Mealtime();
-        $mealtime->name_en = $request->input('mealtime_en');
-        $mealtime->name_ar = $request->input('mealtime_ar');
-        $mealtime->start_time = $request->input('start_time');
-        $mealtime->end_time = $request->input('end_time');
-        $mealtime->save();
-        return redirect('/mealtimes');
+        $user = Auth::user();
+        if($user->admin == 1){
+            $mealtime = new Mealtime();
+            $mealtime->name_en = $request->input('mealtime_en');
+            $mealtime->name_ar = $request->input('mealtime_ar');
+            $mealtime->start_time = $request->input('start_time');
+            $mealtime->end_time = $request->input('end_time');
+            $mealtime->save();
+            return redirect('/mealtimes');
+        }else{
+            return redirect('/mealtimes');
+        }
+
     }
 
     /**
@@ -77,13 +84,19 @@ class MealtimesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $mealtime = Mealtime::find($id);
-        $mealtime->name_en = $request->input('mealtime_en');
-        $mealtime->name_ar = $request->input('mealtime_ar');
-        $mealtime->start_time = $request->input('start_time');
-        $mealtime->end_time = $request->input('end_time');
-        $mealtime->save();
-        return redirect('/mealtimes');
+        $user = Auth::user();
+        if($user->admin == 1){
+            $mealtime = Mealtime::find($id);
+            $mealtime->name_en = $request->input('mealtime_en');
+            $mealtime->name_ar = $request->input('mealtime_ar');
+            $mealtime->start_time = $request->input('start_time');
+            $mealtime->end_time = $request->input('end_time');
+            $mealtime->save();
+            return redirect('/mealtimes');
+        }else{
+            return redirect('/mealtimes');
+        }
+
     }
 
     /**
@@ -94,8 +107,13 @@ class MealtimesController extends Controller
      */
     public function deleteMealtimes(Request $request)
     {
-        $id = $request->get('id');
-        Mealtime::whereIn('id',$id)->delete();
-        return redirect('/mealtimes');
+        $user = Auth::user();
+        if($user->admin == 1){
+            $id = $request->get('id');
+            Mealtime::whereIn('id',$id)->delete();
+            return redirect('/mealtimes');
+        }else{
+            return redirect('/mealtimes');
+        }
     }
 }

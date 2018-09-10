@@ -174,7 +174,7 @@
       @if($selectedRestaurant)
           <div class="page-header">
               <div class="page-action">
-                  <h2>No Collections</h2>
+                  <h2>No Menus</h2>
                   @if(Auth::user()->admin == 1)
                       <a  class="btn btn-primary"  href="{{ url('/menu/create/' . $selectedRestaurant->id) }}">
                           <i class="fa fa-plus"></i>

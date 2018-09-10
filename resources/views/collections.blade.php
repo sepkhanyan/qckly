@@ -137,8 +137,8 @@
                                             <i class="fa fa-pencil"></i>
                                         </a>&nbsp;&nbsp;
                                     </td>
-                                    <td>{{$collection->name}}</td>
-                                    <td>{{$collection->description}}</td>
+                                    <td>{{$collection->name_en}}</td>
+                                    <td>{{$collection->description_en}}</td>
                                     <td>{{$collection->category->name_en}}</td>
                                     <td>{{$collection->price}}</td>
                                     <td>{{$collection->mealtime}}</td>

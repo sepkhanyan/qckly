@@ -17,7 +17,9 @@ class Address extends Model
         'building_number',
         'zone',
         'is_apartment',
-        'apartment_number'
+        'apartment_number',
+        'latitude',
+        'longitude'
     ];
 
 

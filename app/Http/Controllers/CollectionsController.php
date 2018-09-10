@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use Auth;
 use App\User;
 use App\CollectionMenu;
+use App\Mealtime;
 
 class CollectionsController extends Controller
 {
@@ -77,10 +78,12 @@ class CollectionsController extends Controller
         $menu_categories = Category::with(['menu'=> function ($query) use ($restaurant){
             $query->where('restaurant_id', $restaurant->id);
         }])->get();
+        $mealtimes = Mealtime::all();
         return view('collection_create', [
             'restaurant' => $restaurant,
             'categories' => $categories,
-            'menu_categories' => $menu_categories
+            'menu_categories' => $menu_categories,
+            'mealtimes' => $mealtimes
         ]);
     }
 
@@ -101,15 +104,20 @@ class CollectionsController extends Controller
             $collection->restaurant_id = $restaurant->id;
         }
         $collection->category_id = $request->input('category');
-        $collection->name = $request->input('name');
-        $collection->description = $request->input('description');
+        $collection->name_en = $request->input('name_en');
+        $collection->name_ar = $request->input('name_ar');
+        $collection->description_en = $request->input('description_en');
+        $collection->description_ar = $request->input('description_ar');
         $collection->mealtime = $request->input('mealtime');
         $collection->female_caterer_available = $request->input('female_caterer_available');
-        $collection->service_provide = $request->input('service_provide');
-        $collection->service_presentation = $request->input('service_presentation');
+        $collection->service_provide_en = $request->input('service_provide_en');
+        $collection->service_provide_ar = $request->input('service_provide_ar');
+        $collection->service_presentation_en = $request->input('service_presentation_en');
+        $collection->service_presentation_ar = $request->input('service_presentation_ar');
         $collection->setup_time = $request->input('setup_time');
         $collection->max_time = $request->input('max_time');
-        $collection->requirements = $request->input('requirements');
+        $collection->requirements_en = $request->input('requirements_en');
+        $collection->requirements_ar = $request->input('requirements_ar');
         $collection->is_available = $request->input('is_available');
         $collection->price = $request->input('collection_price');
         $collection->max_qty = $request->input('max_quantity');
@@ -182,11 +190,12 @@ class CollectionsController extends Controller
                 $query->where('restaurant_id', $restaurant->id);
             }])->get();
         $categories = CollectionCategory::all();
-
+        $mealtimes = Mealtime::all();
         return view('collection_edit', [
             'collection' => $collection,
             'categories' => $categories,
-            'menu_categories' => $menu_categories
+            'menu_categories' => $menu_categories,
+            'mealtimes' => $mealtimes
         ]);
     }
 
@@ -197,19 +206,24 @@ class CollectionsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CollectionRequest $request, $id)
     {
         $collection = Collection::with('restaurant.menu')->find($id);
         $collection->category_id = $request->input('category');
-        $collection->name = $request->input('name');
-        $collection->description = $request->input('description');
+        $collection->name_en = $request->input('name_en');
+        $collection->name_ar = $request->input('name_ar');
+        $collection->description_en = $request->input('description_en');
+        $collection->description_ar = $request->input('description_ar');
         $collection->mealtime = $request->input('mealtime');
         $collection->female_caterer_available = $request->input('female_caterer_available');
-        $collection->service_provide = $request->input('service_provide');
-        $collection->service_presentation = $request->input('service_presentation');
+        $collection->service_provide_en = $request->input('service_provide_en');
+        $collection->service_provide_ar = $request->input('service_provide_ar');
+        $collection->service_presentation_en = $request->input('service_presentation_en');
+        $collection->service_presentation_ar = $request->input('service_presentation_ar');
         $collection->setup_time = $request->input('setup_time');
         $collection->max_time = $request->input('max_time');
-        $collection->requirements = $request->input('requirements');
+        $collection->requirements_en = $request->input('requirements_en');
+        $collection->requirements_ar = $request->input('requirements_ar');
         $collection->is_available = $request->input('is_available');
         $collection->price = $request->input('collection_price');
         $collection->max_qty = $request->input('max_quantity');
