@@ -72,7 +72,7 @@ class OrdersController extends Controller
                             foreach($category->cartItem as $cartItem){
                                 $items [] = [
                                     'item_id' => $cartItem->item_id,
-                                    'item_name' => $cartItem->menu->name,
+                                    'item_name' => $cartItem->menu->name_en,
                                     'item_price' => $cartItem->menu->price,
                                     'item_quantity' => $cartItem->quantity,
                                     'item_price_unit' => 'QR'
@@ -80,7 +80,7 @@ class OrdersController extends Controller
                             }
                             $menu [] = [
                                 'menu_id' => $category->id,
-                                'menu_name' => $category->name,
+                                'menu_name' => $category->name_en,
                                 'items' => $items
                             ];
                         }
@@ -115,7 +115,7 @@ class OrdersController extends Controller
                             'collection_id' => $cart_collection->collection_id,
                             'collection_type_id' => $cart_collection->collection->category_id,
                             'collection_type' => $cart_collection->collection->category->name_en,
-                            'collection_name' => $cart_collection->collection->name,
+                            'collection_name' => $cart_collection->collection->name_en,
                             'collection_price' => $collection_price,
                             'collection_price_unit' => 'QR',
                             'female_caterer' => $female_caterer,
