@@ -771,7 +771,7 @@ class RestaurantsController extends Controller
                                             } else {
                                                 $max = floor($max_hours) . " hours";
                                             }
-                                            $requirement = $collection->requirements;
+                                            $requirement = $collection->requirements_en;
                                         }
 
 
@@ -811,14 +811,15 @@ class RestaurantsController extends Controller
 //                                }])->get();
 
                             }
+
                             $menu_collection [] = [
                                 'collection_id' => $collection->id,
-                                'collection_name' => $collection->name,
-                                'collection_description' => $collection->description,
+                                'collection_name' => $collection->name_en,
+                                'collection_description' => $collection->description_en,
                                 'collection_type_id' => $collection->category_id,
                                 'collection_type' => $collection->category->name_en,
                                 'female_caterer_available' => $female_caterer_available,
-                                'mealtime' => $collection->mealtime,
+                                'mealtime' => $collection->mealtime->name_en,
                                 'collection_min_qty' => $collection_min,
                                 'collection_max_qty' => $collection_max,
                                 'collection_price' => $collection_price,
@@ -828,9 +829,9 @@ class RestaurantsController extends Controller
                                 'max_serve_to_person' => $max_serve,
                                 'allow_person_increase' => $person_increase,
                                 'persons_max_count' => $max_persons,
-                                'service_provide' => $collection->service_provide,
+                                'service_provide' => $collection->service_provide_en,
                                 'food_list' => $foodlist,
-                                'service_presentation' => $collection->service_presentation,
+                                'service_presentation' => $collection->service_presentation_en,
                                 'special_instruction' => '',
                                 'food_item_image' => url('/') . '/images/' . $collection_item->menu->image,
                                 'food_list_images' => $foodlist_images,

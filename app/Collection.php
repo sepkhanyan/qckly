@@ -37,6 +37,7 @@ class Collection extends Model
     ];
 
 
+
     public function restaurant()
     {
         return $this->belongsTo('App\Restaurant', 'restaurant_id');
@@ -46,6 +47,12 @@ class Collection extends Model
     {
         return $this->belongsTo('App\CollectionCategory', 'category_id');
     }
+
+    public function mealtime()
+    {
+        return $this->belongsTo('App\Mealtime', 'mealtime_id');
+    }
+
     public function collectionMenu()
     {
         return $this->hasMany('App\CollectionMenu', 'collection_id');

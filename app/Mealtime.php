@@ -16,4 +16,9 @@ class Mealtime extends Model
         'end_time',
     ];
 
+    public function collection()
+    {
+        return $this->hasMany('App\Collection', 'mealtime_id');
+    }
+
 }
