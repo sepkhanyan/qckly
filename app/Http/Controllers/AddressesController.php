@@ -49,7 +49,9 @@ class AddressesController extends Controller
                 'building_number' => 'required|string',
                 'zone' => 'required|string',
                 'apartment_number' => 'required|string',
-                'is_apartment' => 'required'
+                'is_apartment' => 'required',
+                'latitude' => 'required|numeric',
+                'longitude' => 'required|numeric'
             ]);
             if ($validator->fails()) {
                 return response()->json(array('success' => 1, 'status_code' => 400,
@@ -65,6 +67,8 @@ class AddressesController extends Controller
                     $address->zone = $DataRequests['zone'];
                     $address->is_apartment = $DataRequests['is_apartment'];
                     $address->apartment_number = $DataRequests['apartment_number'];
+                    $address->latitude = $DataRequests['latitude'];
+                    $address->longitude = $DataRequests['longitude'];
                     $address->save();
                 }else{
                     Address::where('user_id',$user->id)->where('is_default', 1)->update(['is_default'=> 0]);
@@ -78,6 +82,8 @@ class AddressesController extends Controller
                     $address->zone = $DataRequests['zone'];
                     $address->is_apartment = $DataRequests['is_apartment'];
                     $address->apartment_number = $DataRequests['apartment_number'];
+                    $address->latitude = $DataRequests['latitude'];
+                    $address->longitude = $DataRequests['longitude'];
                     $address->save();
                     UserCart::where('user_id', $user->id)->update(['delivery_address_id'=> $address->id]);
                 }
@@ -129,7 +135,9 @@ class AddressesController extends Controller
                         'zone' => $address->zone,
                         'is_apartment' => $is_apartment,
                         'apartment_number' => $address->apartment_number,
-                        'is_default' => $default
+                        'is_default' => $default,
+                        'latitude' => $address->latitude,
+                        'longitude' => $address->longitude,
                     ];
                 }
                 return response()->json(array(

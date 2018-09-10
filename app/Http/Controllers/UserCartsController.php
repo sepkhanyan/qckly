@@ -349,7 +349,9 @@ class UserCartsController extends Controller
                         'zone' => $cart->address->zone,
                         'is_apartment' => $is_apartment,
                         'apartment_number' => $cart->address->apartment_number,
-                        'is_default' => $default
+                        'is_default' => $default,
+                        'latitude' => $cart->address->latitude,
+                        'longitude' => $cart->address->longitude,
                     ];
                 }
 

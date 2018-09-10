@@ -14,7 +14,7 @@ class AddLatAndLngColumnsToAddressesTable extends Migration
     public function up()
     {
         Schema::table('addresses', function (Blueprint $table) {
-            $table->float('	latitude');
+            $table->float('latitude');
             $table->float('longitude');
         });
     }
@@ -27,7 +27,7 @@ class AddLatAndLngColumnsToAddressesTable extends Migration
     public function down()
     {
         Schema::table('addresses', function (Blueprint $table) {
-            $table->dropColumn('	latitude');
+            $table->dropColumn('latitude');
             $table->dropColumn('longitude');
 
         });

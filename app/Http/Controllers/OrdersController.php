@@ -54,7 +54,9 @@ class OrdersController extends Controller
                         'zone' => $order->cart->address->zone,
                         'is_apartment' => $is_apartment,
                         'apartment_number' => $order->cart->address->apartment_number,
-                        'is_default' => $default
+                        'is_default' => $default,
+                        'latitude' => $order->cart->address->latitude,
+                        'longitude' => $order->cart->address->longitude,
                     ];
                     $total = 0;
                     $collections = [];
