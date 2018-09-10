@@ -39,9 +39,9 @@ class RestaurantsController extends Controller
             $restaurants = Restaurant::where('status',$data['restaurant_status'])->paginate(20);
         }
         if(isset($data['restaurant_search'])){
-            $restaurants = Restaurant::where('name','like',$data['restaurant_search'])
-                ->orWhere('city','like',$data['restaurant_search'])
-                ->orWhere('description','like',$data['restaurant_search'])->paginate(20);
+            $restaurants = Restaurant::where('name_en','like',$data['restaurant_search'])
+                ->orWhere('city_en','like',$data['restaurant_search'])
+                ->orWhere('description_en','like',$data['restaurant_search'])->paginate(20);
         }
 
         return view('restaurants', ['restaurants' => $restaurants]);
@@ -81,8 +81,8 @@ class RestaurantsController extends Controller
             $manager->username = $request->input('manager_name');
             $manager->password = bcrypt($request->input('password'));
             $manager->country_code = $request->input('country_code');
-            $manager->mobile_number = $request->input('telephone');
-            $manager->email = $request->input('email');
+            $manager->mobile_number = $request->input('manager_telephone');
+            $manager->email = $request->input('manager_email');
             $manager->otp = rand(15000, 50000);
             $manager->lang = 'en';
             $manager->admin = 2;
@@ -94,17 +94,22 @@ class RestaurantsController extends Controller
             $image->move($destinationPath, $name);
             $restaurant->image = $name;
             $restaurant->user_id = $manager->id;
-            $restaurant->name = $request->input('name');
-            $restaurant->email = $request->input('email');
-            $restaurant->telephone = $request->input('telephone');
-            $restaurant->address = $request->input('address');
-            $restaurant->city = $request->input('city');
-            $restaurant->state = $request->input('state');
+            $restaurant->name_en = $request->input('restaurant_name_en');
+            $restaurant->name_ar = $request->input('restaurant_name_ar');
+            $restaurant->email = $request->input('restaurant_email');
+            $restaurant->telephone = $request->input('restaurant_telephone');
+            $restaurant->address_en = $request->input('address_en');
+            $restaurant->address_ar = $request->input('address_ar');
+            $restaurant->city_en = $request->input('city_en');
+            $restaurant->city_ar = $request->input('city_ar');
+            $restaurant->state_en = $request->input('state_en');
+            $restaurant->state_ar = $request->input('state_ar');
             $restaurant->postcode = $request->input('postcode');
             $restaurant->area_id = $request->input('country');
             $restaurant->latitude = $request->input('latitude');
             $restaurant->longitude = $request->input('longitude');
-            $restaurant->description = $request->input('description');
+            $restaurant->description_en = $request->input('description_en');
+            $restaurant->description_ar = $request->input('description_ar');
             $restaurant->status = $request->input('status');
             $restaurant->save();
             $categories = $request->input('category');
@@ -218,16 +223,22 @@ class RestaurantsController extends Controller
         }else{
             $restaurant = Restaurant::find($id);
         }
-        $restaurant->name = $request->input('name');
-        $restaurant->email = $request->input('email');
-        $restaurant->telephone = $request->input('telephone');
-        $restaurant->address =  $request->input('address');
-        $restaurant->city = $request->input('city');
-        $restaurant->state = $request->input('city');
+        $restaurant->name_en = $request->input('restaurant_name_en');
+        $restaurant->name_ar = $request->input('restaurant_name_ar');
+        $restaurant->email = $request->input('restaurant_email');
+        $restaurant->telephone = $request->input('restaurant_telephone');
+        $restaurant->address_en = $request->input('address_en');
+        $restaurant->address_ar = $request->input('address_ar');
+        $restaurant->city_en = $request->input('city_en');
+        $restaurant->city_ar = $request->input('city_ar');
+        $restaurant->state_en = $request->input('state_en');
+        $restaurant->state_ar = $request->input('state_ar');
         $restaurant->postcode = $request->input('postcode');
+        $restaurant->area_id = $request->input('country');
         $restaurant->latitude = $request->input('latitude');
         $restaurant->longitude = $request->input('longitude');
-        $restaurant->description = $request->input('description');
+        $restaurant->description_en = $request->input('description_en');
+        $restaurant->description_ar = $request->input('description_ar');
         $restaurant->status = $request->input('status');
         if ($request->hasFile('image')) {
             $deletedImage = File::delete(public_path('images/' . $restaurant->image));
@@ -355,7 +366,7 @@ class RestaurantsController extends Controller
                     'restaurant_id' => $restaurant->id,
                     'restaurant_image'=> url('/').'/images/'. $restaurant->image,
                     'famous_images' => $famous,
-                    'restaurant_name'=>$restaurant->name,
+                    'restaurant_name'=>$restaurant->name_en,
                     'category' => $category
                 ];
             }
@@ -432,7 +443,7 @@ class RestaurantsController extends Controller
                         'restaurant_id' => $restaurant->id,
                         'restaurant_image'=> url('/').'/images/'. $restaurant->image,
                         'famous_images' => $famous,
-                        'restaurant_name'=>$restaurant->name,
+                        'restaurant_name'=>$restaurant->name_en,
                         'category' => $category
                     ];
                 }
@@ -555,13 +566,13 @@ class RestaurantsController extends Controller
 
                     $arr [] = [
                         'restaurant_id' => $restaurant->id,
-                        'restaurant_name' => $restaurant->name,
+                        'restaurant_name' => $restaurant->name_en,
                         'restaurant_image' => url('/') . '/images/' . $restaurant->image,
                         'famous_images' => $famous,
                         'ratings_count' => $rating_count,
                         'review_count' => $review_count,
                         'availability_hours' => date("g:i a", strtotime( $opening))  . ' - ' . date("g:i a", strtotime( $closing)),
-                        'description' => $restaurant->description,
+                        'description' => $restaurant->description_en,
                         'status' => $working_status,
                         'category' => $category
                     ];
@@ -622,7 +633,7 @@ class RestaurantsController extends Controller
                 }
                 $arr [] = [
                     'restaurant_id' => $restaurant->id,
-                    'restaurant_name' => $restaurant->name,
+                    'restaurant_name' => $restaurant->name_en,
                     'restaurant_image' => url('/') . '/images/' . $restaurant->image,
                     'menu' => $restaurant_menu
                     ];

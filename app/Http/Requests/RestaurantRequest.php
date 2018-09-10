@@ -23,11 +23,49 @@ class RestaurantRequest extends FormRequest
      */
     public function rules()
     {
-        return   [
-            /*'id' => 'required|integer',
-            'opening_days' => 'required|string|max:255',
-            'opening_hours' => '|string|max:255',*/
+        $rules =   [
+            'manager_name' => 'required|string|max:255',
+            'manager_email' => 'required|string|max:255',
+            'country_code' => 'required|string|max:255',
+            'manager_telephone' => 'required|integer',
+            'password' => 'required|string|max:255',
+            'confirm_password' => 'required|string|max:255',
+            'category' => 'required|integer',
+            'restaurant_name_en' => 'required|string|max:255',
+            'restaurant_name_ar' => 'required|string|max:255',
+            'restaurant_email' => 'required|integer',
+            'restaurant_telephone' => 'required|integer',
+            'description_en' => 'required|string',
+            'description_ar' => 'required|string',
+            'address_en' => 'required|string|max:255',
+            'address_ar' => 'required|string|max:255',
+            'city_en' => 'required|string|max:255',
+            'city_ar' => 'required|string|max:255',
+            'postcode' => 'required|string|max:255',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+            'image' => 'required|image'
+
         ];
+        if ($this->id) {
+            $rules = [
+                'category' => 'required|integer',
+                'restaurant_name_en' => 'required|string|max:255',
+                'restaurant_name_ar' => 'required|string|max:255',
+                'restaurant_email' => 'required|integer',
+                'restaurant_telephone' => 'required|integer',
+                'description_en' => 'required|string',
+                'description_ar' => 'required|string',
+                'address_en' => 'required|string|max:255',
+                'address_ar' => 'required|string|max:255',
+                'city_en' => 'required|string|max:255',
+                'city_ar' => 'required|string|max:255',
+                'postcode' => 'required|string|max:255',
+                'latitude' => 'required|numeric',
+                'longitude' => 'required|numeric',
+            ];
+        }
+        return $rules;
 
 
     }

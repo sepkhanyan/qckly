@@ -6,7 +6,7 @@
                         <select name="restaurant_name" id="input-name" class="form-control" tabindex="-1" title="" onchange="top.location.href = this.options[this.selectedIndex].value">
                             <option value>Select Restaurant</option>
                             @foreach($restaurants as $restaurant)
-                                <option value="{{url('/collections/' . $restaurant->id)}}">{{$restaurant->name}},{{$restaurant->area->area_en}},{{$restaurant->city}},{{$restaurant->address}}</option>
+                                <option value="{{url('/collections/' . $restaurant->id)}}">{{$restaurant->name_en}},{{$restaurant->area->area_en}},{{$restaurant->city_en}},{{$restaurant->address_en}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -19,7 +19,7 @@
                 <div class="panel-heading">
                     <h2>
                         <img src="/images/{{$selectedRestaurant->image}}" width="50px" height="50px">
-                        {{$selectedRestaurant->name}},{{$selectedRestaurant->area->area_en}},{{$selectedRestaurant->city}},{{$selectedRestaurant->address}}
+                        {{$selectedRestaurant->name_en}},{{$selectedRestaurant->area->area_en}},{{$selectedRestaurant->city_en}},{{$selectedRestaurant->address_en}}
                     </h2>
                     <div class="pull-right">
                         <button class="btn btn-filter btn-xs">

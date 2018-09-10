@@ -48,7 +48,7 @@
                             <thead>
                             <tr>
                                 <th class="action action-three">
-                                    <input type="checkbox" onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">
+                                    <input type="checkbox" onclick="$('input[name*=\'delete\']').prop('checked', this.checked)">
                                 </th>
                                 <th>
                                     <a class="sort" href="">
@@ -75,7 +75,7 @@
                                 <tr>
                                     <td class="action">
                                         <input type="checkbox" value="{{ $area->id }}" name="delete" />&nbsp;&nbsp;&nbsp;
-                                        <a class="btn btn-edit"  href="#" data-toggle="modal" data-target="#modalEditArea" type="button"  data-item-id="{{$area->id}}">
+                                        <a class="btn btn-edit"  id="edit_area" data-toggle="modal" data-target="#modalEditArea" type="button"  data-item-id="{{$area->id}}">
                                             <i class="fa fa-pencil"></i>
                                         </a>&nbsp;&nbsp;
                                     </td>
@@ -93,7 +93,7 @@
         </div>
     </div>
     <div class="modal fade" id="modalCreateArea" role="dialog" tabindex="-1" >
-        <form role="form" id="edit-form" class="form-horizontal"  accept-charset="utf-8" method="GET" action="{{ url('/area/store') }}">
+        <form role="form" id="create-form" class="form-horizontal"  accept-charset="utf-8" method="GET" action="{{ url('/area/store') }}">
             {{ csrf_field() }}
             <div class="modal-dialog" >
                 <div class="modal-content">
@@ -102,18 +102,28 @@
                         <h4 class="modal-title"> Add Area</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group" style="margin: 5px">
+                        <div class="form-group {{ $errors->has('area_en') ? ' has-error' : '' }}" style="margin: 5px">
                             <label class="control-label col-sm-2" for="area-en">Area En</label>
                             <div class="col-sm-8">
                                 <input type="text" name="area_en" class="form-control" value="" id="area-en">
+                                @if ($errors->has('area_en'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('area_en') }}</strong>
+                                    </span>
+                                @endif
                             </div>
                         </div>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group" style="margin: 5px">
+                        <div class="form-group{{ $errors->has('area_ar') ? ' has-error' : '' }}" style="margin: 5px">
                             <label class="control-label col-sm-2" for="area-en">Area Ar</label>
                             <div class="col-sm-8">
                                 <input type="text" name="area_ar" class="form-control" value="" id="area-ar">
+                                @if ($errors->has('area_ar'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('area_ar') }}</strong>
+                                    </span>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -125,9 +135,8 @@
             </div>
         </form>
     </div>
-    @if(isset($area->id))
     <div class="modal fade" id="modalEditArea" role="dialog" tabindex="-1" >
-        <form role="form" id="edit-form" class="form-horizontal"  accept-charset="utf-8" method="POST" action="{{ url('/area/update/'}}  ">
+        <form role="form" id="form-edit-area" class="form-horizontal"  accept-charset="utf-8" method="get" {{--action="{{ url('/area/update/' . $area->id)}} "--}}>
             {{ csrf_field() }}
             <div class="modal-dialog" >
                 <div class="modal-content">
@@ -159,7 +168,6 @@
             </div>
         </form>
     </div>
-    @endif
     </form>
     </div>
     <script type="text/javascript">

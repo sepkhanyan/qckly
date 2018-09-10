@@ -42,17 +42,6 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="form-group{{ $errors->has('description_en') ? ' has-error' : '' }}">
-                            <label for="input_description_en" class="col-sm-3 control-label">Description En</label>
-                            <div class="col-sm-5">
-                                <textarea name="description_en" id="input_description_en" class="form-control" rows="7">{{ $category->description_en }}</textarea>
-                                @if ($errors->has('description_en'))
-                                    <span class="help-block">
-                                    <strong>{{ $errors->first('description_en') }}</strong>
-                                </span>
-                                @endif
-                            </div>
-                        </div>
                         <div class="form-group{{ $errors->has('name_ar') ? ' has-error' : '' }}">
                             <label for="input_name_ar" class="col-sm-3 control-label">Name Ar</label>
                             <div class="col-sm-5">
@@ -61,6 +50,17 @@
                                     <span class="help-block">
                                         <strong>{{ $errors->first('name_ar') }}</strong>
                                     </span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="form-group{{ $errors->has('description_en') ? ' has-error' : '' }}">
+                            <label for="input_description_en" class="col-sm-3 control-label">Description En</label>
+                            <div class="col-sm-5">
+                                <textarea name="description_en" id="input_description_en" class="form-control" rows="7">{{ $category->description_en }}</textarea>
+                                @if ($errors->has('description_en'))
+                                    <span class="help-block">
+                                    <strong>{{ $errors->first('description_en') }}</strong>
+                                </span>
                                 @endif
                             </div>
                         </div>

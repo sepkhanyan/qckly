@@ -28,18 +28,6 @@
                     <li>
                         <a href="#opening-hours" data-toggle="tab">Working Hours</a>
                     </li>
-                    {{--<li>--}}
-                        {{--<a href="#order" data-toggle="tab">Order</a>--}}
-                    {{--</li>--}}
-                    {{--<li>--}}
-                        {{--<a href="#reservation" data-toggle="tab">Reservation</a>--}}
-                    {{--</li>--}}
-                    {{--<li>--}}
-                        {{--<a id="open-map" href="#delivery" data-toggle="tab" >Delivery</a>--}}
-                    {{--</li>--}}
-                    {{--<li>--}}
-                        {{--<a href="#gallery" data-toggle="tab">Gallery</a>--}}
-                    {{--</li>--}}
                 </ul>
             </div>
             <form role="form" id="edit-form" name="edit_form" class="form-horizontal" accept-charset="utf-8" method="POST" action="{{ url('/restaurant/update/' . $restaurant->id ) }}" enctype="multipart/form-data">
@@ -57,67 +45,106 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                            <label for="input-name" class="col-sm-3 control-label">Name</label>
+                        <div class="form-group{{ $errors->has('restaurant_name_en') ? ' has-error' : '' }}">
+                            <label for="input_restaurant_name_en" class="col-sm-3 control-label">Name En</label>
                             <div class="col-sm-5">
-                                <input type="text" name="name" id="input-name" class="form-control" value="{{ $restaurant->name }}" />
-                                @if ($errors->has('name'))
+                                <input type="text" name="restaurant_name_en" id="input_restaurant_name_en" class="form-control" value="{{ $restaurant->name_en }}" />
+                                @if ($errors->has('restaurant_name_en'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('name') }}</strong>
+                                        <strong>{{ $errors->first('restaurant_name_en') }}</strong>
                                     </span>
                                 @endif
                             </div>
                         </div>
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="input-email" class="col-sm-3 control-label">Email</label>
+                        <div class="form-group{{ $errors->has('restaurant_name_ar') ? ' has-error' : '' }}">
+                            <label for="input_restaurant_name_ar" class="col-sm-3 control-label">Name Ar</label>
                             <div class="col-sm-5">
-                                <input type="text" name="email" id="input-email" class="form-control" value="{{ $restaurant->email }}" />
-                                @if ($errors->has('email'))
+                                <input type="text" name="restaurant_name_ar" id="input_restaurant_name_ar" class="form-control" value="{{ $restaurant->name_ar }}" />
+                                @if ($errors->has('restaurant_name_ar'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
+                                        <strong>{{ $errors->first('restaurant_name_ar') }}</strong>
                                     </span>
                                 @endif
                             </div>
                         </div>
-                        <div class="form-group{{ $errors->has('telephone') ? ' has-error' : '' }}">
-                            <label for="input-telephone" class="col-sm-3 control-label">Telephone</label>
+                        <div class="form-group{{ $errors->has('restaurant_email') ? ' has-error' : '' }}">
+                            <label for="input_restaurant_email" class="col-sm-3 control-label">Email</label>
                             <div class="col-sm-5">
-                                <input type="text" name="telephone" id="input-telephone" class="form-control" value="{{ $restaurant->telephone }}" />
-                                @if ($errors->has('telephone'))
+                                <input type="text" name="restaurant_email" id="input_restaurant_email" class="form-control" value="{{ $restaurant->email }}" />
+                                @if ($errors->has('restaurant_email'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('telephone') }}</strong>
+                                        <strong>{{ $errors->first('restaurant_email') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="form-group{{ $errors->has('restaurant_telephone') ? ' has-error' : '' }}">
+                            <label for="input_restaurant_telephone" class="col-sm-3 control-label">Telephone</label>
+                            <div class="col-sm-5">
+                                <input type="text" name="restaurant_telephone" id="input_restaurant_telephone" class="form-control" value="{{ $restaurant->telephone }}" />
+                                @if ($errors->has('restaurant_telephone'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('restaurant_telephone') }}</strong>
                                     </span>
                                 @endif
                             </div>
                         </div>
 
                         <h4 class="tab-pane-title">Address</h4>
-                        <div class="form-group{{ $errors->has('address') ? ' has-error' : '' }}">
-                            <label for="input-address" class="col-sm-3 control-label">Address</label>
+                        <div class="form-group{{ $errors->has('address_en') ? ' has-error' : '' }}">
+                            <label for="input_address_en" class="col-sm-3 control-label">Address En</label>
                             <div class="col-sm-5">
-                                <input type="text" name="address" id="input-address" class="form-control" value="{{ $restaurant->address }}" />
-                                @if ($errors->has('address'))
+                                <input type="text" name="address_en" id="input_address_en" class="form-control" value="{{ $restaurant->address_en }}" />
+                                @if ($errors->has('address_en'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('address') }}</strong>
+                                        <strong>{{ $errors->first('address_en') }}</strong>
                                     </span>
                                 @endif
                             </div>
                         </div>
-                        <div class="form-group{{ $errors->has('city') ? ' has-error' : '' }}">
-                            <label for="input-city" class="col-sm-3 control-label">City</label>
+                        <div class="form-group{{ $errors->has('address_ar') ? ' has-error' : '' }}">
+                            <label for="input_address_ar" class="col-sm-3 control-label">Address Ar</label>
                             <div class="col-sm-5">
-                                <input type="text" name="city" id="input-city" class="form-control" value=" {{ $restaurant->city }}" />
-                                @if ($errors->has('city'))
+                                <input type="text" name="address_ar" id="input_address_en" class="form-control" value="{{ $restaurant->address_ar }}" />
+                                @if ($errors->has('address_ar'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('city') }}</strong>
+                                        <strong>{{ $errors->first('address_ar') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="form-group{{ $errors->has('city_en') ? ' has-error' : '' }}">
+                            <label for="input_city_en" class="col-sm-3 control-label">City En</label>
+                            <div class="col-sm-5">
+                                <input type="text" name="city_en" id="input_city_en" class="form-control" value=" {{ $restaurant->city_en }}" />
+                                @if ($errors->has('city_en'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('city_en') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="form-group{{ $errors->has('city_ar') ? ' has-error' : '' }}">
+                            <label for="input_city_ar" class="col-sm-3 control-label">City Ar</label>
+                            <div class="col-sm-5">
+                                <input type="text" name="city_ar" id="input_city_ar" class="form-control" value=" {{ $restaurant->city_ar }}" />
+                                @if ($errors->has('city_ar'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('city_ar') }}</strong>
                                     </span>
                                 @endif
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="input-state" class="col-sm-3 control-label">State</label>
+                            <label for="input_state_en" class="col-sm-3 control-label">State En</label>
                             <div class="col-sm-5">
-                                <input type="text" name="state" id="input-state" class="form-control" value="" />
+                                <input type="text" name="state_en" id="input_state_en" class="form-control" value="" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="input_state_ar" class="col-sm-3 control-label">State Ar</label>
+                            <div class="col-sm-5">
+                                <input type="text" name="state_ar" id="input_state_ar" class="form-control" value="" />
                             </div>
                         </div>
                         <div class="form-group{{ $errors->has('postcode') ? ' has-error' : '' }}">
@@ -186,13 +213,24 @@
                     </div>
 
                     <div id="data" class="tab-pane row wrap-all">
-                        <div class="form-group{{ $errors->has('description]') ? ' has-error' : '' }}">
-                            <label for="input-description" class="col-sm-3 control-label">Description</label>
+                        <div class="form-group{{ $errors->has('description_en') ? ' has-error' : '' }}">
+                            <label for="input_description_en" class="col-sm-3 control-label">Description En</label>
                             <div class="col-sm-5">
-                                <textarea name="description" id="input-description" class="form-control" rows="5">{{ $restaurant->description }}</textarea>
-                                @if ($errors->has('description'))
+                                <textarea name="description_en" id="input_description_en" class="form-control" rows="5">{{ $restaurant->description_en }}</textarea>
+                                @if ($errors->has('description_en'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('description') }}</strong>
+                                        <strong>{{ $errors->first('description_en') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="form-group{{ $errors->has('description_ar') ? ' has-error' : '' }}">
+                            <label for="input_description_ar" class="col-sm-3 control-label">Description Ar</label>
+                            <div class="col-sm-5">
+                                <textarea name="description_ar" id="input_description_ar" class="form-control" rows="5">{{ $restaurant->description_ar }}</textarea>
+                                @if ($errors->has('description_ar'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('description_ar') }}</strong>
                                     </span>
                                 @endif
                             </div>
@@ -564,388 +602,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        {{--<hr>--}}
-
-                        {{--<div id="delivery-type" class="form-group">--}}
-                            {{--<label for="" class="col-sm-3 control-label">Delivery Hours</label>--}}
-                            {{--<div class="col-sm-5">--}}
-                                {{--<div class="btn-group btn-group-toggle" data-toggle="buttons">--}}
-                                    {{--<label class="btn btn-default active" id="delivery-hours-daily-hide">--}}
-                                        {{--<input type="radio" name="delivery_type" value="0"  checked="checked">--}}
-                                        {{--Same As Opening--}}
-                                    {{--</label>--}}
-                                    {{--<label class="btn btn-default" id="delivery-hours-daily-show">--}}
-                                        {{--<input type="radio" name="delivery_type" value="1" >--}}
-                                        {{--Custom--}}
-                                    {{--</label>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-
-                        {{--<div id="delivery-hours-daily" style="display: none;">--}}
-                            {{--<div class="form-group">--}}
-                                {{--<label for="input-delivery-days" class="col-sm-3 control-label">Days</label>--}}
-                                {{--<div class="col-sm-5">--}}
-                                    {{--<div class="btn-group btn-group-toggle btn-group-7" data-toggle="buttons">--}}
-                                        {{--<label class="btn btn-default active">--}}
-                                            {{--<input type="checkbox" name="delivery_days[]" value="0"  checked="checked">--}}
-                                            {{--Mon--}}
-                                        {{--</label>--}}
-                                        {{--<label class="btn btn-default active">--}}
-                                            {{--<input type="checkbox" name="delivery_days[]" value="1"  checked="checked">--}}
-                                            {{--Tue--}}
-                                        {{--</label>--}}
-                                        {{--<label class="btn btn-default active">--}}
-                                            {{--<input type="checkbox" name="delivery_days[]" value="2"  checked="checked">--}}
-                                            {{--Wed--}}
-                                        {{--</label>--}}
-                                        {{--<label class="btn btn-default active">--}}
-                                            {{--<input type="checkbox" name="delivery_days[]" value="3"  checked="checked">--}}
-                                            {{--Thu--}}
-                                        {{--</label>--}}
-                                        {{--<label class="btn btn-default active">--}}
-                                            {{--<input type="checkbox" name="delivery_days[]" value="4"  checked="checked">--}}
-                                            {{--Fri--}}
-                                        {{--</label>--}}
-                                        {{--<label class="btn btn-default active">--}}
-                                            {{--<input type="checkbox" name="delivery_days[]" value="5"  checked="checked">--}}
-                                            {{--Sat--}}
-                                        {{--</label>--}}
-                                        {{--<label class="btn btn-default active">--}}
-                                            {{--<input type="checkbox" name="delivery_days[]" value="6"  checked="checked">--}}
-                                            {{--Sun--}}
-                                        {{--</label>--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                            {{--<div class="form-group">--}}
-                                {{--<label for="input-delivery-hours" class="col-sm-3 control-label">Hours</label>--}}
-                                {{--<div class="col-sm-5">--}}
-                                    {{--<div class="control-group control-group-2">--}}
-                                        {{--<div class="input-group">--}}
-                                            {{--<input type="text" name="delivery_hours[open]" class="form-control timepicker" value="12:00 AM" />--}}
-                                            {{--<span class="input-group-addon">--}}
-                                                {{--<i class="fa fa-clock-o"></i>--}}
-                                            {{--</span>--}}
-                                        {{--</div>--}}
-                                        {{--<div class="input-group">--}}
-                                            {{--<input type="text" name="delivery_hours[close]" class="form-control timepicker" value="11:59 PM" />--}}
-                                            {{--<span class="input-group-addon">--}}
-                                                {{--<i class="fa fa-clock-o"></i>--}}
-                                            {{--</span>--}}
-                                        {{--</div>--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-
-                        {{--<hr>--}}
-
-                        {{--<div id="collection-type" class="form-group">--}}
-                            {{--<label for="" class="col-sm-3 control-label">Pick-up Hours</label>--}}
-                            {{--<div class="col-sm-5">--}}
-                                {{--<div class="btn-group btn-group-toggle" data-toggle="buttons">--}}
-                                    {{--<label class="btn btn-default active" id="collection-hours-daily-hide">--}}
-                                        {{--<input type="radio" name="collection_type" value="0"  checked="checked">--}}
-                                        {{--Same As Opening--}}
-                                    {{--</label>--}}
-                                    {{--<label class="btn btn-default" id="collection-hours-daily-show">--}}
-                                        {{--<input type="radio" name="collection_type" value="1" >--}}
-                                        {{--Custom--}}
-                                    {{--</label>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-
-                        {{--<div id="collection-hours-daily" style="display: none;">--}}
-                            {{--<div class="form-group">--}}
-                                {{--<label for="input-collection-days" class="col-sm-3 control-label">Days</label>--}}
-                                {{--<div class="col-sm-5">--}}
-                                    {{--<div class="btn-group btn-group-toggle btn-group-7" data-toggle="buttons">--}}
-                                        {{--<label class="btn btn-default active">--}}
-                                            {{--<input type="checkbox" name="collection_days[]" value="0"  checked="checked">--}}
-                                            {{--Mon--}}
-                                        {{--</label>--}}
-                                        {{--<label class="btn btn-default active">--}}
-                                            {{--<input type="checkbox" name="collection_days[]" value="1"  checked="checked">--}}
-                                            {{--Tue--}}
-                                        {{--</label>--}}
-                                        {{--<label class="btn btn-default active">--}}
-                                            {{--<input type="checkbox" name="collection_days[]" value="2"  checked="checked">--}}
-                                            {{--Wed--}}
-                                        {{--</label>--}}
-                                        {{--<label class="btn btn-default active">--}}
-                                            {{--<input type="checkbox" name="collection_days[]" value="3"  checked="checked">--}}
-                                            {{--Thu--}}
-                                        {{--</label>--}}
-                                        {{--<label class="btn btn-default active">--}}
-                                            {{--<input type="checkbox" name="collection_days[]" value="4"  checked="checked">--}}
-                                            {{--Fri--}}
-                                        {{--</label>--}}
-                                        {{--<label class="btn btn-default active">--}}
-                                            {{--<input type="checkbox" name="collection_days[]" value="5"  checked="checked">--}}
-                                            {{--Sat--}}
-                                        {{--</label>--}}
-                                        {{--<label class="btn btn-default active">--}}
-                                            {{--<input type="checkbox" name="collection_days[]" value="6"  checked="checked">--}}
-                                            {{--Sun--}}
-                                        {{--</label>--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                            {{--<div class="form-group">--}}
-                                {{--<label for="input-collection-hours" class="col-sm-3 control-label">Hours</label>--}}
-                                {{--<div class="col-sm-5">--}}
-                                    {{--<div class="control-group control-group-2">--}}
-                                        {{--<div class="input-group">--}}
-                                            {{--<input type="text" name="collection_hours[open]" class="form-control timepicker" value="12:00 AM" />--}}
-                                            {{--<span class="input-group-addon">--}}
-                                                {{--<i class="fa fa-clock-o"></i>--}}
-                                            {{--</span>--}}
-                                        {{--</div>--}}
-                                        {{--<div class="input-group">--}}
-                                            {{--<input type="text" name="collection_hours[close]" class="form-control timepicker" value="11:59 PM" />--}}
-                                            {{--<span class="input-group-addon">--}}
-                                                {{--<i class="fa fa-clock-o"></i>--}}
-                                            {{--</span>--}}
-                                        {{--</div>--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                    </div>
-
-                    {{--<div id="order" class="tab-pane row wrap-all">--}}
-                        {{--<div class="form-group">--}}
-                            {{--<label for="input-offer-delivery" class="col-sm-3 control-label">Offer Delivery</label>--}}
-                            {{--<div class="col-sm-5">--}}
-                                {{--<div id="input-offer-delivery" class="btn-group btn-group-switch" data-toggle="buttons">--}}
-                                    {{--<label class="btn btn-danger active">--}}
-                                        {{--<input type="radio" name="offer_delivery" value="0"  checked="checked">--}}
-                                        {{--NO--}}
-                                    {{--</label>--}}
-                                    {{--<label class="btn btn-success"><input type="radio" name="offer_delivery" value="1" >--}}
-                                        {{--YES--}}
-                                    {{--</label>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        {{--<div class="form-group">--}}
-                            {{--<label for="input-offer-collection" class="col-sm-3 control-label">Offer Pick-up</label>--}}
-                            {{--<div class="col-sm-5">--}}
-                                {{--<div id="input-offer-collection" class="btn-group btn-group-switch" data-toggle="buttons">--}}
-                                    {{--<label class="btn btn-danger active">--}}
-                                        {{--<input type="radio" name="offer_collection" value="0"  checked="checked">--}}
-                                        {{--NO--}}
-                                    {{--</label>--}}
-                                    {{--<label class="btn btn-success">--}}
-                                        {{--<input type="radio" name="offer_collection" value="1" >--}}
-                                        {{--YES--}}
-                                    {{--</label>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        {{--<div class="form-group">--}}
-                            {{--<label for="input-delivery-time" class="col-sm-3 control-label">--}}
-                                {{--Delivery Time--}}
-                                {{--<span class="help-block">Set number of minutes an order will be delivered after being placed, or set to 0 to use default</span>--}}
-                            {{--</label>--}}
-                            {{--<div class="col-sm-5">--}}
-                                {{--<div class="input-group">--}}
-                                    {{--<input type="text" name="delivery_time" id="input-delivery-time" class="form-control" value="0" />--}}
-                                    {{--<span class="input-group-addon">minutes</span>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        {{--<div class="form-group">--}}
-                            {{--<label for="input-collection-time" class="col-sm-3 control-label">--}}
-                                {{--Pick-up Time--}}
-                                {{--<span class="help-block">Set number of minutes an order will be ready for pick-up after being placed, or set to 0 to use default</span>--}}
-                            {{--</label>--}}
-                            {{--<div class="col-sm-5">--}}
-                                {{--<div class="input-group">--}}
-                                    {{--<input type="text" name="collection_time" id="input-collection-time" class="form-control" value="0" />--}}
-                                    {{--<span class="input-group-addon">minutes</span>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        {{--<div class="form-group">--}}
-                            {{--<label for="input-last-order-time" class="col-sm-3 control-label">--}}
-                                {{--Last Order Time--}}
-                                {{--<span class="help-block">Set number of minutes before closing time for last order, or set to 0 to use closing hour.</span>--}}
-                            {{--</label>--}}
-                            {{--<div class="col-sm-5">--}}
-                                {{--<div class="input-group">--}}
-                                    {{--<input type="text" name="last_order_time" id="input-last-order-time" class="form-control" value="0" />--}}
-                                    {{--<span class="input-group-addon">minutes</span>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        {{--<div class="form-group">--}}
-                            {{--<label for="input-future-orders" class="col-sm-3 control-label">--}}
-                                {{--Accept Future Orders--}}
-                                {{--<span class="help-block">Allow customer to place order for a later time when restaurant is closed for delivery or pick-up during opening hours</span>--}}
-                            {{--</label>--}}
-                            {{--<div class="col-sm-5">--}}
-                                {{--<div class="btn-group btn-group-switch" data-toggle="buttons">--}}
-                                    {{--<label class="btn btn-danger active" id="future-orders-days-hide">--}}
-                                        {{--<input type="radio" name="future_orders" value="0"  checked="checked">--}}
-                                        {{--NO--}}
-                                    {{--</label>--}}
-                                    {{--<label class="btn btn-success" id="future-orders-days-show">--}}
-                                        {{--<input type="radio" name="future_orders" value="1" >--}}
-                                        {{--YES--}}
-                                    {{--</label>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        {{--<div id="future-orders-days" style="display: none;">--}}
-                            {{--<div class="form-group">--}}
-                                {{--<label for="input-delivery-days" class="col-sm-3 control-label">Future Order Days In Advance								<span class="help-block">Set the number of days in advance to allow customer to place a delivery or pick-up order for a later time.</span>--}}
-                                {{--</label>--}}
-                                {{--<div class="col-sm-5">--}}
-                                    {{--<div class="control-group control-group-2">--}}
-                                        {{--<div class="input-group">--}}
-                                            {{--<span class="input-group-addon"><b>Delivery:</b></span>--}}
-                                            {{--<input type="text" name="future_order_days[delivery]" class="form-control" value="5" />--}}
-                                            {{--<span class="input-group-addon">days</span>--}}
-                                        {{--</div>--}}
-                                        {{--<div class="input-group">--}}
-                                            {{--<span class="input-group-addon"><b>Pick-up:</b></span>--}}
-                                            {{--<input type="text" name="future_order_days[collection]" class="form-control" value="5" />--}}
-                                            {{--<span class="input-group-addon">days</span>--}}
-                                        {{--</div>--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-
-                        {{--<div class="form-group">--}}
-                            {{--<label for="input-payments" class="col-sm-3 control-label">--}}
-                                {{--Payments--}}
-                                {{--<span class="help-block">Select the payment(s) available at this location. Leave blank to use all enabled payments</span>--}}
-                            {{--</label>--}}
-                            {{--<div class="col-sm-7">--}}
-                                {{--<div class="col-xs-12 col-sm-5 wrap-none wrap-horizontal">--}}
-                                    {{--<div class="input-group button-checkbox">--}}
-                                        {{--<button type="button" class="btn btn-default" data-color="default">--}}
-                                            {{--&nbsp;&nbsp;&nbsp;Cash On Delivery--}}
-                                        {{--</button>--}}
-                                        {{--<input name="payments[]" type="checkbox" class="hidden" value="cod" />--}}
-                                        {{--<a href="#" class="btn btn-default">--}}
-                                            {{--<i class="fa fa-cog"></i>--}}
-                                        {{--</a>--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
-
-                    {{--<div id="reservation" class="tab-pane row wrap-all">--}}
-                        {{--<div class="form-group">--}}
-                            {{--<label for="input-reserve-interval" class="col-sm-3 control-label">--}}
-                                {{--Time Interval--}}
-                                {{--<span class="help-block">Set the number of minutes between each reservation time, Leave as 0 to use system setting value</span>--}}
-                            {{--</label>--}}
-                            {{--<div class="col-sm-5">--}}
-                                {{--<div class="input-group">--}}
-                                    {{--<input type="text" name="reservation_time_interval" id="input-reserve-interval" class="form-control" value="0" />--}}
-                                    {{--<span class="input-group-addon">minutes</span>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        {{--<div class="form-group">--}}
-                            {{--<label for="input-reserve-turn" class="col-sm-3 control-label">--}}
-                                {{--Stay Time--}}
-                                {{--<span class="help-block">Set in minutes the average time a guest will stay at a table, Leave as 0 to use system setting value</span>--}}
-                            {{--</label>--}}
-                            {{--<div class="col-sm-5">--}}
-                                {{--<div class="input-group">--}}
-                                    {{--<input type="text" name="reservation_stay_time" id="input-reserve-turn" class="form-control" value="0" />--}}
-                                    {{--<span class="input-group-addon">minutes</span>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        {{--<div class="form-group">--}}
-                            {{--<label for="input-table" class="col-sm-3 control-label">Tables</label>--}}
-                            {{--<div class="col-sm-5">--}}
-
-                                {{--<label for="s2id_autogen1" class="select2-offscreen">Tables</label>--}}
-                                {{--<input class="select2-focusser select2-offscreen" type="text" aria-haspopup="true" role="button" aria-labelledby="select2-chosen-1" id="s2id_autogen1">--}}
-
-                                {{--<input type="text" name="table" value="" id="input-table" class="form-control select2-offscreen" tabindex="-1" title="Tables"/>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        {{--<div class="row">--}}
-                            {{--<div id="table-box" class="col-sm-12 wrap-top">--}}
-                                {{--<div class="table-responsive">--}}
-                                    {{--<table class="table table-striped">--}}
-                                        {{--<thead>--}}
-                                        {{--<tr>--}}
-                                            {{--<th width="40%">Name</th>--}}
-                                            {{--<th>Minimum</th>--}}
-                                            {{--<th>Capacity</th>--}}
-                                            {{--<th>Remove</th>--}}
-                                        {{--</tr>--}}
-                                        {{--</thead>--}}
-                                        {{--<tbody>--}}
-                                        {{--</tbody>--}}
-                                    {{--</table>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
-
-                    {{--<div id="delivery" class="tab-pane row wrap-none">--}}
-                        {{--<p class="alert text-danger">Delivery area map will be visible after location has been added.</p>--}}
-                    {{--</div>--}}
-
-                    {{--<div id="gallery" class="tab-pane row wrap-all">--}}
-                        {{--<div class="form-group">--}}
-                            {{--<label for="input-gallery-title" class="col-sm-3 control-label">Title</label>--}}
-                            {{--<div class="col-sm-5">--}}
-                                {{--<input type="text" name="gallery[title]" id="input-gallery-title" class="form-control" value="" />--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        {{--<div class="form-group">--}}
-                            {{--<label for="input-gallery-description" class="col-sm-3 control-label">Description</label>--}}
-                            {{--<div class="col-sm-5">--}}
-                                {{--<textarea name="gallery[description]" id="input-gallery-description" class="form-control" rows="5"></textarea>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        {{--<br />--}}
-
-                        {{--<div id="gallery-images" class="row">--}}
-                            {{--<div class="panel panel-default panel-table">--}}
-                                {{--<div class="table-responsive">--}}
-                                    {{--<table class="table table-striped table-border table-sortable">--}}
-                                        {{--<thead>--}}
-                                        {{--<tr>--}}
-                                            {{--<th class="action"></th>--}}
-                                            {{--<th>Thumbnail</th>--}}
-                                            {{--<th class="col-sm-3">Filename</th>--}}
-                                            {{--<th class="col-sm-4">Alt Text</th>--}}
-                                            {{--<th class="col-sm-4 text-center">Status</th>--}}
-                                        {{--</tr>--}}
-                                        {{--</thead>--}}
-                                        {{--<tbody>--}}
-                                        {{--</tbody>--}}
-                                        {{--<tfoot>--}}
-                                        {{--<tr id="tfoot">--}}
-                                            {{--<td class="action action-one">--}}
-                                                {{--<a class="btn btn-primary btn-lg" onclick="addImageToGallery();">--}}
-                                                    {{--<i class="fa fa-plus"></i>--}}
-                                                {{--</a>--}}
-                                            {{--</td>--}}
-                                            {{--<td colspan="4"></td>--}}
-                                        {{--</tr>--}}
-                                        {{--</tfoot>--}}
-                                    {{--</table>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
                 </div>
             </form>
         </div>

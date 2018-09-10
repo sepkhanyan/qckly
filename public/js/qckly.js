@@ -2,27 +2,31 @@ $(document).ready(function() {
 
     var token = $('[name=csrf-token]').attr('content');
 
-
-
-    $(document).ready(function () {
-        var $updateModal = $('#modalEditArea');
-        $('.list-item-update').on('click', function (evn) { // this is the "a" tag
-            evn.preventDefault();
-
-            $updateModal.modal('show');
-            var resourceId = $(this).data('data-item-id'),
-                $pressedButton = $(this);
-
-            $updateModal.find('.confirm-btn').on('click', function (e) {
-                e.preventDefault();
-                var submitUrl = '/area/update/' + resourceId,
-                    form = $('#edit-form'); // change with your form
-
-                form.attr('action', submitUrl);
-                form.submit();
-            });
-        });
+    $('#edit_area').change(function() {
+        var id = $(this).data('data-item-id');
+        $('#form-edit-area').attr('action','/area/update/' + id);
     });
+
+
+    // $(document).ready(function () {
+    //     var $updateModal = $('#modalEditArea');
+    //     $('.list-item-update').on('click', function (evn) { // this is the "a" tag
+    //         evn.preventDefault();
+    //
+    //         $updateModal.modal('show');
+    //         var resourceId = $(this).data('data-item-id'),
+    //             $pressedButton = $(this);
+    //
+    //         $updateModal.find('.confirm-btn').on('click', function (e) {
+    //             e.preventDefault();
+    //             var submitUrl = '/area/update/' + resourceId,
+    //                 form = $('#edit-form'); // change with your form
+    //
+    //             form.attr('action', submitUrl);
+    //             form.submit();
+    //         });
+    //     });
+    // });
 
 
     $(document).ready(function () {
@@ -194,6 +198,7 @@ $(document).ready(function() {
             $('#all'). slideDown('fast');
         }
     });
+
 
 
 

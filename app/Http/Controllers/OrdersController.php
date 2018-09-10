@@ -111,7 +111,7 @@ class OrdersController extends Controller
 //                        }
                         $collections [] = [
                             'restaurant_id' => $cart_collection->collection->restaurant->id,
-                            'restaurant_name' => $cart_collection->collection->restaurant->name,
+                            'restaurant_name' => $cart_collection->collection->restaurant->name_en,
                             'collection_id' => $cart_collection->collection_id,
                             'collection_type_id' => $cart_collection->collection->category_id,
                             'collection_type' => $cart_collection->collection->category->name_en,

@@ -128,12 +128,12 @@
                                     </td>
                                     <td>
                                         <img src="/images/{{$restaurant->image}}" width="30px" height="30px">
-                                        {{$restaurant->name}}
+                                        {{$restaurant->name_en}}
                                     </td>
-                                    <td>{{$restaurant->description}}</td>
+                                    <td>{{$restaurant->description_en}}</td>
                                     <td>{{$restaurant->area->area_en}}</td>
-                                    <td>{{$restaurant->city}}</td>
-                                    <td>{{$restaurant->address}}</td>
+                                    <td>{{$restaurant->city_en}}</td>
+                                    <td>{{$restaurant->address_en}}</td>
                                     <td>{{$restaurant->telephone}}</td>
                                     @if($restaurant->status == 1)
                                     <td>Enable</td>

@@ -20,9 +20,6 @@
             <div class="row wrap-vertical">
                 <ul id="nav-tabs" class="nav nav-tabs">
                     <li class="active"><a href="#general" data-toggle="tab">Menu</a></li>
-                    {{--<li><a href="#menu-details" data-toggle="tab">Details </a></li>--}}
-                    {{--<li><a href="#menu-options" data-toggle="tab">Menu Option </a></li>--}}
-                    {{--<li><a href="#specials" data-toggle="tab">Specials </a></li>--}}
                 </ul>
             </div>
             <form role="form" id="edit-form" class="form-horizontal" enctype="multipart/form-data" accept-charset="utf-8" method="POST" action="{{ url('/menu/update/' . $menu->id) }}" >
@@ -110,15 +107,15 @@
                             <div class="col-sm-5">
                                 <div class="btn-group btn-group-switch" data-toggle="buttons">
                                     @if($menu->famous == 1)
-                                    <label class="btn btn-danger">
-                                        <input type="radio" name="famous" value="0"  >
-                                        Disabled
-                                    </label>
-                                    <label class="btn btn-success active">
-                                        <input type="radio" name="famous" value="1"  checked="checked">
-                                        Enabled
-                                    </label>
-                                        @else
+                                        <label class="btn btn-danger">
+                                            <input type="radio" name="famous" value="0"  >
+                                            Disabled
+                                        </label>
+                                        <label class="btn btn-success active">
+                                            <input type="radio" name="famous" value="1"  checked="checked">
+                                            Enabled
+                                        </label>
+                                    @else
                                         <label class="btn btn-danger  active">
                                             <input type="radio" name="famous" value="0"  checked="checked" >
                                             Disabled
@@ -127,7 +124,7 @@
                                             <input type="radio" name="famous" value="1" >
                                             Enabled
                                         </label>
-                                        @endif
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -163,15 +160,15 @@
                             <div class="col-sm-5">
                                 <div class="btn-group btn-group-switch" data-toggle="buttons">
                                     @if($menu->status == 1)
-                                    <label class="btn btn-danger">
-                                        <input type="radio" name="status" value="0" >
-                                        Disabled
-                                    </label>
-                                    <label class="btn btn-success active">
-                                        <input type="radio" name="status" value="1"  checked="checked">
-                                        Enabled
-                                    </label>
-                                        @else
+                                        <label class="btn btn-danger">
+                                            <input type="radio" name="status" value="0" >
+                                            Disabled
+                                        </label>
+                                        <label class="btn btn-success active">
+                                            <input type="radio" name="status" value="1"  checked="checked">
+                                            Enabled
+                                        </label>
+                                    @else
                                         <label class="btn btn-danger active">
                                             <input type="radio" name="status" value="0" checked="checked">
                                             Disabled
@@ -180,154 +177,10 @@
                                             <input type="radio" name="status" value="1"  >
                                             Enabled
                                         </label>
-                                        @endif
+                                    @endif
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div id="menu-details" class="tab-pane row wrap-all">
-                        {{--<div class="form-group">--}}
-                            {{--<label for="input-mealtime" class="col-sm-3 control-label">--}}
-                                {{--Mealtime--}}
-                                {{--<span class="help-block">Set what mealtime of day your customers can order this menu. Mealtimes can be managed under Localisation -> Mealtimes</span>--}}
-                            {{--</label>--}}
-                            {{--<div class="col-sm-5">--}}
-                                {{--<select name="mealtime" id="mealtime" class="form-control">--}}
-                                    {{--<option value="0">Available all day</option>--}}
-                                    {{--<option value="1"  >Breakfast (07:00 - 10:00)</option>--}}
-                                    {{--<option value="2"  >Lunch (12:00 - 14:30)</option>--}}
-                                    {{--<option value="3"  >Dinner (18:00 - 20:00)</option>--}}
-                                {{--</select>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        {{--<div class="form-group{{ $errors->has('stock_qty') ? ' has-error' : '' }}">--}}
-                            {{--<label for="input-stock" class="col-sm-3 control-label">--}}
-                                {{--Stock Quantity--}}
-                                {{--<span class="help-block">Set to 0 for unlimited stock quantity.</span>--}}
-                            {{--</label>--}}
-                            {{--<div class="col-sm-5">--}}
-                                {{--<input type="text" name="stock_qty" id="input-stock" class="form-control" value="{{ $menu->stock_qty }}" />--}}
-                                {{--@if ($errors->has('stock_qty'))--}}
-                                    {{--<span class="help-block">--}}
-                                        {{--<strong>{{ $errors->first('stock_qty') }}</strong>--}}
-                                    {{--</span>--}}
-                                {{--@endif--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        {{--<div class="form-group{{ $errors->has('minimum_qty') ? ' has-error' : '' }}">--}}
-                            {{--<label for="input-minimum" class="col-sm-3 control-label">--}}
-                                {{--Minimum Quantity--}}
-                                {{--<span class="help-block">The minimum quantity that can be ordered. Default is 1, unless set otherwise.</span>--}}
-                            {{--</label>--}}
-                            {{--<div class="col-sm-5">--}}
-                                {{--<input type="text" name="minimum_qty" id="input-minimum" class="form-control" value="1" />--}}
-                                {{--@if ($errors->has('minimum_qty'))--}}
-                                    {{--<span class="help-block">--}}
-                                        {{--<strong>{{ $errors->first('minimum_qty') }}</strong>--}}
-                                    {{--</span>--}}
-                                {{--@endif--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        {{--<div class="form-group">--}}
-                            {{--<label for="input-subtract-stock" class="col-sm-3 control-label">Subtract Stock</label>--}}
-                            {{--<div class="col-sm-5">--}}
-                                {{--<div class="btn-group btn-group-switch" data-toggle="buttons">--}}
-                                    {{--<label class="btn btn-danger active">--}}
-                                        {{--<input type="radio" name="subtract_stock" value="0"  checked="checked">--}}
-                                        {{--NO--}}
-                                    {{--</label>--}}
-                                    {{--<label class="btn btn-success">--}}
-                                        {{--<input type="radio" name="subtract_stock" value="1" >--}}
-                                        {{--YES--}}
-                                    {{--</label>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        {{--<div class="form-group{{ $errors->has('priority') ? ' has-error' : '' }}">--}}
-                            {{--<label for="input-menu-priority" class="col-sm-3 control-label">Priority</label>--}}
-                            {{--<div class="col-sm-5">--}}
-                                {{--<input type="text" name="menu_priority" id="input-menu-priority" class="form-control" value="{{ $menu->priority }}" />--}}
-                                {{--@if ($errors->has('priority'))--}}
-                                    {{--<span class="help-block">--}}
-                                        {{--<strong>{{ $errors->first('priority') }}</strong>--}}
-                                    {{--</span>--}}
-                                {{--@endif--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
-                    {{--<div id="menu-options" class="tab-pane row wrap-all">--}}
-                        {{--<div class="form-group">--}}
-                            {{--<label for="input-name" class="col-sm-3 control-label">Menu Item Option</label>--}}
-                            {{--<div class="col-sm-5">--}}
-                                {{--<input type="text" name="menu_option" id="input-status" class="form-control" value="" />--}}
-                            {{--</div>--}}
-                            {{--<div class="col-sm-3">--}}
-                                {{--<a class="btn btn-default" href="https://demo.tastyigniter.com/admin/menu_options/edit">Add New Menu Option</a>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        {{--<br />--}}
-                        {{--<div id="menu-option" class="hide">--}}
-                            {{--<ul id="sub-tabs" class="nav nav-tabs">--}}
-                                {{--<li id="last-tab"></li>--}}
-                            {{--</ul>--}}
-                            {{--<div id="option-content" class="tab-content">--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
-                    {{--<div id="specials" class="tab-pane row wrap-all">--}}
-                        {{--<div class="form-group">--}}
-                            {{--<label for="input-special-status" class="col-sm-3 control-label">Special</label>--}}
-                            {{--<div class="col-sm-5">--}}
-                                {{--<div class="btn-group btn-group-switch" data-toggle="buttons">--}}
-                                    {{--<label id="special_toggle_hide" class="btn btn-danger active">--}}
-                                        {{--<input type="radio" name="special_status" value="0" checked>--}}
-                                        {{--Disabled--}}
-                                    {{--</label>--}}
-                                    {{--<label id="special_toggle_show" class="btn btn-success">--}}
-                                        {{--<input type="radio" name="special_status" value="1">--}}
-                                        {{--Enabled--}}
-                                    {{--</label>--}}
-                                {{--</div>--}}
-                                {{--<input type="hidden" name="special_id" value="" />--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        {{--<div id="special-toggle" style="display: none">--}}
-                            {{--<div class="form-group">--}}
-                                {{--<label for="start-date" class="col-sm-3 control-label">Start Date</label>--}}
-                                {{--<div class="col-sm-5">--}}
-                                    {{--<div class="input-group">--}}
-                                        {{--<input type="text" name="start_date" id="start-date" class="form-control" value="" />--}}
-                                        {{--<span class="input-group-addon">--}}
-                                            {{--<i class="fa fa-calendar"></i>--}}
-                                        {{--</span>--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                            {{--<div class="form-group">--}}
-                                {{--<label for="end-date" class="col-sm-3 control-label">End Date</label>--}}
-                                {{--<div class="col-sm-5">--}}
-                                    {{--<div class="input-group">--}}
-                                        {{--<input type="text" name="end_date" id="end-date" class="form-control" value="" />--}}
-                                        {{--<span class="input-group-addon">--}}
-                                            {{--<i class="fa fa-calendar"></i>--}}
-                                        {{--</span>--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                            {{--<div class="form-group">--}}
-                                {{--<label for="input-special-price" class="col-sm-3 control-label">Special Price</label>--}}
-                                {{--<div class="col-sm-5">--}}
-                                    {{--<div class="input-group">--}}
-                                        {{--<input type="text" name="special_price" id="input-special-price" class="form-control" value="" />--}}
-                                        {{--<span class="input-group-addon">.00</span>--}}
-                                        {{--<span class="input-group-addon">--}}
-                                            {{--<i class="fa fa-money"></i>--}}
-                                        {{--</span>--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
                     </div>
                 </div>
             </form>
