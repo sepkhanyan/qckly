@@ -511,171 +511,181 @@ class UserCartsController extends Controller
             $collection_type = $DataRequests['collection_type'];
             $collection_id = $DataRequests['collection_id'];
             $collection = Collection::where('id', $collection_id)->with('collectionItem.menu')->first();
-            if ($collection->female_caterer_available == 1) {
-                $female_caterer_available = true;
-            } else {
-                $female_caterer_available = false;
-            }
-            $foodlist = [];
-            $foodlist_images = [];
-            if ($collection->is_available == 1) {
-                $is_available = true;
-            } else {
-                $is_available = false;
-            }
-            $setup = '';
-            $max = '';
-            $requirement = '';
-            $max_persons = -1;
-            $min_serve = -1;
-            $max_serve = -1;
-            $collection_min = -1;
-            $collection_max = -1;
-            $person_increase = false;
-            if($collection_type != 4){
-                $min_serve = $collection->min_serve_to_person;
-                $max_serve = $collection->max_serve_to_person;
-            }
-            if($collection_type != 2 && $collection_type != 4){
-                $collection_min = $collection->min_qty;
-                $collection_max = $collection->max_qty;
-            }
-            if($collection_type == 1){
-                $items = [];
-                $menu = [];
-                foreach ($collection->collectionItem as $collection_item) {
-                    $foodlist [] = $collection_item->menu->name_en;
-                    $image = url('/') . '/images/' . $collection_item->menu->image;
-                    array_push($foodlist_images, $image);
-                    if ($collection_item->menu->status == 1) {
-                        $status = true;
-                    } else {
-                        $status = false;
-                    }
-
-                    $items  [] = [
-                        'item_id' => $collection_item->item_id,
-                        'item_name' => $collection_item->menu->name_en,
-                        'item_qty' => $collection_item->quantity,
-                        'item_price' => $collection_item->menu->price,
-                        'item_price_unit' => 'QR',
-                        'item_availability' => $status
-
-                    ];
+            if($collection){
+                if ($collection->female_caterer_available == 1) {
+                    $female_caterer_available = true;
+                } else {
+                    $female_caterer_available = false;
                 }
-                $menu [] = [
-                    'menu_name' => 'Combo Delicious',
-                    'items' => $items,
-                ];
-            }else{
-                $menu_min_qty = -1;
-                $menu_max_qty = -1;
-                $menu = [];
-                $collectionMenus = CollectionMenu::where('collection_id', $collection->id)->with(['collectionItem' => function ($query) use($collection){
-                    $query->where('collection_id', $collection->id);
-                }])->get();
-                foreach ($collectionMenus as $collectionMenu) {
+                $foodlist = [];
+                $foodlist_images = [];
+                if ($collection->is_available == 1) {
+                    $is_available = true;
+                } else {
+                    $is_available = false;
+                }
+                $setup = '';
+                $max = '';
+                $requirement = '';
+                $max_persons = -1;
+                $min_serve = -1;
+                $max_serve = -1;
+                $collection_price = 0;
+                $collection_min = -1;
+                $collection_max = -1;
+                $person_increase = false;
+                if($collection_type != 4){
+                    $min_serve = $collection->min_serve_to_person;
+                    $max_serve = $collection->max_serve_to_person;
+                    $collection_price = $collection->price;
+                }
+                if($collection_type != 2 && $collection_type != 4){
+                    $collection_min = $collection->min_qty;
+                    $collection_max = $collection->max_qty;
+                }
+                if($collection_type == 1){
                     $items = [];
-                    if($collection->category_id !=4 && $collection->category_id !=1){
-                        $menu_min_qty = $collectionMenu->min_qty;
-                        $menu_max_qty = $collectionMenu->max_qty;
-                    }
-                    foreach($collectionMenu->collectionItem as $collection_item){
+                    $menu = [];
+                    foreach ($collection->collectionItem as $collection_item) {
                         $foodlist [] = $collection_item->menu->name_en;
                         $image = url('/') . '/images/' . $collection_item->menu->image;
                         array_push($foodlist_images, $image);
-                        if($collection->category_id == 2){
-                            if($collection->allow_person_increase == 1){
-                                $person_increase = true;
-                            }else{
-                                $person_increase = false;
-                            }
-                            $max_persons = $collection->persons_max_count;
-
-                            $setup_hours = $collection->setup_time / 60;
-                            $setup_minutes = $collection->setup_time % 60;
-                            if ($setup_minutes > 0) {
-                                $setup = floor($setup_hours) . " hours " . ($setup_minutes) . " minutes";
-                            } else {
-                                $setup = floor($setup_hours) . " hours";
-                            }
-                            $max_hours = $collection->max_time / 60;
-                            $max_minutes = $collection->max_time % 60;
-                            if ($max_minutes > 0) {
-                                $max = floor($max_hours) . " hours " . ($max_minutes) . " minutes";
-                            } else {
-                                $max = floor($max_hours) . " hours";
-                            }
-                            $requirement = $collection->requirements_en;
-                        }
-
-
                         if ($collection_item->menu->status == 1) {
                             $status = true;
                         } else {
                             $status = false;
                         }
-                        $items [] = [
-                            'item_id' => $collection_item->menu->id,
+
+                        $items  [] = [
+                            'item_id' => $collection_item->item_id,
                             'item_name' => $collection_item->menu->name_en,
-                            'item_image' => url('/') . '/images/' .  $collection_item->menu->image,
+                            'item_qty' => $collection_item->quantity,
                             'item_price' => $collection_item->menu->price,
                             'item_price_unit' => 'QR',
                             'item_availability' => $status
 
                         ];
                     }
-
-                    usort($items, function ($item1, $item2) {
-                        return $item2['item_availability'] <=> $item1['item_availability'];
-                    });
                     $menu [] = [
-                        'menu_id' => $collectionMenu->category->id,
-                        'menu_name' => $collectionMenu->category->name_en,
-                        'menu_min_qty' => $menu_min_qty,
-                        'menu_max_qty' => $menu_max_qty,
+                        'menu_name' => 'Combo Delicious',
                         'items' => $items,
                     ];
+                }else{
+                    $menu_min_qty = -1;
+                    $menu_max_qty = -1;
+                    $menu = [];
+                    $collectionMenus = CollectionMenu::where('collection_id', $collection->id)->with(['collectionItem' => function ($query) use($collection){
+                        $query->where('collection_id', $collection->id);
+                    }])->get();
+                    foreach ($collectionMenus as $collectionMenu) {
+                        $items = [];
+                        if($collection->category_id !=4 && $collection->category_id !=1){
+                            $menu_min_qty = $collectionMenu->min_qty;
+                            $menu_max_qty = $collectionMenu->max_qty;
+                        }
+                        foreach($collectionMenu->collectionItem as $collection_item){
+                            $foodlist [] = $collection_item->menu->name_en;
+                            $image = url('/') . '/images/' . $collection_item->menu->image;
+                            array_push($foodlist_images, $image);
+                            if($collection->category_id == 2){
+                                if($collection->allow_person_increase == 1){
+                                    $person_increase = true;
+                                }else{
+                                    $person_increase = false;
+                                }
+                                $max_persons = $collection->persons_max_count;
+
+                                $setup_hours = $collection->setup_time / 60;
+                                $setup_minutes = $collection->setup_time % 60;
+                                if ($setup_minutes > 0) {
+                                    $setup = floor($setup_hours) . " hours " . ($setup_minutes) . " minutes";
+                                } else {
+                                    $setup = floor($setup_hours) . " hours";
+                                }
+                                $max_hours = $collection->max_time / 60;
+                                $max_minutes = $collection->max_time % 60;
+                                if ($max_minutes > 0) {
+                                    $max = floor($max_hours) . " hours " . ($max_minutes) . " minutes";
+                                } else {
+                                    $max = floor($max_hours) . " hours";
+                                }
+                                $requirement = $collection->requirements_en;
+                            }
+
+
+                            if ($collection_item->menu->status == 1) {
+                                $status = true;
+                            } else {
+                                $status = false;
+                            }
+                            $items [] = [
+                                'item_id' => $collection_item->menu->id,
+                                'item_name' => $collection_item->menu->name_en,
+                                'item_image' => url('/') . '/images/' .  $collection_item->menu->image,
+                                'item_price' => $collection_item->menu->price,
+                                'item_price_unit' => 'QR',
+                                'item_availability' => $status
+
+                            ];
+                        }
+
+                        usort($items, function ($item1, $item2) {
+                            return $item2['item_availability'] <=> $item1['item_availability'];
+                        });
+                        $menu [] = [
+                            'menu_id' => $collectionMenu->category->id,
+                            'menu_name' => $collectionMenu->category->name_en,
+                            'menu_min_qty' => $menu_min_qty,
+                            'menu_max_qty' => $menu_max_qty,
+                            'items' => $items,
+                        ];
+
+                    }
 
                 }
-
+                $menu_collection [] = [
+                    'restaurant_id' => $collection->restaurant->id,
+                    'restaurant_name' => $collection->restaurant->name_en,
+                    'collection_id' => $collection->id,
+                    'collection_name' => $collection->name_en,
+                    'collection_description' => $collection->description_en,
+                    'collection_type_id' => $collection->category_id,
+                    'collection_type' => $collection->category->name_en,
+                    'female_caterer_available' => $female_caterer_available,
+                    'mealtime' => $collection->mealtime->name_en,
+                    'collection_min_qty' => $collection_min,
+                    'collection_max_qty' => $collection_max,
+                    'collection_price' => $collection_price,
+                    'collection_price_unit' => "QR",
+                    'is_available' => $is_available,
+                    'min_serve_to_person' => $min_serve,
+                    'max_serve_to_person' => $max_serve,
+                    'allow_person_increase' => $person_increase,
+                    'persons_max_count' => $max_persons,
+                    'service_provide' => $collection->service_provide_en,
+                    'food_list' => $foodlist,
+                    'service_presentation' => $collection->service_presentation_en,
+                    'special_instruction' => '',
+                    'food_item_image' => url('/') . '/images/' . $collection_item->menu->image,
+                    'food_list_images' => $foodlist_images,
+                    'setup_time' => $setup,
+                    'requirement' => $requirement,
+                    'max_time' => $max,
+                    'menu_items' => $menu
+                ];
+                return response()->json(array(
+                    'success'=> 1,
+                    'status_code'=> 200 ,
+                    'data' => $menu_collection));
+            }else{
+                return response()->json(array(
+                    'success'=> 1,
+                    'status_code'=> 200 ,
+                    'data' => [],
+                    'message' => 'No Collection!'));
             }
-            $menu_collection [] = [
-                'restaurant_id' => $collection->restaurant->id,
-                'restaurant_name' => $collection->restaurant->name_en,
-                'collection_id' => $collection->id,
-                'collection_name' => $collection->name_en,
-                'collection_description' => $collection->description_en,
-                'collection_type_id' => $collection->category_id,
-                'collection_type' => $collection->category->name_en,
-                'female_caterer_available' => $female_caterer_available,
-                'mealtime' => $collection->mealtime->name_en,
-                'collection_min_qty' => $collection_min,
-                'collection_max_qty' => $collection_max,
-                'collection_price' => $collection->price,
-                'collection_price_unit' => "QR",
-                'is_available' => $is_available,
-                'min_serve_to_person' => $min_serve,
-                'max_serve_to_person' => $max_serve,
-                'allow_person_increase' => $person_increase,
-                'persons_max_count' => $max_persons,
-                'service_provide' => $collection->service_provide_en,
-                'food_list' => $foodlist,
-                'service_presentation' => $collection->service_presentation_en,
-                'special_instruction' => '',
-                'food_item_image' => url('/') . '/images/' . $collection_item->menu->image,
-                'food_list_images' => $foodlist_images,
-                'setup_time' => $setup,
-                'requirement' => $requirement,
-                'max_time' => $max,
-                'menu_items' => $menu
-            ];
         }
 
-        return response()->json(array(
-            'success'=> 1,
-            'status_code'=> 200 ,
-            'data' => $menu_collection));
     }
 
 
