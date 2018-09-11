@@ -136,7 +136,7 @@
         </form>
     </div>
     <div class="modal fade" id="modalEditArea" role="dialog" tabindex="-1" >
-        <form role="form" id="form-edit-area" class="form-horizontal"  accept-charset="utf-8" method="get" {{--action="{{ url('/area/update/' . $area->id)}} "--}}>
+        <form role="form" id="form-edit-area" class="form-horizontal"  accept-charset="utf-8" method="GET"  {{--action="{{ url('/area/update/' . $area->id)}} "--}}>
             {{ csrf_field() }}
             <div class="modal-dialog" >
                 <div class="modal-content">
@@ -171,6 +171,25 @@
     </form>
     </div>
     <script type="text/javascript">
+        $(document).ready(function () {
+            var $updateModal = $('#modalEditArea');
+            $('#edit_area').on('click', function (evn) { // this is the "a" tag
+                evn.preventDefault();
+
+                $updateModal.modal('show');
+                var resourceId = $(this).data('data-item-id'),
+                    $pressedButton = $(this);
+
+                $updateModal.find('.btn btn-primary').on('click', function (e) {
+                    e.preventDefault();
+                    var submitUrl = '/area/update/' + resourceId,
+                        form = $('#form-edit-area'); // change with your form
+
+                    form.attr('action', submitUrl);
+                    form.submit();
+                });
+            });
+        });
         function filterList() {
             $('#filter-form').submit();
         }

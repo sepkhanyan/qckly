@@ -345,7 +345,7 @@ class UserCartsController extends Controller
                         'address_name' => $cart->address->name,
                         'mobile_number' => $cart->address->mobile_number,
                         'location' => $cart->address->location,
-                        'building_number' => $cart->address->location,
+                        'building_number' => $cart->address->building_number,
                         'zone' => $cart->address->zone,
                         'is_apartment' => $is_apartment,
                         'apartment_number' => $cart->address->apartment_number,
