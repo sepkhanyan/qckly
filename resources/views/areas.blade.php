@@ -75,7 +75,7 @@
                                 <tr>
                                     <td class="action">
                                         <input type="checkbox" value="{{ $area->id }}" name="delete" />&nbsp;&nbsp;&nbsp;
-                                        <a class="btn btn-edit"  id="edit_area" data-toggle="modal" data-target="#modalEditArea" type="button"  data-item-id="{{$area->id}}">
+                                        <a class="btn btn-edit"  id="edit_area" data-toggle="modal" data-target="#modalEditArea" type="button"  data-whatever="{{$area->id}}">
                                             <i class="fa fa-pencil"></i>
                                         </a>&nbsp;&nbsp;
                                     </td>
@@ -171,25 +171,6 @@
     </form>
     </div>
     <script type="text/javascript">
-        $(document).ready(function () {
-            var $updateModal = $('#modalEditArea');
-            $('#edit_area').on('click', function (evn) { // this is the "a" tag
-                evn.preventDefault();
-
-                $updateModal.modal('show');
-                var resourceId = $(this).data('data-item-id'),
-                    $pressedButton = $(this);
-
-                $updateModal.find('.btn btn-primary').on('click', function (e) {
-                    e.preventDefault();
-                    var submitUrl = '/area/update/' + resourceId,
-                        form = $('#form-edit-area'); // change with your form
-
-                    form.attr('action', submitUrl);
-                    form.submit();
-                });
-            });
-        });
         function filterList() {
             $('#filter-form').submit();
         }

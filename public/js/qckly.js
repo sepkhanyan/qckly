@@ -2,9 +2,13 @@ $(document).ready(function() {
 
     var token = $('[name=csrf-token]').attr('content');
 
-    $('#edit_area').click(function(){
-        $('#form-edit-area').attr('action','/menus');
-    });
+    $('#modalEditArea').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var area_id = button.data('whatever') // Extract info from data-* attributes
+        var modal = $(this)
+        $("#upForm").attr('action', 'area/update'+ area_id);
+
+    })
 
 
     // $(document).ready(function () {

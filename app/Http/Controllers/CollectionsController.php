@@ -108,7 +108,7 @@ class CollectionsController extends Controller
         $collection->name_ar = $request->input('name_ar');
         $collection->description_en = $request->input('description_en');
         $collection->description_ar = $request->input('description_ar');
-        $collection->mealtime = $request->input('mealtime');
+        $collection->mealtime_id = $request->input('mealtime');
         $collection->female_caterer_available = $request->input('female_caterer_available');
         $collection->service_provide_en = $request->input('service_provide_en');
         $collection->service_provide_ar = $request->input('service_provide_ar');

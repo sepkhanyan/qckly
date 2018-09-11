@@ -97,6 +97,7 @@ class MenusController extends Controller
             $user = $user->load('restaurant');
             $menu->restaurant_id = $user->restaurant->id;
         }
+        $menu->category_id = $request->input('category');
         $image = $request->file('image');
         $name = time() . '.' . $image->getClientOriginalExtension();
         $destinationPath = public_path('/images');
@@ -107,7 +108,6 @@ class MenusController extends Controller
         $menu->name_ar = $request->input('name_ar');
         $menu->description_ar = $request->input('description_ar');
         $menu->price = $request->input('price');
-        $menu->category_id = $request->input('category');
         $menu->status = $request->input('status');
         $menu->famous = $request->input('famous');
         $menu->save();
