@@ -222,6 +222,7 @@ class OrdersController extends Controller
     public function completeOrder(Request $request)
     {
         \Log::info($request->all());
+        $lang = $request->header('Accept-Language');
         $token = str_replace("Bearer ","" , $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->with('cart.cartCollection')->first();
         if($user){
@@ -239,40 +240,71 @@ class OrdersController extends Controller
                 $cart_id = $DataRequests['cart_id'];
                 $payment_type = $DataRequests['payment_type'];
                 $price = $DataRequests['total_price'];
-                $cart = UserCart::where('user_id', $user->id)->where('id', $cart_id)->first();
-                if($cart->delivery_address_id == null){
+                $cart = UserCart::where('user_id', $user->id)
+                    ->where('id', $cart_id)->first();
+                if($cart){
+                        if($cart->completed == 0){
+                            if($cart->delivery_address_id == null){
+                                return response()->json(array(
+                                    'success' => 1,
+                                    'status_code' => 200,
+                                    'message' => 'Please add an address.'));
+                            }
+                            $order = new Order();
+                            $order->user_id = $user->id;
+                            $order->cart_id = $cart_id;
+                            $order->payment_type = $payment_type;
+                            if(isset($DataRequests['transaction_id'])){
+                                $transaction_id = $DataRequests['transaction_id'];
+                                $order->transaction_id = $transaction_id;
+                            }
+                            $order->total_price = $price;
+                            $order->save();
+                            UserCart::where('id', $cart_id)->update(['completed'=> 1]);
+                        }else{
+                            return response()->json(array(
+                                'success' => 1,
+                                'status_code' => 200,
+                                'message' => 'Cart already ordered.'));
+                        }
+                }else{
                     return response()->json(array(
                         'success' => 1,
                         'status_code' => 200,
-                        'message' => 'Please add an address.'));
+                        'message' => 'No cart.'));
                 }
-                $order = new Order();
-                $order->user_id = $user->id;
-                $order->cart_id = $cart_id;
-                $order->payment_type = $payment_type;
-                if(isset($DataRequests['transaction_id'])){
-                    $transaction_id = $DataRequests['transaction_id'];
-                    $order->transaction_id = $transaction_id;
+                if($lang == 'ar'){
+                    $price_unit = 'ر.ق';
+                    if($order->payment_type == 1){
+                        $order->transaction_id = -1;
+                        $payment = 'الدفع عند الاستلام';
+                    }
+                    if($order->payment_type == 2){
+                        $payment = 'عبر بطاقات الائتمان';
+                    }
+                    if($order->payment_type == 3){
+                        $payment = 'Via Debit Card';
+                    }
+                }else{
+                    $price_unit = 'QR';
+                    if($order->payment_type == 1){
+                        $order->transaction_id = -1;
+                        $payment = 'Cash on delivery';
+                    }
+                    if($order->payment_type == 2){
+                        $payment = 'Via Credit Card';
+                    }
+                    if($order->payment_type == 3){
+                        $payment = 'Via Debit Card';
+                    }
                 }
-                $order->total_price = $price;
-                $order->save();
-                UserCart::where('id', $cart_id)->update(['completed'=> 1]);
-                if($order->payment_type == 1){
-                    $order->transaction_id = -1;
-                    $payment = 'By Cash';
-                }
-                if($order->payment_type == 2){
-                    $payment = 'Credit Card';
-                }
-                if($order->payment_type == 3){
-                    $payment = 'Via payment gateway';
-                }
+
                 $arr = [
                     'order_id' => $order->id,
                     'transaction_id' => $order->transaction_id,
                     'payment_type' => $payment,
                     'total_price' => $order->total_price,
-                    'price_unit' => 'QR'
+                    'price_unit' => $price_unit
                 ];
                 return response()->json(array(
                     'success' => 1,
