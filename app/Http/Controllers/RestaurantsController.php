@@ -354,11 +354,13 @@ class RestaurantsController extends Controller
                 $category= [];
                 foreach($restaurant->categoryRestaurant as $categoryRestaurant){
                     if($lang == 'ar'){
-                        $ar = $categoryRestaurant['name_ar'];
+                        $ar = $categoryRestaurant->name_ar;
                         array_push( $category,$ar);
+                        $restaurant_name = $restaurant->name_ar;
                     }else{
-                        $en = $categoryRestaurant['name_en'];
+                        $en = $categoryRestaurant->name_en;
                         array_push( $category,$en);
+                        $restaurant_name = $restaurant->name_en;
                     }
                 }
 
@@ -366,7 +368,7 @@ class RestaurantsController extends Controller
                     'restaurant_id' => $restaurant->id,
                     'restaurant_image'=> url('/').'/images/'. $restaurant->image,
                     'famous_images' => $famous,
-                    'restaurant_name'=>$restaurant->name_en,
+                    'restaurant_name'=> $restaurant_name,
                     'category' => $category
                 ];
             }
@@ -432,18 +434,20 @@ class RestaurantsController extends Controller
                     $category= [];
                     foreach($restaurant->categoryRestaurant as $categoryRestaurant){
                         if($lang == 'ar'){
-                            $ar = $categoryRestaurant['name_ar'];
+                            $ar = $categoryRestaurant->name_ar;
                             array_push( $category,$ar);
+                            $restaurant_name = $restaurant->name_ar;
                         }else{
-                            $en = $categoryRestaurant['name_en'];
+                            $en = $categoryRestaurant->name_en;
                             array_push( $category,$en);
+                            $restaurant_name = $restaurant->name_en;
                         }
                     }
                     $arr[] = [
                         'restaurant_id' => $restaurant->id,
                         'restaurant_image'=> url('/').'/images/'. $restaurant->image,
                         'famous_images' => $famous,
-                        'restaurant_name'=>$restaurant->name_en,
+                        'restaurant_name'=> $restaurant_name,
                         'category' => $category
                     ];
                 }
@@ -518,13 +522,24 @@ class RestaurantsController extends Controller
                         $closing = $workingHour->closing_time;
                         $status = $workingHour->status;
                     }
-                    if($status == 1){
-                        $working_status = 'Open';
-                    }elseif ($status == 0){
-                        $working_status = 'Close';
+                    if($lang == 'ar'){
+                        if($status == 1){
+                            $working_status = 'افتح';
+                        }elseif ($status == 0){
+                            $working_status = 'قريب';
+                        }else{
+                            $working_status = 'مشغول';
+                        }
                     }else{
-                        $working_status = 'Busy';
+                        if($status == 1){
+                            $working_status = 'Open';
+                        }elseif ($status == 0){
+                            $working_status = 'Close';
+                        }else{
+                            $working_status = 'Busy';
+                        }
                     }
+
                     $famous = null;
                     $famous = [];
                     foreach($restaurant->menu as $menu){
@@ -540,10 +555,12 @@ class RestaurantsController extends Controller
                         $id = $categoryRestaurant->category_id;
                         if($lang == 'ar'){
                             $name= $categoryRestaurant->name_ar;
-
+                            $restaurant_name = $restaurant->name_ar;
+                            $restaurant_description = $restaurant->description_ar;
                         }else{
                             $name = $categoryRestaurant->name_en;
-
+                            $restaurant_name = $restaurant->name_en;
+                            $restaurant_description = $restaurant->description_en;
                         }
 
                         $category [] = [
@@ -566,13 +583,13 @@ class RestaurantsController extends Controller
 
                     $arr [] = [
                         'restaurant_id' => $restaurant->id,
-                        'restaurant_name' => $restaurant->name_en,
+                        'restaurant_name' => $restaurant_name,
                         'restaurant_image' => url('/') . '/images/' . $restaurant->image,
                         'famous_images' => $famous,
                         'ratings_count' => $rating_count,
                         'review_count' => $review_count,
                         'availability_hours' => date("g:i a", strtotime( $opening))  . ' - ' . date("g:i a", strtotime( $closing)),
-                        'description' => $restaurant->description_en,
+                        'description' => $restaurant_description,
                         'status' => $working_status,
                         'category' => $category
                     ];
@@ -607,23 +624,39 @@ class RestaurantsController extends Controller
 
     }
 
-    public function getRestaurant($id)
+    public function getRestaurant(Request $request, $id)
     {
+        $lang = $request->header('Accept-Language');
         $restaurants = Restaurant::where('id',$id)->with(['menu', 'menu.category'])->get();
         if(count($restaurants)>0){
             foreach($restaurants as $restaurant){
                 if(count($restaurant->menu) > 0){
                     foreach($restaurant->menu as $menu){
-                        if($menu->status ==1){
-                            $status = 'Enable';
+                        if($lang == 'ar'){
+                            if($menu->status ==1){
+                                $status = 'مكن';
+                            }else{
+                                $status = 'تعطيل';
+                            }
+                            $menu_name = $menu->name_ar;
+                            $menu_category = $menu->category->name_ar;
+                            $restaurant_name =$restaurant->name_ar;
                         }else{
-                            $status = 'Disable';
+                            if($menu->status == 1){
+                                $status = 'Enable';
+                            }else{
+                                $status = 'Disable';
+                            }
+                            $menu_name = $menu->name_en;
+                            $menu_category = $menu->category->name_en;
+                            $restaurant_name =$restaurant->name_en;
                         }
+
                         $restaurant_menu [] = [
                             'menu_id' => $menu->id,
-                            'menu_name' => $menu->name_en,
+                            'menu_name' => $menu_name,
                             'menu_price' => $menu->price,
-                            'menu_category' => $menu->category['name_en'],
+                            'menu_category' => $menu_category,
                             'menu_status' => $status,
                         ];
                     }
@@ -633,7 +666,7 @@ class RestaurantsController extends Controller
                 }
                 $arr [] = [
                     'restaurant_id' => $restaurant->id,
-                    'restaurant_name' => $restaurant->name_en,
+                    'restaurant_name' => $restaurant_name,
                     'restaurant_image' => url('/') . '/images/' . $restaurant->image,
                     'menu' => $restaurant_menu
                     ];
@@ -656,6 +689,7 @@ class RestaurantsController extends Controller
     public function restaurantMenuItems(Request $request)
     {
         \Log::info($request->all());
+        $lang = $request->header('Accept-Language');
         $DataRequests = $request->all();
         $validator = \Validator::make($DataRequests, [
             'restaurant_id' => 'required',
@@ -719,7 +753,18 @@ class RestaurantsController extends Controller
                                 $items = [];
                                 $menu = [];
                                 foreach ($collection->collectionItem as $collection_item) {
-                                    $foodlist [] = $collection_item->menu->name_en;
+                                    if($lang == 'ar'){
+                                        $foodlist [] = $collection_item->menu->name_ar;
+                                        $item_name = $collection_item->menu->name_ar;
+                                        $menu_name = 'كومبو لذيذ';
+                                        $price_unit = 'ر.ق';
+                                    }else{
+                                        $foodlist [] = $collection_item->menu->name_en;
+                                        $item_name = $collection_item->menu->name_en;
+                                        $menu_name = 'Combo Delicious';
+                                        $price_unit = 'QR';
+                                    }
+
                                     $image = url('/') . '/images/' . $collection_item->menu->image;
                                     array_push($foodlist_images, $image);
                                     if ($collection_item->menu->status == 1) {
@@ -730,17 +775,17 @@ class RestaurantsController extends Controller
 
                                         $items  [] = [
                                             'item_id' => $collection_item->item_id,
-                                            'item_name' => $collection_item->menu->name_en,
+                                            'item_name' => $item_name,
                                             'item_image' => url('/') . '/images/' .  $collection_item->menu->image,
                                             'item_qty' => $collection_item->quantity,
                                             'item_price' => $collection_item->menu->price,
-                                            'item_price_unit' => 'QR',
+                                            'item_price_unit' => $price_unit,
                                             'item_availability' => $status
 
                                         ];
                                 }
                                 $menu [] = [
-                                    'menu_name' => 'Combo Delicious',
+                                    'menu_name' => $menu_name,
                                     'items' => $items,
                                 ];
                             }else{
@@ -757,7 +802,17 @@ class RestaurantsController extends Controller
                                         $menu_max_qty = $collectionMenu->max_qty;
                                     }
                                     foreach($collectionMenu->collectionItem as $collection_item){
-                                        $foodlist [] = $collection_item->menu->name_en;
+                                        if($lang == 'ar'){
+                                            $foodlist [] = $collection_item->menu->name_ar;
+                                            $item_name = $collection_item->menu->name_ar;
+                                            $menu_name = $collectionMenu->category->name_ar;
+                                            $price_unit = 'ر.ق';
+                                        }else{
+                                            $foodlist [] = $collection_item->menu->name_en;
+                                            $item_name = $collection_item->menu->name_en;
+                                            $menu_name = $collectionMenu->category->name_en;
+                                            $price_unit = 'QR';
+                                        }
                                         $image = url('/') . '/images/' . $collection_item->menu->image;
                                         array_push($foodlist_images, $image);
                                         if($collection->category_id == 2){
@@ -782,7 +837,12 @@ class RestaurantsController extends Controller
                                             } else {
                                                 $max = floor($max_hours) . " hours";
                                             }
-                                            $requirement = $collection->requirements_en;
+                                            if($lang == 'ar'){
+                                                $requirement = $collection->requirements_ar;
+                                            }else{
+                                                $requirement = $collection->requirements_en;
+                                            }
+
                                         }
 
 
@@ -793,10 +853,10 @@ class RestaurantsController extends Controller
                                         }
                                         $items [] = [
                                             'item_id' => $collection_item->menu->id,
-                                            'item_name' => $collection_item->menu->name_en,
+                                            'item_name' => $item_name,
                                             'item_image' => url('/') . '/images/' .  $collection_item->menu->image,
                                             'item_price' => $collection_item->menu->price,
-                                            'item_price_unit' => 'QR',
+                                            'item_price_unit' => $price_unit,
                                             'item_availability' => $status
 
                                         ];
@@ -807,7 +867,7 @@ class RestaurantsController extends Controller
                                     });
                                     $menu [] = [
                                         'menu_id' => $collectionMenu->category->id,
-                                        'menu_name' => $collectionMenu->category->name_en,
+                                        'menu_name' => $menu_name,
                                         'menu_min_qty' => $menu_min_qty,
                                         'menu_max_qty' => $menu_max_qty,
                                         'items' => $items,
@@ -823,26 +883,42 @@ class RestaurantsController extends Controller
 
                             }
 
+                            if($lang == 'ar'){
+                                $collection_name = $collection->name_ar;
+                                $collection_description = $collection->description_ar;
+                                $collection_type = $collection->category->name_ar;
+                                $mealtime = $collection->mealtime->name_ar;
+                                $service_provide = $collection->service_provide_ar;
+                                $service_presentation = $collection->service_presentation_ar;
+                            }else{
+                                $collection_name = $collection->name_en;
+                                $collection_description = $collection->description_en;
+                                $collection_type = $collection->category->name_en;
+                                $mealtime = $collection->mealtime->name_en;
+                                $service_provide = $collection->service_provide_en;
+                                $service_presentation = $collection->service_presentation_en;
+                            }
+
                             $menu_collection [] = [
                                 'collection_id' => $collection->id,
-                                'collection_name' => $collection->name_en,
-                                'collection_description' => $collection->description_en,
+                                'collection_name' => $collection_name,
+                                'collection_description' => $collection_description,
                                 'collection_type_id' => $collection->category_id,
-                                'collection_type' => $collection->category->name_en,
+                                'collection_type' => $collection_type,
                                 'female_caterer_available' => $female_caterer_available,
-                                'mealtime' => $collection->mealtime->name_en,
+                                'mealtime' => $mealtime,
                                 'collection_min_qty' => $collection_min,
                                 'collection_max_qty' => $collection_max,
                                 'collection_price' => $collection_price,
-                                'collection_price_unit' => "QR",
+                                'collection_price_unit' => $price_unit,
                                 'is_available' => $is_available,
                                 'min_serve_to_person' => $min_serve,
                                 'max_serve_to_person' => $max_serve,
                                 'allow_person_increase' => $person_increase,
                                 'persons_max_count' => $max_persons,
-                                'service_provide' => $collection->service_provide_en,
+                                'service_provide' => $service_provide,
                                 'food_list' => $foodlist,
-                                'service_presentation' => $collection->service_presentation_en,
+                                'service_presentation' => $service_presentation,
                                 'special_instruction' => '',
                                 'food_item_image' => url('/') . '/images/' . $collection_item->menu->image,
                                 'food_list_images' => $foodlist_images,

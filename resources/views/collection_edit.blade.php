@@ -159,15 +159,15 @@
                             <div class="col-sm-5">
                                 <div class="btn-group btn-group-switch" data-toggle="buttons">
                                     @if($collection->is_available == 0)
-                                    <label class="btn btn-danger active">
-                                        <input type="radio" name="is_available" value="0"  checked="checked">
-                                        NO
-                                    </label>
-                                    <label class="btn btn-success">
-                                        <input type="radio" name="is_available" value="1" >
-                                        YES
-                                    </label>
-                                        @else
+                                        <label class="btn btn-danger active">
+                                            <input type="radio" name="is_available" value="0"  checked="checked">
+                                            NO
+                                        </label>
+                                        <label class="btn btn-success">
+                                            <input type="radio" name="is_available" value="1" >
+                                            YES
+                                        </label>
+                                    @else
                                         <label class="btn btn-danger ">
                                             <input type="radio" name="is_available" value="0">
                                             NO
@@ -176,7 +176,7 @@
                                             <input type="radio" name="is_available" value="1"   checked="checked">
                                             YES
                                         </label>
-                                        @endif
+                                    @endif
                                 </div>
                             </div>
                         </div>

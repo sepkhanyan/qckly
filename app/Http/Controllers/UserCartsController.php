@@ -317,6 +317,7 @@ class UserCartsController extends Controller
     public function showCart(Request $request, $id)
     {
         \Log::info($request->all());
+        $lang = $request->header('Accept-Language');
         $token = str_replace("Bearer ","" , $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->first();
         if($user){
@@ -368,17 +369,30 @@ class UserCartsController extends Controller
                         foreach($categories as $category){
                             $items = [];
                             foreach($category->cartItem as $cartItem){
+                                if($lang == 'ar'){
+                                    $item_name = $cartItem->menu->name_ar;
+                                    $price_unit = 'ر.ق';
+                                }else{
+                                    $item_name = $cartItem->menu->name_en;
+                                    $price_unit = 'QR';
+                                }
                                 $items [] = [
                                     'item_id' => $cartItem->item_id,
-                                    'item_name' => $cartItem->menu->name_en,
+                                    'item_name' =>  $item_name,
                                     'item_price' => $cartItem->menu->price,
                                     'item_quantity' => $cartItem->quantity,
-                                    'item_price_unit' => 'QR'
+                                    'item_price_unit' => $price_unit
                                 ];
                             }
+                            if($lang == 'ar'){
+                                $menu_name = $category->name_ar;
+                            }else{
+                                $menu_name = $category->name_en;
+                            }
+
                             $menu [] = [
                                 'menu_id' => $category->id,
-                                'menu_name' => $category->name_en,
+                                'menu_name' => $menu_name,
                                 'items' => $items
                             ];
                         }
@@ -407,22 +421,33 @@ class UserCartsController extends Controller
 //                        if($cart_collection->collection->category_id == 2){
 //                            $persons_count =  $cart_collection->persons_count;
 //                        }
+
+                        if($lang == 'ar'){
+                            $restaurant_name = $cart_collection->collection->restaurant->name_ar;
+                            $collection_type = $cart_collection->collection->category->name_ar;
+                            $collection_name = $cart_collection->collection->name_ar;
+                        }else{
+                            $restaurant_name = $cart_collection->collection->restaurant->name_en;
+                            $collection_type = $cart_collection->collection->category->name_en;
+                            $collection_name = $cart_collection->collection->name_en;
+                        }
+
                         $collections [] = [
                             'restaurant_id' => $cart_collection->collection->restaurant->id,
-                            'restaurant_name' => $cart_collection->collection->restaurant->name_en,
+                            'restaurant_name' => $restaurant_name,
                             'collection_id' => $cart_collection->collection_id,
                             'collection_type_id' => $cart_collection->collection->category_id,
-                            'collection_type' => $cart_collection->collection->category->name_en,
-                            'collection_name' => $cart_collection->collection->name_en,
+                            'collection_type' => $collection_type,
+                            'collection_name' => $collection_name,
                             'collection_price' => $collection_price,
-                            'collection_price_unit' => 'QR',
+                            'collection_price_unit' => $price_unit,
                             'female_caterer' => $female_caterer,
                             'special_instruction' => $cart_collection->special_instruction,
                             'menu_items' => $menu,
                             'quantity' => $quantity,
                             'persons_count' => $persons_count,
                             'subtotal' => $cart_collection->price,
-                            'subtotal_unit' => "QR",
+                            'subtotal_unit' => $price_unit,
                         ];
                         $total += $cart_collection->price;
 
@@ -436,7 +461,7 @@ class UserCartsController extends Controller
                         'delivery_address' => $address,
                         'collections' => $collections,
                         'total' => $total,
-                        'total_unit' => 'QR',
+                        'total_unit' => $price_unit,
                     ];
                 }
                 return response()->json(array(
@@ -498,6 +523,7 @@ class UserCartsController extends Controller
     public function collectionDetails(Request $request)
     {
         \Log::info($request->all());
+        $lang = $request->header('Accept-Language');
         $DataRequests = $request->all();
         $validator = \Validator::make($DataRequests, [
             'collection_type' => 'required|integer',
@@ -547,7 +573,17 @@ class UserCartsController extends Controller
                     $items = [];
                     $menu = [];
                     foreach ($collection->collectionItem as $collection_item) {
-                        $foodlist [] = $collection_item->menu->name_en;
+                        if($lang == 'ar'){
+                            $foodlist [] = $collection_item->menu->name_ar;
+                            $item_name = $collection_item->menu->name_ar;
+                            $menu_name = 'كومبو لذيذ';
+                            $price_unit = 'ر.ق';
+                        }else{
+                            $foodlist [] = $collection_item->menu->name_en;
+                            $item_name = $collection_item->menu->name_en;
+                            $menu_name = 'Combo Delicious';
+                            $price_unit = 'QR';
+                        }
                         $image = url('/') . '/images/' . $collection_item->menu->image;
                         array_push($foodlist_images, $image);
                         if ($collection_item->menu->status == 1) {
@@ -558,16 +594,16 @@ class UserCartsController extends Controller
 
                         $items  [] = [
                             'item_id' => $collection_item->item_id,
-                            'item_name' => $collection_item->menu->name_en,
+                            'item_name' => $item_name,
                             'item_qty' => $collection_item->quantity,
                             'item_price' => $collection_item->menu->price,
-                            'item_price_unit' => 'QR',
+                            'item_price_unit' => $price_unit,
                             'item_availability' => $status
 
                         ];
                     }
                     $menu [] = [
-                        'menu_name' => 'Combo Delicious',
+                        'menu_name' => $menu_name,
                         'items' => $items,
                     ];
                 }else{
@@ -584,7 +620,17 @@ class UserCartsController extends Controller
                             $menu_max_qty = $collectionMenu->max_qty;
                         }
                         foreach($collectionMenu->collectionItem as $collection_item){
-                            $foodlist [] = $collection_item->menu->name_en;
+                            if($lang == 'ar'){
+                                $foodlist [] = $collection_item->menu->name_ar;
+                                $item_name = $collection_item->menu->name_ar;
+                                $menu_name = $collectionMenu->category->name_ar;
+                                $price_unit = 'ر.ق';
+                            }else{
+                                $foodlist [] = $collection_item->menu->name_en;
+                                $item_name = $collection_item->menu->name_en;
+                                $menu_name = $collectionMenu->category->name_en;
+                                $price_unit = 'QR';
+                            }
                             $image = url('/') . '/images/' . $collection_item->menu->image;
                             array_push($foodlist_images, $image);
                             if($collection->category_id == 2){
@@ -609,7 +655,11 @@ class UserCartsController extends Controller
                                 } else {
                                     $max = floor($max_hours) . " hours";
                                 }
-                                $requirement = $collection->requirements_en;
+                                if($lang == 'ar'){
+                                    $requirement = $collection->requirements_ar;
+                                }else{
+                                    $requirement = $collection->requirements_en;
+                                }
                             }
 
 
@@ -620,10 +670,10 @@ class UserCartsController extends Controller
                             }
                             $items [] = [
                                 'item_id' => $collection_item->menu->id,
-                                'item_name' => $collection_item->menu->name_en,
+                                'item_name' => $item_name,
                                 'item_image' => url('/') . '/images/' .  $collection_item->menu->image,
                                 'item_price' => $collection_item->menu->price,
-                                'item_price_unit' => 'QR',
+                                'item_price_unit' => $price_unit,
                                 'item_availability' => $status
 
                             ];
@@ -634,7 +684,7 @@ class UserCartsController extends Controller
                         });
                         $menu [] = [
                             'menu_id' => $collectionMenu->category->id,
-                            'menu_name' => $collectionMenu->category->name_en,
+                            'menu_name' => $menu_name,
                             'menu_min_qty' => $menu_min_qty,
                             'menu_max_qty' => $menu_max_qty,
                             'items' => $items,
@@ -643,28 +693,47 @@ class UserCartsController extends Controller
                     }
 
                 }
+
+                if($lang == 'ar'){
+                    $restaurant_name = $collection->restaurant->name_ar;
+                    $collection_name = $collection->name_ar;
+                    $collection_description = $collection->description_ar;
+                    $collection_type = $collection->category->name_ar;
+                    $mealtime = $collection->mealtime->name_ar;
+                    $service_provide = $collection->service_provide_ar;
+                    $service_presentation = $collection->service_presentation_ar;
+                }else{
+                    $restaurant_name = $collection->restaurant->name_en;
+                    $collection_name = $collection->name_en;
+                    $collection_description = $collection->description_en;
+                    $collection_type = $collection->category->name_en;
+                    $mealtime = $collection->mealtime->name_en;
+                    $service_provide = $collection->service_provide_en;
+                    $service_presentation = $collection->service_presentation_en;
+                }
+
                 $menu_collection [] = [
                     'restaurant_id' => $collection->restaurant->id,
-                    'restaurant_name' => $collection->restaurant->name_en,
+                    'restaurant_name' => $restaurant_name,
                     'collection_id' => $collection->id,
-                    'collection_name' => $collection->name_en,
-                    'collection_description' => $collection->description_en,
+                    'collection_name' => $collection_name,
+                    'collection_description' => $collection_description,
                     'collection_type_id' => $collection->category_id,
-                    'collection_type' => $collection->category->name_en,
+                    'collection_type' => $collection_type,
                     'female_caterer_available' => $female_caterer_available,
-                    'mealtime' => $collection->mealtime->name_en,
+                    'mealtime' => $mealtime,
                     'collection_min_qty' => $collection_min,
                     'collection_max_qty' => $collection_max,
                     'collection_price' => $collection_price,
-                    'collection_price_unit' => "QR",
+                    'collection_price_unit' => $price_unit,
                     'is_available' => $is_available,
                     'min_serve_to_person' => $min_serve,
                     'max_serve_to_person' => $max_serve,
                     'allow_person_increase' => $person_increase,
                     'persons_max_count' => $max_persons,
-                    'service_provide' => $collection->service_provide_en,
+                    'service_provide' => $service_provide,
                     'food_list' => $foodlist,
-                    'service_presentation' => $collection->service_presentation_en,
+                    'service_presentation' => $service_presentation,
                     'special_instruction' => '',
                     'food_item_image' => url('/') . '/images/' . $collection_item->menu->image,
                     'food_list_images' => $foodlist_images,
