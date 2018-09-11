@@ -19,16 +19,13 @@ class OrdersController extends Controller
     public function index()
     {
 
-//        $orders = Order::all();
-//        return view('orders', [
-//            'orders' => $orders
-//        ]);
     }
 
 
     public function orderList(Request $request)
     {
         \Log::info($request->all());
+        $lang = $request->header('Accept-Language');
         $token = str_replace("Bearer ","" , $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->with('cart.cartCollection')->first();
         if($user){
@@ -70,17 +67,29 @@ class OrdersController extends Controller
                         foreach($categories as $category){
                             $items = [];
                             foreach($category->cartItem as $cartItem){
+                                if($lang == 'ar'){
+                                    $item_name = $cartItem->menu->name_ar;
+                                    $price_unit = 'ر.ق';
+                                }else{
+                                    $item_name = $cartItem->menu->name_en;
+                                    $price_unit = 'QR';
+                                }
                                 $items [] = [
                                     'item_id' => $cartItem->item_id,
-                                    'item_name' => $cartItem->menu->name_en,
+                                    'item_name' => $item_name,
                                     'item_price' => $cartItem->menu->price,
                                     'item_quantity' => $cartItem->quantity,
-                                    'item_price_unit' => 'QR'
+                                    'item_price_unit' => $price_unit
                                 ];
+                            }
+                            if($lang == 'ar'){
+                                $menu_name = $category->name_ar;
+                            }else{
+                                $menu_name = $category->name_en;
                             }
                             $menu [] = [
                                 'menu_id' => $category->id,
-                                'menu_name' => $category->name_en,
+                                'menu_name' => $menu_name,
                                 'items' => $items
                             ];
                         }
@@ -105,26 +114,32 @@ class OrdersController extends Controller
                             $female_caterer = false;
                         }
 
-//                        $persons_count = -1;
-//                        if($cart_collection->collection->category_id == 2){
-//                            $persons_count =  $cart_collection->persons_count;
-//                        }
+                        if($lang == 'ar'){
+                            $restaurant_name = $cart_collection->collection->restaurant->name_ar;
+                            $collection_type = $cart_collection->collection->category->name_ar;
+                            $collection_name = $cart_collection->collection->name_ar;
+                        }else{
+                            $restaurant_name = $cart_collection->collection->restaurant->name_en;
+                            $collection_type = $cart_collection->collection->category->name_en;
+                            $collection_name = $cart_collection->collection->name_en;
+                        }
+
                         $collections [] = [
                             'restaurant_id' => $cart_collection->collection->restaurant->id,
-                            'restaurant_name' => $cart_collection->collection->restaurant->name_en,
+                            'restaurant_name' => $restaurant_name,
                             'collection_id' => $cart_collection->collection_id,
                             'collection_type_id' => $cart_collection->collection->category_id,
-                            'collection_type' => $cart_collection->collection->category->name_en,
-                            'collection_name' => $cart_collection->collection->name_en,
+                            'collection_type' => $collection_type,
+                            'collection_name' => $collection_name,
                             'collection_price' => $collection_price,
-                            'collection_price_unit' => 'QR',
+                            'collection_price_unit' => $price_unit,
                             'female_caterer' => $female_caterer,
                             'special_instruction' => $cart_collection->special_instruction,
                             'menu_items' => $menu,
                             'quantity' => $quantity,
                             'persons_count' => $persons_count,
                             'subtotal' => $cart_collection->price,
-                            'subtotal_unit' => "QR",
+                            'subtotal_unit' => $price_unit,
                         ];
                         $total += $cart_collection->price;
                     }
@@ -138,7 +153,7 @@ class OrdersController extends Controller
                         'delivery_address' => $address,
                         'collections' => $collections,
                         'total' => $total,
-                        'total_unit' => 'QR',
+                        'total_unit' => $price_unit,
                     ];
 
                     if($order->is_rated == 1){
@@ -152,7 +167,7 @@ class OrdersController extends Controller
                         'order_date' =>  date("j M, Y", strtotime($order->created_at)),
                         'order_time' => date("g:i a", strtotime($order->created_at)),
                         'total_price' => $order->total_price,
-                        'total_price_unit' => 'QR',
+                        'total_price_unit' => $price_unit,
                         'is_rated' => $rated,
                         'cart' => $cart
                     ];
