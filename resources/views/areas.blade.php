@@ -75,7 +75,7 @@
                                 <tr>
                                     <td class="action">
                                         <input type="checkbox" value="{{ $area->id }}" name="delete" />&nbsp;&nbsp;&nbsp;
-                                        <a class="btn btn-edit"  id="edit_area" data-toggle="modal" data-target="#modalEditArea" type="button"  data-whatever="{{$area->id}}">
+                                        <a  class="btn btn-edit"   data-toggle="modal" data-target="#modalEditArea"  type="button"   onclick="myFunction({{$area->id}})">
                                             <i class="fa fa-pencil"></i>
                                         </a>&nbsp;&nbsp;
                                     </td>
@@ -136,7 +136,7 @@
         </form>
     </div>
     <div class="modal fade" id="modalEditArea" role="dialog" tabindex="-1" >
-        <form role="form" id="form-edit-area" class="form-horizontal"  accept-charset="utf-8" method="GET"  {{--action="{{ url('/area/update/' . $area->id)}} "--}}>
+        <form role="form" id="edit-form" class="form-horizontal"  accept-charset="utf-8" method="POST">
             {{ csrf_field() }}
             <div class="modal-dialog" >
                 <div class="modal-content">
@@ -171,6 +171,9 @@
     </form>
     </div>
     <script type="text/javascript">
+        function myFunction(id){
+            $("#edit-form").attr('action', 'area/update/' + id);
+        }
         function filterList() {
             $('#filter-form').submit();
         }

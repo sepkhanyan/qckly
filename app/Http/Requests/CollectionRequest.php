@@ -33,7 +33,6 @@ class CollectionRequest extends FormRequest
             'service_presentation_en' => 'required|string',
             'service_presentation_ar' => 'required|string',
             'category' => 'required|integer',
-
         ];
         return $rules;
 

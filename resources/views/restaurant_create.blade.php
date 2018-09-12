@@ -1102,7 +1102,7 @@
             </form>
         </div>
     </div>
-    <script type="text/javascript">
+    <script>
         $('input[name=\'table\']').select2({
             placeholder: 'Start typing...',
             minimumInputLength: 2,

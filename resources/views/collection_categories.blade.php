@@ -80,7 +80,7 @@
                                     @if(Auth::user()->admin == 1)
                                     <td class="action">
                                         <input type="checkbox" value="{{ $category->id }}" name="delete" />
-                                        <a class="btn btn-edit"  href="#" data-toggle="modal" data-target="#modalEditCollectionCategory" type="button"  data-item-id="{{$category->id}}">
+                                        <a class="btn btn-edit"  href="#" data-toggle="modal" data-target="#modalEditCollectionCategory" type="button" onclick="myFunction({{$category->id}})" >
                                             <i class="fa fa-pencil"></i>
                                         </a>&nbsp;&nbsp;&nbsp;
                                     </td>
@@ -99,7 +99,7 @@
     </div>
     @if(Auth::user()->admin == 1)
     <div class="modal fade" id="modalCreateCollectionCategory" role="dialog" tabindex="-1" >
-        <form role="form" id="edit-form" class="form-horizontal"  accept-charset="utf-8" method="GET" action="{{ url('/collection_category/store') }}">
+        <form role="form" id="create-form" class="form-horizontal"  accept-charset="utf-8" method="GET" action="{{ url('/collection_category/store') }}">
             {{ csrf_field() }}
             <div class="modal-dialog" >
                 <div class="modal-content">
@@ -133,7 +133,7 @@
     </div>
     @if(isset($category->id))
     <div class="modal fade" id="modalEditCollectionCategory" role="dialog" tabindex="-1" >
-        <form role="form" id="edit-form" class="form-horizontal"  accept-charset="utf-8" method="POST" action="{{ url('/collection_category/update/' . $category->id ) }}">
+        <form role="form" id="edit-form" class="form-horizontal"  accept-charset="utf-8" method="POST">
             {{ csrf_field() }}
             <div class="modal-dialog" >
                 <div class="modal-content">
@@ -145,7 +145,7 @@
                         <div class="form-group" style="margin: 5px">
                             <label class="control-label col-sm-2" for="en">Category En</label>
                             <div class="col-sm-8">
-                                <input class="form-control" type="text" id="en" name="category_en" value="{{$category->name_en}}">
+                                <input class="form-control" type="text" id="en" name="category_en" value="">
                             </div>
                         </div>
                     </div>
@@ -153,7 +153,7 @@
                         <div class="form-group" style="margin: 5px">
                             <label class="control-label col-sm-2" for="ar">Category Ar</label>
                             <div class="col-sm-8">
-                                <input class="form-control" type="text" id="ar" name="category_ar" value="{{$category->name_ar}}">
+                                <input class="form-control" type="text" id="ar" name="category_ar" value="">
                             </div>
                         </div>
                     </div>
@@ -168,6 +168,9 @@
         @endif
     @endif
     <script type="text/javascript">
+        function myFunction(id){
+            $("#edit-form").attr('action', 'collection_category/update/' + id);
+        }
         function filterList() {
             $('#filter-form').submit();
         }

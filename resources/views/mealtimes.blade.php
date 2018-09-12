@@ -80,7 +80,7 @@
                                     @if(Auth::user()->admin == 1)
                                     <td class="action">
                                         <input type="checkbox" value="{{ $mealtime->id }}" name="delete" />&nbsp;&nbsp;&nbsp;
-                                        <a class="btn btn-edit"  href="#" data-toggle="modal" data-target="#modalEditMealtime" type="button"  data-item-id="{{$mealtime->id}}">
+                                        <a class="btn btn-edit"  href="#" data-toggle="modal" data-target="#modalEditMealtime" type="button"  onclick="myFunction({{$mealtime->id}})">
                                             <i class="fa fa-pencil"></i>
                                         </a>&nbsp;&nbsp;
                                     </td>
@@ -99,7 +99,7 @@
     </div>
     @if(Auth::user()->admin == 1)
     <div class="modal fade" id="modalCreateMealtime" role="dialog" tabindex="-1" >
-        <form role="form" id="edit-form" class="form-horizontal"  accept-charset="utf-8" method="GET" action="{{ url('/mealtime/store') }}">
+        <form role="form" id="create-form" class="form-horizontal"  accept-charset="utf-8" method="GET" action="{{ url('/mealtime/store') }}">
             {{ csrf_field() }}
             <div class="modal-dialog" >
                 <div class="modal-content">
@@ -147,7 +147,7 @@
         </form>
     </div>
     <div class="modal fade" id="modalEditMealtime" role="dialog" tabindex="-1" >
-        <form role="form" id="edit-form" class="form-horizontal"  accept-charset="utf-8" method="POST" action="{{ url('/mealtime/update/') }}">
+        <form role="form" id="edit-form" class="form-horizontal"  accept-charset="utf-8" method="POST">
             {{ csrf_field() }}
             <div class="modal-dialog" >
                 <div class="modal-content">
@@ -198,6 +198,9 @@
     </form>
     </div>
     <script type="text/javascript">
+        function myFunction(id){
+            $("#edit-form").attr('action', 'mealtime/update/' + id);
+        }
         function filterList() {
             $('#filter-form').submit();
         }
