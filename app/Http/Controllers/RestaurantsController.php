@@ -325,7 +325,9 @@ class RestaurantsController extends Controller
             }
             File::delete($menu_images);
             File::delete($restaurant_images);
-            Restaurant::whereIn('id',$id)->delete();
+            $rest = Restaurant::whereIn('id',$id)->first();
+            $rest->delete();
+            User::where('id',$rest->user_id)->delete();
             return redirect('/restaurants');
         }else{
             return redirect('/restaurants');
@@ -390,10 +392,15 @@ class RestaurantsController extends Controller
                 'status_code'=> 200 ,
                 'data' => $wholeData));
         }else{
+            if($lang == 'ar'){
+                $message = 'لا يوجد مطاعم متاحة';
+            }else{
+                $message = 'No available restaurant.';
+            }
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'message' => 'No available restaurant.'));
+                'message' => $message));
         }
 
     }
@@ -471,10 +478,15 @@ class RestaurantsController extends Controller
                         'data' => $wholeData));
 
             }else {
+                if($lang == 'ar'){
+                    $message = 'لا يوجد مطاعم متاحة';
+                }else{
+                    $message = 'No available restaurant.';
+                }
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200,
-                    'message' => 'No available restaurant.'));
+                    'message' => $message));
             }
         }
     }
@@ -614,10 +626,15 @@ class RestaurantsController extends Controller
                         'data' => $wholeData));
 
             } else {
+                if($lang == 'ar'){
+                    $message = 'لم يتم العثور على مطاعم، يرجى اختيار منطقة أخرى وتوقيت آخر';
+                }else{
+                    $message = 'There is no any Restaurant found. Please select other Area, Date and Time.';
+                }
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200,
-                    'message' => 'There is no any Restaurant found. Please select other Area, Date and Time.					'));
+                    'message' => $message));
             }
         }
 
@@ -678,10 +695,15 @@ class RestaurantsController extends Controller
                     'data' => $arr));
 
         }else {
+            if($lang == 'ar'){
+                $message = 'لا يوجد مطاعم متاحة';
+            }else{
+                $message = 'No available restaurant.';
+            }
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'message' => 'No available restaurant.'));
+                'message' => $message));
         }
 
     }
@@ -936,10 +958,15 @@ class RestaurantsController extends Controller
                             'collections' => $menu_collection
                         ];
                     }else{
+                        if($lang == 'ar'){
+                            $message = 'لا يوجد مجموعات';
+                        }else{
+                            $message = 'No collection.';
+                        }
                         return response()->json(array(
                             'success' => 1,
                             'status_code' => 200,
-                            'message' => 'No collection.'));
+                            'message' => $message));
                     }
 
                 }
@@ -950,10 +977,15 @@ class RestaurantsController extends Controller
                     'data' => $arr));
 
             }else {
+                if($lang == 'ar'){
+                    $message = 'لا يوجد مطاعم متاحة';
+                }else{
+                    $message = 'No available restaurant.';
+                }
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200,
-                    'message' => 'No available restaurant.'));
+                    'message' => $message));
             }
 
         }

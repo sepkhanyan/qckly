@@ -233,9 +233,9 @@ class AddressesController extends Controller
                 if($new_default_address){
                     $new_default_address->is_default = 1;
                     $new_default_address->save();
-                    UserCart::where('user_id', $user->id)->update(['delivery_address_id'=> $new_default_address->id]);
+                    UserCart::where('user_id', $user->id)->where('completed', 0)->update(['delivery_address_id'=> $new_default_address->id]);
                 }else{
-                    UserCart::where('user_id', $user->id)->update(['delivery_address_id'=> null]);
+                    UserCart::where('user_id', $user->id)->where('completed', 0)->update(['delivery_address_id'=> null]);
                     if($lang == 'ar'){
                         $message = 'تم حذف العناوين بنجاح';
                     }else{

@@ -99,17 +99,17 @@ class RestaurantCategoriesController extends Controller
     public function deleteRestaurantCategory(Request $request)
     {
         $id = $request->get('id');
-//        $restaurants = Restaurant::with('menu')->where('restaurant_category_id',$id)->get();
-//        $restaurant_images = [];
-//        $menu_images = [];
-//        foreach ($restaurants as $restaurant) {
-//            foreach($restaurant->menu as $menu){
-//                $menu_images[] = public_path('images/' . $menu->menu_photo);
-//            }
-//            $restaurant_images[] = public_path('images/' . $restaurant->restaurant_image);
-//        }
-//        File::delete($menu_images);
-//        File::delete($restaurant_images);
+        $restaurants = Restaurant::with('menu')->where('restaurant_category_id',$id)->get();
+        $restaurant_images = [];
+        $menu_images = [];
+        foreach ($restaurants as $restaurant) {
+            foreach($restaurant->menu as $menu){
+                $menu_images[] = public_path('images/' . $menu->menu_photo);
+            }
+            $restaurant_images[] = public_path('images/' . $restaurant->restaurant_image);
+        }
+        File::delete($menu_images);
+        File::delete($restaurant_images);
         RestaurantCategory::whereIn('id',$id)->delete();
         return redirect('/restaurant_categories');
     }

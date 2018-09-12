@@ -18,7 +18,7 @@ class OrdersController extends Controller
 
     public function index()
     {
-
+        //
     }
 
 
@@ -193,17 +193,27 @@ class OrdersController extends Controller
                     'status_code' => 200,
                     'data' => $wholeData));
             }else{
+                if($lang == 'ar'){
+                    $message = 'لا يوجد لديك طلبات، تقدّم بطلبك الأول لتراه هنا';
+                }else{
+                    $message = 'There are no orders right now, place your first order to see it here.';
+                }
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200,
                     'data' => [],
-                    'message' => 'There are no orders right now, place your first order to see it here.'));
+                    'message' => $message));
             }
         }else{
+            if($lang == 'ar'){
+                $message = 'أنت غير مسجل الدخول، يرجى تسجيل الدخول والمحاولة مجدداً';
+            }else{
+                $message = 'You are not logged in: Please log in and try again.';
+            }
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'message' => 'You are not logged in: Please log in and try again.'));
+                'message' => $message));
         }
     }
 
@@ -245,10 +255,15 @@ class OrdersController extends Controller
                 if($cart){
                         if($cart->completed == 0){
                             if($cart->delivery_address_id == null){
+                                if($lang == 'ar'){
+                                    $message = 'يرجى إضافة عنوان';
+                                }else{
+                                    $message = 'Please add an address.';
+                                }
                                 return response()->json(array(
                                     'success' => 1,
                                     'status_code' => 200,
-                                    'message' => 'Please add an address.'));
+                                    'message' => $message));
                             }
                             $order = new Order();
                             $order->user_id = $user->id;
@@ -312,10 +327,15 @@ class OrdersController extends Controller
                     'data' => $arr));
             }
         }else{
+            if($lang == 'ar'){
+                $message = 'أنت غير مسجل الدخول، يرجى تسجيل الدخول والمحاولة مجدداً';
+            }else{
+                $message = 'You are not logged in: Please log in and try again.';
+            }
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'message' => 'You are not logged in: Please log in and try again.'));
+                'message' => $message));
         }
     }
 
