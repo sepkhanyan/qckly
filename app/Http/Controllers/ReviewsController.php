@@ -17,6 +17,7 @@ class ReviewsController extends Controller
     public function reviews(Request $request)
     {
         \Log::info($request->all());
+        $lang = $request->header('Accept-Language');
         $DataRequests = $request->all();
         $validator = \Validator::make($DataRequests, [
             'restaurant_id' => 'required|integer',
@@ -66,10 +67,15 @@ class ReviewsController extends Controller
                 'status_code' => 200,
                 'data' => $wholeData));
         }else{
+            if($lang == 'ar'){
+                $message = 'لا يوجد آراء';
+            }else{
+                $message = 'No reviews.';
+            }
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'message' => 'No reviews.'));
+                'message' => $message));
         }
 
     }
@@ -93,6 +99,7 @@ class ReviewsController extends Controller
     public function rateOrder(Request $request)
     {
         \Log::info($request->all());
+        $lang = $request->header('Accept-Language');
         $token = str_replace("Bearer ","" , $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->with('cart.cartCollection')->first();
         if($user){
@@ -126,10 +133,15 @@ class ReviewsController extends Controller
                     'status_code' => 200));
             }
         }else{
+            if($lang == 'ar'){
+                $message = 'أنت غير مسجل الدخول، يرجى تسجيل الدخول والمحاولة مجدداً';
+            }else{
+                $message = 'You are not logged in: Please log in and try again.';
+            }
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'message' => 'You are not logged in: Please log in and try again.'));
+                'message' => $message));
         }
     }
 

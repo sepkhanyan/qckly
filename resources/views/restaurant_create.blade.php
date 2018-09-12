@@ -121,13 +121,15 @@
                     <div id="location" class="tab-pane row wrap-all">
                         <h4 class="tab-pane-title">Basic</h4>
                         <div class="form-group">
-                            <label for="restaurant_category" class="col-sm-3 control-label">Category</label>
+                            <label for="" class="col-sm-3 control-label">Category</label>
                             <div class="col-sm-5">
-                                <select name="category[]" id="category[]" class="form-control" tabindex="-1" multiple="multiple">
-                                    @foreach($categories as $category)
-                                        <option value="{{$category->id}}">{{$category->name_en}}</option>
-                                    @endforeach
-                                </select>
+                                @foreach($categories as $category)
+                                    <label class="container">
+                                        {{$category->name_en}}
+                                        <input type="checkbox" name="category[]" value="{{$category->id}}">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                @endforeach
                             </div>
                         </div>
                         <div class="form-group{{ $errors->has('restaurant_name_en') ? ' has-error' : '' }}">

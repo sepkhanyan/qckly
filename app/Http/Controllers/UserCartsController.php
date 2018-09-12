@@ -46,6 +46,7 @@ class UserCartsController extends Controller
     public function createCart(Request $request)
     {
         \Log::info($request->all());
+        $lang = $request->header('Accept-Language');
         $token = str_replace("Bearer ","" , $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->first();
         if($user){
@@ -292,17 +293,28 @@ class UserCartsController extends Controller
                 $arr = [
                     'cart_id' => $cart->id
                 ];
+
+                if($lang == 'ar'){
+                    $message = 'Collections added to cart successfully.';
+                }else{
+                    $message = 'Collections added to cart successfully.';
+                }
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200,
                     'data' => $arr,
-                    'message' => 'Collections added to cart successfully.'));
+                    'message' => $message));
             }
         }else{
+            if($lang == 'ar'){
+                $message = 'أنت غير مسجل الدخول، يرجى تسجيل الدخول والمحاولة مجدداً';
+            }else{
+                $message = 'You are not logged in: Please log in and try again.';
+            }
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'message' => 'You are not logged in: Please log in and try again.'));
+                'message' => $message));
         }
     }
 
@@ -417,10 +429,6 @@ class UserCartsController extends Controller
                             $female_caterer = false;
                         }
 
-//                        $persons_count = -1;
-//                        if($cart_collection->collection->category_id == 2){
-//                            $persons_count =  $cart_collection->persons_count;
-//                        }
 
                         if($lang == 'ar'){
                             $restaurant_name = $cart_collection->collection->restaurant->name_ar;
@@ -475,10 +483,15 @@ class UserCartsController extends Controller
                     'data' => []));
             }
         }else{
+            if($lang == 'ar'){
+                $message = 'أنت غير مسجل الدخول، يرجى تسجيل الدخول والمحاولة مجدداً';
+            }else{
+                $message = 'You are not logged in: Please log in and try again.';
+            }
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'message' => 'You are not logged in: Please log in and try again.'));
+                'message' => $message));
         }
 
     }
@@ -747,11 +760,16 @@ class UserCartsController extends Controller
                     'status_code'=> 200 ,
                     'data' => $menu_collection));
             }else{
+                if($lang == 'ar'){
+                    $message = 'لا يوجد مجموعات';
+                }else{
+                    $message = 'No Collection!';
+                }
                 return response()->json(array(
                     'success'=> 1,
                     'status_code'=> 200 ,
                     'data' => [],
-                    'message' => 'No Collection!'));
+                    'message' => $message));
             }
         }
 
@@ -761,6 +779,7 @@ class UserCartsController extends Controller
     public function removeCart(Request $request, $id)
     {
         \Log::info($request->all());
+        $lang = $request->header('Accept-Language');
         $token = str_replace("Bearer ","" , $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->with('cart.cartCollection')->first();
         if($user){
@@ -773,24 +792,39 @@ class UserCartsController extends Controller
                     ->where('collection_id', $collection_id)->delete();
                 $cart_collections = UserCartCollection::where('cart_id', $cart->id)->get();
                 if(count($cart_collections) > 0){
+                    if($lang == 'ar'){
+                        $message = 'تم حذف المجموعة بنجاح';
+                    }else{
+                        $message = 'Collection deleted successfully.';
+                    }
                     return response()->json(array(
                         'success' => 1,
                         'status_code' => 200,
-                        'message' => 'Collection deleted successfully.'));
+                        'message' => $message));
                 }else{
                     $cart->delete();
+                    if($lang == 'ar'){
+                        $message = 'تم إفراغ السلة بنجاح';
+                    }else{
+                        $message = 'Cart deleted successfully.';
+                    }
                     return response()->json(array(
                         'success' => 1,
                         'status_code' => 200,
-                        'message' => 'Cart deleted successfully.'));
+                        'message' => $message));
                 }
 
             }else{
                 $cart->delete();
+                if($lang == 'ar'){
+                    $message = 'تم إفراغ السلة بنجاح';
+                }else{
+                    $message = 'Cart deleted successfully.';
+                }
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200,
-                    'message' => 'Cart deleted successfully.'));
+                    'message' => $message));
             }
         }
 
@@ -799,6 +833,7 @@ class UserCartsController extends Controller
     public function changeDeliveryAddress(Request $request, $id)
     {
         \Log::info($request->all());
+        $lang = $request->header('Accept-Language');
         $token = str_replace("Bearer ","" , $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->with('cart.cartCollection')->first();
         if($user){
@@ -811,10 +846,15 @@ class UserCartsController extends Controller
                 'success' => 1,
                 'status_code' => 200));
         }else{
+            if($lang == 'ar'){
+                $message = 'أنت غير مسجل الدخول، يرجى تسجيل الدخول والمحاولة مجدداً';
+            }else{
+                $message = 'You are not logged in: Please log in and try again.';
+            }
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'message' => 'You are not logged in: Please log in and try again.'));
+                'message' => $message));
         }
 
     }
