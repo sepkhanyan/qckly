@@ -38,6 +38,7 @@ class AddressesController extends Controller
     public function addAddress(Request $request, $id = null)
     {
         \Log::info($request->all());
+        $lang = $request->header('Accept-Language');
         $token = str_replace("Bearer ","" , $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->first();
         if($user){
@@ -93,10 +94,15 @@ class AddressesController extends Controller
                     'status_code' => 200));
             }
         }else{
+            if($lang == 'ar'){
+                $message = 'أنت غير مسجل الدخول، يرجى تسجيل الدخول والمحاولة مجدداً';
+            }else{
+                $message = 'You are not logged in: Please log in and try again.';
+            }
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'message' => 'You are not logged in: Please log in and try again.'));
+                'message' => $message));
         }
 
     }
@@ -110,6 +116,7 @@ class AddressesController extends Controller
     public function getAddresses(Request $request)
     {
         \Log::info($request->all());
+        $lang = $request->header('Accept-Language');
         $token = str_replace("Bearer ","" , $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->first();
         if($user){
@@ -145,17 +152,27 @@ class AddressesController extends Controller
                     'status_code' => 200,
                     'data' => $arr));
             }else{
+                if($lang == 'ar'){
+                    $message = 'لم يتم ادخال عناوين';
+                }else{
+                    $message = 'No address created.';
+                }
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200,
-                    'message' => 'No address created.',
+                    'message' => $message,
                     'data' => []));
             }
         }else{
+            if($lang == 'ar'){
+                $message = 'أنت غير مسجل الدخول، يرجى تسجيل الدخول والمحاولة مجدداً';
+            }else{
+                $message = 'You are not logged in: Please log in and try again.';
+            }
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'message' => 'You are not logged in: Please log in and try again.'));
+                'message' => $message));
         }
 
     }
@@ -192,11 +209,24 @@ class AddressesController extends Controller
     public function deleteAddress(Request $request, $id)
     {
         \Log::info($request->all());
+        $lang = $request->header('Accept-Language');
         $token = str_replace("Bearer ","" , $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->first();
         if($user){
             $address = Address::where('id', $id)->where('user_id', $user->id)->first();
-            $address->delete();
+            if($address){
+                $address->delete();
+            }else{
+                if($lang == 'ar'){
+                    $message = 'لا يوجد عناوين';
+                }else{
+                    $message = 'No address available.';
+                }
+                return response()->json(array(
+                    'success' => 1,
+                    'status_code' => 200,
+                    'message' => $message));
+            }
             $default_address =  Address::where('user_id', $user->id)->where('is_default', 1)->first();
             if(!$default_address){
                 $new_default_address =  Address::where('user_id', $user->id)->orderBy('created_at', 'desc')->first();
@@ -206,16 +236,26 @@ class AddressesController extends Controller
                     UserCart::where('user_id', $user->id)->update(['delivery_address_id'=> $new_default_address->id]);
                 }else{
                     UserCart::where('user_id', $user->id)->update(['delivery_address_id'=> null]);
+                    if($lang == 'ar'){
+                        $message = 'تم حذف العناوين بنجاح';
+                    }else{
+                        $message = 'Address deleted successfully.';
+                    }
                     return response()->json(array(
                         'success' => 1,
                         'status_code' => 200,
-                        'message' => 'No address available.'));
+                        'message' => $message));
                 }
+            }
+            if($lang == 'ar'){
+                $message = 'تم حذف العناوين بنجاح';
+            }else{
+                $message = 'Address deleted successfully.';
             }
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'message' => 'Address deleted successfully.'));
+                'message' => $message));
         }
     }
 }
