@@ -600,7 +600,7 @@ class RestaurantsController extends Controller
                         'famous_images' => $famous,
                         'ratings_count' => $rating_count,
                         'review_count' => $review_count,
-                        'availability_hours' => date("g:i a", strtotime( $opening))  . ' - ' . date("g:i a", strtotime( $closing)),
+                        'availability_hours' => date("g:i a", strtotime($opening))  . ' - ' . date("g:i a", strtotime($closing)),
                         'description' => $restaurant_description,
                         'status' => $working_status,
                         'category' => $category
@@ -623,6 +623,7 @@ class RestaurantsController extends Controller
                     return response()->json(array(
                         'success'=> 1,
                         'status_code'=> 200 ,
+                        'Accept-Language' => $lang,
                         'data' => $wholeData));
 
             } else {

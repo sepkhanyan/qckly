@@ -52,7 +52,7 @@ class UserCartsController extends Controller
         $user = User::where('api_token', '=', $token)->first();
         if($user){
             $DataRequests = $request->all();
-            $validator = Validator::make($DataRequests, [
+            $validator = \Validator::make($DataRequests, [
                 'collection_type' => 'required|integer',
                 'collection_id' => 'required|integer',
                 'female_caterer' => 'required|integer',
