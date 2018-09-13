@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Validator;
 use App\Address;
 use App\Category;
 use App\Restaurant;
@@ -98,8 +97,8 @@ class UserCartsController extends Controller
                 }
                 if ($collection_type == 1) {
                     $validator = \Validator::make($DataRequests, [
-                        'collection_price' => 'required',
-                        'collection_quantity' => 'integer|required',
+                        'collection_price' => 'required|numeric',
+                        'collection_quantity' => 'required|integer',
                     ]);
                     if ($validator->fails()) {
                         return response()->json(array('success' => 1, 'status_code' => 400,
@@ -140,8 +139,8 @@ class UserCartsController extends Controller
 
                 }else if ($collection_type == 2) {
                     $validator = \Validator::make($DataRequests, [
-                        'collection_price' => 'required',
-                        'persons_count' => 'required',
+                        'collection_price' => 'required|numeric',
+                        'persons_count' => 'required|integer',
                         'menus' => 'required',
                     ]);
                     if ($validator->fails()) {
@@ -192,8 +191,8 @@ class UserCartsController extends Controller
                     }
                 }elseif ($collection_type == 3) {
                     $validator = \Validator::make($DataRequests, [
-                        'collection_price' => 'required',
-                        'collection_quantity' => 'required',
+                        'collection_price' => 'required|numeric',
+                        'collection_quantity' => 'required|numeric',
                         'menus' => 'required',
                     ]);
                     if ($validator->fails()) {
@@ -242,7 +241,7 @@ class UserCartsController extends Controller
                     }
                 }elseif ($collection_type == 4) {
                     $validator = \Validator::make($DataRequests, [
-                        'collection_price' => 'required',
+                        'collection_price' => 'required|numeric',
                         'menus' => 'required',
                     ]);
                     if ($validator->fails()) {

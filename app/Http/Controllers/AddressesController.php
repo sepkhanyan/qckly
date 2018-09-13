@@ -39,18 +39,22 @@ class AddressesController extends Controller
     {
         \Log::info($request->all());
         $lang = $request->header('Accept-Language');
+        $validator = \Validator::make($request->all(), []);
+        if($lang == 'ar'){
+            $validator->getTranslator()->setLocale('ar');
+        }
         $token = str_replace("Bearer ","" , $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->first();
         if($user){
             $DataRequests = $request->all();
             $validator = \Validator::make($DataRequests, [
                 'name' => 'required|string',
-                'mobile_number' => 'required|string',
+                'mobile_number' => 'required|integer',
                 'location' => 'required|string',
-                'building_number' => 'required|string',
+                'building_number' => 'required|integer',
                 'zone' => 'required|string',
-                'apartment_number' => 'required|string',
-                'is_apartment' => 'required',
+                'apartment_number' => 'required|integer',
+                'is_apartment' => 'required|integer',
                 'latitude' => 'required|numeric',
                 'longitude' => 'required|numeric'
             ]);
@@ -94,15 +98,10 @@ class AddressesController extends Controller
                     'status_code' => 200));
             }
         }else{
-            if($lang == 'ar'){
-                $message = 'أنت غير مسجل الدخول، يرجى تسجيل الدخول والمحاولة مجدداً';
-            }else{
-                $message = 'You are not logged in: Please log in and try again.';
-            }
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'message' => $message));
+                'message' => \Lang::get('message.loginError')));
         }
 
     }
@@ -117,6 +116,10 @@ class AddressesController extends Controller
     {
         \Log::info($request->all());
         $lang = $request->header('Accept-Language');
+        $validator = \Validator::make($request->all(), []);
+        if($lang == 'ar'){
+            $validator->getTranslator()->setLocale('ar');
+        }
         $token = str_replace("Bearer ","" , $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->first();
         if($user){
@@ -152,27 +155,17 @@ class AddressesController extends Controller
                     'status_code' => 200,
                     'data' => $arr));
             }else{
-                if($lang == 'ar'){
-                    $message = 'لم يتم ادخال عناوين';
-                }else{
-                    $message = 'No address created.';
-                }
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200,
-                    'message' => $message,
+                    'message' => \Lang::get('message.noAddress'),
                     'data' => []));
             }
         }else{
-            if($lang == 'ar'){
-                $message = 'أنت غير مسجل الدخول، يرجى تسجيل الدخول والمحاولة مجدداً';
-            }else{
-                $message = 'You are not logged in: Please log in and try again.';
-            }
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'message' => $message));
+                'message' => \Lang::get('message.loginError')));
         }
 
     }
@@ -210,6 +203,10 @@ class AddressesController extends Controller
     {
         \Log::info($request->all());
         $lang = $request->header('Accept-Language');
+        $validator = \Validator::make($request->all(), []);
+        if($lang == 'ar'){
+            $validator->getTranslator()->setLocale('ar');
+        }
         $token = str_replace("Bearer ","" , $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->first();
         if($user){
@@ -217,15 +214,10 @@ class AddressesController extends Controller
             if($address){
                 $address->delete();
             }else{
-                if($lang == 'ar'){
-                    $message = 'لا يوجد عناوين';
-                }else{
-                    $message = 'No address available.';
-                }
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200,
-                    'message' => $message));
+                    'message' => \Lang::get('message.noAddress')));
             }
             $default_address =  Address::where('user_id', $user->id)->where('is_default', 1)->first();
             if(!$default_address){
@@ -236,26 +228,16 @@ class AddressesController extends Controller
                     UserCart::where('user_id', $user->id)->where('completed', 0)->update(['delivery_address_id'=> $new_default_address->id]);
                 }else{
                     UserCart::where('user_id', $user->id)->where('completed', 0)->update(['delivery_address_id'=> null]);
-                    if($lang == 'ar'){
-                        $message = 'تم حذف العناوين بنجاح';
-                    }else{
-                        $message = 'Address deleted successfully.';
-                    }
                     return response()->json(array(
                         'success' => 1,
                         'status_code' => 200,
-                        'message' => $message));
+                        'message' => \Lang::get('message.addressDelete')));
                 }
-            }
-            if($lang == 'ar'){
-                $message = 'تم حذف العناوين بنجاح';
-            }else{
-                $message = 'Address deleted successfully.';
             }
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'message' => $message));
+                'message' => \Lang::get('message.addressDelete')));
         }
     }
 }

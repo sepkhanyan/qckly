@@ -26,6 +26,10 @@ class OrdersController extends Controller
     {
         \Log::info($request->all());
         $lang = $request->header('Accept-Language');
+        $validator = \Validator::make($request->all(), []);
+        if($lang == 'ar'){
+            $validator->getTranslator()->setLocale('ar');
+        }
         $token = str_replace("Bearer ","" , $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->with('cart.cartCollection')->first();
         if($user){
@@ -69,17 +73,15 @@ class OrdersController extends Controller
                             foreach($category->cartItem as $cartItem){
                                 if($lang == 'ar'){
                                     $item_name = $cartItem->menu->name_ar;
-                                    $price_unit = 'ر.ق';
                                 }else{
                                     $item_name = $cartItem->menu->name_en;
-                                    $price_unit = 'QR';
                                 }
                                 $items [] = [
                                     'item_id' => $cartItem->item_id,
                                     'item_name' => $item_name,
                                     'item_price' => $cartItem->menu->price,
                                     'item_quantity' => $cartItem->quantity,
-                                    'item_price_unit' => $price_unit
+                                    'item_price_unit' => \Lang::get('message.priceUnit')
                                 ];
                             }
                             if($lang == 'ar'){
@@ -132,14 +134,14 @@ class OrdersController extends Controller
                             'collection_type' => $collection_type,
                             'collection_name' => $collection_name,
                             'collection_price' => $collection_price,
-                            'collection_price_unit' => $price_unit,
+                            'collection_price_unit' => \Lang::get('message.priceUnit'),
                             'female_caterer' => $female_caterer,
                             'special_instruction' => $cart_collection->special_instruction,
                             'menu_items' => $menu,
                             'quantity' => $quantity,
                             'persons_count' => $persons_count,
                             'subtotal' => $cart_collection->price,
-                            'subtotal_unit' => $price_unit,
+                            'subtotal_unit' => \Lang::get('message.priceUnit'),
                         ];
                         $total += $cart_collection->price;
                     }
@@ -153,7 +155,7 @@ class OrdersController extends Controller
                         'delivery_address' => $address,
                         'collections' => $collections,
                         'total' => $total,
-                        'total_unit' => $price_unit,
+                        'total_unit' => \Lang::get('message.priceUnit'),
                     ];
 
                     if($order->is_rated == 1){
@@ -167,7 +169,7 @@ class OrdersController extends Controller
                         'order_date' =>  date("j M, Y", strtotime($order->created_at)),
                         'order_time' => date("g:i a", strtotime($order->created_at)),
                         'total_price' => $order->total_price,
-                        'total_price_unit' => $price_unit,
+                        'total_price_unit' => \Lang::get('message.priceUnit'),
                         'is_rated' => $rated,
                         'cart' => $cart
                     ];
@@ -193,27 +195,17 @@ class OrdersController extends Controller
                     'status_code' => 200,
                     'data' => $wholeData));
             }else{
-                if($lang == 'ar'){
-                    $message = 'لا يوجد لديك طلبات، تقدّم بطلبك الأول لتراه هنا';
-                }else{
-                    $message = 'There are no orders right now, place your first order to see it here.';
-                }
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200,
                     'data' => [],
-                    'message' => $message));
+                    'message' => \Lang::get('message.noOrder')));
             }
         }else{
-            if($lang == 'ar'){
-                $message = 'أنت غير مسجل الدخول، يرجى تسجيل الدخول والمحاولة مجدداً';
-            }else{
-                $message = 'You are not logged in: Please log in and try again.';
-            }
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'message' => $message));
+                'message' => \Lang::get('message.loginError')));
         }
     }
 
@@ -233,6 +225,10 @@ class OrdersController extends Controller
     {
         \Log::info($request->all());
         $lang = $request->header('Accept-Language');
+        $validator = \Validator::make($request->all(), []);
+        if($lang == 'ar'){
+            $validator->getTranslator()->setLocale('ar');
+        }
         $token = str_replace("Bearer ","" , $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->with('cart.cartCollection')->first();
         if($user){
@@ -240,7 +236,7 @@ class OrdersController extends Controller
             $validator = \Validator::make($DataRequests, [
                 'cart_id' => 'required|integer',
                 'payment_type' => 'required|integer',
-                'total_price' => 'required'
+                'total_price' => 'required|numeric'
             ]);
             if ($validator->fails()) {
                 return response()->json(array('success' => 1, 'status_code' => 400,
@@ -255,15 +251,10 @@ class OrdersController extends Controller
                 if($cart){
                         if($cart->completed == 0){
                             if($cart->delivery_address_id == null){
-                                if($lang == 'ar'){
-                                    $message = 'يرجى إضافة عنوان';
-                                }else{
-                                    $message = 'Please add an address.';
-                                }
                                 return response()->json(array(
                                     'success' => 1,
                                     'status_code' => 200,
-                                    'message' => $message));
+                                    'message' => \Lang::get('message.addAddress')));
                             }
                             $order = new Order();
                             $order->user_id = $user->id;
@@ -288,38 +279,25 @@ class OrdersController extends Controller
                         'status_code' => 200,
                         'message' => 'No cart.'));
                 }
-                if($lang == 'ar'){
-                    $price_unit = 'ر.ق';
+
                     if($order->payment_type == 1){
                         $order->transaction_id = -1;
-                        $payment = 'الدفع عند الاستلام';
+                        $payment = \Lang::get('message.cash');
                     }
                     if($order->payment_type == 2){
-                        $payment = 'عبر بطاقات الائتمان';
+                        $payment = \Lang::get('message.credit');
                     }
                     if($order->payment_type == 3){
-                        $payment = 'Via Debit Card';
+                        $payment = \Lang::get('message.debit');
                     }
-                }else{
-                    $price_unit = 'QR';
-                    if($order->payment_type == 1){
-                        $order->transaction_id = -1;
-                        $payment = 'Cash on delivery';
-                    }
-                    if($order->payment_type == 2){
-                        $payment = 'Via Credit Card';
-                    }
-                    if($order->payment_type == 3){
-                        $payment = 'Via Debit Card';
-                    }
-                }
+
 
                 $arr = [
                     'order_id' => $order->id,
                     'transaction_id' => $order->transaction_id,
                     'payment_type' => $payment,
                     'total_price' => $order->total_price,
-                    'price_unit' => $price_unit
+                    'price_unit' => \Lang::get('message.priceUnit')
                 ];
                 return response()->json(array(
                     'success' => 1,
@@ -327,15 +305,10 @@ class OrdersController extends Controller
                     'data' => $arr));
             }
         }else{
-            if($lang == 'ar'){
-                $message = 'أنت غير مسجل الدخول، يرجى تسجيل الدخول والمحاولة مجدداً';
-            }else{
-                $message = 'You are not logged in: Please log in and try again.';
-            }
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'message' => $message));
+                'message' => \Lang::get('message.loginError')));
         }
     }
 

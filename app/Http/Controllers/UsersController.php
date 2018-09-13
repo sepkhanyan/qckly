@@ -159,7 +159,7 @@ class UsersController extends Controller
         \Log::info($request->all());
         $validator = \Validator::make($request->all(), [
             'country_code' => 'required',
-            'mobile_number' => 'required|min:8|max:8',
+            'mobile_number' => 'required|integer|min:8|max:8',
         ]);
         if ($validator->fails()) {
             return response()->json(array('success' => 1, 'status_code' => 400,
@@ -201,7 +201,7 @@ class UsersController extends Controller
             } else {
                 $validator = \Validator::make($request->all(), [
                     'country_code' => 'required',
-                    'mobile_number' => 'required|min:8|max:8'
+                    'mobile_number' => 'required|integer|min:8|max:8'
                 ]);
                 if ($validator->fails()) {
                     return response()->json(array('success' => 1, 'status_code' => 400,
@@ -250,8 +250,8 @@ class UsersController extends Controller
         \Log::info($request->all());
         $validator = \Validator::make($request->all(), [
             'country_code' => 'required',
-            'mobile_number' => 'required|min:8|max:8',
-            'otp' => 'required|min:4|max:4'
+            'mobile_number' => 'required|integer|min:8|max:8',
+            'otp' => 'required|integer|min:4|max:4'
         ]);
         if ($validator->fails()) {
             return response()->json(array('success' => 1, 'status_code' => 400,
@@ -318,7 +318,7 @@ class UsersController extends Controller
         \Log::info($request->all());
         $validator = \Validator::make($request->all(), [
             'country_code' => 'required',
-            'mobile_number' => 'required|min:8|max:8'
+            'mobile_number' => 'required|integer|min:8|max:8'
         ]);
         if ($validator->fails()) {
             return response()->json(array('success' => 1, 'status_code' => 400,

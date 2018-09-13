@@ -715,7 +715,7 @@ class RestaurantsController extends Controller
         $lang = $request->header('Accept-Language');
         $DataRequests = $request->all();
         $validator = \Validator::make($DataRequests, [
-            'restaurant_id' => 'required',
+            'restaurant_id' => 'required|integer',
         ]);
         if ($validator->fails()) {
             return response()->json(array('success' => 1, 'status_code' => 400,
