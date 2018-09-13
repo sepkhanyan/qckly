@@ -18,5 +18,6 @@ return [
     'enable'             => 'Enable',
     'disable'            => 'Disable',
     'combo'              => 'Combo Delicious',
-    'noCollection'       => 'No Collection'
+    'noCollection'       => 'No Collection',
+    'noReview'           => 'No Review',
 ];

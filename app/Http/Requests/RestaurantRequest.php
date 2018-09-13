@@ -29,7 +29,7 @@ class RestaurantRequest extends FormRequest
             'country_code' => 'required|string|max:255',
             'manager_telephone' => 'required|integer',
             'password' => 'required|string|max:255',
-            'confirm_password' => 'required|string|max:255',
+            'confirm_password' => 'required|confirmed|max:255',
             'category' => 'required|integer',
             'restaurant_name_en' => 'required|string|max:255',
             'restaurant_name_ar' => 'required|string|max:255',

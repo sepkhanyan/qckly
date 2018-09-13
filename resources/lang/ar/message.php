@@ -18,5 +18,6 @@ return [
     'enable'             => 'مكن',
     'disable'            => 'تعطيل',
     'combo'              => 'Combo Delicious',
-    'noCollection'       => 'لا يوجد مجموعات'
+    'noCollection'       => 'لا يوجد مجموعات',
+    'noReview'           => 'لا يوجد آراء',
 ];
