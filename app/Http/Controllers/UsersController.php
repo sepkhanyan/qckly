@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use Carbon\Carbon;
+use App\Restaurant;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Auth;
 
 
 
@@ -19,19 +21,24 @@ class UsersController extends Controller
      */
     public function index(Request $request)
     {
-        $customers = User::all();
-        $data = $request->all();
-        /*if(isset($data['customer_status'])){
-            $users = User::where('user_status',$data['customer_status'])->get();
-        }*/
-        if(isset($data['customer_date'])){
-            $customers = User::where('created_at',$data['customer_date'])->get();
+        $user = Auth::user();
+        if($user->admin == 1){
+            $customers = User::all();
+            $data = $request->all();
+            /*if(isset($data['customer_status'])){
+                $users = User::where('user_status',$data['customer_status'])->get();
+            }*/
+            if(isset($data['customer_date'])){
+                $customers = User::where('created_at',$data['customer_date'])->get();
+            }
+            if(isset($data['customer_search'])){
+                $customers = User::where('email','like',$data['customer_search'])
+                    ->orWhere('username','like',$data['customer_search'])->get();
+            }
+            return view('customers', ['customers' => $customers]);
+        }else{
+            return redirect('/');
         }
-        if(isset($data['customer_search'])){
-            $customers = User::where('email','like',$data['customer_search'])
-                ->orWhere('username','like',$data['customer_search'])->get();
-        }
-        return view('customers', ['customers' => $customers]);
     }
 
     /**
@@ -41,7 +48,12 @@ class UsersController extends Controller
      */
     public function create()
     {
-        return view('customer_create');
+        $user = Auth::user();
+        if($user->admin == 1){
+            return view('customer_create');
+        }else{
+            return redirect('/');
+        }
     }
 
     /**
@@ -52,16 +64,21 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        $customer = new User();
-        $customer->username = $request->input('name');
-        $customer->password = bcrypt($request->input('password'));
-        $customer->country_code = $request->input('country_code');
-        $customer->mobile_number = $request->input('telephone');
-        $customer->email = $request->input('email');
-        $customer->otp = rand(1500, 5000);
-        $customer->lang = 'en';
-        $customer->save();
-        return redirect('/customers');
+        $user = Auth::user();
+        if($user->admin == 1){
+            $customer = new User();
+            $customer->username = $request->input('name');
+            $customer->password = bcrypt($request->input('password'));
+            $customer->country_code = $request->input('country_code');
+            $customer->mobile_number = $request->input('telephone');
+            $customer->email = $request->input('email');
+            $customer->otp = rand(1500, 5000);
+            $customer->lang = 'en';
+            $customer->save();
+            return redirect('/customers');
+        }else{
+            return redirect('/');
+        }
     }
 
     /**
@@ -83,8 +100,13 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-        $customer = User::find($id);
-        return view('customer_edit', ['customer' => $customer]);
+        $user = Auth::user();
+        if($user->admin == 1){
+            $customer = User::find($id);
+            return view('customer_edit', ['customer' => $customer]);
+        }else{
+            return redirect('/');
+        }
     }
 
     /**
@@ -96,16 +118,21 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $customer = User::find($id);
-        $customer->username = $request->input('name');
-        $customer->password = bcrypt($request->input('password'));
-        $customer->country_code = $request->input('country_code');
-        $customer->mobile_number = $request->input('telephone');
-        $customer->email = $request->input('email');
-        $customer->otp = rand(1500, 5000);
-        $customer->lang = 'en';
-        $customer->save();
-        return redirect('/customers');
+        $user = Auth::user();
+        if($user->admin == 1){
+            $customer = User::find($id);
+            $customer->username = $request->input('name');
+            $customer->password = bcrypt($request->input('password'));
+            $customer->country_code = $request->input('country_code');
+            $customer->mobile_number = $request->input('telephone');
+            $customer->email = $request->input('email');
+            $customer->otp = rand(1500, 5000);
+            $customer->lang = 'en';
+            $customer->save();
+            return redirect('/customers');
+        }else{
+            return redirect('/');
+        }
     }
 
     /**
@@ -116,10 +143,15 @@ class UsersController extends Controller
      */
     public function deleteCustomers(Request $request)
     {
-        $id = $request->get('id');
-        User::whereIn('id',$id)->delete();
+        $user = Auth::user();
+        if($user->admin == 1){
+            $id = $request->get('id');
+            User::whereIn('id',$id)->delete();
 
-        return redirect('/customers');
+            return redirect('/customers');
+        }else{
+            return redirect('/');
+        }
     }
 
     public function login(Request $request)
