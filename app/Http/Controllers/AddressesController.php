@@ -54,7 +54,7 @@ class AddressesController extends Controller
                 'building_number' => 'required|integer',
                 'zone' => 'required|string',
                 'apartment_number' => 'required|integer',
-                'is_apartment' => 'required|integer',
+                'is_apartment' => 'required',
                 'latitude' => 'required|numeric',
                 'longitude' => 'required|numeric'
             ]);

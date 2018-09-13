@@ -340,6 +340,10 @@ class RestaurantsController extends Controller
     public function getRestaurants(Request $request)
     {
         $lang = $request->header('Accept-Language');
+        $validator = \Validator::make($request->all(), []);
+        if($lang == 'ar'){
+            $validator->getTranslator()->setLocale('ar');
+        }
         $restaurants = Restaurant::with(['menu', 'categoryRestaurant'])->paginate(20);
         if(count($restaurants) > 0){
             foreach($restaurants as $restaurant){
@@ -392,15 +396,10 @@ class RestaurantsController extends Controller
                 'status_code'=> 200 ,
                 'data' => $wholeData));
         }else{
-            if($lang == 'ar'){
-                $message = 'لا يوجد مطاعم متاحة';
-            }else{
-                $message = 'No available restaurant.';
-            }
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'message' => $message));
+                'message' => \Lang::get('message.noRestaurant')));
         }
 
     }
@@ -411,6 +410,10 @@ class RestaurantsController extends Controller
     {
         \Log::info($request->all());
         $lang = $request->header('Accept-Language');
+        $validator = \Validator::make($request->all(), []);
+        if($lang == 'ar'){
+            $validator->getTranslator()->setLocale('ar');
+        }
         $DataRequests = $request->all();
         $validator = \Validator::make($DataRequests, [
             'category_id' => 'required|integer',
@@ -478,15 +481,10 @@ class RestaurantsController extends Controller
                         'data' => $wholeData));
 
             }else {
-                if($lang == 'ar'){
-                    $message = 'لا يوجد مطاعم متاحة';
-                }else{
-                    $message = 'No available restaurant.';
-                }
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200,
-                    'message' => $message));
+                    'message' => \Lang::get('message.noRestaurant')));
             }
         }
     }
@@ -495,6 +493,10 @@ class RestaurantsController extends Controller
     {
         \Log::info($request->all());
         $lang = $request->header('Accept-Language');
+        $validator = \Validator::make($request->all(), []);
+        if($lang == 'ar'){
+            $validator->getTranslator()->setLocale('ar');
+        }
         $DataRequests = $request->all();
         $validator = \Validator::make($DataRequests, [
             'area_id' => 'required|integer',
@@ -534,23 +536,13 @@ class RestaurantsController extends Controller
                         $closing = $workingHour->closing_time;
                         $status = $workingHour->status;
                     }
-                    if($lang == 'ar'){
                         if($status == 1){
-                            $working_status = 'افتح';
+                            $working_status = \Lang::get('message.open');
                         }elseif ($status == 0){
-                            $working_status = 'قريب';
+                            $working_status = \Lang::get('message.close');
                         }else{
-                            $working_status = 'مشغول';
+                            $working_status = \Lang::get('message.busy');
                         }
-                    }else{
-                        if($status == 1){
-                            $working_status = 'Open';
-                        }elseif ($status == 0){
-                            $working_status = 'Close';
-                        }else{
-                            $working_status = 'Busy';
-                        }
-                    }
 
                     $famous = null;
                     $famous = [];
@@ -627,15 +619,10 @@ class RestaurantsController extends Controller
                         'data' => $wholeData));
 
             } else {
-                if($lang == 'ar'){
-                    $message = 'لم يتم العثور على مطاعم، يرجى اختيار منطقة أخرى وتوقيت آخر';
-                }else{
-                    $message = 'There is no any Restaurant found. Please select other Area, Date and Time.';
-                }
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200,
-                    'message' => $message));
+                    'message' => \Lang::get('message.selectAreaDateTime')));
             }
         }
 
@@ -645,31 +632,29 @@ class RestaurantsController extends Controller
     public function getRestaurant(Request $request, $id)
     {
         $lang = $request->header('Accept-Language');
+        $validator = \Validator::make($request->all(), []);
+        if($lang == 'ar'){
+            $validator->getTranslator()->setLocale('ar');
+        }
         $restaurants = Restaurant::where('id',$id)->with(['menu', 'menu.category'])->get();
         if(count($restaurants)>0){
             foreach($restaurants as $restaurant){
                 if(count($restaurant->menu) > 0){
                     foreach($restaurant->menu as $menu){
                         if($lang == 'ar'){
-                            if($menu->status ==1){
-                                $status = 'مكن';
-                            }else{
-                                $status = 'تعطيل';
-                            }
                             $menu_name = $menu->name_ar;
                             $menu_category = $menu->category->name_ar;
                             $restaurant_name =$restaurant->name_ar;
                         }else{
-                            if($menu->status == 1){
-                                $status = 'Enable';
-                            }else{
-                                $status = 'Disable';
-                            }
                             $menu_name = $menu->name_en;
                             $menu_category = $menu->category->name_en;
                             $restaurant_name =$restaurant->name_en;
                         }
-
+                        if($menu->status == 1){
+                            $status = \Lang::get('message.enable');
+                        }else{
+                            $status = \Lang::get('message.disable');
+                        }
                         $restaurant_menu [] = [
                             'menu_id' => $menu->id,
                             'menu_name' => $menu_name,
@@ -696,15 +681,10 @@ class RestaurantsController extends Controller
                     'data' => $arr));
 
         }else {
-            if($lang == 'ar'){
-                $message = 'لا يوجد مطاعم متاحة';
-            }else{
-                $message = 'No available restaurant.';
-            }
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'message' => $message));
+                'message' => \Lang::get('message.noRestaurant')));
         }
 
     }
@@ -713,6 +693,10 @@ class RestaurantsController extends Controller
     {
         \Log::info($request->all());
         $lang = $request->header('Accept-Language');
+        $validator = \Validator::make($request->all(), []);
+        if($lang == 'ar'){
+            $validator->getTranslator()->setLocale('ar');
+        }
         $DataRequests = $request->all();
         $validator = \Validator::make($DataRequests, [
             'restaurant_id' => 'required|integer',
@@ -779,13 +763,9 @@ class RestaurantsController extends Controller
                                     if($lang == 'ar'){
                                         $foodlist [] = $collection_item->menu->name_ar;
                                         $item_name = $collection_item->menu->name_ar;
-                                        $menu_name = 'كومبو لذيذ';
-                                        $price_unit = 'ر.ق';
                                     }else{
                                         $foodlist [] = $collection_item->menu->name_en;
                                         $item_name = $collection_item->menu->name_en;
-                                        $menu_name = 'Combo Delicious';
-                                        $price_unit = 'QR';
                                     }
 
                                     $image = url('/') . '/images/' . $collection_item->menu->image;
@@ -802,13 +782,13 @@ class RestaurantsController extends Controller
                                             'item_image' => url('/') . '/images/' .  $collection_item->menu->image,
                                             'item_qty' => $collection_item->quantity,
                                             'item_price' => $collection_item->menu->price,
-                                            'item_price_unit' => $price_unit,
+                                            'item_price_unit' => \Lang::get('message.priceUnit'),
                                             'item_availability' => $status
 
                                         ];
                                 }
                                 $menu [] = [
-                                    'menu_name' => $menu_name,
+                                    'menu_name' => \Lang::get('message.combo'),
                                     'items' => $items,
                                 ];
                             }else{
@@ -829,12 +809,10 @@ class RestaurantsController extends Controller
                                             $foodlist [] = $collection_item->menu->name_ar;
                                             $item_name = $collection_item->menu->name_ar;
                                             $menu_name = $collectionMenu->category->name_ar;
-                                            $price_unit = 'ر.ق';
                                         }else{
                                             $foodlist [] = $collection_item->menu->name_en;
                                             $item_name = $collection_item->menu->name_en;
                                             $menu_name = $collectionMenu->category->name_en;
-                                            $price_unit = 'QR';
                                         }
                                         $image = url('/') . '/images/' . $collection_item->menu->image;
                                         array_push($foodlist_images, $image);
@@ -879,7 +857,7 @@ class RestaurantsController extends Controller
                                             'item_name' => $item_name,
                                             'item_image' => url('/') . '/images/' .  $collection_item->menu->image,
                                             'item_price' => $collection_item->menu->price,
-                                            'item_price_unit' => $price_unit,
+                                            'item_price_unit' => \Lang::get('message.priceUnit'),
                                             'item_availability' => $status
 
                                         ];
@@ -933,7 +911,7 @@ class RestaurantsController extends Controller
                                 'collection_min_qty' => $collection_min,
                                 'collection_max_qty' => $collection_max,
                                 'collection_price' => $collection_price,
-                                'collection_price_unit' => $price_unit,
+                                'collection_price_unit' => \Lang::get('message.priceUnit'),
                                 'is_available' => $is_available,
                                 'min_serve_to_person' => $min_serve,
                                 'max_serve_to_person' => $max_serve,
@@ -959,15 +937,10 @@ class RestaurantsController extends Controller
                             'collections' => $menu_collection
                         ];
                     }else{
-                        if($lang == 'ar'){
-                            $message = 'لا يوجد مجموعات';
-                        }else{
-                            $message = 'No collection.';
-                        }
                         return response()->json(array(
                             'success' => 1,
                             'status_code' => 200,
-                            'message' => $message));
+                            'message' => \Lang::get('message.priceUnit')));
                     }
 
                 }
@@ -978,15 +951,10 @@ class RestaurantsController extends Controller
                     'data' => $arr));
 
             }else {
-                if($lang == 'ar'){
-                    $message = 'لا يوجد مطاعم متاحة';
-                }else{
-                    $message = 'No available restaurant.';
-                }
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200,
-                    'message' => $message));
+                    'message' => \Lang::get('message.noRestaurant')));
             }
 
         }
