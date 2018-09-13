@@ -20,4 +20,9 @@ return [
     'combo'              => 'Combo Delicious',
     'noCollection'       => 'No Collection',
     'noReview'           => 'No Review',
+    'collectionSuccess'  => 'Collections added to cart successfully.',
+    'hour'               => '',
+    'minute'             => '',
+    'collectionRemove'   => 'Collection deleted successfully.',
+    'cartRemove'         => 'Cart deleted successfully.',
 ];

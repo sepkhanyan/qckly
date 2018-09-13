@@ -20,4 +20,9 @@ return [
     'combo'              => 'Combo Delicious',
     'noCollection'       => 'لا يوجد مجموعات',
     'noReview'           => 'لا يوجد آراء',
+    'collectionSuccess'  => 'Collections added to cart successfully.',
+    'hour'               => '',
+    'minute'             => '',
+    'collectionRemove'   => 'تم حذف المجموعة بنجاح',
+    'cartRemove'         => 'تم إفراغ السلة بنجاح',
 ];

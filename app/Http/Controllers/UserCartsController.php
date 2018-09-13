@@ -47,6 +47,10 @@ class UserCartsController extends Controller
     {
         \Log::info($request->all());
         $lang = $request->header('Accept-Language');
+        $validator = \Validator::make($request->all(), []);
+        if($lang == 'ar'){
+            $validator->getTranslator()->setLocale('ar');
+        }
         $token = str_replace("Bearer ","" , $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->first();
         if($user){
@@ -294,27 +298,17 @@ class UserCartsController extends Controller
                     'cart_id' => $cart->id
                 ];
 
-                if($lang == 'ar'){
-                    $message = 'Collections added to cart successfully.';
-                }else{
-                    $message = 'Collections added to cart successfully.';
-                }
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200,
                     'data' => $arr,
-                    'message' => $message));
+                    'message' => \Lang::get('message.collectionSuccess')));
             }
         }else{
-            if($lang == 'ar'){
-                $message = 'أنت غير مسجل الدخول، يرجى تسجيل الدخول والمحاولة مجدداً';
-            }else{
-                $message = 'You are not logged in: Please log in and try again.';
-            }
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'message' => $message));
+                'message' => \Lang::get('message.loginError')));
         }
     }
 
@@ -330,6 +324,10 @@ class UserCartsController extends Controller
     {
         \Log::info($request->all());
         $lang = $request->header('Accept-Language');
+        $validator = \Validator::make($request->all(), []);
+        if($lang == 'ar'){
+            $validator->getTranslator()->setLocale('ar');
+        }
         $token = str_replace("Bearer ","" , $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->first();
         if($user){
@@ -383,17 +381,15 @@ class UserCartsController extends Controller
                             foreach($category->cartItem as $cartItem){
                                 if($lang == 'ar'){
                                     $item_name = $cartItem->menu->name_ar;
-                                    $price_unit = 'ر.ق';
                                 }else{
                                     $item_name = $cartItem->menu->name_en;
-                                    $price_unit = 'QR';
                                 }
                                 $items [] = [
                                     'item_id' => $cartItem->item_id,
                                     'item_name' =>  $item_name,
                                     'item_price' => $cartItem->menu->price,
                                     'item_quantity' => $cartItem->quantity,
-                                    'item_price_unit' => $price_unit
+                                    'item_price_unit' => \Lang::get('message.priceUnit')
                                 ];
                             }
                             if($lang == 'ar'){
@@ -448,14 +444,14 @@ class UserCartsController extends Controller
                             'collection_type' => $collection_type,
                             'collection_name' => $collection_name,
                             'collection_price' => $collection_price,
-                            'collection_price_unit' => $price_unit,
+                            'collection_price_unit' => \Lang::get('message.priceUnit'),
                             'female_caterer' => $female_caterer,
                             'special_instruction' => $cart_collection->special_instruction,
                             'menu_items' => $menu,
                             'quantity' => $quantity,
                             'persons_count' => $persons_count,
                             'subtotal' => $cart_collection->price,
-                            'subtotal_unit' => $price_unit,
+                            'subtotal_unit' => \Lang::get('message.priceUnit'),
                         ];
                         $total += $cart_collection->price;
 
@@ -469,7 +465,7 @@ class UserCartsController extends Controller
                         'delivery_address' => $address,
                         'collections' => $collections,
                         'total' => $total,
-                        'total_unit' => $price_unit,
+                        'total_unit' => \Lang::get('message.priceUnit'),
                     ];
                 }
                 return response()->json(array(
@@ -483,15 +479,10 @@ class UserCartsController extends Controller
                     'data' => []));
             }
         }else{
-            if($lang == 'ar'){
-                $message = 'أنت غير مسجل الدخول، يرجى تسجيل الدخول والمحاولة مجدداً';
-            }else{
-                $message = 'You are not logged in: Please log in and try again.';
-            }
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'message' => $message));
+                'message' => \Lang::get('message.loginError')));
         }
 
     }
@@ -537,6 +528,10 @@ class UserCartsController extends Controller
     {
         \Log::info($request->all());
         $lang = $request->header('Accept-Language');
+        $validator = \Validator::make($request->all(), []);
+        if($lang == 'ar'){
+            $validator->getTranslator()->setLocale('ar');
+        }
         $DataRequests = $request->all();
         $validator = \Validator::make($DataRequests, [
             'collection_type' => 'required|integer',
@@ -589,13 +584,9 @@ class UserCartsController extends Controller
                         if($lang == 'ar'){
                             $foodlist [] = $collection_item->menu->name_ar;
                             $item_name = $collection_item->menu->name_ar;
-                            $menu_name = 'كومبو لذيذ';
-                            $price_unit = 'ر.ق';
                         }else{
                             $foodlist [] = $collection_item->menu->name_en;
                             $item_name = $collection_item->menu->name_en;
-                            $menu_name = 'Combo Delicious';
-                            $price_unit = 'QR';
                         }
                         $image = url('/') . '/images/' . $collection_item->menu->image;
                         array_push($foodlist_images, $image);
@@ -610,13 +601,13 @@ class UserCartsController extends Controller
                             'item_name' => $item_name,
                             'item_qty' => $collection_item->quantity,
                             'item_price' => $collection_item->menu->price,
-                            'item_price_unit' => $price_unit,
+                            'item_price_unit' => \Lang::get('message.priceUnit'),
                             'item_availability' => $status
 
                         ];
                     }
                     $menu [] = [
-                        'menu_name' => $menu_name,
+                        'menu_name' => \Lang::get('message.combo'),
                         'items' => $items,
                     ];
                 }else{
@@ -637,12 +628,10 @@ class UserCartsController extends Controller
                                 $foodlist [] = $collection_item->menu->name_ar;
                                 $item_name = $collection_item->menu->name_ar;
                                 $menu_name = $collectionMenu->category->name_ar;
-                                $price_unit = 'ر.ق';
                             }else{
                                 $foodlist [] = $collection_item->menu->name_en;
                                 $item_name = $collection_item->menu->name_en;
                                 $menu_name = $collectionMenu->category->name_en;
-                                $price_unit = 'QR';
                             }
                             $image = url('/') . '/images/' . $collection_item->menu->image;
                             array_push($foodlist_images, $image);
@@ -686,7 +675,7 @@ class UserCartsController extends Controller
                                 'item_name' => $item_name,
                                 'item_image' => url('/') . '/images/' .  $collection_item->menu->image,
                                 'item_price' => $collection_item->menu->price,
-                                'item_price_unit' => $price_unit,
+                                'item_price_unit' => \Lang::get('message.priceUnit'),
                                 'item_availability' => $status
 
                             ];
@@ -738,7 +727,7 @@ class UserCartsController extends Controller
                     'collection_min_qty' => $collection_min,
                     'collection_max_qty' => $collection_max,
                     'collection_price' => $collection_price,
-                    'collection_price_unit' => $price_unit,
+                    'collection_price_unit' => \Lang::get('message.priceUnit'),
                     'is_available' => $is_available,
                     'min_serve_to_person' => $min_serve,
                     'max_serve_to_person' => $max_serve,
@@ -760,16 +749,11 @@ class UserCartsController extends Controller
                     'status_code'=> 200 ,
                     'data' => $menu_collection));
             }else{
-                if($lang == 'ar'){
-                    $message = 'لا يوجد مجموعات';
-                }else{
-                    $message = 'No Collection!';
-                }
                 return response()->json(array(
                     'success'=> 1,
                     'status_code'=> 200 ,
                     'data' => [],
-                    'message' => $message));
+                    'message' => \Lang::get('message.noCollection')));
             }
         }
 
@@ -792,39 +776,24 @@ class UserCartsController extends Controller
                     ->where('collection_id', $collection_id)->delete();
                 $cart_collections = UserCartCollection::where('cart_id', $cart->id)->get();
                 if(count($cart_collections) > 0){
-                    if($lang == 'ar'){
-                        $message = 'تم حذف المجموعة بنجاح';
-                    }else{
-                        $message = 'Collection deleted successfully.';
-                    }
                     return response()->json(array(
                         'success' => 1,
                         'status_code' => 200,
-                        'message' => $message));
+                        'message' => \Lang::get('message.collectionRemove')));
                 }else{
                     $cart->delete();
-                    if($lang == 'ar'){
-                        $message = 'تم إفراغ السلة بنجاح';
-                    }else{
-                        $message = 'Cart deleted successfully.';
-                    }
                     return response()->json(array(
                         'success' => 1,
                         'status_code' => 200,
-                        'message' => $message));
+                        'message' => \Lang::get('message.cartRemove')));
                 }
 
             }else{
                 $cart->delete();
-                if($lang == 'ar'){
-                    $message = 'تم إفراغ السلة بنجاح';
-                }else{
-                    $message = 'Cart deleted successfully.';
-                }
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200,
-                    'message' => $message));
+                    'message' => \Lang::get('message.cartRemove')));
             }
         }
 
@@ -834,6 +803,10 @@ class UserCartsController extends Controller
     {
         \Log::info($request->all());
         $lang = $request->header('Accept-Language');
+        $validator = \Validator::make($request->all(), []);
+        if($lang == 'ar'){
+            $validator->getTranslator()->setLocale('ar');
+        }
         $token = str_replace("Bearer ","" , $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->with('cart.cartCollection')->first();
         if($user){
@@ -846,15 +819,10 @@ class UserCartsController extends Controller
                 'success' => 1,
                 'status_code' => 200));
         }else{
-            if($lang == 'ar'){
-                $message = 'أنت غير مسجل الدخول، يرجى تسجيل الدخول والمحاولة مجدداً';
-            }else{
-                $message = 'You are not logged in: Please log in and try again.';
-            }
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'message' => $message));
+                'message' => \Lang::get('message.loginError')));
         }
 
     }
