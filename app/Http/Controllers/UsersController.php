@@ -253,6 +253,11 @@ class UsersController extends Controller
     public function submitOtp(Request $request)
     {
         \Log::info($request->all());
+        $lang = $request->header('Accept-Language');
+        $validator = \Validator::make($request->all(), []);
+        if($lang == 'ar'){
+            $validator->getTranslator()->setLocale('ar');
+        }
         $validator = \Validator::make($request->all(), [
             'country_code' => 'required',
             'mobile_number' => 'required|numeric|digits:8',
@@ -260,7 +265,7 @@ class UsersController extends Controller
         ]);
         if ($validator->fails()) {
             return response()->json(array('success' => 1, 'status_code' => 400,
-                'message' => \Lang::get('message.invalid_inputs'),
+                'message' => 'Invalid inputs',
                 'error_details' => $validator->messages()));
         } else {
             $otp = intval($request->get('otp'));
@@ -278,7 +283,7 @@ class UsersController extends Controller
                     $token = md5(uniqid($user, true));
                 }
 
-                if ($smsCode->group_id == 0) {
+//                if ($smsCode->group_id == 0) {
                     $update = User::select("*")
                         ->where('otp', $otp)
                         ->where('mobile_number', $mobile)
@@ -289,7 +294,8 @@ class UsersController extends Controller
                     $update->save();
 
                     return response()->json(
-                        array('success' => 0,
+                        array(
+                            'success' => 0,
                             'status_code' => 200,
                             'data' => [
                                 'user_id' => $update->id,
@@ -299,20 +305,19 @@ class UsersController extends Controller
                                 'country_code' => $update->country_code,
                                 'mobile_number' => $update->mobile_number
                             ],
-                            'api_token' => 'Bearer ' . $token,
-                            'message' => \Lang::get('message.successCode')));
-                } else {
-                    return response()->json([
-                        'success' => 1,
-                        'status_code' => 400,
-                        'message' => \Lang::get('message.errorSms')
-                    ]);
-                }
+                            'api_token' => 'Bearer ' . $token));
+//                } else {
+//                    return response()->json([
+//                        'success' => 1,
+//                        'status_code' => 400,
+//                        'message' => \Lang::get('message.errorSms')
+//                    ]);
+//                }
             }else{
                 return response()->json([
                     'success' => 1,
                     'status_code' => 400,
-                    'message' => 'Please enter valid otp.'
+                    'message' => \Lang::get('message.otpError')
                 ]);
             }
         }
@@ -321,6 +326,11 @@ class UsersController extends Controller
     public function resendOtp(Request $request)
     {
         \Log::info($request->all());
+        $lang = $request->header('Accept-Language');
+        $validator = \Validator::make($request->all(), []);
+        if($lang == 'ar'){
+            $validator->getTranslator()->setLocale('ar');
+        }
         $validator = \Validator::make($request->all(), [
             'country_code' => 'required',
             'mobile_number' => 'required|numeric|digits:8',
@@ -348,7 +358,7 @@ class UsersController extends Controller
 //                file($url);
                 return response()->json(['success' => 0,
                     'status_code' => 200,
-                    'message' => \Lang::get('message.checkSms'),
+                    'message' => \Lang::get('message.otpSent'),
                     'otp' => $random_val
                 ]);
             }
@@ -358,6 +368,11 @@ class UsersController extends Controller
     public function completeProfile(Request $request)
     {
         \Log::info($request->all());
+        $lang = $request->header('Accept-Language');
+        $validator = \Validator::make($request->all(), []);
+        if($lang == 'ar'){
+            $validator->getTranslator()->setLocale('ar');
+        }
         $token = str_replace("Bearer ","" , $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->first();
         if($user) {
@@ -404,7 +419,7 @@ class UsersController extends Controller
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
-                'message' => 'You are not logged in: Please log in and try again.'));
+                'message' => \Lang::get('message.loginError')));
         }
     }
 
