@@ -67,52 +67,28 @@
                                     <input type="checkbox" onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">
                                 </th>
                                 <th>
-                                    <a class="sort" href="">
-                                        Name
-                                        <i class="fa fa-sort"></i>
-                                    </a>
+                                    Name
                                 </th>
                                 <th>
-                                    <a class="sort" href="">
-                                        Description
-                                        <i class="fa fa-sort>"></i>
-                                    </a>
+                                    Description
                                 </th>
                                 <th>
-                                    <a class="sort" href="">
-                                        Area
-                                        <i class="fa fa-sort"></i>
-                                    </a>
+                                    Area
                                 </th>
                                 <th>
-                                    <a class="sort" href="">
-                                        City
-                                        <i class="fa fa-sort>"></i>
-                                    </a>
+                                    City
                                 </th>
                                 <th>
-                                    <a class="sort" href="">
-                                        Address
-                                        <i class="fa fa-sort>"></i>
-                                    </a>
+                                    Address
                                 </th>
                                 <th>
-                                    <a class="sort" href="">
-                                        Telephone
-                                        <i class="fa fa-sort"></i>
-                                    </a>
+                                    Telephone
                                 </th>
                                 <th>
-                                    <a class="sort" href="">
-                                        Status
-                                        <i class="fa fa-sort>"></i>
-                                    </a>
+                                    Status
                                 </th>
                                 <th>
-                                    <a class="sort" href="">
-                                        ID
-                                        <i class="fa fa-sort>"></i>
-                                    </a>
+                                    ID
                                 </th>
                             </tr>
                             </thead>

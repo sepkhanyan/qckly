@@ -100,40 +100,22 @@
                                     <input type="checkbox" onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">
                                 </th>
                                 <th>
-                                    <a class="sort" href="">
-                                        Name
-                                        <i class="fa fa-sort"></i>
-                                    </a>
+                                    Name
                                 </th>
                                 <th>
-                                    <a class="sort" href="">
-                                        Description
-                                        <i class="fa fa-sort"></i>
-                                    </a>
+                                    Description
                                 </th>
                                 <th>
-                                    <a class="sort" href="">
-                                        Price
-                                        <i class="fa fa-sort>"></i>
-                                    </a>
+                                    Price
                                 </th>
                                 <th>
-                                    <a class="sort" href="">
-                                        Category
-                                        <i class="fa fa-sort"></i>
-                                    </a>
+                                    Category
                                 </th>
                                 <th>
-                                    <a class="sort" href="">
-                                        Status
-                                        <i class="fa fa-sort>"></i>
-                                    </a>
+                                    Status
                                 </th>
                                 <th>
-                                    <a class="sort" href="">
-                                        ID
-                                        <i class="fa fa-sort>"></i>
-                                    </a>
+                                    ID
                                 </th>
                             </tr>
                             </thead>

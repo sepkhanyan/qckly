@@ -55,22 +55,13 @@
                                 </th>
                                 @endif
                                 <th>
-                                    <a class="sort" href="">
-                                        Name
-
-                                    </a>
+                                    Name
                                 </th>
                                 <th>
-                                    <a class="sort" href="">
-                                        Time
-
-                                    </a>
+                                    Time
                                 </th>
                                 <th>
-                                    <a class="sort" href="">
-                                        ID
-
-                                    </a>
+                                    ID
                                 </th>
                             </tr>
                             </thead>

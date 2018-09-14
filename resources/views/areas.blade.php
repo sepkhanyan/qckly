@@ -51,22 +51,13 @@
                                     <input type="checkbox" onclick="$('input[name*=\'delete\']').prop('checked', this.checked)">
                                 </th>
                                 <th>
-                                    <a class="sort" href="">
-                                        Area En
-                                        <i class="fa fa-sort"></i>
-                                    </a>
+                                    Area En
                                 </th>
                                 <th>
-                                    <a class="sort" href="">
-                                        Area Ar
-                                        <i class="fa fa-sort>"></i>
-                                    </a>
+                                    Area Ar
                                 </th>
                                 <th>
-                                    <a class="sort" href="">
-                                        ID
-                                        <i class="fa fa-sort>"></i>
-                                    </a>
+                                    ID
                                 </th>
                             </tr>
                             </thead>

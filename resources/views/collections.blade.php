@@ -91,40 +91,22 @@
                                 <input type="checkbox" onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">
                             </th>
                             <th>
-                                <a class="sort" href="">
-                                    Collection Name
-                                    <i class="fa fa-sort>"></i>
-                                </a>
+                                Collection Name
                             </th>
                             <th>
-                                <a class="sort" href="">
-                                    Description
-                                    <i class="fa fa-sort>"></i>
-                                </a>
+                                Description
                             </th>
                             <th>
-                                <a class="sort" href="">
-                                   Collection Type
-                                    <i class="fa fa-sort>"></i>
-                                </a>
+                                Collection Type
                             </th>
                             <th>
-                                <a class="sort" href="">
-                                   Price
-                                    <i class="fa fa-sort>"></i>
-                                </a>
+                                Price
                             </th>
                             <th>
-                                <a class="sort" href="">
-                                    Mealtime
-                                    <i class="fa fa-sort>"></i>
-                                </a>
+                                Mealtime
                             </th>
                             <th>
-                                <a class="sort" href="">
-                                    ID
-                                    <i class="fa fa-sort>"></i>
-                                </a>
+                                ID
                             </th>
                         </tr>
                         </thead>

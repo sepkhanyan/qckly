@@ -64,34 +64,22 @@
                             <thead>
                             <tr>
                                 @if(Auth::user()->admin == 1)
-                                <th class="action action-three">
-                                    <input type="checkbox" onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">
-                                </th>
+                                    <th class="action action-three">
+                                        <input type="checkbox" onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">
+                                    </th>
                                 @endif
-                                <th>
-                                    <a class="sort" href="">
+                                    <th>
                                         Name
-                                        <i class="fa fa-sort"></i>
-                                    </a>
-                                </th>
-                                <th>
-                                    <a class="sort" href="">
+                                    </th>
+                                    <th>
                                         Description
-                                        <i class="fa fa-sort>"></i>
-                                    </a>
-                                </th>
-                                <th>
-                                    <a class="sort" href="">
+                                    </th>
+                                    <th>
                                         Status
-                                        <i class="fa fa-sort>"></i>
-                                    </a>
-                                </th>
-                                <th>
-                                    <a class="sort" href="">
+                                    </th>
+                                    <th>
                                         ID
-                                        <i class="fa fa-sort>"></i>
-                                    </a>
-                                </th>
+                                    </th>
                             </tr>
                             </thead>
                             <tbody>
@@ -122,10 +110,6 @@
                     </div>
                     {{ $categories->links() }}
                 </form>
-                <div class="pagination-bar clearfix">
-                    <div class="links"></div>
-                    <div class="info"></div>
-                </div>
             </div>
         </div>
     </div>

@@ -55,22 +55,13 @@
                                 </th>
                                 @endif
                                 <th>
-                                    <a class="sort" href="">
-                                        Category En
-                                        <i class="fa fa-sort"></i>
-                                    </a>
+                                    Category En
                                 </th>
                                 <th>
-                                    <a class="sort" href="">
-                                        Category Ar
-                                        <i class="fa fa-sort"></i>
-                                    </a>
+                                    Category Ar
                                 </th>
                                 <th>
-                                    <a class="sort" href="">
-                                        ID
-                                        <i class="fa fa-sort>"></i>
-                                    </a>
+                                    ID
                                 </th>
                             </tr>
                             </thead>

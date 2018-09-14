@@ -74,47 +74,28 @@
                                     <input type="checkbox" onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">
                                 </th>
                                 <th>
-                                    <a class="sort" href="">
-                                        Name
-                                        <i class="fa fa-sort"></i>
-                                    </a>
+                                    Name
                                 </th>
                                 <th>
-                                    <a class="sort" href="">
-                                        Email
-                                        <i class="fa fa-sort"></i>
-                                    </a>
+                                    Email
                                 </th>
                                 <th>
-                                    <a class="sort" href="">
-                                        Country Code
-                                        <i class="fa fa-sort-"></i>
-                                    </a>
+                                    Country Code
                                 </th>
                                 <th>
-                                    <a class="sort" href="">
-                                        Telephone
-                                        <i class="fa fa-sort-"></i>
-                                    </a>
+                                    Telephone
                                 </th>
                                 <th>
-                                    <a class="sort" href="">
-                                        Date Registered
-                                        <i class="fa fa-sort-"></i>
-                                    </a>
+                                    Date Registered
                                 </th>
                                 <th class="id">
-                                    <a class="sort" href="">
-                                        ID
-                                        <i class="fa fa-sort-"></i>
-                                    </a>
+                                    ID
                                 </th>
                             </tr>
                             </thead>
                             <tbody>
 
                             @foreach($customers as $customer)
-
                                 @if($customer->admin != 1)
                                 <tr>
                                     <td class="action"><input type="checkbox" value="{{$customer->id}}" name="delete" />&nbsp;&nbsp;&nbsp;
