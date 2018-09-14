@@ -10,11 +10,14 @@ class Status extends Model
 
 
     protected $fillable = [
-        'status_name',
-        'status_comment',
-        'notify_customer',
-        'status_for',
-        'status_color'
+        'name_en',
+        'name_ar',
     ];
+
+
+    public function order()
+    {
+        return $this->hasMany('App\Order', 'status_id');
+    }
 
 }

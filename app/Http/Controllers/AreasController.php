@@ -55,10 +55,10 @@ class AreasController extends Controller
     {
         $user = Auth::user();
         if($user->admin == 1){
-            $areas = new Area();
-            $areas->area_en = $request->input('area_en');
-            $areas->area_ar = $request->input('area_ar');
-            $areas->save();
+            $area = new Area();
+            $area->area_en = $request->input('area_en');
+            $area->area_ar = $request->input('area_ar');
+            $area->save();
             return redirect('/areas');
         }else{
             return redirect('/');

@@ -163,16 +163,11 @@ class OrdersController extends Controller
                     }else{
                         $rated = false;
                     }
-                    if($order->status == 0){
-                        $status = \Lang::get('message.progress');
-                    }elseif ($order->status == 1){
-                        $status = \Lang::get('message.complete');
-                    }else{
-                        $status = \Lang::get('message.cancel');
-                    }
+
                     $arr [] = [
                         'order_id' => $order->id,
-                        'order_status' => $status,
+                        'order_status_id' => $order->status_id,
+                        'order_status' => $order->status->name_en,
                         'order_date' =>  date("j M, Y", strtotime($order->created_at)),
                         'order_time' => date("g:i a", strtotime($order->created_at)),
                         'total_price' => $order->total_price,
@@ -272,6 +267,7 @@ class OrdersController extends Controller
                                 $order->transaction_id = $transaction_id;
                             }
                             $order->total_price = $price;
+                            $order->status_id = 1;
                             $order->save();
                             UserCart::where('id', $cart_id)->update(['completed'=> 1]);
                         }else{

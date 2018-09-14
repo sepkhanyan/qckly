@@ -26,7 +26,4 @@ return [
     'collectionRemove'   => 'Collection deleted successfully.',
     'cartRemove'         => 'Cart deleted successfully.',
     'otpSent'            => 'Please enter OTP sent to your registered mobile number.',
-    'progress'           => 'In Progress',
-    'complete'           => 'Completed',
-    'cancel'             => 'Cancelled',
 ];

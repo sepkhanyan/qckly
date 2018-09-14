@@ -30,6 +30,12 @@ Route::group(['middleware' => ['web', 'auth']], function (){
             Route::post('update/{id}', 'AreasController@update');
             Route::post('delete', 'AreasController@deleteAreas');
         });
+        Route::get('/statuses', 'StatusesController@index');
+        Route::group(['prefix' => 'status'], function () {
+            Route::get('store', 'StatusesController@store');
+            Route::post('update/{id}', 'StatusesController@update');
+            Route::post('delete', 'StatusesController@deleteStatus');
+        });
         Route::get('/mealtimes', 'MealtimesController@index');
         Route::group(['prefix' => 'mealtime'], function () {
             Route::get('store', 'MealtimesController@store');

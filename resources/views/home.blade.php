@@ -398,12 +398,14 @@
                                     Ratings
                                 </a>
                             </li>
-                            <li>
-                                <a href="#" class="statuses">
-                                    <i class="fa fa-square-o fa-fw"></i>
-                                    Statuses
-                                </a>
-                            </li>
+                            @if(Auth::user()->admin == 1)
+                                <li>
+                                    <a href="{{ url('/statuses') }}" class="statuses">
+                                        <i class="fa fa-square-o fa-fw"></i>
+                                        Statuses
+                                    </a>
+                                </li>
+                            @endif
                         </ul>
                     </li>
                     @endif

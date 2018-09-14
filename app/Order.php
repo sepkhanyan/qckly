@@ -33,4 +33,9 @@ class Order extends Model
     {
         return $this->hasMany('App\Review', 'order_id');
     }
+
+    public  function status()
+    {
+        return $this->belongsTo('App\Status', 'status_id');
+    }
 }
