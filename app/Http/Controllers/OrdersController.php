@@ -163,11 +163,16 @@ class OrdersController extends Controller
                     }else{
                         $rated = false;
                     }
+                    if($lang == 'ar'){
+                        $status = $order->status->name_ar;
+                    }else{
+                        $status = $order->status->name_en;
+                    }
 
                     $arr [] = [
                         'order_id' => $order->id,
                         'order_status_id' => $order->status_id,
-                        'order_status' => $order->status->name_en,
+                        'order_status' => $status,
                         'order_date' =>  date("j M, Y", strtotime($order->created_at)),
                         'order_time' => date("g:i a", strtotime($order->created_at)),
                         'total_price' => $order->total_price,
