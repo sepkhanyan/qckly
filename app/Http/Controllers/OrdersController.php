@@ -163,9 +163,16 @@ class OrdersController extends Controller
                     }else{
                         $rated = false;
                     }
+                    if($order->status == 0){
+                        $status = \Lang::get('message.progress');
+                    }elseif ($order->status == 1){
+                        $status = \Lang::get('message.complete');
+                    }else{
+                        $status = \Lang::get('message.cancel');
+                    }
                     $arr [] = [
                         'order_id' => $order->id,
-                        'order_status' => $order->status,
+                        'order_status' => $status,
                         'order_date' =>  date("j M, Y", strtotime($order->created_at)),
                         'order_time' => date("g:i a", strtotime($order->created_at)),
                         'total_price' => $order->total_price,

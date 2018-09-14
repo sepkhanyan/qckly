@@ -73,7 +73,7 @@ class RestaurantsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RestaurantRequest $request)
     {
         $user = Auth::user();
         if($user->admin == 1){
@@ -210,7 +210,7 @@ class RestaurantsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(RestaurantRequest $request, $id)
     {
         $user = Auth::user();
         if($user->admin == 2){

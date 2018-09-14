@@ -157,13 +157,18 @@ class UsersController extends Controller
     public function login(Request $request)
     {
         \Log::info($request->all());
+        $lang = $request->header('Accept-Language');
+        $validator = \Validator::make($request->all(), []);
+        if($lang == 'ar'){
+            $validator->getTranslator()->setLocale('ar');
+        }
         $validator = \Validator::make($request->all(), [
             'country_code' => 'required',
-            'mobile_number' => 'required|integer|min:8|max:8',
+            'mobile_number' => 'required|numeric|digits:8',
         ]);
         if ($validator->fails()) {
             return response()->json(array('success' => 1, 'status_code' => 400,
-                'message' => \Lang::get('message.invalid_inputs'),
+                'message' => 'Invalid inputs',
                 'error_details' => $validator->messages()));
         } else {
             $mobile = $request->input('mobile_number');
@@ -171,7 +176,7 @@ class UsersController extends Controller
 //            if ($mobile == '76524342' || $mobile == '41052196' || $mobile == '11004527' || $mobile == '98765432' || $mobile == '16262777'||$mobile == '63112689' ) {
 //                return response()->json(['success' => 0,
 //                    'status_code' => 200,
-//                    'message' => \Lang::get('message.checkSmsSent')
+//                    'message' => \Lang::get('message.otpSent')
 //                ]);
 //            }
             $client = User::where('mobile_number', $mobile)
@@ -195,20 +200,20 @@ class UsersController extends Controller
 //                file($url);
                 return response()->json(['success' => 0,
                     'status_code' => 200,
-                    'message' => \Lang::get('message.checkSmsSent'),
+                    'message' => \Lang::get('message.otpSent'),
                     'otp' => $random_val
                 ]);
             } else {
                 $validator = \Validator::make($request->all(), [
                     'country_code' => 'required',
-                    'mobile_number' => 'required|integer|min:8|max:8'
+                    'mobile_number' => 'required|numeric|digits:8'
                 ]);
                 if ($validator->fails()) {
                     return response()->json(array('success' => 1, 'status_code' => 400,
-                        \Lang::get('message.invalid_inputs'),
+                        'message' => 'Invalid inputs',
                         'error_details' => $validator->messages()));
                 } else {
-                    try{
+//                    try{
                         $mobile = $request->input('mobile_number');
                         $country_code = $request->input('country_code');
 //                        $random_val = rand(1500, 5000);
@@ -219,25 +224,25 @@ class UsersController extends Controller
                                 'country_code' => $country_code,
                                 'mobile_number' => $mobile,
                                 'otp' => $random_val,
-                                'lang' => $request->header('Accept-Language'),
+                                'lang' => $lang,
                                 'username'=>'',
                             ]
                         );
                         $date = Carbon::now()->format('Y-m-d');
                         // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=Your%20Syaanh%20code%20is%20:%20$random_val&destination=00974$mobile&source=97772&mask=Syaanh";
 //                        file($url);
-                    }catch(\Exception $e){
-
-                        return response()->json(['success' => 0,
-                            'status_code' => 200,
-                            'message' => \Lang::get('message.checkSms')]);
-
-                    }
+//                    }catch(\Exception $e){
+//
+//                        return response()->json(['success' => 0,
+//                            'status_code' => 200,
+//                            'message' => \Lang::get('message.otpSent'),]);
+//
+//                    }
                     /// here will send code
                     if ($u_id) {
                         return response()->json(['success' => 0,
                             'status_code' => 200,
-                            'message' => \Lang::get('message.checkSms'),
+                            'message' => \Lang::get('message.otpSent'),
                             'otp' => $random_val]);
                     }
                 }
@@ -250,8 +255,8 @@ class UsersController extends Controller
         \Log::info($request->all());
         $validator = \Validator::make($request->all(), [
             'country_code' => 'required',
-            'mobile_number' => 'required|integer|min:8|max:8',
-            'otp' => 'required|integer|min:4|max:4'
+            'mobile_number' => 'required|numeric|digits:8',
+            'otp' => 'required|numeric|digits:4',
         ]);
         if ($validator->fails()) {
             return response()->json(array('success' => 1, 'status_code' => 400,
@@ -318,7 +323,7 @@ class UsersController extends Controller
         \Log::info($request->all());
         $validator = \Validator::make($request->all(), [
             'country_code' => 'required',
-            'mobile_number' => 'required|integer|min:8|max:8'
+            'mobile_number' => 'required|numeric|digits:8',
         ]);
         if ($validator->fails()) {
             return response()->json(array('success' => 1, 'status_code' => 400,
