@@ -7,6 +7,8 @@ use App\Order;
 use App\UserCart;
 use App\User;
 use App\Category;
+use App\Restaurant;
+use Auth;
 
 class OrdersController extends Controller
 {
@@ -16,9 +18,49 @@ class OrdersController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function index()
+    public function index(Request $request, $id = null)
     {
-        //
+        $user = Auth::user();
+        $restaurants = Restaurant::all();
+        $selectedRestaurant = [];
+        $data = $request->all();
+        $orders = [];
+        if($id){
+            $orders = Order::whereHas('cart', function ($query) use($id){
+                $query->whereHas('cartCollection', function ($q)use($id){
+                    $q->wherehas('collection', function ($x)use($id){
+                        $x->where('restaurant_id', $id);
+                    });
+                });
+            });
+            if(isset($data['order_status'])) {
+                $orders = $orders->where('status_id', $data['order_status']);
+            }
+
+            if(isset($data['order_search'])){
+                $orders = $orders->where('id','like',$data['order_search']);
+            }
+            $selectedRestaurant = Restaurant::find($id);
+            $orders = $orders->paginate(20);
+        }
+        if($user->admin == 2){
+            $user = $user->load('restaurant');
+            $restaurant = $user->restaurant;
+            $selectedRestaurant = Restaurant::find($restaurant->id);
+            $orders = Order::whereHas('cart', function ($query) use($restaurant){
+                $query->whereHas('cartCollection', function ($q)use($restaurant){
+                    $q->wherehas('collection', function ($x)use($restaurant){
+                        $x->where('restaurant_id', $restaurant->id);
+                    });
+                });
+            })->paginate(20);
+        }
+        return view('orders', [
+            'id' => $id,
+            'orders' => $orders,
+            'restaurants' => $restaurants,
+            'selectedRestaurant' => $selectedRestaurant,
+        ]);
     }
 
 
@@ -174,7 +216,7 @@ class OrdersController extends Controller
                         'order_status_id' => $order->status_id,
                         'order_status' => $status,
                         'order_date' =>  date("j M, Y", strtotime($order->created_at)),
-                        'order_time' => date("g:i a", strtotime($order->created_at)),
+                        'order_time' => date("g:i A", strtotime($order->created_at)),
                         'total_price' => $order->total_price,
                         'total_price_unit' => \Lang::get('message.priceUnit'),
                         'is_rated' => $rated,

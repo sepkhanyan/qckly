@@ -87,6 +87,12 @@ Route::group(['middleware' => ['web', 'auth']], function (){
             Route::post('update/{id}', 'CollectionsController@update');
             Route::post('delete','CollectionsController@deleteCollection');
         });
+        Route::get('/orders/{id?}', 'OrdersController@index');
+        Route::group(['prefix' => 'area'], function () {
+            Route::get('store', 'AreasController@store');
+            Route::post('update/{id}', 'AreasController@update');
+            Route::post('delete', 'AreasController@deleteAreas');
+        });
     });
 });
 

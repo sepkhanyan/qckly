@@ -15,17 +15,39 @@
     @if(count($collections) > 0)
     <div class="row content" >
         <div class="col-md-12">
-            <div class="panel panel-default panel-table">
                 <div class="panel-heading">
                     <h2>
                         <img src="/images/{{$selectedRestaurant->image}}" width="50px" height="50px">
                         {{$selectedRestaurant->name_en}},{{$selectedRestaurant->area->area_en}},{{$selectedRestaurant->city_en}},{{$selectedRestaurant->address_en}}
                     </h2>
-                    <div class="pull-right">
-                        <button class="btn btn-filter btn-xs">
-                            <i class="fa fa-filter"></i>
-                        </button>
-                    </div>
+                </div>
+            <div class="page-header">
+                <div class="page-action">
+                    @if(Auth::user()->admin == 1)
+                        <a  class="btn btn-primary"  href="{{ url('/collection/create/' . $selectedRestaurant->id) }}">
+                            <i class="fa fa-plus"></i>
+                            New
+                        </a>
+                    @else
+                        <a  class="btn btn-primary"  href="{{ url('/collection/create') }}">
+                            <i class="fa fa-plus"></i>
+                            New
+                        </a>
+                    @endif
+                    <a class="btn btn-danger " id="delete_collection">
+                        <i class="fa fa-trash-o"></i>
+                        Delete
+                    </a>
+                </div>
+            </div>
+            <div class="panel panel-default panel-table">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Collections</h3>
+                <div class="pull-right">
+                    <button class="btn btn-filter btn-xs">
+                        <i class="fa fa-filter"></i>
+                    </button>
+                </div>
                 </div>
                 <div class="panel-body panel-filter" style="display: none;">
                     <form role="form" id="filter-form" accept-charset="utf-8" method="GET" action="{{url('/collections/' . $id)}}">
@@ -60,26 +82,6 @@
                             </div>
                         </div>
                     </form>
-                </div>
-            </div>
-            <div class="page-header">
-                <div class="page-action">
-                    @if(Auth::user()->admin == 1)
-                    <a  class="btn btn-primary"  href="{{ url('/collection/create/' . $selectedRestaurant->id) }}">
-                        <i class="fa fa-plus"></i>
-                        New
-                    </a>
-                    @else
-                        <a  class="btn btn-primary"  href="{{ url('/collection/create') }}">
-                            <i class="fa fa-plus"></i>
-                            New
-                        </a>
-                    @endif
-                    <a class="btn btn-danger " id="delete_collection">
-                        <i class="fa fa-trash-o"></i>
-                        Delete
-                    </a>
-                </div>
             </div>
             <form role="form" id="list-form" accept-charset="utf-8" method="POST" action="">
                 <div class="table-responsive">
@@ -132,12 +134,13 @@
                 </div>
             </form>
         </div>
+        </div>
     </div>
         @else
         @if($selectedRestaurant)
             <div class="page-header">
                 <div class="page-action">
-            <h2>No Collections</h2>
+            <h2>No Collection</h2>
             @if(Auth::user()->admin == 1)
                 <a  class="btn btn-primary"  href="{{ url('/collection/create/' . $selectedRestaurant->id) }}">
                     <i class="fa fa-plus"></i>

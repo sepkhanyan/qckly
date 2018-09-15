@@ -218,7 +218,7 @@
                         </a>
                         <ul class="nav nav-second-level collapse">
                             <li>
-                                <a href="#" class="orders">
+                                <a href="{{ url('/orders') }}" class="orders">
                                     <i class="fa fa-square-o fa-fw"></i>
                                     Orders
                                 </a>
