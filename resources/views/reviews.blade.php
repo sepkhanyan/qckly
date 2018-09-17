@@ -96,12 +96,12 @@
                             <td class="action">
                                 <input type="checkbox" name="delete[]" value="19">&nbsp;&nbsp;&nbsp;
                             </td>
+                            @php($drawn = 5)
                             @foreach($reviews as $review)
                                 <td>{{$review->order->user->username}}</td>
                                 <td>{{$review->order_id}}</td>
-                                <td>
                                    @php($average_stars = round($review->rate_value * 2) / 2)
-                                    @php($drawn = 5)
+                                <td>
                                     @for($i = 0; $i < floor($average_stars); $i++)
                                         @php($drawn --)
                                         <img src="/stars/full.png" width="17px" height="17px">
