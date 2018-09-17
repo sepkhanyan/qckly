@@ -134,6 +134,9 @@
             -ms-transform: rotate(45deg);
             transform: rotate(45deg);
         }
+        .checked {
+            color: orange;
+        }
     </style>
 
 </head>

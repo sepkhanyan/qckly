@@ -99,8 +99,21 @@
                             @foreach($reviews as $review)
                                 <td>{{$review->order->user->username}}</td>
                                 <td>{{$review->order_id}}</td>
-                                <td>{{$review->rate_value}}</td>
-                            <i class="fa fa star"></i>
+                                <td>
+                                   @php($average_stars = round($review->rate_value * 2) / 2)
+                                    @php($drawn = 5)
+                                    @for($i = 0; $i < floor($average_stars); $i++)
+                                        @php($drawn --)
+                                        <img src="/stars/full.png" width="17px" height="17px">
+                                    @endfor
+                                    @if($review->rate_value - floor($average_stars) == 0.5)
+                                        @php($drawn --)
+                                        <img src="/stars/half.png" width="17px" height="17px">
+                                    @endif
+                                    @for($i = $drawn; $i > 0; $i--)
+                                        <img src="/stars/empty.png" width="17px" height="17px">
+                                    @endfor
+                                </td>
                                 <td class="rating-inline">{{$review->review_text}}</td>
                                 <td>{{date("j M Y", strtotime($review->created_at))}}</td>
                             @endforeach
