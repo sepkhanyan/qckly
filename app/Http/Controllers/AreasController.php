@@ -129,7 +129,7 @@ class AreasController extends Controller
                 }
             }
             File::delete($images);
-            Area::whereIn('id',$id)->delete();
+            Area::where('id',$id)->delete();
             return redirect('/areas');
         }else{
             return redirect('/');

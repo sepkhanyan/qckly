@@ -324,6 +324,27 @@ $(document).ready(function() {
 
     });
 
+    $('#delete_order').click(function() {
+        window.checkValues = $('input[name=delete]:checked').map(function () {
+            return $(this).val();
+        }).get();
+        console.log(checkValues);
+
+
+        $.ajax({
+
+            method: "POST",
+            url:"/order/delete",
+            data:{id:checkValues,_token:token },
+            success:function(data){
+
+                window.location.reload();
+            }
+
+        });
+
+    });
+
 
        
           $('.timepicker').timepicker({

@@ -7,7 +7,7 @@ return [
     'priceUnit'          => 'QR',
     'noOrder'            => 'There are no orders right now, place your first order to see it here.',
     'addAddress'         => 'Please add an address.',
-    'cash'               => 'Cash on delivery',
+    'cash'               => 'Cash on Delivery',
     'credit'             => 'Via Credit Card',
     'debit'              => 'Via Debit Card',
     'noRestaurant'       => 'No available restaurant.',

@@ -11,7 +11,7 @@ class UserCartItem extends Model
 
     protected $fillable = [
         'cart_id',
-        'collection_id',
+        'cart_collection_id',
         'item_id',
         'price',
         'quantity',

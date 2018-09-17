@@ -39,4 +39,9 @@ class UserCart extends Model
     {
         return $this->hasMany('App\Order', 'cart_id');
     }
+
+    public function area()
+    {
+        return $this->belongsTo('App\Area', 'delivery_order_area');
+    }
 }

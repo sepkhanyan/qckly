@@ -8,6 +8,7 @@ use App\UserCart;
 use App\User;
 use App\Category;
 use App\Restaurant;
+use App\Status;
 use Auth;
 
 class OrdersController extends Controller
@@ -22,6 +23,7 @@ class OrdersController extends Controller
     {
         $user = Auth::user();
         $restaurants = Restaurant::all();
+        $statuses = Status::all();
         $selectedRestaurant = [];
         $data = $request->all();
         $orders = [];
@@ -38,7 +40,8 @@ class OrdersController extends Controller
             }
 
             if(isset($data['order_search'])){
-                $orders = $orders->where('id','like',$data['order_search']);
+                $orders = $orders->where('id','like',$data['order_search'])
+                    ->orWhere('total_price','like',$data['order_search']);
             }
             $selectedRestaurant = Restaurant::find($id);
             $orders = $orders->paginate(20);
@@ -57,12 +60,30 @@ class OrdersController extends Controller
         }
         return view('orders', [
             'id' => $id,
+            'statuses' => $statuses,
             'orders' => $orders,
             'restaurants' => $restaurants,
             'selectedRestaurant' => $selectedRestaurant,
         ]);
     }
 
+    public function edit($id)
+    {
+        $statuses = Status::all();
+        $order = Order::find($id);
+        return view('order_edit', [
+            'order' => $order,
+            'statuses' => $statuses
+            ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $order = Order::find($id);
+        $order->status_id = $request->input('order_status');
+        $order->save();
+        return redirect('/orders');
+    }
 
     public function orderList(Request $request)
     {
@@ -191,7 +212,7 @@ class OrdersController extends Controller
                     $cart   = [
                         'cart_id' => $order->cart->id,
                         'order_area' => $order->cart->delivery_order_area,
-                        'order_date' => date("j M, Y", strtotime($order->cart->delivery_order_date)),
+                        'order_date' => date("j M Y", strtotime($order->cart->delivery_order_date)),
                         'order_time' => date("g:i a", strtotime( $order->cart->delivery_order_time)),
                         'delivery_address_id' => $address_id,
                         'delivery_address' => $address,
@@ -215,7 +236,7 @@ class OrdersController extends Controller
                         'order_id' => $order->id,
                         'order_status_id' => $order->status_id,
                         'order_status' => $status,
-                        'order_date' =>  date("j M, Y", strtotime($order->created_at)),
+                        'order_date' =>  date("j M Y", strtotime($order->created_at)),
                         'order_time' => date("g:i A", strtotime($order->created_at)),
                         'total_price' => $order->total_price,
                         'total_price_unit' => \Lang::get('message.priceUnit'),
@@ -360,6 +381,32 @@ class OrdersController extends Controller
                 'status_code' => 200,
                 'message' => \Lang::get('message.loginError')));
         }
+    }
+
+
+
+    public function deleteOrder(Request $request)
+    {
+        $user = Auth::user();
+        $id = $request->get('id');
+        if($user->admin == 1){
+            Order::whereIn('id',$id)->delete();
+        }elseif($user->admin == 2){
+            $user = $user->load('restaurant');
+            $restaurant = $user->restaurant;
+            $order = Order::whereHas('cart', function ($query) use($restaurant){
+                $query->whereHas('cartCollection', function ($q)use($restaurant){
+                    $q->wherehas('collection', function ($x)use($restaurant){
+                        $x->where('restaurant_id', $restaurant->id);
+                    });
+                });
+            })->where('id', $id)->first();
+            if($order){
+                $order->delete();
+            }
+        }
+        return redirect('/orders');
+
     }
 
     /**

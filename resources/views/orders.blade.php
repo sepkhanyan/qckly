@@ -57,9 +57,10 @@
                                             <div class="form-group">
                                                 <select name="order_status" class="form-control input-sm">
                                                     <option value="">View all status</option>
-                                                    <option value="1"  >Enabled</option>
-                                                    <option value="0"  >Disabled</option>
-                                                </select>
+                                                    @foreach ($statuses as $status)
+                                                        <option value="{{$status->id}}">{{$status->name_en}}</option>
+                                                    @endforeach
+                                                </select>&nbsp;
                                             </div>
                                             <a class="btn btn-grey" onclick="filterList();" title="Filter">
                                                 <i class="fa fa-filter"></i>
@@ -112,9 +113,25 @@
                                             </a>&nbsp;&nbsp;
                                         </td>
                                         <td>{{$order->user->username}}</td>
-                                        <td>{{$order->payment_type}}</td>
-                                        <td>{{$order->total_price}}</td>
-                                        <td>{{$order->status->name_en}}</td>
+                                        <td>
+                                            @if($order->payment_type == 1)
+                                                {{\Lang::get('message.cash')}}
+                                            @elseif($order->payment_type == 2)
+                                                {{\Lang::get('message.card')}}
+                                            @else
+                                                {{\Lang::get('message.debit')}}
+                                            @endif
+                                        </td>
+                                        <td>{{$order->total_price . \Lang::get('message.priceUnit')}}</td>
+                                        <td>
+                                            @if($order->status_id == 1)
+                                                <span class="label label-default" style="background-color: #00c0ef;">{{$order->status->name_en}}</span>
+                                            @elseif($order->status_id == 2)
+                                                <span class="label label-default" style="background-color: #00a65a;">{{$order->status->name_en}}</span>
+                                            @else
+                                                <span class="label label-default" style="background-color: #ea0b29;">{{$order->status->name_en}}</span>
+                                            @endif
+                                        </td>
                                         <td>
                                             {{date("g:i A", strtotime($order->created_at)) . '-' . date("j M, Y", strtotime($order->created_at))}}
                                         </td>
