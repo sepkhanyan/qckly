@@ -245,7 +245,7 @@
                         </a>
                         <ul class="nav nav-second-level collapse">
                             <li>
-                                <a href="#" class="reviews">
+                                <a href="{{url('/reviews')}}" class="reviews">
                                     <i class="fa fa-square-o fa-fw"></i>
                                     Reviews
                                 </a>

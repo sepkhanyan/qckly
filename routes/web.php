@@ -93,6 +93,8 @@ Route::group(['middleware' => ['web', 'auth']], function (){
             Route::post('update/{id}', 'OrdersController@update');
             Route::post('delete', 'OrdersController@deleteOrder');
         });
+        Route::get('/reviews/{id?}', 'ReviewsController@index');
+        Route::post('/review/delete', 'ReviewsController@deleteReview');
     });
 });
 

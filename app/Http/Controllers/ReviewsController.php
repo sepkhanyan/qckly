@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Order;
 use App\Review;
 use App\User;
+use App\Restaurant;
 use Illuminate\Http\Request;
+use Auth;
 
 class ReviewsController extends Controller
 {
@@ -14,6 +16,40 @@ class ReviewsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function index(Request $request, $id = null)
+    {
+        $user = Auth::user();
+        $restaurants = Restaurant::all();
+        $selectedRestaurant = [];
+        $data = $request->all();
+        $reviews = [];
+        if($id){
+            $reviews = Review::where('restaurant_id', $id);
+            if(isset($data['review_date'])) {
+                $reviews = $reviews->where('created_at', $data['review_date']);
+            }
+
+            if(isset($data['review_search'])){
+                $reviews = $reviews->where('order_id','like',$data['order_search'])
+                    ->orWhere('rate_value','like',$data['order_search']);
+            }
+            $selectedRestaurant = Restaurant::find($id);
+            $reviews = $reviews->paginate(20);
+        }
+        if($user->admin == 2){
+            $user = $user->load('restaurant');
+            $restaurant = $user->restaurant;
+            $selectedRestaurant = Restaurant::find($restaurant->id);
+            $reviews = Review::where('restaurant_id',$restaurant->id)->paginate(20);
+        }
+        return view('reviews', [
+            'id' => $id,
+            'reviews' => $reviews,
+            'restaurants' => $restaurants,
+            'selectedRestaurant' => $selectedRestaurant,
+        ]);
+    }
+
     public function reviews(Request $request)
     {
         \Log::info($request->all());

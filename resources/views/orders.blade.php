@@ -133,7 +133,7 @@
                                             @endif
                                         </td>
                                         <td>
-                                            {{date("g:i A", strtotime($order->created_at)) . '-' . date("j M, Y", strtotime($order->created_at))}}
+                                            {{date("g:i A", strtotime($order->created_at)) . '-' . date("j M Y", strtotime($order->created_at))}}
                                         </td>
                                         <td>{{$order->id}}</td>
                                     </tr>
