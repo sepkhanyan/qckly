@@ -69,8 +69,22 @@ class OrdersController extends Controller
 
     public function edit($id)
     {
+        $user = Auth::user();
         $statuses = Status::all();
-        $order = Order::find($id);
+        if($user->admin == 1){
+            $order = Order::find($id);
+        }elseif($user->admin == 2){
+            $user = $user->load('restaurant');
+            $restaurant = $user->restaurant;
+            $order = Order::whereHas('cart', function ($query) use($restaurant){
+                $query->whereHas('cartCollection', function ($q)use($restaurant){
+                    $q->wherehas('collection', function ($x)use($restaurant){
+                        $x->where('restaurant_id', $restaurant->id);
+                    });
+                });
+            })->where('id', $id)->first();
+
+        }
         return view('order_edit', [
             'order' => $order,
             'statuses' => $statuses
@@ -79,7 +93,20 @@ class OrdersController extends Controller
 
     public function update(Request $request, $id)
     {
-        $order = Order::find($id);
+        $user = Auth::user();
+        if($user->admin == 1){
+            $order = Order::find($id);
+        }elseif($user->admin == 2){
+            $user = $user->load('restaurant');
+            $restaurant = $user->restaurant;
+            $order = Order::whereHas('cart', function ($query) use($restaurant){
+                $query->whereHas('cartCollection', function ($q)use($restaurant){
+                    $q->wherehas('collection', function ($x)use($restaurant){
+                        $x->where('restaurant_id', $restaurant->id);
+                    });
+                });
+            })->where('id', $id)->first();
+        }
         $order->status_id = $request->input('order_status');
         $order->save();
         return redirect('/orders');
