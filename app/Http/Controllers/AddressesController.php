@@ -49,7 +49,7 @@ class AddressesController extends Controller
             $DataRequests = $request->all();
             $validator = \Validator::make($DataRequests, [
                 'name' => 'required|string',
-                'mobile_number' => 'required|integer',
+                'mobile_number' => 'required|numeric|digits:8',
                 'location' => 'required|string',
                 'building_number' => 'required|integer',
                 'zone' => 'required|string',

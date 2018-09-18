@@ -135,27 +135,17 @@ return [
     |
     */
 
-//    'values' => [
-//        '0' => '٠',
-//        '1' => '١',
-//        '2' => '٢',
-//        '3' => '٣',
-//        '4' => '٤',
-//        '5' => '٥',
-//        '6' => '٦',
-//        '7' => '٧',
-//        '8' => '٨',
-//        '9' => '٩'
-//    ],
-
 
     'attributes' => [
         'name'                  => 'الاسم',
         'mobile_number'         => 'رقم الهاتف',
         'location'              => 'الموقع',
+        'is_apartment'          => 'شقة',
         'building_number'       => 'رقم البناء',
         'zone'                  => 'المنطقة',
         'apartment_number'      => 'رقم الشقة',
+        'latitude'              => 'خط العرض',
+        'longitude'             => 'خط الطول',
         'username'              => 'اسم المُستخدم',
         'email'                 => 'البريد الالكتروني',
         'first_name'            => 'الاسم الأول',
@@ -185,5 +175,25 @@ return [
         'available'             => 'مُتاح',
         'size'                  => 'الحجم',
         'reviews'               => 'التقييمات',
+        'payment_type'          => 'نوع الدفعة',
+        'total_price'           => 'السعر الإجمالي',
+        'cart_id'               => 'رقم السلة',
+        'category_id'           => 'رقم الصنف',
+        'area_id'               => 'رقم المنطقة',
+        'working_day'           => 'يوم العمل',
+        'working_time'          => 'وقت العمل',
+        'restaurant_id'         => 'رقم المطعم',
+        'collection_type'       => 'نوع المجموعة',
+        'collection_id'         => 'رقم المجموعة',
+        'female_caterer'        => 'متعد إناث',
+        'delivery_order_area'   => 'منطقة توصيل الطلب',
+        'delivery_order_date'   => 'تاريخ توصيل الطلب',
+        'delivery_order_time'   => 'وقت توصيل الطلب',
+        'collection_price'      => 'سعر المجموعة',
+        'collection_quantity'   => 'كمية المجموعة',
+        'persons_count'         => 'عدد الأشخاص',
+        'menus'                 => 'القوائم',
+        'otp'                   => 'رمز التفعيل',
+        'country_code'          => 'رمز الدولة',
     ],
 ];
