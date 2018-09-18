@@ -55,18 +55,6 @@ $(document).ready(function() {
         $('#special-toggle'). slideDown('fast');
     });
 
-
-    // $('#category').change(function(){
-    //     if ($(this).val() == 3 || $(this).val() == 4 || $(this).val() == 2)
-    //     {
-    //         $('#menu_item').attr('multiple','multiple');
-    //     }
-    //     else
-    //     {
-    //         $('#menu_item').removeAttr('multiple');
-    //     }
-    // });
-
     $('#category').click(function() {
         $('#items'). slideDown('fast');
         if($('select[name=category]').val() == 1){
@@ -114,6 +102,26 @@ $(document).ready(function() {
 
 
 
+    $('#delete_review').click(function() {
+        window.checkValues = $('input[name=delete]:checked').map(function () {
+            return $(this).val();
+        }).get();
+        console.log(checkValues);
+
+
+        $.ajax({
+
+            method: "POST",
+            url:"/review/delete",
+            data:{id:checkValues,_token:token },
+            success:function(data){
+
+                window.location.reload();
+            }
+
+        });
+
+    });
 
     $('#delete_mealtime').click(function() {
         window.checkValues = $('input[name=delete]:checked').map(function () {
@@ -347,93 +355,79 @@ $(document).ready(function() {
 
 
        
-          $('.timepicker').timepicker({
-                defaultTime: '11:45 AM'
-            });
+    $('.timepicker').timepicker({
+        defaultTime: '11:45 AM'
+    });
 
 
 
 
     $('#delivery-areas select.form-control').select2({
-                minimumResultsForSearch: Infinity
-            });
+        minimumResultsForSearch: Infinity
+    });
 
-            // $('.timepicker').timepicker({
-            //     defaultTime: '11:45 AM'
-            // });
 
-            $('input[name="auto_lat_lng"]').on('change', function() {
-                $('#lat-lng').slideDown('fast');
+    $('input[name="auto_lat_lng"]').on('change', function() {
+        $('#lat-lng').slideDown('fast');
+        if (this.value == '1') {
+            $('#lat-lng').slideUp('fast');
+        }
+    });
 
-                if (this.value == '1') {
-                    $('#lat-lng').slideUp('fast');
-                }
-            });
+    $('input[name="opening_type"]').on('change', function() {
+        if (this.value == '24_7') {
+            $('#opening-daily').slideUp('fast');
+            $('#opening-flexible').slideUp('fast');
+        }
+        if (this.value == 'daily') {
+            $('#opening-flexible').slideUp('fast');
+            $('#opening-daily').slideDown('fast');
+        }
+        if (this.value == 'flexible') {
+            $('#opening-daily').slideUp('fast');
+            $('#opening-flexible').slideDown('fast');
+        }
+    });
 
-            $('input[name="opening_type"]').on('change', function() {
-                if (this.value == '24_7') {
-                    $('#opening-daily').slideUp('fast');
-                    $('#opening-flexible').slideUp('fast');
-                }
+    $('input[name="delivery_type"]').on('change', function() {
+        if (this.value == '0') {
+            $('#delivery-hours-daily').slideUp('fast');
+        }
+        if (this.value == '1') {
+            $('#delivery-hours-daily').slideDown('fast');
+        }
+    });
 
-                if (this.value == 'daily') {
-                    $('#opening-flexible').slideUp('fast');
-                    $('#opening-daily').slideDown('fast');
-                }
+    $('input[name="collection_type"]').on('change', function() {
+        if (this.value == '0') {
+            $('#collection-hours-daily').slideUp('fast');
+        }
+        if (this.value == '1') {
+            $('#collection-hours-daily').slideDown('fast');
+        }
+    });
 
-                if (this.value == 'flexible') {
-                    $('#opening-daily').slideUp('fast');
-                    $('#opening-flexible').slideDown('fast');
-                }
-            });
+    $('input[name="future_orders"]').on('change', function() {
+        $('#future-orders-days').slideUp('fast');
+        if (this.value == '1') {
+            $('#future-orders-days').slideDown('fast');
+        }
+    });
 
-            $('input[name="delivery_type"]').on('change', function() {
-                if (this.value == '0') {
-                    $('#delivery-hours-daily').slideUp('fast');
-                }
+    $(document).on('click', '.btn-add-condition', function() {
+        var panelRow = $(this).attr('data-panel-row');
+        var tableRow = $(this).attr('data-table-row');
+        tableRow++;
+        addDeliveryCondition(panelRow, tableRow);
+        $(this).attr('data-table-row', tableRow);
+    });
 
-                if (this.value == '1') {
-                    $('#delivery-hours-daily').slideDown('fast');
-                }
-            });
-
-            $('input[name="collection_type"]').on('change', function() {
-                if (this.value == '0') {
-                    $('#collection-hours-daily').slideUp('fast');
-                }
-
-                if (this.value == '1') {
-                    $('#collection-hours-daily').slideDown('fast');
-                }
-            });
-
-            $('input[name="future_orders"]').on('change', function() {
-                $('#future-orders-days').slideUp('fast');
-
-                if (this.value == '1') {
-                    $('#future-orders-days').slideDown('fast');
-                }
-            });
-
-            $(document).on('click', '.btn-add-condition', function() {
-                var panelRow = $(this).attr('data-panel-row');
-                var tableRow = $(this).attr('data-table-row');
-
-                tableRow++;
-                addDeliveryCondition(panelRow, tableRow);
-
-                $(this).attr('data-table-row', tableRow);
-            });
-
-            $(document).on('change', '#delivery-areas select.form-control', function() {
-                $(this).parent().parent().find('input.total').attr('disabled', false);
-
-                if (this.value == 'all') {
-                    $(this).parent().parent().find('input.total').val('0');
-                    $(this).parent().parent().find('input.total').attr('disabled', true);
-                }
-            });
-
-            $('#delivery-areas select.form-control').trigger('change');
-        
+    $(document).on('change', '#delivery-areas select.form-control', function() {
+        $(this).parent().parent().find('input.total').attr('disabled', false);
+        if (this.value == 'all') {
+            $(this).parent().parent().find('input.total').val('0');
+            $(this).parent().parent().find('input.total').attr('disabled', true);
+        }
+    });
+    $('#delivery-areas select.form-control').trigger('change');
 });

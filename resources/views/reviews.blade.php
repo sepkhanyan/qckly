@@ -89,6 +89,7 @@
                             <th>Rating</th>
                             <th>Review</th>
                             <th>Date Added</th>
+                            <th>ID</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -116,11 +117,13 @@
                                 </td>
                                 <td class="rating-inline">{{$review->review_text}}</td>
                                 <td>{{date("j M Y", strtotime($review->created_at))}}</td>
+                            <td>{{$review->id}}</td>
                         </tr>
                         @endforeach
                         </tbody>
                     </table>
                 </div>
+                {{ $reviews->links() }}
             </form>
         </div>
     </div>

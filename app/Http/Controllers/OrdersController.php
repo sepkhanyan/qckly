@@ -44,7 +44,7 @@ class OrdersController extends Controller
                     ->orWhere('total_price','like',$data['order_search']);
             }
             $selectedRestaurant = Restaurant::find($id);
-            $orders = $orders->paginate(20);
+            $orders = $orders->orderby('created_at', 'desc')->paginate(20);
         }
         if($user->admin == 2){
             $user = $user->load('restaurant');
@@ -56,7 +56,7 @@ class OrdersController extends Controller
                         $x->where('restaurant_id', $restaurant->id);
                     });
                 });
-            })->paginate(20);
+            })->orderby('created_at', 'desc')->paginate(20);
         }
         return view('orders', [
             'id' => $id,

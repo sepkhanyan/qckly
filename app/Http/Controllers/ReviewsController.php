@@ -34,13 +34,15 @@ class ReviewsController extends Controller
                     ->orWhere('rate_value','like',$data['review_search']);
             }
             $selectedRestaurant = Restaurant::find($id);
-            $reviews = $reviews->paginate(20);
+            $reviews = $reviews->orderby('created_at', 'desc')
+                ->with('order.user')->paginate(20);
         }
         if($user->admin == 2){
             $user = $user->load('restaurant');
             $restaurant = $user->restaurant;
             $selectedRestaurant = Restaurant::find($restaurant->id);
-            $reviews = Review::where('restaurant_id',$restaurant->id)->paginate(20);
+            $reviews = Review::where('restaurant_id',$restaurant->id)->orderby('created_at', 'desc')
+                ->with('order.user')->paginate(20);
         }
         return view('reviews', [
             'id' => $id,
@@ -219,8 +221,20 @@ class ReviewsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function deleteReview(Request $request)
     {
-        //
+        $user = Auth::user();
+        $id = $request->get('id');
+        if($user->admin == 1){
+            Review::whereIn('id',$id)->delete();
+        }elseif($user->admin == 2){
+            $user = $user->load('restaurant');
+            $restaurant = $user->restaurant;
+            $review = Review::where('restaurant_id',$restaurant->id)->where('id', $id)->first();
+            if($review){
+                $review->delete();
+            }
+        }
+        return redirect('/reviews');
     }
 }
