@@ -66,7 +66,7 @@
                                     <a class="btn btn-grey" onclick="filterList();" title="" data-original-title="Filter">
                                         <i class="fa fa-filter"></i>
                                     </a>&nbsp;
-                                    <a class="btn btn-grey" href="{{url('/reviews')}}" title="" data-original-title="Clear">
+                                    <a class="btn btn-grey" href="{{url('/reviews/' . $id)}}" title="" data-original-title="Clear">
                                         <i class="fa fa-times"></i>
                                     </a>
                                 </div>
@@ -92,16 +92,16 @@
                         </tr>
                         </thead>
                         <tbody>
+                        @foreach($reviews as $review)
                         <tr>
                             <td class="action">
                                 <input type="checkbox" name="delete[]" value="19">&nbsp;&nbsp;&nbsp;
                             </td>
-                            @php($drawn = 5)
-                            @foreach($reviews as $review)
                                 <td>{{$review->order->user->username}}</td>
                                 <td>{{$review->order_id}}</td>
-                                   @php($average_stars = round($review->rate_value * 2) / 2)
                                 <td>
+                                    @php($drawn = 5)
+                                    @php($average_stars = round($review->rate_value * 2) / 2)
                                     @for($i = 0; $i < floor($average_stars); $i++)
                                         @php($drawn --)
                                         <img src="/stars/full.png" width="17px" height="17px">
@@ -116,9 +116,8 @@
                                 </td>
                                 <td class="rating-inline">{{$review->review_text}}</td>
                                 <td>{{date("j M Y", strtotime($review->created_at))}}</td>
-                            @endforeach
                         </tr>
-
+                        @endforeach
                         </tbody>
                     </table>
                 </div>
