@@ -342,13 +342,13 @@ class OrdersController extends Controller
                             return response()->json(array(
                                 'success' => 1,
                                 'status_code' => 200,
-                                'message' => 'Cart already ordered.'));
+                                'message' => \Lang::get('message.orderComplete')));
                         }
                 }else{
                     return response()->json(array(
                         'success' => 1,
                         'status_code' => 200,
-                        'message' => 'No cart.'));
+                        'message' => \Lang::get('message.emptyCart')));
                 }
 
                     if($order->payment_type == 1){

@@ -592,7 +592,7 @@ class RestaurantsController extends Controller
                         'famous_images' => $famous,
                         'ratings_count' => $rating_count,
                         'review_count' => $review_count,
-                        'availability_hours' => date("g:i a", strtotime($opening))  . ' - ' . date("g:i a", strtotime($closing)),
+                        'availability_hours' => date("g:i A", strtotime($opening))  . ' - ' . date("g:i A", strtotime($closing)),
                         'description' => $restaurant_description,
                         'status' => $working_status,
                         'category' => $category
@@ -827,16 +827,16 @@ class RestaurantsController extends Controller
                                             $setup_hours = $collection->setup_time / 60;
                                             $setup_minutes = $collection->setup_time % 60;
                                             if ($setup_minutes > 0) {
-                                                $setup = floor($setup_hours) . " hours " . ($setup_minutes) . " minutes";
+                                                $setup = floor($setup_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($setup_minutes) . ' ' . \Lang::get('message.minute');
                                             } else {
-                                                $setup = floor($setup_hours) . " hours";
+                                                $setup = floor($setup_hours) . ' ' . \Lang::get('message.hour');
                                             }
                                             $max_hours = $collection->max_time / 60;
                                             $max_minutes = $collection->max_time % 60;
                                             if ($max_minutes > 0) {
-                                                $max = floor($max_hours) . " hours " . ($max_minutes) . " minutes";
+                                                $max = floor($max_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($max_minutes) . ' ' . \Lang::get('message.minute');
                                             } else {
-                                                $max = floor($max_hours) . " hours";
+                                                $max = floor($max_hours) . ' ' . \Lang::get('message.hour');
                                             }
                                             if($lang == 'ar'){
                                                 $requirement = $collection->requirements_ar;

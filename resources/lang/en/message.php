@@ -26,5 +26,7 @@ return [
     'collectionRemove'   => 'Collection deleted successfully.',
     'cartRemove'         => 'Cart deleted successfully.',
     'otpSent'            => 'Please enter OTP sent to your registered mobile number.',
-    'otpError'           => 'Enter valid OTP Number'
+    'otpError'           => 'Enter valid OTP Number',
+    'orderComplete'      => 'Cart already ordered.',
+    'emptyCart'          => 'Cart is empty.'
 ];
