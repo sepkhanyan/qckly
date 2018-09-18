@@ -141,7 +141,7 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function deleteCustomers(Request $request)
+    public function deleteCustomer(Request $request)
     {
         $user = Auth::user();
         if($user->admin == 1){

@@ -132,7 +132,7 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function deleteCategories(Request $request)
+    public function deleteCategory(Request $request)
     {
         $user = Auth::user();
         if($user->admin == 1){

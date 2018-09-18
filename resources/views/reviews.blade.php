@@ -96,7 +96,7 @@
                         @foreach($reviews as $review)
                         <tr>
                             <td class="action">
-                                <input type="checkbox" name="delete[]" value="19">&nbsp;&nbsp;&nbsp;
+                                <input type="checkbox" value="{{ $review->id }}" name="delete" />
                             </td>
                                 <td>{{$review->order->user->username}}</td>
                                 <td>{{$review->order_id}}</td>

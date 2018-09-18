@@ -308,7 +308,7 @@ class RestaurantsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function deleteRestaurants(Request $request)
+    public function deleteRestaurant(Request $request)
     {
         $user = Auth::user();
         if($user->admin == 1){

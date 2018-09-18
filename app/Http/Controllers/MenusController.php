@@ -179,7 +179,7 @@ class MenusController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function deleteMenus(Request $request)
+    public function deleteMenu(Request $request)
     {
         $id = $request->get('id');
         $menus = Menu::where('id',$id)->get();

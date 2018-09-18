@@ -116,7 +116,7 @@ class AreasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function deleteAreas(Request $request)
+    public function deleteArea(Request $request)
     {
         $user = Auth::user();
         if($user->admin == 1){

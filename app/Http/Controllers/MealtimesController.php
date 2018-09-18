@@ -105,7 +105,7 @@ class MealtimesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function deleteMealtimes(Request $request)
+    public function deleteMealtime(Request $request)
     {
         $user = Auth::user();
         if($user->admin == 1){
