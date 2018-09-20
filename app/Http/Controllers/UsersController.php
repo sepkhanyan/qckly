@@ -23,18 +23,19 @@ class UsersController extends Controller
     {
         $user = Auth::user();
         if($user->admin == 1){
-            $customers = User::all();
+            $customers = User::where('group_id', 0);
             $data = $request->all();
             /*if(isset($data['customer_status'])){
                 $users = User::where('user_status',$data['customer_status'])->get();
             }*/
             if(isset($data['customer_date'])){
-                $customers = User::where('created_at',$data['customer_date'])->get();
+                $customers = User::where('created_at',$data['customer_date']);
             }
             if(isset($data['customer_search'])){
                 $customers = User::where('email','like',$data['customer_search'])
-                    ->orWhere('username','like',$data['customer_search'])->get();
+                    ->orWhere('username','like',$data['customer_search']);
             }
+            $customers = $customers->paginate(20);
             return view('customers', ['customers' => $customers]);
         }else{
             return redirect('/');
@@ -442,6 +443,25 @@ class UsersController extends Controller
                 'status_code' => 200,
                 'data' => $arr));
         }
+    }
+
+
+    public function editAdmin()
+    {
+        $admin = Auth::user();
+        return view('admin_edit', ['admin' => $admin]);
+
+    }
+
+    public function updateAdmin(Request $request)
+    {
+        $admin = Auth::user();
+        $admin->first_name = $request->input('name');
+        $admin->email = $request->input('email');
+        $admin->username = $request->input('username');
+        $admin->save();
+        return redirect('/');
+
     }
 
 }

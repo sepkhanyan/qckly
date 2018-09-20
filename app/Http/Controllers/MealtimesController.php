@@ -110,6 +110,17 @@ class MealtimesController extends Controller
         $user = Auth::user();
         if($user->admin == 1){
             $id = $request->get('id');
+            $mealtimes = Mealtime::where('id', $id)->get();
+            foreach ($mealtimes as $mealtime) {
+                if ($mealtime->menu) {
+                    $menu_images = [];
+                    foreach ($mealtime->menu as $menu) {
+                        $menu_images[] = public_path('images/' . $menu->menu_photo);
+                    }
+
+                    File::delete($menu_images);
+                }
+            }
             Mealtime::whereIn('id',$id)->delete();
             return redirect('/mealtimes');
         }else{

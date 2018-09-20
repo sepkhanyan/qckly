@@ -95,6 +95,8 @@ Route::group(['middleware' => ['web', 'auth']], function (){
         });
         Route::get('/reviews/{id?}', 'ReviewsController@index');
         Route::post('/review/delete', 'ReviewsController@deleteReview');
+        Route::get('/admin/edit/{id}', 'UsersController@editAdmin');
+        Route::post('/admin/update/{id}', 'UsersController@updateAdmin');
     });
 });
 

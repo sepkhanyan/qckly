@@ -44,13 +44,13 @@ class CollectionsController extends Controller
                     ->orWhere('mealtime','like',$data['collection_search']);
             }
             $selectedRestaurant = Restaurant::find($id);
-            $collections = $collections->get();
+            $collections = $collections->paginate(20);
         }
         if($user->admin == 2){
             $user = $user->load('restaurant');
             $restaurant = $user->restaurant;
             $selectedRestaurant = Restaurant::find($restaurant->id);
-            $collections = Collection::where('restaurant_id', $restaurant->id)->get();
+            $collections = Collection::where('restaurant_id', $restaurant->id)->paginate(20);
         }
         return view('collections', [
             'id' => $id,

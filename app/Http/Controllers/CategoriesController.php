@@ -20,14 +20,14 @@ class CategoriesController extends Controller
     {
         $categories = Category::paginate(20);
         $data = $request->all();
-        if(isset($data['category_status'])){
-            $categories = Category::where('status',$data['category_status'])->paginate(20);
+        if (isset($data['category_status'])) {
+            $categories = Category::where('status', $data['category_status'])->paginate(20);
         }
-        if(isset($data['category_search'])){
-            $categories = Category::where('name','like',$data['category_search'])
-                ->orWhere('description','like',$data['category_search'])->paginate(20);
+        if (isset($data['category_search'])) {
+            $categories = Category::where('name', 'like', $data['category_search'])
+                ->orWhere('description', 'like', $data['category_search'])->paginate(20);
         }
-            return view('menu_categories', ['categories' => $categories]);
+        return view('menu_categories', ['categories' => $categories]);
 
     }
 
@@ -39,9 +39,9 @@ class CategoriesController extends Controller
     public function create()
     {
         $user = Auth::user();
-        if($user->admin == 1){
+        if ($user->admin == 1) {
             return view('menu_category_create');
-        }else{
+        } else {
             return redirect('categories');
         }
     }
@@ -49,14 +49,14 @@ class CategoriesController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(CategoryRequest $request)
 
     {
         $user = Auth::user();
-        if($user->admin == 1){
+        if ($user->admin == 1) {
             $category = new Category();
             $category->name_en = $request->input('name_en');
             $category->description_en = $request->input('description_en');
@@ -67,7 +67,7 @@ class CategoriesController extends Controller
             if ($category) {
                 return redirect('/categories');
             }
-        }else{
+        } else {
             return redirect('categories');
         }
 
@@ -76,7 +76,7 @@ class CategoriesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -87,16 +87,16 @@ class CategoriesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
         $user = Auth::user();
-        if($user->admin == 1){
+        if ($user->admin == 1) {
             $category = Category::find($id);
             return view('menu_category_edit', ['category' => $category]);
-        }else{
+        } else {
             return redirect('categories');
         }
     }
@@ -104,14 +104,14 @@ class CategoriesController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(CategoryRequest $request, $id)
     {
         $user = Auth::user();
-        if($user->admin == 1){
+        if ($user->admin == 1) {
             $category = Category::find($id);
             $category->name_en = $request->input('name_en');
             $category->description_en = $request->input('description_en');
@@ -120,7 +120,7 @@ class CategoriesController extends Controller
             $category->status = $request->input('status');
             $category->save();
             return redirect('/categories');
-        }else{
+        } else {
             return redirect('categories');
         }
 
@@ -129,23 +129,28 @@ class CategoriesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function deleteCategory(Request $request)
     {
         $user = Auth::user();
-        if($user->admin == 1){
+        if ($user->admin == 1) {
             $id = $request->get('id');
-            $menus = Menu::where('category_id',$id)->get();
-            $images = [];
-            foreach($menus as $menu){
-                $images [] = public_path('images/' . $menu->image);
+            $categories = Category::where('id', $id)->get();
+            foreach ($categories as $category) {
+                if ($category->menu) {
+                    $menu_images = [];
+                    foreach ($category->menu as $menu) {
+                        $menu_images[] = public_path('images/' . $menu->menu_photo);
+                    }
+
+                    File::delete($menu_images);
+                }
             }
-            File::delete($images);
-            Category::whereIn('id',$id)->delete();
+            Category::whereIn('id', $id)->delete();
             return redirect('/categories');
-        }else{
+        } else {
             return redirect('categories');
         }
 

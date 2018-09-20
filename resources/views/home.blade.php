@@ -14,20 +14,20 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 
-    <script src="{{ asset('js/jquery-1.11.2.min.js') }}" ></script>
-    <script src="{{ asset('js/jquery.js') }}" ></script>
-    <script src="{{ asset('js/jquery-sortable.js') }}" ></script>
-    <script src="{{ asset('js/jquery-ui.js') }}" ></script>
-    <script src="{{ asset('js/jquery.raty.js') }}" ></script>
-    <script src="{{ asset('js/datepicker/timepicki.js') }}" ></script>
-    <script src="{{ asset('js/datepicker/bootstrap-datepicker.js') }}" ></script>
-    <script src="{{ asset('js/datepicker/bootstrap-timepicker.js') }}" ></script>
-    <script src="{{ asset('js/js.cookie.js')}}" ></script>
-    <script src="{{ asset('js/qckly.js') }}" ></script>
-    <script src="{{ asset('js/bootstrap.min.js') }}" ></script>
-    <script src="{{ asset('js/metisMenu.min.js') }}" ></script>
-    <script src="{{ asset('js/select2.js') }}" ></script>
-    <script src="{{ asset('js/common.js') }}" ></script>
+    <script src="{{ asset('js/jquery-1.11.2.min.js') }}"></script>
+    <script src="{{ asset('js/jquery.js') }}"></script>
+    <script src="{{ asset('js/jquery-sortable.js') }}"></script>
+    <script src="{{ asset('js/jquery-ui.js') }}"></script>
+    <script src="{{ asset('js/jquery.raty.js') }}"></script>
+    <script src="{{ asset('js/datepicker/timepicki.js') }}"></script>
+    <script src="{{ asset('js/datepicker/bootstrap-datepicker.js') }}"></script>
+    <script src="{{ asset('js/datepicker/bootstrap-timepicker.js') }}"></script>
+    <script src="{{ asset('js/js.cookie.js')}}"></script>
+    <script src="{{ asset('js/qckly.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/metisMenu.min.js') }}"></script>
+    <script src="{{ asset('js/select2.js') }}"></script>
+    <script src="{{ asset('js/common.js') }}"></script>
 
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
@@ -42,21 +42,21 @@
     <link href="{{ asset('css/stylesheet.css') }}" rel="stylesheet">
     <link href="{{ asset('js/datepicker/datepicker.css') }}" rel="stylesheet">
     <link href="{{ asset('js/datepicker/bootstrap-timepicker.css') }}" rel="stylesheet">
-    {{--<script>
-    var js_site_url = function(str) {
-    var strTmp = "qckly.loc/" + str;
-    return strTmp;
-    };
+    <script>
+        var js_site_url = function (str) {
+            var strTmp = "qckly.loc/" + str;
+            return strTmp;
+        };
 
-    var js_base_url = function(str) {
-    var strTmp = "qckly.loc/" + str;
-    return strTmp;
-    };
+        var js_base_url = function (str) {
+            var strTmp = "qckly.loc/" + str;
+            return strTmp;
+        };
 
-    var active_menu = 'menus';
-    </script>--}}
+        var active_menu = 'menus';
+    </script>
     <script type="text/javascript">
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('a[title], span[title], button[title]').tooltip({placement: 'bottom'});
             $('select.form-control').select2({minimumResultsForSearch: 10});
 
@@ -134,6 +134,7 @@
             -ms-transform: rotate(45deg);
             transform: rotate(45deg);
         }
+
         .checked {
             color: orange;
         }
@@ -142,11 +143,12 @@
 </head>
 <body>
 <div id="wrapper" class="">
-    <nav class="navbar navbar-static-top navbar-top" role="navigation" style="margin-bottom: 0">
-        <div class="navbar-header">
+    <nav class="navbar navbar-static-top navbar-top" role="navigation" style="margin-bottom:0 ">
+        <div class="navbar-header ">
             <div class="navbar-brand">
                 <div class="navbar-logo col-xs-3">
-                    <img class="logo-image" alt="Qckly" title="Qckly" src="https://demo.tastyigniter.com/admin/views/themes/tastyigniter-blue/images/tastyigniter-logo.png"/>
+                    <img class="logo-image" alt="Qckly" title="Qckly"
+                         src="https://demo.tastyigniter.com/admin/views/themes/tastyigniter-blue/images/tastyigniter-logo.png"/>
                 </div>
                 <div class="navbar-logo col-xs-9">
                     {{--<img class="logo-text" alt="TastyIgniter" title="TastyIgniter" src="https://demo.tastyigniter.com/admin/views/themes/tastyigniter-blue/images/tastyigniter-logo-text.png"/>--}}
@@ -163,7 +165,7 @@
             <div class="sidebar-nav navbar-collapse">
                 <ul class="nav" id="side-menu">
                     <li>
-                        <a class="dashboard admin active" href="{{ url('/') }}">
+                        <a href="{{ url('/') }}">
                             <i class="fa fa-dashboard fa-fw"></i>
                             <span class="content">Dashboard</span>
                         </a>
@@ -194,10 +196,10 @@
                                 </a>
                             </li>
                             {{--<li>--}}
-                                {{--<a href="#" class="menu_options">--}}
-                                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                                    {{--Options--}}
-                                {{--</a>--}}
+                            {{--<a href="#" class="menu_options">--}}
+                            {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                            {{--Options--}}
+                            {{--</a>--}}
                             {{--</li>--}}
                             <li>
                                 <a href="{{ url('/categories') }}" class="menu-categories">
@@ -227,16 +229,16 @@
                                 </a>
                             </li>
                             {{--<li>--}}
-                                {{--<a href="#" class="reservations">--}}
-                                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                                    {{--Reservations--}}
-                                {{--</a>--}}
+                            {{--<a href="#" class="reservations">--}}
+                            {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                            {{--Reservations--}}
+                            {{--</a>--}}
                             {{--</li>--}}
                             {{--<li>--}}
-                                {{--<a href="#" class="coupons">--}}
-                                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                                    {{--Coupons--}}
-                                {{--</a>--}}
+                            {{--<a href="#" class="coupons">--}}
+                            {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                            {{--Coupons--}}
+                            {{--</a>--}}
                             {{--</li>--}}
                         </ul>
                     </li>
@@ -254,16 +256,16 @@
                                 </a>
                             </li>
                             {{--<li>--}}
-                                {{--<a href="#" class="messages">--}}
-                                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                                    {{--Messages--}}
-                                {{--</a>--}}
+                            {{--<a href="#" class="messages">--}}
+                            {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                            {{--Messages--}}
+                            {{--</a>--}}
                             {{--</li>--}}
                             {{--<li>--}}
-                                {{--<a href="#" class="banners">--}}
-                                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                                    {{--Banners--}}
-                                {{--</a>--}}
+                            {{--<a href="#" class="banners">--}}
+                            {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                            {{--Banners--}}
+                            {{--</a>--}}
                             {{--</li>--}}
                         </ul>
                     </li>
@@ -284,25 +286,25 @@
                             </ul>
                         </li>
                         <li>
-                        <a class="restaurant">
-                            <i class="fa fa-map-marker fa-fw"></i>
-                            <span class="content">Restaurants</span>
-                            <span class="fa arrow"></span>
-                        </a>
-                        <ul class="nav nav-second-level collapse">
-                            <li>
-                                <a href="{{ url('/restaurants') }}" class="locations">
-                                    <i class="fa fa-square-o fa-fw"></i>
-                                    Restaurants
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ url('/restaurant_categories') }}" class="locations">
-                                    <i class="fa fa-square-o fa-fw"></i>
-                                    Categories
-                                </a>
-                            </li>
-                        </ul>
+                            <a class="restaurant">
+                                <i class="fa fa-map-marker fa-fw"></i>
+                                <span class="content">Restaurants</span>
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level collapse">
+                                <li>
+                                    <a href="{{ url('/restaurants') }}" class="locations">
+                                        <i class="fa fa-square-o fa-fw"></i>
+                                        Restaurants
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('/restaurant_categories') }}" class="locations">
+                                        <i class="fa fa-square-o fa-fw"></i>
+                                        Categories
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                         <li>
                             <a class="users">
@@ -310,107 +312,107 @@
                                 <span class="content">Users</span>
                                 <span class="fa arrow"></span>
                             </a>
-                        <ul class="nav nav-second-level collapse">
-                            <li>
-                                <a href="{{ url('/customers') }}" class="customers">
-                                    <i class="fa fa-square-o fa-fw"></i>
-                                    Customers
-                                </a>
-                            </li>
-                            {{--<li>--}}
+                            <ul class="nav nav-second-level collapse">
+                                <li>
+                                    <a href="{{ url('/customers') }}" class="customers">
+                                        <i class="fa fa-square-o fa-fw"></i>
+                                        Customers
+                                    </a>
+                                </li>
+                                {{--<li>--}}
                                 {{--<a href="#" class="customer_groups">--}}
-                                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                                    {{--Customer Groups--}}
+                                {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                                {{--Customer Groups--}}
                                 {{--</a>--}}
-                            {{--</li>--}}
-                            {{--<li>--}}
+                                {{--</li>--}}
+                                {{--<li>--}}
                                 {{--<a href="#" class="activities">--}}
-                                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                                    {{--Activities--}}
+                                {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                                {{--Activities--}}
                                 {{--</a>--}}
-                            {{--</li>--}}
-                        </ul>
+                                {{--</li>--}}
+                            </ul>
                         </li>
-                    {{--<li>--}}
+                        {{--<li>--}}
                         {{--<a href="#" class="extensions">--}}
-                            {{--<i class="fa fa-puzzle-piece fa-fw"></i>--}}
-                            {{--<span class="content">Extensions</span>--}}
+                        {{--<i class="fa fa-puzzle-piece fa-fw"></i>--}}
+                        {{--<span class="content">Extensions</span>--}}
                         {{--</a>--}}
-                    {{--</li>--}}
-                    {{--<li>--}}
+                        {{--</li>--}}
+                        {{--<li>--}}
                         {{--<a class="design">--}}
-                            {{--<i class="fa fa-paint-brush fa-fw"></i>--}}
-                            {{--<span class="content">Design</span>--}}
-                            {{--<span class="fa arrow"></span>--}}
+                        {{--<i class="fa fa-paint-brush fa-fw"></i>--}}
+                        {{--<span class="content">Design</span>--}}
+                        {{--<span class="fa arrow"></span>--}}
                         {{--</a>--}}
                         {{--<ul class="nav nav-second-level collapse">--}}
-                            {{--<li>--}}
-                                {{--<a href="#" class="pages">--}}
-                                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                                    {{--Pages--}}
-                                {{--</a>--}}
-                            {{--</li>--}}
-                            {{--<li>--}}
-                                {{--<a href="#" class="layouts">--}}
-                                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                                    {{--Layouts--}}
-                                {{--</a>--}}
-                            {{--</li>--}}
-                            {{--<li>--}}
-                                {{--<a href="#" class="mail_templates">--}}
-                                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                                    {{--Mail Templates--}}
-                                {{--</a>--}}
-                            {{--</li>--}}
+                        {{--<li>--}}
+                        {{--<a href="#" class="pages">--}}
+                        {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                        {{--Pages--}}
+                        {{--</a>--}}
+                        {{--</li>--}}
+                        {{--<li>--}}
+                        {{--<a href="#" class="layouts">--}}
+                        {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                        {{--Layouts--}}
+                        {{--</a>--}}
+                        {{--</li>--}}
+                        {{--<li>--}}
+                        {{--<a href="#" class="mail_templates">--}}
+                        {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                        {{--Mail Templates--}}
+                        {{--</a>--}}
+                        {{--</li>--}}
                         {{--</ul>--}}
-                    {{--</li>--}}
+                        {{--</li>--}}
                         <li>
                             <a class="locations">
                                 <i class="fa fa-globe fa-fw"></i>
                                 <span class="content">Localisation</span>
                                 <span class="fa arrow"></span>
-                        </a>
-                        <ul class="nav nav-second-level collapse">
-                            <li>
-                                <a href="{{url('/languages')}}" class="languages">
-                                    <i class="fa fa-square-o fa-fw"></i>
-                                    Languages
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="currencies">
-                                    <i class="fa fa-square-o fa-fw"></i>
-                                    Currencies
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="countries">
-                                    <i class="fa fa-square-o fa-fw"></i>
-                                    Countries
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="security_questions">
-                                    <i class="fa fa-square-o fa-fw"></i>
-                                    Security Questions
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="ratings">
-                                    <i class="fa fa-square-o fa-fw"></i>
-                                    Ratings
-                                </a>
-                            </li>
-                            @if(Auth::user()->admin == 1)
+                            </a>
+                            <ul class="nav nav-second-level collapse">
                                 <li>
-                                    <a href="{{ url('/statuses') }}" class="statuses">
+                                    <a href="{{url('/languages')}}" class="languages">
                                         <i class="fa fa-square-o fa-fw"></i>
-                                        Statuses
+                                        Languages
                                     </a>
                                 </li>
-                            @endif
-                        </ul>
-                    </li>
+                                <li>
+                                    <a href="#" class="currencies">
+                                        <i class="fa fa-square-o fa-fw"></i>
+                                        Currencies
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="countries">
+                                        <i class="fa fa-square-o fa-fw"></i>
+                                        Countries
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="security_questions">
+                                        <i class="fa fa-square-o fa-fw"></i>
+                                        Security Questions
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="ratings">
+                                        <i class="fa fa-square-o fa-fw"></i>
+                                        Ratings
+                                    </a>
+                                </li>
+                                @if(Auth::user()->admin == 1)
+                                    <li>
+                                        <a href="{{ url('/statuses') }}" class="statuses">
+                                            <i class="fa fa-square-o fa-fw"></i>
+                                            Statuses
+                                        </a>
+                                    </li>
+                                @endif
+                            </ul>
+                        </li>
                     @endif
                     <li>
                         <a class="system">
@@ -420,16 +422,16 @@
                         </a>
                         <ul class="nav nav-second-level collapse">
                             {{--<li>--}}
-                                {{--<a href="#" class="settings">--}}
-                                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                                    {{--Settings--}}
-                                {{--</a>--}}
+                            {{--<a href="#" class="settings">--}}
+                            {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                            {{--Settings--}}
+                            {{--</a>--}}
                             {{--</li>--}}
                             {{--<li>--}}
-                                {{--<a href="#" class="permissions">--}}
-                                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                                    {{--Permissions--}}
-                                {{--</a>--}}
+                            {{--<a href="#" class="permissions">--}}
+                            {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                            {{--Permissions--}}
+                            {{--</a>--}}
                             {{--</li>--}}
                             <li>
                                 <a class="tools">
@@ -458,29 +460,6 @@
             </div>
         </div>
         <ul class="nav navbar-top-links navbar-right">
-            <li class="dropdown">
-                <a class="front-end" title href="#"  data-original-title="Storefront">
-                    <i class="fa fa-home"></i>
-                </a>
-            </li>
-            <li class="dropdown">
-                <a class="dropdown-toggle messages" data-toggle="dropdown">
-                    <i class="fa fa-envelope"></i>
-                    <span class="label label-danger"></span>
-                </a>
-                <ul class="dropdown-menu dropdown-messages">
-                    <li class="menu-header">You have messages</li>
-                    <li class="menu-body">
-                        <ul class="menu message-list">
-                            <li>Ther are no messages available in this folder.</li>
-                            <li class="divider"></li>
-                        </ul>
-                    </li>
-                    <li class="menu-footer">
-                        <a class="text-center" href="#">See all messages</a>
-                    </li>
-                </ul>
-            </li>
             <li class="dropdown">
                 <a class="dropdown-toggle alerts" data-toggle="dropdown">
                     <i class="fa fa-bell"></i>
@@ -514,7 +493,7 @@
                             <li class="unread">
                                 <div class="activity-body">
                                     <i class="fa fa-tasks fa-fw bg-primary"></i>
-                                    <a >
+                                    <a>
                                         <b></b>
                                     </a>
                                     <span class="activity-time text-muted small">
@@ -526,23 +505,23 @@
                         </ul>
                     </li>
                     <li class="menu-footer">
-                        <a class="text-center" >See all activities</a>
+                        <a class="text-center">See all activities</a>
                     </li>
                 </ul>
             </li>
-            <li class="dropdown">
-                <a class="dropdown-toggle settings" data-toggle="dropdown">
-                    <i class="fa fa-cog"></i>
-                </a>
-                <ul class="dropdown-menu dropdown-settings">
-                    <li><a>Pages</a></li>
-                    <li><a >Banners</a></li>
-                    <li><a>Layouts</a></li>
-                    <li><a >Error Logs</a></li>
-                    <li><a >Settings</a></li>
-                    <li class="menu-footer"></li>
-                </ul>
-            </li>
+            {{--<li class="dropdown">--}}
+            {{--<a class="dropdown-toggle settings" data-toggle="dropdown">--}}
+            {{--<i class="fa fa-cog"></i>--}}
+            {{--</a>--}}
+            {{--<ul class="dropdown-menu dropdown-settings">--}}
+            {{--<li><a>Pages</a></li>--}}
+            {{--<li><a >Banners</a></li>--}}
+            {{--<li><a>Layouts</a></li>--}}
+            {{--<li><a >Error Logs</a></li>--}}
+            {{--<li><a >Settings</a></li>--}}
+            {{--<li class="menu-footer"></li>--}}
+            {{--</ul>--}}
+            {{--</li>--}}
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-user"></i>
@@ -551,24 +530,22 @@
                     <li>
                         <div class="row wrap-vertical text-center">
                             <div class="col-xs-12 wrap-top">
-                                <img class="img-rounded" src="https://www.gravatar.com/avatar/7c4ff521986b4ff8d29440beec01972d.png?s=48&d=mm">
+                                <img class="img-rounded" src="admin/admin.png" width="60px" height="60px">
                             </div>
                             <div class="col-xs-12 wrap-none wrap-top wrap-right">
                                 <span>
-                                    <strong>Demo Adminm</strong>
-                                </span>
-                                <span class="small">
-                                    <i>(demo)</i>
+                                    <strong>{{Auth::user()->first_name}}</strong>
                                 </span>
                                 <br>
-                                <span class="small text-uppercase">Demo</span>
-                                <span></span>
+                                <span>
+                                    <i>{{Auth::user()->username}}</i>
+                                </span>
                             </div>
                         </div>
                     </li>
                     <li class="divider"></li>
                     <li>
-                        <a href="#">
+                        <a href="{{url('/admin/edit/' . Auth::user()->id)}}">
                             <i class="fa fa-user fa-fw"></i>
                             &nbsp;&nbsp;Edit Details
                         </a>
@@ -583,53 +560,58 @@
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form>
+                        <br>
                     </li>
-                    <li class="divider"></li>
-                    <li>
-                        <a href="#" >
-                            <i class="fa fa-info-circle fa-fw"></i>
-                            &nbsp;&nbsp;About Qckly
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" >
-                            <i class="fa fa-book fa-fw"></i>
-                            &nbsp;&nbsp;Documentation
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" >
-                            <i class="fa fa-users fa-fw"></i>
-                            &nbsp;Community Support
-                        </a>
-                    </li>
-                    <li class="menu-footer"></li>
                 </ul>
             </li>
         </ul>
-        {{--<h1 class="navbar-heading">Dashboard</h1>--}}
     </nav>
-    <div id="page-wrapper" style="height: 100%;">
-        @yield('content')
-    </div>
-</div>
-{{--<div id="notification"></div>
-<div class="row content dashboard">
-    <div class="col-md-12">
-        <div class="row mini-statistics">
+    @yield('content')
+    <div id="footer" class="">
+        <div class="row navbar-footer">
+            <div class="col-sm-12 text-version">
+                <p class="col-xs-9 wrap-none">Thank you for using Qckly</p>
+                <p class="col-xs-3 text-right wrap-none"></p>
+            </div>
         </div>
-        <div class="row statistics"></div>
-        <div></div>
-        <div class="panel panel-default panel-orders"></div>
     </div>
 </div>
-    <div class="collapse" id="context-help-wrap">
-        <div class="well"></div>
-    </div>
-<div id="notification">
-</div>
-</div>
-</div>--}}
+<script type="text/javascript">
+    function filterList() {
+        $('#filter-form').submit();
+    }
+
+    $(document).ready(function () {
+        if (document.location.toString().toLowerCase().indexOf(active_menu, 1) != -1) {
+            $('#side-menu .' + active_menu).addClass('active');
+            $('#side-menu .' + active_menu).parents('.collapse').parent().addClass('active');
+            $('#side-menu .' + active_menu).parents('.collapse').collapse('show');
+            $('#side-menu .' + active_menu).parents('.collapse').collapse('show');
+        }
+
+        if (window.location.hash) {
+            var hash = window.location.hash.substring(1); //Puts hash in variable, and removes the # character
+            $('html,body').animate({scrollTop: $('#wrapper').offset().top - 45}, 800);
+            $('#nav-tabs a[href="#' + hash + '"]').tab('show');
+        }
+
+        $('.btn-group input[type="radio"]:checked, .btn-group .active input[type="radio"]').trigger('change');
+    });
+
+    function confirmDelete(form) {
+        if ($('input[name="delete[]"]:checked').length && confirm('This cannot be undone! Are you sure you want to do this?')) {
+            form = (typeof form === 'undefined' || form === null) ? 'list-form' : form;
+            $('#' + form).submit();
+        } else {
+            return false;
+        }
+    }
+
+    function saveClose() {
+        $('#edit-form').append('<input type="hidden" name="save_close" value="1" />');
+        $('#edit-form').submit();
+    }
+</script>
 </body>
 </html>
 

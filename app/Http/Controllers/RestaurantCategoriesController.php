@@ -16,13 +16,18 @@ class RestaurantCategoriesController extends Controller
      */
     public function index(Request $request)
     {
-        $categories = RestaurantCategory::paginate(20);
-        $data = $request->all();
-        if(isset($data['restaurant_category_search'])){
-            $categories = RestaurantCategory::where('name_en','like',$data['restaurant_category_search'])
-                ->orWhere('name_ar','like',$data['restaurant_category_search'])->paginate(15);
+        $user = Auth::user();
+        if($user->admin == 1){
+            $categories = RestaurantCategory::paginate(20);
+            $data = $request->all();
+            if (isset($data['restaurant_category_search'])) {
+                $categories = RestaurantCategory::where('name_en', 'like', $data['restaurant_category_search'])
+                    ->orWhere('name_ar', 'like', $data['restaurant_category_search'])->paginate(15);
+            }
+            return view('restaurant_categories', ['categories' => $categories]);
+        }else{
+            return redirect('/');
         }
-        return view('restaurant_categories', ['categories' => $categories]);
     }
 
     /**
@@ -38,24 +43,30 @@ class RestaurantCategoriesController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $categories = new RestaurantCategory();
-        $categories->name_en = $request->input('name_en');
-        $categories->name_ar = $request->input('name_ar');
-        $categories->save();
-        if ($categories) {
-            return redirect('/restaurant_categories');
+        $user = Auth::user();
+        if($user->admin == 1){
+            $category = new RestaurantCategory();
+            $category->name_en = $request->input('name_en');
+            $category->name_ar = $request->input('name_ar');
+            $category->save();
+            if ($category) {
+                return redirect('/restaurant_categories');
+            }
+        }else{
+            return redirect('/');
         }
+
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -66,7 +77,7 @@ class RestaurantCategoriesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -77,54 +88,70 @@ class RestaurantCategoriesController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        $category = RestaurantCategory::find($id);
-        $category->name_en = $request->input('name_en');
-        $category->name_ar = $request->input('name_ar');
-        $category->save();
-        return redirect('/restaurant_categories');
+        $user = Auth::user();
+        if($user->admin == 1){
+            $category = RestaurantCategory::find($id);
+            $category->name_en = $request->input('name_en');
+            $category->name_ar = $request->input('name_ar');
+            $category->save();
+            return redirect('/restaurant_categories');
+        }else{
+            return redirect('/');
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function deleteRestaurantCategory(Request $request)
     {
-        $id = $request->get('id');
-        $restaurants = Restaurant::with('menu')->where('restaurant_category_id',$id)->get();
-        $restaurant_images = [];
-        $menu_images = [];
-        foreach ($restaurants as $restaurant) {
-            foreach($restaurant->menu as $menu){
-                $menu_images[] = public_path('images/' . $menu->menu_photo);
+        $user = Auth::user();
+        if($user->admin == 1){
+            $id = $request->get('id');
+            $categories = RestaurantCategory::where('id', $id)->get();
+            foreach ($categories as $category) {
+                if ($category->restaurant) {
+                    $restaurant_images = [];
+                    $menu_images = [];
+                    foreach ($category->restaurant as $restaurant) {
+                        if($restaurant->menu){
+                            foreach ($restaurant->menu as $menu) {
+                                $menu_images[] = public_path('images/' . $menu->menu_photo);
+                            }
+                            File::delete($menu_images);
+                        }
+                        $restaurant_images[] = public_path('images/' . $restaurant->restaurant_image);
+                    }
+                    File::delete($restaurant_images);
+                }
             }
-            $restaurant_images[] = public_path('images/' . $restaurant->restaurant_image);
+            RestaurantCategory::whereIn('id', $id)->delete();
+            return redirect('/restaurant_categories');
+        }else{
+            return redirect('/');
         }
-        File::delete($menu_images);
-        File::delete($restaurant_images);
-        RestaurantCategory::whereIn('id',$id)->delete();
-        return redirect('/restaurant_categories');
     }
 
     public function getCategories(Request $request)
     {
         $lang = $request->header('Accept-Language');
         $categories = RestaurantCategory::all();
-        foreach($categories as $category){
-            if ($lang == 'ar'){
+        foreach ($categories as $category) {
+            if ($lang == 'ar') {
                 $arr [] = [
                     'category_id' => $category->id,
                     'category_name' => $category->name_ar,
                 ];
-            }else{
+            } else {
                 $arr [] = [
                     'category_id' => $category->id,
                     'category_name' => $category->name_en,
@@ -133,10 +160,10 @@ class RestaurantCategoriesController extends Controller
 
         }
 
-        if ($arr){
+        if ($arr) {
             return response()->json(array(
-                'success'=> 1,
-                'status_code'=> 200 ,
+                'success' => 1,
+                'status_code' => 200,
                 'data' => $arr));
         }
     }
