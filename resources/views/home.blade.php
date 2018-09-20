@@ -530,7 +530,9 @@
                     <li>
                         <div class="row wrap-vertical text-center">
                             <div class="col-xs-12 wrap-top">
-                                <img class="img-rounded" src="admin/admin.png" width="60px" height="60px">
+                                @if(isset(Auth::user()->image))
+                                    <img src="/images/{{Auth::user()->image}}" width="30px" height="30px">
+                                @endif
                             </div>
                             <div class="col-xs-12 wrap-none wrap-top wrap-right">
                                 <span>

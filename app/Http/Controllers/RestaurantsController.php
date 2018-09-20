@@ -238,14 +238,14 @@ class RestaurantsController extends Controller
         $restaurant->description_ar = $request->input('description_ar');
         $restaurant->status = $request->input('status');
         if ($request->hasFile('image')) {
-            $deletedImage = File::delete(public_path('images/' . $restaurant->image));
-            if ($deletedImage) {
-                $image = $request->file('image');
-                $name = time() . '.' . $image->getClientOriginalExtension();
-                $destinationPath = public_path('/images');
-                $image->move($destinationPath, $name);
-                $restaurant->image = $name;
+            if ($restaurant->image) {
+                File::delete(public_path('images/' . $restaurant->image));
             }
+            $image = $request->file('image');
+            $name = time() . '.' . $image->getClientOriginalExtension();
+            $destinationPath = public_path('/images');
+            $image->move($destinationPath, $name);
+            $restaurant->image = $name;
         }
         $restaurant->save();
         $categories = $request->input('category');

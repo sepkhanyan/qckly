@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Storage;
 use Auth;
 
 
-
 class UsersController extends Controller
 {
     /**
@@ -22,22 +21,22 @@ class UsersController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        if($user->admin == 1){
+        if ($user->admin == 1) {
             $customers = User::where('group_id', 0);
             $data = $request->all();
             /*if(isset($data['customer_status'])){
                 $users = User::where('user_status',$data['customer_status'])->get();
             }*/
-            if(isset($data['customer_date'])){
-                $customers = User::where('created_at',$data['customer_date']);
+            if (isset($data['customer_date'])) {
+                $customers = User::where('created_at', $data['customer_date']);
             }
-            if(isset($data['customer_search'])){
-                $customers = User::where('email','like',$data['customer_search'])
-                    ->orWhere('username','like',$data['customer_search']);
+            if (isset($data['customer_search'])) {
+                $customers = User::where('email', 'like', $data['customer_search'])
+                    ->orWhere('username', 'like', $data['customer_search']);
             }
             $customers = $customers->paginate(20);
             return view('customers', ['customers' => $customers]);
-        }else{
+        } else {
             return redirect('/');
         }
     }
@@ -50,9 +49,9 @@ class UsersController extends Controller
     public function create()
     {
         $user = Auth::user();
-        if($user->admin == 1){
+        if ($user->admin == 1) {
             return view('customer_create');
-        }else{
+        } else {
             return redirect('/');
         }
     }
@@ -60,13 +59,13 @@ class UsersController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $user = Auth::user();
-        if($user->admin == 1){
+        if ($user->admin == 1) {
             $customer = new User();
             $customer->username = $request->input('name');
             $customer->password = bcrypt($request->input('password'));
@@ -77,7 +76,7 @@ class UsersController extends Controller
             $customer->lang = 'en';
             $customer->save();
             return redirect('/customers');
-        }else{
+        } else {
             return redirect('/');
         }
     }
@@ -85,7 +84,7 @@ class UsersController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -96,16 +95,16 @@ class UsersController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
         $user = Auth::user();
-        if($user->admin == 1){
+        if ($user->admin == 1) {
             $customer = User::find($id);
             return view('customer_edit', ['customer' => $customer]);
-        }else{
+        } else {
             return redirect('/');
         }
     }
@@ -113,14 +112,14 @@ class UsersController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         $user = Auth::user();
-        if($user->admin == 1){
+        if ($user->admin == 1) {
             $customer = User::find($id);
             $customer->username = $request->input('name');
             $customer->password = bcrypt($request->input('password'));
@@ -131,7 +130,7 @@ class UsersController extends Controller
             $customer->lang = 'en';
             $customer->save();
             return redirect('/customers');
-        }else{
+        } else {
             return redirect('/');
         }
     }
@@ -139,18 +138,18 @@ class UsersController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function deleteCustomer(Request $request)
     {
         $user = Auth::user();
-        if($user->admin == 1){
+        if ($user->admin == 1) {
             $id = $request->get('id');
-            User::whereIn('id',$id)->delete();
+            User::whereIn('id', $id)->delete();
 
             return redirect('/customers');
-        }else{
+        } else {
             return redirect('/');
         }
     }
@@ -160,7 +159,7 @@ class UsersController extends Controller
         \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
-        if($lang == 'ar'){
+        if ($lang == 'ar') {
             $validator->getTranslator()->setLocale('ar');
         }
         $validator = \Validator::make($request->all(), [
@@ -182,11 +181,11 @@ class UsersController extends Controller
 //            }
             $client = User::where('mobile_number', $mobile)
                 ->where('country_code', $country_code)
-                 ->where('group_id',0)
+                ->where('group_id', 0)
                 ->first();
-            $standardNumSets = array("0","1","2","3","4","5","6","7","8","9");
-            $devanagariNumSets = array("٠","١","٢","٣","٤","٥","٦","٧","٨","٩");
-            $mobile = str_replace($devanagariNumSets,$standardNumSets, $mobile);
+            $standardNumSets = array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
+            $devanagariNumSets = array("٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩");
+            $mobile = str_replace($devanagariNumSets, $standardNumSets, $mobile);
             // $randomSmsValue = $this->AccessSms($mobile);
             // $device_id = $request->get('userMacAddress');
             // $device = $this->getSmsCount($device_id);
@@ -215,22 +214,22 @@ class UsersController extends Controller
                         'error_details' => $validator->messages()));
                 } else {
 //                    try{
-                        $mobile = $request->input('mobile_number');
-                        $country_code = $request->input('country_code');
+                    $mobile = $request->input('mobile_number');
+                    $country_code = $request->input('country_code');
 //                        $random_val = rand(1500, 5000);
-                        $random_val = 1234;
-                        $date = Carbon::now();
-                        $u_id = User::create(
-                            [
-                                'country_code' => $country_code,
-                                'mobile_number' => $mobile,
-                                'otp' => $random_val,
-                                'lang' => $lang,
-                                'username'=>'',
-                            ]
-                        );
-                        $date = Carbon::now()->format('Y-m-d');
-                        // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=Your%20Syaanh%20code%20is%20:%20$random_val&destination=00974$mobile&source=97772&mask=Syaanh";
+                    $random_val = 1234;
+                    $date = Carbon::now();
+                    $u_id = User::create(
+                        [
+                            'country_code' => $country_code,
+                            'mobile_number' => $mobile,
+                            'otp' => $random_val,
+                            'lang' => $lang,
+                            'username' => '',
+                        ]
+                    );
+                    $date = Carbon::now()->format('Y-m-d');
+                    // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=Your%20Syaanh%20code%20is%20:%20$random_val&destination=00974$mobile&source=97772&mask=Syaanh";
 //                        file($url);
 //                    }catch(\Exception $e){
 //
@@ -256,7 +255,7 @@ class UsersController extends Controller
         \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
-        if($lang == 'ar'){
+        if ($lang == 'ar') {
             $validator->getTranslator()->setLocale('ar');
         }
         $validator = \Validator::make($request->all(), [
@@ -285,28 +284,28 @@ class UsersController extends Controller
                 }
 
 //                if ($smsCode->group_id == 0) {
-                    $update = User::select("*")
-                        ->where('otp', $otp)
-                        ->where('mobile_number', $mobile)
-                        ->where('country_code', $country_code)
-                        ->first();
-                    $update->api_token = $token;
-                    $update->lang = $request->header('Accept-Language');
-                    $update->save();
+                $update = User::select("*")
+                    ->where('otp', $otp)
+                    ->where('mobile_number', $mobile)
+                    ->where('country_code', $country_code)
+                    ->first();
+                $update->api_token = $token;
+                $update->lang = $request->header('Accept-Language');
+                $update->save();
 
-                    return response()->json(
-                        array(
-                            'success' => 0,
-                            'status_code' => 200,
-                            'data' => [
-                                'user_id' => $update->id,
-                                'username' => $update->username != null ? $update->username : '',
-                                'email' => $update->email != null ? $update->email : '',
-                                'image' => $update->image != '' ? url('/') . "/images/" . $update->image : '',
-                                'country_code' => $update->country_code,
-                                'mobile_number' => $update->mobile_number
-                            ],
-                            'api_token' => 'Bearer ' . $token));
+                return response()->json(
+                    array(
+                        'success' => 0,
+                        'status_code' => 200,
+                        'data' => [
+                            'user_id' => $update->id,
+                            'username' => $update->username != null ? $update->username : '',
+                            'email' => $update->email != null ? $update->email : '',
+                            'image' => $update->image != '' ? url('/') . "/images/" . $update->image : '',
+                            'country_code' => $update->country_code,
+                            'mobile_number' => $update->mobile_number
+                        ],
+                        'api_token' => 'Bearer ' . $token));
 //                } else {
 //                    return response()->json([
 //                        'success' => 1,
@@ -314,7 +313,7 @@ class UsersController extends Controller
 //                        'message' => \Lang::get('message.errorSms')
 //                    ]);
 //                }
-            }else{
+            } else {
                 return response()->json([
                     'success' => 1,
                     'status_code' => 400,
@@ -329,7 +328,7 @@ class UsersController extends Controller
         \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
-        if($lang == 'ar'){
+        if ($lang == 'ar') {
             $validator->getTranslator()->setLocale('ar');
         }
         $validator = \Validator::make($request->all(), [
@@ -345,11 +344,11 @@ class UsersController extends Controller
             $mobile = $request->input('mobile_number');
             $client = User::where('mobile_number', $mobile)
                 ->where('country_code', $country_code)
-                ->where('group_id',0)
+                ->where('group_id', 0)
                 ->first();
-            $standardNumSets = array("0","1","2","3","4","5","6","7","8","9");
-            $devanagariNumSets = array("٠","١","٢","٣","٤","٥","٦","٧","٨","٩");
-            $mobile = str_replace($devanagariNumSets,$standardNumSets, $mobile);
+            $standardNumSets = array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
+            $devanagariNumSets = array("٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩");
+            $mobile = str_replace($devanagariNumSets, $standardNumSets, $mobile);
             if ($client) {
                 $random_val = rand(1500, 5000);
                 $date = Carbon::now()->format('Y-m-d');
@@ -371,12 +370,12 @@ class UsersController extends Controller
         \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
-        if($lang == 'ar'){
+        if ($lang == 'ar') {
             $validator->getTranslator()->setLocale('ar');
         }
-        $token = str_replace("Bearer ","" , $request->header('Authorization'));
+        $token = str_replace("Bearer ", "", $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->first();
-        if($user) {
+        if ($user) {
             $validator = \Validator::make($request->all(), [
                 'email' => 'required|string',
                 'username' => 'required|string'
@@ -416,7 +415,7 @@ class UsersController extends Controller
 
 
             }
-        }else{
+        } else {
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
@@ -427,9 +426,9 @@ class UsersController extends Controller
     public function getUserDetails(Request $request)
     {
         \Log::info($request->all());
-        $token = str_replace("Bearer ","" , $request->header('Authorization'));
+        $token = str_replace("Bearer ", "", $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->first();
-        if($user){
+        if ($user) {
             $arr = [
                 'user_id' => $user->id,
                 'username' => $user->username != null ? $user->username : '',
@@ -459,6 +458,17 @@ class UsersController extends Controller
         $admin->first_name = $request->input('name');
         $admin->email = $request->input('email');
         $admin->username = $request->input('username');
+        $admin->username = $request->input('username');
+        if ($request->hasFile('image')) {
+            if ($admin->image) {
+                File::delete(public_path('images/' . $admin->image));
+            }
+            $image = $request->file('image');
+            $name = time() . '.' . $image->getClientOriginalExtension();
+            $destinationPath = public_path('/images');
+            $image->move($destinationPath, $name);
+            $admin->image = $name;
+        }
         $admin->save();
         return redirect('/');
 

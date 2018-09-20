@@ -28,26 +28,27 @@ class MenusController extends Controller
         $selectedRestaurant = [];
         $data = $request->all();
         $menus = [];
-        if($id){
-            $menus = Menu::whereHas('restaurant',function ($query) use ($id){
-                $query->where('restaurant_id', $id);})
+        if ($id) {
+            $menus = Menu::whereHas('restaurant', function ($query) use ($id) {
+                $query->where('restaurant_id', $id);
+            })
                 ->with('category');
-            if(isset($data['menu_status'])) {
+            if (isset($data['menu_status'])) {
                 $menus = $menus->where('status', $data['menu_status']);
             }
-            if(isset($data['menu_category'])){
-                $menus = $menus->where('category_id',$data['menu_category']);
+            if (isset($data['menu_category'])) {
+                $menus = $menus->where('category_id', $data['menu_category']);
 
             }
-            if(isset($data['menu_search'])){
-                $menus = $menus->where('name','like',$data['menu_search'])
-                    ->orWhere('price','like',$data['menu_search'])
-                    ->orWhere('description','like',$data['menu_search']);
+            if (isset($data['menu_search'])) {
+                $menus = $menus->where('name', 'like', $data['menu_search'])
+                    ->orWhere('price', 'like', $data['menu_search'])
+                    ->orWhere('description', 'like', $data['menu_search']);
             }
             $selectedRestaurant = Restaurant::find($id);
             $menus = $menus->paginate(20);
         }
-        if($user->admin == 2){
+        if ($user->admin == 2) {
             $user = $user->load('restaurant');
             $restaurant = $user->restaurant;
             $selectedRestaurant = Restaurant::find($restaurant->id);
@@ -71,7 +72,7 @@ class MenusController extends Controller
     {
         $user = Auth::user();
         $restaurant = Restaurant::where('id', $id)->first();
-        if($user->admin == 2){
+        if ($user->admin == 2) {
             $user = $user->load('restaurant');
             $restaurant = $user->restaurant;
         }
@@ -85,7 +86,7 @@ class MenusController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(MenuRequest $request)
@@ -93,7 +94,7 @@ class MenusController extends Controller
         $user = Auth::user();
         $menu = new Menu();
         $menu->restaurant_id = $request->input('restaurant');
-        if($user->admin == 2){
+        if ($user->admin == 2) {
             $user = $user->load('restaurant');
             $menu->restaurant_id = $user->restaurant->id;
         }
@@ -117,7 +118,7 @@ class MenusController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -128,7 +129,7 @@ class MenusController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -144,8 +145,8 @@ class MenusController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(MenuRequest $request, $id)
@@ -160,14 +161,14 @@ class MenusController extends Controller
         $menu->status = $request->input('status');
         $menu->famous = $request->input('famous');
         if ($request->hasFile('image')) {
-            $deletedImage = File::delete(public_path('images/' . $menu->image));
-            if ($deletedImage) {
-                $image = $request->file('image');
-                $name = time() . '.' . $image->getClientOriginalExtension();
-                $destinationPath = public_path('/images');
-                $image->move($destinationPath, $name);
-                $menu->image = $name;
+            if ($menu->image) {
+                File::delete(public_path('images/' . $menu->image));
             }
+            $image = $request->file('image');
+            $name = time() . '.' . $image->getClientOriginalExtension();
+            $destinationPath = public_path('/images');
+            $image->move($destinationPath, $name);
+            $menu->image = $name;
         }
         $menu->save();
         return redirect('/menus');
@@ -176,19 +177,19 @@ class MenusController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function deleteMenu(Request $request)
     {
         $id = $request->get('id');
-        $menus = Menu::where('id',$id)->get();
+        $menus = Menu::where('id', $id)->get();
         $images = [];
         foreach ($menus as $menu) {
             $images[] = public_path('images/' . $menu->image);
         }
         File::delete($images);
-        Menu::whereIn('id',$id)->delete();
+        Menu::whereIn('id', $id)->delete();
 
         return redirect('/menus');
     }

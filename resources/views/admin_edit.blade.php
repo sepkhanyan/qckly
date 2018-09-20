@@ -26,7 +26,7 @@
                     </ul>
                 </div>
 
-                <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST"
+                <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST" enctype="multipart/form-data"
                       action="{{url('/admin/update/' . Auth::user()->id)}}">
                     {{ csrf_field() }}
                     <div class="tab-content">
@@ -50,6 +50,13 @@
                                 <div class="col-sm-5">
                                     <input type="text" name="username" id="input-username" class="form-control"
                                            value="{{Auth::user()->username}}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="input-image" class="col-sm-3 control-label">Image</label>
+                                <div class="col-sm-5">
+                                    <input type="file" name="image" id="input-image" class="form-control">
                                 </div>
                             </div>
                             <div class="form-group">
