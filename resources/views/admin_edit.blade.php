@@ -56,7 +56,9 @@
                             <div class="form-group">
                                 <label for="input-image" class="col-sm-3 control-label">Image</label>
                                 <div class="col-sm-5">
-                                    <input type="file" name="image" id="input-image" class="form-control">
+                                    <label class=" btn btn-default btn-file col-sm-3">
+                                        Browse <input type="file" style="display: none;">
+                                    </label>
                                 </div>
                             </div>
                             <div class="form-group">

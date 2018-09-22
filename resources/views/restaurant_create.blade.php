@@ -367,21 +367,21 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="input-status" class="col-sm-3 control-label">Status</label>
-                                <div class="col-sm-5">
-                                    <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                        <label class="btn btn-danger">
-                                            <input type="radio" name="status" value="0">
-                                            Disabled
-                                        </label>
-                                        <label class="btn btn-success active">
-                                            <input type="radio" name="status" value="1" checked="checked">
-                                            Enabled
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
+                            {{--<div class="form-group">--}}
+                                {{--<label for="input-status" class="col-sm-3 control-label">Status</label>--}}
+                                {{--<div class="col-sm-5">--}}
+                                    {{--<div class="btn-group btn-group-switch" data-toggle="buttons">--}}
+                                        {{--<label class="btn btn-danger">--}}
+                                            {{--<input type="radio" name="status" value="0">--}}
+                                            {{--Disabled--}}
+                                        {{--</label>--}}
+                                        {{--<label class="btn btn-success active">--}}
+                                            {{--<input type="radio" name="status" value="1" checked="checked">--}}
+                                            {{--Enabled--}}
+                                        {{--</label>--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
                         </div>
 
                         <div id="opening-hours" class="tab-pane row wrap-all">
@@ -508,10 +508,6 @@
                                                     <input type="radio" name="flexible_hours[1][status]" value="0">
                                                     Closed
                                                 </label>
-                                                <label class="btn btn-danger">
-                                                    <input type="radio" name="flexible_hours[1][status]" value="2">
-                                                    Busy
-                                                </label>
                                             </div>
                                         </div>
                                     </div>
@@ -546,10 +542,6 @@
                                                 <label class="btn btn-danger">
                                                     <input type="radio" name="flexible_hours[2][status]" value="0">
                                                     Closed
-                                                </label>
-                                                <label class="btn btn-danger">
-                                                    <input type="radio" name="flexible_hours[2][status]" value="2">
-                                                    Busy
                                                 </label>
                                             </div>
                                         </div>
@@ -586,10 +578,6 @@
                                                     <input type="radio" name="flexible_hours[3][status]" value="0">
                                                     Closed
                                                 </label>
-                                                <label class="btn btn-danger">
-                                                    <input type="radio" name="flexible_hours[3][status]" value="2">
-                                                    Busy
-                                                </label>
                                             </div>
                                         </div>
                                     </div>
@@ -624,10 +612,6 @@
                                                 <label class="btn btn-danger">
                                                     <input type="radio" name="flexible_hours[4][status]" value="0">
                                                     Closed
-                                                </label>
-                                                <label class="btn btn-danger">
-                                                    <input type="radio" name="flexible_hours[4][status]" value="2">
-                                                    Busy
                                                 </label>
                                             </div>
                                         </div>
@@ -664,10 +648,6 @@
                                                     <input type="radio" name="flexible_hours[5][status]" value="0">
                                                     Closed
                                                 </label>
-                                                <label class="btn btn-danger">
-                                                    <input type="radio" name="flexible_hours[5][status]" value="2">
-                                                    Busy
-                                                </label>
                                             </div>
                                         </div>
                                     </div>
@@ -703,10 +683,6 @@
                                                     <input type="radio" name="flexible_hours[6][status]" value="0">
                                                     Closed
                                                 </label>
-                                                <label class="btn btn-danger">
-                                                    <input type="radio" name="flexible_hours[6][status]" value="2">
-                                                    Busy
-                                                </label>
                                             </div>
                                         </div>
                                     </div>
@@ -741,10 +717,6 @@
                                                 <label class="btn btn-danger">
                                                     <input type="radio" name="flexible_hours[0][status]" value="0">
                                                     Closed
-                                                </label>
-                                                <label class="btn btn-danger">
-                                                    <input type="radio" name="flexible_hours[0][status]" value="2">
-                                                    Busy
                                                 </label>
                                             </div>
                                         </div>

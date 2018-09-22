@@ -107,7 +107,7 @@ class RestaurantsController extends Controller
             $restaurant->longitude = $request->input('longitude');
             $restaurant->description_en = $request->input('description_en');
             $restaurant->description_ar = $request->input('description_ar');
-            $restaurant->status = $request->input('status');
+//            $restaurant->status = $request->input('status');
             $restaurant->save();
             $categories = $request->input('category');
             foreach ($categories as $category) {
@@ -129,8 +129,6 @@ class RestaurantsController extends Controller
                 $working = new WorkingHour();
                 $working->type = $request->input('opening_type');
                 $working->weekday = $day;
-                $working->opening_time = Carbon::parse("11:00 AM");
-                $working->closing_time = Carbon::parse("11:59 PM");
                 $working->status = 1;
                 $working->restaurant_id = $restaurant->id;
                 if ($working->type == 'daily') {
@@ -236,7 +234,7 @@ class RestaurantsController extends Controller
         $restaurant->longitude = $request->input('longitude');
         $restaurant->description_en = $request->input('description_en');
         $restaurant->description_ar = $request->input('description_ar');
-        $restaurant->status = $request->input('status');
+//        $restaurant->status = $request->input('status');
         if ($request->hasFile('image')) {
             if ($restaurant->image) {
                 File::delete(public_path('images/' . $restaurant->image));
@@ -273,8 +271,6 @@ class RestaurantsController extends Controller
                 $working = new WorkingHour();
                 $working->type = $request->input('opening_type');
                 $working->weekday = $day;
-                $working->opening_time = Carbon::parse("11:00 AM");
-                $working->closing_time = Carbon::parse("11:59 PM");
                 $working->status = 1;
                 $working->restaurant_id = $restaurant->id;
                 if ($working->type == 'daily') {
@@ -297,6 +293,24 @@ class RestaurantsController extends Controller
         }
 
         return redirect('/restaurants');
+    }
+
+    public function changeStatus(Request $request, $id)
+    {
+        $status = $request->input('status');
+        $user = Auth::user();
+        if ($user->admin == 2) {
+            $user = $user->load('restaurant');
+            if ($user->restaurant->id == $id) {
+                Restaurant::where('id', $id)->update(['status' => $status]);
+            }else{
+                return redirect('/restaurants');
+            }
+        }else{
+            Restaurant::where('id', $id)->update(['status' => $status]);
+        }
+        return redirect('/restaurants');
+
     }
 
     /**
@@ -512,7 +526,9 @@ class RestaurantsController extends Controller
                 ->whereHas('workingHour', function ($query) use ($working_day, $working_time) {
                     $query->where('weekday', $working_day)
                         ->where('opening_time', '<=', $working_time)
-                        ->where('closing_time', '>=', $working_time);
+                        ->where('closing_time', '>=', $working_time)
+                        ->where('status', 1)
+                        ->orWhere('type', '=', '24_7');
                 })->with(['menu', 'categoryRestaurant']);
 
             if (isset($DataRequests['category_id'])) {
@@ -529,14 +545,11 @@ class RestaurantsController extends Controller
                     foreach ($restaurant->workingHour as $workingHour) {
                         $opening = $workingHour->opening_time;
                         $closing = $workingHour->closing_time;
-                        $status = $workingHour->status;
                     }
-                    if ($status == 1) {
-                        $working_status = \Lang::get('message.open');
-                    } elseif ($status == 0) {
-                        $working_status = \Lang::get('message.close');
+                    if ($restaurant->status == 1) {
+                        $status = \Lang::get('message.open');
                     } else {
-                        $working_status = \Lang::get('message.busy');
+                        $status = \Lang::get('message.busy');
                     }
 
                     $famous = null;
@@ -589,7 +602,7 @@ class RestaurantsController extends Controller
                         'review_count' => $review_count,
                         'availability_hours' => date("g:i A", strtotime($opening)) . ' - ' . date("g:i A", strtotime($closing)),
                         'description' => $restaurant_description,
-                        'status' => $working_status,
+                        'status' => $status,
                         'category' => $category
                     ];
 

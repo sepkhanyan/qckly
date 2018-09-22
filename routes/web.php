@@ -50,6 +50,7 @@ Route::group(['middleware' => ['web', 'auth']], function (){
             Route::get('edit/{id}', 'RestaurantsController@edit');
             Route::post('update/{id}', 'RestaurantsController@update');
             Route::post('delete', 'RestaurantsController@deleteRestaurant');
+            Route::post('status/update/{id}', 'RestaurantsController@changeStatus');
         });
         Route::get('/restaurant_categories', 'RestaurantCategoriesController@index');
         Route::group(['prefix' => 'restaurant_category'], function () {

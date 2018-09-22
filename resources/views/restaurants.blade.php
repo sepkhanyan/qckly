@@ -76,7 +76,6 @@
                                     @endif
                                     <th>Name</th>
                                     <th>Description</th>
-                                    <th>Area</th>
                                     <th>City</th>
                                     <th>Address</th>
                                     <th>Telephone</th>
@@ -85,7 +84,6 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-
                                 @foreach($restaurants as $restaurant)
                                     <tr>
                                         <td class="action">
@@ -104,16 +102,19 @@
                                         </td>
                                         <td>{{$restaurant->description_en}}</td>
                                         <td>{{$restaurant->area->area_en}}</td>
-                                        <td>{{$restaurant->city_en}}</td>
                                         <td>{{$restaurant->address_en}}</td>
                                         <td>{{$restaurant->telephone}}</td>
-                                        @if($restaurant->status == 1)
-                                            <td>Enable</td>
-                                        @else
-                                            <td>Disable</td>
-                                        @endif
+                                        <td data-toggle="modal" data-target="#changeStatus"  onclick="myFunction({{$restaurant->id}})"
+                                            style="font-size: 20px; cursor: pointer">
+                                            @if($restaurant->status == 1)
+                                                <span class="label label-default"
+                                                      style="background-color: #00a65a; ">{{\Lang::get('message.open')}}</span>
+                                            @elseif($restaurant->status == 0)
+                                                <span class="label label-default"
+                                                      style="background-color: #ea0b29 ;">{{\Lang::get('message.busy')}}</span>
+                                            @endif
+                                        </td>
                                         <td>{{$restaurant->id}}</td>
-
                                     </tr>
                                 @endforeach
 
@@ -126,4 +127,39 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="changeStatus" role="dialog" tabindex="-1">
+        <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST">
+            {{ csrf_field() }}
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"> Change Status</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="btn-group btn-group-switch" data-toggle="buttons">
+                            <label class="btn btn-success active">
+                                <input type="radio" name="status" value="1"
+                                       checked="checked">
+                                Open
+                            </label>
+                            <label class="btn btn-danger">
+                                <input type="radio" name="status" value="0">
+                                Busy
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script type="text/javascript">
+        function myFunction(id) {
+            $("#edit-form").attr('action', 'restaurant/status/update/' + id);
+        }
+    </script>
 @endsection
