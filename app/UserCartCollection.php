@@ -35,4 +35,10 @@ class UserCartCollection extends Model
     {
         return $this->belongsTo('App\Collection', 'collection_id');
     }
+
+
+    public function restaurant ()
+    {
+        return $this->belongsTo('App\Restaurant', 'restaurant_id');
+    }
 }

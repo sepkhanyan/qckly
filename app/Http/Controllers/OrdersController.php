@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\OrderRestaurant;
+use App\UserCartCollection;
 use Illuminate\Http\Request;
 use App\Order;
 use App\UserCart;
@@ -27,36 +29,33 @@ class OrdersController extends Controller
         $selectedRestaurant = [];
         $data = $request->all();
         $orders = [];
-        if($id){
-            $orders = Order::whereHas('cart', function ($query) use($id){
-                $query->whereHas('cartCollection', function ($q)use($id){
-                    $q->wherehas('collection', function ($x)use($id){
-                        $x->where('restaurant_id', $id);
-                    });
-                });
-            });
-            if(isset($data['order_status'])) {
+        if ($id) {
+            $orders = OrderRestaurant::where('restaurant_id', $id);
+            if (isset($data['order_status'])) {
                 $orders = $orders->where('status_id', $data['order_status']);
             }
 
-            if(isset($data['order_search'])){
-                $orders = $orders->where('id','like',$data['order_search'])
-                    ->orWhere('total_price','like',$data['order_search']);
+            if (isset($data['order_search'])) {
+                $orders = $orders->where('id', 'like', $data['order_search'])
+                    ->orWhere('total_price', 'like', $data['order_search']);
             }
             $selectedRestaurant = Restaurant::find($id);
             $orders = $orders->orderby('created_at', 'desc')->paginate(20);
         }
-        if($user->admin == 2){
+        if ($user->admin == 2) {
             $user = $user->load('restaurant');
             $restaurant = $user->restaurant;
             $selectedRestaurant = Restaurant::find($restaurant->id);
-            $orders = Order::whereHas('cart', function ($query) use($restaurant){
-                $query->whereHas('cartCollection', function ($q)use($restaurant){
-                    $q->wherehas('collection', function ($x)use($restaurant){
-                        $x->where('restaurant_id', $restaurant->id);
-                    });
-                });
-            })->orderby('created_at', 'desc')->paginate(20);
+            $orders = OrderRestaurant::where('restaurant_id', $restaurant->id);
+            if (isset($data['order_status'])) {
+                $orders = $orders->where('status_id', $data['order_status']);
+            }
+
+            if (isset($data['order_search'])) {
+                $orders = $orders->where('id', 'like', $data['order_search'])
+                    ->orWhere('total_price', 'like', $data['order_search']);
+            }
+            $orders = $orders->orderby('created_at', 'desc')->paginate(20);
         }
         return view('orders', [
             'id' => $id,
@@ -71,44 +70,33 @@ class OrdersController extends Controller
     {
         $user = Auth::user();
         $statuses = Status::all();
-        if($user->admin == 1){
-            $order = Order::find($id);
-        }elseif($user->admin == 2){
-            $user = $user->load('restaurant');
-            $restaurant = $user->restaurant;
-            $order = Order::whereHas('cart', function ($query) use($restaurant){
-                $query->whereHas('cartCollection', function ($q)use($restaurant){
-                    $q->wherehas('collection', function ($x)use($restaurant){
-                        $x->where('restaurant_id', $restaurant->id);
-                    });
-                });
-            })->where('id', $id)->first();
-
-        }
+        $user = $user->load('restaurant');
+        $restaurant = $user->restaurant;
+        $order = Order::with(['cart' => function ($query) use ($restaurant) {
+            $query->with(['cartCollection' => function ($q) use ($restaurant) {
+                $q->where('restaurant_id', $restaurant->id);
+            }]);
+        }])->where('id', $id)->first();
+        $restaurantOrder = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $restaurant->id)->first();
         return view('order_edit', [
             'order' => $order,
+            'restaurantOrder' => $restaurantOrder,
             'statuses' => $statuses
-            ]);
+        ]);
     }
 
     public function update(Request $request, $id)
     {
         $user = Auth::user();
-        if($user->admin == 1){
-            $order = Order::find($id);
-        }elseif($user->admin == 2){
-            $user = $user->load('restaurant');
-            $restaurant = $user->restaurant;
-            $order = Order::whereHas('cart', function ($query) use($restaurant){
-                $query->whereHas('cartCollection', function ($q)use($restaurant){
-                    $q->wherehas('collection', function ($x)use($restaurant){
-                        $x->where('restaurant_id', $restaurant->id);
-                    });
-                });
-            })->where('id', $id)->first();
+        $user = $user->load('restaurant');
+        $restaurant = $user->restaurant;
+        $restaurantOrder = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $restaurant->id)->first();
+        $restaurantOrder->status_id = $request->input('status');
+        $restaurantOrder->save();
+        $orders = OrderRestaurant::where('order_id', $id)->where('status_id', '!=', 2)->get();
+        if(count($orders) <= 0){
+            Order::where('id', $id)->update(['status_id' => 2]);
         }
-        $order->status_id = $request->input('order_status');
-        $order->save();
         return redirect('/orders');
     }
 
@@ -117,23 +105,23 @@ class OrdersController extends Controller
         \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
-        if($lang == 'ar'){
+        if ($lang == 'ar') {
             $validator->getTranslator()->setLocale('ar');
         }
-        $token = str_replace("Bearer ","" , $request->header('Authorization'));
+        $token = str_replace("Bearer ", "", $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->with('cart.cartCollection')->first();
-        if($user){
+        if ($user) {
             $orders = Order::where('user_id', $user->id)->orderby('created_at', 'desc')->with('cart.address')->paginate(20);
-            if(count($orders) > 0){
-                foreach($orders as $order){
-                    if($order->cart->address->is_apartment == 1){
+            if (count($orders) > 0) {
+                foreach ($orders as $order) {
+                    if ($order->cart->address->is_apartment == 1) {
                         $is_apartment = true;
-                    }else{
+                    } else {
                         $is_apartment = false;
                     }
-                    if($order->cart->address->is_default == 1){
+                    if ($order->cart->address->is_default == 1) {
                         $default = true;
-                    }else{
+                    } else {
                         $default = false;
                     }
                     $address_id = $order->cart->address->id;
@@ -151,19 +139,19 @@ class OrdersController extends Controller
                     ];
                     $total = 0;
                     $collections = [];
-                    foreach($order->cart->cartCollection as $cart_collection){
+                    foreach ($order->cart->cartCollection as $cart_collection) {
                         $menu = [];
-                        $categories = Category::whereHas('cartItem', function($query) use ($cart_collection){
+                        $categories = Category::whereHas('cartItem', function ($query) use ($cart_collection) {
                             $query->where('cart_collection_id', $cart_collection->id);
-                        })->with(['cartItem' => function ($x) use($cart_collection){
+                        })->with(['cartItem' => function ($x) use ($cart_collection) {
                             $x->where('cart_collection_id', $cart_collection->id);
                         }])->get();
-                        foreach($categories as $category){
+                        foreach ($categories as $category) {
                             $items = [];
-                            foreach($category->cartItem as $cartItem){
-                                if($lang == 'ar'){
+                            foreach ($category->cartItem as $cartItem) {
+                                if ($lang == 'ar') {
                                     $item_name = $cartItem->menu->name_ar;
-                                }else{
+                                } else {
                                     $item_name = $cartItem->menu->name_en;
                                 }
                                 $items [] = [
@@ -174,9 +162,9 @@ class OrdersController extends Controller
                                     'item_price_unit' => \Lang::get('message.priceUnit')
                                 ];
                             }
-                            if($lang == 'ar'){
+                            if ($lang == 'ar') {
                                 $menu_name = $category->name_ar;
-                            }else{
+                            } else {
                                 $menu_name = $category->name_en;
                             }
                             $menu [] = [
@@ -185,32 +173,32 @@ class OrdersController extends Controller
                                 'items' => $items
                             ];
                         }
-                        if($cart_collection->collection->price == null){
+                        if ($cart_collection->collection->price == null) {
                             $collection_price = '';
-                        }else{
+                        } else {
                             $collection_price = $cart_collection->collection->price;
                         }
-                        if($cart_collection->persons_count == null){
+                        if ($cart_collection->persons_count == null) {
                             $persons_count = -1;
-                        }else{
+                        } else {
                             $persons_count = $cart_collection->persons_count;
                         }
-                        if($cart_collection->quantity == null){
+                        if ($cart_collection->quantity == null) {
                             $quantity = '';
-                        }else{
+                        } else {
                             $quantity = $cart_collection->quantity;
                         }
-                        if($cart_collection->female_caterer == 1){
+                        if ($cart_collection->female_caterer == 1) {
                             $female_caterer = true;
-                        }else{
+                        } else {
                             $female_caterer = false;
                         }
 
-                        if($lang == 'ar'){
+                        if ($lang == 'ar') {
                             $restaurant_name = $cart_collection->collection->restaurant->name_ar;
                             $collection_type = $cart_collection->collection->category->name_ar;
                             $collection_name = $cart_collection->collection->name_ar;
-                        }else{
+                        } else {
                             $restaurant_name = $cart_collection->collection->restaurant->name_en;
                             $collection_type = $cart_collection->collection->category->name_en;
                             $collection_name = $cart_collection->collection->name_en;
@@ -236,11 +224,11 @@ class OrdersController extends Controller
                         $total += $cart_collection->price;
                     }
 
-                    $cart   = [
+                    $cart = [
                         'cart_id' => $order->cart->id,
                         'order_area' => $order->cart->delivery_order_area,
                         'order_date' => date("j M Y", strtotime($order->cart->delivery_order_date)),
-                        'order_time' => date("g:i a", strtotime( $order->cart->delivery_order_time)),
+                        'order_time' => date("g:i A", strtotime($order->cart->delivery_order_time)),
                         'delivery_address_id' => $address_id,
                         'delivery_address' => $address,
                         'collections' => $collections,
@@ -248,14 +236,14 @@ class OrdersController extends Controller
                         'total_unit' => \Lang::get('message.priceUnit'),
                     ];
 
-                    if($order->is_rated == 1){
+                    if ($order->is_rated == 1) {
                         $rated = true;
-                    }else{
+                    } else {
                         $rated = false;
                     }
-                    if($lang == 'ar'){
+                    if ($lang == 'ar') {
                         $status = $order->status->name_ar;
-                    }else{
+                    } else {
                         $status = $order->status->name_en;
                     }
 
@@ -263,7 +251,7 @@ class OrdersController extends Controller
                         'order_id' => $order->id,
                         'order_status_id' => $order->status_id,
                         'order_status' => $status,
-                        'order_date' =>  date("j M Y", strtotime($order->created_at)),
+                        'order_date' => date("j M Y", strtotime($order->created_at)),
                         'order_time' => date("g:i A", strtotime($order->created_at)),
                         'total_price' => $order->total_price,
                         'total_price_unit' => \Lang::get('message.priceUnit'),
@@ -291,14 +279,14 @@ class OrdersController extends Controller
                     'success' => 1,
                     'status_code' => 200,
                     'data' => $wholeData));
-            }else{
+            } else {
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200,
                     'data' => [],
                     'message' => \Lang::get('message.noOrder')));
             }
-        }else{
+        } else {
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
@@ -315,7 +303,7 @@ class OrdersController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function completeOrder(Request $request)
@@ -323,12 +311,12 @@ class OrdersController extends Controller
         \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
-        if($lang == 'ar'){
+        if ($lang == 'ar') {
             $validator->getTranslator()->setLocale('ar');
         }
-        $token = str_replace("Bearer ","" , $request->header('Authorization'));
+        $token = str_replace("Bearer ", "", $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->with('cart.cartCollection')->first();
-        if($user){
+        if ($user) {
             $DataRequests = $request->all();
             $validator = \Validator::make($DataRequests, [
                 'cart_id' => 'required|integer',
@@ -345,49 +333,57 @@ class OrdersController extends Controller
                 $price = $DataRequests['total_price'];
                 $cart = UserCart::where('user_id', $user->id)
                     ->where('id', $cart_id)->first();
-                if($cart){
-                        if($cart->completed == 0){
-                            if($cart->delivery_address_id == null){
-                                return response()->json(array(
-                                    'success' => 1,
-                                    'status_code' => 200,
-                                    'message' => \Lang::get('message.addAddress')));
-                            }
-                            $order = new Order();
-                            $order->user_id = $user->id;
-                            $order->cart_id = $cart_id;
-                            $order->payment_type = $payment_type;
-                            if(isset($DataRequests['transaction_id'])){
-                                $transaction_id = $DataRequests['transaction_id'];
-                                $order->transaction_id = $transaction_id;
-                            }
-                            $order->total_price = $price;
-                            $order->status_id = 1;
-                            $order->save();
-                            UserCart::where('id', $cart_id)->update(['completed'=> 1]);
-                        }else{
+                if ($cart) {
+                    if ($cart->completed == 0) {
+                        if ($cart->delivery_address_id == null) {
                             return response()->json(array(
                                 'success' => 1,
                                 'status_code' => 200,
-                                'message' => \Lang::get('message.orderComplete')));
+                                'message' => \Lang::get('message.addAddress')));
                         }
-                }else{
+                        $order = new Order();
+                        $order->user_id = $user->id;
+                        $order->cart_id = $cart_id;
+                        $order->payment_type = $payment_type;
+                        if (isset($DataRequests['transaction_id'])) {
+                            $transaction_id = $DataRequests['transaction_id'];
+                            $order->transaction_id = $transaction_id;
+                        }
+                        $order->total_price = $price;
+                        $order->status_id = 1;
+                        $order->save();
+                        $restaurantOrders = $DataRequests['orders'];
+                        foreach ($restaurantOrders as $restaurantOrder) {
+                            $orderRestaurant = new OrderRestaurant();
+                            $orderRestaurant->restaurant_id = $restaurantOrder['restaurant_id'];
+                            $orderRestaurant->order_id = $order->id;
+                            $orderRestaurant->total_price = $restaurantOrder['restaurant_total'];
+                            $orderRestaurant->save();
+                        }
+                        UserCart::where('id', $cart_id)->update(['completed' => 1]);
+                    } else {
+                        return response()->json(array(
+                            'success' => 1,
+                            'status_code' => 200,
+                            'message' => \Lang::get('message.orderComplete')));
+                    }
+                } else {
                     return response()->json(array(
                         'success' => 1,
                         'status_code' => 200,
-                        'message' => \Lang::get('message.emptyCart')));
+                        'message' => \Lang::get('message.noCart')));
                 }
 
-                    if($order->payment_type == 1){
-                        $order->transaction_id = -1;
-                        $payment = \Lang::get('message.cash');
-                    }
-                    if($order->payment_type == 2){
-                        $payment = \Lang::get('message.credit');
-                    }
-                    if($order->payment_type == 3){
-                        $payment = \Lang::get('message.debit');
-                    }
+                if ($order->payment_type == 1) {
+                    $order->transaction_id = -1;
+                    $payment = \Lang::get('message.cash');
+                }
+                if ($order->payment_type == 2) {
+                    $payment = \Lang::get('message.credit');
+                }
+                if ($order->payment_type == 3) {
+                    $payment = \Lang::get('message.debit');
+                }
 
 
                 $arr = [
@@ -402,7 +398,7 @@ class OrdersController extends Controller
                     'status_code' => 200,
                     'data' => $arr));
             }
-        }else{
+        } else {
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
@@ -411,24 +407,23 @@ class OrdersController extends Controller
     }
 
 
-
     public function deleteOrder(Request $request)
     {
         $user = Auth::user();
         $id = $request->get('id');
-        if($user->admin == 1){
-            Order::whereIn('id',$id)->delete();
-        }elseif($user->admin == 2){
+        if ($user->admin == 1) {
+            Order::whereIn('id', $id)->delete();
+        } elseif ($user->admin == 2) {
             $user = $user->load('restaurant');
             $restaurant = $user->restaurant;
-            $order = Order::whereHas('cart', function ($query) use($restaurant){
-                $query->whereHas('cartCollection', function ($q)use($restaurant){
-                    $q->wherehas('collection', function ($x)use($restaurant){
+            $order = Order::whereHas('cart', function ($query) use ($restaurant) {
+                $query->whereHas('cartCollection', function ($q) use ($restaurant) {
+                    $q->wherehas('collection', function ($x) use ($restaurant) {
                         $x->where('restaurant_id', $restaurant->id);
                     });
                 });
             })->where('id', $id)->first();
-            if($order){
+            if ($order) {
                 $order->delete();
             }
         }
@@ -439,21 +434,21 @@ class OrdersController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
-
-    /**
+     *
+     * /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
 
@@ -461,7 +456,7 @@ class OrdersController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
 

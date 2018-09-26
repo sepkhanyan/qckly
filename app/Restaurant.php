@@ -34,6 +34,11 @@ class Restaurant extends Model
     }
 
 
+    public function cartCollection()
+    {
+        return $this->hasMany('App\UserCartCollection', 'restaurant_id');
+    }
+
     public function category()
     {
         return $this->belongsTo('App\RestaurantCategory', 'category_id');
@@ -67,5 +72,10 @@ class Restaurant extends Model
     public function user()
     {
         return $this->belongsTo('App\User', 'user_id');
+    }
+
+    public function orderRestaurant()
+    {
+        return $this->hasMany('App\OrderRestaurant', 'restaurant_id');
     }
 }

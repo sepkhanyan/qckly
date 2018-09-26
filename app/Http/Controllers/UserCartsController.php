@@ -111,12 +111,14 @@ class UserCartsController extends Controller
                     } else {
                         $collection_price = $DataRequests['collection_price'];
                         $collection_quantity = $DataRequests['collection_quantity'];
+                        $collection = Collection::where('id', $collection_id)->first();
                         $cart_collection = UserCartCollection::where('cart_id', $cart->id)
                             ->where('collection_id', $collection_id)->first();
                         if(!$cart_collection){
                             $cart_collection = new UserCartCollection();
                             $cart_collection->collection_id = $collection_id;
                             $cart_collection->cart_id = $cart->id;
+                            $cart_collection->restaurant_id = $collection->restaurant_id;
                             $cart_collection->price = $collection_price;
                             $cart_collection->quantity = $collection_quantity;
                             $cart_collection->female_caterer = $female_caterer;
@@ -155,11 +157,13 @@ class UserCartsController extends Controller
                         $collection_price = $DataRequests['collection_price'];
                         $persons_count = $DataRequests['persons_count'];
                         $menus = $DataRequests['menus'];
+                        $collection = Collection::where('id', $collection_id)->first();
                         $cart_collection = UserCartCollection::where('cart_id', $cart->id)
                             ->where('collection_id', $collection_id)->first();
                         if(!$cart_collection){
                             $cart_collection = new UserCartCollection();
                             $cart_collection->collection_id = $collection_id;
+                            $cart_collection->restaurant_id = $collection->restaurant_id;
                             $cart_collection->cart_id = $cart->id;
                             $cart_collection->price = $collection_price;
                             $cart_collection->persons_count = $persons_count;
@@ -207,11 +211,13 @@ class UserCartsController extends Controller
                         $collection_price = $DataRequests['collection_price'];
                         $collection_quantity = $DataRequests['collection_quantity'];
                         $menus = $DataRequests['menus'];
+                        $collection = Collection::where('id', $collection_id)->first();
                         $cart_collection = UserCartCollection::where('cart_id', $cart->id)
                             ->where('collection_id', $collection_id)->first();
                         if(!$cart_collection){
                             $cart_collection = new UserCartCollection();
                             $cart_collection->collection_id = $collection_id;
+                            $cart_collection->restaurant_id = $collection->restaurant_id;
                             $cart_collection->cart_id = $cart->id;
                             $cart_collection->price = $collection_price;
                             $cart_collection->quantity = $collection_quantity;
@@ -255,11 +261,13 @@ class UserCartsController extends Controller
                     } else {
                         $collection_price = $DataRequests['collection_price'];
                         $menus = $DataRequests['menus'];
+                        $collection = Collection::where('id', $collection_id)->first();
                         $cart_collection = UserCartCollection::where('cart_id', $cart->id)
                             ->where('collection_id', $collection_id)->first();
                         if(!$cart_collection){
                             $cart_collection = new UserCartCollection();
                             $cart_collection->collection_id = $collection_id;
+                            $cart_collection->restaurant_id = $collection->restaurant_id;
                             $cart_collection->cart_id = $cart->id;
                             $cart_collection->price = $collection_price;
                             $cart_collection->quantity = 1;

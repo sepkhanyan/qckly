@@ -1,26 +1,22 @@
 @extends('home')
 @section('content')
-    <div id="page-wrapper">
+    <div id="page-wrapper" style="min-height: 261px; height: 100%;">
         <div class="page-header clearfix">
+
             <div class="page-action">
-                <a class="btn btn-primary" onclick="$('#edit-form').submit();">
-                    <i class="fa fa-save"></i>
-                    Save
-                </a>
-                <a class="btn btn-default" onclick="saveClose();">
-                    <i class="fa fa-save"></i>
-                    Save & Close
-                </a>
-                <a href="{{ url('/orders') }}" class="btn btn-default">
-                    <i class="fa fa-angle-double-left"></i>
-                </a>
-            </div>
+
+                <a class="btn btn-primary" onclick="$('#edit-form').submit();"><i class="fa fa-save"></i> Save</a>
+                <a class="btn btn-default" onclick="saveClose();"><i class="fa fa-save"></i> Save &amp; Close</a>
+                <a class="btn btn-default" href="{{ redirect()->back()->getTargetUrl() }}"><i
+                            class="fa fa-angle-double-left"></i></a></div>
         </div>
         <div class="row content">
             <div class="col-md-12">
                 <div class="row wrap-vertical">
                     <ul id="nav-tabs" class="nav nav-tabs">
-                        <li class="active"><a href="#general" data-toggle="tab" aria-expanded="true">Order</a></li>
+                        <li class="active"><a href="#general" data-toggle="tab">Order</a></li>
+                        <li><a href="#menus" data-toggle="tab">Menu Items
+                                <span class="badge">{{$order->cart->cartCollection->count()}}</span></a></li>
                     </ul>
                 </div>
 
@@ -35,16 +31,14 @@
                                         <div class="panel-heading"><h3 class="panel-title">Order Details</h3></div>
                                         <div class="panel-body">
                                             <div class="form-group col-xs-12">
-                                                <label for="" class="control-label">Order ID</label>
+                                                <label for="" class="control-label">Order #</label>
                                                 <div class="">
                                                     #{{$order->id}}                                        </div>
                                             </div>
                                             <div class="form-group col-xs-12">
-                                                <label for="input-name" class="control-label">Order Date and
-                                                    Time</label>
+                                                <label for="input-name" class="control-label">Delivery Time</label>
                                                 <div class="">
-                                                    {{date("j M Y", strtotime($order->created_at)) . ', ' . date("g:i A", strtotime($order->created_at))}}
-                                                </div>
+                                                    {{date("g:i A", strtotime( $order->cart->delivery_order_time))}}                                        </div>
                                             </div>
                                             <div class="form-group col-xs-12">
                                                 <label for="input-status" class="control-label">Order Status</label>
@@ -57,10 +51,10 @@
                                                     @if($order->payment_type == 1)
                                                         {{\Lang::get('message.cash')}}
                                                     @elseif($order->payment_type == 2)
-                                                        {{\Lang::get('message.card')}}
+                                                        {{\Lang::get('message.credit')}}
                                                     @else
                                                         {{\Lang::get('message.debit')}}
-                                                    @endif                                                                                </div>
+                                                    @endif                                                                                        </div>
                                             </div>
                                             <div class="paypal_details" style="display:none">
                                                 <ul>
@@ -76,18 +70,20 @@
                                             <div class="form-group col-xs-12">
                                                 <label for="input-name" class="control-label">Name</label>
                                                 <div class="">
-                                                    <a href="#">{{$order->user->username}}</a>
+                                                    {{$order->user->username}}
                                                 </div>
                                             </div>
                                             <div class="form-group col-xs-12">
                                                 <label for="input-name" class="control-label">Email</label>
                                                 <div class="">
-                                                    {{$order->user->email}}                                    </div>
+                                                    {{$order->user->email}}
+                                                </div>
                                             </div>
                                             <div class="form-group col-xs-12">
                                                 <label for="input-name" class="control-label">Telephone</label>
                                                 <div class="">
-                                                    {{$order->user->mobile_number}}                                        </div>
+                                                    {{$order->user->mobile_number}}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -99,17 +95,15 @@
                                     <div class="panel panel-default">
                                         <div class="panel-heading"><h3 class="panel-title">Delivery Address</h3></div>
                                         <div class="panel-body">
-                                            {{$order->cart->address->name}}
-                                            <br>
-                                            {{$order->cart->address->location}}
-                                            <br>
-                                            {{$order->cart->address->building_number}}
-                                            <br>
-                                            {{$order->cart->address->zone}}
-                                            <br>
+                                            <b>Address:</b>
+                                            {{$order->cart->address->name}},
+                                            {{$order->cart->address->location}},
+                                            {{$order->cart->address->building_number}},
+                                            {{$order->cart->address->zone}},
                                             {{$order->cart->address->apartment_number}}
                                             <br>
-                                            {{$order->cart->area->area_en}}
+                                            <b>Telephone:</b>
+                                            {{$order->cart->address->mobile_number}}
                                         </div>
                                     </div>
                                 </div>
@@ -118,22 +112,92 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="panel panel-default">
-                                        <div class="panel-heading">
-                                            <h3 class="panel-title">Status</h3>
-                                        </div>
+                                        <div class="panel-heading"><h3 class="panel-title">Status</h3></div>
                                         <div class="panel-body">
-                                            <div class="form-group">
-                                                <div class="col-sm-5">
-                                                    <select name="order_status" class="form-control ">
-                                                        <option value="">{{$order->status->name_en}}</option>
+                                            <div class="col-xs-12 col-sm-3">
+                                                <label for="input-name" class="control-label">Order Status</label>
+                                                <div class="">
+                                                    <select name="status" id="category" class="form-control">
+                                                        <option value="">{{$restaurantOrder->status->name_en}}</option>
                                                         @foreach ($statuses as $status)
                                                             <option value="{{$status->id}}">{{$status->name_en}}</option>
                                                         @endforeach
-                                                    </select>&nbsp;
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="menus" class="tab-pane row wrap-all">
+                            <div class="panel panel-default panel-table">
+                                <div class="table-responsive">
+                                    <table height="auto" class="table table-condensed table-border">
+                                        <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Name</th>
+                                            <th class="text-left">Female Caterer</th>
+                                            <th class="text-left">Special Instruction</th>
+                                            <th class="text-left">Price</th>
+                                            <th class="text-right">Total</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @php($price = 0)
+                                        @foreach($order->cart->cartCollection as $cartCollection)
+                                            <tr>
+                                                <td style="width: 100px; font-style: oblique; font-size: 15px">
+                                                    @if($cartCollection->collection->category_id == 2)
+                                                        <b>For {{$cartCollection->persons_count}} persons</b>
+                                                    @else
+                                                        <b>{{$cartCollection->quantity}}x</b>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <h4><b>{{$cartCollection->collection->name_en}}</b></h4>
+                                                    @foreach($cartCollection->cartItem as $cartItem)
+                                                        <div>
+                                                            <span style="font-style: oblique">{{$cartItem->quantity}}
+                                                                x</span>
+                                                            {{$cartItem->menu->name_en}}
+                                                            @if($cartCollection->collection->category_id == 4)
+                                                                /
+                                                                <span style="font-style: oblique">{{$cartItem->menu->price}} {{\Lang::get('message.priceUnit')}}</span>
+                                                            @endif
+                                                        </div>
+                                                    @endforeach
+                                                </td>
+                                                <td>
+                                                    @if($cartCollection->female_caterer == 1)
+                                                        Yes
+                                                    @else
+                                                        No
+                                                    @endif
+                                                </td>
+                                                <td>{{$cartCollection->special_instruction}}</td>
+                                                <td class="text-left">
+                                                    @if($cartCollection->collection->category_id != 4)
+                                                        {{$cartCollection->collection->price}} {{\Lang::get('message.priceUnit')}}
+                                                    @endif
+                                                </td>
+                                                <td class="text-right">{{$cartCollection->price}} {{\Lang::get('message.priceUnit')}}</td>
+                                            </tr>
+                                            @php($price += $cartCollection->price)
+                                        @endforeach
+                                        <tr>
+                                            <td class="no-line"></td>
+                                            <td class="no-line"></td>
+                                            <td class="no-line"></td>
+                                            <td class="no-line"></td>
+                                            <td class="thick-line text-left" style="font-size: 20px"><b>Order Total</b></td>
+                                            <td class="thick-line text-right" style="font-size: 20px">
+                                                <b>{{$price}} {{\Lang::get('message.priceUnit')}}</b></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>

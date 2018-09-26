@@ -11,7 +11,7 @@
                     <i class="fa fa-save"></i>
                     Save & Close
                 </a>
-                <a href="{{ url('/restaurants') }}" class="btn btn-default">
+                <a href="{{ redirect()->back()->getTargetUrl() }}" class="btn btn-default">
                     <i class="fa fa-angle-double-left"></i>
                 </a>
             </div>
@@ -24,7 +24,7 @@
                             <a href="#general" data-toggle="tab">Manager</a>
                         </li>
                         <li>
-                            <a href="#location" data-toggle="tab">Location</a>
+                            <a href="#location" data-toggle="tab">Restaurant</a>
                         </li>
                         <li>
                             <a href="#data" data-toggle="tab">Data</a>

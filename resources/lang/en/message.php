@@ -28,5 +28,6 @@ return [
     'otpSent'            => 'Please enter OTP sent to your registered mobile number.',
     'otpError'           => 'Enter valid OTP Number',
     'orderComplete'      => 'Cart already ordered.',
-    'emptyCart'          => 'Cart is empty.'
+    'emptyCart'          => 'Cart is empty.',
+    'noCart'             => 'No Cart.'
 ];

@@ -37,7 +37,7 @@ class UserCart extends Model
 
     public function order()
     {
-        return $this->hasMany('App\Order', 'cart_id');
+        return $this->hasOne('App\Order', 'cart_id');
     }
 
     public function area()

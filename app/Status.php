@@ -20,4 +20,9 @@ class Status extends Model
         return $this->hasMany('App\Order', 'status_id');
     }
 
+
+    public function orderRestaurant()
+    {
+        return $this->hasMany('App\OrderRestaurant', 'status_id');
+    }
 }

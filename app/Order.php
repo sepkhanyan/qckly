@@ -38,4 +38,9 @@ class Order extends Model
     {
         return $this->belongsTo('App\Status', 'status_id');
     }
+
+    public function orderRestaurant()
+    {
+        return $this->hasMany('App\OrderRestaurant', 'order_id');
+    }
 }

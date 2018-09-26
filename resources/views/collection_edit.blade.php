@@ -11,7 +11,7 @@
                     <i class="fa fa-save"></i>
                     Save & Close
                 </a>
-                <a href="{{ url('/collections') }}" class="btn btn-default">
+                <a href="{{ redirect()->back()->getTargetUrl() }}" class="btn btn-default">
                     <i class="fa fa-angle-double-left"></i>
                 </a>
             </div>

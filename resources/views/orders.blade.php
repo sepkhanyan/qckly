@@ -90,40 +90,48 @@
                                 <table border="0" class="table table-striped table-border">
                                     <thead>
                                     <tr>
-                                        <th class="action action-three">
-                                            <input type="checkbox"
-                                                   onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">
-                                        </th>
+                                        @if(Auth::user()->admin == 2)
+                                            <th class="action action-three">
+                                                <input type="checkbox"
+                                                       onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">
+                                            </th>
+                                        @endif
+                                        <th>ID</th>
                                         <th>Customer Name</th>
                                         <th>Payment</th>
                                         <th>Total</th>
                                         <th>Status</th>
                                         <th>Time - Date</th>
-                                        <th>ID</th>
                                     </tr>
                                     </thead>
                                     <tbody>
 
                                     @foreach($orders as $order)
                                         <tr>
-                                            <td class="action">
-                                                <input type="checkbox" value="{{ $order->id }}" name="delete"/>
-                                                <a class="btn btn-edit" title=""
-                                                   href="{{ url('/order/edit/' . $order->id )}}">
-                                                    <i class="fa fa-pencil"></i>
-                                                </a>&nbsp;&nbsp;
-                                            </td>
-                                            <td>{{$order->user->username}}</td>
+                                            @if(Auth::user()->admin == 2)
+                                                <td class="action">
+                                                    <input type="checkbox" value="{{ $order->order_id }}"
+                                                           name="delete"/>
+                                                    <a class="btn btn-edit" title=""
+                                                       href="{{ url('/order/edit/' . $order->order_id )}}">
+                                                        <i class="fa fa-pencil"></i>
+                                                    </a>&nbsp;&nbsp;
+                                                </td>
+                                            @endif
+                                            <td>{{$order->order_id}}</td>
+                                            <td>{{$order->order->user->username}}</td>
                                             <td>
-                                                @if($order->payment_type == 1)
+                                                @if($order->order->payment_type == 1)
                                                     {{\Lang::get('message.cash')}}
                                                 @elseif($order->payment_type == 2)
-                                                    {{\Lang::get('message.card')}}
+                                                    {{\Lang::get('message.credit')}}
                                                 @else
                                                     {{\Lang::get('message.debit')}}
                                                 @endif
                                             </td>
-                                            <td>{{$order->total_price . \Lang::get('message.priceUnit')}}</td>
+                                            <td>
+                                                {{$order->total_price . \Lang::get('message.priceUnit')}}
+                                            </td>
                                             <td>
                                                 @if($order->status_id == 1)
                                                     <span class="label label-default"
@@ -137,9 +145,8 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                {{date("g:i A", strtotime($order->created_at)) . '-' . date("j M Y", strtotime($order->created_at))}}
+                                                {{date("g:i A", strtotime($order->created_at)) . ', ' . date("j M Y", strtotime($order->created_at))}}
                                             </td>
-                                            <td>{{$order->id}}</td>
                                         </tr>
                                     @endforeach
                                     </tbody>
