@@ -221,20 +221,20 @@ class ReviewsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function deleteReview(Request $request)
-    {
-        $user = Auth::user();
-        $id = $request->get('id');
-        if($user->admin == 1){
-            Review::whereIn('id',$id)->delete();
-        }elseif($user->admin == 2){
-            $user = $user->load('restaurant');
-            $restaurant = $user->restaurant;
-            $review = Review::where('restaurant_id',$restaurant->id)->where('id', $id)->first();
-            if($review){
-                $review->delete();
-            }
-        }
-        return redirect('/reviews');
-    }
+//    public function deleteReview(Request $request)
+//    {
+//        $user = Auth::user();
+//        $id = $request->get('id');
+//        if($user->admin == 1){
+//            Review::whereIn('id',$id)->delete();
+//        }elseif($user->admin == 2){
+//            $user = $user->load('restaurant');
+//            $restaurant = $user->restaurant;
+//            $review = Review::where('restaurant_id',$restaurant->id)->where('id', $id)->first();
+//            if($review){
+//                $review->delete();
+//            }
+//        }
+//        return redirect('/reviews');
+//    }
 }

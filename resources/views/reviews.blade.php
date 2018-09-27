@@ -7,10 +7,10 @@
                     <div class="row">
                         @if($selectedRestaurant)
                             @if(count($reviews) > 0)
-                                <a class="btn btn-danger " id="delete_review">
-                                    <i class="fa fa-trash-o"></i>
-                                    Delete
-                                </a>
+                                {{--<a class="btn btn-danger " id="delete_review">--}}
+                                    {{--<i class="fa fa-trash-o"></i>--}}
+                                    {{--Delete--}}
+                                {{--</a>--}}
                             @else
                                 <i style="font-size: 20px">No Review</i>
                             @endif
@@ -102,10 +102,10 @@
                                 <table class="table table-striped table-border">
                                     <thead>
                                     <tr>
-                                        <th class="action">
-                                            <input type="checkbox"
-                                                   onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">
-                                        </th>
+                                        {{--<th class="action">--}}
+                                            {{--<input type="checkbox"--}}
+                                                   {{--onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">--}}
+                                        {{--</th>--}}
                                         <th>Author</th>
                                         <th>Order ID</th>
                                         <th>Rating</th>
@@ -117,9 +117,9 @@
                                     <tbody>
                                     @foreach($reviews as $review)
                                         <tr>
-                                            <td class="action">
-                                                <input type="checkbox" value="{{ $review->id }}" name="delete"/>
-                                            </td>
+                                            {{--<td class="action">--}}
+                                                {{--<input type="checkbox" value="{{ $review->id }}" name="delete"/>--}}
+                                            {{--</td>--}}
                                             <td>{{$review->order->user->username}}</td>
                                             <td>{{$review->order_id}}</td>
                                             <td>
