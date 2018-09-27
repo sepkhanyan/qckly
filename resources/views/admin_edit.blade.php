@@ -57,7 +57,7 @@
                                 <label for="input-image" class="col-sm-3 control-label">Image</label>
                                 <div class="col-sm-5">
                                     <label class=" btn btn-default btn-file col-sm-3">
-                                        Browse <input type="file" style="display: none;">
+                                        Browse <input type="file" name="image" style="display: none;">
                                     </label>
                                 </div>
                             </div>
