@@ -84,8 +84,11 @@
                                 <label for="input_mealtime" class="col-sm-3 control-label">Mealtime</label>
                                 <div class="col-sm-5">
                                     <select name="mealtime" id="mealtime" class="form-control">
+                                        <option value="{{$collection->mealtime_id}}">{{$collection->mealtime->name_en}}</option>
                                         @foreach ($mealtimes as $mealtime)
-                                            <option value="{{$mealtime->id}}">{{$mealtime->name_en}}</option>
+                                            @if($collection->mealtime_id != $mealtime->id)
+                                                <option value="{{$mealtime->id}}">{{$mealtime->name_en}}</option>
+                                            @endif
                                         @endforeach
                                     </select>
                                 </div>
@@ -201,9 +204,11 @@
                                 <label for="input-name" class="col-sm-3 control-label">Category</label>
                                 <div class="col-sm-5">
                                     <select name="category" id="category" class="form-control">
-                                        <option value="">Select Category</option>
+                                        <option value="{{$collection->category_id}}">{{$collection->category->name_en}}</option>
                                         @foreach ($categories as $category)
-                                            <option value="{{$category->id}}">{{$category->name_en}}</option>
+                                            @if($collection->category_id != $category->id)
+                                                <option value="{{$category->id}}">{{$category->name_en}}</option>
+                                            @endif
                                         @endforeach
                                     </select>
                                     @if ($errors->has('category'))

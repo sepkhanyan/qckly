@@ -35,13 +35,19 @@
                                         <option value>{{$selectedRestaurant->name_en}}
                                             ,{{$selectedRestaurant->area->area_en}}
                                             ,{{$selectedRestaurant->address_en}}</option>
+                                        @foreach($restaurants as $restaurant)
+                                            @if($selectedRestaurant->id != $restaurant->id)
+                                                <option value="{{url('/menus/' . $restaurant->id)}}">{{$restaurant->name_en}}
+                                                    ,{{$restaurant->area->area_en}},{{$restaurant->address_en}}</option>
+                                            @endif
+                                        @endforeach
                                     @else
                                         <option value>Select Restaurant</option>
+                                        @foreach($restaurants as $restaurant)
+                                            <option value="{{url('/menus/' . $restaurant->id)}}">{{$restaurant->name_en}}
+                                                ,{{$restaurant->area->area_en}},{{$restaurant->address_en}}</option>
+                                        @endforeach
                                     @endif
-                                    @foreach($restaurants as $restaurant)
-                                        <option value="{{url('/menus/' . $restaurant->id)}}">{{$restaurant->name_en}}
-                                            ,{{$restaurant->area->area_en}},{{$restaurant->address_en}}</option>
-                                    @endforeach
                                 </select>
                             </div>
                         @endif

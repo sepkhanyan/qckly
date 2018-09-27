@@ -91,11 +91,13 @@ class OrdersController extends Controller
         $user = $user->load('restaurant');
         $restaurant = $user->restaurant;
         $restaurantOrder = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $restaurant->id)->first();
-        $restaurantOrder->status_id = $request->input('status');
-        $restaurantOrder->save();
-        $orders = OrderRestaurant::where('order_id', $id)->where('status_id', '!=', 2)->get();
-        if(count($orders) <= 0){
-            Order::where('id', $id)->update(['status_id' => 2]);
+        if($restaurantOrder->status_id != 2){
+            $restaurantOrder->status_id = $request->input('status');
+            $restaurantOrder->save();
+            $orders = OrderRestaurant::where('order_id', $id)->where('status_id', '!=', 2)->get();
+            if(count($orders) <= 0){
+                Order::where('id', $id)->update(['status_id' => 2]);
+            }
         }
         return redirect('/orders');
     }
@@ -321,7 +323,8 @@ class OrdersController extends Controller
             $validator = \Validator::make($DataRequests, [
                 'cart_id' => 'required|integer',
                 'payment_type' => 'required|integer',
-                'total_price' => 'required|numeric'
+                'total_price' => 'required|numeric',
+                'orders' => 'required'
             ]);
             if ($validator->fails()) {
                 return response()->json(array('success' => 1, 'status_code' => 400,
@@ -407,29 +410,28 @@ class OrdersController extends Controller
     }
 
 
-    public function deleteOrder(Request $request)
-    {
-        $user = Auth::user();
-        $id = $request->get('id');
-        if ($user->admin == 1) {
-            Order::whereIn('id', $id)->delete();
-        } elseif ($user->admin == 2) {
-            $user = $user->load('restaurant');
-            $restaurant = $user->restaurant;
-            $order = Order::whereHas('cart', function ($query) use ($restaurant) {
-                $query->whereHas('cartCollection', function ($q) use ($restaurant) {
-                    $q->wherehas('collection', function ($x) use ($restaurant) {
-                        $x->where('restaurant_id', $restaurant->id);
-                    });
-                });
-            })->where('id', $id)->first();
-            if ($order) {
-                $order->delete();
-            }
-        }
-        return redirect('/orders');
-
-    }
+//    public function deleteOrder(Request $request)
+//    {
+//        $user = Auth::user();
+//        $id = $request->get('id');
+//        if ($user->admin == 1) {
+//            Order::whereIn('id', $id)->delete();
+//        } elseif ($user->admin == 2) {
+//            $user = $user->load('restaurant');
+//            $restaurant = $user->restaurant;
+//            $order = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $restaurant->id)->first();
+//            if ($order) {
+//                $order->delete();
+//                Order::where('id', $id)->decrement('total_price', $order->total_price);
+//                $orders = OrderRestaurant::where('order_id', $id)->where('status_id', '!=', 2)->get();
+//                if(count($orders) <= 0){
+//                    Order::where('id', $id)->update(['status_id' => 2]);
+//                }
+//            }
+//        }
+//        return redirect('/orders');
+//
+//    }
 
     /**
      * Display the specified resource.

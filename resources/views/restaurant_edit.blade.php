@@ -130,28 +130,28 @@
                                 </div>
                             </div>
                             {{--<div class="form-group{{ $errors->has('city_en') ? ' has-error' : '' }}">--}}
-                                {{--<label for="input_city_en" class="col-sm-3 control-label">City En</label>--}}
-                                {{--<div class="col-sm-5">--}}
-                                    {{--<input type="text" name="city_en" id="input_city_en" class="form-control"--}}
-                                           {{--value=" {{ $restaurant->city_en }}"/>--}}
-                                    {{--@if ($errors->has('city_en'))--}}
-                                        {{--<span class="help-block">--}}
-                                        {{--<strong>{{ $errors->first('city_en') }}</strong>--}}
-                                    {{--</span>--}}
-                                    {{--@endif--}}
-                                {{--</div>--}}
+                            {{--<label for="input_city_en" class="col-sm-3 control-label">City En</label>--}}
+                            {{--<div class="col-sm-5">--}}
+                            {{--<input type="text" name="city_en" id="input_city_en" class="form-control"--}}
+                            {{--value=" {{ $restaurant->city_en }}"/>--}}
+                            {{--@if ($errors->has('city_en'))--}}
+                            {{--<span class="help-block">--}}
+                            {{--<strong>{{ $errors->first('city_en') }}</strong>--}}
+                            {{--</span>--}}
+                            {{--@endif--}}
+                            {{--</div>--}}
                             {{--</div>--}}
                             {{--<div class="form-group{{ $errors->has('city_ar') ? ' has-error' : '' }}">--}}
-                                {{--<label for="input_city_ar" class="col-sm-3 control-label">City Ar</label>--}}
-                                {{--<div class="col-sm-5">--}}
-                                    {{--<input type="text" name="city_ar" id="input_city_ar" class="form-control"--}}
-                                           {{--value=" {{ $restaurant->city_ar }}"/>--}}
-                                    {{--@if ($errors->has('city_ar'))--}}
-                                        {{--<span class="help-block">--}}
-                                        {{--<strong>{{ $errors->first('city_ar') }}</strong>--}}
-                                    {{--</span>--}}
-                                    {{--@endif--}}
-                                {{--</div>--}}
+                            {{--<label for="input_city_ar" class="col-sm-3 control-label">City Ar</label>--}}
+                            {{--<div class="col-sm-5">--}}
+                            {{--<input type="text" name="city_ar" id="input_city_ar" class="form-control"--}}
+                            {{--value=" {{ $restaurant->city_ar }}"/>--}}
+                            {{--@if ($errors->has('city_ar'))--}}
+                            {{--<span class="help-block">--}}
+                            {{--<strong>{{ $errors->first('city_ar') }}</strong>--}}
+                            {{--</span>--}}
+                            {{--@endif--}}
+                            {{--</div>--}}
                             {{--</div>--}}
                             <div class="form-group">
                                 <label for="input_state_en" class="col-sm-3 control-label">State En</label>
@@ -184,8 +184,11 @@
                                 <div class="col-sm-5">
 
                                     <select name="country" id="input-country" class="form-control">
+                                        <option value="{{$restaurant->area_id}}">{{$restaurant->area->area_en}}</option>
                                         @foreach($areas as $area)
-                                            <option value="{{$area->id}}">{{$area->area_en}}</option>
+                                            @if($restaurant->area_id != $area->id)
+                                                <option value="{{$area->id}}">{{$area->area_en}}</option>
+                                            @endif
                                         @endforeach
                                     </select>
                                 </div>
@@ -298,19 +301,19 @@
                                 -
                             </div>
                             {{--<div class="form-group">--}}
-                                {{--<label for="input-status" class="col-sm-3 control-label">Status</label>--}}
-                                {{--<div class="col-sm-5">--}}
-                                    {{--<div class="btn-group btn-group-switch" data-toggle="buttons">--}}
-                                        {{--<label class="btn btn-danger">--}}
-                                            {{--<input type="radio" name="status" value="0">--}}
-                                            {{--Disabled--}}
-                                        {{--</label>--}}
-                                        {{--<label class="btn btn-success active">--}}
-                                            {{--<input type="radio" name="status" value="1" checked="checked">--}}
-                                            {{--Enabled--}}
-                                        {{--</label>--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
+                            {{--<label for="input-status" class="col-sm-3 control-label">Status</label>--}}
+                            {{--<div class="col-sm-5">--}}
+                            {{--<div class="btn-group btn-group-switch" data-toggle="buttons">--}}
+                            {{--<label class="btn btn-danger">--}}
+                            {{--<input type="radio" name="status" value="0">--}}
+                            {{--Disabled--}}
+                            {{--</label>--}}
+                            {{--<label class="btn btn-success active">--}}
+                            {{--<input type="radio" name="status" value="1" checked="checked">--}}
+                            {{--Enabled--}}
+                            {{--</label>--}}
+                            {{--</div>--}}
+                            {{--</div>--}}
                             {{--</div>--}}
                         </div>
 

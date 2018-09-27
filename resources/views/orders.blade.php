@@ -7,10 +7,10 @@
                     <div class="row">
                         @if($selectedRestaurant)
                             @if(count($orders) > 0)
-                                <a class="btn btn-danger " id="delete_order">
-                                    <i class="fa fa-trash-o"></i>
-                                    Delete
-                                </a>
+                                {{--<a class="btn btn-danger " id="delete_order">--}}
+                                    {{--<i class="fa fa-trash-o"></i>--}}
+                                    {{--Delete--}}
+                                {{--</a>--}}
                             @else
                                 <i style="font-size: 20px">No Order</i>
                             @endif
@@ -23,13 +23,19 @@
                                         <option value>{{$selectedRestaurant->name_en}}
                                             ,{{$selectedRestaurant->area->area_en}}
                                             ,{{$selectedRestaurant->address_en}}</option>
+                                        @foreach($restaurants as $restaurant)
+                                            @if($selectedRestaurant->id != $restaurant->id)
+                                                <option value="{{url('/orders/' . $restaurant->id)}}">{{$restaurant->name_en}}
+                                                    ,{{$restaurant->area->area_en}},{{$restaurant->address_en}}</option>
+                                            @endif
+                                        @endforeach
                                     @else
                                         <option value>Select Restaurant</option>
+                                        @foreach($restaurants as $restaurant)
+                                            <option value="{{url('/orders/' . $restaurant->id)}}">{{$restaurant->name_en}}
+                                                ,{{$restaurant->area->area_en}},{{$restaurant->address_en}}</option>
+                                        @endforeach
                                     @endif
-                                    @foreach($restaurants as $restaurant)
-                                        <option value="{{url('/orders/' . $restaurant->id)}}">{{$restaurant->name_en}}
-                                            ,{{$restaurant->area->area_en}},{{$restaurant->address_en}}</option>
-                                    @endforeach
                                 </select>
                             </div>
                         @endif
@@ -92,8 +98,8 @@
                                     <tr>
                                         @if(Auth::user()->admin == 2)
                                             <th class="action action-three">
-                                                <input type="checkbox"
-                                                       onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">
+                                                {{--<input type="checkbox"--}}
+                                                       {{--onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">--}}
                                             </th>
                                         @endif
                                         <th>ID</th>
@@ -110,8 +116,8 @@
                                         <tr>
                                             @if(Auth::user()->admin == 2)
                                                 <td class="action">
-                                                    <input type="checkbox" value="{{ $order->order_id }}"
-                                                           name="delete"/>
+                                                    {{--<input type="checkbox" value="{{ $order->order_id }}"--}}
+                                                           {{--name="delete"/>--}}
                                                     <a class="btn btn-edit" title=""
                                                        href="{{ url('/order/edit/' . $order->order_id )}}">
                                                         <i class="fa fa-pencil"></i>

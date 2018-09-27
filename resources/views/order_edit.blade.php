@@ -108,29 +108,31 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading"><h3 class="panel-title">Status</h3></div>
-                                        <div class="panel-body">
-                                            <div class="col-xs-12 col-sm-3">
-                                                <label for="input-name" class="control-label">Order Status</label>
-                                                <div class="">
-                                                    <select name="status" id="category" class="form-control">
-                                                        <option value="">{{$restaurantOrder->status->name_en}}</option>
-                                                        @foreach ($statuses as $status)
-                                                            <option value="{{$status->id}}">{{$status->name_en}}</option>
-                                                        @endforeach
-                                                    </select>
+                            @if($restaurantOrder->status_id !=2)
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading"><h3 class="panel-title">Status</h3></div>
+                                            <div class="panel-body">
+                                                <div class="col-xs-12 col-sm-3">
+                                                    <label for="input-name" class="control-label">Order Status</label>
+                                                    <div class="">
+                                                        <select name="status" id="category" class="form-control">
+                                                            <option value="{{$restaurantOrder->status_id}}">{{$restaurantOrder->status->name_en}}</option>
+                                                            @foreach ($statuses as $status)
+                                                                @if($restaurantOrder->status_id != $status->id)
+                                                                    <option value="{{$status->id}}">{{$status->name_en}}</option>
+                                                                @endif
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            @endif
                         </div>
-
                         <div id="menus" class="tab-pane row wrap-all">
                             <div class="panel panel-default panel-table">
                                 <div class="table-responsive">
@@ -192,7 +194,8 @@
                                             <td class="no-line"></td>
                                             <td class="no-line"></td>
                                             <td class="no-line"></td>
-                                            <td class="thick-line text-left" style="font-size: 20px"><b>Order Total</b></td>
+                                            <td class="thick-line text-left" style="font-size: 20px"><b>Order Total</b>
+                                            </td>
                                             <td class="thick-line text-right" style="font-size: 20px">
                                                 <b>{{$price}} {{\Lang::get('message.priceUnit')}}</b></td>
                                         </tr>

@@ -50,7 +50,7 @@ class RestaurantRequest extends FormRequest
                 'category' => 'required',
                 'restaurant_name_en' => 'required|string|max:255',
                 'restaurant_name_ar' => 'required|string|max:255',
-                'restaurant_email' => 'required|integer',
+                'restaurant_email' => 'required|string|max:255',
                 'restaurant_telephone' => 'required|integer',
                 'description_en' => 'required|string',
                 'description_ar' => 'required|string',
