@@ -156,7 +156,7 @@ class AreasController extends Controller
             }
             $arr [] = [
                 'area_id' => $area->id,
-                'area_ar' => $area_name,
+                'area' => $area_name,
             ];
         }
         if ($arr) {

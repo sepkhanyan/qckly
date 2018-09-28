@@ -31,17 +31,17 @@ class RestaurantsController extends Controller
     {
         $user = Auth::user();
         $restaurants = Restaurant::paginate(20);
-        if ($user->admin == 2) {
-            $restaurants = Restaurant::where('user_id', $user->id)->paginate(20);
-        }
         $data = $request->all();
         if (isset($data['restaurant_status'])) {
             $restaurants = Restaurant::where('status', $data['restaurant_status'])->paginate(20);
         }
         if (isset($data['restaurant_search'])) {
             $restaurants = Restaurant::where('name_en', 'like', $data['restaurant_search'])
-                ->orWhere('city_en', 'like', $data['restaurant_search'])
                 ->orWhere('description_en', 'like', $data['restaurant_search'])->paginate(20);
+        }
+        if ($user->admin == 2) {
+            $restaurants = Restaurant::where('user_id', $user->id)->paginate(20);
+
         }
 
         return view('restaurants', ['restaurants' => $restaurants]);

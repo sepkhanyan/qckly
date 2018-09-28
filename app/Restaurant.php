@@ -10,12 +10,16 @@ class Restaurant extends Model
 
 
     protected $fillable = [
-        'name',
+        'name_en',
+        'name_ar',
         'email',
-        'description',
-        'address',
-        'city',
-        'state',
+        'description_en',
+        'description_ar',
+        'address_en',
+        'address_ar',
+//        'city',
+        'state_en',
+        'state_ar',
         'postcode',
         'area_id',
         'telephone',

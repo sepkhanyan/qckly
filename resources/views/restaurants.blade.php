@@ -35,7 +35,7 @@
                                             <div class="form-group">
                                                 <input type="text" name="restaurant_search"
                                                        class="form-control input-sm" value=""
-                                                       placeholder="Search name, description or city."/>&nbsp;&nbsp;&nbsp;
+                                                       placeholder="Search name or description."/>&nbsp;&nbsp;&nbsp;
                                             </div>
                                             <a class="btn btn-grey" onclick="filterList();" title="Search">
                                                 <i class="fa fa-search"></i>
