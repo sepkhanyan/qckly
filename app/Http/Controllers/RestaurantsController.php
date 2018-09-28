@@ -178,7 +178,6 @@ class RestaurantsController extends Controller
     public function edit($id)
     {
         $user = Auth::user();
-        $working = WorkingHour::where('restaurant_id', $id)->first();
         $restaurant = Restaurant::find($id);
         $areas = Area::all();
         $categories = RestaurantCategory::all();
@@ -190,10 +189,11 @@ class RestaurantsController extends Controller
                 return redirect('restaurants');
             }
         }
+        $working = WorkingHour::where('restaurant_id', $restaurant->id)->first();
         return view('restaurant_edit', [
             'restaurant' => $restaurant,
-            'areas' => $areas,
             'working' => $working,
+            'areas' => $areas,
             'categories' => $categories
         ]);
     }
@@ -208,6 +208,7 @@ class RestaurantsController extends Controller
     public function update(RestaurantRequest $request, $id)
     {
         $user = Auth::user();
+        $restaurant = Restaurant::find($id);
         if ($user->admin == 2) {
             $user = $user->load('restaurant');
             if ($user->restaurant->id == $id) {
@@ -215,8 +216,6 @@ class RestaurantsController extends Controller
             } else {
                 return redirect('restaurants');
             }
-        } else {
-            $restaurant = Restaurant::find($id);
         }
         $restaurant->name_en = $request->input('restaurant_name_en');
         $restaurant->name_ar = $request->input('restaurant_name_ar');
@@ -265,7 +264,8 @@ class RestaurantsController extends Controller
         }
 
         $days = $request->input('daily_days');
-        if ($days) {
+        $working = WorkingHour::where('restaurant_id', $id)->first();
+        if ($working->type != $request->input('opening_type')) {
             WorkingHour::where('restaurant_id', $id)->delete();
             foreach ($days as $day) {
                 $working = new WorkingHour();

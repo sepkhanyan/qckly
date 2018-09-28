@@ -322,18 +322,47 @@
                                 <label for="" class="col-sm-3 control-label">Opening Type</label>
                                 <div class="col-sm-5">
                                     <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
-                                        <label class="btn btn-success active" id="daily-flexible-hide">
-                                            <input type="radio" name="opening_type" value="24_7" checked="checked">
-                                            24/7
-                                        </label>
-                                        <label class="btn btn-success" id="opening-daily-show">
-                                            <input type="radio" name="opening_type" value="daily">
-                                            Daily
-                                        </label>
-                                        <label class="btn btn-success" id="opening-flexible-show">
-                                            <input type="radio" name="opening_type" value="flexible">
-                                            Flexible
-                                        </label>
+                                        @if($working->type == '24_7')
+                                            <label class="btn btn-success active" id="daily-flexible-hide">
+                                                <input type="radio" name="opening_type" value="24_7" checked="checked">
+                                                24/7
+                                            </label>
+                                            <label class="btn btn-success" id="opening-daily-show">
+                                                <input type="radio" name="opening_type" value="daily">
+                                                Daily
+                                            </label>
+                                            <label class="btn btn-success" id="opening-flexible-show">
+                                                <input type="radio" name="opening_type" value="flexible">
+                                                Flexible
+                                            </label>
+                                        @elseif($working->type == 'daily')
+                                            <label class="btn btn-success " id="daily-flexible-hide">
+                                                <input type="radio" name="opening_type" value="24_7">
+                                                24/7
+                                            </label>
+                                            <label class="btn btn-success active" id="opening-daily-show">
+                                                <input type="radio" name="opening_type" value="daily" checked="checked">
+                                                Daily
+                                            </label>
+                                            <label class="btn btn-success" id="opening-flexible-show">
+                                                <input type="radio" name="opening_type" value="flexible">
+                                                Flexible
+                                            </label>
+                                        @else
+                                            <label class="btn btn-success " id="daily-flexible-hide">
+                                                <input type="radio" name="opening_type" value="24_7">
+                                                24/7
+                                            </label>
+                                            <label class="btn btn-success " id="opening-daily-show">
+                                                <input type="radio" name="opening_type" value="daily">
+                                                Daily
+                                            </label>
+                                            <label class="btn btn-success active" id="opening-flexible-show">
+                                                <input type="radio" name="opening_type" value="flexible"
+                                                       checked="checked">
+                                                Flexible
+                                            </label>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
