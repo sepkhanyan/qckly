@@ -63,10 +63,6 @@ class Collection extends Model
         return $this->hasMany('App\CollectionItem', 'collection_id');
     }
 
-    public function cartItem ()
-    {
-        return $this->hasMany('App\UserCartItem', 'collection_id');
-    }
 
     public function cartCollection ()
     {

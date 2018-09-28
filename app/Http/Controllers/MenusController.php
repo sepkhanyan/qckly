@@ -29,10 +29,7 @@ class MenusController extends Controller
         $data = $request->all();
         $menus = [];
         if ($id) {
-            $menus = Menu::whereHas('restaurant', function ($query) use ($id) {
-                $query->where('restaurant_id', $id);
-            })
-                ->with('category');
+            $menus = Menu::where('restaurant_id', $id);
             if (isset($data['menu_status'])) {
                 $menus = $menus->where('status', $data['menu_status']);
             }
@@ -41,9 +38,8 @@ class MenusController extends Controller
 
             }
             if (isset($data['menu_search'])) {
-                $menus = $menus->where('name', 'like', $data['menu_search'])
-                    ->orWhere('price', 'like', $data['menu_search'])
-                    ->orWhere('description', 'like', $data['menu_search']);
+                $menus = $menus->where('name_en', 'like', $data['menu_search'])
+                    ->orWhere('price', 'like', $data['menu_search']);
             }
             $selectedRestaurant = Restaurant::find($id);
             $menus = $menus->paginate(20);
@@ -51,8 +47,21 @@ class MenusController extends Controller
         if ($user->admin == 2) {
             $user = $user->load('restaurant');
             $restaurant = $user->restaurant;
+            $menus = Menu::where('restaurant_id', $restaurant->id);
+            if (isset($data['menu_status'])) {
+                $menus = $menus->where('status', $data['menu_status']);
+            }
+            if (isset($data['menu_category'])) {
+                $menus = $menus->where('category_id', $data['menu_category']);
+
+            }
+            if (isset($data['menu_search'])) {
+                $menus = $menus->where('name_en', 'like', $data['menu_search'])
+                    ->orWhere('price', 'like', $data['menu_search'])
+                    ->orWhere('description_en', 'like', $data['menu_search']);
+            }
             $selectedRestaurant = Restaurant::find($restaurant->id);
-            $menus = Menu::where('restaurant_id', $restaurant->id)->paginate(20);
+            $menus = $menus->paginate(20);
         }
         return view('menus', [
             'id' => $id,
@@ -134,7 +143,16 @@ class MenusController extends Controller
      */
     public function edit($id)
     {
+        $user = Auth::user();
         $menu = Menu::find($id);
+        if ($user->admin == 2) {
+            $user = $user->load('restaurant');
+            $restaurant = $user->restaurant;
+            $menu = Menu::where('id', $id)->where('restaurant_id', $restaurant->id)->first();
+            if (!$menu) {
+                return redirect('/menus');
+            }
+        }
         $categories = Category::all();
         return view('menu_edit', [
             'categories' => $categories,
@@ -151,7 +169,16 @@ class MenusController extends Controller
      */
     public function update(MenuRequest $request, $id)
     {
+        $user = Auth::user();
         $menu = Menu::find($id);
+        if ($user->admin == 2) {
+            $user = $user->load('restaurant');
+            $restaurant = $user->restaurant;
+            $menu = Menu::where('id', $id)->where('restaurant_id', $restaurant->id)->first();
+            if (!$menu) {
+                return redirect('/menus');
+            }
+        }
         $menu->name_en = $request->input('name_en');
         $menu->description_en = $request->input('description_en');
         $menu->name_ar = $request->input('name_ar');
@@ -184,12 +211,23 @@ class MenusController extends Controller
     {
         $id = $request->get('id');
         $menus = Menu::where('id', $id)->get();
+        $menu = Menu::find($id);
+        $user = Auth::user();
+        if ($user->admin == 2) {
+            $user = $user->load('restaurant');
+            $restaurant = $user->restaurant;
+            $menu = Menu::where('id', $id)->where('restaurant_id', $restaurant->id)->first();
+            if(!$menu){
+                return redirect('/menus');
+            }
+            $menus = Menu::where('id', $id)->where('restaurant_id', $restaurant->id)->get();
+        }
         $images = [];
         foreach ($menus as $menu) {
             $images[] = public_path('images/' . $menu->image);
         }
         File::delete($images);
-        Menu::whereIn('id', $id)->delete();
+        $menu->delete();
 
         return redirect('/menus');
     }

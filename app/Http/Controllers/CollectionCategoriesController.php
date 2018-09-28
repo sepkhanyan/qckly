@@ -48,7 +48,7 @@ class CollectionCategoriesController extends Controller
             $category->save();
             return redirect('/collection_categories');
         }else{
-            return redirect('collection_categories');
+            return redirect('/collection_categories');
         }
 
     }
@@ -92,7 +92,7 @@ class CollectionCategoriesController extends Controller
             $category->save();
             return redirect('/collection_categories');
         }else{
-            return redirect('collection_categories');
+            return redirect('/collection_categories');
         }
     }
 
@@ -110,7 +110,7 @@ class CollectionCategoriesController extends Controller
             CollectionCategory::whereIn('id',$id)->delete();
             return redirect('/collection_categories');
         }else{
-            return redirect('collection_categories');
+            return redirect('/collection_categories');
         }
 
 

@@ -9,7 +9,12 @@ class OrderRestaurant extends Model
     protected $table = 'order_restaurant';
 
 
-    protected $fillable = ['restaurant_id', 'order_id', 'price', 'status_id'];
+    protected $fillable = [
+        'restaurant_id',
+        'order_id',
+        'price',
+        'status_id'
+    ];
 
     public function  restaurant()
     {

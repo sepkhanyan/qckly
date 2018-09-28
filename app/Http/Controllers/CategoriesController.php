@@ -42,7 +42,7 @@ class CategoriesController extends Controller
         if ($user->admin == 1) {
             return view('menu_category_create');
         } else {
-            return redirect('categories');
+            return redirect('/categories');
         }
     }
 
@@ -68,7 +68,7 @@ class CategoriesController extends Controller
                 return redirect('/categories');
             }
         } else {
-            return redirect('categories');
+            return redirect('/categories');
         }
 
     }
@@ -97,7 +97,7 @@ class CategoriesController extends Controller
             $category = Category::find($id);
             return view('menu_category_edit', ['category' => $category]);
         } else {
-            return redirect('categories');
+            return redirect('/categories');
         }
     }
 
@@ -121,7 +121,7 @@ class CategoriesController extends Controller
             $category->save();
             return redirect('/categories');
         } else {
-            return redirect('categories');
+            return redirect('/categories');
         }
 
     }
@@ -151,7 +151,7 @@ class CategoriesController extends Controller
             Category::whereIn('id', $id)->delete();
             return redirect('/categories');
         } else {
-            return redirect('categories');
+            return redirect('/categories');
         }
 
     }

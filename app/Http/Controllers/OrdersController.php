@@ -69,35 +69,49 @@ class OrdersController extends Controller
     public function edit($id)
     {
         $user = Auth::user();
-        $statuses = Status::all();
-        $user = $user->load('restaurant');
-        $restaurant = $user->restaurant;
-        $order = Order::with(['cart' => function ($query) use ($restaurant) {
-            $query->with(['cartCollection' => function ($q) use ($restaurant) {
-                $q->where('restaurant_id', $restaurant->id);
-            }]);
-        }])->where('id', $id)->first();
-        $restaurantOrder = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $restaurant->id)->first();
-        return view('order_edit', [
-            'order' => $order,
-            'restaurantOrder' => $restaurantOrder,
-            'statuses' => $statuses
-        ]);
+        if ($user->admin == 2){
+            $statuses = Status::all();
+            $user = $user->load('restaurant');
+            $restaurant = $user->restaurant;
+            $order = Order::with(['cart' => function ($query) use ($restaurant) {
+                $query->with(['cartCollection' => function ($q) use ($restaurant) {
+                    $q->where('restaurant_id', $restaurant->id);
+                }]);
+            }])->where('id', $id)->first();
+            $restaurantOrder = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $restaurant->id)->first();
+            if(!$restaurantOrder){
+                return redirect('/orders');
+            }
+            return view('order_edit', [
+                'order' => $order,
+                'restaurantOrder' => $restaurantOrder,
+                'statuses' => $statuses
+            ]);
+        }else{
+           return redirect('/orders');
+        }
     }
 
     public function update(Request $request, $id)
     {
         $user = Auth::user();
-        $user = $user->load('restaurant');
-        $restaurant = $user->restaurant;
-        $restaurantOrder = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $restaurant->id)->first();
-        if($restaurantOrder->status_id != 2){
-            $restaurantOrder->status_id = $request->input('status');
-            $restaurantOrder->save();
-            $orders = OrderRestaurant::where('order_id', $id)->where('status_id', '!=', 2)->get();
-            if(count($orders) <= 0){
-                Order::where('id', $id)->update(['status_id' => 2]);
+        if ($user->admin == 2){
+            $user = $user->load('restaurant');
+            $restaurant = $user->restaurant;
+            $restaurantOrder = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $restaurant->id)->first();
+            if(!$restaurantOrder){
+                return redirect('/orders');
             }
+            if($restaurantOrder->status_id != 2){
+                $restaurantOrder->status_id = $request->input('status');
+                $restaurantOrder->save();
+                $orders = OrderRestaurant::where('order_id', $id)->where('status_id', '!=', 2)->get();
+                if(count($orders) <= 0){
+                    Order::where('id', $id)->update(['status_id' => 2]);
+                }
+            }
+        }else{
+            return redirect('/orders');
         }
         return redirect('/orders');
     }

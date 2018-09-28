@@ -17,15 +17,15 @@ class RestaurantCategoriesController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        if($user->admin == 1){
+        if ($user->admin == 1) {
             $categories = RestaurantCategory::paginate(20);
             $data = $request->all();
             if (isset($data['restaurant_category_search'])) {
                 $categories = RestaurantCategory::where('name_en', 'like', $data['restaurant_category_search'])
-                    ->orWhere('name_ar', 'like', $data['restaurant_category_search'])->paginate(15);
+                    ->orWhere('name_ar', 'like', $data['restaurant_category_search'])->paginate(20);
             }
             return view('restaurant_categories', ['categories' => $categories]);
-        }else{
+        } else {
             return redirect('/');
         }
     }
@@ -49,7 +49,7 @@ class RestaurantCategoriesController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-        if($user->admin == 1){
+        if ($user->admin == 1) {
             $category = new RestaurantCategory();
             $category->name_en = $request->input('name_en');
             $category->name_ar = $request->input('name_ar');
@@ -57,7 +57,7 @@ class RestaurantCategoriesController extends Controller
             if ($category) {
                 return redirect('/restaurant_categories');
             }
-        }else{
+        } else {
             return redirect('/');
         }
 
@@ -95,13 +95,13 @@ class RestaurantCategoriesController extends Controller
     public function update(Request $request, $id)
     {
         $user = Auth::user();
-        if($user->admin == 1){
+        if ($user->admin == 1) {
             $category = RestaurantCategory::find($id);
             $category->name_en = $request->input('name_en');
             $category->name_ar = $request->input('name_ar');
             $category->save();
             return redirect('/restaurant_categories');
-        }else{
+        } else {
             return redirect('/');
         }
     }
@@ -115,7 +115,7 @@ class RestaurantCategoriesController extends Controller
     public function deleteRestaurantCategory(Request $request)
     {
         $user = Auth::user();
-        if($user->admin == 1){
+        if ($user->admin == 1) {
             $id = $request->get('id');
             $categories = RestaurantCategory::where('id', $id)->get();
             foreach ($categories as $category) {
@@ -123,7 +123,7 @@ class RestaurantCategoriesController extends Controller
                     $restaurant_images = [];
                     $menu_images = [];
                     foreach ($category->restaurant as $restaurant) {
-                        if($restaurant->menu){
+                        if ($restaurant->menu) {
                             foreach ($restaurant->menu as $menu) {
                                 $menu_images[] = public_path('images/' . $menu->menu_photo);
                             }
@@ -136,7 +136,7 @@ class RestaurantCategoriesController extends Controller
             }
             RestaurantCategory::whereIn('id', $id)->delete();
             return redirect('/restaurant_categories');
-        }else{
+        } else {
             return redirect('/');
         }
     }
@@ -147,19 +147,16 @@ class RestaurantCategoriesController extends Controller
         $categories = RestaurantCategory::all();
         foreach ($categories as $category) {
             if ($lang == 'ar') {
-                $arr [] = [
-                    'category_id' => $category->id,
-                    'category_name' => $category->name_ar,
-                ];
+                $name = $category->name_ar;
             } else {
-                $arr [] = [
-                    'category_id' => $category->id,
-                    'category_name' => $category->name_en,
-                ];
+                $name = $category->name_en;
             }
+            $arr [] = [
+                'category_id' => $category->id,
+                'category_name' => $name,
+            ];
 
         }
-
         if ($arr) {
             return response()->json(array(
                 'success' => 1,

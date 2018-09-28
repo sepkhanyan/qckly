@@ -6,8 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Layout extends Model
 {
-    protected $table = 'layouts';
-
-
-    protected $fillable = ['name'];
+    //
 }

@@ -39,9 +39,8 @@ class CollectionsController extends Controller
 
             }
             if (isset($data['collection_search'])) {
-                $collections = $collections->where('name', 'like', $data['collection_search'])
-                    ->orWhere('price', 'like', $data['collection_search'])
-                    ->orWhere('mealtime', 'like', $data['collection_search']);
+                $collections = $collections->where('name_en', 'like', $data['collection_search'])
+                    ->orWhere('price', 'like', $data['collection_search']);
             }
             $selectedRestaurant = Restaurant::find($id);
             $collections = $collections->paginate(20);
@@ -49,8 +48,18 @@ class CollectionsController extends Controller
         if ($user->admin == 2) {
             $user = $user->load('restaurant');
             $restaurant = $user->restaurant;
+            $collections = Collection::where('restaurant_id', $restaurant->id);
+            if (isset($data['collection_type'])) {
+                $collections = $collections->where('category_id', $data['collection_type']);
+
+            }
+            if (isset($data['collection_search'])) {
+                $collections = $collections->where('name_en', 'like', $data['collection_search'])
+                    ->orWhere('price', 'like', $data['collection_search'])
+                    ->orWhere('mealtime_id', 'like', $data['collection_search']);
+            }
             $selectedRestaurant = Restaurant::find($restaurant->id);
-            $collections = Collection::where('restaurant_id', $restaurant->id)->paginate(20);
+            $collections = $collections->paginate(20);
         }
         return view('collections', [
             'id' => $id,
@@ -184,8 +193,18 @@ class CollectionsController extends Controller
      */
     public function edit($id)
     {
-        $collection = Collection::find($id);
-        $restaurant = Restaurant::where('id', $collection->restaurant_id)->first();
+        $user = Auth::user();
+        if ($user->admin == 2) {
+            $user = $user->load('restaurant');
+            $restaurant = $user->restaurant;
+            $collection = Collection::where('id', $id)->where('restaurant_id', $restaurant->id)->first();
+            if (!$collection) {
+                return redirect('/collections');
+            }
+        } else {
+            $collection = Collection::find($id);
+            $restaurant = Restaurant::where('id', $collection->restaurant_id)->first();
+        }
         $menu_categories = Category::with(['menu' => function ($query) use ($restaurant) {
             $query->where('restaurant_id', $restaurant->id);
         }])->get();
@@ -208,7 +227,17 @@ class CollectionsController extends Controller
      */
     public function update(CollectionRequest $request, $id)
     {
-        $collection = Collection::with('restaurant.menu')->find($id);
+        $user = Auth::user();
+        if ($user->admin == 2) {
+            $user = $user->load('restaurant');
+            $restaurant = $user->restaurant;
+            $collection = Collection::where('id', $id)->where('restaurant_id', $restaurant->id)->with('restaurant.menu')->first();
+            if (!$collection) {
+                return redirect('/collections');
+            }
+        } else {
+            $collection = Collection::with('restaurant.menu')->find($id);
+        }
         if ($collection->category_id != $request->input('category')) {
             $collection->category_id = $request->input('category');
             if ($collection->category_id == 1) {
@@ -291,8 +320,20 @@ class CollectionsController extends Controller
      */
     public function deleteCollection(Request $request)
     {
+        $user = Auth::user();
         $id = $request->get('id');
-        Collection::whereIn('id', $id)->delete();
+        if ($user->admin == 2) {
+            $user = $user->load('restaurant');
+            $restaurant = $user->restaurant;
+            $collection = Collection::where('id', $id)->where('restaurant_id', $restaurant->id)->first();
+            if ($collection) {
+                $collection->delete();
+            } else {
+                return redirect('/collections');
+            }
+        } else {
+            Collection::whereIn('id', $id)->delete();
+        }
         return redirect('/collections');
     }
 

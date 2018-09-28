@@ -14,6 +14,7 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 
+
     <script src="{{ asset('js/jquery-1.11.2.min.js') }}"></script>
     <script src="{{ asset('js/jquery.js') }}"></script>
     <script src="{{ asset('js/jquery-sortable.js') }}"></script>
@@ -149,7 +150,7 @@
             <div class="navbar-brand">
                 <div class="navbar-logo col-xs-3">
                     <img class="logo-image" alt="Qckly" title="Qckly"
-                         src="https://demo.tastyigniter.com/admin/views/themes/tastyigniter-blue/images/tastyigniter-logo.png"/>
+                         src="admin/qckly_logo.png"/>
                 </div>
                 <div class="navbar-logo col-xs-9">
                     {{--<img class="logo-text" alt="TastyIgniter" title="TastyIgniter" src="https://demo.tastyigniter.com/admin/views/themes/tastyigniter-blue/images/tastyigniter-logo-text.png"/>--}}
