@@ -6,12 +6,10 @@
                 <div class="form-inline">
                     <div class="row">
                         @if($selectedRestaurant)
-                            @if(count($orders) > 0)
-                                {{--<a class="btn btn-danger " id="delete_order">--}}
+                            {{--<a class="btn btn-danger " id="delete_order">--}}
                                 {{--<i class="fa fa-trash-o"></i>--}}
                                 {{--Delete--}}
-                                {{--</a>--}}
-                            @endif
+                            {{--</a>--}}
                         @endif
                         @if(Auth::user()->admin == 1)
                             <div class="form-group col-md-4">
@@ -155,7 +153,7 @@
                                         @endforeach
                                     @else
                                         <tr>
-                                            <td colspan="7" class="center">There are no orders available.</td>
+                                            <td colspan="7" class="center">There are no orders right now.</td>
                                         </tr>
                                     @endif
                                 @endif

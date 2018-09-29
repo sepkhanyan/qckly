@@ -18,12 +18,10 @@
                                     New
                                 </a>
                             @endif
-                            @if(count($menus) > 0)
-                                <a class="btn btn-danger " id="delete_menu">
-                                    <i class="fa fa-trash-o"></i>
-                                    Delete
-                                </a>
-                            @endif
+                            <a class="btn btn-danger " id="delete_menu">
+                                <i class="fa fa-trash-o"></i>
+                                Delete
+                            </a>
                         @endif
                         @if(Auth::user()->admin == 1)
                             <div class="form-group col-md-4">
