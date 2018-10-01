@@ -39,6 +39,10 @@ class MealtimesController extends Controller
     {
         $user = Auth::user();
         if ($user->admin == 1) {
+            $request->validate([
+                'mealtime_en' => 'required|string|max:255',
+                'mealtime_ar' => 'required|string|max:255|',
+            ]);
             $mealtime = new Mealtime();
             $mealtime->name_en = $request->input('mealtime_en');
             $mealtime->name_ar = $request->input('mealtime_ar');
@@ -86,6 +90,10 @@ class MealtimesController extends Controller
     {
         $user = Auth::user();
         if ($user->admin == 1) {
+            $request->validate([
+                'mealtime_en' => 'required|string|max:255',
+                'mealtime_ar' => 'required|string|max:255|',
+            ]);
             $mealtime = Mealtime::find($id);
             $mealtime->name_en = $request->input('mealtime_en');
             $mealtime->name_ar = $request->input('mealtime_ar');

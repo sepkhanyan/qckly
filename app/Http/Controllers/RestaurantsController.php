@@ -73,10 +73,29 @@ class RestaurantsController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(RestaurantRequest $request)
+    public function store(Request $request)
     {
         $user = Auth::user();
         if ($user->admin == 1) {
+            $request->validate([
+                'manager_name' => 'required|string|max:255',
+                'manager_email' => 'required|string|max:255',
+                'manager_username' => 'required|string|max:255',
+                'password' => 'required|string|min:6|confirmed',
+                'category' => 'required',
+                'restaurant_name_en' => 'required|string|max:255',
+                'restaurant_name_ar' => 'required|string|max:255',
+                'restaurant_email' => 'required|string|max:255',
+                'restaurant_telephone' => 'required|integer',
+                'description_en' => 'required|string',
+                'description_ar' => 'required|string',
+                'address_en' => 'required|string|max:255',
+                'address_ar' => 'required|string|max:255',
+                'postcode' => 'required|string|max:255',
+                'latitude' => 'required|numeric',
+                'longitude' => 'required|numeric',
+                'image' => 'required|image'
+            ]);
             $manager = new User();
             $manager->first_name = $request->input('manager_name');
             $manager->username = $request->input('manager_username');
@@ -205,8 +224,22 @@ class RestaurantsController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(RestaurantRequest $request, $id)
+    public function update(Request $request, $id)
     {
+        $request->validate([
+            'category' => 'required',
+            'restaurant_name_en' => 'required|string|max:255',
+            'restaurant_name_ar' => 'required|string|max:255',
+            'restaurant_email' => 'required|string|max:255',
+            'restaurant_telephone' => 'required|integer',
+            'description_en' => 'required|string',
+            'description_ar' => 'required|string',
+            'address_en' => 'required|string|max:255',
+            'address_ar' => 'required|string|max:255',
+            'postcode' => 'required|string|max:255',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+        ]);
         $user = Auth::user();
         $restaurant = Restaurant::find($id);
         if ($user->admin == 2) {
@@ -214,7 +247,7 @@ class RestaurantsController extends Controller
             if ($user->restaurant->id == $id) {
                 $restaurant = Restaurant::find($id);
             } else {
-                return redirect('restaurants');
+                return redirect('/restaurants');
             }
         }
         $restaurant->name_en = $request->input('restaurant_name_en');

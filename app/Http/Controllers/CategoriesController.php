@@ -52,11 +52,17 @@ class CategoriesController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CategoryRequest $request)
+    public function store(Request $request)
 
     {
         $user = Auth::user();
         if ($user->admin == 1) {
+            $request->validate([
+                'name_en' => 'required|string|max:255',
+                'description_en' => 'required|string',
+                'name_ar' => 'required|string|max:255',
+                'description_ar' => 'required|string',
+            ]);
             $category = new Category();
             $category->name_en = $request->input('name_en');
             $category->description_en = $request->input('description_en');
@@ -108,10 +114,16 @@ class CategoriesController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CategoryRequest $request, $id)
+    public function update(Request $request, $id)
     {
         $user = Auth::user();
         if ($user->admin == 1) {
+            $request->validate([
+                'name_en' => 'required|string|max:255',
+                'description_en' => 'required|string',
+                'name_ar' => 'required|string|max:255',
+                'description_ar' => 'required|string',
+            ]);
             $category = Category::find($id);
             $category->name_en = $request->input('name_en');
             $category->description_en = $request->input('description_en');

@@ -39,7 +39,6 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::get('/mealtimes', 'MealtimesController@index');
         Route::group(['prefix' => 'mealtime'], function () {
             Route::get('store', 'MealtimesController@store');
-            Route::post('edit/{id}', 'MealtimesController@edit');
             Route::post('update/{id}', 'MealtimesController@update');
             Route::post('delete', 'MealtimesController@deleteMealtime');
         });

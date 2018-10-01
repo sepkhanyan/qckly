@@ -52,6 +52,10 @@ class StatusesController extends Controller
     {
         $user = Auth::user();
         if ($user->admin == 1) {
+            $request->validate([
+                'name_en' => 'required|string|max:255',
+                'name_ar' => 'required|string|max:255|',
+            ]);
             $status = new Status();
             $status->name_en = $request->input('name_en');
             $status->name_ar = $request->input('name_ar');
@@ -95,6 +99,10 @@ class StatusesController extends Controller
     {
         $user = Auth::user();
         if ($user->admin == 1) {
+            $request->validate([
+                'name_en' => 'required|string|max:255',
+                'name_ar' => 'required|string|max:255|',
+            ]);
             $status = Status::find($id);
             $status->name_en = $request->input('name_en');
             $status->name_ar = $request->input('name_ar');

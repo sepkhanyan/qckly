@@ -102,16 +102,28 @@ class CollectionsController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CollectionRequest $request)
+    public function store(Request $request)
     {
+        $request->validate([
+            'name_en' => 'required|string|max:255',
+            'description_en' => 'required|string',
+            'name_ar' => 'required|string|max:255',
+            'description_ar' => 'required|string',
+            'service_provide_en' => 'required|string',
+            'service_provide_ar' => 'required|string',
+            'service_presentation_en' => 'required|string',
+            'service_presentation_ar' => 'required|string',
+            'category' => 'required|integer',
+        ]);
         $user = Auth::user();
         $collection = New Collection();
-        $collection->restaurant_id = $request->input('restaurant');
+        $restaurant_id = $request->input('restaurant');
         if ($user->admin == 2) {
             $user = $user->load('restaurant');
             $restaurant = $user->restaurant;
-            $collection->restaurant_id = $restaurant->id;
+            $restaurant_id = $restaurant->id;
         }
+        $collection->restaurant_id = $restaurant_id;
         $collection->category_id = $request->input('category');
         $collection->name_en = $request->input('name_en');
         $collection->name_ar = $request->input('name_ar');
@@ -171,7 +183,7 @@ class CollectionsController extends Controller
                 $collection_item->save();
             }
         }
-        return redirect('/collections');
+        return redirect('/collections/' . $restaurant_id);
     }
 
     /**
@@ -225,12 +237,24 @@ class CollectionsController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CollectionRequest $request, $id)
+    public function update(Request $request, $id)
     {
+        $request->validate([
+            'name_en' => 'required|string|max:255',
+            'description_en' => 'required|string',
+            'name_ar' => 'required|string|max:255',
+            'description_ar' => 'required|string',
+            'service_provide_en' => 'required|string',
+            'service_provide_ar' => 'required|string',
+            'service_presentation_en' => 'required|string',
+            'service_presentation_ar' => 'required|string',
+        ]);
         $user = Auth::user();
+        $restaurant_id = $request->input('restaurant');
         if ($user->admin == 2) {
             $user = $user->load('restaurant');
             $restaurant = $user->restaurant;
+            $restaurant_id = $restaurant->id;
             $collection = Collection::where('id', $id)->where('restaurant_id', $restaurant->id)->with('restaurant.menu')->first();
             if (!$collection) {
                 return redirect('/collections');
@@ -309,7 +333,7 @@ class CollectionsController extends Controller
         $collection->allow_person_increase = $request->input('allow_person_increase');
         $collection->save();
 
-        return redirect('/collections');
+        return redirect('/collections/' . $restaurant_id);
     }
 
     /**

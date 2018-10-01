@@ -155,7 +155,7 @@
                 </div>
                 <div class="navbar-logo col-xs-9" >
                     <img class="logo-image" alt="Qckly" title="Qckly"
-                         src="{{url('/') . '/admin/qckly-logo_1.png'}}"/>
+                         src="{{url('/') . '/admin/qckly_logo.png'}}"/>
                 </div>
             </div>
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -383,30 +383,30 @@
                                         Languages
                                     </a>
                                 </li>
-                                <li>
-                                    <a href="#" class="currencies">
-                                        <i class="fa fa-square-o fa-fw"></i>
-                                        Currencies
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="countries">
-                                        <i class="fa fa-square-o fa-fw"></i>
-                                        Countries
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="security_questions">
-                                        <i class="fa fa-square-o fa-fw"></i>
-                                        Security Questions
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="ratings">
-                                        <i class="fa fa-square-o fa-fw"></i>
-                                        Ratings
-                                    </a>
-                                </li>
+                                {{--<li>--}}
+                                    {{--<a href="#" class="currencies">--}}
+                                        {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                                        {{--Currencies--}}
+                                    {{--</a>--}}
+                                {{--</li>--}}
+                                {{--<li>--}}
+                                    {{--<a href="#" class="countries">--}}
+                                        {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                                        {{--Countries--}}
+                                    {{--</a>--}}
+                                {{--</li>--}}
+                                {{--<li>--}}
+                                    {{--<a href="#" class="security_questions">--}}
+                                        {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                                        {{--Security Questions--}}
+                                    {{--</a>--}}
+                                {{--</li>--}}
+                                {{--<li>--}}
+                                    {{--<a href="#" class="ratings">--}}
+                                        {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                                        {{--Ratings--}}
+                                    {{--</a>--}}
+                                {{--</li>--}}
                                 @if(Auth::user()->admin == 1)
                                     <li>
                                         <a href="{{ url('/statuses') }}" class="statuses">

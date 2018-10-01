@@ -50,6 +50,10 @@ class RestaurantCategoriesController extends Controller
     {
         $user = Auth::user();
         if ($user->admin == 1) {
+            $request->validate([
+                'name_en' => 'required|string|max:255',
+                'name_ar' => 'required|string|max:255|'
+            ]);
             $category = new RestaurantCategory();
             $category->name_en = $request->input('name_en');
             $category->name_ar = $request->input('name_ar');
@@ -96,6 +100,10 @@ class RestaurantCategoriesController extends Controller
     {
         $user = Auth::user();
         if ($user->admin == 1) {
+            $request->validate([
+                'name_en' => 'required|string|max:255',
+                'name_ar' => 'required|string|max:255|'
+            ]);
             $category = RestaurantCategory::find($id);
             $category->name_en = $request->input('name_en');
             $category->name_ar = $request->input('name_ar');

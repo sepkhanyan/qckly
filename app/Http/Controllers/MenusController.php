@@ -98,15 +98,25 @@ class MenusController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(MenuRequest $request)
+    public function store(Request $request)
     {
+        $request->validate([
+            'name_en' => 'required|string|max:255',
+            'description_en' => 'required|string',
+            'name_ar' => 'required|string|max:255',
+            'description_ar' => 'required|string',
+            'price' => 'required|numeric',
+            'category' => 'required|integer',
+            'image' => 'required|image'
+        ]);
         $user = Auth::user();
         $menu = new Menu();
-        $menu->restaurant_id = $request->input('restaurant');
+        $restaurant_id = $request->input('restaurant');
         if ($user->admin == 2) {
             $user = $user->load('restaurant');
-            $menu->restaurant_id = $user->restaurant->id;
+            $restaurant_id = $user->restaurant->id;
         }
+        $menu->restaurant_id = $restaurant_id;
         $menu->category_id = $request->input('category');
         $image = $request->file('image');
         $name = time() . '.' . $image->getClientOriginalExtension();
@@ -121,7 +131,7 @@ class MenusController extends Controller
         $menu->status = $request->input('status');
         $menu->famous = $request->input('famous');
         $menu->save();
-        return redirect('/menus');
+        return redirect('/menus/' . $restaurant_id);
     }
 
     /**
@@ -167,13 +177,23 @@ class MenusController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(MenuRequest $request, $id)
+    public function update(Request $request, $id)
     {
+        $request->validate([
+            'name_en' => 'required|string|max:255',
+            'description_en' => 'required|string',
+            'name_ar' => 'required|string|max:255',
+            'description_ar' => 'required|string',
+            'price' => 'required|numeric',
+            'category' => 'required|integer',
+        ]);
         $user = Auth::user();
         $menu = Menu::find($id);
+        $restaurant_id = $request->input('restaurant');
         if ($user->admin == 2) {
             $user = $user->load('restaurant');
             $restaurant = $user->restaurant;
+            $restaurant_id = $restaurant->id;
             $menu = Menu::where('id', $id)->where('restaurant_id', $restaurant->id)->first();
             if (!$menu) {
                 return redirect('/menus');
@@ -198,7 +218,7 @@ class MenusController extends Controller
             $menu->image = $name;
         }
         $menu->save();
-        return redirect('/menus');
+        return redirect('/menus/' . $restaurant_id);
     }
 
     /**

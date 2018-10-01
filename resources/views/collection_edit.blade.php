@@ -32,6 +32,9 @@
                         <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST"
                               action="{{ url('/collection/update/' . $collection->id) }}" enctype="multipart/form-data">
                             {{ csrf_field() }}
+                            @if(Auth::user()->admin == 1)
+                                <input type="hidden" name="restaurant" value="{{$collection->restaurant_id}}">
+                            @endif
                             <div class="form-group{{ $errors->has('name_en') ? ' has-error' : '' }}">
                                 <label for="input_name_en" class="col-sm-3 control-label">Name En</label>
                                 <div class="col-sm-5">

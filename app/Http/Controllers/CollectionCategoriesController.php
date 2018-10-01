@@ -42,6 +42,10 @@ class CollectionCategoriesController extends Controller
     {
         $user = Auth::user();
         if ($user->admin == 1) {
+            $request->validate([
+                'category_en' => 'required|string|max:255',
+                'category_ar' => 'required|string|max:255'
+            ]);
             $category = New CollectionCategory();
             $category->name_en = $request->input('category_en');
             $category->name_ar = $request->input('category_ar');
@@ -86,6 +90,10 @@ class CollectionCategoriesController extends Controller
     {
         $user = Auth::user();
         if ($user->admin == 1) {
+            $request->validate([
+                'category_en' => 'required|string|max:255',
+                'category_ar' => 'required|string|max:255'
+            ]);
             $category = CollectionCategory::find($id);
             $category->name_en = $request->input('category_en');
             $category->name_ar = $request->input('category_ar');

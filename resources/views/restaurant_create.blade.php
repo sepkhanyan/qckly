@@ -240,7 +240,7 @@
                                            value=""/>
                                 </div>
                             </div>
-                            <div class="form-group{{ $errors->has('postcode') ? ' has-error' : '' }}">
+                             <div class="form-group{{ $errors->has('postcode') ? ' has-error' : '' }}">
                                 <label for="input-postcode" class="col-sm-3 control-label">Postcode</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="postcode" id="input-postcode" class="form-control"
