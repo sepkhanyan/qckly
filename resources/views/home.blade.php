@@ -7,6 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Administrator Panel</title>
 
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     {{--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">--}}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -143,18 +144,19 @@
     </style>
 
 </head>
-<body>
+<body >
 <div id="wrapper" class="">
     <nav class="navbar navbar-static-top navbar-top" role="navigation" style="margin-bottom:0 ">
         <div class="navbar-header ">
             <div class="navbar-brand">
                 <div class="navbar-logo col-xs-3">
-                    <img class="logo-image" alt="Qckly" title="Qckly"
-                         src="admin/qckly_logo.png"/>
+                    {{--<img class="logo-image" alt="Qckly" title="Qckly"--}}
+                         {{--src="{{url('/') . '/admin/qckly_logo.png'}}"/>--}}
                 </div>
-                {{--<div class="navbar-logo col-xs-9">--}}
-                    {{--<img class="logo-text" alt="TastyIgniter" title="TastyIgniter" src="https://demo.tastyigniter.com/admin/views/themes/tastyigniter-blue/images/tastyigniter-logo-text.png"/>--}}
-                {{--</div>--}}
+                <div class="navbar-logo col-xs-9" >
+                    <img class="logo-image" alt="Qckly" title="Qckly"
+                         src="{{url('/') . '/admin/qckly-logo_1.png'}}"/>
+                </div>
             </div>
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
