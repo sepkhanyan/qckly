@@ -26,9 +26,9 @@
                             </a>
                         </li>
                         {{--<li>--}}
-                            {{--<a href="#addresses" data-toggle="tab">--}}
-                                {{--Address--}}
-                            {{--</a>--}}
+                        {{--<a href="#addresses" data-toggle="tab">--}}
+                        {{--Address--}}
+                        {{--</a>--}}
                         {{--</li>--}}
                     </ul>
                 </div>
@@ -84,17 +84,17 @@
                             </div>
                         </div>
                         {{--<div id="addresses" class="tab-pane row wrap-all">--}}
-                            {{--<ul id="sub-tabs" class="nav nav-tabs">--}}
-                                {{--<li class="add_address">--}}
-                                    {{--<a onclick="addAddress();">--}}
-                                        {{--<i class="fa fa-book"></i>&nbsp;--}}
-                                        {{--<i class="fa fa-plus"></i>--}}
-                                    {{--</a>--}}
-                                {{--</li>--}}
-                            {{--</ul>--}}
+                        {{--<ul id="sub-tabs" class="nav nav-tabs">--}}
+                        {{--<li class="add_address">--}}
+                        {{--<a onclick="addAddress();">--}}
+                        {{--<i class="fa fa-book"></i>&nbsp;--}}
+                        {{--<i class="fa fa-plus"></i>--}}
+                        {{--</a>--}}
+                        {{--</li>--}}
+                        {{--</ul>--}}
 
-                            {{--<div id="new-address" class="tab-content">--}}
-                            {{--</div>--}}
+                        {{--<div id="new-address" class="tab-content">--}}
+                        {{--</div>--}}
                         {{--</div>--}}
                     </div>
                 </form>

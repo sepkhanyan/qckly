@@ -7,8 +7,8 @@
                     <div class="row">
                         @if($selectedRestaurant)
                             {{--<a class="btn btn-danger " id="delete_order">--}}
-                                {{--<i class="fa fa-trash-o"></i>--}}
-                                {{--Delete--}}
+                            {{--<i class="fa fa-trash-o"></i>--}}
+                            {{--Delete--}}
                             {{--</a>--}}
                         @endif
                         @if(Auth::user()->admin == 1)

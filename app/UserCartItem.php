@@ -10,7 +10,6 @@ class UserCartItem extends Model
 
 
     protected $fillable = [
-        'cart_id',
         'cart_collection_id',
         'item_id',
         'price',
@@ -19,26 +18,25 @@ class UserCartItem extends Model
     ];
 
 
-
-    public function cartCollection ()
+    public function cartCollection()
     {
         return $this->belongsTo('App\UserCartCollection', 'cart_collection_id');
     }
 
 
-    public function menu ()
+    public function menu()
     {
         return $this->belongsTo('App\Menu', 'item_id');
     }
 
 
-    public function category ()
+    public function category()
     {
         return $this->belongsTo('App\Category', 'menu_id');
     }
 
 
-    public function collection ()
+    public function collection()
     {
         return $this->belongsTo('App\Collection', 'collection_id');
     }

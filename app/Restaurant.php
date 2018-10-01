@@ -31,7 +31,6 @@ class Restaurant extends Model
     ];
 
 
-
     public function collection()
     {
         return $this->hasMany('App\Collection', 'restaurant_id');

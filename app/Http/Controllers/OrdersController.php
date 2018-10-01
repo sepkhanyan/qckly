@@ -69,7 +69,7 @@ class OrdersController extends Controller
     public function edit($id)
     {
         $user = Auth::user();
-        if ($user->admin == 2){
+        if ($user->admin == 2) {
             $statuses = Status::all();
             $user = $user->load('restaurant');
             $restaurant = $user->restaurant;
@@ -79,7 +79,7 @@ class OrdersController extends Controller
                 }]);
             }])->where('id', $id)->first();
             $restaurantOrder = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $restaurant->id)->first();
-            if(!$restaurantOrder){
+            if (!$restaurantOrder) {
                 return redirect('/orders');
             }
             return view('order_edit', [
@@ -87,30 +87,30 @@ class OrdersController extends Controller
                 'restaurantOrder' => $restaurantOrder,
                 'statuses' => $statuses
             ]);
-        }else{
-           return redirect('/orders');
+        } else {
+            return redirect('/orders');
         }
     }
 
     public function update(Request $request, $id)
     {
         $user = Auth::user();
-        if ($user->admin == 2){
+        if ($user->admin == 2) {
             $user = $user->load('restaurant');
             $restaurant = $user->restaurant;
             $restaurantOrder = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $restaurant->id)->first();
-            if(!$restaurantOrder){
+            if (!$restaurantOrder) {
                 return redirect('/orders');
             }
-            if($restaurantOrder->status_id != 2){
+            if ($restaurantOrder->status_id != 2) {
                 $restaurantOrder->status_id = $request->input('status');
                 $restaurantOrder->save();
                 $orders = OrderRestaurant::where('order_id', $id)->where('status_id', '!=', 2)->get();
-                if(count($orders) <= 0){
+                if (count($orders) <= 0) {
                     Order::where('id', $id)->update(['status_id' => 2]);
                 }
             }
-        }else{
+        } else {
             return redirect('/orders');
         }
         return redirect('/orders');

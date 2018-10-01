@@ -13,8 +13,8 @@
 
 
 Auth::routes();
-Route::group(['middleware' => ['web', 'auth']], function (){
-    Route::group(['middleware' => 'admin'],function(){
+Route::group(['middleware' => ['web', 'auth']], function () {
+    Route::group(['middleware' => 'admin'], function () {
         Route::get('/', 'RestaurantsController@index')->name('home');
         Route::get('/customers', 'UsersController@index');
         Route::group(['prefix' => 'customer'], function () {
@@ -80,13 +80,13 @@ Route::group(['middleware' => ['web', 'auth']], function (){
             Route::post('update/{id}', 'MenusController@update');
             Route::post('delete', 'MenusController@deleteMenu');
         });
-        Route::get('/collections/{id?}','CollectionsController@index');
+        Route::get('/collections/{id?}', 'CollectionsController@index');
         Route::group(['prefix' => 'collection'], function () {
-            Route::get('create/{id?}','CollectionsController@create');
-            Route::get('store','CollectionsController@store');
+            Route::get('create/{id?}', 'CollectionsController@create');
+            Route::get('store', 'CollectionsController@store');
             Route::get('edit/{id}', 'CollectionsController@edit');
             Route::post('update/{id}', 'CollectionsController@update');
-            Route::post('delete','CollectionsController@deleteCollection');
+            Route::post('delete', 'CollectionsController@deleteCollection');
         });
         Route::get('/orders/{id?}', 'OrdersController@index');
         Route::group(['prefix' => 'order'], function () {

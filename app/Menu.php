@@ -22,15 +22,14 @@ class Menu extends Model
     ];
 
 
-
     public function category()
     {
-        return$this->belongsTo('App\Category','category_id' );
+        return $this->belongsTo('App\Category', 'category_id');
     }
 
     public function restaurant()
     {
-        return $this->belongsTo('App\Restaurant', 'restaurant_id' );
+        return $this->belongsTo('App\Restaurant', 'restaurant_id');
     }
 
     public function collectionItem()
@@ -38,7 +37,7 @@ class Menu extends Model
         return $this->hasMany('App\CollectionItem', 'item_id');
     }
 
-    public function cartItem ()
+    public function cartItem()
     {
         return $this->hasMany('App\UserCartItem', 'item_id');
     }

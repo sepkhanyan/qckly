@@ -16,18 +16,18 @@ class OrderRestaurant extends Model
         'status_id'
     ];
 
-    public function  restaurant()
+    public function restaurant()
     {
         return $this->belongsTo('App\Restaurant', 'restaurant_id');
     }
 
-    public function  order()
+    public function order()
     {
         return $this->belongsTo('App\Order', 'order_id');
     }
 
 
-    public  function status()
+    public function status()
     {
         return $this->belongsTo('App\Status', 'status_id');
     }

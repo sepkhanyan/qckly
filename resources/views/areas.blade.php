@@ -25,13 +25,15 @@
                         </div>
                     </div>
                     <div class="panel-body panel-filter" style="display: none">
-                        <form role="form" id="filter-form" accept-charset="utf-8" method="GET" action="{{url('/areas')}}">
+                        <form role="form" id="filter-form" accept-charset="utf-8" method="GET"
+                              action="{{url('/areas')}}">
                             <div class="filter-bar">
                                 <div class="form-inline">
                                     <div class="row">
                                         <div class="col-md-8 pull-left">
                                             <div class="form-group">
-                                                <input type="text" name="area_search" class="form-control input-sm" value="" placeholder="Search area." />&nbsp;&nbsp;&nbsp;
+                                                <input type="text" name="area_search" class="form-control input-sm"
+                                                       value="" placeholder="Search area."/>&nbsp;&nbsp;&nbsp;
                                             </div>
                                             <a class="btn btn-grey" onclick="filterList();" title="Search">
                                                 <i class="fa fa-search"></i>
@@ -51,7 +53,8 @@
                                 <thead>
                                 <tr>
                                     <th class="action action-three">
-                                        <input type="checkbox" onclick="$('input[name*=\'delete\']').prop('checked', this.checked)">
+                                        <input type="checkbox"
+                                               onclick="$('input[name*=\'delete\']').prop('checked', this.checked)">
                                     </th>
                                     <th>Area En</th>
                                     <th>Area Ar</th>
@@ -62,8 +65,9 @@
                                 @foreach($areas as $area)
                                     <tr>
                                         <td class="action">
-                                            <input type="checkbox" value="{{ $area->id }}" name="delete" />&nbsp;&nbsp;&nbsp;
-                                            <a  class="btn btn-edit"   data-toggle="modal" data-target="#modalEditArea"  type="button"   onclick="myFunction({{$area->id}})">
+                                            <input type="checkbox" value="{{ $area->id }}" name="delete"/>&nbsp;&nbsp;&nbsp;
+                                            <a class="btn btn-edit" data-toggle="modal" data-target="#modalEditArea"
+                                               type="button" onclick="myFunction({{$area->id}})">
                                                 <i class="fa fa-pencil"></i>
                                             </a>&nbsp;&nbsp;
                                         </td>
@@ -80,17 +84,19 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="modalCreateArea" role="dialog" tabindex="-1" >
-            <form role="form" id="create-form" class="form-horizontal"  accept-charset="utf-8" method="GET" action="{{ url('/area/store') }}">
+        <div class="modal fade" id="modalCreateArea" role="dialog" tabindex="-1">
+            <form role="form" id="create-form" class="form-horizontal" accept-charset="utf-8" method="GET"
+                  action="{{ url('/area/store') }}">
                 {{ csrf_field() }}
-                <div class="modal-dialog" >
+                <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" >&times;</button>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
                             <h4 class="modal-title"> Add Area</h4>
                         </div>
                         <div class="modal-body">
-                            <div class="form-group {{ $errors->has('area_en') ? ' has-error' : '' }}" style="margin: 5px">
+                            <div class="form-group {{ $errors->has('area_en') ? ' has-error' : '' }}"
+                                 style="margin: 5px">
                                 <label class="control-label col-sm-2" for="area-en">Area En</label>
                                 <div class="col-sm-8">
                                     <input type="text" name="area_en" class="form-control" value="" id="area-en">
@@ -103,7 +109,8 @@
                             </div>
                         </div>
                         <div class="modal-body">
-                            <div class="form-group{{ $errors->has('area_ar') ? ' has-error' : '' }}" style="margin: 5px">
+                            <div class="form-group{{ $errors->has('area_ar') ? ' has-error' : '' }}"
+                                 style="margin: 5px">
                                 <label class="control-label col-sm-2" for="area-en">Area Ar</label>
                                 <div class="col-sm-8">
                                     <input type="text" name="area_ar" class="form-control" value="" id="area-ar">
@@ -117,19 +124,19 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit"  class="btn btn-primary">Add</button>
+                            <button type="submit" class="btn btn-primary">Add</button>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
-        <div class="modal fade" id="modalEditArea" role="dialog" tabindex="-1" >
-            <form role="form" id="edit-form" class="form-horizontal"  accept-charset="utf-8" method="POST">
+        <div class="modal fade" id="modalEditArea" role="dialog" tabindex="-1">
+            <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST">
                 {{ csrf_field() }}
-                <div class="modal-dialog" >
+                <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" >&times;</button>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
                             <h4 class="modal-title"> Edit Area</h4>
                         </div>
                         <div class="modal-body">
@@ -150,7 +157,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit"  class="btn btn-primary">Update</button>
+                            <button type="submit" class="btn btn-primary">Update</button>
                         </div>
                     </div>
                 </div>
@@ -158,7 +165,7 @@
         </div>
     </div>
     <script type="text/javascript">
-        function myFunction(id){
+        function myFunction(id) {
             $("#edit-form").attr('action', 'area/update/' + id);
         }
 

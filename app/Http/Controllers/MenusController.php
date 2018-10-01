@@ -217,7 +217,7 @@ class MenusController extends Controller
             $user = $user->load('restaurant');
             $restaurant = $user->restaurant;
             $menu = Menu::where('id', $id)->where('restaurant_id', $restaurant->id)->first();
-            if(!$menu){
+            if (!$menu) {
                 return redirect('/menus');
             }
             $menus = Menu::where('id', $id)->where('restaurant_id', $restaurant->id)->get();

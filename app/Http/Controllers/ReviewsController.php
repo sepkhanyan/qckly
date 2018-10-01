@@ -23,30 +23,30 @@ class ReviewsController extends Controller
         $selectedRestaurant = [];
         $data = $request->all();
         $reviews = [];
-        if($id){
+        if ($id) {
             $reviews = Review::where('restaurant_id', $id);
-            if(isset($data['review_date'])) {
+            if (isset($data['review_date'])) {
                 $reviews = $reviews->where('created_at', $data['review_date']);
             }
 
-            if(isset($data['review_search'])){
-                $reviews = $reviews->where('order_id','like',$data['review_search'])
-                    ->orWhere('rate_value','like',$data['review_search']);
+            if (isset($data['review_search'])) {
+                $reviews = $reviews->where('order_id', 'like', $data['review_search'])
+                    ->orWhere('rate_value', 'like', $data['review_search']);
             }
             $selectedRestaurant = Restaurant::find($id);
             $reviews = $reviews->orderby('created_at', 'desc')
                 ->with('order.user')->paginate(20);
         }
-        if($user->admin == 2){
+        if ($user->admin == 2) {
             $user = $user->load('restaurant');
             $restaurant = $user->restaurant;
-            $reviews = Review::where('restaurant_id',$restaurant->id);
-            if(isset($data['review_date'])) {
+            $reviews = Review::where('restaurant_id', $restaurant->id);
+            if (isset($data['review_date'])) {
                 $reviews = $reviews->where('created_at', $data['review_date']);
             }
 
-            if(isset($data['review_search'])){
-                $reviews = $reviews->where('order_id','like',$data['review_search']);
+            if (isset($data['review_search'])) {
+                $reviews = $reviews->where('order_id', 'like', $data['review_search']);
             }
             $selectedRestaurant = Restaurant::find($restaurant->id);
             $reviews = $reviews->orderby('created_at', 'desc')
@@ -65,7 +65,7 @@ class ReviewsController extends Controller
         \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
-        if($lang == 'ar'){
+        if ($lang == 'ar') {
             $validator->getTranslator()->setLocale('ar');
         }
         $DataRequests = $request->all();
@@ -82,12 +82,12 @@ class ReviewsController extends Controller
         $reviews = Review::where('restaurant_id', $restaurant_id)
             ->orderby('created_at', 'desc')
             ->with('order.user')->paginate(20);
-        if(count($reviews) > 0){
-            foreach($reviews as $review){
+        if (count($reviews) > 0) {
+            foreach ($reviews as $review) {
                 $date = date("j M, Y", strtotime($review->created_at));
-                if(isset($review->review_text)){
+                if (isset($review->review_text)) {
                     $review_text = $review->review_text;
-                }else{
+                } else {
                     $review_text = '';
                 }
                 $arr [] = [
@@ -116,7 +116,7 @@ class ReviewsController extends Controller
                 'success' => 1,
                 'status_code' => 200,
                 'data' => $wholeData));
-        }else{
+        } else {
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
@@ -138,7 +138,7 @@ class ReviewsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function rateOrder(Request $request)
@@ -146,12 +146,12 @@ class ReviewsController extends Controller
         \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
-        if($lang == 'ar'){
+        if ($lang == 'ar') {
             $validator->getTranslator()->setLocale('ar');
         }
-        $token = str_replace("Bearer ","" , $request->header('Authorization'));
+        $token = str_replace("Bearer ", "", $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->with('cart.cartCollection')->first();
-        if($user){
+        if ($user) {
             $DataRequests = $request->all();
             $validator = \Validator::make($DataRequests, [
                 'reviews' => 'required',
@@ -162,17 +162,17 @@ class ReviewsController extends Controller
                     'error_details' => $validator->messages()));
             } else {
                 $reviews = $DataRequests['reviews'];
-                foreach($reviews as $review){
+                foreach ($reviews as $review) {
                     $rating = new Review();
                     $rating->order_id = $review['order_id'];
                     $rating->restaurant_id = $review['restaurant_id'];
                     $rating->rate_value = $review['rate_value'];
-                    if(isset($review['review_text'])){
+                    if (isset($review['review_text'])) {
                         $rating->review_text = $review['review_text'];
                     }
                     $rating->save();
                     $order = Order::where('id', $review['order_id'])->where('user_id', $user->id)->first();
-                    if($order){
+                    if ($order) {
                         $order->is_rated = 1;
                         $order->save();
                     }
@@ -181,7 +181,7 @@ class ReviewsController extends Controller
                     'success' => 1,
                     'status_code' => 200));
             }
-        }else{
+        } else {
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
@@ -192,7 +192,7 @@ class ReviewsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -203,7 +203,7 @@ class ReviewsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -214,8 +214,8 @@ class ReviewsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -226,7 +226,7 @@ class ReviewsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
 //    public function deleteReview(Request $request)

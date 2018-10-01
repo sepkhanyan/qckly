@@ -23,7 +23,7 @@ class RestaurantRequest extends FormRequest
      */
     public function rules()
     {
-        $rules =   [
+        $rules = [
             'manager_name' => 'required|string|max:255',
             'manager_email' => 'required|string|max:255',
             'manager_username' => 'required|string|max:255',

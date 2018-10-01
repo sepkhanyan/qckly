@@ -37,7 +37,6 @@ class Collection extends Model
     ];
 
 
-
     public function restaurant()
     {
         return $this->belongsTo('App\Restaurant', 'restaurant_id');
@@ -64,7 +63,7 @@ class Collection extends Model
     }
 
 
-    public function cartCollection ()
+    public function cartCollection()
     {
         return $this->hasMany('App\UserCartCollection', 'collection_id');
     }

@@ -104,7 +104,8 @@
                                         <td>{{$restaurant->area->area_en}}</td>
                                         <td>{{$restaurant->address_en}}</td>
                                         <td>{{$restaurant->telephone}}</td>
-                                        <td data-toggle="modal" data-target="#changeStatus"  onclick="myFunction({{$restaurant->id}})"
+                                        <td data-toggle="modal" data-target="#changeStatus"
+                                            onclick="myFunction({{$restaurant->id}})"
                                             style="font-size: 20px; cursor: pointer">
                                             @if($restaurant->status == 1)
                                                 <span class="label label-default"

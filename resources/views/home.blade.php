@@ -152,9 +152,9 @@
                     <img class="logo-image" alt="Qckly" title="Qckly"
                          src="admin/qckly_logo.png"/>
                 </div>
-                <div class="navbar-logo col-xs-9">
+                {{--<div class="navbar-logo col-xs-9">--}}
                     {{--<img class="logo-text" alt="TastyIgniter" title="TastyIgniter" src="https://demo.tastyigniter.com/admin/views/themes/tastyigniter-blue/images/tastyigniter-logo-text.png"/>--}}
-                </div>
+                {{--</div>--}}
             </div>
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>

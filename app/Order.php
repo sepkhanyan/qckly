@@ -18,7 +18,6 @@ class Order extends Model
     ];
 
 
-
     public function cart()
     {
         return $this->belongsTo('App\UserCart', 'cart_id');
@@ -26,7 +25,7 @@ class Order extends Model
 
     public function user()
     {
-        return  $this->belongsTo('App\User', 'user_id');
+        return $this->belongsTo('App\User', 'user_id');
     }
 
     public function review()
@@ -34,7 +33,7 @@ class Order extends Model
         return $this->hasMany('App\Review', 'order_id');
     }
 
-    public  function status()
+    public function status()
     {
         return $this->belongsTo('App\Status', 'status_id');
     }

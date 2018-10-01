@@ -40,7 +40,7 @@ class UserCartsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function createCart(Request $request)
@@ -48,12 +48,12 @@ class UserCartsController extends Controller
         \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
-        if($lang == 'ar'){
+        if ($lang == 'ar') {
             $validator->getTranslator()->setLocale('ar');
         }
-        $token = str_replace("Bearer ","" , $request->header('Authorization'));
+        $token = str_replace("Bearer ", "", $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->first();
-        if($user){
+        if ($user) {
             $DataRequests = $request->all();
             $validator = \Validator::make($DataRequests, [
                 'collection_type' => 'required|integer',
@@ -69,7 +69,7 @@ class UserCartsController extends Controller
                 $collection_id = $DataRequests['collection_id'];
                 $female_caterer = $DataRequests['female_caterer'];
                 $special_instruction = '';
-                if(isset($DataRequests['special_instruction'])){
+                if (isset($DataRequests['special_instruction'])) {
                     $special_instruction = $DataRequests['special_instruction'];
                 }
                 $cart = UserCart::where('user_id', '=', $user->id)->where('completed', 0)->first();
@@ -90,7 +90,7 @@ class UserCartsController extends Controller
                         $cart = new UserCart();
                         $cart->user_id = $user->id;
                         $address = Address::where('user_id', $user->id)->where('is_default', 1)->first();
-                        if($address){
+                        if ($address) {
                             $cart->delivery_address_id = $address->id;
                         }
                         $cart->delivery_order_area = $delivery_area;
@@ -114,7 +114,7 @@ class UserCartsController extends Controller
                         $collection = Collection::where('id', $collection_id)->first();
                         $cart_collection = UserCartCollection::where('cart_id', $cart->id)
                             ->where('collection_id', $collection_id)->first();
-                        if(!$cart_collection){
+                        if (!$cart_collection) {
                             $cart_collection = new UserCartCollection();
                             $cart_collection->collection_id = $collection_id;
                             $cart_collection->cart_id = $cart->id;
@@ -133,7 +133,7 @@ class UserCartsController extends Controller
                                 $cart_item->cart_collection_id = $cart_collection->id;
                                 $cart_item->save();
                             }
-                        }else{
+                        } else {
                             $cart_collection->price = $collection_price;
                             $cart_collection->quantity = $collection_quantity;
                             $cart_collection->female_caterer = $female_caterer;
@@ -143,7 +143,7 @@ class UserCartsController extends Controller
 
                     }
 
-                }else if ($collection_type == 2) {
+                } else if ($collection_type == 2) {
                     $validator = \Validator::make($DataRequests, [
                         'collection_price' => 'required|numeric',
                         'persons_count' => 'required|integer',
@@ -160,7 +160,7 @@ class UserCartsController extends Controller
                         $collection = Collection::where('id', $collection_id)->first();
                         $cart_collection = UserCartCollection::where('cart_id', $cart->id)
                             ->where('collection_id', $collection_id)->first();
-                        if(!$cart_collection){
+                        if (!$cart_collection) {
                             $cart_collection = new UserCartCollection();
                             $cart_collection->collection_id = $collection_id;
                             $cart_collection->restaurant_id = $collection->restaurant_id;
@@ -171,7 +171,7 @@ class UserCartsController extends Controller
                             $cart_collection->female_caterer = $female_caterer;
                             $cart_collection->special_instruction = $special_instruction;
                             $cart_collection->save();
-                            foreach($menus as $menu){
+                            foreach ($menus as $menu) {
                                 $cart_item = new UserCartItem();
                                 $cart_item->cart_collection_id = $cart_collection->id;
                                 $cart_item->menu_id = $menu['menu_id'];
@@ -179,7 +179,7 @@ class UserCartsController extends Controller
                                 $cart_item->quantity = $menu['item_quantity'];
                                 $cart_item->save();
                             }
-                        }else{
+                        } else {
                             $cart_collection->price = $collection_price;
                             $cart_collection->persons_count = $persons_count;
                             $cart_collection->quantity = 1;
@@ -187,7 +187,7 @@ class UserCartsController extends Controller
                             $cart_collection->special_instruction = $special_instruction;
                             $cart_collection->save();
                             UserCartItem::where('cart_collection_id', $cart_collection->id)->delete();
-                            foreach($menus as $menu){
+                            foreach ($menus as $menu) {
                                 $cart_item = new UserCartItem();
                                 $cart_item->cart_collection_id = $cart_collection->id;
                                 $cart_item->menu_id = $menu['menu_id'];
@@ -197,10 +197,10 @@ class UserCartsController extends Controller
                             }
                         }
                     }
-                }elseif ($collection_type == 3) {
+                } elseif ($collection_type == 3) {
                     $validator = \Validator::make($DataRequests, [
                         'collection_price' => 'required|numeric',
-                        'collection_quantity' => 'required|numeric',
+                        'collection_quantity' => 'required|integer',
                         'menus' => 'required',
                     ]);
                     if ($validator->fails()) {
@@ -214,7 +214,7 @@ class UserCartsController extends Controller
                         $collection = Collection::where('id', $collection_id)->first();
                         $cart_collection = UserCartCollection::where('cart_id', $cart->id)
                             ->where('collection_id', $collection_id)->first();
-                        if(!$cart_collection){
+                        if (!$cart_collection) {
                             $cart_collection = new UserCartCollection();
                             $cart_collection->collection_id = $collection_id;
                             $cart_collection->restaurant_id = $collection->restaurant_id;
@@ -224,7 +224,7 @@ class UserCartsController extends Controller
                             $cart_collection->female_caterer = $female_caterer;
                             $cart_collection->special_instruction = $special_instruction;
                             $cart_collection->save();
-                            foreach($menus as $menu){
+                            foreach ($menus as $menu) {
                                 $cart_item = new UserCartItem();
                                 $cart_item->cart_collection_id = $cart_collection->id;
                                 $cart_item->menu_id = $menu['menu_id'];
@@ -232,14 +232,14 @@ class UserCartsController extends Controller
                                 $cart_item->quantity = $menu['item_quantity'];
                                 $cart_item->save();
                             }
-                        }else{
+                        } else {
                             $cart_collection->price = $collection_price;
                             $cart_collection->quantity = $collection_quantity;
                             $cart_collection->female_caterer = $female_caterer;
                             $cart_collection->special_instruction = $special_instruction;
                             $cart_collection->save();
                             UserCartItem::where('cart_collection_id', $cart_collection->id)->delete();
-                            foreach($menus as $menu){
+                            foreach ($menus as $menu) {
                                 $cart_item = new UserCartItem();
                                 $cart_item->cart_collection_id = $cart_collection->id;
                                 $cart_item->menu_id = $menu['menu_id'];
@@ -249,7 +249,7 @@ class UserCartsController extends Controller
                             }
                         }
                     }
-                }elseif ($collection_type == 4) {
+                } elseif ($collection_type == 4) {
                     $validator = \Validator::make($DataRequests, [
                         'collection_price' => 'required|numeric',
                         'menus' => 'required',
@@ -264,7 +264,7 @@ class UserCartsController extends Controller
                         $collection = Collection::where('id', $collection_id)->first();
                         $cart_collection = UserCartCollection::where('cart_id', $cart->id)
                             ->where('collection_id', $collection_id)->first();
-                        if(!$cart_collection){
+                        if (!$cart_collection) {
                             $cart_collection = new UserCartCollection();
                             $cart_collection->collection_id = $collection_id;
                             $cart_collection->restaurant_id = $collection->restaurant_id;
@@ -274,7 +274,7 @@ class UserCartsController extends Controller
                             $cart_collection->female_caterer = $female_caterer;
                             $cart_collection->special_instruction = $special_instruction;
                             $cart_collection->save();
-                            foreach($menus as $menu){
+                            foreach ($menus as $menu) {
                                 $cart_item = new UserCartItem();
                                 $cart_item->cart_collection_id = $cart_collection->id;
                                 $cart_item->menu_id = $menu['menu_id'];
@@ -283,14 +283,14 @@ class UserCartsController extends Controller
                                 $cart_item->quantity = $menu['item_quantity'];
                                 $cart_item->save();
                             }
-                        }else{
+                        } else {
                             $cart_collection->price = $collection_price;
                             $cart_collection->quantity = 1;
                             $cart_collection->female_caterer = $female_caterer;
                             $cart_collection->special_instruction = $special_instruction;
                             $cart_collection->save();
                             UserCartItem::where('cart_collection_id', $cart_collection->id)->delete();
-                            foreach($menus as $menu){
+                            foreach ($menus as $menu) {
                                 $cart_item = new UserCartItem();
                                 $cart_item->cart_collection_id = $cart_collection->id;
                                 $cart_item->menu_id = $menu['menu_id'];
@@ -312,7 +312,7 @@ class UserCartsController extends Controller
                     'data' => $arr,
                     'message' => \Lang::get('message.collectionSuccess')));
             }
-        }else{
+        } else {
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
@@ -321,11 +321,10 @@ class UserCartsController extends Controller
     }
 
 
-
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function showCart(Request $request, $id)
@@ -333,30 +332,30 @@ class UserCartsController extends Controller
         \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
-        if($lang == 'ar'){
+        if ($lang == 'ar') {
             $validator->getTranslator()->setLocale('ar');
         }
-        $token = str_replace("Bearer ","" , $request->header('Authorization'));
+        $token = str_replace("Bearer ", "", $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->first();
-        if($user){
+        if ($user) {
             $cart = UserCart::where('id', $id)
                 ->where('user_id', $user->id)
                 ->where('completed', 0)
                 ->with(['address', 'cartCollection' => function ($query) {
                     $query->with(['cartItem', 'collection.category']);
                 }])->first();
-            if($cart){
-                $address = (object) array();
+            if ($cart) {
+                $address = (object)array();
                 $address_id = -1;
-                if($cart->address){
-                    if($cart->address->is_apartment == 1){
+                if ($cart->address) {
+                    if ($cart->address->is_apartment == 1) {
                         $is_apartment = true;
-                    }else{
+                    } else {
                         $is_apartment = false;
                     }
-                    if($cart->address->is_default == 1){
+                    if ($cart->address->is_default == 1) {
                         $default = true;
-                    }else{
+                    } else {
                         $default = false;
                     }
                     $address_id = $cart->address->id;
@@ -375,34 +374,34 @@ class UserCartsController extends Controller
                 }
 
 
-                if(count($cart->cartCollection ) > 0){
+                if (count($cart->cartCollection) > 0) {
                     $total = 0;
-                    foreach($cart->cartCollection as $cart_collection){
+                    foreach ($cart->cartCollection as $cart_collection) {
                         $menu = [];
-                        $categories = Category::whereHas('cartItem', function($query) use ($cart_collection){
+                        $categories = Category::whereHas('cartItem', function ($query) use ($cart_collection) {
                             $query->where('cart_collection_id', $cart_collection->id);
-                        })->with(['cartItem' => function ($x) use($cart_collection){
+                        })->with(['cartItem' => function ($x) use ($cart_collection) {
                             $x->where('cart_collection_id', $cart_collection->id);
                         }])->get();
-                        foreach($categories as $category){
+                        foreach ($categories as $category) {
                             $items = [];
-                            foreach($category->cartItem as $cartItem){
-                                if($lang == 'ar'){
+                            foreach ($category->cartItem as $cartItem) {
+                                if ($lang == 'ar') {
                                     $item_name = $cartItem->menu->name_ar;
-                                }else{
+                                } else {
                                     $item_name = $cartItem->menu->name_en;
                                 }
                                 $items [] = [
                                     'item_id' => $cartItem->item_id,
-                                    'item_name' =>  $item_name,
+                                    'item_name' => $item_name,
                                     'item_price' => $cartItem->menu->price,
                                     'item_quantity' => $cartItem->quantity,
                                     'item_price_unit' => \Lang::get('message.priceUnit')
                                 ];
                             }
-                            if($lang == 'ar'){
+                            if ($lang == 'ar') {
                                 $menu_name = $category->name_ar;
-                            }else{
+                            } else {
                                 $menu_name = $category->name_en;
                             }
 
@@ -412,33 +411,33 @@ class UserCartsController extends Controller
                                 'items' => $items
                             ];
                         }
-                        if($cart_collection->collection->price == null){
+                        if ($cart_collection->collection->price == null) {
                             $collection_price = '';
-                        }else{
+                        } else {
                             $collection_price = $cart_collection->collection->price;
                         }
-                        if($cart_collection->persons_count == null){
+                        if ($cart_collection->persons_count == null) {
                             $persons_count = -1;
-                        }else{
+                        } else {
                             $persons_count = $cart_collection->persons_count;
                         }
-                        if($cart_collection->quantity == null){
+                        if ($cart_collection->quantity == null) {
                             $quantity = '';
-                        }else{
+                        } else {
                             $quantity = $cart_collection->quantity;
                         }
-                        if($cart_collection->female_caterer == 1){
+                        if ($cart_collection->female_caterer == 1) {
                             $female_caterer = true;
-                        }else{
+                        } else {
                             $female_caterer = false;
                         }
 
 
-                        if($lang == 'ar'){
+                        if ($lang == 'ar') {
                             $restaurant_name = $cart_collection->collection->restaurant->name_ar;
                             $collection_type = $cart_collection->collection->category->name_ar;
                             $collection_name = $cart_collection->collection->name_ar;
-                        }else{
+                        } else {
                             $restaurant_name = $cart_collection->collection->restaurant->name_en;
                             $collection_type = $cart_collection->collection->category->name_en;
                             $collection_name = $cart_collection->collection->name_en;
@@ -464,7 +463,7 @@ class UserCartsController extends Controller
                         $total += $cart_collection->price;
 
                     }
-                    $arr  = [
+                    $arr = [
                         'cart_id' => $cart->id,
                         'order_area' => $cart->delivery_order_area,
                         'order_date' => $cart->delivery_order_date,
@@ -480,13 +479,13 @@ class UserCartsController extends Controller
                     'success' => 1,
                     'status_code' => 200,
                     'data' => $arr));
-            }else{
+            } else {
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200,
                     'data' => []));
             }
-        }else{
+        } else {
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
@@ -498,31 +497,30 @@ class UserCartsController extends Controller
     public function cartCount(Request $request)
     {
         \Log::info($request->all());
-        $token = str_replace("Bearer ","" , $request->header('Authorization'));
+        $token = str_replace("Bearer ", "", $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->with('cart.cartCollection')->first();
-//        $cart = UserCart::where('user_id', $user->id)->where('completed', 0)->with('cartCollection')->first();
-        if($user){
-            if($user->cart->count() > 0){
+        if ($user) {
+            if ($user->cart->count() > 0) {
                 $cart = $user->cart->where('completed', 0)->first();
-                if($cart){
+                if ($cart) {
                     $cart_count = $cart->cartCollection->count();
-                    $arr  = [
+                    $arr = [
                         'cart_id' => $cart->id,
                         'cart_count' => $cart_count
                     ];
-                }else{
-                    $arr  = [
+                } else {
+                    $arr = [
                         'cart_count' => 0
                     ];
                 }
-            }else{
-                $arr  = [
+            } else {
+                $arr = [
                     'cart_count' => 0
                 ];
 
             }
-        }else{
-            $arr  = [
+        } else {
+            $arr = [
                 'cart_count' => 0
             ];
         }
@@ -537,7 +535,7 @@ class UserCartsController extends Controller
         \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
-        if($lang == 'ar'){
+        if ($lang == 'ar') {
             $validator->getTranslator()->setLocale('ar');
         }
         $DataRequests = $request->all();
@@ -553,7 +551,7 @@ class UserCartsController extends Controller
             $collection_type = $DataRequests['collection_type'];
             $collection_id = $DataRequests['collection_id'];
             $collection = Collection::where('id', $collection_id)->with('collectionItem.menu')->first();
-            if($collection){
+            if ($collection) {
                 if ($collection->female_caterer_available == 1) {
                     $female_caterer_available = true;
                 } else {
@@ -576,23 +574,23 @@ class UserCartsController extends Controller
                 $collection_min = -1;
                 $collection_max = -1;
                 $person_increase = false;
-                if($collection_type != 4){
+                if ($collection_type != 4) {
                     $min_serve = $collection->min_serve_to_person;
                     $max_serve = $collection->max_serve_to_person;
                     $collection_price = $collection->price;
                 }
-                if($collection_type != 2 && $collection_type != 4){
+                if ($collection_type != 2 && $collection_type != 4) {
                     $collection_min = $collection->min_qty;
                     $collection_max = $collection->max_qty;
                 }
-                if($collection_type == 1){
+                if ($collection_type == 1) {
                     $items = [];
                     $menu = [];
                     foreach ($collection->collectionItem as $collection_item) {
-                        if($lang == 'ar'){
+                        if ($lang == 'ar') {
                             $foodlist [] = $collection_item->menu->name_ar;
                             $item_name = $collection_item->menu->name_ar;
-                        }else{
+                        } else {
                             $foodlist [] = $collection_item->menu->name_en;
                             $item_name = $collection_item->menu->name_en;
                         }
@@ -618,35 +616,35 @@ class UserCartsController extends Controller
                         'menu_name' => \Lang::get('message.combo'),
                         'items' => $items,
                     ];
-                }else{
+                } else {
                     $menu_min_qty = -1;
                     $menu_max_qty = -1;
                     $menu = [];
-                    $collectionMenus = CollectionMenu::where('collection_id', $collection->id)->with(['collectionItem' => function ($query) use($collection){
+                    $collectionMenus = CollectionMenu::where('collection_id', $collection->id)->with(['collectionItem' => function ($query) use ($collection) {
                         $query->where('collection_id', $collection->id);
                     }])->get();
                     foreach ($collectionMenus as $collectionMenu) {
                         $items = [];
-                        if($collection->category_id !=4 && $collection->category_id !=1){
+                        if ($collection->category_id != 4 && $collection->category_id != 1) {
                             $menu_min_qty = $collectionMenu->min_qty;
                             $menu_max_qty = $collectionMenu->max_qty;
                         }
-                        foreach($collectionMenu->collectionItem as $collection_item){
-                            if($lang == 'ar'){
+                        foreach ($collectionMenu->collectionItem as $collection_item) {
+                            if ($lang == 'ar') {
                                 $foodlist [] = $collection_item->menu->name_ar;
                                 $item_name = $collection_item->menu->name_ar;
                                 $menu_name = $collectionMenu->category->name_ar;
-                            }else{
+                            } else {
                                 $foodlist [] = $collection_item->menu->name_en;
                                 $item_name = $collection_item->menu->name_en;
                                 $menu_name = $collectionMenu->category->name_en;
                             }
                             $image = url('/') . '/images/' . $collection_item->menu->image;
                             array_push($foodlist_images, $image);
-                            if($collection->category_id == 2){
-                                if($collection->allow_person_increase == 1){
+                            if ($collection->category_id == 2) {
+                                if ($collection->allow_person_increase == 1) {
                                     $person_increase = true;
-                                }else{
+                                } else {
                                     $person_increase = false;
                                 }
                                 $max_persons = $collection->persons_max_count;
@@ -665,9 +663,9 @@ class UserCartsController extends Controller
                                 } else {
                                     $max = floor($max_hours) . ' ' . \Lang::get('message.hour');
                                 }
-                                if($lang == 'ar'){
+                                if ($lang == 'ar') {
                                     $requirement = $collection->requirements_ar;
-                                }else{
+                                } else {
                                     $requirement = $collection->requirements_en;
                                 }
                             }
@@ -681,7 +679,7 @@ class UserCartsController extends Controller
                             $items [] = [
                                 'item_id' => $collection_item->menu->id,
                                 'item_name' => $item_name,
-                                'item_image' => url('/') . '/images/' .  $collection_item->menu->image,
+                                'item_image' => url('/') . '/images/' . $collection_item->menu->image,
                                 'item_price' => $collection_item->menu->price,
                                 'item_price_unit' => \Lang::get('message.priceUnit'),
                                 'item_availability' => $status
@@ -704,7 +702,7 @@ class UserCartsController extends Controller
 
                 }
 
-                if($lang == 'ar'){
+                if ($lang == 'ar') {
                     $restaurant_name = $collection->restaurant->name_ar;
                     $collection_name = $collection->name_ar;
                     $collection_description = $collection->description_ar;
@@ -712,7 +710,7 @@ class UserCartsController extends Controller
                     $mealtime = $collection->mealtime->name_ar;
                     $service_provide = $collection->service_provide_ar;
                     $service_presentation = $collection->service_presentation_ar;
-                }else{
+                } else {
                     $restaurant_name = $collection->restaurant->name_en;
                     $collection_name = $collection->name_en;
                     $collection_description = $collection->description_en;
@@ -753,13 +751,13 @@ class UserCartsController extends Controller
                     'menu_items' => $menu
                 ];
                 return response()->json(array(
-                    'success'=> 1,
-                    'status_code'=> 200 ,
+                    'success' => 1,
+                    'status_code' => 200,
                     'data' => $menu_collection));
-            }else{
+            } else {
                 return response()->json(array(
-                    'success'=> 1,
-                    'status_code'=> 200 ,
+                    'success' => 1,
+                    'status_code' => 200,
                     'data' => [],
                     'message' => \Lang::get('message.noCollection')));
             }
@@ -772,23 +770,27 @@ class UserCartsController extends Controller
     {
         \Log::info($request->all());
         $lang = $request->header('Accept-Language');
-        $token = str_replace("Bearer ","" , $request->header('Authorization'));
+        $validator = \Validator::make($request->all(), []);
+        if ($lang == 'ar') {
+            $validator->getTranslator()->setLocale('ar');
+        }
+        $token = str_replace("Bearer ", "", $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->with('cart.cartCollection')->first();
-        if($user){
+        if ($user) {
             $DataRequests = $request->all();
             $cart = UserCart::where('id', $id)
                 ->where('user_id', $user->id)->first();
-            if(isset($DataRequests['collection_id'])){
+            if (isset($DataRequests['collection_id'])) {
                 $collection_id = $DataRequests['collection_id'];
                 UserCartCollection::where('cart_id', $cart->id)
                     ->where('collection_id', $collection_id)->delete();
                 $cart_collections = UserCartCollection::where('cart_id', $cart->id)->get();
-                if(count($cart_collections) > 0){
+                if (count($cart_collections) > 0) {
                     return response()->json(array(
                         'success' => 1,
                         'status_code' => 200,
                         'message' => \Lang::get('message.collectionRemove')));
-                }else{
+                } else {
                     $cart->delete();
                     return response()->json(array(
                         'success' => 1,
@@ -796,7 +798,7 @@ class UserCartsController extends Controller
                         'message' => \Lang::get('message.cartRemove')));
                 }
 
-            }else{
+            } else {
                 $cart->delete();
                 return response()->json(array(
                     'success' => 1,
@@ -812,21 +814,24 @@ class UserCartsController extends Controller
         \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
-        if($lang == 'ar'){
+        if ($lang == 'ar') {
             $validator->getTranslator()->setLocale('ar');
         }
-        $token = str_replace("Bearer ","" , $request->header('Authorization'));
+        $token = str_replace("Bearer ", "", $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->with('cart.cartCollection')->first();
-        if($user){
+        if ($user) {
             $address = Address::where('id', $id)->where('user_id', $user->id)->first();
-            $cart = UserCart::where('user_id', $user->id)->where('completed', 0)->first();
-            $cart->delivery_address_id = $address->id;
-            $cart->save();
-
-            return response()->json(array(
-                'success' => 1,
-                'status_code' => 200));
-        }else{
+            if ($address) {
+                $cart = UserCart::where('user_id', $user->id)->where('completed', 0)->first();
+                if ($cart) {
+                    $cart->delivery_address_id = $address->id;
+                    $cart->save();
+                    return response()->json(array(
+                        'success' => 1,
+                        'status_code' => 200));
+                }
+            }
+        } else {
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
@@ -840,7 +845,7 @@ class UserCartsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
 
@@ -848,15 +853,15 @@ class UserCartsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
 

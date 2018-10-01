@@ -146,6 +146,7 @@ class AreasController extends Controller
 
     public function getAreas(Request $request)
     {
+        \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $areas = Area::all();
         foreach ($areas as $area) {

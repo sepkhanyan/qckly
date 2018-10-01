@@ -26,7 +26,8 @@
                     </ul>
                 </div>
 
-                <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST" enctype="multipart/form-data"
+                <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST"
+                      enctype="multipart/form-data"
                       action="{{url('/admin/update/' . Auth::user()->id)}}">
                     {{ csrf_field() }}
                     <div class="tab-content">

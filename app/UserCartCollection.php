@@ -14,6 +14,7 @@ class UserCartCollection extends Model
         'collection_id',
         'price',
         'quantity',
+        'persons_count',
         'female_caterer',
         'special_instruction'
     ];
@@ -25,19 +26,19 @@ class UserCartCollection extends Model
     }
 
 
-    public function cartItem ()
+    public function cartItem()
     {
-        return $this->hasMany('App\UserCartItem',  'cart_collection_id');
+        return $this->hasMany('App\UserCartItem', 'cart_collection_id');
     }
 
 
-    public function collection ()
+    public function collection()
     {
         return $this->belongsTo('App\Collection', 'collection_id');
     }
 
 
-    public function restaurant ()
+    public function restaurant()
     {
         return $this->belongsTo('App\Restaurant', 'restaurant_id');
     }

@@ -32,7 +32,7 @@ class AddressesController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function addAddress(Request $request, $id = null)
@@ -40,12 +40,12 @@ class AddressesController extends Controller
         \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
-        if($lang == 'ar'){
+        if ($lang == 'ar') {
             $validator->getTranslator()->setLocale('ar');
         }
-        $token = str_replace("Bearer ","" , $request->header('Authorization'));
+        $token = str_replace("Bearer ", "", $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->first();
-        if($user){
+        if ($user) {
             $DataRequests = $request->all();
             $validator = \Validator::make($DataRequests, [
                 'name' => 'required|string',
@@ -63,8 +63,8 @@ class AddressesController extends Controller
                     'message' => 'Invalid inputs',
                     'error_details' => $validator->messages()));
             } else {
-                if($id){
-                    $address = Address::where('id', $id)->where('user_id',$user->id)->first();
+                if ($id) {
+                    $address = Address::where('id', $id)->where('user_id', $user->id)->first();
                     $address->name = $DataRequests['name'];
                     $address->mobile_number = $DataRequests['mobile_number'];
                     $address->location = $DataRequests['location'];
@@ -75,8 +75,8 @@ class AddressesController extends Controller
                     $address->latitude = $DataRequests['latitude'];
                     $address->longitude = $DataRequests['longitude'];
                     $address->save();
-                }else{
-                    Address::where('user_id',$user->id)->where('is_default', 1)->update(['is_default'=> 0]);
+                } else {
+                    Address::where('user_id', $user->id)->where('is_default', 1)->update(['is_default' => 0]);
                     $address = new Address();
                     $address->user_id = $user->id;
                     $address->is_default = 1;
@@ -90,14 +90,14 @@ class AddressesController extends Controller
                     $address->latitude = $DataRequests['latitude'];
                     $address->longitude = $DataRequests['longitude'];
                     $address->save();
-                    UserCart::where('user_id', $user->id)->update(['delivery_address_id'=> $address->id]);
+                    UserCart::where('user_id', $user->id)->update(['delivery_address_id' => $address->id]);
                 }
 
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200));
             }
-        }else{
+        } else {
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
@@ -109,7 +109,7 @@ class AddressesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function getAddresses(Request $request)
@@ -117,23 +117,23 @@ class AddressesController extends Controller
         \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
-        if($lang == 'ar'){
+        if ($lang == 'ar') {
             $validator->getTranslator()->setLocale('ar');
         }
-        $token = str_replace("Bearer ","" , $request->header('Authorization'));
+        $token = str_replace("Bearer ", "", $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->first();
-        if($user){
+        if ($user) {
             $addresses = Address::where('user_id', $user->id)->orderby('created_at', 'desc')->get();
-            if(count($addresses) > 0){
-                foreach($addresses as $address){
-                    if($address->is_apartment == 1){
+            if (count($addresses) > 0) {
+                foreach ($addresses as $address) {
+                    if ($address->is_apartment == 1) {
                         $is_apartment = true;
-                    }else{
+                    } else {
                         $is_apartment = false;
                     }
-                    if($address->is_default == 1){
+                    if ($address->is_default == 1) {
                         $default = true;
-                    }else{
+                    } else {
                         $default = false;
                     }
                     $arr [] = [
@@ -154,14 +154,14 @@ class AddressesController extends Controller
                     'success' => 1,
                     'status_code' => 200,
                     'data' => $arr));
-            }else{
+            } else {
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200,
                     'message' => \Lang::get('message.noAddress'),
                     'data' => []));
             }
-        }else{
+        } else {
             return response()->json(array(
                 'success' => 1,
                 'status_code' => 200,
@@ -173,7 +173,7 @@ class AddressesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -184,8 +184,8 @@ class AddressesController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -196,7 +196,7 @@ class AddressesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function deleteAddress(Request $request, $id)
@@ -204,30 +204,30 @@ class AddressesController extends Controller
         \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
-        if($lang == 'ar'){
+        if ($lang == 'ar') {
             $validator->getTranslator()->setLocale('ar');
         }
-        $token = str_replace("Bearer ","" , $request->header('Authorization'));
+        $token = str_replace("Bearer ", "", $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->first();
-        if($user){
+        if ($user) {
             $address = Address::where('id', $id)->where('user_id', $user->id)->first();
-            if($address){
+            if ($address) {
                 $address->delete();
-            }else{
+            } else {
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200,
                     'message' => \Lang::get('message.noAddress')));
             }
-            $default_address =  Address::where('user_id', $user->id)->where('is_default', 1)->first();
-            if(!$default_address){
-                $new_default_address =  Address::where('user_id', $user->id)->orderBy('created_at', 'desc')->first();
-                if($new_default_address){
+            $default_address = Address::where('user_id', $user->id)->where('is_default', 1)->first();
+            if (!$default_address) {
+                $new_default_address = Address::where('user_id', $user->id)->orderBy('created_at', 'desc')->first();
+                if ($new_default_address) {
                     $new_default_address->is_default = 1;
                     $new_default_address->save();
-                    UserCart::where('user_id', $user->id)->where('completed', 0)->update(['delivery_address_id'=> $new_default_address->id]);
-                }else{
-                    UserCart::where('user_id', $user->id)->where('completed', 0)->update(['delivery_address_id'=> null]);
+                    UserCart::where('user_id', $user->id)->where('completed', 0)->update(['delivery_address_id' => $new_default_address->id]);
+                } else {
+                    UserCart::where('user_id', $user->id)->where('completed', 0)->update(['delivery_address_id' => null]);
                     return response()->json(array(
                         'success' => 1,
                         'status_code' => 200,

@@ -368,19 +368,19 @@
                                 </div>
                             </div>
                             {{--<div class="form-group">--}}
-                                {{--<label for="input-status" class="col-sm-3 control-label">Status</label>--}}
-                                {{--<div class="col-sm-5">--}}
-                                    {{--<div class="btn-group btn-group-switch" data-toggle="buttons">--}}
-                                        {{--<label class="btn btn-danger">--}}
-                                            {{--<input type="radio" name="status" value="0">--}}
-                                            {{--Disabled--}}
-                                        {{--</label>--}}
-                                        {{--<label class="btn btn-success active">--}}
-                                            {{--<input type="radio" name="status" value="1" checked="checked">--}}
-                                            {{--Enabled--}}
-                                        {{--</label>--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
+                            {{--<label for="input-status" class="col-sm-3 control-label">Status</label>--}}
+                            {{--<div class="col-sm-5">--}}
+                            {{--<div class="btn-group btn-group-switch" data-toggle="buttons">--}}
+                            {{--<label class="btn btn-danger">--}}
+                            {{--<input type="radio" name="status" value="0">--}}
+                            {{--Disabled--}}
+                            {{--</label>--}}
+                            {{--<label class="btn btn-success active">--}}
+                            {{--<input type="radio" name="status" value="1" checked="checked">--}}
+                            {{--Enabled--}}
+                            {{--</label>--}}
+                            {{--</div>--}}
+                            {{--</div>--}}
                             {{--</div>--}}
                         </div>
 

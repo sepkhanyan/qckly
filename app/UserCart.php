@@ -13,7 +13,9 @@ class UserCart extends Model
         'user_id',
         'delivery_order_area',
         'delivery_order_date',
-        'delivery_order_time'
+        'delivery_order_time',
+        'delivery_address_id',
+        'completed'
     ];
 
 
@@ -31,7 +33,7 @@ class UserCart extends Model
 
     public function address()
     {
-      return  $this->belongsTo('App\Address', 'delivery_address_id');
+        return $this->belongsTo('App\Address', 'delivery_address_id');
     }
 
 

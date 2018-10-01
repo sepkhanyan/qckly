@@ -23,7 +23,7 @@ class AreaRequest extends FormRequest
      */
     public function rules()
     {
-        return   [
+        return [
             'area_en' => 'required|string|max:255',
             'area_ar' => 'required|string|max:255|',
         ];

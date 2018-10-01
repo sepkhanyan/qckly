@@ -32,13 +32,13 @@ class MealtimesController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $user = Auth::user();
-        if($user->admin == 1){
+        if ($user->admin == 1) {
             $mealtime = new Mealtime();
             $mealtime->name_en = $request->input('mealtime_en');
             $mealtime->name_ar = $request->input('mealtime_ar');
@@ -46,7 +46,7 @@ class MealtimesController extends Controller
             $mealtime->end_time = $request->input('end_time');
             $mealtime->save();
             return redirect('/mealtimes');
-        }else{
+        } else {
             return redirect('/mealtimes');
         }
 
@@ -55,7 +55,7 @@ class MealtimesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -66,7 +66,7 @@ class MealtimesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit(Request $request)
@@ -78,14 +78,14 @@ class MealtimesController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         $user = Auth::user();
-        if($user->admin == 1){
+        if ($user->admin == 1) {
             $mealtime = Mealtime::find($id);
             $mealtime->name_en = $request->input('mealtime_en');
             $mealtime->name_ar = $request->input('mealtime_ar');
@@ -93,7 +93,7 @@ class MealtimesController extends Controller
             $mealtime->end_time = $request->input('end_time');
             $mealtime->save();
             return redirect('/mealtimes');
-        }else{
+        } else {
             return redirect('/mealtimes');
         }
 
@@ -102,13 +102,13 @@ class MealtimesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function deleteMealtime(Request $request)
     {
         $user = Auth::user();
-        if($user->admin == 1){
+        if ($user->admin == 1) {
             $id = $request->get('id');
             $mealtimes = Mealtime::where('id', $id)->get();
             foreach ($mealtimes as $mealtime) {
@@ -121,9 +121,9 @@ class MealtimesController extends Controller
                     File::delete($menu_images);
                 }
             }
-            Mealtime::whereIn('id',$id)->delete();
+            Mealtime::whereIn('id', $id)->delete();
             return redirect('/mealtimes');
-        }else{
+        } else {
             return redirect('/mealtimes');
         }
     }

@@ -303,10 +303,10 @@ class RestaurantsController extends Controller
             $user = $user->load('restaurant');
             if ($user->restaurant->id == $id) {
                 Restaurant::where('id', $id)->update(['status' => $status]);
-            }else{
+            } else {
                 return redirect('/restaurants');
             }
-        }else{
+        } else {
             Restaurant::where('id', $id)->update(['status' => $status]);
         }
         return redirect('/restaurants');
@@ -349,6 +349,7 @@ class RestaurantsController extends Controller
 
     public function getRestaurants(Request $request)
     {
+        \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
         if ($lang == 'ar') {
@@ -639,6 +640,7 @@ class RestaurantsController extends Controller
 
     public function getRestaurant(Request $request, $id)
     {
+        \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
         if ($lang == 'ar') {

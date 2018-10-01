@@ -16,16 +16,16 @@ class StatusesController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        if($user->admin == 1){
+        if ($user->admin == 1) {
             $statuses = Status::paginate(20);
             $data = $request->all();
 
-            if(isset($data['status_search'])){
-                $statuses = Status::where('name_en','like',$data['status_search'])
-                    ->orWhere('name_ar','like',$data['status_search'])->paginate(20);
+            if (isset($data['status_search'])) {
+                $statuses = Status::where('name_en', 'like', $data['status_search'])
+                    ->orWhere('name_ar', 'like', $data['status_search'])->paginate(20);
             }
             return view('statuses', ['statuses' => $statuses]);
-        }else{
+        } else {
             return redirect('/');
         }
 
@@ -45,19 +45,19 @@ class StatusesController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $user = Auth::user();
-        if($user->admin == 1){
+        if ($user->admin == 1) {
             $status = new Status();
             $status->name_en = $request->input('name_en');
             $status->name_ar = $request->input('name_ar');
             $status->save();
             return redirect('/statuses');
-        }else{
+        } else {
             return redirect('/');
         }
     }
@@ -65,7 +65,7 @@ class StatusesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -76,7 +76,7 @@ class StatusesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -87,20 +87,20 @@ class StatusesController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         $user = Auth::user();
-        if($user->admin == 1){
+        if ($user->admin == 1) {
             $status = Status::find($id);
             $status->name_en = $request->input('name_en');
             $status->name_ar = $request->input('name_ar');
             $status->save();
             return redirect('/statuses');
-        }else{
+        } else {
             return redirect('/');
         }
     }
@@ -108,17 +108,17 @@ class StatusesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function deleteStatus(Request $request)
     {
         $user = Auth::user();
-        if($user->admin == 1){
+        if ($user->admin == 1) {
             $id = $request->get('id');
-            Status::whereIn('id',$id)->delete();
+            Status::whereIn('id', $id)->delete();
             return redirect('/statuses');
-        }else{
+        } else {
             return redirect('/');
         }
     }

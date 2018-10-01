@@ -1,109 +1,105 @@
-$(document).ready(function() {
+$(document).ready(function () {
 
     var token = $('[name=csrf-token]').attr('content');
 
 
-    $("a#select-image").on("click", function(){
+    $("a#select-image").on("click", function () {
 
 
-        $.post("/image/manager", function(data){
+        $.post("/image/manager", function (data) {
 
             $("#media-manager").html(data).fadeIn();
 
         });//Put the code from above here.
 
     });
-    $('#lat-lng-no').click(function() {
-        $('#lat-lng'). slideDown('fast');
+    $('#lat-lng-no').click(function () {
+        $('#lat-lng').slideDown('fast');
     });
-    $('#lat-lng-yes').click(function() {
-        $('#lat-lng'). slideUp('fast');
+    $('#lat-lng-yes').click(function () {
+        $('#lat-lng').slideUp('fast');
     });
-    $('#opening-daily-show').click(function() {
-        $('#opening-daily'). slideDown('fast');
-        $('#opening-flexible'). slideUp('fast');
+    $('#opening-daily-show').click(function () {
+        $('#opening-daily').slideDown('fast');
+        $('#opening-flexible').slideUp('fast');
     });
-    $('#opening-flexible-show').click(function() {
-        $('#opening-flexible'). slideDown('fast');
-        $('#opening-daily'). slideUp('fast');
+    $('#opening-flexible-show').click(function () {
+        $('#opening-flexible').slideDown('fast');
+        $('#opening-daily').slideUp('fast');
     });
-    $('#daily-flexible-hide').click(function() {
-        $('#opening-daily'). slideUp('fast');
-        $('#opening-flexible'). slideUp('fast');
+    $('#daily-flexible-hide').click(function () {
+        $('#opening-daily').slideUp('fast');
+        $('#opening-flexible').slideUp('fast');
     });
-    $('#delivery-hours-daily-show').click(function() {
-        $('#delivery-hours-daily'). slideDown('fast');
+    $('#delivery-hours-daily-show').click(function () {
+        $('#delivery-hours-daily').slideDown('fast');
     });
-    $('#delivery-hours-daily-hide').click(function() {
-        $('#delivery-hours-daily'). slideUp('fast');
+    $('#delivery-hours-daily-hide').click(function () {
+        $('#delivery-hours-daily').slideUp('fast');
     });
-    $('#collection-hours-daily-show').click(function() {
-        $('#collection-hours-daily'). slideDown('fast');
+    $('#collection-hours-daily-show').click(function () {
+        $('#collection-hours-daily').slideDown('fast');
     });
-    $('#collection-hours-daily-hide').click(function() {
-        $('#collection-hours-daily'). slideUp('fast');
+    $('#collection-hours-daily-hide').click(function () {
+        $('#collection-hours-daily').slideUp('fast');
     });
-    $('#future-orders-days-show').click(function() {
-        $('#future-orders-days'). slideDown('fast');
+    $('#future-orders-days-show').click(function () {
+        $('#future-orders-days').slideDown('fast');
     });
-    $('#future-orders-days-hide').click(function() {
-        $('#future-orders-days'). slideUp('fast');
+    $('#future-orders-days-hide').click(function () {
+        $('#future-orders-days').slideUp('fast');
     });
-    $('#special_toggle_hide').click(function() {
-        $('#special-toggle'). slideUp('fast');
+    $('#special_toggle_hide').click(function () {
+        $('#special-toggle').slideUp('fast');
     });
-    $('#special_toggle_show').click(function() {
-        $('#special-toggle'). slideDown('fast');
+    $('#special_toggle_show').click(function () {
+        $('#special-toggle').slideDown('fast');
     });
 
-    $('#category').click(function() {
-        $('#items'). slideDown('fast');
-        if($('select[name=category]').val() == 1){
-            $('#price'). slideDown('fast');
-            $('#persons_qty'). slideDown('fast');
-            $('#max_person'). slideUp('fast');
-            $('#collection_qty'). slideDown('fast');
-            $('#item_count'). slideDown('fast');
-            $('#person_increase'). slideUp('fast');
-            $('#setup'). slideUp('fast');
-            $('#all'). slideUp('fast');
-        }else if($('select[name=category]').val() == 2){
-            $('#price'). slideDown('fast');
-            $('#collection_qty'). slideUp('fast');
-            $('#persons_qty'). slideDown('fast');
-            $('#max_person'). slideDown('fast');
-            $('#item_count'). slideDown('fast');
-            $('#person_increase'). slideDown('fast');
-            $('#setup'). slideDown('fast');
-            $('#all'). slideDown('fast');
-        }else if($('select[name=category]').val() == 3){
-            $('#price'). slideDown('fast');
-            $('#collection_qty'). slideDown('fast');
-            $('#persons_qty'). slideDown('fast');
-            $('#max_person'). slideUp('fast');
-            $('#item_count'). slideDown('fast');
-            $('#person_increase'). slideUp('fast');
-            $('#setup'). slideUp('fast');
-            $('#all'). slideDown('fast');
-        }else if($('select[name=category]').val() == 4){
-            $('#price'). slideUp('fast');
-            $('#items_container'). slideDown('fast');
-            $('#collection_qty'). slideUp('fast');
-            $('#persons_qty'). slideUp('fast');
-            $('#max_person'). slideUp('fast');
-            $('#item_count'). slideUp('fast');
-            $('#person_increase'). slideUp('fast');
-            $('#setup'). slideUp('fast');
-            $('#all'). slideDown('fast');
+    $('#category').click(function () {
+        $('#items').slideDown('fast');
+        if ($('select[name=category]').val() == 1) {
+            $('#price').slideDown('fast');
+            $('#persons_qty').slideDown('fast');
+            $('#max_person').slideUp('fast');
+            $('#collection_qty').slideDown('fast');
+            $('#item_count').slideDown('fast');
+            $('#person_increase').slideUp('fast');
+            $('#setup').slideUp('fast');
+            $('#all').slideUp('fast');
+        } else if ($('select[name=category]').val() == 2) {
+            $('#price').slideDown('fast');
+            $('#collection_qty').slideUp('fast');
+            $('#persons_qty').slideDown('fast');
+            $('#max_person').slideDown('fast');
+            $('#item_count').slideDown('fast');
+            $('#person_increase').slideDown('fast');
+            $('#setup').slideDown('fast');
+            $('#all').slideDown('fast');
+        } else if ($('select[name=category]').val() == 3) {
+            $('#price').slideDown('fast');
+            $('#collection_qty').slideDown('fast');
+            $('#persons_qty').slideDown('fast');
+            $('#max_person').slideUp('fast');
+            $('#item_count').slideDown('fast');
+            $('#person_increase').slideUp('fast');
+            $('#setup').slideUp('fast');
+            $('#all').slideDown('fast');
+        } else if ($('select[name=category]').val() == 4) {
+            $('#price').slideUp('fast');
+            $('#items_container').slideDown('fast');
+            $('#collection_qty').slideUp('fast');
+            $('#persons_qty').slideUp('fast');
+            $('#max_person').slideUp('fast');
+            $('#item_count').slideUp('fast');
+            $('#person_increase').slideUp('fast');
+            $('#setup').slideUp('fast');
+            $('#all').slideDown('fast');
         }
     });
 
 
-
-
-
-
-    $('#delete_review').click(function() {
+    $('#delete_review').click(function () {
         window.checkValues = $('input[name=delete]:checked').map(function () {
             return $(this).val();
         }).get();
@@ -113,9 +109,9 @@ $(document).ready(function() {
         $.ajax({
 
             method: "POST",
-            url:"/review/delete",
-            data:{id:checkValues,_token:token },
-            success:function(data){
+            url: "/review/delete",
+            data: {id: checkValues, _token: token},
+            success: function (data) {
 
                 window.location.reload();
             }
@@ -124,7 +120,7 @@ $(document).ready(function() {
 
     });
 
-    $('#delete_mealtime').click(function() {
+    $('#delete_mealtime').click(function () {
         window.checkValues = $('input[name=delete]:checked').map(function () {
             return $(this).val();
         }).get();
@@ -134,9 +130,9 @@ $(document).ready(function() {
         $.ajax({
 
             method: "POST",
-            url:"/mealtime/delete",
-            data:{id:checkValues,_token:token },
-            success:function(data){
+            url: "/mealtime/delete",
+            data: {id: checkValues, _token: token},
+            success: function (data) {
 
                 window.location.reload();
             }
@@ -145,7 +141,7 @@ $(document).ready(function() {
 
     });
 
-    $('#delete_collection').click(function() {
+    $('#delete_collection').click(function () {
         window.checkValues = $('input[name=delete]:checked').map(function () {
             return $(this).val();
         }).get();
@@ -155,9 +151,9 @@ $(document).ready(function() {
         $.ajax({
 
             method: "POST",
-            url:"/collection/delete",
-            data:{id:checkValues,_token:token },
-            success:function(data){
+            url: "/collection/delete",
+            data: {id: checkValues, _token: token},
+            success: function (data) {
 
                 window.location.reload();
             }
@@ -167,9 +163,7 @@ $(document).ready(function() {
     });
 
 
-
-
-    $('#delete_collection_category').click(function() {
+    $('#delete_collection_category').click(function () {
         window.checkValues = $('input[name=delete]:checked').map(function () {
             return $(this).val();
         }).get();
@@ -179,9 +173,9 @@ $(document).ready(function() {
         $.ajax({
 
             method: "POST",
-            url:"/collection_category/delete",
-            data:{id:checkValues,_token:token },
-            success:function(data){
+            url: "/collection_category/delete",
+            data: {id: checkValues, _token: token},
+            success: function (data) {
 
                 window.location.reload();
             }
@@ -190,7 +184,7 @@ $(document).ready(function() {
 
     });
 
-    $('#delete_restaurant_category').click(function() {
+    $('#delete_restaurant_category').click(function () {
         window.checkValues = $('input[name=delete]:checked').map(function () {
             return $(this).val();
         }).get();
@@ -200,9 +194,9 @@ $(document).ready(function() {
         $.ajax({
 
             method: "POST",
-            url:"/restaurant_category/delete",
-            data:{id:checkValues,_token:token },
-            success:function(data){
+            url: "/restaurant_category/delete",
+            data: {id: checkValues, _token: token},
+            success: function (data) {
 
                 window.location.reload();
             }
@@ -211,27 +205,7 @@ $(document).ready(function() {
 
     });
 
-    $('#delete_restaurant').click(function() {
-        window.checkValues = $('input[name=delete]:checked').map(function () {
-            return $(this).val();
-        }).get();
-        console.log(checkValues);
-
-
-            $.ajax({
-
-                method: "POST",
-                url:"/restaurant/delete",
-                data:{id:checkValues,_token:token },
-                success:function(data){
-
-                    window.location.reload();
-                }
-
-            });
-
-    });
-    $('#delete_area').click(function() {
+    $('#delete_restaurant').click(function () {
         window.checkValues = $('input[name=delete]:checked').map(function () {
             return $(this).val();
         }).get();
@@ -241,9 +215,9 @@ $(document).ready(function() {
         $.ajax({
 
             method: "POST",
-            url:"/area/delete",
-            data:{id:checkValues,_token:token },
-            success:function(data){
+            url: "/restaurant/delete",
+            data: {id: checkValues, _token: token},
+            success: function (data) {
 
                 window.location.reload();
             }
@@ -251,7 +225,7 @@ $(document).ready(function() {
         });
 
     });
-    $('#delete_category').click(function() {
+    $('#delete_area').click(function () {
         window.checkValues = $('input[name=delete]:checked').map(function () {
             return $(this).val();
         }).get();
@@ -261,9 +235,9 @@ $(document).ready(function() {
         $.ajax({
 
             method: "POST",
-            url:"/category/delete",
-            data:{id:checkValues,_token:token },
-            success:function(data){
+            url: "/area/delete",
+            data: {id: checkValues, _token: token},
+            success: function (data) {
 
                 window.location.reload();
             }
@@ -271,7 +245,7 @@ $(document).ready(function() {
         });
 
     });
-    $('#delete_customer').click(function() {
+    $('#delete_category').click(function () {
         window.checkValues = $('input[name=delete]:checked').map(function () {
             return $(this).val();
         }).get();
@@ -281,9 +255,9 @@ $(document).ready(function() {
         $.ajax({
 
             method: "POST",
-            url:"/customer/delete",
-            data:{id:checkValues,_token:token },
-            success:function(data){
+            url: "/category/delete",
+            data: {id: checkValues, _token: token},
+            success: function (data) {
 
                 window.location.reload();
             }
@@ -291,7 +265,7 @@ $(document).ready(function() {
         });
 
     });
-    $('#delete_menu').click(function() {
+    $('#delete_customer').click(function () {
         window.checkValues = $('input[name=delete]:checked').map(function () {
             return $(this).val();
         }).get();
@@ -301,9 +275,9 @@ $(document).ready(function() {
         $.ajax({
 
             method: "POST",
-            url:"/menu/delete",
-            data:{id:checkValues,_token:token },
-            success:function(data){
+            url: "/customer/delete",
+            data: {id: checkValues, _token: token},
+            success: function (data) {
 
                 window.location.reload();
             }
@@ -311,8 +285,7 @@ $(document).ready(function() {
         });
 
     });
-
-    $('#delete_status').click(function() {
+    $('#delete_menu').click(function () {
         window.checkValues = $('input[name=delete]:checked').map(function () {
             return $(this).val();
         }).get();
@@ -322,9 +295,9 @@ $(document).ready(function() {
         $.ajax({
 
             method: "POST",
-            url:"/status/delete",
-            data:{id:checkValues,_token:token },
-            success:function(data){
+            url: "/menu/delete",
+            data: {id: checkValues, _token: token},
+            success: function (data) {
 
                 window.location.reload();
             }
@@ -333,7 +306,7 @@ $(document).ready(function() {
 
     });
 
-    $('#delete_order').click(function() {
+    $('#delete_status').click(function () {
         window.checkValues = $('input[name=delete]:checked').map(function () {
             return $(this).val();
         }).get();
@@ -343,9 +316,30 @@ $(document).ready(function() {
         $.ajax({
 
             method: "POST",
-            url:"/order/delete",
-            data:{id:checkValues,_token:token },
-            success:function(data){
+            url: "/status/delete",
+            data: {id: checkValues, _token: token},
+            success: function (data) {
+
+                window.location.reload();
+            }
+
+        });
+
+    });
+
+    $('#delete_order').click(function () {
+        window.checkValues = $('input[name=delete]:checked').map(function () {
+            return $(this).val();
+        }).get();
+        console.log(checkValues);
+
+
+        $.ajax({
+
+            method: "POST",
+            url: "/order/delete",
+            data: {id: checkValues, _token: token},
+            success: function (data) {
 
                 window.location.reload();
             }
@@ -355,12 +349,9 @@ $(document).ready(function() {
     });
 
 
-       
     $('.timepicker').timepicker({
         defaultTime: '11:45 AM'
     });
-
-
 
 
     $('#delivery-areas select.form-control').select2({
@@ -368,14 +359,14 @@ $(document).ready(function() {
     });
 
 
-    $('input[name="auto_lat_lng"]').on('change', function() {
+    $('input[name="auto_lat_lng"]').on('change', function () {
         $('#lat-lng').slideDown('fast');
         if (this.value == '1') {
             $('#lat-lng').slideUp('fast');
         }
     });
 
-    $('input[name="opening_type"]').on('change', function() {
+    $('input[name="opening_type"]').on('change', function () {
         if (this.value == '24_7') {
             $('#opening-daily').slideUp('fast');
             $('#opening-flexible').slideUp('fast');
@@ -390,7 +381,7 @@ $(document).ready(function() {
         }
     });
 
-    $('input[name="delivery_type"]').on('change', function() {
+    $('input[name="delivery_type"]').on('change', function () {
         if (this.value == '0') {
             $('#delivery-hours-daily').slideUp('fast');
         }
@@ -399,7 +390,7 @@ $(document).ready(function() {
         }
     });
 
-    $('input[name="collection_type"]').on('change', function() {
+    $('input[name="collection_type"]').on('change', function () {
         if (this.value == '0') {
             $('#collection-hours-daily').slideUp('fast');
         }
@@ -408,14 +399,14 @@ $(document).ready(function() {
         }
     });
 
-    $('input[name="future_orders"]').on('change', function() {
+    $('input[name="future_orders"]').on('change', function () {
         $('#future-orders-days').slideUp('fast');
         if (this.value == '1') {
             $('#future-orders-days').slideDown('fast');
         }
     });
 
-    $(document).on('click', '.btn-add-condition', function() {
+    $(document).on('click', '.btn-add-condition', function () {
         var panelRow = $(this).attr('data-panel-row');
         var tableRow = $(this).attr('data-table-row');
         tableRow++;
@@ -423,7 +414,7 @@ $(document).ready(function() {
         $(this).attr('data-table-row', tableRow);
     });
 
-    $(document).on('change', '#delivery-areas select.form-control', function() {
+    $(document).on('change', '#delivery-areas select.form-control', function () {
         $(this).parent().parent().find('input.total').attr('disabled', false);
         if (this.value == 'all') {
             $(this).parent().parent().find('input.total').val('0');

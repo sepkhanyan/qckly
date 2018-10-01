@@ -19,13 +19,12 @@ class Category extends Model
     ];
 
 
-
     public function menu()
     {
-        return$this->hasMany('App\Menu', 'category_id');
+        return $this->hasMany('App\Menu', 'category_id');
     }
 
-    public function cartItem ()
+    public function cartItem()
     {
         return $this->hasMany('App\UserCartItem', 'menu_id');
     }
@@ -34,6 +33,7 @@ class Category extends Model
     {
         return $this->hasMany('App\CollectionMenu', 'menu_id');
     }
+
     public function collectionItem()
     {
         return $this->hasMany('App\CollectionItem', 'collection_menu_id');

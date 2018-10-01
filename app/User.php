@@ -14,7 +14,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected  $table = 'users';
+    protected $table = 'users';
 
 
     protected $fillable = [
@@ -25,6 +25,11 @@ class User extends Authenticatable
         'mobile_number',
         'api_token',
         'otp',
+        'admin',
+        'first_name',
+        'last_name',
+        'group_id',
+        'image',
         'lang'
     ];
 
@@ -41,12 +46,12 @@ class User extends Authenticatable
 
     public function address()
     {
-      return  $this->hasMany('App\Address', 'user_id');
+        return $this->hasMany('App\Address', 'user_id');
     }
 
     public function order()
     {
-        return  $this->hasMany('App\Order', 'user_id');
+        return $this->hasMany('App\Order', 'user_id');
     }
 
     public function cart()
