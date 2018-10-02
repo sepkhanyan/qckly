@@ -128,6 +128,29 @@
                                     </div>
                                 </div>
                             </div>
+                            {{--<div class="form-group">--}}
+                            {{--<label for="" class="col-sm-3 control-label">Image <span class="help-block">Select an image to use as the location logo, this image is displayed in the restaurant list.</span>--}}
+                            {{--</label>--}}
+                            {{--<div class="col-sm-5">--}}
+                            {{--<div class="thumbnail imagebox" id="selectImage">--}}
+                            {{--<div class="preview">--}}
+                            {{--<img src="{{url('/') . '/admin/no_photo.png'}}"--}}
+                            {{--class="thumb img-responsive" id="thumb">--}}
+                            {{--</div>--}}
+                            {{--<div class="caption">--}}
+                            {{--<span class="name text-center"></span>--}}
+                            {{--<input type="hidden" name="image" value="" id="field">--}}
+                            {{--<p>--}}
+                            {{--<a id="select-image" class="btn btn-primary"--}}
+                            {{--onclick="mediaManager('field');"><i class="fa fa-picture-o"></i>&nbsp;&nbsp;Select</a>--}}
+                            {{--<a class="btn btn-danger"--}}
+                            {{--onclick="$('#thumb').attr('src', {{url('/') . '/admin/no_photo.png'}}); $('#field').attr('value', ''); $(this).parent().parent().find('.name').html('');"><i--}}
+                            {{--class="fa fa-times-circle"></i>&nbsp;&nbsp;Remove </a>--}}
+                            {{--</p>--}}
+                            {{--</div>--}}
+                            {{--</div>--}}
+                            {{--</div>--}}
+                            {{--</div>--}}
                             <div class="form-group{{ $errors->has('image') ? ' has-error' : '' }}">
                                 <label for="" class="col-sm-3 control-label">
                                     Image
@@ -147,11 +170,6 @@
                                                     <strong>{{ $errors->first('image') }}</strong>
                                                 </span>
                                             @endif
-                                            {{--<input type="hidden" name="menu_photo" value="" id="field" />
-                                            <p>
-                                                <a id="select-image" class="btn btn-primary" onclick="mediaManager('field');"><i class="fa fa-picture-o"></i>&nbsp;&nbsp;Select</a>
-                                                <a class="btn btn-danger" onclick="$('#thumb').attr('src', 'https://demo.tastyigniter.com/assets/images/data/no_photo.png'); $('#field').attr('value', ''); $(this).parent().parent().find('.name').html('');"><i class="fa fa-times-circle"></i>&nbsp;&nbsp;Remove </a>
-                                            </p>--}}
                                         </div>
                                     </div>
                                 </div>
@@ -180,4 +198,26 @@
     <script type="text/javascript">
         $('#restaurant ').select2();
     </script>
+    <div id="media-manager" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+         style="display: none;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Image Manager</h4></div>
+                <div class="modal-body wrap-none">
+                    <iframe name="media_manager"
+                            src="https://demo.tastyigniter.com/admin/image_manager?popup=iframe&amp;field_id=field&amp;sub_folder="
+                            width="100%" height="869px" frameborder="0" style="height: 558px;"></iframe>
+                    <script>
+                        var ifrm = document.getElementById('media-manager');
+                        ifrm = (ifrm.contentWindow) ? ifrm.contentWindow : (ifrm.contentDocument.document) ? ifrm.contentDocument.document : ifrm.contentDocument;
+                        ifrm.document.open();
+                        ifrm.document.write('Hello World!');
+                        ifrm.document.close();
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection

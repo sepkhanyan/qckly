@@ -110,7 +110,6 @@
                             </div>
                         </div>
                         <div id="location" class="tab-pane row wrap-all">
-                            <div id="map"></div>
                             <h4 class="tab-pane-title">Basic</h4>
                             <div class="form-group{{ $errors->has('category') ? ' has-error' : '' }}">
                                 <label for="" class="col-sm-3 control-label">Category</label>
@@ -279,6 +278,7 @@
                                 </div>
                             </div>
                             <br/>
+                            <div id="map"></div>
                             {{--<div>--}}
                             {{--<div id="map" style="width:500px;height:500px;background:yellow"></div>--}}
                             {{--<script type="text/javascript">--}}
@@ -745,26 +745,6 @@
             </div>
         </div>
     </div>
-    <script>
-        // Initialize and add the map
-        function initMap() {
-            // The location of Uluru
-            var uluru = {lat: -25.344, lng: 131.036};
-            // The map, centered at Uluru
-            var map = new google.maps.Map(
-                document.getElementById('map'), {zoom: 4, center: uluru});
-            // The marker, positioned at Uluru
-            var marker = new google.maps.Marker({position: uluru, map: map});
-        }
-    </script>
-    <!--Load the API from the specified URL
-    * The async attribute allows the browser to render the page while the API loads
-    * The key parameter will contain your own API key (which is not needed for this tutorial)
-    * The callback parameter executes the initMap() function
-    -->
-    <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAf3Mvs_VUn36k8PLKIaSKY9QW17cg_18k&callback=initMap">
-    </script>
     <script>
         $('input[name=\'table\']').select2({
             placeholder: 'Start typing...',

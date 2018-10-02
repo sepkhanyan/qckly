@@ -96,10 +96,6 @@
                                                href="{{ url('/customer/edit/' . $customer->id )}}">
                                                 <i class="fa fa-pencil"></i>
                                             </a>&nbsp;&nbsp;
-                                            <a class="btn btn-info " title="">
-                                                <i class="fa fa-user"></i>&nbsp;
-                                                &nbsp;<i class="fa fa-arrow-right"></i>
-                                            </a>
                                         </td>
                                         <td>{{$customer->username}}</td>
                                         <td>{{$customer->email}}</td>
