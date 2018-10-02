@@ -1,4 +1,4 @@
-@extends('home')
+@extends('home', ['title' => 'Orders'])
 @section('content')
     <div id="page-wrapper">
         <div class="page-header clearfix">
@@ -43,7 +43,7 @@
             <div class="col-md-12">
                 <div class="panel panel-default panel-table">
                     <div class="panel-heading">
-                        <h2>Order List</h2>
+                        <h3 class="panel-title">Order List</h3>
                         <div class="pull-right">
                             <button class="btn btn-filter btn-xs">
                                 <i class="fa fa-filter"></i>

@@ -5,7 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Administrator Panel</title>
+    <title>
+        @isset($title)
+            {{ $title }} |
+        @endisset Administrator Panel | {{ config('app.name') }}
+    </title>
+    <link rel="icon" href="{{ asset('admin/favicon.ico') }}"/>
 
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -46,12 +51,12 @@
     <link href="{{ asset('js/datepicker/bootstrap-timepicker.css') }}" rel="stylesheet">
     <script>
         var js_site_url = function (str) {
-            var strTmp = "qckly.loc/" + str;
+            var strTmp = "/" + str;
             return strTmp;
         };
 
         var js_base_url = function (str) {
-            var strTmp = "qckly.loc/" + str;
+            var strTmp = "/" + str;
             return strTmp;
         };
 
@@ -68,6 +73,13 @@
             $("#list-form td:contains('Disabled')").addClass('red');
         });
     </script>
+    <style>
+        /* Set the size of the div element that contains the map */
+        #map {
+            height: 400px; /* The height is 400 pixels */
+            width: 50%; /* The width is the width of the web page */
+        }
+    </style>
     <style>
 
         /* The container */
@@ -144,16 +156,16 @@
     </style>
 
 </head>
-<body >
+<body>
 <div id="wrapper" class="">
     <nav class="navbar navbar-static-top navbar-top" role="navigation" style="margin-bottom:0 ">
         <div class="navbar-header ">
             <div class="navbar-brand">
                 <div class="navbar-logo col-xs-3">
                     {{--<img class="logo-image" alt="Qckly" title="Qckly"--}}
-                         {{--src="{{url('/') . '/admin/qckly_logo.png'}}"/>--}}
+                    {{--src="{{url('/') . '/admin/qckly_logo.png'}}"/>--}}
                 </div>
-                <div class="navbar-logo col-xs-9" >
+                <div class="navbar-logo col-xs-9">
                     <img class="logo-image" alt="Qckly" title="Qckly"
                          src="{{url('/') . '/admin/qckly_logo.png'}}"/>
                 </div>
@@ -174,6 +186,44 @@
                             <span class="content">Dashboard</span>
                         </a>
                     </li>
+                    @if(Auth::user()->admin == 1)
+                        <li>
+                            <a class="area">
+                                <i class="fa fa-map-marker fa-fw"></i>
+                                <span class="content ">Areas</span>
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level collapse">
+                                <li>
+                                    <a href="{{ url('/areas') }}" class=menus"">
+                                        <i class="fa fa-square-o fa-fw "></i>
+                                        Areas
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a class="restaurant">
+                                <i class="fa fa-glass fa-fw"></i>
+                                <span class="content">Restaurants</span>
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level collapse">
+                                <li>
+                                    <a href="{{ url('/restaurants') }}" class="locations">
+                                        <i class="fa fa-square-o fa-fw"></i>
+                                        Restaurants
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('/restaurant_categories') }}" class="locations">
+                                        <i class="fa fa-square-o fa-fw"></i>
+                                        Categories
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    @endif
                     <li>
                         <a class="kitchen">
                             <i class="fa fa-cutlery fa-fw"></i>
@@ -275,44 +325,8 @@
                     </li>
                     @if(Auth::user()->admin == 1)
                         <li>
-                            <a class="kitchen">
-                                <i class="fa fa-map-marker fa-fw"></i>
-                                <span class="content ">Areas</span>
-                                <span class="fa arrow"></span>
-                            </a>
-                            <ul class="nav nav-second-level collapse">
-                                <li>
-                                    <a href="{{ url('/areas') }}" class=menus"">
-                                        <i class="fa fa-square-o fa-fw "></i>
-                                        Areas
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a class="restaurant">
-                                <i class="fa fa-map-marker fa-fw"></i>
-                                <span class="content">Restaurants</span>
-                                <span class="fa arrow"></span>
-                            </a>
-                            <ul class="nav nav-second-level collapse">
-                                <li>
-                                    <a href="{{ url('/restaurants') }}" class="locations">
-                                        <i class="fa fa-square-o fa-fw"></i>
-                                        Restaurants
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ url('/restaurant_categories') }}" class="locations">
-                                        <i class="fa fa-square-o fa-fw"></i>
-                                        Categories
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
                             <a class="users">
-                                <i class="fa fa-user fa-fw"></i>
+                                <i class="fa fa-users fa-fw"></i>
                                 <span class="content">Users</span>
                                 <span class="fa arrow"></span>
                             </a>
@@ -378,34 +392,34 @@
                             </a>
                             <ul class="nav nav-second-level collapse">
                                 <li>
-                                    <a href="{{url('/languages')}}" class="languages">
+                                    <a href="#" class="languages">
                                         <i class="fa fa-square-o fa-fw"></i>
                                         Languages
                                     </a>
                                 </li>
                                 {{--<li>--}}
-                                    {{--<a href="#" class="currencies">--}}
-                                        {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                                        {{--Currencies--}}
-                                    {{--</a>--}}
+                                {{--<a href="#" class="currencies">--}}
+                                {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                                {{--Currencies--}}
+                                {{--</a>--}}
                                 {{--</li>--}}
                                 {{--<li>--}}
-                                    {{--<a href="#" class="countries">--}}
-                                        {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                                        {{--Countries--}}
-                                    {{--</a>--}}
+                                {{--<a href="#" class="countries">--}}
+                                {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                                {{--Countries--}}
+                                {{--</a>--}}
                                 {{--</li>--}}
                                 {{--<li>--}}
-                                    {{--<a href="#" class="security_questions">--}}
-                                        {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                                        {{--Security Questions--}}
-                                    {{--</a>--}}
+                                {{--<a href="#" class="security_questions">--}}
+                                {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                                {{--Security Questions--}}
+                                {{--</a>--}}
                                 {{--</li>--}}
                                 {{--<li>--}}
-                                    {{--<a href="#" class="ratings">--}}
-                                        {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                                        {{--Ratings--}}
-                                    {{--</a>--}}
+                                {{--<a href="#" class="ratings">--}}
+                                {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                                {{--Ratings--}}
+                                {{--</a>--}}
                                 {{--</li>--}}
                                 @if(Auth::user()->admin == 1)
                                     <li>

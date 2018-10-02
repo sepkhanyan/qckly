@@ -1,4 +1,4 @@
-@extends('home')
+@extends('home', ['title' => 'Menu: Categories'])
 @section('content')
     <div id="page-wrapper">
         @if(Auth::user()->admin == 1)

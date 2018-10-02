@@ -1,4 +1,4 @@
-@extends('home')
+@extends('home', ['title' => 'Restaurant: ' . $restaurant->name_en])
 @section('content')
     <div id="page-wrapper">
         <div class="page-header clearfix">

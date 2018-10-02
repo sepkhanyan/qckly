@@ -1,4 +1,4 @@
-@extends('home')
+@extends('home', ['title' => 'Collection: ' . $collection->name_en])
 @section('content')
     <div id="page-wrapper">
         <div class="page-header clearfix">

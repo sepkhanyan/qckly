@@ -1,4 +1,4 @@
-@extends('home')
+@extends('home', ['title' => 'Order: ' . $order->order_id])
 @section('content')
     <div id="page-wrapper" style="min-height: 261px; height: 100%;">
         <div class="page-header clearfix">

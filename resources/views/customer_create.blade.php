@@ -1,4 +1,4 @@
-@extends('home')
+@extends('home', ['title' => 'Customer: New'])
 @section('content')
     <div id="page-wrapper">
         <div class="page-header clearfix">

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\RestaurantCategory;
 use App\Restaurant;
 use Illuminate\Support\Facades\File;
+use Auth;
 
 class RestaurantCategoriesController extends Controller
 {

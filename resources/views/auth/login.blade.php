@@ -4,8 +4,12 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
+            <div align="center">
+                <img class="logo-image" alt="Qckly" title="Qckly"
+                      src="{{url('/') . '/admin/qckly_logo.png'}}" width="550px" height="200px"/>
+            </div>
+            <div class="card" >
+                {{--<div class="card-header">{{ __('Login') }}</div>--}}
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('login') }}" aria-label="{{ __('Login') }}">
@@ -39,15 +43,15 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> {{ __('Remember Me') }}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
+                        {{--<div class="form-group row">--}}
+                            {{--<div class="col-md-6 offset-md-4">--}}
+                                {{--<div class="checkbox">--}}
+                                    {{--<label>--}}
+                                        {{--<input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> {{ __('Remember Me') }}--}}
+                                    {{--</label>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
 
                         <div class="form-group row mb-0">
                             <div class="col-md-8 offset-md-4">
@@ -55,9 +59,9 @@
                                     {{ __('Login') }}
                                 </button>
 
-                                <a class="btn btn-link" href="{{ route('password.request') }}">
-                                    {{ __('Forgot Your Password?') }}
-                                </a>
+                                {{--<a class="btn btn-link" href="{{ route('password.request') }}">--}}
+                                    {{--{{ __('Forgot Your Password?') }}--}}
+                                {{--</a>--}}
                             </div>
                         </div>
                     </form>

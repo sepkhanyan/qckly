@@ -1,4 +1,4 @@
-@extends('home')
+@extends('home', ['title' => 'Menu: Category: ' . $category->name_en])
 @section('content')
     <div id="page-wrapper">
         <div class="page-header clearfix">
