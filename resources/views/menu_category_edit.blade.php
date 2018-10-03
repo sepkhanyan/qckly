@@ -81,25 +81,59 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="" class="col-sm-3 control-label">
-                                    Image
-                                    <span class="help-block">Select a file to update category image, otherwise leave blank.</span>
-                                </label>
-                                <div class="col-sm-5">
-                                    <div class="thumbnail imagebox imagebox-sm" id="selectImage">
-                                        <div class="preview">
-                                            <img src="https://demo.tastyigniter.com/assets/images/data/no_photo.png"
-                                                 class="thumb img-responsive" id="thumb">
-                                        </div>
-                                        <div class="caption">
-                                            <span class="name text-center"></span>
-                                            <input type="file" name="image" class="form-control">
+                            {{--<div class="form-group">--}}
+                                {{--<label for="" class="col-sm-3 control-label">--}}
+                                    {{--Image--}}
+                                    {{--<span class="help-block">Select a file to update category image, otherwise leave blank.</span>--}}
+                                {{--</label>--}}
+                                {{--<div class="col-sm-5">--}}
+                                    {{--<div class="thumbnail imagebox imagebox-sm" id="selectImage">--}}
+                                        {{--<div class="preview">--}}
+                                            {{--<img src="https://demo.tastyigniter.com/assets/images/data/no_photo.png"--}}
+                                                 {{--class="thumb img-responsive" id="thumb">--}}
+                                        {{--</div>--}}
+                                        {{--<div class="caption">--}}
+                                            {{--<span class="name text-center"></span>--}}
+                                            {{--<input type="file" name="image" class="form-control">--}}
                                             {{--<input type="hidden" name="image" value="" id="field">--}}
                                             {{--<p>--}}
                                             {{--<a id="select-image" class="btn btn-primary" onclick="mediaManager('field');"><i class="fa fa-picture-o"></i></a>--}}
                                             {{--<a class="btn btn-danger" onclick="$('#thumb').attr('src', 'https://demo.tastyigniter.com/assets/images/data/no_photo.png'); $('#field').attr('value', ''); $(this).parent().parent().find('.name').html('');"><i class="fa fa-times-circle"></i></a>--}}
                                             {{--</p>--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                            <div class="form-group">
+                                <label for="input-image" class="col-sm-3 control-label">
+                                    Image
+                                    <span class="help-block">Select a file to update category image, otherwise leave blank.</span>
+                                </label>
+                                <div class="col-sm-5">
+                                    <div class="thumbnail imagebox">
+                                        <div class="preview">
+                                            @if(isset($category->image))
+                                                <img src="{{url('/') . '/images/' . $category->image}}"
+                                                     class="thumb img-responsive" id="thumb">
+                                            @else
+                                                <img src="{{url('/') . '/admin/no_photo.png'}}"
+                                                     class="thumb img-responsive" id="thumb">
+                                            @endif
+                                        </div>
+                                        <div class="caption">
+                                            <span class="name text-center"></span>
+                                            <p>
+                                                <label class=" btn btn-primary btn-file ">
+                                                    <i class="fa fa-picture-o"></i> Select <input type="file"
+                                                                                                  name="image"
+                                                                                                  style="display: none;"
+                                                                                                  onchange="readURL(this);">
+
+                                                </label>
+                                                <label class="btn btn-danger "
+                                                       onclick="removeFile()">
+                                                    <i class="fa fa-times-circle"></i>&nbsp;&nbsp;Remove </label>
+                                            </p>
                                         </div>
                                     </div>
                                 </div>

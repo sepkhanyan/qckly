@@ -55,11 +55,37 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="input-image" class="col-sm-3 control-label">Image</label>
+                                <label for="input-image" class="col-sm-3 control-label">
+                                    Image
+                                    <span class="help-block">Select a file to update category image, otherwise leave blank.</span>
+                                </label>
                                 <div class="col-sm-5">
-                                    <label class=" btn btn-default btn-file col-sm-3">
-                                        Browse <input type="file" name="image" style="display: none;">
-                                    </label>
+                                    <div class="thumbnail imagebox">
+                                        <div class="preview">
+                                            @if(isset(Auth::user()->image))
+                                                <img src="{{url('/') . '/images/' . Auth::user()->image}}"
+                                                     class="thumb img-responsive" id="thumb">
+                                            @else
+                                                <img src="{{url('/') . '/admin/no_photo.png'}}"
+                                                     class="thumb img-responsive" id="thumb">
+                                            @endif
+                                        </div>
+                                        <div class="caption">
+                                            <span class="name text-center"></span>
+                                            <p>
+                                                <label class=" btn btn-primary btn-file ">
+                                                    <i class="fa fa-picture-o"></i> Select <input type="file"
+                                                                                                  name="image"
+                                                                                                  style="display: none;"
+                                                                                                  onchange="readURL(this);">
+
+                                                </label>
+                                                <label class="btn btn-danger "
+                                                       onclick="removeFile()">
+                                                    <i class="fa fa-times-circle"></i>&nbsp;&nbsp;Remove </label>
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">

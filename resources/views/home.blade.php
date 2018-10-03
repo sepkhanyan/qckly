@@ -51,12 +51,12 @@
     <link href="{{ asset('js/datepicker/bootstrap-timepicker.css') }}" rel="stylesheet">
     <script>
         var js_site_url = function (str) {
-            var strTmp = "/" + str;
+            var strTmp = "{{url('/')}}" + str;
             return strTmp;
         };
 
         var js_base_url = function (str) {
-            var strTmp = "/" + str;
+            var strTmp = "{{url('/')}}" + str;
             return strTmp;
         };
 
@@ -154,7 +154,12 @@
             color: orange;
         }
     </style>
-
+    <style>
+        article, aside, figure, footer, header, hgroup,
+        menu, nav, section {
+            display: block;
+        }
+    </style>
 </head>
 <body>
 <div id="wrapper" class="">
@@ -432,13 +437,13 @@
                             </ul>
                         </li>
                     @endif
-                    <li>
-                        <a class="system">
-                            <i class="fa fa-cog fa-fw"></i>
-                            <span class="content">System</span>
-                            <span class="fa arrow"></span>
-                        </a>
-                        <ul class="nav nav-second-level collapse">
+                    {{--<li>--}}
+                        {{--<a class="system">--}}
+                            {{--<i class="fa fa-cog fa-fw"></i>--}}
+                            {{--<span class="content">System</span>--}}
+                            {{--<span class="fa arrow"></span>--}}
+                        {{--</a>--}}
+                        {{--<ul class="nav nav-second-level collapse">--}}
                             {{--<li>--}}
                             {{--<a href="#" class="settings">--}}
                             {{--<i class="fa fa-square-o fa-fw"></i>--}}
@@ -451,23 +456,23 @@
                             {{--Permissions--}}
                             {{--</a>--}}
                             {{--</li>--}}
-                            <li>
-                                <a class="tools">
-                                    <i class="fa fa-square-o fa-fw"></i>
-                                    Tools
-                                    <span class="fa arrow"></span>
-                                </a>
-                                <ul class="nav nav-third-level collapse">
-                                    <li>
-                                        <a href="#" class="image_manager">
-                                            <i class="fa fa-square-o fa-fw"></i>
-                                            Image Manager
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
+                            {{--<li>--}}
+                                {{--<a class="tools">--}}
+                                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                                    {{--Tools--}}
+                                    {{--<span class="fa arrow"></span>--}}
+                                {{--</a>--}}
+                                {{--<ul class="nav nav-third-level collapse">--}}
+                                    {{--<li>--}}
+                                        {{--<a href="#" class="image_manager">--}}
+                                            {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                                            {{--Image Manager--}}
+                                        {{--</a>--}}
+                                    {{--</li>--}}
+                                {{--</ul>--}}
+                            {{--</li>--}}
+                        {{--</ul>--}}
+                    {{--</li>--}}
                     <li>
                         <a class="hidden-xs sidebar-toggle">
                             <i class="fa fa-chevron-circle-left fa-fw"></i>
@@ -630,6 +635,25 @@
     function saveClose() {
         $('#edit-form').append('<input type="hidden" name="save_close" value="1" />');
         $('#edit-form').submit();
+    }
+</script>
+<script type="text/javascript">
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#thumb')
+                    .attr('src', e.target.result);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function removeFile() {
+        $('#thumb')
+            .attr('src', '/admin/no_photo.png');
     }
 </script>
 <script>

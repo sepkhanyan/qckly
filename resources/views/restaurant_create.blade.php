@@ -240,7 +240,7 @@
                                            value=""/>
                                 </div>
                             </div>
-                             <div class="form-group{{ $errors->has('postcode') ? ' has-error' : '' }}">
+                            <div class="form-group{{ $errors->has('postcode') ? ' has-error' : '' }}">
                                 <label for="input-postcode" class="col-sm-3 control-label">Postcode</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="postcode" id="input-postcode" class="form-control"
@@ -349,55 +349,55 @@
                                 </div>
                             </div>
                             {{--<div class="form-group">--}}
-                            {{--<label for="input-slug" class="col-sm-3 control-label">--}}
-                            {{--Permalink Slug--}}
-                            {{--<span class="help-block">Use ONLY alpha-numeric lowercase characters, underscores or dashes and make sure it is unique GLOBALLY.</span>--}}
+                            {{--<label for="" class="col-sm-3 control-label">Image--}}
+                            {{--<span class="help-block">Select an image to use as the location logo, this image is displayed in the restaurant list.</span>--}}
                             {{--</label>--}}
                             {{--<div class="col-sm-5">--}}
-                            {{--<div class="input-group">--}}
-                            {{--<span class="input-group-addon text-sm">https://demo.tastyigniter.com/local/</span>--}}
-                            {{--<input type="hidden" name="permalink[permalink_id]" value="0"/>--}}
-                            {{--<input type="text" name="permalink[slug]" id="input-slug" class="form-control" value=""/>--}}
+                            {{--<div class="thumbnail imagebox" id="selectImage">--}}
+                            {{--<div class="preview">--}}
+                            {{--<img src="https://demo.tastyigniter.com/assets/images/data/no_photo.png"--}}
+                            {{--class="thumb img-responsive" id="thumb">--}}
+                            {{--</div>--}}
+                            {{--<div class="caption">--}}
+                            {{--<span class="name text-center"></span>--}}
+                            {{--<input type="hidden" name="location_image" value="" id="field">--}}
+                            {{--<p>--}}
+                            {{--<a id="select-image" class="btn btn-primary" onclick="mediaManager('field');"><i class="fa fa-picture-o"></i>&nbsp;&nbsp;Select</a>--}}
+                            {{--<a class="btn btn-danger" onclick="$('#thumb').attr('src', 'https://demo.tastyigniter.com/assets/images/data/no_photo.png'); $('#field').attr('value', ''); $(this).parent().parent().find('.name').html('');"><i class="fa fa-times-circle"></i>&nbsp;&nbsp;Remove </a>--}}
+                            {{--</p>--}}
+                            {{--</div>--}}
                             {{--</div>--}}
                             {{--</div>--}}
                             {{--</div>--}}
                             <div class="form-group">
-                                <label for="" class="col-sm-3 control-label">Image
-                                    <span class="help-block">Select an image to use as the location logo, this image is displayed in the restaurant list.</span>
+                                <label for="input-image" class="col-sm-3 control-label">
+                                    Image
+                                    <span class="help-block">Select an image to use as the restaurant logo, this image is displayed in the restaurant list.</span>
                                 </label>
                                 <div class="col-sm-5">
-                                    <div class="thumbnail imagebox" id="selectImage">
+                                    <div class="thumbnail imagebox">
                                         <div class="preview">
-                                            <img src="https://demo.tastyigniter.com/assets/images/data/no_photo.png"
+                                            <img src="{{url('/') . '/admin/no_photo.png'}}"
                                                  class="thumb img-responsive" id="thumb">
                                         </div>
                                         <div class="caption">
                                             <span class="name text-center"></span>
-                                            {{--<input type="hidden" name="location_image" value="" id="field">--}}
-                                            <input type="file" name="image" class="form-control">
-                                            {{--<p>
-                                                <a id="select-image" class="btn btn-primary" onclick="mediaManager('field');"><i class="fa fa-picture-o"></i>&nbsp;&nbsp;Select</a>
-                                                <a class="btn btn-danger" onclick="$('#thumb').attr('src', 'https://demo.tastyigniter.com/assets/images/data/no_photo.png'); $('#field').attr('value', ''); $(this).parent().parent().find('.name').html('');"><i class="fa fa-times-circle"></i>&nbsp;&nbsp;Remove </a>
-                                            </p>--}}
+                                            <p>
+                                                <label class=" btn btn-primary btn-file ">
+                                                    <i class="fa fa-picture-o"></i> Select <input type="file"
+                                                                                                  name="image"
+                                                                                                  style="display: none;"
+                                                                                                  onchange="readURL(this);">
+
+                                                </label>
+                                                <label class="btn btn-danger "
+                                                       onclick="removeFile()">
+                                                    <i class="fa fa-times-circle"></i>&nbsp;&nbsp;Remove </label>
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            {{--<div class="form-group">--}}
-                            {{--<label for="input-status" class="col-sm-3 control-label">Status</label>--}}
-                            {{--<div class="col-sm-5">--}}
-                            {{--<div class="btn-group btn-group-switch" data-toggle="buttons">--}}
-                            {{--<label class="btn btn-danger">--}}
-                            {{--<input type="radio" name="status" value="0">--}}
-                            {{--Disabled--}}
-                            {{--</label>--}}
-                            {{--<label class="btn btn-success active">--}}
-                            {{--<input type="radio" name="status" value="1" checked="checked">--}}
-                            {{--Enabled--}}
-                            {{--</label>--}}
-                            {{--</div>--}}
-                            {{--</div>--}}
-                            {{--</div>--}}
                         </div>
 
                         <div id="opening-hours" class="tab-pane row wrap-all">
