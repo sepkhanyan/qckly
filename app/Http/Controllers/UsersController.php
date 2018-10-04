@@ -180,7 +180,6 @@ class UsersController extends Controller
 //                ]);
 //            }
             $client = User::where('mobile_number', $mobile)
-                ->where('country_code', $country_code)
                 ->where('group_id', 0)
                 ->first();
             $standardNumSets = array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
@@ -272,8 +271,7 @@ class UsersController extends Controller
             $country_code = $request->input('country_code');
             $mobile = $request->input('mobile_number');
             $smsCode = User::where('otp', $otp)
-                ->where('mobile_number', $mobile)
-                ->where('country_code', $country_code)->first();
+                ->where('mobile_number', $mobile)->first();
             ///=========create any token =============//
             if ($smsCode) {
                 if ($smsCode->api_token != '') {
@@ -343,7 +341,6 @@ class UsersController extends Controller
             $country_code = $request->input('country_code');
             $mobile = $request->input('mobile_number');
             $client = User::where('mobile_number', $mobile)
-                ->where('country_code', $country_code)
                 ->where('group_id', 0)
                 ->first();
             $standardNumSets = array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
