@@ -242,9 +242,9 @@ class OrdersController extends Controller
 
                     $cart = [
                         'cart_id' => $order->cart->id,
-                        'order_area' => $order->cart->delivery_order_area,
-                        'order_date' => date("j M Y", strtotime($order->cart->delivery_order_date)),
-                        'order_time' => date("g:i A", strtotime($order->cart->delivery_order_time)),
+                        'delivery_area' => $order->cart->delivery_order_area,
+                        'delivery_date' => date("j M Y", strtotime($order->cart->delivery_order_date)),
+                        'delivery_time' => date("g:i A", strtotime($order->cart->delivery_order_time)),
                         'delivery_address_id' => $address_id,
                         'delivery_address' => $address,
                         'collections' => $collections,

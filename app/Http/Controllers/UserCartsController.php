@@ -465,9 +465,9 @@ class UserCartsController extends Controller
                     }
                     $arr = [
                         'cart_id' => $cart->id,
-                        'order_area' => $cart->delivery_order_area,
-                        'order_date' => $cart->delivery_order_date,
-                        'order_time' => date("g:i a", strtotime($cart->delivery_order_time)),
+                        'delivery_area' => $cart->delivery_order_area,
+                        'delivery_date' => $cart->delivery_order_date,
+                        'delivery_time' => date("g:i a", strtotime($cart->delivery_order_time)),
                         'delivery_address_id' => $address_id,
                         'delivery_address' => $address,
                         'collections' => $collections,
