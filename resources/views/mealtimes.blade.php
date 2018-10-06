@@ -32,7 +32,7 @@
                             <div class="filter-bar">
                                 <div class="form-inline">
                                     <div class="row">
-                                        <div class="col-md-8 pull-left">
+                                        <div class="col-md-3 pull-right text-right">
                                             <div class="form-group">
                                                 <input type="text" name="mealtime_search" class="form-control input-sm"
                                                        value="" placeholder="Search mealtime."/>&nbsp;&nbsp;&nbsp;

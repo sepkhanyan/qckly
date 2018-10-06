@@ -49,13 +49,6 @@
                                                     @endforeach
                                                 </select>&nbsp;
                                             </div>
-                                            <div class="form-group">
-                                                <select name="customer_status" class="form-control input-sm">
-                                                    <option value="">View all status</option>
-                                                    <option value="1">Enabled</option>
-                                                    <option value="0">Disabled</option>
-                                                </select>
-                                            </div>
                                             <a class="btn btn-grey" onclick="filterList();" title="Filter">
                                                 <i class="fa fa-filter"></i>
                                             </a>&nbsp;

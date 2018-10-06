@@ -1,4 +1,4 @@
-@extends('home', ['title' => 'Language: New'])
+@extends('home', ['title' => 'Language: ' . $language->name])
 @section('content')
     <div id="page-wrapper">
         <div class="page-header clearfix">
