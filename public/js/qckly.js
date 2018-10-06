@@ -99,6 +99,27 @@ $(document).ready(function () {
     });
 
 
+    $('#delete_language').click(function () {
+        window.checkValues = $('input[name=delete]:checked').map(function () {
+            return $(this).val();
+        }).get();
+        console.log(checkValues);
+
+
+        $.ajax({
+
+            method: "POST",
+            url: "/language/delete",
+            data: {id: checkValues, _token: token},
+            success: function (data) {
+
+                window.location.reload();
+            }
+
+        });
+
+    });
+
     $('#delete_review').click(function () {
         window.checkValues = $('input[name=delete]:checked').map(function () {
             return $(this).val();

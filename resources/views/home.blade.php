@@ -397,7 +397,7 @@
                             </a>
                             <ul class="nav nav-second-level collapse">
                                 <li>
-                                    <a href="#" class="languages">
+                                    <a href="{{url('/languages')}}" class="languages">
                                         <i class="fa fa-square-o fa-fw"></i>
                                         Languages
                                     </a>
@@ -438,40 +438,40 @@
                         </li>
                     @endif
                     {{--<li>--}}
-                        {{--<a class="system">--}}
-                            {{--<i class="fa fa-cog fa-fw"></i>--}}
-                            {{--<span class="content">System</span>--}}
-                            {{--<span class="fa arrow"></span>--}}
-                        {{--</a>--}}
-                        {{--<ul class="nav nav-second-level collapse">--}}
-                            {{--<li>--}}
-                            {{--<a href="#" class="settings">--}}
-                            {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                            {{--Settings--}}
-                            {{--</a>--}}
-                            {{--</li>--}}
-                            {{--<li>--}}
-                            {{--<a href="#" class="permissions">--}}
-                            {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                            {{--Permissions--}}
-                            {{--</a>--}}
-                            {{--</li>--}}
-                            {{--<li>--}}
-                                {{--<a class="tools">--}}
-                                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                                    {{--Tools--}}
-                                    {{--<span class="fa arrow"></span>--}}
-                                {{--</a>--}}
-                                {{--<ul class="nav nav-third-level collapse">--}}
-                                    {{--<li>--}}
-                                        {{--<a href="#" class="image_manager">--}}
-                                            {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                                            {{--Image Manager--}}
-                                        {{--</a>--}}
-                                    {{--</li>--}}
-                                {{--</ul>--}}
-                            {{--</li>--}}
-                        {{--</ul>--}}
+                    {{--<a class="system">--}}
+                    {{--<i class="fa fa-cog fa-fw"></i>--}}
+                    {{--<span class="content">System</span>--}}
+                    {{--<span class="fa arrow"></span>--}}
+                    {{--</a>--}}
+                    {{--<ul class="nav nav-second-level collapse">--}}
+                    {{--<li>--}}
+                    {{--<a href="#" class="settings">--}}
+                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                    {{--Settings--}}
+                    {{--</a>--}}
+                    {{--</li>--}}
+                    {{--<li>--}}
+                    {{--<a href="#" class="permissions">--}}
+                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                    {{--Permissions--}}
+                    {{--</a>--}}
+                    {{--</li>--}}
+                    {{--<li>--}}
+                    {{--<a class="tools">--}}
+                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                    {{--Tools--}}
+                    {{--<span class="fa arrow"></span>--}}
+                    {{--</a>--}}
+                    {{--<ul class="nav nav-third-level collapse">--}}
+                    {{--<li>--}}
+                    {{--<a href="#" class="image_manager">--}}
+                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                    {{--Image Manager--}}
+                    {{--</a>--}}
+                    {{--</li>--}}
+                    {{--</ul>--}}
+                    {{--</li>--}}
+                    {{--</ul>--}}
                     {{--</li>--}}
                     <li>
                         <a class="hidden-xs sidebar-toggle">
@@ -635,25 +635,6 @@
     function saveClose() {
         $('#edit-form').append('<input type="hidden" name="save_close" value="1" />');
         $('#edit-form').submit();
-    }
-</script>
-<script type="text/javascript">
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                $('#thumb')
-                    .attr('src', e.target.result);
-            };
-
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    function removeFile() {
-        $('#thumb')
-            .attr('src', '/admin/no_photo.png');
     }
 </script>
 <script>

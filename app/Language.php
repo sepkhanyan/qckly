@@ -14,8 +14,6 @@ class Language extends Model
         'name',
         'image',
         'idiom',
-        'status',
-        'can_delete'
     ];
 
 }
