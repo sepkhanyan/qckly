@@ -19,6 +19,11 @@ class Category extends Model
     ];
 
 
+    public function restaurant()
+    {
+        return $this->belongsTo('App\Restaurant', 'restaurant_id');
+    }
+
     public function menu()
     {
         return $this->hasMany('App\Menu', 'category_id');
@@ -31,7 +36,7 @@ class Category extends Model
 
     public function collectionMenu()
     {
-        return $this->hasMany('App\CollectionMenu', 'menu_id');
+        return $this->hasOne('App\CollectionMenu', 'menu_id');
     }
 
     public function collectionItem()

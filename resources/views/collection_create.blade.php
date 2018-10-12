@@ -22,19 +22,24 @@
                     <ul id="nav-tabs" class="nav nav-tabs">
                         <li class="active">
                             <a href="#general" data-toggle="tab">
-                                Collection
+                                Collection Details
                             </a>
+                        </li>
+                        <li>
+                            <a href="#menus" data-toggle="tab">Collection Items</a>
                         </li>
                     </ul>
                 </div>
-                <div class="tab-content">
-                    <div id="general" class="tab-pane row wrap-all active">
-                        <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="GET"
-                              action="{{ url('/collection/store') }}">
-                            {{ csrf_field() }}
+                <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="GET"
+                      action="{{ url('/collection/store') }}">
+                    {{ csrf_field() }}
+                    <div class="tab-content">
+                        <div id="general" class="tab-pane row wrap-all active">
                             @if(Auth::user()->admin == 1)
                                 <input type="hidden" name="restaurant" value="{{$restaurant->id}}">
                             @endif
+                            <h4 class="tab-pane-title">{{$collection_category->name_en}}</h4>
+                            <input type="hidden" name="category" value="{{$collection_category->id}}">
                             <div class="form-group {{ $errors->has('name_en') ? ' has-error' : '' }}">
                                 <label for="input_name_en" class="col-sm-3 control-label">Name En</label>
                                 <div class="col-sm-5">
@@ -177,159 +182,230 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group{{ $errors->has('category') ? ' has-error' : '' }}">
-                                <label for="input-name" class="col-sm-3 control-label">Category</label>
-                                <div class="col-sm-5">
-                                    <select name="category" id="category" class="form-control">
-                                        <option value="">Select Category</option>
-                                        @foreach ($categories as $category)
-                                            <option value="{{$category->id}}">{{$category->name_en}}</option>
-                                        @endforeach
-                                    </select>
-                                    @if ($errors->has('category'))
-                                        <span class="help-block">
-                                            <strong>{{ $errors->first('category') }}</strong>
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-                            <div style="display: none" id="items">
-                                <div id="selection">
-                                    <div class="form-group" id="price">
-                                        <label for="input-price" class="col-sm-3 control-label">Price</label>
-                                        <div class="col-sm-5">
-                                            <div class="input-group">
-                                                <input type="text" name="collection_price" id="input-price"
-                                                       class="form-control" value="{{ old('collection_price') }}"/>
-                                                <span class="input-group-addon">
+                            @if($collection_category->id != 4)
+                                <div class="form-group{{ $errors->has('collection_price') ? ' has-error' : '' }}">
+                                    <label for="input-price" class="col-sm-3 control-label">Price</label>
+                                    <div class="col-sm-5">
+                                        <div class="input-group">
+                                            <input type="text" name="collection_price" id="input-price"
+                                                   class="form-control" value="{{old('collection_price')}}"/>
+                                            <span class="input-group-addon">
                                                     <i class="fa fa-money"></i>
                                                 </span>
-                                            </div>
+                                        </div>
+                                        @if ($errors->has('collection_price'))
+                                            <span class="help-block">
+                                            <strong>{{ $errors->first('collection_price') }}</strong>
+                                        </span>
+                                        @endif
+                                    </div>
+                                </div>
+                                @if($collection_category->id != 2)
+                                    <div class="form-group{{ $errors->has('min_quantity') ? ' has-error' : '' }}">
+                                        <label class="col-sm-3 control-label">Collection min quantity</label>
+                                        <div class="col-xs-2">
+                                            <input type="number" min="1" name="min_quantity" class="form-control"
+                                                   value="1">
+                                            @if ($errors->has('min_quantity'))
+                                                <span class="help-block">
+                                                    <strong>{{ $errors->first('min_quantity') }}</strong>
+                                                </span>
+                                            @endif
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">Quantity</label>
-                                        <div class="col-sm-5">
-                                            <div class="input-group" id="collection_qty"
-                                                 style="width: 200px; display: none">
-                                                <input type="text" name="min_quantity" class="form-control"
-                                                       placeholder="Collection min quantity"
-                                                       value="{{ old('min_quantity') }}">
-                                                <input type="text" name="max_quantity" class="form-control"
-                                                       placeholder="Collection max quantity"
-                                                       value="{{ old('max_quantity') }}">
-                                            </div>
-                                            <div class="input-group" id="persons_qty"
-                                                 style="display: none; width: 200px;">
-                                                <input type="text" name="min_serve_to_person" class="form-control"
-                                                       placeholder="Serve to person(min)"
-                                                       value="{{ old('min_serve_to_person') }}">
-                                                <input type="text" name="max_serve_to_person" class="form-control"
-                                                       placeholder="Serve to person(max)"
-                                                       value="{{ old('max_serve_to_person') }}">
-                                                <input type="text" name="persons_max_count" id="max_person"
-                                                       class="form-control" placeholder="Persons max count"
-                                                       value="{{ old('persons_max_count') }}">
-                                            </div>
+                                    <div class="form-group{{ $errors->has('max_quantity') ? ' has-error' : '' }}">
+                                        <label class="col-sm-3 control-label">Collection max quantity</label>
+                                        <div class="col-xs-2">
+                                            <input type="number" min="1" name="max_quantity" class="form-control"
+                                                   value="1">
+                                            @if ($errors->has('max_quantity'))
+                                                <span class="help-block">
+                                                    <strong>{{ $errors->first('max_quantity') }}</strong>
+                                                </span>
+                                            @endif
+
                                         </div>
                                     </div>
-                                    <div class="form-group" id="person_increase" style="display: none">
-                                        <label for="is_available" class="col-sm-3 control-label">Allow Person
-                                            Increase</label>
-                                        <div class="col-sm-5">
-                                            <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                                <label class="btn btn-danger active">
-                                                    <input type="radio" name="allow_person_increase" value="0"
-                                                           checked="checked">
-                                                    NO
-                                                </label>
-                                                <label class="btn btn-success">
-                                                    <input type="radio" name="allow_person_increase" value="1">
-                                                    YES
-                                                </label>
-                                            </div>
-                                        </div>
+                                @endif
+                                <div class="form-group{{ $errors->has('min_serve_to_person') ? ' has-error' : '' }}">
+                                    <label class="col-sm-3 control-label">Min serve to person</label>
+                                    <div class="col-xs-2">
+                                        <input type="number" min="1" name="min_serve_to_person" class="form-control"
+                                               value="1">
+                                        @if ($errors->has('min_serve_to_person'))
+                                            <span class="help-block">
+                                                <strong>{{ $errors->first('min_serve_to_person') }}</strong>
+                                            </span>
+                                        @endif
+
                                     </div>
-                                    <div class="form-group">
-                                        <label for="" class="col-sm-3 control-label">Menu Items</label>
-                                        <div class="col-sm-5">
-                                            <div class="page-header clearfix" id="all">
-                                                <div class="checkbox">
-                                                    <label>
-                                                        <input type="checkbox"
-                                                               onclick="$('input[name*=\'menu\']').prop('checked', this.checked);">
-                                                        <b>Select All</b>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            @foreach($menu_categories as $menu_category)
-                                                <label for="">
-                                                    <h4>{{$menu_category->name_en}}</h4>
-                                                    <input type="hidden" name="menu[]" value="{{$menu_category->id}}">
-                                                </label>
-                                                <span class="help-block">Needed for "Fixed quantity by person" and "Customised platter" collections.</span>
-                                                <label for="menu_min_qty">
-                                                    <input type="number" class="form-control" name="menu_min_qty[]"
-                                                           id="menu_min_qty" placeholder="Menu Min Quantity" min="1">
-                                                </label>
-                                                <label for="menu_max_qty">
-                                                    <input type="number" class="form-control" name="menu_max_qty[]"
-                                                           id="menu_max_qty" placeholder="Menu Max Quantity" min="1">
-                                                </label>
-                                                @foreach($menu_category->menu as $menu)
-                                                    <div class="checkbox" id="menu_items">
-                                                        <label>
-                                                            <input type="checkbox" name="menu_item[]"
-                                                                   value="{{$menu->id}}">
-                                                            {{$menu->name_en}}
-                                                        </label>
-                                                    </div>
-                                                @endforeach
-                                                <br>
-                                            @endforeach
+                                </div>
+                                <div class="form-group{{ $errors->has('max_serve_to_person') ? ' has-error' : '' }}">
+                                    <label class="col-sm-3 control-label">Max serve to person</label>
+                                    <div class="col-xs-2">
+                                        <input type="number" min="1" name="max_serve_to_person" class="form-control"
+                                               value="1">
+                                        @if ($errors->has('max_serve_to_person'))
+                                            <span class="help-block">
+                                                <strong>{{ $errors->first('max_serve_to_person') }}</strong>
+                                            </span>
+                                        @endif
+
+                                    </div>
+                                </div>
+                            @endif
+                            @if($collection_category->id == 2)
+                                <div class="form-group{{ $errors->has('persons_max_count') ? ' has-error' : '' }}">
+                                    <label class="col-sm-3 control-label">Persons max count</label>
+                                    <div class="col-xs-2">
+                                        <input type="number" min="1" name="persons_max_count" class="form-control"
+                                               value="1">
+                                        @if ($errors->has('persons_max_count'))
+                                            <span class="help-block">
+                                                <strong>{{ $errors->first('persons_max_count') }}</strong>
+                                            </span>
+                                        @endif
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="is_available" class="col-sm-3 control-label">Allow Person
+                                        Increase</label>
+                                    <div class="col-sm-5">
+                                        <div class="btn-group btn-group-switch" data-toggle="buttons">
+                                            <label class="btn btn-danger active">
+                                                <input type="radio" name="allow_person_increase" value="0"
+                                                       checked="checked">
+                                                NO
+                                            </label>
+                                            <label class="btn btn-success">
+                                                <input type="radio" name="allow_person_increase" value="1">
+                                                YES
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
-                                <div style="display: none" id="setup">
-                                    <div class="form-group">
-                                        <label for="input-setup" class="col-sm-3 control-label">Setup Time</label>
-                                        <div class="col-sm-5">
-                                            <div class="input-group">
-                                                <input type="text" name="setup_time" id="input-setup"
-                                                       class="form-control" value="{{ old('setup_time') }}"/>
-                                            </div>
+                                <div class="form-group{{ $errors->has('setup_time') ? ' has-error' : '' }}">
+                                    <label for="input-setup" class="col-sm-3 control-label">Setup Time</label>
+                                    <div class="col-sm-5">
+                                        <div class="input-group">
+                                            <input type="number" name="setup_time" id="input-setup"
+                                                   class="form-control" min="0" value="0"/>
+                                            @if ($errors->has('setup_time'))
+                                                <span class="help-block">
+                                                    <strong>{{ $errors->first('setup_time') }}</strong>
+                                                </span>
+                                            @endif
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="input_requirements_en" class="col-sm-3 control-label">Requirements
-                                            En</label>
-                                        <div class="col-sm-5">
+                                </div>
+                                <div class="form-group{{ $errors->has('requirements_en') ? ' has-error' : '' }}">
+                                    <label for="input_requirements_en" class="col-sm-3 control-label">Requirements
+                                        En</label>
+                                    <div class="col-sm-5">
                                             <textarea name="requirements_en" id="input_requirements_en"
                                                       class="form-control">{{ old('requirements_en') }}</textarea>
-                                        </div>
+                                        @if ($errors->has('requirements_en'))
+                                            <span class="help-block">
+                                                    <strong>{{ $errors->first('requirements_en') }}</strong>
+                                            </span>
+                                        @endif
                                     </div>
-                                    <div class="form-group">
-                                        <label for="input_requirements_ar" class="col-sm-3 control-label">Requirements
-                                            Ar</label>
-                                        <div class="col-sm-5">
+                                </div>
+                                <div class="form-group{{ $errors->has('requirements_ar') ? ' has-error' : '' }}">
+                                    <label for="input_requirements_ar" class="col-sm-3 control-label">Requirements
+                                        Ar</label>
+                                    <div class="col-sm-5">
                                             <textarea name="requirements_ar" id="input_requirements_ar"
                                                       class="form-control">{{ old('requirements_ar') }}</textarea>
+                                        @if ($errors->has('requirements_ar'))
+                                            <span class="help-block">
+                                                    <strong>{{ $errors->first('requirements_ar') }}</strong>
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="form-group{{ $errors->has('max_time') ? ' has-error' : '' }}">
+                                    <label for="input-max" class="col-sm-3 control-label">Max Time</label>
+                                    <div class="col-sm-5">
+                                        <div class="input-group">
+                                            <input type="number" name="max_time" id="input-max" class="form-control"
+                                                   min="0" value="0"/>
+                                            @if ($errors->has('max_time'))
+                                                <span class="help-block">
+                                                    <strong>{{ $errors->first('max_time') }}</strong>
+                                                </span>
+                                            @endif
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="input-max" class="col-sm-3 control-label">Max Time</label>
-                                        <div class="col-sm-5">
-                                            <div class="input-group">
-                                                <input type="text" name="max_time" id="input-max" class="form-control"
-                                                       value="{{ old('max_time') }}"/>
-                                            </div>
-                                        </div>
+                                </div>
+                            @endif
+                        </div>
+                        <div id="menus" class="tab-pane row wrap-all">
+                            <div class="form-group">
+                                <label for="" class="col-sm-3 control-label"></label>
+                                <div class="col-xs-2">
+                                    <div class="checkbox" style="font-size: medium;">
+                                        <label>
+                                            <input type="checkbox"
+                                                   onclick="$('input[name*=\'menu_item\']').prop('checked', this.checked);">
+                                            Select All
+                                        </label>
+                                        @if ($errors->has('menu_item_qty'))
+                                            <span class="help-block">
+                                                    <strong>{{ $errors->first('menu_item_qty') }}</strong>
+                                                </span>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                            @foreach($menu_categories as $menu_category)
+                                <div class="form-group">
+                                    <label for="" class="col-sm-3 control-label" style="font-size: medium;">
+                                        {{$menu_category->name_en}}
+                                        <input type="hidden" name="menu[]" value="{{$menu_category->id}}">
+                                    </label>
+                                    @if($collection_category->id == 2 || $collection_category->id == 3)
+                                        <div class="col-xs-2">
+                                            <input type="number" name="menu_min_qty[]" min="1" value=""
+                                                   class="form-control" placeholder="Menu min quantity">
+                                        </div>
+                                        <div class="col-xs-2">
+                                            <input type="number" name="menu_max_qty[]" min="1" value=""
+                                                   class="form-control" placeholder="Menu max quantity">
+                                        </div>
+                                    @else
+                                        <div class="col-xs-2">
+                                        </div>
+                                    @endif
+                                </div>
+                                @foreach($menu_category->menu as $menu)
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-3 control-label"></label>
+                                        <div class="col-xs-2">
+                                            <div class="checkbox" style="font-size: medium;">
+                                                <label>
+                                                    <input type="checkbox" name="menu_item[]" value="{{$menu->id}}">
+                                                    {{$menu->name_en}}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        @if($collection_category->id == 1)
+                                            <div class="col-xs-2">
+                                                <input type="number"
+                                                       min="1"
+                                                       class="form-control"
+                                                       name="menu_item_qty[]"
+                                                       placeholder="Quantity"
+                                                       value="">
+                                            </div>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            @endforeach
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>

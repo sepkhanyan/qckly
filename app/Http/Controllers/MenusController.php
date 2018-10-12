@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\MenuRequest;
 use Auth;
 use DB;
 use App\Area;
@@ -11,6 +10,9 @@ use Illuminate\Http\Request;
 use App\Menu;
 use App\Restaurant;
 use App\Category;
+use App\Collection;
+use App\CollectionItem;
+use App\CollectionMenu;
 use Illuminate\Support\Facades\File;
 
 class MenusController extends Controller
@@ -23,11 +25,11 @@ class MenusController extends Controller
     public function index($id = null, Request $request)
     {
         $user = Auth::user();
-        $categories = Category::all();
         $restaurants = Restaurant::all();
         $selectedRestaurant = [];
         $data = $request->all();
         $menus = [];
+        $categories = [];
         if ($id) {
             $menus = Menu::where('restaurant_id', $id);
             if (isset($data['menu_status'])) {
@@ -42,7 +44,8 @@ class MenusController extends Controller
                     ->orWhere('price', 'like', $data['menu_search']);
             }
             $selectedRestaurant = Restaurant::find($id);
-            $menus = $menus->paginate(20);
+            $menus = $menus->orderby('category_id', 'asc')->paginate(20);
+            $categories = Category::where('restaurant_id',$selectedRestaurant->id )->get();
         }
         if ($user->admin == 2) {
             $user = $user->load('restaurant');
@@ -61,8 +64,10 @@ class MenusController extends Controller
                     ->orWhere('description_en', 'like', $data['menu_search']);
             }
             $selectedRestaurant = Restaurant::find($restaurant->id);
-            $menus = $menus->paginate(20);
+            $menus = $menus->orderby('category_id', 'asc')->paginate(20);
+            $categories = Category::where('restaurant_id',$selectedRestaurant->id )->get();
         }
+
         return view('menus', [
             'id' => $id,
             'menus' => $menus,
@@ -85,7 +90,7 @@ class MenusController extends Controller
             $user = $user->load('restaurant');
             $restaurant = $user->restaurant;
         }
-        $categories = Category::all();
+        $categories = Category::where('restaurant_id', $restaurant->id)->get();
         return view('menu_create', [
             'restaurant' => $restaurant,
             'categories' => $categories
@@ -131,7 +136,32 @@ class MenusController extends Controller
         $menu->status = $request->input('status');
         $menu->famous = $request->input('famous');
         $menu->save();
-        return redirect('/menus/' . $restaurant_id);
+        if($menu){
+            $collections = Collection::where('restaurant_id', $restaurant_id)->where('category_id', '!=', 1)->get();
+            if(count($collections) > 0){
+                foreach ($collections as $collection) {
+                    $collection_item = new CollectionItem();
+                    $collection_item->item_id = $menu->id;
+                    $collection_item->collection_menu_id = $menu->category_id;
+                    $collection_item->collection_id = $collection->id;
+                    $collection_item->quantity = 1;
+                    $collection_item->save();
+                    $collection_menu = CollectionMenu::where('collection_id',$collection->id)->where('menu_id',$menu->category_id)->first();
+                    if(!$collection_menu){
+                        $collection_menu = new CollectionMenu();
+                        $collection_menu->collection_id = $collection->id;
+                        $collection_menu->menu_id = $menu->category_id;
+                        $collection_menu->name = $menu->category->name_en;
+                        if ($collection->id != 4) {
+                            $collection_menu->min_qty = 1;
+                            $collection_menu->max_qty = 1;
+                        }
+                        $collection_menu->save();
+                    }
+                }
+            }
+            return redirect('/menus/' . $restaurant_id);
+        }
     }
 
     /**
@@ -163,9 +193,7 @@ class MenusController extends Controller
                 return redirect('/menus');
             }
         }
-        $categories = Category::all();
         return view('menu_edit', [
-            'categories' => $categories,
             'menu' => $menu
         ]);
     }
@@ -185,7 +213,6 @@ class MenusController extends Controller
             'name_ar' => 'required|string|max:255',
             'description_ar' => 'required|string',
             'price' => 'required|numeric',
-            'category' => 'required|integer',
         ]);
         $user = Auth::user();
         $menu = Menu::find($id);
@@ -204,7 +231,7 @@ class MenusController extends Controller
         $menu->name_ar = $request->input('name_ar');
         $menu->description_ar = $request->input('description_ar');
         $menu->price = $request->input('price');
-        $menu->category_id = $request->input('category');
+//        $menu->category_id = $request->input('category');
         $menu->status = $request->input('status');
         $menu->famous = $request->input('famous');
         if ($request->hasFile('image')) {

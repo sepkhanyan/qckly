@@ -278,7 +278,7 @@
                                 </div>
                             </div>
                             <br/>
-                            <div id="map"></div>
+                            {{--<div id="map"></div>--}}
                             {{--<div>--}}
                             {{--<div id="map" style="width:500px;height:500px;background:yellow"></div>--}}
                             {{--<script type="text/javascript">--}}

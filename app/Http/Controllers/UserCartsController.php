@@ -622,7 +622,9 @@ class UserCartsController extends Controller
                     $menu = [];
                     $collectionMenus = CollectionMenu::where('collection_id', $collection->id)->with(['collectionItem' => function ($query) use ($collection) {
                         $query->where('collection_id', $collection->id);
-                    }])->get();
+                    }])->whereHas('collectionItem' , function ($q) use ($collection) {
+                        $q->where('collection_id', $collection->id);
+                    })->get();
                     foreach ($collectionMenus as $collectionMenu) {
                         $items = [];
                         if ($collection->category_id != 4 && $collection->category_id != 1) {

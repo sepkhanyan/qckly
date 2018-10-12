@@ -837,7 +837,9 @@ class RestaurantsController extends Controller
                                 $menu = [];
                                 $collectionMenus = CollectionMenu::where('collection_id', $collection->id)->with(['collectionItem' => function ($query) use ($collection) {
                                     $query->where('collection_id', $collection->id);
-                                }])->get();
+                                }])->whereHas('collectionItem' , function ($q) use ($collection) {
+                                    $q->where('collection_id', $collection->id);
+                                })->get();
                                 foreach ($collectionMenus as $collectionMenu) {
                                     $items = [];
                                     if ($collection->category_id != 4 && $collection->category_id != 1) {
@@ -848,7 +850,7 @@ class RestaurantsController extends Controller
                                         if ($lang == 'ar') {
                                             $foodlist [] = $collection_item->menu->name_ar;
                                             $item_name = $collection_item->menu->name_ar;
-                                            $menu_name = $collectionMenu->category->name_ar;
+                                            $menu_name = $collectionMenu->category->name_en;
                                         } else {
                                             $foodlist [] = $collection_item->menu->name_en;
                                             $item_name = $collection_item->menu->name_en;
@@ -980,7 +982,7 @@ class RestaurantsController extends Controller
                         return response()->json(array(
                             'success' => 1,
                             'status_code' => 200,
-                            'message' => \Lang::get('message.priceUnit')));
+                            'message' => \Lang::get('message.noCollection')));
                     }
 
                 }

@@ -56,47 +56,6 @@ $(document).ready(function () {
         $('#special-toggle').slideDown('fast');
     });
 
-    $('#category').click(function () {
-        $('#items').slideDown('fast');
-        if ($('select[name=category]').val() == 1) {
-            $('#price').slideDown('fast');
-            $('#persons_qty').slideDown('fast');
-            $('#max_person').slideUp('fast');
-            $('#collection_qty').slideDown('fast');
-            $('#item_count').slideDown('fast');
-            $('#person_increase').slideUp('fast');
-            $('#setup').slideUp('fast');
-            $('#all').slideUp('fast');
-        } else if ($('select[name=category]').val() == 2) {
-            $('#price').slideDown('fast');
-            $('#collection_qty').slideUp('fast');
-            $('#persons_qty').slideDown('fast');
-            $('#max_person').slideDown('fast');
-            $('#item_count').slideDown('fast');
-            $('#person_increase').slideDown('fast');
-            $('#setup').slideDown('fast');
-            $('#all').slideDown('fast');
-        } else if ($('select[name=category]').val() == 3) {
-            $('#price').slideDown('fast');
-            $('#collection_qty').slideDown('fast');
-            $('#persons_qty').slideDown('fast');
-            $('#max_person').slideUp('fast');
-            $('#item_count').slideDown('fast');
-            $('#person_increase').slideUp('fast');
-            $('#setup').slideUp('fast');
-            $('#all').slideDown('fast');
-        } else if ($('select[name=category]').val() == 4) {
-            $('#price').slideUp('fast');
-            $('#items_container').slideDown('fast');
-            $('#collection_qty').slideUp('fast');
-            $('#persons_qty').slideUp('fast');
-            $('#max_person').slideUp('fast');
-            $('#item_count').slideUp('fast');
-            $('#person_increase').slideUp('fast');
-            $('#setup').slideUp('fast');
-            $('#all').slideDown('fast');
-        }
-    });
 
 
     $('#delete_language').click(function () {

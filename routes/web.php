@@ -57,9 +57,9 @@ Route::group(['middleware' => ['web', 'auth']], function () {
             Route::post('update/{id}', 'RestaurantCategoriesController@update');
             Route::post('delete', 'RestaurantCategoriesController@deleteRestaurantCategory');
         });
-        Route::get('/categories', 'CategoriesController@index');
+        Route::get('/categories/{id?}', 'CategoriesController@index');
         Route::group(['prefix' => 'category'], function () {
-            Route::get('create', 'CategoriesController@create');
+            Route::get('create/{id?}', 'CategoriesController@create');
             Route::get('store', 'CategoriesController@store');
             Route::get('edit/{id}', 'CategoriesController@edit');
             Route::post('update/{id}', 'CategoriesController@update');

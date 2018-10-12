@@ -31,6 +31,7 @@
                             @if(Auth::user()->admin == 1)
                                 <input type="hidden" name="restaurant" value="{{$menu->restaurant_id}}">
                             @endif
+                            <h4 class="tab-pane-title">{{$menu->category->name_en}}</h4>
                             <div class="form-group{{ $errors->has('name_en') ? ' has-error' : '' }}">
                                 <label for="input_name_en" class="col-sm-3 control-label">Name En</label>
                                 <div class="col-sm-5">
@@ -96,24 +97,6 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="form-group{{ $errors->has('category') ? ' has-error' : '' }}">
-                                <label for="input-name" class="col-sm-3 control-label">Category</label>
-                                <div class="col-sm-5">
-                                    <select name="category" id="category" class="form-control">
-                                        <option value="{{$menu->category_id}}">{{$menu->category->name_en}}</option>
-                                        @foreach ($categories as $category)
-                                            @if($menu->category_id != $category->id)
-                                                <option value="{{$category->id}}">{{$category->name_en}}</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                    @if ($errors->has('category'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('category') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-                            </div>
                             <div class="form-group">
                                 <label for="famous" class="col-sm-3 control-label">Famous</label>
                                 <div class="col-sm-5">
@@ -121,20 +104,20 @@
                                         @if($menu->famous == 1)
                                             <label class="btn btn-danger">
                                                 <input type="radio" name="famous" value="0">
-                                                Disabled
+                                                No
                                             </label>
                                             <label class="btn btn-success active">
                                                 <input type="radio" name="famous" value="1" checked="checked">
-                                                Enabled
+                                                Yes
                                             </label>
                                         @else
                                             <label class="btn btn-danger  active">
                                                 <input type="radio" name="famous" value="0" checked="checked">
-                                                Disabled
+                                                No
                                             </label>
                                             <label class="btn btn-success">
                                                 <input type="radio" name="famous" value="1">
-                                                Enabled
+                                                Yes
                                             </label>
                                         @endif
                                     </div>

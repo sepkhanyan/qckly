@@ -1,20 +1,56 @@
 @extends('home', ['title' => 'Menu: Categories'])
 @section('content')
     <div id="page-wrapper">
-        @if(Auth::user()->admin == 1)
-            <div class="page-header">
-                <div class="page-action">
-                    <a href="{{ url('/category/create') }}" class="btn btn-primary">
-                        <i class="fa fa-plus"></i>
-                        New
-                    </a>
-                    <a class="btn btn-danger" id="delete_category">
-                        <i class="fa fa-trash-o"></i>
-                        Delete
-                    </a>
+        <div class="page-header">
+            <div class="page-action">
+                <div class="form-inline">
+                    <div class="row">
+                        @if($selectedRestaurant)
+                            @if(Auth::user()->admin == 1)
+                                <a class="btn btn-primary"
+                                   href="{{ url('/category/create/' . $selectedRestaurant->id ) }}">
+                                    <i class="fa fa-plus"></i>
+                                    New
+                                </a>
+                            @else
+                                <a class="btn btn-primary" href="{{ url('/category/create') }}">
+                                    <i class="fa fa-plus"></i>
+                                    New
+                                </a>
+                            @endif
+                            <a class="btn btn-danger " id="delete_category">
+                                <i class="fa fa-trash-o"></i>
+                                Delete
+                            </a>
+                        @endif
+                        @if(Auth::user()->admin == 1)
+                            <div class="form-group col-md-4">
+                                <select name="restaurant_name" id="input-name" class="form-control" tabindex="-1"
+                                        title="" onchange="top.location.href = this.options[this.selectedIndex].value">
+                                    @if($selectedRestaurant)
+                                        <option value>{{$selectedRestaurant->name_en}}
+                                            ,{{$selectedRestaurant->area->area_en}}
+                                            ,{{$selectedRestaurant->address_en}}</option>
+                                        @foreach($restaurants as $restaurant)
+                                            @if($selectedRestaurant->id != $restaurant->id)
+                                                <option value="{{url('/categories/' . $restaurant->id)}}">{{$restaurant->name_en}}
+                                                    ,{{$restaurant->area->area_en}},{{$restaurant->address_en}}</option>
+                                            @endif
+                                        @endforeach
+                                    @else
+                                        <option value>Select Restaurant</option>
+                                        @foreach($restaurants as $restaurant)
+                                            <option value="{{url('/categories/' . $restaurant->id)}}">{{$restaurant->name_en}}
+                                                ,{{$restaurant->area->area_en}},{{$restaurant->address_en}}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        @endif
+                    </div>
                 </div>
             </div>
-        @endif
+        </div>
         <div class="row content">
             <div class="col-md-12">
                 <div class="panel panel-default panel-table">
@@ -28,7 +64,7 @@
                     </div>
                     <div class="panel-body panel-filter" style="display: none">
                         <form role="form" id="filter-form" accept-charset="utf-8" method="GET"
-                              action="{{url('/categories')}}">
+                              action="{{url('/categories/' . $id)}}">
                             <div class="filter-bar">
                                 <div class="form-inline">
                                     <div class="row">
@@ -53,7 +89,7 @@
                                             <a class="btn btn-grey" onclick="filterList();" title="Filter">
                                                 <i class="fa fa-filter"></i>
                                             </a>&nbsp;
-                                            <a class="btn btn-grey" href="{{url('/categories')}}" title="Clear">
+                                            <a class="btn btn-grey" href="{{url('/categories/' . $id)}}" title="Clear">
                                                 <i class="fa fa-times"></i>
                                             </a>
                                         </div>
@@ -67,12 +103,10 @@
                             <table border="0" class="table table-striped table-border">
                                 <thead>
                                 <tr>
-                                    @if(Auth::user()->admin == 1)
-                                        <th class="action action-three">
-                                            <input type="checkbox"
-                                                   onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">
-                                        </th>
-                                    @endif
+                                    <th class="action action-three">
+                                        <input type="checkbox"
+                                               onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">
+                                    </th>
                                     <th>Name</th>
                                     <th>Description</th>
                                     <th>Status</th>
@@ -80,33 +114,39 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-
-                                @foreach($categories as $category)
-                                    <tr>
-                                        @if(Auth::user()->admin == 1)
-                                            <td class="action">
-                                                <input type="checkbox" value="{{ $category->id }}" name="delete"/>
-                                                <a class="btn btn-edit" title=""
-                                                   href="{{ url('category/edit/' . $category->id )}}">
-                                                    <i class="fa fa-pencil"></i>
-                                                </a>&nbsp;&nbsp;
-                                            </td>
-                                        @endif
-                                        <td>{{$category->name_en}}</td>
-                                        <td>{{$category->description_en}}</td>
-                                        @if($category->status == 1)
-                                            <td>Enable</td>
-                                        @else
-                                            <td>Disable</td>
-                                        @endif
-                                        <td>{{$category->id}}</td>
-                                    </tr>
-                                @endforeach
-
+                                @if($selectedRestaurant)
+                                    @if(count($categories) > 0)
+                                        @foreach($categories as $category)
+                                            <tr>
+                                                <td class="action">
+                                                    <input type="checkbox" value="{{ $category->id }}" name="delete"/>
+                                                    <a class="btn btn-edit" title=""
+                                                       href="{{ url('category/edit/' . $category->id )}}">
+                                                        <i class="fa fa-pencil"></i>
+                                                    </a>&nbsp;&nbsp;
+                                                </td>
+                                                <td>{{$category->name_en}}</td>
+                                                <td>{{$category->description_en}}</td>
+                                                @if($category->status == 1)
+                                                    <td>Enable</td>
+                                                @else
+                                                    <td>Disable</td>
+                                                @endif
+                                                <td>{{$category->id}}</td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        <tr>
+                                            <td colspan="7" class="center">There are no menu categories available.</td>
+                                        </tr>
+                                    @endif
+                                @endif
                                 </tbody>
                             </table>
                         </div>
-                        {{ $categories->links() }}
+                        @if(count($categories) > 0)
+                            {{ $categories->links() }}
+                        @endif
                     </form>
                 </div>
             </div>

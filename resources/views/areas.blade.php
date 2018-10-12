@@ -62,20 +62,26 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($areas as $area)
+                                @if(count($areas))
+                                    @foreach($areas as $area)
+                                        <tr>
+                                            <td class="action">
+                                                <input type="checkbox" value="{{ $area->id }}" name="delete"/>&nbsp;&nbsp;&nbsp;
+                                                <a class="btn btn-edit" data-toggle="modal" data-target="#modalEditArea"
+                                                   type="button" onclick="myFunction({{$area->id}})">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>&nbsp;&nbsp;
+                                            </td>
+                                            <td>{{$area->area_en}}</td>
+                                            <td>{{$area->area_ar}}</td>
+                                            <td>{{$area->id}}</td>
+                                        </tr>
+                                    @endforeach
+                                @else
                                     <tr>
-                                        <td class="action">
-                                            <input type="checkbox" value="{{ $area->id }}" name="delete"/>&nbsp;&nbsp;&nbsp;
-                                            <a class="btn btn-edit" data-toggle="modal" data-target="#modalEditArea"
-                                               type="button" onclick="myFunction({{$area->id}})">
-                                                <i class="fa fa-pencil"></i>
-                                            </a>&nbsp;&nbsp;
-                                        </td>
-                                        <td>{{$area->area_en}}</td>
-                                        <td>{{$area->area_ar}}</td>
-                                        <td>{{$area->id}}</td>
+                                        <td colspan="7" class="center">There are no areas available.</td>
                                     </tr>
-                                @endforeach
+                                @endif
                                 </tbody>
                             </table>
                         </div>

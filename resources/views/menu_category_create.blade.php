@@ -32,6 +32,9 @@
                       action="{{ url('/category/store') }}">
                     {{ csrf_field() }}
                     <div class="tab-content">
+                        @if(Auth::user()->admin == 1)
+                            <input type="hidden" name="restaurant" value="{{$restaurant->id}}">
+                        @endif
                         <div id="general" class="tab-pane row wrap-all active">
                             <div class="form-group{{ $errors->has('name_en') ? ' has-error' : '' }}">
                                 <label for="input_name_en" class="col-sm-3 control-label">Name En</label>

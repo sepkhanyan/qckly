@@ -119,11 +119,11 @@
                                     <div class="btn-group btn-group-switch" data-toggle="buttons">
                                         <label class="btn btn-danger">
                                             <input type="radio" name="famous" value="0">
-                                            Disabled
+                                            No
                                         </label>
                                         <label class="btn btn-success active">
                                             <input type="radio" name="famous" value="1" checked="checked">
-                                            Enabled
+                                            Yes
                                         </label>
                                     </div>
                                 </div>

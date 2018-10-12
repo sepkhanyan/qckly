@@ -6,18 +6,12 @@
                 <div class="form-inline">
                     <div class="row">
                         @if($selectedRestaurant)
-                            @if(Auth::user()->admin == 1)
-                                <a class="btn btn-primary"
-                                   href="{{ url('/collection/create/' . $selectedRestaurant->id ) }}">
-                                    <i class="fa fa-plus"></i>
-                                    New
-                                </a>
-                            @else
-                                <a class="btn btn-primary" href="{{ url('/collection/create') }}">
-                                    <i class="fa fa-plus"></i>
-                                    New
-                                </a>
-                            @endif
+                            <a class="btn btn-primary" href="{{--{{ url('/collection/create') }}--}}"
+                               data-toggle="modal"
+                               data-target="#modalNewCollection">
+                                <i class="fa fa-plus"></i>
+                                New
+                            </a>
                             <a class="btn btn-danger " id="delete_collection">
                                 <i class="fa fa-trash-o"></i>
                                 Delete
@@ -56,11 +50,15 @@
                 <div class="panel panel-default panel-table">
                     <div class="panel-heading">
                         <h3 class="panel-title">Collections</h3>
-                        <div class="pull-right">
-                            <button class="btn btn-filter btn-xs">
-                                <i class="fa fa-filter"></i>
-                            </button>
-                        </div>
+                        @if($selectedRestaurant)
+                            @if(count($collections) > 0)
+                                <div class="pull-right">
+                                    <button class="btn btn-filter btn-xs">
+                                        <i class="fa fa-filter"></i>
+                                    </button>
+                                </div>
+                            @endif
+                        @endif
                     </div>
                     <div class="panel-body panel-filter" style="display: none;">
                         <form role="form" id="filter-form" accept-charset="utf-8" method="GET"
@@ -102,7 +100,6 @@
                     </div>
                     <form role="form" id="list-form" accept-charset="utf-8" method="POST" action="">
                         <div class="table-responsive">
-                            <h2>Collections</h2>
                             <table border="0" class="table table-striped table-border">
                                 <thead>
                                 <tr>
@@ -153,6 +150,71 @@
                     @endif
                 </div>
             </div>
+        </div>
+        <div class="modal fade" id="modalNewCollection" role="dialog" tabindex="-1">
+            @if($selectedRestaurant)
+                {{--@if(Auth::user()->admin == 1)--}}
+                <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="GET"
+                      @if(Auth::user()->admin == 1)
+                      action="{{ url('/collection/create/' . $selectedRestaurant->id ) }}"
+                      @else
+                      action="{{ url('/collection/create') }}"
+                        @endif>
+                    {{ csrf_field() }}
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title"> Select Collection Category</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group" style="margin: 5px">
+                                    <select name="collection_category" class="form-control">
+                                        <option value="">View all Categories</option>
+                                        @foreach ($categories as $category)
+                                            <option value="{{$category->id}}">{{$category->name_en}}</option>
+                                        @endforeach
+                                    </select>&nbsp;
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                                </button>
+                                <button type="submit" class="btn btn-primary">Next</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                {{--@else--}}
+                {{--<form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="GET"--}}
+                {{--action="{{ url('/collection/create') }}">--}}
+                {{--{{ csrf_field() }}--}}
+                {{--<div class="modal-dialog">--}}
+                {{--<div class="modal-content">--}}
+                {{--<div class="modal-header">--}}
+                {{--<button type="button" class="close" data-dismiss="modal">&times;</button>--}}
+                {{--<h4 class="modal-title"> Select Collection Category</h4>--}}
+                {{--</div>--}}
+                {{--<div class="modal-body">--}}
+                {{--<div class="form-group" style="margin: 5px">--}}
+                {{--<select name="collection_category" class="form-control">--}}
+                {{--<option value="">View all Categories</option>--}}
+                {{--@foreach ($categories as $category)--}}
+                {{--<option value="{{$category->id}}">{{$category->name_en}}</option>--}}
+                {{--@endforeach--}}
+                {{--</select>&nbsp;--}}
+                {{--</div>--}}
+                {{--</div>--}}
+                {{--<div class="modal-footer">--}}
+                {{--<button type="button" class="btn btn-default" data-dismiss="modal">Close--}}
+                {{--</button>--}}
+                {{--<button type="submit" class="btn btn-primary">Next</button>--}}
+                {{--</div>--}}
+                {{--</div>--}}
+                {{--</div>--}}
+                {{--</form>--}}
+                {{--@endif--}}
+            @endif
         </div>
     </div>
 @endsection
