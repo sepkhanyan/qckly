@@ -66,23 +66,29 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($mealtimes as $mealtime)
+                                @if(count($mealtimes) > 0)
+                                    @foreach($mealtimes as $mealtime)
+                                        <tr>
+                                            @if(Auth::user()->admin == 1)
+                                                <td class="action">
+                                                    <input type="checkbox" value="{{ $mealtime->id }}" name="delete"/>&nbsp;&nbsp;&nbsp;
+                                                    <a class="btn btn-edit" href="#" data-toggle="modal"
+                                                       data-target="#modalEditMealtime" type="button"
+                                                       onclick="myFunction({{$mealtime->id}})">
+                                                        <i class="fa fa-pencil"></i>
+                                                    </a>&nbsp;&nbsp;
+                                                </td>
+                                            @endif
+                                            <td>{{$mealtime->name_en}}</td>
+                                            <td>{{date("g:i A", strtotime($mealtime->start_time)) . ' - ' . date("g:i A", strtotime($mealtime->end_time))}}</td>
+                                            <td>{{$mealtime->id}}</td>
+                                        </tr>
+                                    @endforeach
+                                @else
                                     <tr>
-                                        @if(Auth::user()->admin == 1)
-                                            <td class="action">
-                                                <input type="checkbox" value="{{ $mealtime->id }}" name="delete"/>&nbsp;&nbsp;&nbsp;
-                                                <a class="btn btn-edit" href="#" data-toggle="modal"
-                                                   data-target="#modalEditMealtime" type="button"
-                                                   onclick="myFunction({{$mealtime->id}})">
-                                                    <i class="fa fa-pencil"></i>
-                                                </a>&nbsp;&nbsp;
-                                            </td>
-                                        @endif
-                                        <td>{{$mealtime->name_en}}</td>
-                                        <td>{{date("g:i A", strtotime($mealtime->start_time)) . ' - ' . date("g:i A", strtotime($mealtime->end_time))}}</td>
-                                        <td>{{$mealtime->id}}</td>
+                                        <td colspan="7" class="center">There are no mealtimes available.</td>
                                     </tr>
-                                @endforeach
+                                @endif
                                 </tbody>
                             </table>
                         </div>

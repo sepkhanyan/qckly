@@ -54,35 +54,38 @@
                                         <input type="checkbox"
                                                onclick="$('input[name*=\'delete\']').prop('checked', this.checked)">
                                     </th>
-                                    <th>
-                                        Name En
-                                    </th>
-                                    <th>
-                                        Name Ar
-                                    </th>
-                                    <th>
-                                        ID
-                                    </th>
+                                    <th>Name En</th>
+                                    <th>Name Ar</th>
+                                    <th>ID</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($statuses as $status)
+                                @if(count($statuses) > 0)
+                                    @foreach($statuses as $status)
+                                        <tr>
+                                            <td class="action">
+                                                <input type="checkbox" value="{{ $status->id }}" name="delete"/>&nbsp;&nbsp;&nbsp;
+                                                <a class="btn btn-edit" data-toggle="modal"
+                                                   data-target="#modalEditStatus"
+                                                   type="button" onclick="myFunction({{$status->id}})">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>&nbsp;&nbsp;
+                                            </td>
+                                            <td>{{$status->name_en}}</td>
+                                            <td>{{$status->name_ar}}</td>
+                                            <td>{{$status->id}}</td>
+                                        </tr>
+                                    @endforeach
+                                @else
                                     <tr>
-                                        <td class="action">
-                                            <input type="checkbox" value="{{ $status->id }}" name="delete"/>&nbsp;&nbsp;&nbsp;
-                                            <a class="btn btn-edit" data-toggle="modal" data-target="#modalEditStatus"
-                                               type="button" onclick="myFunction({{$status->id}})">
-                                                <i class="fa fa-pencil"></i>
-                                            </a>&nbsp;&nbsp;
-                                        </td>
-                                        <td>{{$status->name_en}}</td>
-                                        <td>{{$status->name_ar}}</td>
-                                        <td>{{$status->id}}</td>
+                                        <td colspan="7" class="center">There are no statuses available.</td>
                                     </tr>
-                                @endforeach
+                                @endif
                                 </tbody>
                             </table>
-                            {{ $statuses->links() }}
+                            @if(count($statuses) > 0)
+                                {{ $statuses->links() }}
+                            @endif
                         </div>
                     </form>
                 </div>

@@ -62,7 +62,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @if(count($areas))
+                                @if(count($areas) > 0)
                                     @foreach($areas as $area)
                                         <tr>
                                             <td class="action">
@@ -86,7 +86,9 @@
                             </table>
                         </div>
                     </form>
-                    {{ $areas->links() }}
+                    @if(count($areas) > 0)
+                        {{ $areas->links() }}
+                    @endif
                 </div>
             </div>
         </div>

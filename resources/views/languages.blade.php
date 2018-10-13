@@ -66,28 +66,36 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($languages as $language)
+                                @if(count($languages) > 0)
+                                    @foreach($languages as $language)
+                                        <tr>
+                                            <td class="action">
+                                                <input type="checkbox" value="{{$language->id}}" name="delete">
+                                                <a class="btn btn-edit" title=""
+                                                   href="{{url('/language/edit/' . $language->id)}}">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
+                                            </td>
+                                            <td width="55%">{{$language->name}}</td>
+                                            <td>{{$language->code}}</td>
+                                            <td class="text-center">
+                                                <img src="/images/{{$language->image}}">
+                                            </td>
+                                            <td>{{$language->idiom}}</td>
+                                        </tr>
+                                    @endforeach
+                                @else
                                     <tr>
-                                        <td class="action">
-                                            <input type="checkbox" value="{{$language->id}}" name="delete">
-                                            <a class="btn btn-edit" title=""
-                                               href="{{url('/language/edit/' . $language->id)}}">
-                                                <i class="fa fa-pencil"></i>
-                                            </a>
-                                        </td>
-                                        <td width="55%">{{$language->name}}</td>
-                                        <td>{{$language->code}}</td>
-                                        <td class="text-center">
-                                            <img src="/images/{{$language->image}}">
-                                        </td>
-                                        <td>{{$language->idiom}}</td>
+                                        <td colspan="7" class="center">There are no languages available.</td>
                                     </tr>
-                                @endforeach
+                                @endif
                                 </tbody>
                             </table>
                         </div>
                     </form>
-                    {{$languages->links()}}
+                    @if(count($languages) > 0)
+                        {{$languages->links()}}
+                    @endif
                 </div>
             </div>
         </div>

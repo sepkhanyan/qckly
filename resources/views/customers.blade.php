@@ -80,29 +80,35 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-
-                                @foreach($customers as $customer)
+                                @if(count($customers) > 0)
+                                    @foreach($customers as $customer)
+                                        <tr>
+                                            <td class="action"><input type="checkbox" value="{{$customer->id}}"
+                                                                      name="delete"/>&nbsp;&nbsp;&nbsp;
+                                                <a class="btn btn-edit" title=""
+                                                   href="{{ url('/customer/edit/' . $customer->id )}}">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>&nbsp;&nbsp;
+                                            </td>
+                                            <td>{{$customer->username}}</td>
+                                            <td>{{$customer->email}}</td>
+                                            <td>{{$customer->country_code}}</td>
+                                            <td>{{$customer->mobile_number}}</td>
+                                            <td>{{date("j M, Y", strtotime($customer->created_at))}}</td>
+                                            <td>{{$customer->id}}</td>
+                                        </tr>
+                                    @endforeach
+                                @else
                                     <tr>
-                                        <td class="action"><input type="checkbox" value="{{$customer->id}}"
-                                                                  name="delete"/>&nbsp;&nbsp;&nbsp;
-                                            <a class="btn btn-edit" title=""
-                                               href="{{ url('/customer/edit/' . $customer->id )}}">
-                                                <i class="fa fa-pencil"></i>
-                                            </a>&nbsp;&nbsp;
-                                        </td>
-                                        <td>{{$customer->username}}</td>
-                                        <td>{{$customer->email}}</td>
-                                        <td>{{$customer->country_code}}</td>
-                                        <td>{{$customer->mobile_number}}</td>
-                                        <td>{{date("j M, Y", strtotime($customer->created_at))}}</td>
-                                        <td>{{$customer->id}}</td>
+                                        <td colspan="7" class="center">There are no customers right now.</td>
                                     </tr>
-                                @endforeach
-
+                                @endif
                                 </tbody>
                             </table>
                         </div>
-                        {{ $customers->links() }}
+                        @if(count($customers) > 0)
+                            {{ $customers->links() }}
+                        @endif
                     </form>
                 </div>
             </div>

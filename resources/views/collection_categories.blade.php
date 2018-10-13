@@ -68,23 +68,29 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($categories as $category)
+                                @if(count($categories) > 0)
+                                    @foreach($categories as $category)
+                                        <tr>
+                                            @if(Auth::user()->admin == 1)
+                                                <td class="action">
+                                                    <input type="checkbox" value="{{ $category->id }}" name="delete"/>
+                                                    <a class="btn btn-edit" href="#" data-toggle="modal"
+                                                       data-target="#modalEditCollectionCategory" type="button"
+                                                       onclick="myFunction({{$category->id}})">
+                                                        <i class="fa fa-pencil"></i>
+                                                    </a>&nbsp;&nbsp;&nbsp;
+                                                </td>
+                                            @endif
+                                            <td>{{$category->name_en}}</td>
+                                            <td>{{$category->name_ar}}</td>
+                                            <td>{{$category->id}}</td>
+                                        </tr>
+                                    @endforeach
+                                @else
                                     <tr>
-                                        @if(Auth::user()->admin == 1)
-                                            <td class="action">
-                                                <input type="checkbox" value="{{ $category->id }}" name="delete"/>
-                                                <a class="btn btn-edit" href="#" data-toggle="modal"
-                                                   data-target="#modalEditCollectionCategory" type="button"
-                                                   onclick="myFunction({{$category->id}})">
-                                                    <i class="fa fa-pencil"></i>
-                                                </a>&nbsp;&nbsp;&nbsp;
-                                            </td>
-                                        @endif
-                                        <td>{{$category->name_en}}</td>
-                                        <td>{{$category->name_ar}}</td>
-                                        <td>{{$category->id}}</td>
+                                        <td colspan="7" class="center">There are no categories available.</td>
                                     </tr>
-                                @endforeach
+                                @endif
                                 </tbody>
                             </table>
                         </div>

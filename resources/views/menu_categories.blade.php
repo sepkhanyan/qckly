@@ -137,7 +137,7 @@
                                         @endforeach
                                     @else
                                         <tr>
-                                            <td colspan="7" class="center">There are no menu categories available.</td>
+                                            <td colspan="7" class="center">There are no categories available.</td>
                                         </tr>
                                     @endif
                                 @endif

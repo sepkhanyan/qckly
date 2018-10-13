@@ -72,46 +72,53 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($restaurants as $restaurant)
+                                @if(count($restaurants) > 0)
+                                    @foreach($restaurants as $restaurant)
+                                        <tr>
+                                            <td class="action">
+                                                @if(Auth::user()->admin == 1)
+                                                    <input type="checkbox" value="{{ $restaurant->id }}" name="delete"/>
+                                                    &nbsp;&nbsp;&nbsp;
+                                                @endif
+                                                <a class="btn btn-edit" title=""
+                                                   href="{{ url('/restaurant/edit/' . $restaurant->id )}}">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>&nbsp;&nbsp;
+                                            </td>
+                                            <td>
+                                                <img src="/images/{{$restaurant->image}}" width="30px" height="30px">
+                                                {{$restaurant->name_en}}
+                                            </td>
+                                            <td>{{$restaurant->description_en}}</td>
+                                            <td>{{$restaurant->area->area_en}}</td>
+                                            <td>{{$restaurant->address_en}}</td>
+                                            <td>{{$restaurant->telephone}}</td>
+                                            <td data-toggle="modal" data-target="#changeStatus"
+                                                onclick="myFunction({{$restaurant->id}})"
+                                                style="font-size: 20px; cursor: pointer">
+                                                @if($restaurant->status == 1)
+                                                    <span class="label label-default"
+                                                          style="background-color: #00a65a; ">{{\Lang::get('message.open')}}</span>
+                                                @elseif($restaurant->status == 0)
+                                                    <span class="label label-default"
+                                                          style="background-color: #ea0b29 ;">{{\Lang::get('message.busy')}}</span>
+                                                @endif
+                                            </td>
+                                            <td>{{$restaurant->id}}</td>
+                                        </tr>
+                                    @endforeach
+                                @else
                                     <tr>
-                                        <td class="action">
-                                            @if(Auth::user()->admin == 1)
-                                                <input type="checkbox" value="{{ $restaurant->id }}" name="delete"/>
-                                                &nbsp;&nbsp;&nbsp;
-                                            @endif
-                                            <a class="btn btn-edit" title=""
-                                               href="{{ url('/restaurant/edit/' . $restaurant->id )}}">
-                                                <i class="fa fa-pencil"></i>
-                                            </a>&nbsp;&nbsp;
-                                        </td>
-                                        <td>
-                                            <img src="/images/{{$restaurant->image}}" width="30px" height="30px">
-                                            {{$restaurant->name_en}}
-                                        </td>
-                                        <td>{{$restaurant->description_en}}</td>
-                                        <td>{{$restaurant->area->area_en}}</td>
-                                        <td>{{$restaurant->address_en}}</td>
-                                        <td>{{$restaurant->telephone}}</td>
-                                        <td data-toggle="modal" data-target="#changeStatus"
-                                            onclick="myFunction({{$restaurant->id}})"
-                                            style="font-size: 20px; cursor: pointer">
-                                            @if($restaurant->status == 1)
-                                                <span class="label label-default"
-                                                      style="background-color: #00a65a; ">{{\Lang::get('message.open')}}</span>
-                                            @elseif($restaurant->status == 0)
-                                                <span class="label label-default"
-                                                      style="background-color: #ea0b29 ;">{{\Lang::get('message.busy')}}</span>
-                                            @endif
-                                        </td>
-                                        <td>{{$restaurant->id}}</td>
+                                        <td colspan="7" class="center">There are no restaurants available.</td>
                                     </tr>
-                                @endforeach
-
+                                @endif
                                 </tbody>
                             </table>
                         </div>
                     </form>
-                    {{ $restaurants->links() }}
+                    @if(count($restaurants) > 0)
+                        {{ $restaurants->links() }}
+                    @endif
                 </div>
             </div>
         </div>
