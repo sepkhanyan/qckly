@@ -67,7 +67,6 @@ class MenusController extends Controller
             $menus = $menus->orderby('category_id', 'asc')->paginate(20);
             $categories = Category::where('restaurant_id',$selectedRestaurant->id )->get();
         }
-
         return view('menus', [
             'id' => $id,
             'menus' => $menus,
@@ -91,10 +90,14 @@ class MenusController extends Controller
             $restaurant = $user->restaurant;
         }
         $categories = Category::where('restaurant_id', $restaurant->id)->get();
-        return view('menu_create', [
-            'restaurant' => $restaurant,
-            'categories' => $categories
-        ]);
+        if(count($categories) > 0){
+            return view('menu_create', [
+                'restaurant' => $restaurant,
+                'categories' => $categories
+            ]);
+        }else{
+            return redirect('/categories/' . $id);
+        }
     }
 
     /**
@@ -258,23 +261,25 @@ class MenusController extends Controller
     {
         $id = $request->get('id');
         $menus = Menu::where('id', $id)->get();
-        $menu = Menu::find($id);
         $user = Auth::user();
         if ($user->admin == 2) {
             $user = $user->load('restaurant');
             $restaurant = $user->restaurant;
-            $menu = Menu::where('id', $id)->where('restaurant_id', $restaurant->id)->first();
-            if (!$menu) {
-                return redirect('/menus');
-            }
             $menus = Menu::where('id', $id)->where('restaurant_id', $restaurant->id)->get();
+            $images = [];
+            foreach ($menus as $menu) {
+                $images[] = public_path('images/' . $menu->image);
+            }
+            File::delete($images);
+            Menu::whereIn('id', $id)->where('restaurant_id')->delete();
+        }else{
+            $images = [];
+            foreach ($menus as $menu) {
+                $images[] = public_path('images/' . $menu->image);
+            }
+            File::delete($images);
+            Menu::whereIn('id', $id)->delete();
         }
-        $images = [];
-        foreach ($menus as $menu) {
-            $images[] = public_path('images/' . $menu->image);
-        }
-        File::delete($images);
-        $menu->delete();
 
         return redirect('/menus');
     }

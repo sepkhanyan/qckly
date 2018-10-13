@@ -188,27 +188,33 @@ class CategoriesController extends Controller
     {
         $id = $request->get('id');
         $categories = Category::where('id', $id)->get();
-        $category = Category::find($id);
         $user = Auth::user();
         if ($user->admin == 2) {
             $user = $user->load('restaurant');
             $restaurant = $user->restaurant;
-            $category = Category::where('id', $id)->where('restaurant_id', $restaurant->id)->first();
-            if (!$category) {
-                return redirect('/categories');
-            }
             $categories = Category::where('id', $id)->where('restaurant_id', $restaurant->id)->get();
-        }
-        foreach ($categories as $category) {
-            if ($category->menu) {
-                $menu_images = [];
-                foreach ($category->menu as $menu) {
-                    $menu_images[] = public_path('images/' . $menu->menu_photo);
+            foreach ($categories as $category) {
+                if ($category->menu) {
+                    $menu_images = [];
+                    foreach ($category->menu as $menu) {
+                        $menu_images[] = public_path('images/' . $menu->menu_photo);
+                    }
+                    File::delete($menu_images);
                 }
-                File::delete($menu_images);
             }
+            Category::whereIn('id', $id)->where('restaurant_id', $restaurant->id)->delete();
+        }else{
+            foreach ($categories as $category) {
+                if ($category->menu) {
+                    $menu_images = [];
+                    foreach ($category->menu as $menu) {
+                        $menu_images[] = public_path('images/' . $menu->menu_photo);
+                    }
+                    File::delete($menu_images);
+                }
+            }
+            Category::whereIn('id', $id)->delete();
         }
-        $category->delete();
         return redirect('/categories');
 
     }

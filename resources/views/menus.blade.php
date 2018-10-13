@@ -150,7 +150,7 @@
                                         @endforeach
                                     @else
                                         <tr>
-                                            <td colspan="7" class="center">There are no menus available.</td>
+                                            <td colspan="7" class="center">There are no menu items available.</td>
                                         </tr>
                                     @endif
                                 @endif

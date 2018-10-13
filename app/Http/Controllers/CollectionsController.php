@@ -91,13 +91,18 @@ class CollectionsController extends Controller
         $mealtimes = Mealtime::all();
         $category_id = $request->input('collection_category');
         $collection_category = CollectionCategory::where('id', $category_id)->first();
-        return view('collection_create', [
-            'restaurant' => $restaurant,
-            'categories' => $categories,
-            'menu_categories' => $menu_categories,
-            'mealtimes' => $mealtimes,
-            'collection_category' => $collection_category,
-        ]);
+        $menu_items = Menu::where('restaurant_id', $restaurant->id)->get();
+        if (count($menu_items) > 0) {
+            return view('collection_create', [
+                'restaurant' => $restaurant,
+                'categories' => $categories,
+                'menu_categories' => $menu_categories,
+                'mealtimes' => $mealtimes,
+                'collection_category' => $collection_category,
+            ]);
+        } else {
+            return redirect('/menus/' . $restaurant->id);
+        }
     }
 
     /**
@@ -273,7 +278,7 @@ class CollectionsController extends Controller
         }
         $collection_menus = CollectionMenu::where('collection_id', $collection->id)->with(['collectionItem' => function ($query) use ($collection) {
             $query->where('collection_id', $collection->id);
-        }])->whereHas('collectionItem' , function ($q) use ($collection) {
+        }])->whereHas('collectionItem', function ($q) use ($collection) {
             $q->where('collection_id', $collection->id);
         })->get();
         $menu_categories = Category::where('restaurant_id', $restaurant->id)->wherehas('menu')->get();
@@ -320,7 +325,7 @@ class CollectionsController extends Controller
         } else {
             $collection = Collection::with('restaurant.menu')->find($id);
         }
-        if (isset($request['menu_item'])){
+        if (isset($request['menu_item'])) {
             CollectionItem::where('collection_id', $collection->id)->delete();
             if ($collection->category_id == 1) {
                 $quantity = array_values(array_filter($request['menu_item_qty']));
@@ -427,12 +432,7 @@ class CollectionsController extends Controller
         if ($user->admin == 2) {
             $user = $user->load('restaurant');
             $restaurant = $user->restaurant;
-            $collection = Collection::where('id', $id)->where('restaurant_id', $restaurant->id)->first();
-            if ($collection) {
-                $collection->delete();
-            } else {
-                return redirect('/collections');
-            }
+            Collection::where('id', $id)->where('restaurant_id', $restaurant->id)->delete();
         } else {
             Collection::whereIn('id', $id)->delete();
         }

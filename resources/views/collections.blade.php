@@ -185,35 +185,6 @@
                         </div>
                     </div>
                 </form>
-                {{--@else--}}
-                {{--<form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="GET"--}}
-                {{--action="{{ url('/collection/create') }}">--}}
-                {{--{{ csrf_field() }}--}}
-                {{--<div class="modal-dialog">--}}
-                {{--<div class="modal-content">--}}
-                {{--<div class="modal-header">--}}
-                {{--<button type="button" class="close" data-dismiss="modal">&times;</button>--}}
-                {{--<h4 class="modal-title"> Select Collection Category</h4>--}}
-                {{--</div>--}}
-                {{--<div class="modal-body">--}}
-                {{--<div class="form-group" style="margin: 5px">--}}
-                {{--<select name="collection_category" class="form-control">--}}
-                {{--<option value="">View all Categories</option>--}}
-                {{--@foreach ($categories as $category)--}}
-                {{--<option value="{{$category->id}}">{{$category->name_en}}</option>--}}
-                {{--@endforeach--}}
-                {{--</select>&nbsp;--}}
-                {{--</div>--}}
-                {{--</div>--}}
-                {{--<div class="modal-footer">--}}
-                {{--<button type="button" class="btn btn-default" data-dismiss="modal">Close--}}
-                {{--</button>--}}
-                {{--<button type="submit" class="btn btn-primary">Next</button>--}}
-                {{--</div>--}}
-                {{--</div>--}}
-                {{--</div>--}}
-                {{--</form>--}}
-                {{--@endif--}}
             @endif
         </div>
     </div>

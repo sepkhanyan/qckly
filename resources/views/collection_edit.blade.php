@@ -409,7 +409,7 @@
                                         @else
                                             <thead>
                                             <tr>
-                                                <th>Menu ID</th>
+                                                   <th>Menu ID</th>
                                                 <th>Menu</th>
                                                 <th>Menu Min/Max Quantity</th>
                                                 <th>Items(Id/Name - Price)</th>
@@ -433,7 +433,8 @@
                                                         @foreach($collectionMenu->collectionItem->sortBy('collection_menu_id') as $collectionItem)
                                                             <div>
                                                                 #{{$collectionItem->item_id}}
-                                                                <span style="font-size: medium">/ {{$collectionItem->menu->name_en}} -</span>
+                                                                <span style="font-size: medium">/ {{$collectionItem->menu->name_en}}
+                                                                    -</span>
                                                                 <span style="font-style: oblique">{{$collectionItem->menu->price . ' ' . \Lang::get('message.priceUnit')}}</span>
                                                             </div>
 
