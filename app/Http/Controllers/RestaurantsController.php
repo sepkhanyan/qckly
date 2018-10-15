@@ -197,12 +197,13 @@ class RestaurantsController extends Controller
         $restaurant = Restaurant::find($id);
         $areas = Area::all();
         $categories = RestaurantCategory::all();
+        $category_restaurants = CategoryRestaurant::where('restaurant_id', $id)->get();
         if ($user->admin == 2) {
             $user = $user->load('restaurant');
             if ($user->restaurant->id == $id) {
                 $restaurant = Restaurant::find($id);
             } else {
-                return redirect('restaurants');
+                return redirect('/restaurants');
             }
         }
         $working = WorkingHour::where('restaurant_id', $restaurant->id)->first();
@@ -210,7 +211,8 @@ class RestaurantsController extends Controller
             'restaurant' => $restaurant,
             'working' => $working,
             'areas' => $areas,
-            'categories' => $categories
+            'categories' => $categories,
+            'category_restaurants' => $category_restaurants
         ]);
     }
 
@@ -224,7 +226,7 @@ class RestaurantsController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'category' => 'required',
+//            'category' => 'required',
             'restaurant_name_en' => 'required|string|max:255',
             'restaurant_name_ar' => 'required|string|max:255',
             'restaurant_email' => 'required|string|max:255',

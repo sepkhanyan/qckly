@@ -34,7 +34,7 @@
                     <div class="tab-content">
                         <div id="general" class="tab-pane row wrap-all active">
                             @if(Auth::user()->admin == 1)
-                                <input type="hidden" name="restaurant" value="{{$menu->restaurant_id}}">
+                                <input type="hidden" name="restaurant" value="{{$category->restaurant_id}}">
                             @endif
                             <div class="form-group{{ $errors->has('name_en') ? ' has-error' : '' }}">
                                 <label for="input_name_en" class="col-sm-3 control-label">Name En</label>

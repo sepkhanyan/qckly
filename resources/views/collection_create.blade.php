@@ -286,17 +286,20 @@
                                     </div>
                                 </div>
                                 <div class="form-group{{ $errors->has('setup_time') ? ' has-error' : '' }}">
-                                    <label for="input-setup" class="col-sm-3 control-label">Setup Time</label>
+                                    <label for="input-setup" class="col-sm-3 control-label">
+                                        Setup Time
+                                    </label>
                                     <div class="col-sm-5">
                                         <div class="input-group">
                                             <input type="number" name="setup_time" id="input-setup"
                                                    class="form-control" min="0" value="0"/>
-                                            @if ($errors->has('setup_time'))
-                                                <span class="help-block">
+                                            <span class="input-group-addon">minutes</span>
+                                        </div>
+                                        @if ($errors->has('setup_time'))
+                                            <span class="help-block">
                                                     <strong>{{ $errors->first('setup_time') }}</strong>
                                                 </span>
-                                            @endif
-                                        </div>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="form-group{{ $errors->has('requirements_en') ? ' has-error' : '' }}">
@@ -326,17 +329,20 @@
                                     </div>
                                 </div>
                                 <div class="form-group{{ $errors->has('max_time') ? ' has-error' : '' }}">
-                                    <label for="input-max" class="col-sm-3 control-label">Max Time</label>
+                                    <label for="input-max" class="col-sm-3 control-label">
+                                        Max Time
+                                    </label>
                                     <div class="col-sm-5">
                                         <div class="input-group">
                                             <input type="number" name="max_time" id="input-max" class="form-control"
                                                    min="0" value="0"/>
-                                            @if ($errors->has('max_time'))
-                                                <span class="help-block">
+                                            <span class="input-group-addon">minutes</span>
+                                        </div>
+                                        @if ($errors->has('max_time'))
+                                            <span class="help-block">
                                                     <strong>{{ $errors->first('max_time') }}</strong>
                                                 </span>
-                                            @endif
-                                        </div>
+                                        @endif
                                     </div>
                                 </div>
                             @endif

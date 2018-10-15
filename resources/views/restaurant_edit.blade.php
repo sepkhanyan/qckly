@@ -38,16 +38,33 @@
                     <div class="tab-content">
                         <div id="general" class="tab-pane row wrap-all active">
                             <h4 class="tab-pane-title">Basic</h4>
-                            <div class="form-group{{ $errors->has('category') ? ' has-error' : '' }}">
-                                <label for="" class="col-sm-3 control-label">Category</label>
+                            {{--<div class="form-group{{ $errors->has('category') ? ' has-error' : '' }}" id="category">--}}
+                                {{--<label for="" class="col-sm-3 control-label">Category</label>--}}
+                                {{--<div class="col-sm-5" style="font-size: medium">--}}
+                                  {{--<table border="0" class="table table-striped table-border">--}}
+                                      {{--<tr>--}}
+                                          {{--@foreach($category_restaurants as $category_restaurant)--}}
+                                              {{--<td >--}}
+                                                  {{--<span  style="font-size: large" >{{$category_restaurant->name_en}}</span>--}}
+                                              {{--</td>--}}
+                                          {{--@endforeach--}}
+                                          {{--<td >--}}
+                                              {{--<a class="btn" onclick="changeCategory()">--}}
+                                                  {{--<i class="fa fa-pencil fa-2x"></i>--}}
+                                              {{--</a>--}}
+                                          {{--</td>--}}
+                                      {{--</tr>--}}
+                                  {{--</table>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                            <div class="form-group" id="changeCategory">
+                                <label for="input-category" class="col-sm-3 control-label">Category</label>
                                 <div class="col-sm-5">
-                                    @foreach($categories as $category)
-                                        <label class="container">
-                                            {{$category->name_en}}
-                                            <input type="checkbox" name="category[]" value="{{$category->id}}">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                    @endforeach
+                                    <select name="category[]" id="input-category" class="form-control" multiple>
+                                        @foreach($categories as $category)
+                                            <option value="{{$category->id}}">{{$category->name_en}}</option>
+                                        @endforeach
+                                    </select>
                                     @if ($errors->has('category'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('category') }}</strong>
@@ -696,68 +713,11 @@
         </div>
     </div>
     <script type="text/javascript">
-
-        var gallery_image_row = 1;
-
-        function addImageToGallery(image_row = null) {
-            var height = (this.window.innerHeight > 0) ? this.window.innerHeight - 100 : this.screen.height - 100;
-            $(window).bind("load resize", function () {
-                var height = (this.window.innerHeight > 0) ? this.window.innerHeight - 100 : this.screen.height - 100;
-                $('#media-manager > iframe').css("height", (height) + "px");
-            });
-
-            if (null == image_row) {
-                image_row = gallery_image_row;
-
-                html = '<tr id="gallery-image' + image_row + '">';
-                html += '	<td class="action action-one"><i class="fa fa-sort handle"></i>&nbsp;&nbsp;&nbsp;<a class="btn btn-danger" onclick="confirm(\'This cannot be undone! Are you sure you want to do this?\') ? $(this).parent().parent().remove() : false;"><i class="fa fa-times-circle"></i></a></td>';
-                html += '	<td><img src="" class="image-thumb img-responsive" />'
-                    + '<input type="hidden" id="image-thumb' + image_row + '" name="gallery[images][' + image_row + '][path]" value=""></td>';
-                html += '	<td><span class="name"></span><input type="hidden" class="image-name" id="image-name' + image_row + '" name="gallery[images][' + image_row + '][name]" value=""></td>';
-                html += '	<td><input type="text" name="gallery[images][' + image_row + '][alt_text]" class="form-control" value="" /></td>';
-                html += '	<td class="text-center"><div class="btn-group btn-group-switch" data-toggle="buttons">';
-                html += '		<label class="btn btn-default active"><input type="radio" name="gallery[images][' + image_row + '][status]" checked="checked"value="0">Included</label>';
-                html += '		<label class="btn btn-danger"><input type="radio" name="gallery[images][' + image_row + '][status]" value="1">Excluded</label>';
-                html += '	</div></td>';
-                html += '</tr>';
-
-                $('#gallery-images .table-sortable tbody').append(html);
-                $('#gallery-image' + image_row + ' select.form-control').select2();
-
-                gallery_image_row++;
-            }
-
-            var field = 'image-thumb' + image_row;
-            $('#media-manager').remove();
-            var iframe_url = js_site_url('image_manager?popup=iframe&field_id=' + field);
-
-            $('body').append('<div id="media-manager" class="modal" tabindex="-1" data-parent="note-editor" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'
-                + '<div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header">'
-                + '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>'
-                + '<h4 class="modal-title">Image Manager</h4>'
-                + '</div><div class="modal-body wrap-none">'
-                + '<iframe name="media_manager" src="' + iframe_url + '" width="100%" height="' + height + 'px" frameborder="0"></iframe>'
-                + '</div></div></div></div>');
-
-            $('#media-manager').modal('show');
-
-            $('#media-manager').on('hide.bs.modal', function (e) {
-                if ($('#' + field).attr('value')) {
-                    $.ajax({
-                        url: js_site_url('image_manager/resize?image=') + encodeURIComponent($('#' + field).attr('value')) + '&width=120&height=120',
-                        dataType: 'json',
-                        success: function (json) {
-                            var parent = $('#' + field).parent().parent();
-                            parent.find('.image-thumb').attr('src', json);
-                            parent.find('.image-name').attr('value', parent.find('.name').html());
-                        }
-                    });
-                }
-            });
+        function changeCategory() {
+            $('#changeCategory').slideToggle();
+            $('#category_name').slideToggle();
         }
 
-        //--></script>
-    <script type="text/javascript">
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();

@@ -111,23 +111,33 @@
                         </div>
                         <div id="location" class="tab-pane row wrap-all">
                             <h4 class="tab-pane-title">Basic</h4>
-                            <div class="form-group{{ $errors->has('category') ? ' has-error' : '' }}">
-                                <label for="" class="col-sm-3 control-label">Category</label>
+                            <div class="form-group">
+                                <label for="category" class="col-sm-3 control-label">Category</label>
                                 <div class="col-sm-5">
-                                    @foreach($categories as $category)
-                                        <label class="container">
-                                            {{$category->name_en}}
-                                            <input type="checkbox" name="category[]" value="{{$category->id}}">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                    @endforeach
-                                    @if ($errors->has('category'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('category') }}</strong>
-                                    </span>
-                                    @endif
+                                    <select name="category[]"  class="chosen-select" id="chkveg" multiple="multiple">
+                                        @foreach($categories as $category)
+                                            <option value="{{$category->id}}">{{$category->name_en}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
+                            {{--<div class="form-group{{ $errors->has('category') ? ' has-error' : '' }}">--}}
+                            {{--<label for="" class="col-sm-3 control-label">Category</label>--}}
+                            {{--<div class="col-sm-5">--}}
+                            {{--@foreach($categories as $category)--}}
+                            {{--<label class="container">--}}
+                            {{--{{$category->name_en}}--}}
+                            {{--<input type="checkbox" name="category[]" value="{{$category->id}}">--}}
+                            {{--<span class="checkmark"></span>--}}
+                            {{--</label>--}}
+                            {{--@endforeach--}}
+                            {{--@if ($errors->has('category'))--}}
+                            {{--<span class="help-block">--}}
+                            {{--<strong>{{ $errors->first('category') }}</strong>--}}
+                            {{--</span>--}}
+                            {{--@endif--}}
+                            {{--</div>--}}
+                            {{--</div>--}}
                             <div class="form-group{{ $errors->has('restaurant_name_en') ? ' has-error' : '' }}">
                                 <label for="input_restaurant_name_en" class="col-sm-3 control-label">Name En</label>
                                 <div class="col-sm-5">
@@ -736,123 +746,12 @@
                                                 </label>
                                             </div>
                                         </div>
-                                    </div>
+                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </form>
-            </div>
-        </div>
-    </div>
-    <script>
-        $('input[name=\'table\']').select2({
-            placeholder: 'Start typing...',
-            minimumInputLength: 2,
-            ajax: {
-                url: 'https://demo.tastyigniter.com/admin/tables/autocomplete',
-                dataType: 'json',
-                quietMillis: 100,
-                data: function (term, page) {
-                    return {
-                        term: term, //search term
-                        page_limit: 10 // page size
-                    };
-                },
-                results: function (data, page, query) {
-                    return {results: data.results};
-                }
-            }
-        });
-
-        $('input[name=\'table\']').on('select2-selecting', function (e) {
-            $('#table-box' + e.choice.id).remove();
-            $('#table-box table tbody').append('<tr id="table-box' + e.choice.id + '"><td class="name">' + e.choice.text + '</td><td>' + e.choice.min + '</td><td>' + e.choice.max + '</td><td class="img">' + '<a class="btn btn-danger btn-xs" onclick="confirm(\'This cannot be undone! Are you sure you want to do this?\') ? $(this).parent().parent().remove() : false;"><i class="fa fa-times-circle"></i></a>' + '<input type="hidden" name="tables[]" value="' + e.choice.id + '" /></td></tr>');
-        });
-    </script>
-    <script type="text/javascript">
-
-        $(function () {
-            $('.table-sortable').sortable({
-                containerSelector: 'table',
-                itemPath: '> tbody',
-                itemSelector: 'tr',
-                placeholder: '<tr class="placeholder"><td colspan="5"></td></tr>',
-                handle: '.handle'
-            })
-        });
-
-        var gallery_image_row = 1;
-
-        function addImageToGallery(image_row = null) {
-            var height = (this.window.innerHeight > 0) ? this.window.innerHeight - 100 : this.screen.height - 100;
-            $(window).bind("load resize", function () {
-                var height = (this.window.innerHeight > 0) ? this.window.innerHeight - 100 : this.screen.height - 100;
-                $('#media-manager > iframe').css("height", (height) + "px");
-            });
-
-            if (null == image_row) {
-                image_row = gallery_image_row;
-
-                html = '<tr id="gallery-image' + image_row + '">';
-                html += '	<td class="action action-one"><i class="fa fa-sort handle"></i>&nbsp;&nbsp;&nbsp;<a class="btn btn-danger" onclick="confirm(\'This cannot be undone! Are you sure you want to do this?\') ? $(this).parent().parent().remove() : false;"><i class="fa fa-times-circle"></i></a></td>';
-                html += '	<td><img src="" class="image-thumb img-responsive" />'
-                    + '<input type="hidden" id="image-thumb' + image_row + '" name="gallery[images][' + image_row + '][path]" value=""></td>';
-                html += '	<td><span class="name"></span><input type="hidden" class="image-name" id="image-name' + image_row + '" name="gallery[images][' + image_row + '][name]" value=""></td>';
-                html += '	<td><input type="text" name="gallery[images][' + image_row + '][alt_text]" class="form-control" value="" /></td>';
-                html += '	<td class="text-center"><div class="btn-group btn-group-switch" data-toggle="buttons">';
-                html += '		<label class="btn btn-default active"><input type="radio" name="gallery[images][' + image_row + '][status]" checked="checked"value="0">Included</label>';
-                html += '		<label class="btn btn-danger"><input type="radio" name="gallery[images][' + image_row + '][status]" value="1">Excluded</label>';
-                html += '	</div></td>';
-                html += '</tr>';
-
-                $('#gallery-images .table-sortable tbody').append(html);
-                $('#gallery-image' + image_row + ' select.form-control').select2();
-
-                gallery_image_row++;
-            }
-
-            var field = 'image-thumb' + image_row;
-            $('#media-manager').remove();
-            // var iframe_url = js_site_url('image_manager?popup=iframe&field_id=' + field);
-            var iframe_url = 'https://demo.tastyigniter.com/admin/image_manager?popup=iframe&field_id=field&sub_folder= '
-            $('body').append('<div id="media-manager" class="modal" tabindex="-1" data-parent="note-editor" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'
-                + '<div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header">'
-                + '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>'
-                + '<h4 class="modal-title">Image Manager</h4>'
-                + '</div><div class="modal-body wrap-none">'
-                + '<iframe name="media_manager" src="' + iframe_url + '" width="100%" height="' + height + 'px" frameborder="0"></iframe>'
-                + '</div></div></div></div>');
-
-            $('#media-manager').modal('show');
-
-            $('#media-manager').on('hide.bs.modal', function (e) {
-                if ($('#' + field).attr('value')) {
-                    $.ajax({
-                        url: js_site_url('image_manager/resize?image=') + encodeURIComponent($('#' + field).attr('value')) + '&width=120&height=120',
-                        dataType: 'json',
-                        success: function (json) {
-                            var parent = $('#' + field).parent().parent();
-                            parent.find('.image-thumb').attr('src', json);
-                            parent.find('.image-name').attr('value', parent.find('.name').html());
-                        }
-                    });
-                }
-            });
-        }
-    </script>
-    <div id="media-manager" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
-         style="display: none;">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">Image Manager</h4>
-                </div>
-                <div class="modal-body wrap-none">
-                    {{--<iframe name="media_manager" src="qckly.loc/image_manager?popup=iframe&field_id=field&sub_folder=" width="100%" height="241px" frameborder="0"></iframe>--}}
-                </div>
-
             </div>
         </div>
     </div>
