@@ -60,13 +60,12 @@
                             <div class="form-group{{ $errors->has('category') ? ' has-error' : '' }}">
                                 <label for="category" class="col-sm-3 control-label">Category</label>
                                 <div class="col-sm-5">
-                                    <select name="category[]" id="selected" class="form-control" multiple>
-                                        @foreach($category_restaurants as $category_restaurant)
-                                            <option selected>{{$category_restaurant->name_en}}</option>
+                                    <select name="category[]" id="selected" class="form-control" multiple placeholder=" @foreach($category_restaurants as $category_restaurant)
+                                    {{$category_restaurant->name_en}}
+                                    @endforeach">
+                                        @foreach($categories as $category)
+                                            <option value="{{$category->id}}">{{$category->name_en}}</option>
                                         @endforeach
-                                        {{--@foreach($categories as $category)--}}
-                                            {{--<option value="{{$category->id}}">{{$category->name_en}}</option>--}}
-                                        {{--@endforeach--}}
                                     </select>
                                     @if ($errors->has('category'))
                                         <span class="help-block">

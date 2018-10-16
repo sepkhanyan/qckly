@@ -198,9 +198,6 @@ class RestaurantsController extends Controller
         $areas = Area::all();
         $categories = RestaurantCategory::all();
         $category_restaurants = CategoryRestaurant::where('restaurant_id', $id)->get();
-        foreach($categories as $category){
-            dd($category->id);
-        }
         if ($user->admin == 2) {
             $user = $user->load('restaurant');
             if ($user->restaurant->id == $id) {
