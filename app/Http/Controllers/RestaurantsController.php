@@ -951,6 +951,7 @@ class RestaurantsController extends Controller
                                 'collection_type_id' => $collection->category_id,
                                 'collection_type' => $collection_type,
                                 'female_caterer_available' => $female_caterer_available,
+                                'mealtime_id' => $collection->mealtime_id,
                                 'mealtime' => $mealtime,
                                 'collection_min_qty' => $collection_min,
                                 'collection_max_qty' => $collection_max,
