@@ -283,8 +283,7 @@ class UsersController extends Controller
                 }
 
 //                if ($smsCode->group_id == 0) {
-                $update = User::select("*")
-                    ->where('otp', $otp)
+                $update = User::where('otp', $otp)
                     ->where('mobile_number', $mobile)
                     ->first();
                 $update->api_token = $token;
