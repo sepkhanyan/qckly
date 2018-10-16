@@ -286,7 +286,6 @@ class UsersController extends Controller
                 $update = User::select("*")
                     ->where('otp', $otp)
                     ->where('mobile_number', $mobile)
-                    ->where('country_code', $country_code)
                     ->first();
                 $update->api_token = $token;
                 $update->lang = $request->header('Accept-Language');
