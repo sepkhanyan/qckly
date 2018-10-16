@@ -111,33 +111,22 @@
                         </div>
                         <div id="location" class="tab-pane row wrap-all">
                             <h4 class="tab-pane-title">Basic</h4>
-                            <div class="form-group">
+                            <div class="form-group{{ $errors->has('category') ? ' has-error' : '' }}">
                                 <label for="category" class="col-sm-3 control-label">Category</label>
                                 <div class="col-sm-5">
-                                    <select name="category[]"  class="chosen-select" id="chkveg" multiple="multiple">
+                                    <select name="category[]" id="category" class="form-control" multiple
+                                            placeholder="Select Category">
                                         @foreach($categories as $category)
                                             <option value="{{$category->id}}">{{$category->name_en}}</option>
                                         @endforeach
                                     </select>
+                                    @if ($errors->has('category'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('category') }}</strong>
+                                        </span>
+                                    @endif
                                 </div>
                             </div>
-                            {{--<div class="form-group{{ $errors->has('category') ? ' has-error' : '' }}">--}}
-                            {{--<label for="" class="col-sm-3 control-label">Category</label>--}}
-                            {{--<div class="col-sm-5">--}}
-                            {{--@foreach($categories as $category)--}}
-                            {{--<label class="container">--}}
-                            {{--{{$category->name_en}}--}}
-                            {{--<input type="checkbox" name="category[]" value="{{$category->id}}">--}}
-                            {{--<span class="checkmark"></span>--}}
-                            {{--</label>--}}
-                            {{--@endforeach--}}
-                            {{--@if ($errors->has('category'))--}}
-                            {{--<span class="help-block">--}}
-                            {{--<strong>{{ $errors->first('category') }}</strong>--}}
-                            {{--</span>--}}
-                            {{--@endif--}}
-                            {{--</div>--}}
-                            {{--</div>--}}
                             <div class="form-group{{ $errors->has('restaurant_name_en') ? ' has-error' : '' }}">
                                 <label for="input_restaurant_name_en" class="col-sm-3 control-label">Name En</label>
                                 <div class="col-sm-5">
@@ -746,7 +735,7 @@
                                                 </label>
                                             </div>
                                         </div>
-                                     </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -2,7 +2,6 @@ $(document).ready(function () {
 
     var token = $('[name=csrf-token]').attr('content');
 
-
     $("a#select-image").on("click", function () {
 
 

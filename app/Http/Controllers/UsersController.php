@@ -273,6 +273,7 @@ class UsersController extends Controller
             $smsCode = User::where('otp', $otp)
                 ->where('mobile_number', $mobile)->first();
             ///=========create any token =============//
+            ///
             if ($smsCode) {
                 if ($smsCode->api_token != '') {
                     $token = $smsCode->api_token;

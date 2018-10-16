@@ -81,7 +81,6 @@
         }
     </style>
     <style>
-
         /* The container */
         .container {
             display: block;

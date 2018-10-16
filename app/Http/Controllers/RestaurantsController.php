@@ -198,6 +198,9 @@ class RestaurantsController extends Controller
         $areas = Area::all();
         $categories = RestaurantCategory::all();
         $category_restaurants = CategoryRestaurant::where('restaurant_id', $id)->get();
+        foreach($categories as $category){
+            dd($category->id);
+        }
         if ($user->admin == 2) {
             $user = $user->load('restaurant');
             if ($user->restaurant->id == $id) {
@@ -226,7 +229,6 @@ class RestaurantsController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-//            'category' => 'required',
             'restaurant_name_en' => 'required|string|max:255',
             'restaurant_name_ar' => 'required|string|max:255',
             'restaurant_email' => 'required|string|max:255',
