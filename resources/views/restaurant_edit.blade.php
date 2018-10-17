@@ -38,31 +38,13 @@
                     <div class="tab-content">
                         <div id="general" class="tab-pane row wrap-all active">
                             <h4 class="tab-pane-title">Basic</h4>
-                            {{--<div class="form-group{{ $errors->has('category') ? ' has-error' : '' }}" id="category">--}}
-                            {{--<label for="" class="col-sm-3 control-label">Category</label>--}}
-                            {{--<div class="col-sm-5" style="font-size: medium">--}}
-                            {{--<table border="0" class="table table-striped table-border">--}}
-                            {{--<tr>--}}
-                            {{--@foreach($category_restaurants as $category_restaurant)--}}
-                            {{--<td >--}}
-                            {{--<span  style="font-size: large" >{{$category_restaurant->name_en}}</span>--}}
-                            {{--</td>--}}
-                            {{--@endforeach--}}
-                            {{--<td >--}}
-                            {{--<a class="btn" onclick="changeCategory()">--}}
-                            {{--<i class="fa fa-pencil fa-2x"></i>--}}
-                            {{--</a>--}}
-                            {{--</td>--}}
-                            {{--</tr>--}}
-                            {{--</table>--}}
-                            {{--</div>--}}
-                            {{--</div>--}}
                             <div class="form-group{{ $errors->has('category') ? ' has-error' : '' }}">
                                 <label for="category" class="col-sm-3 control-label">Category</label>
                                 <div class="col-sm-5">
-                                    <select name="category[]" id="selected" class="form-control" multiple placeholder=" @foreach($category_restaurants as $category_restaurant)
-                                    {{$category_restaurant->name_en}}
-                                    @endforeach">
+                                    <select name="category[]" class="form-control" multiple>
+                                        @foreach($category_restaurants as $category_restaurant)
+                                            <option selected value="{{$category_restaurant->category_id}}">{{$category_restaurant->name_en}}</option>
+                                        @endforeach
                                         @foreach($categories as $category)
                                             <option value="{{$category->id}}">{{$category->name_en}}</option>
                                         @endforeach
@@ -715,11 +697,6 @@
         </div>
     </div>
     <script type="text/javascript">
-        function changeCategory() {
-            $('#changeCategory').slideToggle();
-            $('#category_name').slideToggle();
-        }
-
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();

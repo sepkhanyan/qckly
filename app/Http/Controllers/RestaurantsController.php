@@ -196,8 +196,10 @@ class RestaurantsController extends Controller
         $user = Auth::user();
         $restaurant = Restaurant::find($id);
         $areas = Area::all();
-        $categories = RestaurantCategory::all();
         $category_restaurants = CategoryRestaurant::where('restaurant_id', $id)->get();
+        $categories = RestaurantCategory::whereDoesntHave('categoryRestaurant', function($query) use ($id) {
+            $query->where('restaurant_id', '=', $id);
+        })->get();
         if ($user->admin == 2) {
             $user = $user->load('restaurant');
             if ($user->restaurant->id == $id) {

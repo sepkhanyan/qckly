@@ -14,4 +14,8 @@ class RestaurantCategory extends Model
         'name_ar'
     ];
 
+    public function categoryRestaurant()
+    {
+        return $this->hasMany('App\CategoryRestaurant', 'category_id');
+    }
 }

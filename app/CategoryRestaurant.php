@@ -21,4 +21,9 @@ class CategoryRestaurant extends Model
         return $this->belongsTo('App\Restaurant', 'restaurant_id');
     }
 
+    public function category()
+    {
+        return $this->belongsTo('App\RestaurantCategory', 'category_id');
+    }
+
 }
