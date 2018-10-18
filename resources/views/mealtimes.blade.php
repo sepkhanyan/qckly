@@ -74,7 +74,7 @@
                                                     <input type="checkbox" value="{{ $mealtime->id }}" name="delete"/>&nbsp;&nbsp;&nbsp;
                                                     <a class="btn btn-edit" href="#" data-toggle="modal"
                                                        data-target="#modalEditMealtime" type="button"
-                                                       onclick="myFunction({{$mealtime->id}})">
+                                                       onclick="myFunction('{{$mealtime->id}}', '{{$mealtime->name_en}}', '{{$mealtime->name_ar}}', '{{$mealtime->start_time}}', '{{$mealtime->end_time}}' )">
                                                         <i class="fa fa-pencil"></i>
                                                     </a>&nbsp;&nbsp;
                                                 </td>
@@ -201,7 +201,11 @@
         @endif
     </div>
     <script type="text/javascript">
-        function myFunction(id) {
+        function myFunction(id,en,ar,start,end) {
+            $('input[name=mealtime_en]').val(en);
+            $('input[name=mealtime_ar]').val(ar);
+            $('input[name=start_time]').val(start);
+            $('input[name=end_time]').val(end);
             $("#edit-form").attr('action', 'mealtime/update/' + id);
         }
     </script>

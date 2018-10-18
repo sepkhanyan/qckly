@@ -97,11 +97,9 @@
                                                 onclick="myFunction('{{$restaurant->id}}','{{$restaurant->status}}')"
                                                 style="font-size: 20px; cursor: pointer">
                                                 @if($restaurant->status == 1)
-                                                    <span class="label label-default"
-                                                          style="background-color: #00a65a; ">{{\Lang::get('message.open')}}</span>
+                                                    <a class="btn btn-success">{{\Lang::get('message.open')}}</a>
                                                 @elseif($restaurant->status == 0)
-                                                    <span class="label label-default"
-                                                          style="background-color: #ea0b29 ;">{{\Lang::get('message.busy')}}</span>
+                                                    <a class="btn btn-danger">{{\Lang::get('message.busy')}}</a>
                                                 @endif
                                             </td>
                                             <td>{{$restaurant->id}}</td>
@@ -134,11 +132,11 @@
                     </div>
                     <div class="modal-body">
                         <div class="btn-group btn-group-switch" data-toggle="buttons">
-                            <label class="" id="open">
+                            <label id="open">
                                 <input type="radio" name="status" value="1" id="input_open">
                                 Open
                             </label>
-                            <label class="" id="busy">
+                            <label id="busy">
                                 <input type="radio" name="status" value="0" id="input_busy">
                                 Busy
                             </label>

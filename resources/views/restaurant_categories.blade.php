@@ -74,7 +74,7 @@
                                             <input type="checkbox" value="{{ $category->id }}" name="delete"/>
                                             <a class="btn btn-edit" href="#" data-toggle="modal"
                                                data-target="#modalEditRestaurantCategory" type="button"
-                                               onclick="myFunction({{$category->id }})">
+                                               onclick="myFunction('{{$category->id}}', '{{$category->name_en}}', '{{$category->name_ar}}')">
                                                 <i class="fa fa-pencil"></i>
                                             </a>&nbsp;&nbsp;&nbsp;
                                         </td>
@@ -164,9 +164,10 @@
         </div>
     </div>
     <script type="text/javascript">
-        function myFunction(id) {
+        function myFunction(id,en,ar) {
+            $('input[name=name_en]').val(en);
+            $('input[name=name_ar]').val(ar);
             $("#edit-form").attr('action', 'restaurant_category/update/' + id);
         }
-
-        //--></script>
+    </script>
 @endsection
