@@ -94,7 +94,7 @@
                                             <td>{{$restaurant->address_en}}</td>
                                             <td>{{$restaurant->telephone}}</td>
                                             <td data-toggle="modal" data-target="#changeStatus"
-                                                onclick="myFunction({{$restaurant->id}})"
+                                                onclick="myFunction('{{$restaurant->id}}','{{$restaurant->status}}')"
                                                 style="font-size: 20px; cursor: pointer">
                                                 @if($restaurant->status == 1)
                                                     <span class="label label-default"
@@ -134,13 +134,12 @@
                     </div>
                     <div class="modal-body">
                         <div class="btn-group btn-group-switch" data-toggle="buttons">
-                            <label class="btn btn-success active">
-                                <input type="radio" name="status" value="1"
-                                       checked="checked">
+                            <label class="" id="open">
+                                <input type="radio" name="status" value="1" id="input_open">
                                 Open
                             </label>
-                            <label class="btn btn-danger">
-                                <input type="radio" name="status" value="0">
+                            <label class="" id="busy">
+                                <input type="radio" name="status" value="0" id="input_busy">
                                 Busy
                             </label>
                         </div>
@@ -154,7 +153,17 @@
         </form>
     </div>
     <script type="text/javascript">
-        function myFunction(id) {
+        function myFunction(id, status) {
+            console.log(status);
+            if(status ==1){
+                $('#open').attr('class', 'btn btn-success active');
+                $('#busy').attr('class', 'btn btn-danger');
+                $('#input_open').attr('checked', 'checked');
+            }else{
+                $('#busy').attr('class', 'btn btn-danger active');
+                $('#open').attr('class', 'btn btn-success');
+                $('#input_busy').attr('checked', 'checked');
+            }
             $("#edit-form").attr('action', 'restaurant/status/update/' + id);
         }
     </script>
