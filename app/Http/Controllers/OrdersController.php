@@ -145,7 +145,7 @@ class OrdersController extends Controller
                         'address_name' => $order->cart->address->name,
                         'mobile_number' => $order->cart->address->mobile_number,
                         'location' => $order->cart->address->location,
-                        'building_number' => $order->cart->address->location,
+                        'building_number' => $order->cart->address->building_number,
                         'zone' => $order->cart->address->zone,
                         'is_apartment' => $is_apartment,
                         'apartment_number' => $order->cart->address->apartment_number,
