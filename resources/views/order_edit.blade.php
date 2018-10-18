@@ -96,14 +96,14 @@
                                         <div class="panel-heading"><h3 class="panel-title">Delivery Address</h3></div>
                                         <div class="panel-body">
                                             <b>Address:</b>
-                                            {{$order->cart->address->name}},
-                                            {{$order->cart->address->location}},
-                                            {{$order->cart->address->building_number}},
-                                            {{$order->cart->address->zone}},
-                                            {{$order->cart->address->apartment_number}}
+                                            {{$order->deliveryAddress->name}},
+                                            {{$order->deliveryAddress->location}},
+                                            {{$order->deliveryAddress->building_number}},
+                                            {{$order->deliveryAddress->zone}},
+                                            {{$order->deliveryAddress->apartment_number}}
                                             <br>
                                             <b>Telephone:</b>
-                                            {{$order->cart->address->mobile_number}}
+                                            {{$order->deliveryAddress->mobile_number}}
                                         </div>
                                     </div>
                                 </div>

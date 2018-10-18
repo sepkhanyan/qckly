@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Address;
 use App\UserCart;
 use App\User;
+use App\Order;
 use Illuminate\Http\Request;
 
 class AddressesController extends Controller
@@ -228,10 +229,6 @@ class AddressesController extends Controller
                     UserCart::where('user_id', $user->id)->where('completed', 0)->update(['delivery_address_id' => $new_default_address->id]);
                 } else {
                     UserCart::where('user_id', $user->id)->where('completed', 0)->update(['delivery_address_id' => null]);
-                    return response()->json(array(
-                        'success' => 1,
-                        'status_code' => 200,
-                        'message' => \Lang::get('message.addressDelete')));
                 }
             }
             return response()->json(array(

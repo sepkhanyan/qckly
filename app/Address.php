@@ -32,4 +32,9 @@ class Address extends Model
     {
         return $this->hasMany('App\UserCart', 'delivery_address_id');
     }
+
+    public function deliveryAddress()
+    {
+        return $this->hasOne('App\DeliveryAddress', 'address_id');
+    }
 }

@@ -42,4 +42,9 @@ class Order extends Model
     {
         return $this->hasMany('App\OrderRestaurant', 'order_id');
     }
+
+    public function deliveryAddress()
+    {
+        return $this->hasOne('App\DeliveryAddress', 'order_id');
+    }
 }

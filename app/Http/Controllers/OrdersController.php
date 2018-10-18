@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DeliveryAddress;
 use App\OrderRestaurant;
 use App\UserCartCollection;
 use Illuminate\Http\Request;
@@ -130,28 +131,28 @@ class OrdersController extends Controller
             $orders = Order::where('user_id', $user->id)->orderby('created_at', 'desc')->with('cart.address')->paginate(20);
             if (count($orders) > 0) {
                 foreach ($orders as $order) {
-                    if ($order->cart->address->is_apartment == 1) {
+                    if ($order->deliveryAddress->is_apartment == 1) {
                         $is_apartment = true;
                     } else {
                         $is_apartment = false;
                     }
-                    if ($order->cart->address->is_default == 1) {
+                    if ($order->deliveryAddress->is_default == 1) {
                         $default = true;
                     } else {
                         $default = false;
                     }
-                    $address_id = $order->cart->address->id;
+                    $address_id = $order->deliveryAddress->id;
                     $address = [
-                        'address_name' => $order->cart->address->name,
-                        'mobile_number' => $order->cart->address->mobile_number,
-                        'location' => $order->cart->address->location,
-                        'building_number' => $order->cart->address->building_number,
-                        'zone' => $order->cart->address->zone,
+                        'address_name' => $order->deliveryAddress->name,
+                        'mobile_number' => $order->deliveryAddress->mobile_number,
+                        'location' => $order->deliveryAddress->location,
+                        'building_number' => $order->deliveryAddress->building_number,
+                        'zone' => $order->deliveryAddress->zone,
                         'is_apartment' => $is_apartment,
-                        'apartment_number' => $order->cart->address->apartment_number,
+                        'apartment_number' => $order->deliveryAddress->apartment_number,
                         'is_default' => $default,
-                        'latitude' => $order->cart->address->latitude,
-                        'longitude' => $order->cart->address->longitude,
+                        'latitude' => $order->deliveryAddress->latitude,
+                        'longitude' => $order->deliveryAddress->longitude,
                     ];
                     $total = 0;
                     $collections = [];
@@ -378,6 +379,19 @@ class OrdersController extends Controller
                             $orderRestaurant->save();
                         }
                         UserCart::where('id', $cart_id)->update(['completed' => 1]);
+                        $delivery_address = new DeliveryAddress();
+                        $delivery_address->order_id = $order->id;
+                        $delivery_address->address_id = $cart->delivery_address_id;
+                        $delivery_address->name = $cart->address->name;
+                        $delivery_address->mobile_number = $cart->address->mobile_number;
+                        $delivery_address->location = $cart->address->location;
+                        $delivery_address->building_number = $cart->address->building_number;
+                        $delivery_address->zone = $cart->address->zone;
+                        $delivery_address->is_apartment = $cart->address->is_apartment;
+                        $delivery_address->latitude = $cart->address->latitude;
+                        $delivery_address->longitude = $cart->address->longitude;
+                        $delivery_address->apartment_number = $cart->address->apartment_number;
+                        $delivery_address->save();
                     } else {
                         return response()->json(array(
                             'success' => 1,
