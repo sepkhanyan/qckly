@@ -204,7 +204,7 @@ class CategoriesController extends Controller
                 if ($category->menu) {
                     $menu_images = [];
                     foreach ($category->menu as $menu) {
-                        $menu_images[] = public_path('images/' . $menu->menu_photo);
+                        $menu_images[] = public_path('images/' . $menu->image);
                     }
                     File::delete($menu_images);
                 }
@@ -217,7 +217,7 @@ class CategoriesController extends Controller
                 if ($category->menu) {
                     $menu_images = [];
                     foreach ($category->menu as $menu) {
-                        $menu_images[] = public_path('images/' . $menu->menu_photo);
+                        $menu_images[] = public_path('images/' . $menu->image);
                     }
                     File::delete($menu_images);
                 }
