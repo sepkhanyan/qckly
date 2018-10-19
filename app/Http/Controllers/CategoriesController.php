@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Collection;
 use App\CollectionMenu;
-use App\Http\Requests\CategoryRequest;
 use Auth;
 use Illuminate\Http\Request;
 use App\Category;
@@ -28,9 +27,6 @@ class CategoriesController extends Controller
         $categories = [];
         if ($id) {
             $categories = Category::where('restaurant_id', $id);
-            if (isset($data['category_status'])) {
-                $categories = Category::where('status', $data['category_status']);
-            }
             if (isset($data['category_search'])) {
                 $categories = Category::where('name_en', 'like', $data['category_search'])
                     ->orWhere('description_en', 'like', $data['category_search']);
@@ -42,9 +38,6 @@ class CategoriesController extends Controller
             $user = $user->load('restaurant');
             $restaurant = $user->restaurant;
             $categories = Category::where('restaurant_id', $restaurant->id);
-            if (isset($data['category_status'])) {
-                $categories = Category::where('status', $data['category_status']);
-            }
             if (isset($data['category_search'])) {
                 $categories = Category::where('name_en', 'like', $data['category_search'])
                     ->orWhere('description_en', 'like', $data['category_search']);
@@ -78,6 +71,7 @@ class CategoriesController extends Controller
     }
 
     /**
+     *
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
@@ -103,7 +97,11 @@ class CategoriesController extends Controller
         $category->description_en = $request->input('description_en');
         $category->name_ar = $request->input('name_ar');
         $category->description_ar = $request->input('description_ar');
-        $category->status = $request->input('status');
+        $image = $request->file('image');
+        $name = time() . '.' . $image->getClientOriginalExtension();
+        $destinationPath = public_path('/images');
+        $image->move($destinationPath, $name);
+        $category->image = $name;
         $category->save();
         if ($category) {
             return redirect('/categories/' . $restaurant_id);
@@ -173,7 +171,16 @@ class CategoriesController extends Controller
         $category->description_en = $request->input('description_en');
         $category->name_ar = $request->input('name_ar');
         $category->description_ar = $request->input('description_ar');
-        $category->status = $request->input('status');
+        if ($request->hasFile('image')) {
+            if ($category->image) {
+                File::delete(public_path('images/' . $category->image));
+            }
+            $image = $request->file('image');
+            $name = time() . '.' . $image->getClientOriginalExtension();
+            $destinationPath = public_path('/images');
+            $image->move($destinationPath, $name);
+            $category->image = $name;
+        }
         $category->save();
         return redirect('/categories/' . $restaurant_id);
     }
@@ -201,7 +208,9 @@ class CategoriesController extends Controller
                     }
                     File::delete($menu_images);
                 }
+                $category_images[] = public_path('images/' . $category->image);
             }
+            File::delete($category_images);
             Category::whereIn('id', $id)->where('restaurant_id', $restaurant->id)->delete();
         }else{
             foreach ($categories as $category) {
@@ -212,7 +221,9 @@ class CategoriesController extends Controller
                     }
                     File::delete($menu_images);
                 }
+                $category_images[] = public_path('images/' . $category->image);
             }
+            File::delete($category_images);
             Category::whereIn('id', $id)->delete();
         }
         return redirect('/categories');

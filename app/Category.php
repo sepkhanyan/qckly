@@ -14,7 +14,6 @@ class Category extends Model
         'name_ar',
         'description_en',
         'description_ar',
-        'status',
         'image'
     ];
 

@@ -28,7 +28,7 @@
                     </ul>
                 </div>
 
-                <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST"
+                <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST" enctype="multipart/form-data"
                       action="{{ url('/category/update/' . $category->id) }}">
                     {{ csrf_field() }}
                     <div class="tab-content">
@@ -138,32 +138,6 @@
                                                     <i class="fa fa-times-circle"></i>&nbsp;&nbsp;Remove </label>
                                             </p>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="input-status" class="col-sm-3 control-label">Status</label>
-                                <div class="col-sm-5">
-                                    <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                        @if($category->status == 0)
-                                            <label class="btn btn-danger active">
-                                                <input type="radio" name="status" value="0" checked="checked">
-                                                Disabled
-                                            </label>
-                                            <label class="btn btn-success">
-                                                <input type="radio" name="status" value="1">
-                                                Enabled
-                                            </label>
-                                        @else
-                                            <label class="btn btn-danger ">
-                                                <input type="radio" name="status" value="0">
-                                                Disabled
-                                            </label>
-                                            <label class="btn btn-success active">
-                                                <input type="radio" name="status" value="1" checked="checked">
-                                                Enabled
-                                            </label>
-                                        @endif
                                     </div>
                                 </div>
                             </div>

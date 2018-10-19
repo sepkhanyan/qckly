@@ -60,7 +60,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::get('/categories/{id?}', 'CategoriesController@index');
         Route::group(['prefix' => 'category'], function () {
             Route::get('create/{id?}', 'CategoriesController@create');
-            Route::get('store', 'CategoriesController@store');
+            Route::post('store', 'CategoriesController@store');
             Route::get('edit/{id}', 'CategoriesController@edit');
             Route::post('update/{id}', 'CategoriesController@update');
             Route::post('delete', 'CategoriesController@deleteCategory');

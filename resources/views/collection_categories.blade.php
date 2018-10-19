@@ -98,78 +98,78 @@
                 </div>
             </div>
         </div>
-        @if(Auth::user()->admin == 1)
-            <div class="modal fade" id="modalCreateCollectionCategory" role="dialog" tabindex="-1">
-                <form role="form" id="create-form" class="form-horizontal" accept-charset="utf-8" method="GET"
-                      action="{{ url('/collection_category/store') }}">
-                    {{ csrf_field() }}
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 class="modal-title"> Add Category</h4>
-                            </div>
-                            <div class="modal-body">
-                                <div class="form-group" style="margin: 5px">
-                                    <label class="control-label col-sm-2" for="en">Category En</label>
-                                    <div class="col-sm-8">
-                                        <input class="form-control" type="text" id="en" name="category_en">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-body">
-                                <div class="form-group" style="margin: 5px">
-                                    <label class="control-label col-sm-2" for="ar">Category Ar</label>
-                                    <div class="col-sm-8">
-                                        <input class="form-control" type="text" id="ar" name="category_ar">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Add</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal fade" id="modalEditCollectionCategory" role="dialog" tabindex="-1">
-                <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST">
-                    {{ csrf_field() }}
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 class="modal-title"> Edit Category</h4>
-                            </div>
-                            <div class="modal-body">
-                                <div class="form-group" style="margin: 5px">
-                                    <label class="control-label col-sm-2" for="en">Category En</label>
-                                    <div class="col-sm-8">
-                                        <input class="form-control" type="text" id="en" name="category_en" value="">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-body">
-                                <div class="form-group" style="margin: 5px">
-                                    <label class="control-label col-sm-2" for="ar">Category Ar</label>
-                                    <div class="col-sm-8">
-                                        <input class="form-control" type="text" id="ar" name="category_ar" value="">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Update</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        @endif
     </div>
+    @if(Auth::user()->admin == 1)
+        <div class="modal fade" id="modalCreateCollectionCategory" role="dialog" tabindex="-1">
+            <form role="form" id="create-form" class="form-horizontal" accept-charset="utf-8" method="GET"
+                  action="{{ url('/collection_category/store') }}">
+                {{ csrf_field() }}
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title"> Add Category</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group" style="margin: 5px">
+                                <label class="control-label col-sm-2" for="en">Category En</label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" type="text" id="en" name="category_en">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group" style="margin: 5px">
+                                <label class="control-label col-sm-2" for="ar">Category Ar</label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" type="text" id="ar" name="category_ar">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Add</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal fade" id="modalEditCollectionCategory" role="dialog" tabindex="-1">
+            <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST">
+                {{ csrf_field() }}
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title"> Edit Category</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group" style="margin: 5px">
+                                <label class="control-label col-sm-2" for="en">Category En</label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" type="text" id="en" name="category_en" value="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group" style="margin: 5px">
+                                <label class="control-label col-sm-2" for="ar">Category Ar</label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" type="text" id="ar" name="category_ar" value="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    @endif
     <script type="text/javascript">
-        function myFunction(id,en,ar) {
+        function myFunction(id, en, ar) {
             $('input[name=category_en]').val(en);
             $('input[name=category_ar]').val(ar);
             $("#edit-form").attr('action', 'collection_category/update/' + id);

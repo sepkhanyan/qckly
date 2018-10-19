@@ -99,11 +99,11 @@
                 </div>
             </div>
         </div>
-        <script type="text/javascript"><!--
-            function filterList() {
-                $('#filter-form').submit();
-            }
-
-            //--></script>
     </div>
+    <script type="text/javascript">
+        function filterList() {
+            $('#filter-form').submit();
+        }
+
+    </script>
 @endsection

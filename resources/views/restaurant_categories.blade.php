@@ -95,7 +95,7 @@
             </div>
         </div>
         <div class="modal fade" id="modalCreateRestaurantCategory" role="dialog" tabindex="-1">
-            <form role="form" id="create-form" class="form-horizontal" accept-charset="utf-8" method="GET"
+            <form role="form" id="create-form" class="form-horizontal" accept-charset="utf-8" method="POST"
                   action="{{ url('/restaurant_category/store') }}">
                 {{ csrf_field() }}
                 <div class="modal-dialog">

@@ -28,7 +28,7 @@
                     </ul>
                 </div>
 
-                <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="GET"
+                <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST" enctype="multipart/form-data"
                       action="{{ url('/category/store') }}">
                     {{ csrf_field() }}
                     <div class="tab-content">
@@ -109,7 +109,7 @@
                             <div class="form-group">
                                 <label for="input-image" class="col-sm-3 control-label">
                                     Image
-                                    <span class="help-block">Select a file to update category image, otherwise leave blank.</span>
+                                    <span class="help-block">Select a file to update menu image, otherwise leave blank.</span>
                                 </label>
                                 <div class="col-sm-5">
                                     <div class="thumbnail imagebox">
@@ -132,21 +132,6 @@
                                                     <i class="fa fa-times-circle"></i>&nbsp;&nbsp;Remove </label>
                                             </p>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="input-status" class="col-sm-3 control-label">Status</label>
-                                <div class="col-sm-5">
-                                    <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                        <label class="btn btn-danger active">
-                                            <input type="radio" name="status" value="0" checked="checked">
-                                            Disabled
-                                        </label>
-                                        <label class="btn btn-success">
-                                            <input type="radio" name="status" value="1">
-                                            Enabled
-                                        </label>
                                     </div>
                                 </div>
                             </div>

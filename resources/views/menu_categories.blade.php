@@ -68,27 +68,15 @@
                                             <div class="form-group">
                                                 <input type="text" name="category_search" class="form-control input-sm"
                                                        value=""
-                                                       placeholder="Search category name, description or status."/>&nbsp;&nbsp;&nbsp;
+                                                       placeholder="Search category name or description."/>&nbsp;&nbsp;&nbsp;
                                             </div>
                                             <a class="btn btn-grey" onclick="filterList();" title="Search">
                                                 <i class="fa fa-search"></i>
                                             </a>
-                                        </div>
-                                        <div class="col-md-8 pull-left">
-                                            <div class="form-group">
-                                                <select name="category_status" class="form-control input-sm">
-                                                    <option value="">View all status</option>
-                                                    <option value="1">Enabled</option>
-                                                    <option value="0">Disabled</option>
-                                                </select>
-                                            </div>
-                                            <a class="btn btn-grey" onclick="filterList();" title="Filter">
-                                                <i class="fa fa-filter"></i>
-                                            </a>&nbsp;
                                             <a class="btn btn-grey" href="{{url('/categories/' . $id)}}" title="Clear">
                                                 <i class="fa fa-times"></i>
                                             </a>
-                                        </div>
+                                        </div>&nbsp;
                                     </div>
                                 </div>
                             </div>
@@ -105,7 +93,6 @@
                                     </th>
                                     <th>Name</th>
                                     <th>Description</th>
-                                    <th>Status</th>
                                     <th>ID</th>
                                 </tr>
                                 </thead>
@@ -123,11 +110,6 @@
                                                 </td>
                                                 <td>{{$category->name_en}}</td>
                                                 <td>{{$category->description_en}}</td>
-                                                @if($category->status == 1)
-                                                    <td>Enable</td>
-                                                @else
-                                                    <td>Disable</td>
-                                                @endif
                                                 <td>{{$category->id}}</td>
                                             </tr>
                                         @endforeach

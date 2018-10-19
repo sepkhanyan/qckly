@@ -67,7 +67,7 @@
                                                 <input type="checkbox" value="{{ $status->id }}" name="delete"/>&nbsp;&nbsp;&nbsp;
                                                 <a class="btn btn-edit" data-toggle="modal"
                                                    data-target="#modalEditStatus"
-                                                   type="button" onclick="myFunction({{$status->id}})">
+                                                   type="button" onclick="myFunction('{{$status->id}}', '{{$status->name_en}}', '{{$status->name_ar}}')">
                                                     <i class="fa fa-pencil"></i>
                                                 </a>&nbsp;&nbsp;
                                             </td>
@@ -172,7 +172,9 @@
         </div>
     </div>
     <script type="text/javascript">
-        function myFunction(id) {
+        function myFunction(id,en,ar) {
+            $('input[name=name_en]').val(en);
+            $('input[name=name_ar]').val(ar);
             $("#edit-form").attr('action', 'status/update/' + id);
         }
     </script>
