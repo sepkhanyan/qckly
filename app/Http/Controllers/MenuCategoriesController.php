@@ -6,12 +6,12 @@ use App\Collection;
 use App\CollectionMenu;
 use Auth;
 use Illuminate\Http\Request;
-use App\Category;
+use App\MenuCategory;
 use App\Menu;
 use App\Restaurant;
 use Illuminate\Support\Facades\File;
 
-class CategoriesController extends Controller
+class MenuCategoriesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,9 +26,9 @@ class CategoriesController extends Controller
         $data = $request->all();
         $categories = [];
         if ($id) {
-            $categories = Category::where('restaurant_id', $id);
+            $categories = MenuCategory::where('restaurant_id', $id);
             if (isset($data['category_search'])) {
-                $categories = Category::where('name_en', 'like', $data['category_search'])
+                $categories = MenuCategory::where('name_en', 'like', $data['category_search'])
                     ->orWhere('description_en', 'like', $data['category_search']);
             }
             $selectedRestaurant = Restaurant::find($id);
@@ -37,9 +37,9 @@ class CategoriesController extends Controller
         if ($user->admin == 2) {
             $user = $user->load('restaurant');
             $restaurant = $user->restaurant;
-            $categories = Category::where('restaurant_id', $restaurant->id);
+            $categories = MenuCategory::where('restaurant_id', $restaurant->id);
             if (isset($data['category_search'])) {
-                $categories = Category::where('name_en', 'like', $data['category_search'])
+                $categories = MenuCategory::where('name_en', 'like', $data['category_search'])
                     ->orWhere('description_en', 'like', $data['category_search']);
             }
             $selectedRestaurant = Restaurant::find($restaurant->id);
@@ -91,7 +91,7 @@ class CategoriesController extends Controller
             $user = $user->load('restaurant');
             $restaurant_id = $user->restaurant->id;
         }
-        $category = new Category();
+        $category = new MenuCategory();
         $category->restaurant_id = $restaurant_id;
         $category->name_en = $request->input('name_en');
         $category->description_en = $request->input('description_en');
@@ -104,7 +104,7 @@ class CategoriesController extends Controller
         $category->image = $name;
         $category->save();
         if ($category) {
-            return redirect('/categories/' . $restaurant_id);
+            return redirect('/menu_categories/' . $restaurant_id);
         }
     }
 
@@ -128,13 +128,13 @@ class CategoriesController extends Controller
     public function edit($id)
     {
         $user = Auth::user();
-        $category = Category::find($id);
+        $category = MenuCategory::find($id);
         if ($user->admin == 2) {
             $user = $user->load('restaurant');
             $restaurant = $user->restaurant;
-            $category = Category::where('id', $id)->where('restaurant_id', $restaurant->id)->first();
+            $category = MenuCategory::where('id', $id)->where('restaurant_id', $restaurant->id)->first();
             if (!$category) {
-                return redirect('/categories');
+                return redirect('/menu_categories');
             }
         }
         return view('menu_category_edit', ['category' => $category]);
@@ -156,13 +156,13 @@ class CategoriesController extends Controller
             'description_ar' => 'required|string',
         ]);
         $user = Auth::user();
-        $category = Category::find($id);
+        $category = MenuCategory::find($id);
         $restaurant_id = $request->input('restaurant');
         if ($user->admin == 2) {
             $user = $user->load('restaurant');
             $restaurant = $user->restaurant;
             $restaurant_id = $restaurant->id;
-            $category = Category::where('id', $id)->where('restaurant_id', $restaurant->id)->first();
+            $category = MenuCategory::where('id', $id)->where('restaurant_id', $restaurant->id)->first();
             if (!$category) {
                 return redirect('/categories');
             }
@@ -182,7 +182,7 @@ class CategoriesController extends Controller
             $category->image = $name;
         }
         $category->save();
-        return redirect('/categories/' . $restaurant_id);
+        return redirect('/menu_categories/' . $restaurant_id);
     }
 
     /**
@@ -194,12 +194,12 @@ class CategoriesController extends Controller
     public function deleteCategory(Request $request)
     {
         $id = $request->get('id');
-        $categories = Category::where('id', $id)->get();
+        $categories = MenuCategory::where('id', $id)->get();
         $user = Auth::user();
         if ($user->admin == 2) {
             $user = $user->load('restaurant');
             $restaurant = $user->restaurant;
-            $categories = Category::where('id', $id)->where('restaurant_id', $restaurant->id)->get();
+            $categories = MenuCategory::where('id', $id)->where('restaurant_id', $restaurant->id)->get();
             foreach ($categories as $category) {
                 if ($category->menu) {
                     $menu_images = [];
@@ -211,7 +211,7 @@ class CategoriesController extends Controller
                 $category_images[] = public_path('images/' . $category->image);
             }
             File::delete($category_images);
-            Category::whereIn('id', $id)->where('restaurant_id', $restaurant->id)->delete();
+            MenuCategory::whereIn('id', $id)->where('restaurant_id', $restaurant->id)->delete();
         }else{
             foreach ($categories as $category) {
                 if ($category->menu) {
@@ -224,9 +224,9 @@ class CategoriesController extends Controller
                 $category_images[] = public_path('images/' . $category->image);
             }
             File::delete($category_images);
-            Category::whereIn('id', $id)->delete();
+            MenuCategory::whereIn('id', $id)->delete();
         }
-        return redirect('/categories');
+        return redirect('/menu_categories');
 
     }
 }

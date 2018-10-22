@@ -306,7 +306,7 @@
                             {{--</a>--}}
                             {{--</li>--}}
                             <li>
-                                <a href="{{ url('/categories') }}" class="menu-categories">
+                                <a href="{{ url('/menu_categories') }}" class="menu-categories">
                                     <i class="fa fa-square-o fa-fw"></i>
                                     Menu Categories
                                 </a>

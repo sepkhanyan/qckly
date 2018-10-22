@@ -32,7 +32,7 @@ class UserCartItem extends Model
 
     public function category()
     {
-        return $this->belongsTo('App\Category', 'menu_id');
+        return $this->belongsTo('App\MenuCategory', 'menu_id');
     }
 
 

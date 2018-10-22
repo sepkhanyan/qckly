@@ -1,4 +1,4 @@
-@extends('home', ['title' => 'Menu: Category: ' . $category->name_en])
+@extends('home', ['title' => 'MenuCategory' . $category->name_en])
 @section('content')
     <div id="page-wrapper">
         <div class="page-header clearfix">
@@ -29,7 +29,7 @@
                 </div>
 
                 <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST" enctype="multipart/form-data"
-                      action="{{ url('/category/update/' . $category->id) }}">
+                      action="{{ url('/menu_category/update/' . $category->id) }}">
                     {{ csrf_field() }}
                     <div class="tab-content">
                         <div id="general" class="tab-pane row wrap-all active">

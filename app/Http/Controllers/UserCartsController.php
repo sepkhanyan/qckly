@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Address;
-use App\Category;
+use App\MenuCategory;
 use App\Restaurant;
 use App\UserCart;
 use App\UserCartItem;
@@ -378,7 +378,7 @@ class UserCartsController extends Controller
                     $total = 0;
                     foreach ($cart->cartCollection as $cart_collection) {
                         $menu = [];
-                        $categories = Category::whereHas('cartItem', function ($query) use ($cart_collection) {
+                        $categories = MenuCategory::whereHas('cartItem', function ($query) use ($cart_collection) {
                             $query->where('cart_collection_id', $cart_collection->id);
                         })->with(['cartItem' => function ($x) use ($cart_collection) {
                             $x->where('cart_collection_id', $cart_collection->id);

@@ -224,7 +224,7 @@ $(document).ready(function () {
         });
 
     });
-    $('#delete_category').click(function () {
+    $('#delete_menu_category').click(function () {
         window.checkValues = $('input[name=delete]:checked').map(function () {
             return $(this).val();
         }).get();
@@ -234,7 +234,7 @@ $(document).ready(function () {
         $.ajax({
 
             method: "POST",
-            url: "/category/delete",
+            url: "/menu_category/delete",
             data: {id: checkValues, _token: token},
             success: function (data) {
 

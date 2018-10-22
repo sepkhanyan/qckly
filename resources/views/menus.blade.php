@@ -28,16 +28,16 @@
                                 <select name="restaurant_name" id="input-name" class="form-control" tabindex="-1"
                                         title="" onchange="top.location.href = this.options[this.selectedIndex].value">
                                     @if($selectedRestaurant)
-                                        <option value>{{$selectedRestaurant->name_en . ', ' . $selectedRestaurant->area->area_en . ', ' . $selectedRestaurant->address_en}}</option>
+                                        <option value>{{$selectedRestaurant->name_en . ', ' . $selectedRestaurant->area->name_en . ', ' . $selectedRestaurant->address_en}}</option>
                                         @foreach($restaurants as $restaurant)
                                             @if($selectedRestaurant->id != $restaurant->id)
-                                                <option value="{{url('/menus/' . $restaurant->id)}}">{{$restaurant->name_en . ', ' . $restaurant->area->area_en . ', ' . $restaurant->address_en}}</option>
+                                                <option value="{{url('/menus/' . $restaurant->id)}}">{{$restaurant->name_en . ', ' . $restaurant->area->name_en . ', ' . $restaurant->address_en}}</option>
                                             @endif
                                         @endforeach
                                     @else
                                         <option value>Select Restaurant</option>
                                         @foreach($restaurants as $restaurant)
-                                            <option value="{{url('/menus/' . $restaurant->id)}}">{{$restaurant->name_en . ', ' . $restaurant->area->area_en . ', ' . $restaurant->address_en}}</option>
+                                            <option value="{{url('/menus/' . $restaurant->id)}}">{{$restaurant->name_en . ', ' . $restaurant->area->name_en . ', ' . $restaurant->address_en}}</option>
                                         @endforeach
                                     @endif
                                 </select>
@@ -103,7 +103,7 @@
                     </div>
                     <form role="form" id="list-form" accept-charset="utf-8" method="POST" action="">
                         <div class="table-responsive">
-                            <table border="0" class="table table-striped table-border">
+                             <table border="0" class="table table-striped table-border">
                                 <thead>
                                 <tr>
                                     <th class="action action-three">

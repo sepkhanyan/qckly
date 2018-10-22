@@ -57,13 +57,13 @@ Route::group(['middleware' => ['web', 'auth']], function () {
             Route::post('update/{id}', 'RestaurantCategoriesController@update');
             Route::post('delete', 'RestaurantCategoriesController@deleteRestaurantCategory');
         });
-        Route::get('/categories/{id?}', 'CategoriesController@index');
-        Route::group(['prefix' => 'category'], function () {
-            Route::get('create/{id?}', 'CategoriesController@create');
-            Route::post('store', 'CategoriesController@store');
-            Route::get('edit/{id}', 'CategoriesController@edit');
-            Route::post('update/{id}', 'CategoriesController@update');
-            Route::post('delete', 'CategoriesController@deleteCategory');
+        Route::get('/menu_categories/{id?}', 'MenuCategoriesController@index');
+        Route::group(['prefix' => 'menu_category'], function () {
+            Route::get('create/{id?}', 'MenuCategoriesController@create');
+            Route::post('store', 'MenuCategoriesController@store');
+            Route::get('edit/{id}', 'MenuCategoriesController@edit');
+            Route::post('update/{id}', 'MenuCategoriesController@update');
+            Route::post('delete', 'MenuCategoriesController@deleteCategory');
         });
         Route::get('/collection_categories', 'CollectionCategoriesController@index');
         Route::group(['prefix' => 'collection_category'], function () {

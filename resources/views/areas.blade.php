@@ -33,7 +33,7 @@
                                         <div class="col-md-3 pull-right text-right">
                                             <div class="form-group">
                                                 <input type="text" name="area_search" class="form-control input-sm"
-                                                       value="" placeholder="Search area."/>&nbsp;&nbsp;&nbsp;
+                                                       value="" placeholder="Search area name."/>&nbsp;&nbsp;&nbsp;
                                             </div>
                                             <a class="btn btn-grey" onclick="filterList();" title="Search">
                                                 <i class="fa fa-search"></i>

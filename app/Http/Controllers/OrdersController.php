@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use App\Order;
 use App\UserCart;
 use App\User;
-use App\Category;
+use App\MenuCategory;
 use App\Restaurant;
 use App\Status;
 use Auth;
@@ -158,7 +158,7 @@ class OrdersController extends Controller
                     $collections = [];
                     foreach ($order->cart->cartCollection as $cart_collection) {
                         $menu = [];
-                        $categories = Category::whereHas('cartItem', function ($query) use ($cart_collection) {
+                        $categories = MenuCategory::whereHas('cartItem', function ($query) use ($cart_collection) {
                             $query->where('cart_collection_id', $cart_collection->id);
                         })->with(['cartItem' => function ($x) use ($cart_collection) {
                             $x->where('cart_collection_id', $cart_collection->id);

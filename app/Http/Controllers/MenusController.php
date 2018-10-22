@@ -9,7 +9,7 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Menu;
 use App\Restaurant;
-use App\Category;
+use App\MenuCategory;
 use App\Collection;
 use App\CollectionItem;
 use App\CollectionMenu;
@@ -45,7 +45,7 @@ class MenusController extends Controller
             }
             $selectedRestaurant = Restaurant::find($id);
             $menus = $menus->orderby('category_id', 'asc')->paginate(20);
-            $categories = Category::where('restaurant_id',$selectedRestaurant->id )->get();
+            $categories = MenuCategory::where('restaurant_id',$selectedRestaurant->id )->get();
         }
         if ($user->admin == 2) {
             $user = $user->load('restaurant');
@@ -65,7 +65,7 @@ class MenusController extends Controller
             }
             $selectedRestaurant = Restaurant::find($restaurant->id);
             $menus = $menus->orderby('category_id', 'asc')->paginate(20);
-            $categories = Category::where('restaurant_id',$selectedRestaurant->id )->get();
+            $categories = MenuCategory::where('restaurant_id',$selectedRestaurant->id )->get();
         }
         return view('menus', [
             'id' => $id,
@@ -89,7 +89,7 @@ class MenusController extends Controller
             $user = $user->load('restaurant');
             $restaurant = $user->restaurant;
         }
-        $categories = Category::where('restaurant_id', $restaurant->id)->get();
+        $categories = MenuCategory::where('restaurant_id', $restaurant->id)->get();
         if(count($categories) > 0){
             return view('menu_create', [
                 'restaurant' => $restaurant,

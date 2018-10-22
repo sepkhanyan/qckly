@@ -1,4 +1,4 @@
-@extends('home', ['title' => 'Menu: Category: New'])
+@extends('home', ['title' => 'MenuCategory'])
 @section('content')
     <div id="page-wrapper">
         <div class="page-header clearfix">
@@ -29,7 +29,7 @@
                 </div>
 
                 <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST" enctype="multipart/form-data"
-                      action="{{ url('/category/store') }}">
+                      action="{{ url('/menu_category/store') }}">
                     {{ csrf_field() }}
                     <div class="tab-content">
                         @if(Auth::user()->admin == 1)

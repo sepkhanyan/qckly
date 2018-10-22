@@ -11,7 +11,7 @@ use App\Restaurant;
 use App\Area;
 use App\WorkingHour;
 use App\Menu;
-use App\Category;
+use App\MenuCategory;
 use App\RestaurantCategory;
 use App\CategoryRestaurant;
 use DB;
@@ -920,7 +920,7 @@ class RestaurantsController extends Controller
                                     ];
 
                                 }
-//                                $categories = Category::with(['menu' => function ($query) use ($collection, $restaurant_id){
+//                                $categories = MenuCategory::with(['menu' => function ($query) use ($collection, $restaurant_id){
 //                                    $query->where('restaurant_id', $restaurant_id)
 //                                        ->whereHas('collectionItem', function ($x) use ($collection){
 //                                        $x->where('collection_id', $collection->id);

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CollectionRequest;
-use App\Category;
+use App\MenuCategory;
 use App\CollectionItem;
 use Illuminate\Http\Request;
 use App\Collection;
@@ -87,7 +87,7 @@ class CollectionsController extends Controller
             $user = $user->load('restaurant');
             $restaurant = $user->restaurant;
         }
-        $menu_categories = Category::where('restaurant_id', $restaurant->id)->wherehas('menu')->get();
+        $menu_categories = MenuCategory::where('restaurant_id', $restaurant->id)->wherehas('menu')->get();
         $mealtimes = Mealtime::all();
         $category_id = $request->input('collection_category');
         $collection_category = CollectionCategory::where('id', $category_id)->first();
@@ -200,7 +200,7 @@ class CollectionsController extends Controller
                 $collection_item = new CollectionItem();
                 $collection_item->item_id = $item;
                 $menu_item = Menu::where('id', $item)->first();
-                $category = Category::where('id', $menu_item->category_id)->first();
+                $category = MenuCategory::where('id', $menu_item->category_id)->first();
                 $collection_item->collection_menu_id = $category->id;
                 $collection_item->collection_id = $collection->id;
                 $collection_item->quantity = 1;
@@ -212,7 +212,7 @@ class CollectionsController extends Controller
                     $collection_menu = new CollectionMenu();
                     $collection_menu->collection_id = $collection->id;
                     $collection_menu->menu_id = $menu_id;
-                    $menu = Category::where('id', $menu_id)->first();
+                    $menu = MenuCategory::where('id', $menu_id)->first();
                     $collection_menu->name = $menu->name_en;
                     $collection_menu->save();
                 }
@@ -225,7 +225,7 @@ class CollectionsController extends Controller
                         $collection_menu = new CollectionMenu();
                         $collection_menu->collection_id = $collection->id;
                         $collection_menu->menu_id = $menu_id;
-                        $menu = Category::where('id', $menu_id)->first();
+                        $menu = MenuCategory::where('id', $menu_id)->first();
                         $collection_menu->name = $menu->name_en;
                         if (count($min_qty) != count($request['menu'])) {
                             $collection_menu->min_qty = 1;
@@ -281,7 +281,7 @@ class CollectionsController extends Controller
         }])->whereHas('collectionItem', function ($q) use ($collection) {
             $q->where('collection_id', $collection->id);
         })->get();
-        $menu_categories = Category::where('restaurant_id', $restaurant->id)->wherehas('menu')->get();
+        $menu_categories = MenuCategory::where('restaurant_id', $restaurant->id)->wherehas('menu')->get();
         $categories = CollectionCategory::all();
         $mealtimes = Mealtime::all();
         return view('collection_edit', [
@@ -347,7 +347,7 @@ class CollectionsController extends Controller
                     $collection_item = new CollectionItem();
                     $collection_item->item_id = $item;
                     $menu_item = Menu::where('id', $item)->first();
-                    $category = Category::where('id', $menu_item->category_id)->first();
+                    $category = MenuCategory::where('id', $menu_item->category_id)->first();
                     $collection_item->collection_menu_id = $category->id;
                     $collection_item->collection_id = $collection->id;
                     $collection_item->quantity = 1;
@@ -360,7 +360,7 @@ class CollectionsController extends Controller
                         $collection_menu = new CollectionMenu();
                         $collection_menu->collection_id = $collection->id;
                         $collection_menu->menu_id = $menu_id;
-                        $menu = Category::where('id', $menu_id)->first();
+                        $menu = MenuCategory::where('id', $menu_id)->first();
                         $collection_menu->name = $menu->name_en;
                         $collection_menu->save();
                     }
@@ -373,7 +373,7 @@ class CollectionsController extends Controller
                             $collection_menu = new CollectionMenu();
                             $collection_menu->collection_id = $collection->id;
                             $collection_menu->menu_id = $menu_id;
-                            $menu = Category::where('id', $menu_id)->first();
+                            $menu = MenuCategory::where('id', $menu_id)->first();
                             $collection_menu->name = $menu->name_en;
                             if (count($min_qty) != count($request['menu'])) {
                                 $collection_menu->min_qty = 1;

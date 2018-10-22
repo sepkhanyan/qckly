@@ -8,17 +8,17 @@
                         @if($selectedRestaurant)
                             @if(Auth::user()->admin == 1)
                                 <a class="btn btn-primary"
-                                   href="{{ url('/category/create/' . $selectedRestaurant->id ) }}">
+                                   href="{{ url('/menu_category/create/' . $selectedRestaurant->id ) }}">
                                     <i class="fa fa-plus"></i>
                                     New
                                 </a>
                             @else
-                                <a class="btn btn-primary" href="{{ url('/category/create') }}">
+                                <a class="btn btn-primary" href="{{ url('/menu_category/create') }}">
                                     <i class="fa fa-plus"></i>
                                     New
                                 </a>
                             @endif
-                            <a class="btn btn-danger " id="delete_category">
+                            <a class="btn btn-danger " id="delete_menu_category">
                                 <i class="fa fa-trash-o"></i>
                                 Delete
                             </a>
@@ -28,16 +28,16 @@
                                 <select name="restaurant_name" id="input-name" class="form-control" tabindex="-1"
                                         title="" onchange="top.location.href = this.options[this.selectedIndex].value">
                                     @if($selectedRestaurant)
-                                        <option value>{{$selectedRestaurant->name_en . ', ' . $selectedRestaurant->area->area_en . ', ' . $selectedRestaurant->address_en}}</option>
+                                        <option value>{{$selectedRestaurant->name_en . ', ' . $selectedRestaurant->area->name_en . ', ' . $selectedRestaurant->address_en}}</option>
                                         @foreach($restaurants as $restaurant)
                                             @if($selectedRestaurant->id != $restaurant->id)
-                                                <option value="{{url('/categories/' . $restaurant->id)}}">{{$restaurant->name_en . ', ' . $restaurant->area->area_en . ', ' . $restaurant->address_en}}</option>
+                                                <option value="{{url('/menu_categories/' . $restaurant->id)}}">{{$restaurant->name_en . ', ' . $restaurant->area->name_en . ', ' . $restaurant->address_en}}</option>
                                             @endif
                                         @endforeach
                                     @else
                                         <option value>Select Restaurant</option>
                                         @foreach($restaurants as $restaurant)
-                                            <option value="{{url('/categories/' . $restaurant->id)}}">{{$restaurant->name_en . ', ' . $restaurant->area->area_en . ', ' . $restaurant->address_en}}</option>
+                                            <option value="{{url('/menu_categories/' . $restaurant->id)}}">{{$restaurant->name_en . ', ' . $restaurant->area->name_en . ', ' . $restaurant->address_en}}</option>
                                         @endforeach
                                     @endif
                                 </select>
@@ -60,7 +60,7 @@
                     </div>
                     <div class="panel-body panel-filter" style="display: none">
                         <form role="form" id="filter-form" accept-charset="utf-8" method="GET"
-                              action="{{url('/categories/' . $id)}}">
+                              action="{{url('/menu_categories/' . $id)}}">
                             <div class="filter-bar">
                                 <div class="form-inline">
                                     <div class="row">
@@ -73,7 +73,7 @@
                                             <a class="btn btn-grey" onclick="filterList();" title="Search">
                                                 <i class="fa fa-search"></i>
                                             </a>
-                                            <a class="btn btn-grey" href="{{url('/categories/' . $id)}}" title="Clear">
+                                            <a class="btn btn-grey" href="{{url('/menu_categories/' . $id)}}" title="Clear">
                                                 <i class="fa fa-times"></i>
                                             </a>
                                         </div>&nbsp;
@@ -104,7 +104,7 @@
                                                 <td class="action">
                                                     <input type="checkbox" value="{{ $category->id }}" name="delete"/>
                                                     <a class="btn btn-edit" title=""
-                                                       href="{{ url('category/edit/' . $category->id )}}">
+                                                       href="{{ url('menu_category/edit/' . $category->id )}}">
                                                         <i class="fa fa-pencil"></i>
                                                     </a>&nbsp;&nbsp;
                                                 </td>
