@@ -110,18 +110,18 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label class="col-sm-3 control-label" for="mealtime-en">Mealtime En</label>
+                                <label class="col-sm-3 control-label" for="mealtime-en">Name En</label>
                                 <div class="col-sm-8">
-                                    <input type="text" name="mealtime_en" class="form-control" value=""
+                                    <input type="text" name="name_en" class="form-control" value=""
                                            id="mealtime-en">
                                 </div>
                             </div>
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label class="col-sm-3 control-label" for="mealtime-ar">Mealtime Ar</label>
+                                <label class="col-sm-3 control-label" for="mealtime-ar">Name Ar</label>
                                 <div class="col-sm-8">
-                                    <input type="text" name="mealtime_ar" class="form-control" value=""
+                                    <input type="text" name="name_ar" class="form-control" value=""
                                            id="mealtime-ar">
                                 </div>
                             </div>
@@ -160,18 +160,18 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label class="col-sm-3 control-label" for="mealtime-en">Mealtime En</label>
+                                <label class="col-sm-3 control-label" for="mealtime-en">Name En</label>
                                 <div class="col-sm-8">
-                                    <input type="text" name="mealtime_en" class="form-control" value=""
+                                    <input type="text" name="name_en" class="form-control" value=""
                                            id="mealtime-en">
                                 </div>
                             </div>
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label class="col-sm-3 control-label" for="mealtime-ar">Mealtime Ar</label>
+                                <label class="col-sm-3 control-label" for="mealtime-ar">Name Ar</label>
                                 <div class="col-sm-8">
-                                    <input type="text" name="mealtime_ar" class="form-control" value=""
+                                    <input type="text" name="name_ar" class="form-control" value=""
                                            id="mealtime-ar">
                                 </div>
                             </div>
@@ -202,8 +202,8 @@
     @endif
     <script type="text/javascript">
         function myFunction(id, en, ar, start, end) {
-            $('input[name=mealtime_en]').val(en);
-            $('input[name=mealtime_ar]').val(ar);
+            $('input[name=name_en]').val(en);
+            $('input[name=name_ar]').val(ar);
             $('input[name=start_time]').val(start);
             $('input[name=end_time]').val(end);
             $("#edit-form").attr('action', 'mealtime/update/' + id);

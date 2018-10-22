@@ -61,8 +61,7 @@
                                         <input type="checkbox"
                                                onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">
                                     </th>
-                                    <th>Name En</th>
-                                    <th>Name Ar</th>
+                                    <th>Name</th>
                                     <th>ID</th>
                                 </tr>
                                 </thead>
@@ -79,7 +78,6 @@
                                             </a>&nbsp;&nbsp;&nbsp;
                                         </td>
                                         <td>{{$category->name_en}}</td>
-                                        <td>{{$category->name_ar}}</td>
                                         <td>{{$category->id}}</td>
                                     </tr>
                                 @endforeach
@@ -106,7 +104,7 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label class="col-sm-3 control-label" for="en">Category En</label>
+                                <label class="col-sm-3 control-label" for="en">Name En</label>
                                 <div class="col-sm-8">
                                     <input class="form-control" type="text" id="en" name="name_en">
                                 </div>
@@ -114,7 +112,7 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label class="col-sm-3 control-label" for="ar">Category Ar</label>
+                                <label class="col-sm-3 control-label" for="ar">Name Ar</label>
                                 <div class="col-sm-8">
                                     <input class="form-control" type="text" id="ar" name="name_ar">
                                 </div>
@@ -140,7 +138,7 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label class="col-sm-3 control-label" for="en">Category En</label>
+                                <label class="col-sm-3 control-label" for="en">Name En</label>
                                 <div class="col-sm-8">
                                     <input class="form-control" type="text" id="en" name="name_en" value="">
                                 </div>
@@ -148,7 +146,7 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label class="col-sm-3 control-label" for="ar">Category Ar</label>
+                                <label class="col-sm-3 control-label" for="ar">Name Ar</label>
                                 <div class="col-sm-8">
                                     <input class="form-control" type="text" id="ar" name="name_ar" value="">
                                 </div>

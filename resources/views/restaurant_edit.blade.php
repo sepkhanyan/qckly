@@ -181,14 +181,14 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="input-country" class="col-sm-3 control-label">Country</label>
+                                <label for="input-country" class="col-sm-3 control-label">City</label>
                                 <div class="col-sm-5">
 
                                     <select name="country" id="input-country" class="form-control">
-                                        <option value="{{$restaurant->area_id}}">{{$restaurant->area->area_en}}</option>
+                                        <option value="{{$restaurant->area_id}}">{{$restaurant->area->name_en}}</option>
                                         @foreach($areas as $area)
                                             @if($restaurant->area_id != $area->id)
-                                                <option value="{{$area->id}}">{{$area->area_en}}</option>
+                                                <option value="{{$area->id}}">{{$area->name_en}}</option>
                                             @endif
                                         @endforeach
                                     </select>

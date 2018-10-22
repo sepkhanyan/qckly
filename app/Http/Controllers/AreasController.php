@@ -24,8 +24,7 @@ class AreasController extends Controller
             $data = $request->all();
 
             if (isset($data['area_search'])) {
-                $areas = Area::where('area_en', 'like', $data['area_search'])
-                    ->orWhere('area_ar', 'like', $data['area_search'])->paginate(20);
+                $areas = Area::where('name_en', 'like', $data['area_search'])->paginate(20);
             }
             return view('areas', ['areas' => $areas]);
         } else {
@@ -56,12 +55,12 @@ class AreasController extends Controller
         $user = Auth::user();
         if ($user->admin == 1) {
             $request->validate([
-                'area_en' => 'required|string|max:255',
-                'area_ar' => 'required|string|max:255|',
+                'name_en' => 'required|string|max:255',
+                'name_ar' => 'required|string|max:255|',
             ]);
             $area = new Area();
-            $area->area_en = $request->input('area_en');
-            $area->area_ar = $request->input('area_ar');
+            $area->name_en = $request->input('name_en');
+            $area->name_ar = $request->input('name_ar');
             $area->save();
             return redirect('/areas');
         } else {
@@ -94,12 +93,12 @@ class AreasController extends Controller
         $user = Auth::user();
         if ($user->admin == 1) {
             $request->validate([
-                'area_en' => 'required|string|max:255',
-                'area_ar' => 'required|string|max:255|'
+                'name_en' => 'required|string|max:255',
+                'name_ar' => 'required|string|max:255|'
             ]);
             $area = Area::find($id);
-            $area->area_en = $request->input('area_en');
-            $area->area_ar = $request->input('area_ar');
+            $area->name_en = $request->input('name_en');
+            $area->name_ar = $request->input('name_ar');
             $area->save();
             return redirect('/areas');
         } else {
@@ -135,16 +134,18 @@ class AreasController extends Controller
                     $restaurant_images = [];
                     $menu_images = [];
                     foreach ($area->restaurant as $restaurant) {
-                        foreach ($restaurant->menu as $menu) {
-                            $menu_images[] = public_path('images/' . $menu->menu_photo);
+                        if($restaurant->menu){
+                            foreach ($restaurant->menu as $menu) {
+                                $menu_images[] = public_path('images/' . $menu->image);
+                            }
+                            File::delete($menu_images);
                         }
-                        $restaurant_images[] = public_path('images/' . $restaurant->restaurant_image);
+                        $restaurant_images[] = public_path('images/' . $restaurant->image);
                     }
-                    File::delete($menu_images);
                     File::delete($restaurant_images);
                 }
             }
-            Area::where('id', $id)->delete();
+            Area::whereIn('id', $id)->delete();
             return redirect('/areas');
         } else {
             return redirect('/');
@@ -159,9 +160,9 @@ class AreasController extends Controller
         $areas = Area::all();
         foreach ($areas as $area) {
             if ($lang == 'ar') {
-                $area_name = $area->area_ar;
+                $area_name = $area->name_ar;
             } else {
-                $area_name = $area->area_en;
+                $area_name = $area->name_en;
             }
             $arr [] = [
                 'area_id' => $area->id,

@@ -56,8 +56,7 @@
                                         <input type="checkbox"
                                                onclick="$('input[name*=\'delete\']').prop('checked', this.checked)">
                                     </th>
-                                    <th>Area En</th>
-                                    <th>Area Ar</th>
+                                    <th>Name</th>
                                     <th>ID</th>
                                 </tr>
                                 </thead>
@@ -69,12 +68,11 @@
                                                 <input type="checkbox" value="{{ $area->id }}" name="delete"/>&nbsp;&nbsp;&nbsp;
                                                 <a class="btn btn-edit" data-toggle="modal" data-target="#modalEditArea"
                                                    type="button"
-                                                   onclick="myFunction('{{$area->id}}', '{{$area->area_en}}', '{{$area->area_ar}}')">
+                                                   onclick="myFunction('{{$area->id}}', '{{$area->name_en}}', '{{$area->name_ar}}')">
                                                     <i class="fa fa-pencil"></i>
                                                 </a>&nbsp;&nbsp;
                                             </td>
-                                            <td>{{$area->area_en}}</td>
-                                            <td>{{$area->area_ar}}</td>
+                                            <td>{{$area->name_en}}</td>
                                             <td>{{$area->id}}</td>
                                         </tr>
                                     @endforeach
@@ -105,27 +103,27 @@
                         <h4 class="modal-title"> Add Area</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group {{ $errors->has('area_en') ? ' has-error' : '' }}">
-                            <label class="col-sm-3 control-label" for="area-en">Area En</label>
+                        <div class="form-group {{ $errors->has('name_en') ? ' has-error' : '' }}">
+                            <label class="col-sm-3 control-label" for="area-en">Name En</label>
                             <div class="col-sm-8">
-                                <input type="text" name="area_en" class="form-control" value="" id="area-en">
-                                @if ($errors->has('area_en'))
+                                <input type="text" name="name_en" class="form-control" value="" id="area-en">
+                                @if ($errors->has('name_en'))
                                     <span class="help-block">
-                                            <strong>{{ $errors->first('area_en') }}</strong>
+                                            <strong>{{ $errors->first('name_en') }}</strong>
                                         </span>
                                 @endif
                             </div>
                         </div>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group{{ $errors->has('area_ar') ? ' has-error' : '' }}">
-                            <label class="col-sm-3 control-label" for="area-en">Area Ar</label>
+                        <div class="form-group{{ $errors->has('name_ar') ? ' has-error' : '' }}">
+                            <label class="col-sm-3 control-label" for="area-en">Name Ar</label>
                             <div class="col-sm-8">
-                                <input type="text" name="area_ar" class="form-control" value="" id="area-ar">
-                                @if ($errors->has('area_ar'))
+                                <input type="text" name="name_ar" class="form-control" value="" id="area-ar">
+                                @if ($errors->has('name_ar'))
                                     <span class="help-block">
-                                            <strong>{{ $errors->first('area_ar') }}</strong>
-                                        </span>
+                                        <strong>{{ $errors->first('name_ar') }}</strong>
+                                    </span>
                                 @endif
                             </div>
                         </div>
@@ -149,17 +147,17 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label class="col-sm-3 control-label" for="area-en">Area En</label>
+                            <label class="col-sm-3 control-label" for="area-en">Name En</label>
                             <div class="col-sm-8">
-                                <input type="text" name="area_en" class="form-control" value="" id="area-en">
+                                <input type="text" name="name_en" class="form-control" value="" id="area-en">
                             </div>
                         </div>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label class="col-sm-3 control-label" for="area-en">Area Ar</label>
+                            <label class="col-sm-3 control-label" for="area-en">Name Ar</label>
                             <div class="col-sm-8">
-                                <input type="text" name="area_ar" class="form-control" value="" id="area-ar">
+                                <input type="text" name="name_ar" class="form-control" value="" id="area-ar">
                             </div>
                         </div>
                     </div>
@@ -173,8 +171,8 @@
     </div>
     <script type="text/javascript">
         function myFunction(id, en, ar) {
-            $('input[name=area_en]').val(en);
-            $('input[name=area_ar]').val(ar);
+            $('input[name=name_en]').val(en);
+            $('input[name=name_ar]').val(ar);
             $("#edit-form").attr('action', 'area/update/' + id);
         }
 

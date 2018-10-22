@@ -54,8 +54,7 @@
                                         <input type="checkbox"
                                                onclick="$('input[name*=\'delete\']').prop('checked', this.checked)">
                                     </th>
-                                    <th>Name En</th>
-                                    <th>Name Ar</th>
+                                    <th>Name</th>
                                     <th>ID</th>
                                 </tr>
                                 </thead>
@@ -72,7 +71,6 @@
                                                 </a>&nbsp;&nbsp;
                                             </td>
                                             <td>{{$status->name_en}}</td>
-                                            <td>{{$status->name_ar}}</td>
                                             <td>{{$status->id}}</td>
                                         </tr>
                                     @endforeach

@@ -40,12 +40,12 @@ class MealtimesController extends Controller
         $user = Auth::user();
         if ($user->admin == 1) {
             $request->validate([
-                'mealtime_en' => 'required|string|max:255',
-                'mealtime_ar' => 'required|string|max:255|',
+                'name_en' => 'required|string|max:255',
+                'name_ar' => 'required|string|max:255|',
             ]);
             $mealtime = new Mealtime();
-            $mealtime->name_en = $request->input('mealtime_en');
-            $mealtime->name_ar = $request->input('mealtime_ar');
+            $mealtime->name_en = $request->input('name_en');
+            $mealtime->name_ar = $request->input('name_ar');
             $mealtime->start_time = $request->input('start_time');
             $mealtime->end_time = $request->input('end_time');
             $mealtime->save();
@@ -91,12 +91,12 @@ class MealtimesController extends Controller
         $user = Auth::user();
         if ($user->admin == 1) {
             $request->validate([
-                'mealtime_en' => 'required|string|max:255',
-                'mealtime_ar' => 'required|string|max:255|',
+                'name_en' => 'required|string|max:255',
+                'name_ar' => 'required|string|max:255|',
             ]);
             $mealtime = Mealtime::find($id);
-            $mealtime->name_en = $request->input('mealtime_en');
-            $mealtime->name_ar = $request->input('mealtime_ar');
+            $mealtime->name_en = $request->input('name_en');
+            $mealtime->name_ar = $request->input('name_ar');
             $mealtime->start_time = $request->input('start_time');
             $mealtime->end_time = $request->input('end_time');
             $mealtime->save();
@@ -123,7 +123,7 @@ class MealtimesController extends Controller
                 if ($mealtime->menu) {
                     $menu_images = [];
                     foreach ($mealtime->menu as $menu) {
-                        $menu_images[] = public_path('images/' . $menu->menu_photo);
+                        $menu_images[] = public_path('images/' . $menu->image);
                     }
 
                     File::delete($menu_images);

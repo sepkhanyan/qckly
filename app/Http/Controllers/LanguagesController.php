@@ -14,11 +14,16 @@ class LanguagesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
         if($user->admin == 1){
             $languages = Language::paginate(20);
+            $data = $request->all();
+
+            if (isset($data['language_search'])) {
+                $languages = Language::where('name', 'like', $data['language_search'])->paginate(20);
+            }
             return view('languages', ['languages' => $languages ]);
         }else{
             return redirect()->back();

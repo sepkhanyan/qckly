@@ -256,7 +256,7 @@
                                 <div class="col-sm-5">
                                     <select name="country" id="input-country" class="form-control">
                                         @foreach($areas as $area)
-                                            <option value="{{$area->id}}">{{$area->area_en}}</option>
+                                            <option value="{{$area->id}}">{{$area->name_en}}</option>
                                         @endforeach
                                     </select>
                                 </div>

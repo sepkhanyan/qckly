@@ -90,7 +90,7 @@
                                                 {{$restaurant->name_en}}
                                             </td>
                                             <td>{{$restaurant->description_en}}</td>
-                                            <td>{{$restaurant->area->area_en}}</td>
+                                            <td>{{$restaurant->area->name_en}}</td>
                                             <td>{{$restaurant->address_en}}</td>
                                             <td>{{$restaurant->telephone}}</td>
                                             <td data-toggle="modal" data-target="#changeStatus"

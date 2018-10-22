@@ -62,8 +62,7 @@
                                                    onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">
                                         </th>
                                     @endif
-                                    <th>Category En</th>
-                                    <th>Category Ar</th>
+                                    <th>Name</th>
                                     <th>ID</th>
                                 </tr>
                                 </thead>
@@ -82,7 +81,6 @@
                                                 </td>
                                             @endif
                                             <td>{{$category->name_en}}</td>
-                                            <td>{{$category->name_ar}}</td>
                                             <td>{{$category->id}}</td>
                                         </tr>
                                     @endforeach
@@ -112,17 +110,17 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label class="col-sm-3 control-label" for="en">Category En</label>
+                                <label class="col-sm-3 control-label" for="en">Name En</label>
                                 <div class="col-sm-8">
-                                    <input class="form-control" type="text" id="en" name="category_en">
+                                    <input class="form-control" type="text" id="en" name="name_en">
                                 </div>
                             </div>
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label class="col-sm-3 control-label" for="ar">Category Ar</label>
+                                <label class="col-sm-3 control-label" for="ar">Name Ar</label>
                                 <div class="col-sm-8">
-                                    <input class="form-control" type="text" id="ar" name="category_ar">
+                                    <input class="form-control" type="text" id="ar" name="name_ar">
                                 </div>
                             </div>
                         </div>
@@ -145,17 +143,17 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label class="col-sm-3 control-label" for="en">Category En</label>
+                                <label class="col-sm-3 control-label" for="en">Name En</label>
                                 <div class="col-sm-8">
-                                    <input class="form-control" type="text" id="en" name="category_en" value="">
+                                    <input class="form-control" type="text" id="en" name="name_en" value="">
                                 </div>
                             </div>
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label class="col-sm-3 control-label" for="ar">Category Ar</label>
+                                <label class="col-sm-3 control-label" for="ar">Name Ar</label>
                                 <div class="col-sm-8">
-                                    <input class="form-control" type="text" id="ar" name="category_ar" value="">
+                                    <input class="form-control" type="text" id="ar" name="name_ar" value="">
                                 </div>
                             </div>
                         </div>
@@ -170,8 +168,8 @@
     @endif
     <script type="text/javascript">
         function myFunction(id, en, ar) {
-            $('input[name=category_en]').val(en);
-            $('input[name=category_ar]').val(ar);
+            $('input[name=name_en]').val(en);
+            $('input[name=name_ar]').val(ar);
             $("#edit-form").attr('action', 'collection_category/update/' + id);
         }
     </script>

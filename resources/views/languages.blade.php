@@ -32,7 +32,7 @@
                                     <div class="row">
                                         <div class="col-md-3 pull-right text-right">
                                             <div class="form-group">
-                                                <input type="text" name="filter_search" class="form-control input-sm"
+                                                <input type="text" name="language_search" class="form-control input-sm"
                                                        value="" placeholder="Search name.">
                                             </div>
                                             <a class="btn btn-grey" onclick="filterList();" title=""

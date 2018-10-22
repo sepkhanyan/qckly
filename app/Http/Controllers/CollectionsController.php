@@ -432,7 +432,7 @@ class CollectionsController extends Controller
         if ($user->admin == 2) {
             $user = $user->load('restaurant');
             $restaurant = $user->restaurant;
-            Collection::where('id', $id)->where('restaurant_id', $restaurant->id)->delete();
+            Collection::whereIn('id', $id)->where('restaurant_id', $restaurant->id)->delete();
         } else {
             Collection::whereIn('id', $id)->delete();
         }
