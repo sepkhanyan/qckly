@@ -109,8 +109,8 @@
                             <h4 class="modal-title"> Add Mealtime</h4>
                         </div>
                         <div class="modal-body">
-                            <div class="form-group" style="margin: 5px">
-                                <label class="control-label col-sm-2" for="mealtime-en">Mealtime En</label>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="mealtime-en">Mealtime En</label>
                                 <div class="col-sm-8">
                                     <input type="text" name="mealtime_en" class="form-control" value=""
                                            id="mealtime-en">
@@ -118,8 +118,8 @@
                             </div>
                         </div>
                         <div class="modal-body">
-                            <div class="form-group" style="margin: 5px">
-                                <label class="control-label col-sm-2" for="mealtime-ar">Mealtime Ar</label>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="mealtime-ar">Mealtime Ar</label>
                                 <div class="col-sm-8">
                                     <input type="text" name="mealtime_ar" class="form-control" value=""
                                            id="mealtime-ar">
@@ -127,8 +127,8 @@
                             </div>
                         </div>
                         <div class="modal-body">
-                            <div class="form-group" style="margin: 5px">
-                                <label class="control-label col-sm-2" for="mealtime-ar">Time</label>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="mealtime-ar">Time</label>
                                 <div class="col-sm-7">
                                     <div class="control-group control-group-3">
                                         <div class="input-group">
@@ -159,8 +159,8 @@
                             <h4 class="modal-title"> Edit Mealtime</h4>
                         </div>
                         <div class="modal-body">
-                            <div class="form-group" style="margin: 5px">
-                                <label class="control-label col-sm-2" for="mealtime-en">Mealtime En</label>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="mealtime-en">Mealtime En</label>
                                 <div class="col-sm-8">
                                     <input type="text" name="mealtime_en" class="form-control" value=""
                                            id="mealtime-en">
@@ -168,8 +168,8 @@
                             </div>
                         </div>
                         <div class="modal-body">
-                            <div class="form-group" style="margin: 5px">
-                                <label class="control-label col-sm-2" for="mealtime-ar">Mealtime Ar</label>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="mealtime-ar">Mealtime Ar</label>
                                 <div class="col-sm-8">
                                     <input type="text" name="mealtime_ar" class="form-control" value=""
                                            id="mealtime-ar">
@@ -177,8 +177,8 @@
                             </div>
                         </div>
                         <div class="modal-body">
-                            <div class="form-group" style="margin: 5px">
-                                <label class="control-label col-sm-2" for="mealtime-ar">Time</label>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="mealtime-ar">Time</label>
                                 <div class="col-sm-7">
                                     <div class="control-group control-group-3">
                                         <div class="input-group">

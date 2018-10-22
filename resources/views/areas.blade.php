@@ -105,9 +105,8 @@
                         <h4 class="modal-title"> Add Area</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group {{ $errors->has('area_en') ? ' has-error' : '' }}"
-                             style="margin: 5px">
-                            <label class="control-label col-sm-2" for="area-en">Area En</label>
+                        <div class="form-group {{ $errors->has('area_en') ? ' has-error' : '' }}">
+                            <label class="col-sm-3 control-label" for="area-en">Area En</label>
                             <div class="col-sm-8">
                                 <input type="text" name="area_en" class="form-control" value="" id="area-en">
                                 @if ($errors->has('area_en'))
@@ -119,9 +118,8 @@
                         </div>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group{{ $errors->has('area_ar') ? ' has-error' : '' }}"
-                             style="margin: 5px">
-                            <label class="control-label col-sm-2" for="area-en">Area Ar</label>
+                        <div class="form-group{{ $errors->has('area_ar') ? ' has-error' : '' }}">
+                            <label class="col-sm-3 control-label" for="area-en">Area Ar</label>
                             <div class="col-sm-8">
                                 <input type="text" name="area_ar" class="form-control" value="" id="area-ar">
                                 @if ($errors->has('area_ar'))
@@ -150,16 +148,16 @@
                         <h4 class="modal-title"> Edit Area</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group" style="margin: 5px">
-                            <label class="control-label col-sm-2" for="area-en">Area En</label>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="area-en">Area En</label>
                             <div class="col-sm-8">
                                 <input type="text" name="area_en" class="form-control" value="" id="area-en">
                             </div>
                         </div>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group" style="margin: 5px">
-                            <label class="control-label col-sm-2" for="area-en">Area Ar</label>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="area-en">Area Ar</label>
                             <div class="col-sm-8">
                                 <input type="text" name="area_ar" class="form-control" value="" id="area-ar">
                             </div>

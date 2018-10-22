@@ -189,9 +189,38 @@ class AddressesController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function changeDefaultAddress(Request $request, $id)
     {
-        //
+        \Log::info($request->all());
+        $lang = $request->header('Accept-Language');
+        $validator = \Validator::make($request->all(), []);
+        if ($lang == 'ar') {
+            $validator->getTranslator()->setLocale('ar');
+        }
+        $token = str_replace("Bearer ", "", $request->header('Authorization'));
+        $user = User::where('api_token', '=', $token)->with('cart.cartCollection')->first();
+        if ($user) {
+            $address = Address::where('id', $id)->where('user_id', $user->id)->first();
+            if ($address) {
+                Address::where('user_id', $user->id)->where('is_default', 1)->update(['is_default' => 0]);
+                $address->is_default = 1;
+                $address->save();
+                return response()->json(array(
+                    'success' => 1,
+                    'status_code' => 200));
+            }else{
+                return response()->json(array(
+                    'success' => 1,
+                    'status_code' => 200,
+                    'message' => \Lang::get('message.noAddress')));
+            }
+        } else {
+            return response()->json(array(
+                'success' => 1,
+                'status_code' => 200,
+                'message' => \Lang::get('message.loginError')));
+        }
+
     }
 
     /**

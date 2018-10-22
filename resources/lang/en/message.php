@@ -2,7 +2,7 @@
 
 return [
     'loginError'         => 'You are not logged in: Please log in and try again.',
-    'noAddress'          => 'No address created.',
+    'noAddress'          => 'No address available.',
     'addressDelete'      => 'Address deleted successfully.',
     'priceUnit'          => 'QR',
     'noOrder'            => 'There are no orders right now, place your first order to see it here.',

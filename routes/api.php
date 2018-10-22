@@ -31,6 +31,7 @@ Route::get('/showCart/{id}', 'UserCartsController@showCart');
 Route::get('/cartCount', 'UserCartsController@cartCount');
 Route::post('/removeCart/{id}', 'UserCartsController@removeCart');
 Route::get('/changeDeliveryAddress/{id}', 'UserCartsController@changeDeliveryAddress');
+Route::get('/changeDefaultAddress/{id}', 'AddressesController@changeDefaultAddress');
 Route::post('/addAddress/{id?}', 'AddressesController@addAddress');
 Route::get('/getAddresses', 'AddressesController@getAddresses');
 Route::get('/deleteAddress/{id}', 'AddressesController@deleteAddress');

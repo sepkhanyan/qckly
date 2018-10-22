@@ -102,9 +102,8 @@
                             <h4 class="modal-title"> Add Status</h4>
                         </div>
                         <div class="modal-body">
-                            <div class="form-group {{ $errors->has('name_en') ? ' has-error' : '' }}"
-                                 style="margin: 5px">
-                                <label class="control-label col-sm-2" for="status-en">Name En</label>
+                            <div class="form-group {{ $errors->has('name_en') ? ' has-error' : '' }}">
+                                <label class="col-sm-3 control-label" for="status-en">Name En</label>
                                 <div class="col-sm-8">
                                     <input type="text" name="name_en" class="form-control" value="" id="status-en">
                                     @if ($errors->has('name_en'))
@@ -116,9 +115,8 @@
                             </div>
                         </div>
                         <div class="modal-body">
-                            <div class="form-group {{ $errors->has('name_ar') ? ' has-error' : '' }}"
-                                 style="margin: 5px">
-                                <label class="control-label col-sm-2" for="status-ar">Name Ar</label>
+                            <div class="form-group {{ $errors->has('name_ar') ? ' has-error' : '' }}">
+                                <label class="col-sm-3 control-label" for="status-ar">Name Ar</label>
                                 <div class="col-sm-8">
                                     <input type="text" name="name_ar" class="form-control" value="" id="status-ar">
                                     @if ($errors->has('name_ar'))
@@ -147,16 +145,16 @@
                             <h4 class="modal-title"> Edit Status</h4>
                         </div>
                         <div class="modal-body">
-                            <div class="form-group" style="margin: 5px">
-                                <label class="control-label col-sm-2" for="status-en">Name En</label>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="status-en">Name En</label>
                                 <div class="col-sm-8">
                                     <input type="text" name="name_en" class="form-control" value="" id="status-en">
                                 </div>
                             </div>
                         </div>
                         <div class="modal-body">
-                            <div class="form-group" style="margin: 5px">
-                                <label class="control-label col-sm-2" for="status-ar">Name Ar</label>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="status-ar">Name Ar</label>
                                 <div class="col-sm-8">
                                     <input type="text" name="name_ar" class="form-control" value="" id="status-ar">
                                 </div>

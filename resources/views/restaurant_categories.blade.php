@@ -105,16 +105,16 @@
                             <h4 class="modal-title"> Add Category</h4>
                         </div>
                         <div class="modal-body">
-                            <div class="form-group" style="margin: 5px">
-                                <label class="control-label col-sm-2" for="en">Category En</label>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="en">Category En</label>
                                 <div class="col-sm-8">
                                     <input class="form-control" type="text" id="en" name="name_en">
                                 </div>
                             </div>
                         </div>
                         <div class="modal-body">
-                            <div class="form-group" style="margin: 5px">
-                                <label class="control-label col-sm-2" for="ar">Category Ar</label>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="ar">Category Ar</label>
                                 <div class="col-sm-8">
                                     <input class="form-control" type="text" id="ar" name="name_ar">
                                 </div>
@@ -139,16 +139,16 @@
                             <h4 class="modal-title"> Edit Category</h4>
                         </div>
                         <div class="modal-body">
-                            <div class="form-group" style="margin: 5px">
-                                <label class="control-label col-sm-2" for="en">Category En</label>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="en">Category En</label>
                                 <div class="col-sm-8">
                                     <input class="form-control" type="text" id="en" name="name_en" value="">
                                 </div>
                             </div>
                         </div>
                         <div class="modal-body">
-                            <div class="form-group" style="margin: 5px">
-                                <label class="control-label col-sm-2" for="ar">Category Ar</label>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="ar">Category Ar</label>
                                 <div class="col-sm-8">
                                     <input class="form-control" type="text" id="ar" name="name_ar" value="">
                                 </div>

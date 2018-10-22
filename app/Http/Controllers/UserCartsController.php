@@ -832,7 +832,17 @@ class UserCartsController extends Controller
                     return response()->json(array(
                         'success' => 1,
                         'status_code' => 200));
+                }else{
+                    return response()->json(array(
+                        'success' => 1,
+                        'status_code' => 200,
+                        'message' => \Lang::get('message.noCart')));
                 }
+            }else{
+                return response()->json(array(
+                    'success' => 1,
+                    'status_code' => 200,
+                    'message' => \Lang::get('message.noAddress')));
             }
         } else {
             return response()->json(array(
