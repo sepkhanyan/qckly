@@ -96,7 +96,7 @@ class MenusController extends Controller
                 'categories' => $categories
             ]);
         }else{
-            return redirect('/categories/' . $id);
+            return redirect('/menu_categories/' . $id);
         }
     }
 

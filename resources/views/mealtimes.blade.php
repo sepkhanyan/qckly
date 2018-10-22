@@ -1,9 +1,9 @@
 @extends('home', ['title' => 'Mealtimes'])
 @section('content')
     <div id="page-wrapper">
-        @if(Auth::user()->admin == 1)
-            <div class="page-header">
-                <div class="page-action">
+        <div class="page-header">
+            <div class="page-action">
+                @if(Auth::user()->admin == 1)
                     <a data-toggle="modal" data-target="#modalCreateMealtime" href="" class="btn btn-primary">
                         <i class="fa fa-plus"></i>
                         New
@@ -12,14 +12,14 @@
                         <i class="fa fa-trash-o"></i>
                         Delete
                     </a>
-                </div>
+                @endif
             </div>
-        @endif
+        </div>
         <div class="row content">
             <div class="col-md-12">
                 <div class="panel panel-default panel-table">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Mealtimes</h3>
+                        <h3 class="panel-title">Mealtime List</h3>
                         <div class="pull-right">
                             <button class="btn btn-filter btn-xs">
                                 <i class="fa fa-filter"></i>

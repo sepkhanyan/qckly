@@ -1,4 +1,4 @@
-@extends('home', ['title' => 'Staffs: ' . Auth::user()->first_name])
+@extends('home', ['title' => 'Staff: ' . Auth::user()->first_name])
 @section('content')
     <div id="page-wrapper">
         <div class="page-header clearfix">

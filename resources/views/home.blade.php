@@ -82,11 +82,12 @@
             height: 500px;
             width: 650px;
         }
+
         /* Optional: Makes the sample page fill the window. */
         /*html, body {*/
-            /*height: 100%;*/
-            /*margin: 0;*/
-            /*padding: 0;*/
+        /*height: 100%;*/
+        /*margin: 0;*/
+        /*padding: 0;*/
         /*}*/
         #floating-panel {
             position: absolute;
@@ -97,33 +98,33 @@
             padding: 5px;
             border: 1px solid #999;
             text-align: center;
-            font-family: 'Roboto','sans-serif';
+            font-family: 'Roboto', 'sans-serif';
             line-height: 30px;
             padding-left: 10px;
         }
 
         /*#lat {*/
-            /*margin-left: 1em;*/
-            /*margin-top: 2em;*/
-            /*height: 25px;*/
-            /*width: 150px;*/
-            /*font-size: 13px;*/
-            /*padding: 0;*/
-            /*padding-left: 0.5em;*/
-            /*border: 3px solid #cccccc;*/
-            /*border-radius: 5px;*/
+        /*margin-left: 1em;*/
+        /*margin-top: 2em;*/
+        /*height: 25px;*/
+        /*width: 150px;*/
+        /*font-size: 13px;*/
+        /*padding: 0;*/
+        /*padding-left: 0.5em;*/
+        /*border: 3px solid #cccccc;*/
+        /*border-radius: 5px;*/
 
         /*}*/
 
         /*#long {*/
-            /*margin-top: 2em;*/
-            /*height: 25px;*/
-            /*width: 150px;*/
-            /*font-size: 13px;*/
-            /*padding: 0;*/
-            /*padding-left: 0.5em;*/
-            /*border: 3px solid #cccccc;*/
-            /*border-radius: 5px;*/
+        /*margin-top: 2em;*/
+        /*height: 25px;*/
+        /*width: 150px;*/
+        /*font-size: 13px;*/
+        /*padding: 0;*/
+        /*padding-left: 0.5em;*/
+        /*border: 3px solid #cccccc;*/
+        /*border-radius: 5px;*/
         /*}*/
     </style>
     <style>
@@ -211,12 +212,12 @@
     <nav class="navbar navbar-static-top navbar-top" role="navigation" style="margin-bottom:0 ">
         <div class="navbar-header ">
             <div class="navbar-brand">
-                <div class="navbar-logo col-xs-3">
+                <div class="navbar-logo col-xs-1">
                     {{--<img class="logo-image" alt="Qckly" title="Qckly"--}}
                     {{--src="{{url('/') . '/admin/qckly_logo.png'}}"/>--}}
                 </div>
-                <div class="navbar-logo col-xs-9">
-                    <img class="logo-image" alt="Qckly" title="Qckly"
+                <div class="navbar-logo col-xs-7">
+                    <img class="logo-text" alt="Qckly" title="Qckly"
                          src="{{url('/') . '/admin/qckly_logo.png'}}"/>
                 </div>
             </div>
@@ -635,6 +636,19 @@
                 </ul>
             </li>
         </ul>
+        <h1 class="navbar-heading">
+            @php
+                $s = ':';
+                $pos = strpos($title,$s);
+            @endphp
+            @if($pos === false)
+                {{$title}}
+            @else
+                @php($title = explode(':', $title))
+                {{$title[0]}}&nbsp;&nbsp;
+                <small>{{$title[1]}}</small>
+            @endif
+        </h1>
     </nav>
     @yield('content')
     <div id="footer" class="">
@@ -683,16 +697,16 @@
     }
 </script>
 {{--<script>--}}
-    {{--// Initialize and add the map--}}
-    {{--function initMap() {--}}
-        {{--// The location of Uluru--}}
-        {{--var uluru = {lat: -25.344, lng: 131.036};--}}
-        {{--// The map, centered at Uluru--}}
-        {{--var map = new google.maps.Map(--}}
-            {{--document.getElementById('map'), {zoom: 4, center: uluru});--}}
-        {{--// The marker, positioned at Uluru--}}
-        {{--var marker = new google.maps.Marker({position: uluru, map: map});--}}
-    {{--}--}}
+{{--// Initialize and add the map--}}
+{{--function initMap() {--}}
+{{--// The location of Uluru--}}
+{{--var uluru = {lat: -25.344, lng: 131.036};--}}
+{{--// The map, centered at Uluru--}}
+{{--var map = new google.maps.Map(--}}
+{{--document.getElementById('map'), {zoom: 4, center: uluru});--}}
+{{--// The marker, positioned at Uluru--}}
+{{--var marker = new google.maps.Marker({position: uluru, map: map});--}}
+{{--}--}}
 {{--</script>--}}
 {{--<!--Load the API from the specified URL--}}
 {{--* The async attribute allows the browser to render the page while the API loads--}}
@@ -700,7 +714,7 @@
 {{--* The callback parameter executes the initMap() function--}}
 {{---->--}}
 {{--<script async defer--}}
-        {{--src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8kDz25qFYhy1UYiPyrzvcOpkiwZz9C4o&callback=initMap">--}}
+{{--src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8kDz25qFYhy1UYiPyrzvcOpkiwZz9C4o&callback=initMap">--}}
 {{--</script>--}}
 </body>
 </html>

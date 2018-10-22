@@ -1,9 +1,9 @@
 @extends('home', ['title' => 'Restaurants'])
 @section('content')
     <div id="page-wrapper">
-        @if(Auth::user()->admin == 1)
-            <div class="page-header">
-                <div class="page-action">
+        <div class="page-header">
+            <div class="page-action">
+                @if(Auth::user()->admin == 1)
                     <a href="{{ url('/restaurant/create') }}" class="btn btn-primary">
                         <i class="fa fa-plus"></i>
                         New
@@ -12,14 +12,18 @@
                         <i class="fa fa-trash-o"></i>
                         Delete
                     </a>
-                </div>
+                @endif
             </div>
-        @endif
+        </div>
         <div class="row content">
             <div class="col-md-12">
                 <div class="panel panel-default panel-table">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Restaurants</h3>
+                        @if(Auth::user()->admin == 1)
+                            <h3 class="panel-title">Restaurant List</h3>
+                        @else
+                            <h3 class="panel-title">Restaurant</h3>
+                        @endif
                         <div class="pull-right">
                             <button class="btn btn-filter btn-xs">
                                 <i class="fa fa-filter"></i>
@@ -153,11 +157,11 @@
     <script type="text/javascript">
         function myFunction(id, status) {
             console.log(status);
-            if(status ==1){
+            if (status == 1) {
                 $('#open').attr('class', 'btn btn-success active');
                 $('#busy').attr('class', 'btn btn-danger');
                 $('#input_open').attr('checked', 'checked');
-            }else{
+            } else {
                 $('#busy').attr('class', 'btn btn-danger active');
                 $('#open').attr('class', 'btn btn-success');
                 $('#input_busy').attr('checked', 'checked');

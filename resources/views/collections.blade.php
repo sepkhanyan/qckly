@@ -45,7 +45,7 @@
             <div class="col-md-12">
                 <div class="panel panel-default panel-table">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Collections</h3>
+                        <h3 class="panel-title">Collection List</h3>
                         @if($selectedRestaurant)
                             @if(count($collections) > 0)
                                 <div class="pull-right">

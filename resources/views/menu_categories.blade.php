@@ -1,4 +1,4 @@
-@extends('home', ['title' => 'Menu: Categories'])
+@extends('home', ['title' => 'Menu Categories'])
 @section('content')
     <div id="page-wrapper">
         <div class="page-header">
