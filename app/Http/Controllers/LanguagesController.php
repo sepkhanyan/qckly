@@ -49,6 +49,7 @@ class LanguagesController extends Controller
      */
     public function store(Request $request)
     {
+        dd($request->input('image'));
         $user = Auth::user();
         if ($user->admin == 1) {
             $request->validate([
@@ -61,7 +62,7 @@ class LanguagesController extends Controller
             $language->name = $request->input('name');
             $language->code = $request->input('code');
             $flag = $request->file('image');
-            $name = time() . '.' . $flag->getClientOriginalExtension();
+            $name = $flag->getClientOriginalName();
             $destinationPath = public_path('/images');
             $flag->move($destinationPath, $name);
             $language->image = $name;
@@ -125,10 +126,10 @@ class LanguagesController extends Controller
                 if ($language->image) {
                     File::delete(public_path('images/' . $language->image));
                 }
-                $image = $request->file('image');
-                $name = time() . '.' . $image->getClientOriginalExtension();
+                $flag = $request->file('image');
+                $name = $flag->getClientOriginalName();
                 $destinationPath = public_path('/images');
-                $image->move($destinationPath, $name);
+                $flag->move($destinationPath, $name);
                 $language->image = $name;
             }
             $language->save();
@@ -155,7 +156,7 @@ class LanguagesController extends Controller
                 $images[] = public_path('images/' . $language->image);
             }
             File::delete($images);
-            Language::where('id', $id)->delete();
+            Language::whereIn('id', $id)->delete();
             return redirect('/languages');
         }else{
             return redirect('/languages');
