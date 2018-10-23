@@ -197,7 +197,7 @@ class RestaurantsController extends Controller
         $restaurant = Restaurant::find($id);
         $areas = Area::all();
         $category_restaurants = CategoryRestaurant::where('restaurant_id', $id)->get();
-        $categories = RestaurantCategory::whereDoesntHave('categoryRestaurant', function($query) use ($id) {
+        $categories = RestaurantCategory::whereDoesntHave('categoryRestaurant', function ($query) use ($id) {
             $query->where('restaurant_id', '=', $id);
         })->get();
         if ($user->admin == 2) {
@@ -840,7 +840,7 @@ class RestaurantsController extends Controller
                                 $menu = [];
                                 $collectionMenus = CollectionMenu::where('collection_id', $collection->id)->with(['collectionItem' => function ($query) use ($collection) {
                                     $query->where('collection_id', $collection->id);
-                                }])->whereHas('collectionItem' , function ($q) use ($collection) {
+                                }])->whereHas('collectionItem', function ($q) use ($collection) {
                                     $q->where('collection_id', $collection->id);
                                 })->get();
                                 foreach ($collectionMenus as $collectionMenu) {

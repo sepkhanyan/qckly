@@ -109,8 +109,8 @@
                                 <input type="text" name="name_en" class="form-control" value="" id="area-en">
                                 @if ($errors->has('name_en'))
                                     <span class="help-block">
-                                            <strong>{{ $errors->first('name_en') }}</strong>
-                                        </span>
+                                        <strong>{{ $errors->first('name_en') }}</strong>
+                                    </span>
                                 @endif
                             </div>
                         </div>
@@ -175,6 +175,5 @@
             $('input[name=name_ar]').val(ar);
             $("#edit-form").attr('action', 'area/update/' + id);
         }
-
     </script>
 @endsection

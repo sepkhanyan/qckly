@@ -2,9 +2,7 @@
 @section('content')
     <div id="page-wrapper" style="min-height: 261px; height: 100%;">
         <div class="page-header clearfix">
-
             <div class="page-action">
-
                 <a class="btn btn-primary" onclick="$('#edit-form').submit();"><i class="fa fa-save"></i> Save</a>
                 <a class="btn btn-default" onclick="saveClose();"><i class="fa fa-save"></i> Save &amp; Close</a>
                 <a class="btn btn-default" href="{{ redirect()->back()->getTargetUrl() }}"><i
@@ -19,7 +17,6 @@
                                 <span class="badge">{{$order->cart->cartCollection->count()}}</span></a></li>
                     </ul>
                 </div>
-
                 <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST"
                       action="{{url('/order/update/' . $order->id)}}">
                     {{ csrf_field() }}
@@ -38,12 +35,14 @@
                                             <div class="form-group col-xs-12">
                                                 <label for="input-name" class="control-label">Delivery Time</label>
                                                 <div class="">
-                                                    {{date("g:i A", strtotime( $order->cart->delivery_order_time))}}                                        </div>
+                                                    {{date("g:i A", strtotime( $order->cart->delivery_order_time))}}
+                                                </div>
                                             </div>
                                             <div class="form-group col-xs-12">
                                                 <label for="input-status" class="control-label">Order Status</label>
                                                 <div class="">
-                                                    {{$order->status->name_en}}                                        </div>
+                                                    {{$order->status->name_en}}
+                                                </div>
                                             </div>
                                             <div class="form-group col-xs-12">
                                                 <label for="input-name" class="control-label">Payment Method</label>
@@ -54,7 +53,8 @@
                                                         {{\Lang::get('message.credit')}}
                                                     @else
                                                         {{\Lang::get('message.debit')}}
-                                                    @endif                                                                                        </div>
+                                                    @endif
+                                                </div>
                                             </div>
                                             <div class="paypal_details" style="display:none">
                                                 <ul>
@@ -89,7 +89,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="row">
                                 <div class="col-xs-12 col-sm-6">
                                     <div class="panel panel-default">

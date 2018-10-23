@@ -45,7 +45,7 @@ class MenusController extends Controller
             }
             $selectedRestaurant = Restaurant::find($id);
             $menus = $menus->orderby('category_id', 'asc')->paginate(20);
-            $categories = MenuCategory::where('restaurant_id',$selectedRestaurant->id )->get();
+            $categories = MenuCategory::where('restaurant_id', $selectedRestaurant->id)->get();
         }
         if ($user->admin == 2) {
             $user = $user->load('restaurant');
@@ -65,7 +65,7 @@ class MenusController extends Controller
             }
             $selectedRestaurant = Restaurant::find($restaurant->id);
             $menus = $menus->orderby('category_id', 'asc')->paginate(20);
-            $categories = MenuCategory::where('restaurant_id',$selectedRestaurant->id )->get();
+            $categories = MenuCategory::where('restaurant_id', $selectedRestaurant->id)->get();
         }
         return view('menus', [
             'id' => $id,
@@ -90,12 +90,12 @@ class MenusController extends Controller
             $restaurant = $user->restaurant;
         }
         $categories = MenuCategory::where('restaurant_id', $restaurant->id)->get();
-        if(count($categories) > 0){
+        if (count($categories) > 0) {
             return view('menu_create', [
                 'restaurant' => $restaurant,
                 'categories' => $categories
             ]);
-        }else{
+        } else {
             return redirect('/menu_categories/' . $id);
         }
     }
@@ -139,9 +139,9 @@ class MenusController extends Controller
         $menu->status = $request->input('status');
         $menu->famous = $request->input('famous');
         $menu->save();
-        if($menu){
+        if ($menu) {
             $collections = Collection::where('restaurant_id', $restaurant_id)->where('category_id', '!=', 1)->get();
-            if(count($collections) > 0){
+            if (count($collections) > 0) {
                 foreach ($collections as $collection) {
                     $collection_item = new CollectionItem();
                     $collection_item->item_id = $menu->id;
@@ -149,8 +149,8 @@ class MenusController extends Controller
                     $collection_item->collection_id = $collection->id;
                     $collection_item->quantity = 1;
                     $collection_item->save();
-                    $collection_menu = CollectionMenu::where('collection_id',$collection->id)->where('menu_id',$menu->category_id)->first();
-                    if(!$collection_menu){
+                    $collection_menu = CollectionMenu::where('collection_id', $collection->id)->where('menu_id', $menu->category_id)->first();
+                    if (!$collection_menu) {
                         $collection_menu = new CollectionMenu();
                         $collection_menu->collection_id = $collection->id;
                         $collection_menu->menu_id = $menu->category_id;
@@ -272,7 +272,7 @@ class MenusController extends Controller
             }
             File::delete($images);
             Menu::whereIn('id', $id)->where('restaurant_id')->delete();
-        }else{
+        } else {
             $images = [];
             foreach ($menus as $menu) {
                 $images[] = public_path('images/' . $menu->image);

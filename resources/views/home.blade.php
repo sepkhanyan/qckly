@@ -75,20 +75,12 @@
     </script>
     <style>
         #map {
-            /*height: 100%;*/
-            /*margin-left: 30em;*/
             border: 2px solid black;
             margin-top: 1em;
             height: 500px;
             width: 650px;
         }
 
-        /* Optional: Makes the sample page fill the window. */
-        /*html, body {*/
-        /*height: 100%;*/
-        /*margin: 0;*/
-        /*padding: 0;*/
-        /*}*/
         #floating-panel {
             position: absolute;
             top: 10px;
@@ -300,12 +292,6 @@
                                     Collections
                                 </a>
                             </li>
-                            {{--<li>--}}
-                            {{--<a href="#" class="menu_options">--}}
-                            {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                            {{--Options--}}
-                            {{--</a>--}}
-                            {{--</li>--}}
                             <li>
                                 <a href="{{ url('/menu_categories') }}" class="menu-categories">
                                     <i class="fa fa-square-o fa-fw"></i>
@@ -333,18 +319,6 @@
                                     Orders
                                 </a>
                             </li>
-                            {{--<li>--}}
-                            {{--<a href="#" class="reservations">--}}
-                            {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                            {{--Reservations--}}
-                            {{--</a>--}}
-                            {{--</li>--}}
-                            {{--<li>--}}
-                            {{--<a href="#" class="coupons">--}}
-                            {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                            {{--Coupons--}}
-                            {{--</a>--}}
-                            {{--</li>--}}
                         </ul>
                     </li>
                     <li>
@@ -360,18 +334,6 @@
                                     Reviews
                                 </a>
                             </li>
-                            {{--<li>--}}
-                            {{--<a href="#" class="messages">--}}
-                            {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                            {{--Messages--}}
-                            {{--</a>--}}
-                            {{--</li>--}}
-                            {{--<li>--}}
-                            {{--<a href="#" class="banners">--}}
-                            {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                            {{--Banners--}}
-                            {{--</a>--}}
-                            {{--</li>--}}
                         </ul>
                     </li>
                     @if(Auth::user()->admin == 1)
@@ -388,53 +350,8 @@
                                         Customers
                                     </a>
                                 </li>
-                                {{--<li>--}}
-                                {{--<a href="#" class="customer_groups">--}}
-                                {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                                {{--Customer Groups--}}
-                                {{--</a>--}}
-                                {{--</li>--}}
-                                {{--<li>--}}
-                                {{--<a href="#" class="activities">--}}
-                                {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                                {{--Activities--}}
-                                {{--</a>--}}
-                                {{--</li>--}}
                             </ul>
                         </li>
-                        {{--<li>--}}
-                        {{--<a href="#" class="extensions">--}}
-                        {{--<i class="fa fa-puzzle-piece fa-fw"></i>--}}
-                        {{--<span class="content">Extensions</span>--}}
-                        {{--</a>--}}
-                        {{--</li>--}}
-                        {{--<li>--}}
-                        {{--<a class="design">--}}
-                        {{--<i class="fa fa-paint-brush fa-fw"></i>--}}
-                        {{--<span class="content">Design</span>--}}
-                        {{--<span class="fa arrow"></span>--}}
-                        {{--</a>--}}
-                        {{--<ul class="nav nav-second-level collapse">--}}
-                        {{--<li>--}}
-                        {{--<a href="#" class="pages">--}}
-                        {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                        {{--Pages--}}
-                        {{--</a>--}}
-                        {{--</li>--}}
-                        {{--<li>--}}
-                        {{--<a href="#" class="layouts">--}}
-                        {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                        {{--Layouts--}}
-                        {{--</a>--}}
-                        {{--</li>--}}
-                        {{--<li>--}}
-                        {{--<a href="#" class="mail_templates">--}}
-                        {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                        {{--Mail Templates--}}
-                        {{--</a>--}}
-                        {{--</li>--}}
-                        {{--</ul>--}}
-                        {{--</li>--}}
                         <li>
                             <a class="locations">
                                 <i class="fa fa-globe fa-fw"></i>
@@ -448,30 +365,6 @@
                                         Languages
                                     </a>
                                 </li>
-                                {{--<li>--}}
-                                {{--<a href="#" class="currencies">--}}
-                                {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                                {{--Currencies--}}
-                                {{--</a>--}}
-                                {{--</li>--}}
-                                {{--<li>--}}
-                                {{--<a href="#" class="countries">--}}
-                                {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                                {{--Countries--}}
-                                {{--</a>--}}
-                                {{--</li>--}}
-                                {{--<li>--}}
-                                {{--<a href="#" class="security_questions">--}}
-                                {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                                {{--Security Questions--}}
-                                {{--</a>--}}
-                                {{--</li>--}}
-                                {{--<li>--}}
-                                {{--<a href="#" class="ratings">--}}
-                                {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                                {{--Ratings--}}
-                                {{--</a>--}}
-                                {{--</li>--}}
                                 @if(Auth::user()->admin == 1)
                                     <li>
                                         <a href="{{ url('/statuses') }}" class="statuses">
@@ -483,42 +376,6 @@
                             </ul>
                         </li>
                     @endif
-                    {{--<li>--}}
-                    {{--<a class="system">--}}
-                    {{--<i class="fa fa-cog fa-fw"></i>--}}
-                    {{--<span class="content">System</span>--}}
-                    {{--<span class="fa arrow"></span>--}}
-                    {{--</a>--}}
-                    {{--<ul class="nav nav-second-level collapse">--}}
-                    {{--<li>--}}
-                    {{--<a href="#" class="settings">--}}
-                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                    {{--Settings--}}
-                    {{--</a>--}}
-                    {{--</li>--}}
-                    {{--<li>--}}
-                    {{--<a href="#" class="permissions">--}}
-                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                    {{--Permissions--}}
-                    {{--</a>--}}
-                    {{--</li>--}}
-                    {{--<li>--}}
-                    {{--<a class="tools">--}}
-                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                    {{--Tools--}}
-                    {{--<span class="fa arrow"></span>--}}
-                    {{--</a>--}}
-                    {{--<ul class="nav nav-third-level collapse">--}}
-                    {{--<li>--}}
-                    {{--<a href="#" class="image_manager">--}}
-                    {{--<i class="fa fa-square-o fa-fw"></i>--}}
-                    {{--Image Manager--}}
-                    {{--</a>--}}
-                    {{--</li>--}}
-                    {{--</ul>--}}
-                    {{--</li>--}}
-                    {{--</ul>--}}
-                    {{--</li>--}}
                     <li>
                         <a class="hidden-xs sidebar-toggle">
                             <i class="fa fa-chevron-circle-left fa-fw"></i>
@@ -578,19 +435,6 @@
                     </li>
                 </ul>
             </li>
-            {{--<li class="dropdown">--}}
-            {{--<a class="dropdown-toggle settings" data-toggle="dropdown">--}}
-            {{--<i class="fa fa-cog"></i>--}}
-            {{--</a>--}}
-            {{--<ul class="dropdown-menu dropdown-settings">--}}
-            {{--<li><a>Pages</a></li>--}}
-            {{--<li><a >Banners</a></li>--}}
-            {{--<li><a>Layouts</a></li>--}}
-            {{--<li><a >Error Logs</a></li>--}}
-            {{--<li><a >Settings</a></li>--}}
-            {{--<li class="menu-footer"></li>--}}
-            {{--</ul>--}}
-            {{--</li>--}}
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-user"></i>
@@ -696,26 +540,6 @@
         $('#edit-form').submit();
     }
 </script>
-{{--<script>--}}
-{{--// Initialize and add the map--}}
-{{--function initMap() {--}}
-{{--// The location of Uluru--}}
-{{--var uluru = {lat: -25.344, lng: 131.036};--}}
-{{--// The map, centered at Uluru--}}
-{{--var map = new google.maps.Map(--}}
-{{--document.getElementById('map'), {zoom: 4, center: uluru});--}}
-{{--// The marker, positioned at Uluru--}}
-{{--var marker = new google.maps.Marker({position: uluru, map: map});--}}
-{{--}--}}
-{{--</script>--}}
-{{--<!--Load the API from the specified URL--}}
-{{--* The async attribute allows the browser to render the page while the API loads--}}
-{{--* The key parameter will contain your own API key (which is not needed for this tutorial)--}}
-{{--* The callback parameter executes the initMap() function--}}
-{{---->--}}
-{{--<script async defer--}}
-{{--src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8kDz25qFYhy1UYiPyrzvcOpkiwZz9C4o&callback=initMap">--}}
-{{--</script>--}}
 </body>
 </html>
 

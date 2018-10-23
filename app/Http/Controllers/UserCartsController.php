@@ -622,7 +622,7 @@ class UserCartsController extends Controller
                     $menu = [];
                     $collectionMenus = CollectionMenu::where('collection_id', $collection->id)->with(['collectionItem' => function ($query) use ($collection) {
                         $query->where('collection_id', $collection->id);
-                    }])->whereHas('collectionItem' , function ($q) use ($collection) {
+                    }])->whereHas('collectionItem', function ($q) use ($collection) {
                         $q->where('collection_id', $collection->id);
                     })->get();
                     foreach ($collectionMenus as $collectionMenu) {
@@ -832,13 +832,13 @@ class UserCartsController extends Controller
                     return response()->json(array(
                         'success' => 1,
                         'status_code' => 200));
-                }else{
+                } else {
                     return response()->json(array(
                         'success' => 1,
                         'status_code' => 200,
                         'message' => \Lang::get('message.noCart')));
                 }
-            }else{
+            } else {
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200,

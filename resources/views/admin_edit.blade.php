@@ -2,9 +2,7 @@
 @section('content')
     <div id="page-wrapper">
         <div class="page-header clearfix">
-
             <div class="page-action">
-
                 <a class="btn btn-primary" onclick="$('#edit-form').submit();">
                     <i class="fa fa-save"></i>
                     Save
@@ -25,7 +23,6 @@
                         </li>
                     </ul>
                 </div>
-
                 <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST"
                       enctype="multipart/form-data"
                       action="{{url('/admin/update/' . Auth::user()->id)}}">
@@ -53,7 +50,6 @@
                                            value="{{Auth::user()->username}}">
                                 </div>
                             </div>
-
                             <div class="form-group">
                                 <label for="input-image" class="col-sm-3 control-label">
                                     Image
@@ -74,23 +70,24 @@
                                             <span class="name text-center"></span>
                                             <p>
                                                 <label class=" btn btn-primary btn-file ">
-                                                    <i class="fa fa-picture-o"></i> Select <input type="file"
-                                                                                                  name="image"
-                                                                                                  style="display: none;"
-                                                                                                  onchange="readURL(this);">
-
+                                                    <i class="fa fa-picture-o"></i>
+                                                    Select
+                                                    <input type="file" name="image" style="display: none;"
+                                                           onchange="readURL(this);">
                                                 </label>
-                                                <label class="btn btn-danger "
-                                                       onclick="removeFile()">
-                                                    <i class="fa fa-times-circle"></i>&nbsp;&nbsp;Remove </label>
+                                                <label class="btn btn-danger " onclick="removeFile()">
+                                                    <i class="fa fa-times-circle"></i>&nbsp;
+                                                    &nbsp;Remove
+                                                </label>
                                             </p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="input-password" class="col-sm-3 control-label">Password <span
-                                            class="help-block">Leave blank to leave password unchanged</span>
+                                <label for="input-password" class="col-sm-3 control-label">
+                                    Password
+                                    <span class="help-block">Leave blank to leave password unchanged</span>
                                 </label>
                                 <div class="col-sm-5">
                                     <input type="password" name="password" id="input-password" class="form-control"
@@ -114,7 +111,6 @@
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
-
                 reader.onload = function (e) {
                     $('#thumb')
                         .attr('src', e.target.result);

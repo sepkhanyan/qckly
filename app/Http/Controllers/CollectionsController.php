@@ -212,8 +212,6 @@ class CollectionsController extends Controller
                     $collection_menu = new CollectionMenu();
                     $collection_menu->collection_id = $collection->id;
                     $collection_menu->menu_id = $menu_id;
-                    $menu = MenuCategory::where('id', $menu_id)->first();
-                    $collection_menu->name = $menu->name_en;
                     $collection_menu->save();
                 }
             } else {
@@ -225,8 +223,6 @@ class CollectionsController extends Controller
                         $collection_menu = new CollectionMenu();
                         $collection_menu->collection_id = $collection->id;
                         $collection_menu->menu_id = $menu_id;
-                        $menu = MenuCategory::where('id', $menu_id)->first();
-                        $collection_menu->name = $menu->name_en;
                         if (count($min_qty) != count($request['menu'])) {
                             $collection_menu->min_qty = 1;
                             $collection_menu->max_qty = 1;
@@ -360,8 +356,6 @@ class CollectionsController extends Controller
                         $collection_menu = new CollectionMenu();
                         $collection_menu->collection_id = $collection->id;
                         $collection_menu->menu_id = $menu_id;
-                        $menu = MenuCategory::where('id', $menu_id)->first();
-                        $collection_menu->name = $menu->name_en;
                         $collection_menu->save();
                     }
                 } else {
@@ -373,8 +367,6 @@ class CollectionsController extends Controller
                             $collection_menu = new CollectionMenu();
                             $collection_menu->collection_id = $collection->id;
                             $collection_menu->menu_id = $menu_id;
-                            $menu = MenuCategory::where('id', $menu_id)->first();
-                            $collection_menu->name = $menu->name_en;
                             if (count($min_qty) != count($request['menu'])) {
                                 $collection_menu->min_qty = 1;
                                 $collection_menu->max_qty = 1;

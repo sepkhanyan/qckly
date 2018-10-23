@@ -7,7 +7,6 @@
                     <i class="fa fa-plus"></i>
                     New
                 </a>
-
                 <a class="btn btn-danger" id="delete_restaurant_category">
                     <i class="fa fa-trash-o"></i>
                     Delete
@@ -66,7 +65,6 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-
                                 @foreach($categories as $category)
                                     <tr>
                                         <td class="action">
@@ -162,7 +160,7 @@
         </div>
     </div>
     <script type="text/javascript">
-        function myFunction(id,en,ar) {
+        function myFunction(id, en, ar) {
             $('input[name=name_en]').val(en);
             $('input[name=name_ar]').val(ar);
             $("#edit-form").attr('action', 'restaurant_category/update/' + id);

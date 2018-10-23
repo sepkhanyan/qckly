@@ -103,6 +103,5 @@
         function filterList() {
             $('#filter-form').submit();
         }
-
     </script>
 @endsection

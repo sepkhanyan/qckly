@@ -134,7 +134,7 @@ class AreasController extends Controller
                     $restaurant_images = [];
                     $menu_images = [];
                     foreach ($area->restaurant as $restaurant) {
-                        if($restaurant->menu){
+                        if ($restaurant->menu) {
                             foreach ($restaurant->menu as $menu) {
                                 $menu_images[] = public_path('images/' . $menu->image);
                             }

@@ -29,7 +29,8 @@
                             <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                                 <label for="input-name" class="col-sm-3 control-label">Name</label>
                                 <div class="col-sm-5">
-                                    <input type="text" name="name" id="input-name" class="form-control" value="{{$language->name}}">
+                                    <input type="text" name="name" id="input-name" class="form-control"
+                                           value="{{$language->name}}">
                                     @if ($errors->has('name'))
                                         <span class="help-block">
                                             <strong>{{ $errors->first('name') }}</strong>
@@ -44,7 +45,8 @@
                                 </label>
 
                                 <div class="col-sm-5">
-                                    <input type="text" name="code" id="input-code" class="form-control" value="{{$language->code}}">
+                                    <input type="text" name="code" id="input-code" class="form-control"
+                                           value="{{$language->code}}">
                                     @if ($errors->has('code'))
                                         <span class="help-block">
                                             <strong>{{ $errors->first('code') }}</strong>
@@ -59,22 +61,26 @@
                                         @if(isset($language->image))
                                             <span class="input-group-addon lg-addon" title="" data-original-title="">
                                                 <i>
-                                                    <img src="{{url('/') . '/images/' . $language->image}}" class="thumb img-responsive" id="thumb">
+                                                    <img src="{{url('/') . '/images/' . $language->image}}"
+                                                         class="thumb img-responsive" id="thumb">
                                                 </i>
                                             </span>
-                                            <input type="text" class="form-control" id="image_name" value="{{'flags/' . $language->image}}" name="image">
-                                          @else
+                                            <input type="text" class="form-control" id="image_name"
+                                                   value="{{'flags/' . $language->image}}" name="image">
+                                        @else
                                             <span class="input-group-addon lg-addon" title="" data-original-title="">
                                                 <i>
-                                                    <img src="{{url('/') . '/admin/flags/no_flag.png'}}" class="thumb img-responsive" id="thumb">
+                                                    <img src="{{url('/') . '/admin/flags/no_flag.png'}}"
+                                                         class="thumb img-responsive" id="thumb">
                                                 </i>
                                             </span>
-                                            <input type="text" class="form-control" id="image_name"  name="image">
+                                            <input type="text" class="form-control" id="image_name" name="image">
                                         @endif
-                                            <span class="input-group-btn">
+                                        <span class="input-group-btn">
                                                 <label class=" btn btn-primary btn-file ">
                                                     <i class="fa fa-picture-o"></i>
-                                                    <input type="file" name="image" style="display: none;" onchange="readURL(this);" id="image_file">
+                                                    <input type="file" name="image" style="display: none;"
+                                                           onchange="readURL(this);" id="image_file">
                                                 </label>
                                                 <label class="btn btn-danger " onclick="removeFile()">
                                                     <i class="fa fa-times-circle"></i>
@@ -93,7 +99,8 @@
                                     <span class="help-block">Language idiom, must be same as the language directory name.</span>
                                 </label>
                                 <div class="col-sm-5">
-                                    <input type="text" name="idiom" id="input-idiom" class="form-control" value="{{$language->idiom}}">
+                                    <input type="text" name="idiom" id="input-idiom" class="form-control"
+                                           value="{{$language->idiom}}">
                                     @if ($errors->has('idiom'))
                                         <span class="help-block">
                                             <strong>{{ $errors->first('idiom') }}</strong>
@@ -111,7 +118,6 @@
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
-
                 reader.onload = function (e) {
                     $('#thumb')
                         .attr('src', e.target.result);

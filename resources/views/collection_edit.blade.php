@@ -415,7 +415,7 @@
                                         @else
                                             <thead>
                                             <tr>
-                                                   <th>Menu ID</th>
+                                                <th>Menu ID</th>
                                                 <th>Menu</th>
                                                 <th>Menu Min/Max Quantity</th>
                                                 <th>Items(Id/Name - Price)</th>

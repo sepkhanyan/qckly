@@ -27,7 +27,6 @@
                         </li>
                     </ul>
                 </div>
-
                 <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST" enctype="multipart/form-data"
                       action="{{ url('/menu_category/store') }}">
                     {{ csrf_field() }}
@@ -114,22 +113,20 @@
                                 <div class="col-sm-5">
                                     <div class="thumbnail imagebox">
                                         <div class="preview">
-                                            <img src="{{url('/') . '/admin/no_photo.png'}}"
-                                                 class="thumb img-responsive" id="thumb">
+                                            <img src="{{url('/') . '/admin/no_photo.png'}}" class="thumb img-responsive" id="thumb">
                                         </div>
                                         <div class="caption">
                                             <span class="name text-center"></span>
                                             <p>
                                                 <label class=" btn btn-primary btn-file ">
-                                                    <i class="fa fa-picture-o"></i> Select <input type="file"
-                                                                                                  name="image"
-                                                                                                  style="display: none;"
-                                                                                                  onchange="readURL(this);">
-
+                                                    <i class="fa fa-picture-o"></i>
+                                                    Select
+                                                    <input type="file" name="image" style="display: none;" onchange="readURL(this);">
                                                 </label>
-                                                <label class="btn btn-danger "
-                                                       onclick="removeFile()">
-                                                    <i class="fa fa-times-circle"></i>&nbsp;&nbsp;Remove </label>
+                                                <label class="btn btn-danger " onclick="removeFile()">
+                                                    <i class="fa fa-times-circle"></i>&nbsp;
+                                                    &nbsp;Remove
+                                                </label>
                                             </p>
                                         </div>
                                     </div>
@@ -145,7 +142,6 @@
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
-
                 reader.onload = function (e) {
                     $('#thumb')
                         .attr('src', e.target.result);
@@ -153,7 +149,6 @@
                 reader.readAsDataURL(input.files[0]);
             }
         }
-
         function removeFile() {
             $('#thumb').attr('src', '/admin/no_photo.png');
         }

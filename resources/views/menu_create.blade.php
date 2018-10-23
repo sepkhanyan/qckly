@@ -23,7 +23,6 @@
                         <li class="active"><a href="#general" data-toggle="tab">Menu</a></li>
                     </ul>
                 </div>
-
                 <form role="form" id="edit-form" class="form-horizontal" enctype="multipart/form-data"
                       accept-charset="utf-8" method="POST" action="{{ url('/menu/store') }}">
                     {{ csrf_field() }}
@@ -166,15 +165,14 @@
                                             <span class="name text-center"></span>
                                             <p>
                                                 <label class=" btn btn-primary btn-file ">
-                                                    <i class="fa fa-picture-o"></i> Select <input type="file"
-                                                                                                  name="image"
-                                                                                                  style="display: none;"
-                                                                                                  onchange="readURL(this);">
-
+                                                    <i class="fa fa-picture-o"></i>
+                                                    Select
+                                                    <input type="file" name="image" style="display: none;" onchange="readURL(this);">
                                                 </label>
-                                                <label class="btn btn-danger "
-                                                       onclick="removeFile()">
-                                                    <i class="fa fa-times-circle"></i>&nbsp;&nbsp;Remove </label>
+                                                <label class="btn btn-danger " onclick="removeFile()">
+                                                    <i class="fa fa-times-circle"></i>
+                                                    &nbsp;&nbsp;Remove
+                                                </label>
                                             </p>
                                         </div>
                                     </div>
@@ -205,7 +203,6 @@
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
-
                 reader.onload = function (e) {
                     $('#thumb')
                         .attr('src', e.target.result);
@@ -213,7 +210,6 @@
                 reader.readAsDataURL(input.files[0]);
             }
         }
-
         function removeFile() {
             $('#thumb').attr('src', '/admin/no_photo.png');
         }
@@ -221,19 +217,4 @@
     <script type="text/javascript">
         $('#restaurant ').select2();
     </script>
-    {{--<div id="media-manager" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"--}}
-    {{--style="display: none;">--}}
-    {{--<div class="modal-dialog modal-lg">--}}
-    {{--<div class="modal-content">--}}
-    {{--<div class="modal-header">--}}
-    {{--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>--}}
-    {{--<h4 class="modal-title">Image Manager</h4></div>--}}
-    {{--<div class="modal-body wrap-none">--}}
-    {{--<iframe  name="media_manager"--}}
-    {{--src="{{url('/image_manager?popup=iframe')}}"--}}
-    {{--width="100%" height="869px" frameborder="0" style="height: 558px;"></iframe>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
-    {{--</div>--}}
 @endsection

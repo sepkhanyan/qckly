@@ -212,7 +212,7 @@ class MenuCategoriesController extends Controller
             }
             File::delete($category_images);
             MenuCategory::whereIn('id', $id)->where('restaurant_id', $restaurant->id)->delete();
-        }else{
+        } else {
             foreach ($categories as $category) {
                 if ($category->menu) {
                     $menu_images = [];

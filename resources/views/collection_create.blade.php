@@ -47,8 +47,8 @@
                                            value="{{ old('name_en') }}">
                                     @if ($errors->has('name_en'))
                                         <span class="help-block">
-                                            <strong>{{ $errors->first('name_en') }}</strong>
-                                        </span>
+                                                <strong>{{ $errors->first('name_en') }}</strong>
+                                            </span>
                                     @endif
                                 </div>
                             </div>
@@ -59,8 +59,8 @@
                                            value="{{ old('name_ar') }}">
                                     @if ($errors->has('name_ar'))
                                         <span class="help-block">
-                                            <strong>{{ $errors->first('name_ar') }}</strong>
-                                        </span>
+                                                <strong>{{ $errors->first('name_ar') }}</strong>
+                                            </span>
                                     @endif
                                 </div>
                             </div>
@@ -71,8 +71,8 @@
                                               rows="5">{{ old('description_en') }}</textarea>
                                     @if ($errors->has('description_en'))
                                         <span class="help-block">
-                                            <strong>{{ $errors->first('description_en') }}</strong>
-                                        </span>
+                                                <strong>{{ $errors->first('description_en') }}</strong>
+                                            </span>
                                     @endif
                                 </div>
                             </div>
@@ -83,8 +83,8 @@
                                               rows="5">{{ old('description_ar') }}</textarea>
                                     @if ($errors->has('description_ar'))
                                         <span class="help-block">
-                                            <strong>{{ $errors->first('description_ar') }}</strong>
-                                        </span>
+                                                <strong>{{ $errors->first('description_ar') }}</strong>
+                                            </span>
                                     @endif
                                 </div>
                             </div>
@@ -123,14 +123,15 @@
                                               id="service_provide_en">{{ old('service_provide_en') }}</textarea>
                                     @if ($errors->has('service_provide_en'))
                                         <span class="help-block">
-                                            <strong>{{ $errors->first('service_provide_en') }}</strong>
-                                        </span>
+                                                <strong>{{ $errors->first('service_provide_en') }}</strong>
+                                            </span>
                                     @endif
                                 </div>
                             </div>
                             <div class="form-group{{ $errors->has('service_provide_ar') ? ' has-error' : '' }}">
-                                <label for="service_provide_ar" class="col-sm-3 control-label">Service Provide
-                                    Ar</label>
+                                <label for="service_provide_ar" class="col-sm-3 control-label">
+                                    Service Provide Ar
+                                </label>
                                 <div class="col-sm-5">
                                     <textarea name="service_provide_ar" class="form-control"
                                               id="service_provide_ar">{{ old('service_provide_ar') }}</textarea>
@@ -142,8 +143,9 @@
                                 </div>
                             </div>
                             <div class="form-group{{ $errors->has('service_presentation_en') ? ' has-error' : '' }}">
-                                <label for="service_presentation_en" class="col-sm-3 control-label">Service Presentation
-                                    En</label>
+                                <label for="service_presentation_en" class="col-sm-3 control-label">
+                                    Service Presentation En
+                                </label>
                                 <div class="col-sm-5">
                                     <textarea name="service_presentation_en" class="form-control"
                                               id="service_presentation_en">{{ old('service_presentation_en') }}</textarea>
@@ -155,8 +157,9 @@
                                 </div>
                             </div>
                             <div class="form-group{{ $errors->has('service_presentation_ar') ? ' has-error' : '' }}">
-                                <label for="service_presentation_ar" class="col-sm-3 control-label">Service Presentation
-                                    Ar</label>
+                                <label for="service_presentation_ar" class="col-sm-3 control-label">
+                                    Service Presentation Ar
+                                </label>
                                 <div class="col-sm-5">
                                     <textarea name="service_presentation_ar" class="form-control"
                                               id="service_presentation_ar">{{ old('service_presentation_ar') }}</textarea>
@@ -190,13 +193,13 @@
                                             <input type="text" name="collection_price" id="input-price"
                                                    class="form-control" value="{{old('collection_price')}}"/>
                                             <span class="input-group-addon">
-                                                    <i class="fa fa-money"></i>
-                                                </span>
+                                                <i class="fa fa-money"></i>
+                                            </span>
                                         </div>
                                         @if ($errors->has('collection_price'))
                                             <span class="help-block">
-                                            <strong>{{ $errors->first('collection_price') }}</strong>
-                                        </span>
+                                                <strong>{{ $errors->first('collection_price') }}</strong>
+                                            </span>
                                         @endif
                                     </div>
                                 </div>

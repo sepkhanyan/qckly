@@ -208,7 +208,7 @@ class AddressesController extends Controller
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200));
-            }else{
+            } else {
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200,

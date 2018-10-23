@@ -17,15 +17,15 @@ class LanguagesController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        if($user->admin == 1){
+        if ($user->admin == 1) {
             $languages = Language::paginate(20);
             $data = $request->all();
 
             if (isset($data['language_search'])) {
                 $languages = Language::where('name', 'like', $data['language_search'])->paginate(20);
             }
-            return view('languages', ['languages' => $languages ]);
-        }else{
+            return view('languages', ['languages' => $languages]);
+        } else {
             return redirect()->back();
         }
     }
@@ -49,7 +49,7 @@ class LanguagesController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -74,7 +74,7 @@ class LanguagesController extends Controller
             $language->idiom = $request->input('idiom');
             $language->save();
             return redirect('/languages');
-        }else{
+        } else {
             return redirect('/languages');
         }
     }
@@ -82,7 +82,7 @@ class LanguagesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -93,7 +93,7 @@ class LanguagesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -102,7 +102,7 @@ class LanguagesController extends Controller
         if ($user->admin == 1) {
             $language = Language::find($id);
             return view('language_edit', ['language' => $language]);
-        }else{
+        } else {
             return redirect('/languages');
         }
     }
@@ -110,8 +110,8 @@ class LanguagesController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -139,7 +139,7 @@ class LanguagesController extends Controller
             }
             $language->save();
             return redirect('/languages');
-        }else{
+        } else {
             return redirect('/languages');
         }
     }
@@ -147,7 +147,7 @@ class LanguagesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function deleteLanguage(Request $request)
@@ -163,7 +163,7 @@ class LanguagesController extends Controller
             File::delete($images);
             Language::whereIn('id', $id)->delete();
             return redirect('/languages');
-        }else{
+        } else {
             return redirect('/languages');
         }
     }

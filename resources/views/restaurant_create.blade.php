@@ -32,18 +32,6 @@
                         <li>
                             <a href="#opening-hours" data-toggle="tab">Working Hours</a>
                         </li>
-                        {{--<li>--}}
-                        {{--<a href="#order" data-toggle="tab">Order</a>--}}
-                        {{--</li>--}}
-                        {{--<li>--}}
-                        {{--<a href="#reservation" data-toggle="tab">Reservation</a>--}}
-                        {{--</li>--}}
-                        {{--<li>--}}
-                        {{--<a id="open-map" href="#delivery" data-toggle="tab" >Delivery</a>--}}
-                        {{--</li>--}}
-                        {{--<li>--}}
-                        {{--<a href="#gallery" data-toggle="tab">Gallery</a>--}}
-                        {{--</li>--}}
                     </ul>
                 </div>
                 <form role="form" id="edit-form" name="edit_form" class="form-horizontal" accept-charset="utf-8"
@@ -262,19 +250,19 @@
                                 </div>
                             </div>
                             {{--<div class="form-group">--}}
-                                {{--<label for="" class="col-sm-3 control-label">Automatically fetch lat/lng</label>--}}
-                                {{--<div class="col-sm-5">--}}
-                                    {{--<div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">--}}
-                                        {{--<label id="lat-lng-yes" class="btn btn-default active">--}}
-                                            {{--<input type="radio" name="auto_lat_lng" value="1" checked="checked">--}}
-                                            {{--YES--}}
-                                        {{--</label>--}}
-                                        {{--<label class="btn btn-default" id="lat-lng-no">--}}
-                                            {{--<input type="radio" name="auto_lat_lng" value="0">--}}
-                                            {{--NO--}}
-                                        {{--</label>--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
+                            {{--<label for="" class="col-sm-3 control-label">Automatically fetch lat/lng</label>--}}
+                            {{--<div class="col-sm-5">--}}
+                            {{--<div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">--}}
+                            {{--<label id="lat-lng-yes" class="btn btn-default active">--}}
+                            {{--<input type="radio" name="auto_lat_lng" value="1" checked="checked">--}}
+                            {{--YES--}}
+                            {{--</label>--}}
+                            {{--<label class="btn btn-default" id="lat-lng-no">--}}
+                            {{--<input type="radio" name="auto_lat_lng" value="0">--}}
+                            {{--NO--}}
+                            {{--</label>--}}
+                            {{--</div>--}}
+                            {{--</div>--}}
                             {{--</div>--}}
                             {{--<br/>--}}
                             {{--<div id="map"></div>--}}
@@ -294,7 +282,7 @@
                             {{--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAf3Mvs_VUn36k8PLKIaSKY9QW17cg_18k&callback=myMap"></script>--}}
                             {{--</div>--}}
 
-                            <div id="lat-lng" >
+                            <div id="lat-lng">
                                 <div class="form-group{{ $errors->has('latitude') ? ' has-error' : '' }}">
                                     <label for="lat" class="col-sm-3 control-label">Latitude</label>
                                     <div class="col-sm-5">
@@ -392,22 +380,21 @@
                                             <span class="name text-center"></span>
                                             <p>
                                                 <label class=" btn btn-primary btn-file ">
-                                                    <i class="fa fa-picture-o"></i> Select <input type="file"
-                                                                                                  name="image"
-                                                                                                  style="display: none;"
-                                                                                                  onchange="readURL(this);">
-
+                                                    <i class="fa fa-picture-o"></i>
+                                                    Select
+                                                    <input type="file" name="image" style="display: none;"
+                                                           onchange="readURL(this);">
                                                 </label>
-                                                <label class="btn btn-danger "
-                                                       onclick="removeFile()">
-                                                    <i class="fa fa-times-circle"></i>&nbsp;&nbsp;Remove </label>
+                                                <label class="btn btn-danger " onclick="removeFile()">
+                                                    <i class="fa fa-times-circle"></i>&nbsp;
+                                                    &nbsp;Remove
+                                                </label>
                                             </p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                         <div id="opening-hours" class="tab-pane row wrap-all">
                             <div id="opening-type" class="form-group">
                                 <label for="" class="col-sm-3 control-label">Working Type</label>
@@ -428,7 +415,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div id="opening-daily" style="display: none;">
                                 <div class="form-group">
                                     <label for="input-opening-days" class="col-sm-3 control-label">Days</label>
@@ -754,9 +740,6 @@
         </div>
     </div>
     <script type="text/javascript">
-        // In the following example, markers appear when the user clicks on the map.
-        // The markers are stored in an array.
-        // The user can then click an option to hide, show or delete the markers.
         var map;
         var markers = [];
 
@@ -764,31 +747,31 @@
             var haightAshbury = {lat: 40.7143528, lng: -74.0059731};
 
             map = new google.maps.Map(document.getElementById('map'), {
-                zoom:11,
-                panControl:true,
-                zoomControl:true,
-                mapTypeControl:true,
-                scaleControl:true,
-                streetViewControl:true,
-                overviewMapControl:true,
-                rotateControl:true,                        // Set the zoom level manually
+                zoom: 11,
+                panControl: true,
+                zoomControl: true,
+                mapTypeControl: true,
+                scaleControl: true,
+                streetViewControl: true,
+                overviewMapControl: true,
+                rotateControl: true,
                 center: haightAshbury,
                 mapTypeId: 'terrain'
             });
 
-            // This event listener will call addMarker() when the map is clicked.
-            map.addListener('click', function(event) {
+
+            map.addListener('click', function (event) {
                 if (markers.length >= 1) {
                     deleteMarkers();
                 }
 
                 addMarker(event.latLng);
                 document.getElementById('lat').value = event.latLng.lat();
-                document.getElementById('long').value =  event.latLng.lng();
+                document.getElementById('long').value = event.latLng.lng();
             });
         }
 
-        // Adds a marker to the map and push to the array.
+
         function addMarker(location) {
             var marker = new google.maps.Marker({
                 position: location,
@@ -797,23 +780,24 @@
             markers.push(marker);
         }
 
-        // Sets the map on all markers in the array.
+
         function setMapOnAll(map) {
             for (var i = 0; i < markers.length; i++) {
                 markers[i].setMap(map);
             }
         }
 
-        // Removes the markers from the map, but keeps them in the array.
+
         function clearMarkers() {
             setMapOnAll(null);
         }
 
-        // Deletes all markers in the array by removing references to them.
+
         function deleteMarkers() {
             clearMarkers();
             markers = [];
         }
+
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();

@@ -17,7 +17,6 @@ class Restaurant extends Model
         'description_ar',
         'address_en',
         'address_ar',
-//        'city',
         'state_en',
         'state_ar',
         'postcode',
