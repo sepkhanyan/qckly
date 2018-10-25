@@ -206,7 +206,7 @@
                                 @if($collection_category->id != 2)
                                     <div class="form-group{{ $errors->has('min_quantity') ? ' has-error' : '' }}">
                                         <label class="col-sm-3 control-label">Collection min quantity</label>
-                                        <div class="col-xs-2">
+                                        <div class="col-sm-5">
                                             <input type="number" min="1" name="min_quantity" class="form-control"
                                                    value="1">
                                             @if ($errors->has('min_quantity'))
@@ -218,7 +218,7 @@
                                     </div>
                                     <div class="form-group{{ $errors->has('max_quantity') ? ' has-error' : '' }}">
                                         <label class="col-sm-3 control-label">Collection max quantity</label>
-                                        <div class="col-xs-2">
+                                        <div class="col-sm-5">
                                             <input type="number" min="1" name="max_quantity" class="form-control"
                                                    value="1">
                                             @if ($errors->has('max_quantity'))
@@ -232,7 +232,7 @@
                                 @endif
                                 <div class="form-group{{ $errors->has('min_serve_to_person') ? ' has-error' : '' }}">
                                     <label class="col-sm-3 control-label">Min serve to person</label>
-                                    <div class="col-xs-2">
+                                    <div class="col-sm-5">
                                         <input type="number" min="1" name="min_serve_to_person" class="form-control"
                                                value="1">
                                         @if ($errors->has('min_serve_to_person'))
@@ -245,7 +245,7 @@
                                 </div>
                                 <div class="form-group{{ $errors->has('max_serve_to_person') ? ' has-error' : '' }}">
                                     <label class="col-sm-3 control-label">Max serve to person</label>
-                                    <div class="col-xs-2">
+                                    <div class="col-sm-5">
                                         <input type="number" min="1" name="max_serve_to_person" class="form-control"
                                                value="1">
                                         @if ($errors->has('max_serve_to_person'))
@@ -260,7 +260,7 @@
                             @if($collection_category->id == 2)
                                 <div class="form-group{{ $errors->has('persons_max_count') ? ' has-error' : '' }}">
                                     <label class="col-sm-3 control-label">Persons max count</label>
-                                    <div class="col-xs-2">
+                                    <div class="col-sm-5">
                                         <input type="number" min="1" name="persons_max_count" class="form-control"
                                                value="1">
                                         @if ($errors->has('persons_max_count'))

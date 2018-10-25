@@ -93,7 +93,7 @@
                                             {{--onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">--}}
                                         </th>
                                     @endif
-                                    <th>ID</th>
+                                    <th>Order ID</th>
                                     <th>Customer Name</th>
                                     <th>Payment</th>
                                     <th>Total</th>
@@ -116,7 +116,7 @@
                                                         </a>&nbsp;&nbsp;
                                                     </td>
                                                 @endif
-                                                <td>{{$order->order_id}}</td>
+                                                <td>#{{$order->order_id}}</td>
                                                 <td>{{$order->order->user->username}}</td>
                                                 <td>
                                                     @if($order->order->payment_type == 1)
@@ -143,7 +143,7 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    {{date("g:i A", strtotime($order->created_at)) . ', ' . date("j M Y", strtotime($order->created_at))}}
+                                                    {{date("g:i A", strtotime($order->updated_at)) . ', ' . date("j M Y", strtotime($order->updated_at))}}
                                                 </td>
                                             </tr>
                                         @endforeach

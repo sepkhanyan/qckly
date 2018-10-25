@@ -10,6 +10,8 @@
 | the IoC container for the system binding all of the various parts.
 |
 */
+class_alias(\LaravelFCM\Facades\FCM::class, 'FCM');
+class_alias(\LaravelFCM\Facades\FCMGroup::class, 'FCMGroup');
 
 $app = new Illuminate\Foundation\Application(
     realpath(__DIR__.'/../')
@@ -40,6 +42,7 @@ $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
     App\Exceptions\Handler::class
 );
+
 
 /*
 |--------------------------------------------------------------------------
