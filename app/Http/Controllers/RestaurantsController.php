@@ -76,7 +76,7 @@ class RestaurantsController extends Controller
         if ($user->admin == 1) {
             $request->validate([
                 'manager_name' => 'required|string|max:255',
-                'manager_email' => 'required|string|max:255',
+                'manager_email' => 'required|email|max:255',
                 'manager_username' => 'required|string|max:255',
                 'password' => 'required|string|min:6|confirmed',
                 'category' => 'required',
@@ -555,6 +555,7 @@ class RestaurantsController extends Controller
             $working_day = Carbon::parse($DataRequests['working_day'])->dayOfWeek;
             $working_time = $DataRequests['working_time'];
             $working_time = Carbon::parse($working_time);
+//            dd($working_time);
             $restaurants = Restaurant::
             where('area_id', $id)
                 ->whereHas('workingHour', function ($query) use ($working_day, $working_time) {
