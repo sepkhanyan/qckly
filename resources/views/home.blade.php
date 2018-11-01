@@ -21,6 +21,7 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 
 
+    {{--<script src="{{ asset('js/app.js') }}" defer></script>--}}
     <script src="{{ asset('js/jquery-1.11.2.min.js') }}"></script>
     <script src="{{ asset('js/jquery.js') }}"></script>
     <script src="{{ asset('js/jquery-sortable.js') }}"></script>
@@ -36,6 +37,7 @@
     <script src="{{ asset('js/select2.js') }}"></script>
     <script src="{{ asset('js/common.js') }}"></script>
 
+
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
 
@@ -50,6 +52,7 @@
     <link href="{{ asset('js/datepicker/datepicker.css') }}" rel="stylesheet">
     <link href="{{ asset('js/datepicker/bootstrap-timepicker.css') }}" rel="stylesheet">
 
+
     <script type="text/javascript">
         $(document).ready(function () {
             $('a[title], span[title], button[title]').tooltip({placement: 'bottom'});
@@ -60,6 +63,25 @@
 
             $("#list-form td:contains('Disabled')").addClass('red');
         });
+    </script>
+
+    <script src="https://js.pusher.com/4.3/pusher.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/dojo/1.13.0/dojo/dojo.js"></script>
+    <script>
+
+        // Enable pusher logging - don't include this in production
+        Pusher.logToConsole = true;
+
+        var pusher = new Pusher('6dba162777e691fc6a70', {
+            cluster: 'eu',
+            forceTLS: true
+        });
+
+        var channel = pusher.subscribe('messages');
+        channel.bind('.newMessage', function(data) {
+            alert(JSON.stringify(data));
+        });
+
     </script>
     <style>
         #map {
@@ -178,6 +200,14 @@
             display: block;
         }
     </style>
+    {{--<script src="https://js.pusher.com/4.3/pusher.min.js"></script>--}}
+    {{--<script>--}}
+
+        {{--Echo.channel('messages.' + self.user_id)--}}
+            {{--.listen('NewMessage', (e) => {--}}
+                {{--console.log(e);--}}
+            {{--});--}}
+    {{--</script>--}}
 </head>
 <body>
 <div id="wrapper" class="">
@@ -209,7 +239,7 @@
                     </li>
                     @if(Auth::user()->admin == 1)
                         <li>
-                            <a class="area">
+                             <a class="area">
                                 <i class="fa fa-map-marker fa-fw"></i>
                                 <span class="content ">Areas</span>
                                 <span class="fa arrow"></span>
@@ -470,6 +500,19 @@
             @endif
         </h1>
     </nav>
+    {{--<div class="container">--}}
+        {{--<div class="row">--}}
+            {{--<div class="col-md-8 col-md-offset-2">--}}
+                {{--<div class="panel panel-default">--}}
+                    {{--<div class="panel-heading">Dashboard</div>--}}
+
+                    {{--<div class="panel-body">--}}
+                        {{--<example></example>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+        {{--</div>--}}
+    {{--</div>--}}
     @yield('content')
     <div id="footer" class="">
         <div class="row navbar-footer">
@@ -481,16 +524,12 @@
     </div>
 </div>
 <script type="text/javascript"><!--
-    $(document).ready(function() {
-        $('#delivery-areas select.form-control').select2({
-            minimumResultsForSearch: Infinity
-        });
-
+    $(document).ready(function () {
         $('.timepicker').timepicker({
             defaultTime: '11:45 AM'
         });
 
-        $('input[name="auto_lat_lng"]').on('change', function() {
+        $('input[name="auto_lat_lng"]').on('change', function () {
             $('#lat-lng').slideDown('fast');
 
             if (this.value == '1') {
@@ -498,7 +537,7 @@
             }
         });
 
-        $('input[name="opening_type"]').on('change', function() {
+        $('input[name="opening_type"]').on('change', function () {
             if (this.value == '24_7') {
                 $('#opening-daily').slideUp('fast');
                 $('#opening-flexible').slideUp('fast');
@@ -515,79 +554,6 @@
             }
         });
 
-        $('input[name="delivery_type"]').on('change', function() {
-            if (this.value == '0') {
-                $('#delivery-hours-daily').slideUp('fast');
-            }
-
-            if (this.value == '1') {
-                $('#delivery-hours-daily').slideDown('fast');
-            }
-        });
-
-        $('input[name="collection_type"]').on('change', function() {
-            if (this.value == '0') {
-                $('#collection-hours-daily').slideUp('fast');
-            }
-
-            if (this.value == '1') {
-                $('#collection-hours-daily').slideDown('fast');
-            }
-        });
-
-        $('input[name="future_orders"]').on('change', function() {
-            $('#future-orders-days').slideUp('fast');
-
-            if (this.value == '1') {
-                $('#future-orders-days').slideDown('fast');
-            }
-        });
-
-        $(document).on('click', '.btn-add-condition', function() {
-            var panelRow = $(this).attr('data-panel-row');
-            var tableRow = $(this).attr('data-table-row');
-
-            tableRow++;
-            addDeliveryCondition(panelRow, tableRow);
-
-            $(this).attr('data-table-row', tableRow);
-        });
-
-        $(document).on('change', '#delivery-areas select.form-control', function() {
-            $(this).parent().parent().find('input.total').attr('disabled', false);
-
-            if (this.value == 'all') {
-                $(this).parent().parent().find('input.total').val('0');
-                $(this).parent().parent().find('input.total').attr('disabled', true);
-            }
-        });
-
-        $('#delivery-areas select.form-control').trigger('change');
-    });
-    //--></script>
-<script type="text/javascript"><!--
-    $('input[name=\'table\']').select2({
-        placeholder: 'Start typing...',
-        minimumInputLength: 2,
-        ajax: {
-            url: 'https://demo.tastyigniter.com/admin/tables/autocomplete',
-            dataType: 'json',
-            quietMillis: 100,
-            data: function (term, page) {
-                return {
-                    term: term, //search term
-                    page_limit: 10 // page size
-                };
-            },
-            results: function (data, page, query) {
-                return { results: data.results };
-            }
-        }
-    });
-
-    $('input[name=\'table\']').on('select2-selecting', function(e) {
-        $('#table-box' + e.choice.id).remove();
-        $('#table-box table tbody').append('<tr id="table-box' + e.choice.id + '"><td class="name">' + e.choice.text + '</td><td>' + e.choice.min + '</td><td>' + e.choice.max + '</td><td class="img">' + '<a class="btn btn-danger btn-xs" onclick="confirm(\'This cannot be undone! Are you sure you want to do this?\') ? $(this).parent().parent().remove() : false;"><i class="fa fa-times-circle"></i></a>' + '<input type="hidden" name="tables[]" value="' + e.choice.id + '" /></td></tr>');
     });
     //--></script>
 <script type="text/javascript"><!--
@@ -601,67 +567,10 @@
         })
     });
 
-    var gallery_image_row = 1;
 
-    function addImageToGallery(image_row = null) {
-        var height = (this.window.innerHeight > 0) ? this.window.innerHeight-100 : this.screen.height-100;
-        $(window).bind("load resize", function() {
-            var height = (this.window.innerHeight > 0) ? this.window.innerHeight-100 : this.screen.height-100;
-            $('#media-manager > iframe').css("height", (height) + "px");
-        });
-
-        if (null == image_row) {
-            image_row = gallery_image_row;
-
-            html = '<tr id="gallery-image' + image_row + '">';
-            html += '	<td class="action action-one"><i class="fa fa-sort handle"></i>&nbsp;&nbsp;&nbsp;<a class="btn btn-danger" onclick="confirm(\'This cannot be undone! Are you sure you want to do this?\') ? $(this).parent().parent().remove() : false;"><i class="fa fa-times-circle"></i></a></td>';
-            html += '	<td><img src="" class="image-thumb img-responsive" />'
-                + '<input type="hidden" id="image-thumb' + image_row + '" name="gallery[images][' + image_row + '][path]" value=""></td>';
-            html += '	<td><span class="name"></span><input type="hidden" class="image-name" id="image-name' + image_row + '" name="gallery[images][' + image_row + '][name]" value=""></td>';
-            html += '	<td><input type="text" name="gallery[images][' + image_row + '][alt_text]" class="form-control" value="" /></td>';
-            html += '	<td class="text-center"><div class="btn-group btn-group-switch" data-toggle="buttons">';
-            html += '		<label class="btn btn-default active"><input type="radio" name="gallery[images][' + image_row + '][status]" checked="checked"value="0">Included</label>';
-            html += '		<label class="btn btn-danger"><input type="radio" name="gallery[images][' + image_row + '][status]" value="1">Excluded</label>';
-            html += '	</div></td>';
-            html += '</tr>';
-
-            $('#gallery-images .table-sortable tbody').append(html);
-            $('#gallery-image' + image_row + ' select.form-control').select2();
-
-            gallery_image_row++;
-        }
-
-        var field = 'image-thumb' + image_row;
-        $('#media-manager').remove();
-        var iframe_url = js_site_url('image_manager?popup=iframe&field_id=' + field);
-
-        $('body').append('<div id="media-manager" class="modal" tabindex="-1" data-parent="note-editor" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'
-            + '<div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header">'
-            + '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>'
-            + '<h4 class="modal-title">Image Manager</h4>'
-            + '</div><div class="modal-body wrap-none">'
-            + '<iframe name="media_manager" src="'+ iframe_url +'" width="100%" height="' + height + 'px" frameborder="0"></iframe>'
-            + '</div></div></div></div>');
-
-        $('#media-manager').modal('show');
-
-        $('#media-manager').on('hide.bs.modal', function (e) {
-            if ($('#' + field).attr('value')) {
-                $.ajax({
-                    url: js_site_url('image_manager/resize?image=') + encodeURIComponent($('#' + field).attr('value')) + '&width=120&height=120',
-                    dataType: 'json',
-                    success: function(json) {
-                        var parent = $('#' + field).parent().parent();
-                        parent.find('.image-thumb').attr('src', json);
-                        parent.find('.image-name').attr('value', parent.find('.name').html());
-                    }
-                });
-            }
-        });
-    }
     //--></script>
 <script type="text/javascript">
-    $(document).ready(function() {
+    $(document).ready(function () {
         if (document.location.toString().toLowerCase().indexOf(active_menu, 1) != -1) {
             $('#side-menu .' + active_menu).addClass('active');
             $('#side-menu .' + active_menu).parents('.collapse').parent().addClass('active');
@@ -672,7 +581,7 @@
         if (window.location.hash) {
             var hash = window.location.hash.substring(1); //Puts hash in variable, and removes the # character
             $('html,body').animate({scrollTop: $('#wrapper').offset().top - 45}, 800);
-            $('#nav-tabs a[href="#'+hash+'"]').tab('show');
+            $('#nav-tabs a[href="#' + hash + '"]').tab('show');
         }
 
         $('.btn-group input[type="radio"]:checked, .btn-group .active input[type="radio"]').trigger('change');

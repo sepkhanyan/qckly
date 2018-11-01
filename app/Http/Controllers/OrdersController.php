@@ -13,6 +13,7 @@ use App\MenuCategory;
 use App\Restaurant;
 use App\Status;
 use Auth;
+use App\Events\NewMessage;
 
 class OrdersController extends Controller
 {
@@ -378,6 +379,8 @@ class OrdersController extends Controller
                             $orderRestaurant->total_price = $restaurantOrder['restaurant_total'];
                             $orderRestaurant->save();
                         }
+                        $message = 'New Order!';
+                        event(new NewMessage($message));
                         UserCart::where('id', $cart_id)->update(['completed' => 1]);
                         $delivery_address = new DeliveryAddress();
                         $delivery_address->order_id = $order->id;

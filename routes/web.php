@@ -109,3 +109,12 @@ Route::group(['middleware' => ['web', 'auth']], function () {
 });
 
 
+Route::get('/test','TestController@index');
+
+Route::get('/sender', 'TestController@sender');
+
+Route::post('/message', 'TestController@test');
+
+
+
+

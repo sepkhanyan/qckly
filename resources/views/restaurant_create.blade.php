@@ -315,7 +315,7 @@
                                     </div>
                                 </div>
                                 <script async defer
-                                        src="http://maps.google.com/maps/api/js?sensor=false&callback=initMap">
+                                        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAU2aEUn440lIbc-dt9swUPO-jB0HMmCl8&callback=initMap">
                                 </script>
                             </div>
                         </div>
