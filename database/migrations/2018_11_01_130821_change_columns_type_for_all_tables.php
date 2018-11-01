@@ -19,6 +19,7 @@ class ChangeColumnsTypeForAllTables extends Migration
             $table->text('service_provide_ar')->change();
             $table->text('requirements_ar')->change();
             $table->text('description_ar')->change();
+            $table->text('service_presentation_ar')->change();
         });
         Schema::table('menus', function (Blueprint $table) {
             $table->text('description_ar')->change();
@@ -41,6 +42,7 @@ class ChangeColumnsTypeForAllTables extends Migration
             $table->string('service_provide_ar')->change();
             $table->string('requirements_ar')->change();
             $table->string('description_ar')->change();
+            $table->string('service_presentation_ar')->change();
         });
         Schema::table('menus', function (Blueprint $table) {
             $table->string('description_ar')->change();
