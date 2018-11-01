@@ -82,18 +82,23 @@
                                 <div class="col-sm-5">
                                     <input type="password" name="password" id="input_password" class="form-control"
                                            value="" autocomplete="off"/>
+                                    {{--@if ($errors->has('password'))--}}
+                                        {{--<span class="help-block">--}}
+                                        {{--<strong>{{ $errors->first('password') }}</strong>--}}
+                                    {{--</span>--}}
+                                    {{--@endif--}}
+                                </div>
+                            </div>
+                            <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+                                <label for="password-confirm" class="col-sm-3 control-label">Confirm Password</label>
+                                <div class="col-sm-5">
+                                    <input type="password" name="password_confirmation" id="password-confirm"
+                                           class="form-control" value=""/>
                                     @if ($errors->has('password'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('password') }}</strong>
                                     </span>
                                     @endif
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="password-confirm" class="col-sm-3 control-label">Confirm Password</label>
-                                <div class="col-sm-5">
-                                    <input type="password" name="password_confirmation" id="password-confirm"
-                                           class="form-control" value=""/>
                                 </div>
                             </div>
                         </div>

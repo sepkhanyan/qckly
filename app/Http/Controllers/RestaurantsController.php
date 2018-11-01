@@ -563,7 +563,7 @@ class RestaurantsController extends Controller
                         ->where('closing_time', '>=', $working_time)
                         ->where('status', 1)
                         ->orWhere('type', '=', '24_7');
-                })->with(['menu', 'categoryRestaurant']);
+                });
 
             if (isset($DataRequests['category_id'])) {
                 $category = $DataRequests['category_id'];
