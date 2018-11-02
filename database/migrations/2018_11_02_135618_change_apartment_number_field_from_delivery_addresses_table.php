@@ -15,6 +15,7 @@ class ChangeApartmentNumberFieldFromDeliveryAddressesTable extends Migration
     {
         Schema::table('delivery_addresses', function (Blueprint $table) {
             $table->string('apartment_number')->change();
+            $table->string('building_number')->change();
         });
     }
 
@@ -27,6 +28,7 @@ class ChangeApartmentNumberFieldFromDeliveryAddressesTable extends Migration
     {
         Schema::table('delivery_addresses', function (Blueprint $table) {
             $table->integer('apartment_number')->change();
+            $table->integer('building_number')->change();
         });
     }
 }
