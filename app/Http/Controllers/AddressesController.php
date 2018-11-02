@@ -52,9 +52,9 @@ class AddressesController extends Controller
                 'name' => 'required|string',
                 'mobile_number' => 'required|numeric|digits:8',
                 'location' => 'required|string',
-                'building_number' => 'required|integer',
+                'building_number' => 'required',
                 'zone' => 'required|string',
-                'apartment_number' => 'required|integer',
+                'apartment_number' => 'required',
                 'is_apartment' => 'required',
                 'latitude' => 'required|numeric',
                 'longitude' => 'required|numeric'

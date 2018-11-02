@@ -81,19 +81,14 @@
                                 </label>
                                 <div class="col-sm-5">
                                     <input type="password" name="password" id="input_password" class="form-control"
-                                           value="" autocomplete="off"/>
-                                    {{--@if ($errors->has('password'))--}}
-                                        {{--<span class="help-block">--}}
-                                        {{--<strong>{{ $errors->first('password') }}</strong>--}}
-                                    {{--</span>--}}
-                                    {{--@endif--}}
+                                           value="{{ old('password') }}"  autocomplete="off"/>
                                 </div>
                             </div>
                             <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
                                 <label for="password-confirm" class="col-sm-3 control-label">Confirm Password</label>
                                 <div class="col-sm-5">
                                     <input type="password" name="password_confirmation" id="password-confirm"
-                                           class="form-control" value=""/>
+                                           class="form-control" value="{{ old('password_confirmation') }}"/>
                                     @if ($errors->has('password'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('password') }}</strong>
@@ -222,14 +217,14 @@
                                 <label for="input_state_en" class="col-sm-3 control-label">State En</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="state_en" id="input_state_en" class="form-control"
-                                           value=""/>
+                                           value="{{ old('state_en') }}"/>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="input_state_ar" class="col-sm-3 control-label">State Ar</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="state_ar" id="input_state_ar" class="form-control"
-                                           value=""/>
+                                           value="{{ old('state_ar') }}"/>
                                 </div>
                             </div>
                             <div class="form-group{{ $errors->has('postcode') ? ' has-error' : '' }}">
@@ -255,38 +250,21 @@
                                 </div>
                             </div>
                             {{--<div class="form-group">--}}
-                            {{--<label for="" class="col-sm-3 control-label">Automatically fetch lat/lng</label>--}}
-                            {{--<div class="col-sm-5">--}}
-                            {{--<div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">--}}
-                            {{--<label id="lat-lng-yes" class="btn btn-default active">--}}
-                            {{--<input type="radio" name="auto_lat_lng" value="1" checked="checked">--}}
-                            {{--YES--}}
-                            {{--</label>--}}
-                            {{--<label class="btn btn-default" id="lat-lng-no">--}}
-                            {{--<input type="radio" name="auto_lat_lng" value="0">--}}
-                            {{--NO--}}
-                            {{--</label>--}}
-                            {{--</div>--}}
-                            {{--</div>--}}
+                                {{--<label for="" class="col-sm-3 control-label">Automatically fetch lat/lng</label>--}}
+                                {{--<div class="col-sm-5">--}}
+                                    {{--<div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">--}}
+                                        {{--<label id="lat-lng-yes" class="btn btn-default active">--}}
+                                            {{--<input type="radio" name="auto_lat_lng" value="1" checked="checked">--}}
+                                            {{--YES--}}
+                                        {{--</label>--}}
+                                        {{--<label class="btn btn-default" id="lat-lng-no">--}}
+                                            {{--<input type="radio" name="auto_lat_lng" value="0">--}}
+                                            {{--NO--}}
+                                        {{--</label>--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
                             {{--</div>--}}
                             {{--<br/>--}}
-                            {{--<div id="map"></div>--}}
-                            {{--<div>--}}
-                            {{--<div id="map" style="width:500px;height:500px;background:yellow"></div>--}}
-                            {{--<script type="text/javascript">--}}
-                            {{--function myMap() {--}}
-                            {{--var mapOptions = {--}}
-                            {{--center: new google.maps.LatLng(51.5, -0.12),--}}
-                            {{--zoom: 10,--}}
-                            {{--mapTypeId: google.maps.MapTypeId.HYBRID--}}
-                            {{--}--}}
-                            {{--var map = new google.maps.Map(document.getElementById("map"), mapOptions);--}}
-
-                            {{--}--}}
-                            {{--</script>--}}
-                            {{--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAf3Mvs_VUn36k8PLKIaSKY9QW17cg_18k&callback=myMap"></script>--}}
-                            {{--</div>--}}
-
                             <div id="lat-lng">
                                 <div class="form-group{{ $errors->has('latitude') ? ' has-error' : '' }}">
                                     <label for="lat" class="col-sm-3 control-label">Latitude</label>
@@ -370,7 +348,7 @@
                             {{--</div>--}}
                             {{--</div>--}}
                             {{--</div>--}}
-                            <div class="form-group">
+                            <div class="form-group{{ $errors->has('image') ? ' has-error' : '' }}">
                                 <label for="input-image" class="col-sm-3 control-label">
                                     Image
                                     <span class="help-block">Select an image to use as the restaurant logo, this image is displayed in the restaurant list.</span>
@@ -387,7 +365,7 @@
                                                 <label class=" btn btn-primary btn-file ">
                                                     <i class="fa fa-picture-o"></i>
                                                     Select
-                                                    <input type="file" name="image" style="display: none;"
+                                                    <input type="file" value="{{old('image')}}" name="image" style="display: none;"
                                                            onchange="readURL(this);">
                                                 </label>
                                                 <label class="btn btn-danger " onclick="removeFile()">
@@ -396,6 +374,11 @@
                                                 </label>
                                             </p>
                                         </div>
+                                        @if ($errors->has('image'))
+                                            <span class="help-block">
+                                        <strong>{{ $errors->first('image') }}</strong>
+                                    </span>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

@@ -74,7 +74,7 @@ class RestaurantsController extends Controller
     {
         $user = Auth::user();
         if ($user->admin == 1) {
-            $request->validate([
+            $validator = \Validator::make($request->all(), [
                 'manager_name' => 'required|string|max:255',
                 'manager_email' => 'required|email|max:255',
                 'manager_username' => 'required|string|max:255',
@@ -93,6 +93,12 @@ class RestaurantsController extends Controller
                 'longitude' => 'required|numeric',
                 'image' => 'required|image'
             ]);
+
+            if ($validator->fails()) {
+                return redirect()->back()
+                    ->withErrors($validator)
+                    ->withInput();
+            }
             $manager = new User();
             $manager->first_name = $request->input('manager_name');
             $manager->username = $request->input('manager_username');
@@ -227,7 +233,7 @@ class RestaurantsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
+        $validator = \Validator::make($request->all(), [
             'restaurant_name_en' => 'required|string|max:255',
             'restaurant_name_ar' => 'required|string|max:255',
             'restaurant_email' => 'required|string|max:255',
@@ -240,6 +246,11 @@ class RestaurantsController extends Controller
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
         ]);
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
         $user = Auth::user();
         $restaurant = Restaurant::find($id);
         if ($user->admin == 2) {
