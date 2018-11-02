@@ -258,19 +258,19 @@
                                 </div>
                             @endif
                             @if($collection_category->id == 2)
-                                <div class="form-group{{ $errors->has('persons_max_count') ? ' has-error' : '' }}">
-                                    <label class="col-sm-3 control-label">Persons max count</label>
-                                    <div class="col-sm-5">
-                                        <input type="number" min="1" name="persons_max_count" class="form-control"
-                                               value="1">
-                                        @if ($errors->has('persons_max_count'))
-                                            <span class="help-block">
-                                                <strong>{{ $errors->first('persons_max_count') }}</strong>
-                                            </span>
-                                        @endif
+                                {{--<div class="form-group{{ $errors->has('persons_max_count') ? ' has-error' : '' }}">--}}
+                                    {{--<label class="col-sm-3 control-label">Persons max count</label>--}}
+                                    {{--<div class="col-sm-5">--}}
+                                        {{--<input type="number" min="1" name="persons_max_count" class="form-control"--}}
+                                               {{--value="1">--}}
+                                        {{--@if ($errors->has('persons_max_count'))--}}
+                                            {{--<span class="help-block">--}}
+                                                {{--<strong>{{ $errors->first('persons_max_count') }}</strong>--}}
+                                            {{--</span>--}}
+                                        {{--@endif--}}
 
-                                    </div>
-                                </div>
+                                    {{--</div>--}}
+                                {{--</div>--}}
                                 <div class="form-group">
                                     <label for="is_available" class="col-sm-3 control-label">Allow Person
                                         Increase</label>
@@ -351,28 +351,34 @@
                             @endif
                         </div>
                         <div id="menus" class="tab-pane row wrap-all">
-                            <div class="form-group">
-                                <label for="" class="col-sm-3 control-label"></label>
-                                <div class="col-xs-2">
-                                    <div class="checkbox" style="font-size: medium;">
-                                        <label>
-                                            <input type="checkbox"
-                                                   onclick="$('input[name*=\'menu_item\']').prop('checked', this.checked);">
-                                            Select All
-                                        </label>
-                                        @if ($errors->has('menu_item_qty'))
-                                            <span class="help-block">
-                                                    <strong>{{ $errors->first('menu_item_qty') }}</strong>
-                                                </span>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
+                            {{--<div class="form-group">--}}
+                                {{--<label for="" class="col-sm-3 control-label"></label>--}}
+                                {{--<div class="col-xs-2">--}}
+                                    {{--<div class="checkbox" style="font-size: medium;">--}}
+                                        {{--<label>--}}
+                                            {{--<input type="checkbox"--}}
+                                                   {{--onclick="$('input[name*=\'menu_item\']').prop('checked', this.checked);">--}}
+                                            {{--Select All--}}
+                                        {{--</label>--}}
+                                        {{--@if ($errors->has('menu_item_qty'))--}}
+                                            {{--<span class="help-block">--}}
+                                                    {{--<strong>{{ $errors->first('menu_item_qty') }}</strong>--}}
+                                                {{--</span>--}}
+                                        {{--@endif--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
                             @foreach($menu_categories as $menu_category)
                                 <div class="form-group">
                                     <label for="" class="col-sm-3 control-label" style="font-size: medium;">
-                                        {{$menu_category->name_en}}
-                                        <input type="hidden" name="menu[]" value="{{$menu_category->id}}">
+                                        <div class="col-xs-2">
+                                            <div class="checkbox" style="font-size: medium;">
+                                                <label>
+                                                    <input type="checkbox" id="menu" name="menu[]" value="{{$menu_category->id}}">
+                                                    {{$menu_category->name_en}}
+                                                </label>
+                                            </div>
+                                        </div>
                                     </label>
                                     @if($collection_category->id == 2 || $collection_category->id == 3)
                                         <div class="col-xs-2">
@@ -418,4 +424,27 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        $("#menu").change(function() {
+            var $self = $(this),
+                checkboxVal  = $self.val(),
+                selector = checkboxVal === "all" ? ".item" : ".item." + checkboxVal;
+
+            if ($self.is(":checked")) {
+                $(selector).show();
+            } else {
+                $(selector).hide();
+            }
+
+            if (checkboxVal === "all") {
+                $(".checkbox.single").prop("checked", $self.is(":checked"));
+            } else {
+                if ($(".checkbox.single:checked").length === $(".checkbox.single").length) {
+                    $(".checkbox.all").prop("checked", true)
+                } else {
+                    $(".checkbox.all").prop("checked", false)
+                }
+            }
+        });
+    </script>
 @endsection

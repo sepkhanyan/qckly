@@ -105,7 +105,7 @@
                                     <select name="category[]" id="category" class="form-control" multiple
                                             placeholder="Select Category">
                                         @foreach($categories as $category)
-                                            <option value="{{$category->id}}">{{$category->name_en}}</option>
+                                            <option value="{{$category->id}}" {{ (collect(old('category'))->contains($category->id)) ? 'selected':'' }}>{{$category->name_en}}</option>
                                         @endforeach
                                     </select>
                                     @if ($errors->has('category'))

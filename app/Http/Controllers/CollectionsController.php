@@ -166,13 +166,13 @@ class CollectionsController extends Controller
         }
         if ($category == 2) {
             $request->validate([
-                'persons_max_count' => 'required|integer',
+//                'persons_max_count' => 'required|integer',
                 'setup_time' => 'required|integer',
                 'max_time' => 'required|integer',
                 'requirements_en' => 'required|string|max:255',
                 'requirements_ar' => 'required|string|max:255',
             ]);
-            $collection->persons_max_count = $request->input('persons_max_count');
+//            $collection->persons_max_count = $request->input('persons_max_count');
             $collection->allow_person_increase = $request->input('allow_person_increase');
             $collection->setup_time = $request->input('setup_time');
             $collection->max_time = $request->input('max_time');
@@ -401,7 +401,7 @@ class CollectionsController extends Controller
         $collection->price = $request->input('collection_price');
         $collection->max_qty = $request->input('max_quantity');
         $collection->min_qty = $request->input('min_quantity');
-        $collection->persons_max_count = $request->input('persons_max_count');
+//        $collection->persons_max_count = $request->input('persons_max_count');
         $collection->min_serve_to_person = $request->input('min_serve_to_person');
         $collection->max_serve_to_person = $request->input('max_serve_to_person');
         $collection->allow_person_increase = $request->input('allow_person_increase');

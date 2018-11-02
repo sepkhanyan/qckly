@@ -275,19 +275,19 @@
                                 </div>
                             @endif
                             @if($collection->category_id == 2)
-                                <div class="form-group{{ $errors->has('persons_max_count') ? ' has-error' : '' }}">
-                                    <label class="col-sm-3 control-label">Persons max count</label>
-                                    <div class="col-sm-5">
-                                        <input type="number" min="1" name="persons_max_count" class="form-control"
-                                               value="{{$collection->persons_max_count}}">
-                                        @if ($errors->has('persons_max_count'))
-                                            <span class="help-block">
-                                                <strong>{{ $errors->first('persons_max_count') }}</strong>
-                                            </span>
-                                        @endif
+                                {{--<div class="form-group{{ $errors->has('persons_max_count') ? ' has-error' : '' }}">--}}
+                                    {{--<label class="col-sm-3 control-label">Persons max count</label>--}}
+                                    {{--<div class="col-sm-5">--}}
+                                        {{--<input type="number" min="1" name="persons_max_count" class="form-control"--}}
+                                               {{--value="{{$collection->persons_max_count}}">--}}
+                                        {{--@if ($errors->has('persons_max_count'))--}}
+                                            {{--<span class="help-block">--}}
+                                                {{--<strong>{{ $errors->first('persons_max_count') }}</strong>--}}
+                                            {{--</span>--}}
+                                        {{--@endif--}}
 
-                                    </div>
-                                </div>
+                                    {{--</div>--}}
+                                {{--</div>--}}
                                 <div class="form-group">
                                     <label for="is_available" class="col-sm-3 control-label">Allow Person
                                         Increase</label>
