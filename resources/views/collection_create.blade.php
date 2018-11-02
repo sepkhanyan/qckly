@@ -374,7 +374,7 @@
                                         <div class="col-xs-2">
                                             <div class="checkbox" style="font-size: medium;">
                                                 <label>
-                                                    <input type="checkbox" id="menu" name="menu[]" value="{{$menu_category->id}}">
+                                                    <input type="checkbox" id name="menu[]" value="{{$menu_category->id}}">
                                                     {{$menu_category->name_en}}
                                                 </label>
                                             </div>
@@ -424,27 +424,4 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript">
-        $("#menu").change(function() {
-            var $self = $(this),
-                checkboxVal  = $self.val(),
-                selector = checkboxVal === "all" ? ".item" : ".item." + checkboxVal;
-
-            if ($self.is(":checked")) {
-                $(selector).show();
-            } else {
-                $(selector).hide();
-            }
-
-            if (checkboxVal === "all") {
-                $(".checkbox.single").prop("checked", $self.is(":checked"));
-            } else {
-                if ($(".checkbox.single:checked").length === $(".checkbox.single").length) {
-                    $(".checkbox.all").prop("checked", true)
-                } else {
-                    $(".checkbox.all").prop("checked", false)
-                }
-            }
-        });
-    </script>
 @endsection
