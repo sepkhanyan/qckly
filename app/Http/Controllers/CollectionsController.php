@@ -113,6 +113,7 @@ class CollectionsController extends Controller
      */
     public function store(Request $request)
     {
+        dd($request->all());
         $request->validate([
             'category' => 'required|integer',
             'name_en' => 'required|string|max:255',
@@ -126,16 +127,10 @@ class CollectionsController extends Controller
             'menu_item' => 'required|array',
         ]);
         $category = $request->input('category');
-        if($category != 1){
+        if ($category != 1) {
             $request->validate([
                 'menu' => 'required|array',
             ]);
-            if($category != 4){
-                $request->validate([
-                    'menu_min_qty' => 'required|array',
-                    'menu_max_qty' => 'required|array',
-                ]);
-            }
         }
         $user = Auth::user();
         $collection = New Collection();

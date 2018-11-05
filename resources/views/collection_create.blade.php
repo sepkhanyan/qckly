@@ -383,11 +383,11 @@
                                         @if($collection_category->id == 2 || $collection_category->id == 3)
                                             <div class="col-xs-2">
                                                 <input type="number" name="menu_min_qty[]" min="1"
-                                                       class="form-control" placeholder="Menu min quantity" required>
+                                                       class="form-control" placeholder="Menu min quantity"  required>
                                             </div>
                                             <div class="col-xs-2">
                                                 <input type="number" name="menu_max_qty[]" min="1"
-                                                       class="form-control" placeholder="Menu max quantity" required>
+                                                       class="form-control" placeholder="Menu max quantity"  required>
                                             </div>
                                         @else
                                             <div class="col-xs-2">
