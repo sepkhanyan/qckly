@@ -99,6 +99,7 @@ class CollectionsController extends Controller
                 'menu_categories' => $menu_categories,
                 'mealtimes' => $mealtimes,
                 'collection_category' => $collection_category,
+                'menu_items' => $menu_items
             ]);
         } else {
             return redirect('/menus/' . $restaurant->id);
@@ -113,7 +114,6 @@ class CollectionsController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
         $request->validate([
             'category' => 'required|integer',
             'name_en' => 'required|string|max:255',
@@ -188,16 +188,10 @@ class CollectionsController extends Controller
         }
         $collection->save();
         if ($collection->category_id == 1) {
-            $quantity = array_values(array_filter($request['menu_item_qty']));
             foreach ($request['menu_item'] as $key => $value) {
-                $item = $request['menu_item'][$key];
                 $collection_item = new CollectionItem();
-                $collection_item->item_id = $item;
-                if (count($quantity) == count($request['menu_item'])) {
-                    $collection_item->quantity = $quantity[$key];;
-                } else {
-                    $collection_item->quantity = 1;
-                }
+                $collection_item->item_id = $request['menu_item'][$key];
+                $collection_item->quantity = $request['menu_item_qty'][$key];
                 $collection_item->collection_id = $collection->id;
                 $collection_item->save();
             }
@@ -213,36 +207,17 @@ class CollectionsController extends Controller
                 $collection_item->quantity = 1;
                 $collection_item->save();
             }
-            if ($collection->category_id == 4) {
-                foreach ($request['menu'] as $key => $value) {
-                    $menu_id = $request['menu'][$key];
-                    $collection_menu = new CollectionMenu();
-                    $collection_menu->collection_id = $collection->id;
-                    $collection_menu->menu_id = $menu_id;
-                    $collection_menu->save();
+            $menus = $request->input('menu');
+            foreach ($menus as $menu) {
+                $collection_menu = new CollectionMenu();
+                $collection_menu->collection_id = $collection->id;
+                $collection_menu->menu_id = $menu['id'];
+                $collection_menu->status = $menu['status'];
+                if ($collection->category_id != 4) {
+                    $collection_menu->min_qty = $menu['min_qty'];
+                    $collection_menu->max_qty = $menu['max_qty'];
                 }
-            } else {
-                if (isset($request['menu_min_qty']) && isset($request['menu_max_qty'])) {
-                    $min_qty = array_values(array_filter($request['menu_min_qty']));
-                    $max_qty = array_values(array_filter($request['menu_max_qty']));
-                    foreach ($request['menu'] as $key => $value) {
-                        $menu_id = $request['menu'][$key];
-                        $collection_menu = new CollectionMenu();
-                        $collection_menu->collection_id = $collection->id;
-                        $collection_menu->menu_id = $menu_id;
-                        if (count($min_qty) != count($request['menu'])) {
-                            $collection_menu->min_qty = 1;
-                            $collection_menu->max_qty = 1;
-                        } elseif (count($max_qty) != count($request['menu'])) {
-                            $collection_menu->min_qty = 1;
-                            $collection_menu->max_qty = 1;
-                        } else {
-                            $collection_menu->min_qty = $min_qty[$key];
-                            $collection_menu->max_qty = $max_qty[$key];
-                        }
-                        $collection_menu->save();
-                    }
-                }
+                $collection_menu->save();
             }
         }
         return redirect('/collections/' . $restaurant_id);
@@ -279,7 +254,7 @@ class CollectionsController extends Controller
             $collection = Collection::find($id);
             $restaurant = Restaurant::where('id', $collection->restaurant_id)->first();
         }
-        $collection_menus = CollectionMenu::where('collection_id', $collection->id)->with(['collectionItem' => function ($query) use ($collection) {
+        $collection_menus = CollectionMenu::where('collection_id', $collection->id)->where('status', 1)->with(['collectionItem' => function ($query) use ($collection) {
             $query->where('collection_id', $collection->id);
         }])->whereHas('collectionItem', function ($q) use ($collection) {
             $q->where('collection_id', $collection->id);

@@ -14,6 +14,7 @@ class CollectionMenu extends Model
         'menu_id',
         'min_qty',
         'max_qty',
+        'status'
     ];
 
 
