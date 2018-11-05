@@ -208,7 +208,7 @@
                                         <label class="col-sm-3 control-label">Collection min quantity</label>
                                         <div class="col-sm-5">
                                             <input type="number" min="1" name="min_quantity" class="form-control"
-                                                   value="1">
+                                                   value="{{old('min_quantity') ?? 1}}">
                                             @if ($errors->has('min_quantity'))
                                                 <span class="help-block">
                                                     <strong>{{ $errors->first('min_quantity') }}</strong>
@@ -220,13 +220,12 @@
                                         <label class="col-sm-3 control-label">Collection max quantity</label>
                                         <div class="col-sm-5">
                                             <input type="number" min="1" name="max_quantity" class="form-control"
-                                                   value="1">
+                                                   value="{{old('max_quantity') ?? 1}}">
                                             @if ($errors->has('max_quantity'))
                                                 <span class="help-block">
                                                     <strong>{{ $errors->first('max_quantity') }}</strong>
                                                 </span>
                                             @endif
-
                                         </div>
                                     </div>
                                 @endif
@@ -234,7 +233,7 @@
                                     <label class="col-sm-3 control-label">Min serve to person</label>
                                     <div class="col-sm-5">
                                         <input type="number" min="1" name="min_serve_to_person" class="form-control"
-                                               value="1">
+                                               value="{{old('min_serve_to_person') ?? 1}}">
                                         @if ($errors->has('min_serve_to_person'))
                                             <span class="help-block">
                                                 <strong>{{ $errors->first('min_serve_to_person') }}</strong>
@@ -247,7 +246,7 @@
                                     <label class="col-sm-3 control-label">Max serve to person</label>
                                     <div class="col-sm-5">
                                         <input type="number" min="1" name="max_serve_to_person" class="form-control"
-                                               value="1">
+                                               value="{{old('max_serve_to_person') ?? 1}}">
                                         @if ($errors->has('max_serve_to_person'))
                                             <span class="help-block">
                                                 <strong>{{ $errors->first('max_serve_to_person') }}</strong>
@@ -295,7 +294,7 @@
                                     <div class="col-sm-5">
                                         <div class="input-group">
                                             <input type="number" name="setup_time" id="input-setup"
-                                                   class="form-control" min="0" value="0"/>
+                                                   class="form-control" min="0" value="{{old('setup_time') ?? 0}}"/>
                                             <span class="input-group-addon">minutes</span>
                                         </div>
                                         @if ($errors->has('setup_time'))
@@ -338,7 +337,7 @@
                                     <div class="col-sm-5">
                                         <div class="input-group">
                                             <input type="number" name="max_time" id="input-max" class="form-control"
-                                                   min="0" value="0"/>
+                                                   min="0" value="{{old('max_time') ?? 0}}"/>
                                             <span class="input-group-addon">minutes</span>
                                         </div>
                                         @if ($errors->has('max_time'))
@@ -351,77 +350,98 @@
                             @endif
                         </div>
                         <div id="menus" class="tab-pane row wrap-all">
-                            {{--<div class="form-group">--}}
-                                {{--<label for="" class="col-sm-3 control-label"></label>--}}
-                                {{--<div class="col-xs-2">--}}
-                                    {{--<div class="checkbox" style="font-size: medium;">--}}
-                                        {{--<label>--}}
-                                            {{--<input type="checkbox"--}}
-                                                   {{--onclick="$('input[name*=\'menu_item\']').prop('checked', this.checked);">--}}
-                                            {{--Select All--}}
-                                        {{--</label>--}}
-                                        {{--@if ($errors->has('menu_item_qty'))--}}
-                                            {{--<span class="help-block">--}}
-                                                    {{--<strong>{{ $errors->first('menu_item_qty') }}</strong>--}}
-                                                {{--</span>--}}
-                                        {{--@endif--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                            @foreach($menu_categories as $menu_category)
+                            @if($collection_category->id != 1)
                                 <div class="form-group">
-                                    <label for="" class="col-sm-3 control-label" style="font-size: medium;">
-                                        <div class="col-xs-2">
-                                            <div class="checkbox" style="font-size: medium;">
-                                                <label>
-                                                    <input type="checkbox" id name="menu[]" value="{{$menu_category->id}}">
-                                                    {{$menu_category->name_en}}
-                                                </label>
-                                            </div>
+                                    <label for="" class="col-sm-3 control-label"></label>
+                                    <div class="col-xs-2">
+                                        <div class="checkbox" style="font-size: medium;">
+                                            <label>
+                                                <input type="checkbox"
+                                                       onclick="$('input[name*=\'menu\']').prop('checked', this.checked);">
+                                                Select All
+                                            </label>
                                         </div>
-                                    </label>
-                                    @if($collection_category->id == 2 || $collection_category->id == 3)
-                                        <div class="col-xs-2">
-                                            <input type="number" name="menu_min_qty[]" min="1" value=""
-                                                   class="form-control" placeholder="Menu min quantity">
-                                        </div>
-                                        <div class="col-xs-2">
-                                            <input type="number" name="menu_max_qty[]" min="1" value=""
-                                                   class="form-control" placeholder="Menu max quantity">
-                                        </div>
-                                    @else
-                                        <div class="col-xs-2">
-                                        </div>
-                                    @endif
+                                    </div>
                                 </div>
-                                @foreach($menu_category->menu as $menu)
+                            @endif
+                            <div class="{{ $errors->has('menu') ? ' has-error' : '' }}{{ $errors->has('menu_item') ? ' has-error' : '' }}{{ $errors->has('menu_min_qty') ? ' has-error' : '' }}{{ $errors->has('menu_max_qty') ? ' has-error' : '' }}">
+                                @foreach($menu_categories as $menu_category)
                                     <div class="form-group">
-                                        <label for="" class="col-sm-3 control-label"></label>
-                                        <div class="col-xs-2">
-                                            <div class="checkbox" style="font-size: medium;">
-                                                <label>
-                                                    <input type="checkbox" name="menu_item[]" value="{{$menu->id}}">
-                                                    {{$menu->name_en}}
-                                                </label>
-                                            </div>
-                                        </div>
-                                        @if($collection_category->id == 1)
+                                        <label for="" class="col-sm-3 control-label" style="font-size: medium;">
                                             <div class="col-xs-2">
-                                                <input type="number"
-                                                       min="1"
-                                                       class="form-control"
-                                                       name="menu_item_qty[]"
-                                                       placeholder="Quantity"
-                                                       value="">
+                                                <div class="checkbox" style="font-size: medium;">
+                                                    @if($collection_category->id != 1)
+                                                        <label>
+                                                            <input type="checkbox" name="menu[]"
+                                                                   value="{{$menu_category->id}}" {{ (collect(old('menu'))->contains($menu_category->id)) ? 'checked':'' }}>
+                                                            {{$menu_category->name_en}}
+                                                        </label>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </label>
+                                        @if($collection_category->id == 2 || $collection_category->id == 3)
+                                            <div class="col-xs-2">
+                                                <input type="number" name="menu_min_qty[]" min="1"
+                                                       class="form-control" placeholder="Menu min quantity" required>
+                                            </div>
+                                            <div class="col-xs-2">
+                                                <input type="number" name="menu_max_qty[]" min="1"
+                                                       class="form-control" placeholder="Menu max quantity" required>
+                                            </div>
+                                        @else
+                                            <div class="col-xs-2">
                                             </div>
                                         @endif
                                     </div>
+                                    @foreach($menu_category->menu as $menu)
+                                        <div class="form-group">
+                                            <label for="" class="col-sm-3 control-label"></label>
+                                            <div class="col-xs-2">
+                                                <div class="checkbox" style="font-size: medium;">
+                                                    <label>
+                                                        <input type="checkbox" name="menu_item[]"
+                                                               value="{{$menu->id}}" {{ (collect(old('menu_item'))->contains($menu->id)) ? 'checked':'' }}>
+                                                        {{$menu->name_en}}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            @if($collection_category->id == 1)
+                                                <div class="col-xs-2">
+                                                    <input type="number"
+                                                           min="1"
+                                                           class="form-control"
+                                                           name="menu_item_qty[]"
+                                                           placeholder="Quantity"
+                                                           value="">
+                                                </div>
+                                            @endif
+                                        </div>
+                                    @endforeach
                                 @endforeach
-                            @endforeach
+                                @if ($errors->has('menu'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('menu') }}</strong>
+                                    </span>
+                                @endif
+                                <div class="form-group">
+                                    <label for="" class="col-sm-3 control-label"></label>
+                                    <div class="col-xs-2">
+                                        @if ($errors->has('menu_item'))
+                                            <span class="help-block">
+                                                <strong>{{ $errors->first('menu_item') }}</strong>
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+
+    </script>
 @endsection

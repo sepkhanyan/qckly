@@ -114,6 +114,7 @@ class CollectionsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'category' => 'required|integer',
             'name_en' => 'required|string|max:255',
             'description_en' => 'required|string',
             'name_ar' => 'required|string|max:255',
@@ -125,6 +126,17 @@ class CollectionsController extends Controller
             'menu_item' => 'required|array',
         ]);
         $category = $request->input('category');
+        if($category != 1){
+            $request->validate([
+                'menu' => 'required|array',
+            ]);
+            if($category != 4){
+                $request->validate([
+                    'menu_min_qty' => 'required|array',
+                    'menu_max_qty' => 'required|array',
+                ]);
+            }
+        }
         $user = Auth::user();
         $collection = New Collection();
         $restaurant_id = $request->input('restaurant');
@@ -149,7 +161,7 @@ class CollectionsController extends Controller
         if ($category == 1 || $category == 3) {
             $request->validate([
                 'min_quantity' => 'required|integer',
-                'max_quantity' => 'required|integer',
+                'max_quantity' => 'required|integer|gte:min_quantity',
             ]);
             $collection->max_qty = $request->input('max_quantity');
             $collection->min_qty = $request->input('min_quantity');
@@ -158,7 +170,7 @@ class CollectionsController extends Controller
             $request->validate([
                 'collection_price' => 'required|numeric',
                 'min_serve_to_person' => 'required|integer',
-                'max_serve_to_person' => 'required|integer',
+                'max_serve_to_person' => 'required|integer|gte:min_serve_to_person',
             ]);
             $collection->price = $request->input('collection_price');
             $collection->min_serve_to_person = $request->input('min_serve_to_person');
@@ -168,7 +180,7 @@ class CollectionsController extends Controller
             $request->validate([
 //                'persons_max_count' => 'required|integer',
                 'setup_time' => 'required|integer',
-                'max_time' => 'required|integer',
+                'max_time' => 'required|integer|gte:setup_time',
                 'requirements_en' => 'required|string|max:255',
                 'requirements_ar' => 'required|string|max:255',
             ]);

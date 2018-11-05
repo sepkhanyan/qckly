@@ -354,7 +354,7 @@ class UsersController extends Controller
 //                file($url);
                 return response()->json(['success' => 0,
                     'status_code' => 200,
-                    'message' => \Lang::get('message.otpSent'),
+                    'message' => \Lang::get('message.otpResent'),
                     'otp' => $random_val
                 ]);
             }
