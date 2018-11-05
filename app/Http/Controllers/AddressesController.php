@@ -52,6 +52,7 @@ class AddressesController extends Controller
                 'name' => 'required|string',
                 'mobile_number' => 'required|numeric|digits:8',
                 'location' => 'required|string',
+                'street_number' => 'required|string',
                 'building_number' => 'required',
                 'zone' => 'required|string',
                 'apartment_number' => 'required',
@@ -69,6 +70,7 @@ class AddressesController extends Controller
                     $address->name = $DataRequests['name'];
                     $address->mobile_number = $DataRequests['mobile_number'];
                     $address->location = $DataRequests['location'];
+                    $address->street_number = $DataRequests['street_number'];
                     $address->building_number = $DataRequests['building_number'];
                     $address->zone = $DataRequests['zone'];
                     $address->is_apartment = $DataRequests['is_apartment'];
@@ -84,6 +86,7 @@ class AddressesController extends Controller
                     $address->name = $DataRequests['name'];
                     $address->mobile_number = $DataRequests['mobile_number'];
                     $address->location = $DataRequests['location'];
+                    $address->street_number = $DataRequests['street_number'];
                     $address->building_number = $DataRequests['building_number'];
                     $address->zone = $DataRequests['zone'];
                     $address->is_apartment = $DataRequests['is_apartment'];
@@ -142,6 +145,7 @@ class AddressesController extends Controller
                         'address_name' => $address->name,
                         'mobile_number' => $address->mobile_number,
                         'location' => $address->location,
+                        'street_number' => $address->street_number,
                         'building_number' => $address->building_number,
                         'zone' => $address->zone,
                         'is_apartment' => $is_apartment,

@@ -147,6 +147,7 @@ class OrdersController extends Controller
                         'address_name' => $order->deliveryAddress->name,
                         'mobile_number' => $order->deliveryAddress->mobile_number,
                         'location' => $order->deliveryAddress->location,
+                        'street_number' => $order->deliveryAddress->street_number,
                         'building_number' => $order->deliveryAddress->building_number,
                         'zone' => $order->deliveryAddress->zone,
                         'is_apartment' => $is_apartment,
@@ -386,6 +387,7 @@ class OrdersController extends Controller
                         $delivery_address->name = $cart->address->name;
                         $delivery_address->mobile_number = $cart->address->mobile_number;
                         $delivery_address->location = $cart->address->location;
+                        $delivery_address->street_number = $cart->address->street_number;
                         $delivery_address->building_number = $cart->address->building_number;
                         $delivery_address->zone = $cart->address->zone;
                         $delivery_address->is_apartment = $cart->address->is_apartment;

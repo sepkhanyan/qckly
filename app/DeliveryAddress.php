@@ -15,6 +15,7 @@ class DeliveryAddress extends Model
         'name',
         'mobile_number',
         'location',
+        'street_number',
         'building_number',
         'zone',
         'is_apartment',
