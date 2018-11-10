@@ -398,16 +398,16 @@
                                 <label for="" class="col-sm-3 control-label">Working Type</label>
                                 <div class="col-sm-5">
                                     <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
-                                        <label class="btn btn-success active" id="daily-flexible-hide">
-                                            <input type="radio" name="opening_type" value="24_7" checked="checked">
+                                        <label class="btn btn-success " id="daily-flexible-hide">
+                                            <input type="radio" name="opening_type" value="24_7" {{ (old('opening_type') == '24_7') ? 'checked' : '' }} >
                                             24/7
                                         </label>
                                         <label class="btn btn-success" id="opening-daily-show">
-                                            <input type="radio" name="opening_type" value="daily">
+                                            <input type="radio" name="opening_type" value="daily" {{ (old('opening_type') == 'daily') ? 'checked' : '' }}>
                                             Daily
                                         </label>
                                         <label class="btn btn-success" id="opening-flexible-show">
-                                            <input type="radio" name="opening_type" value="flexible">
+                                            <input type="radio" name="opening_type" value="flexible" {{ (old('opening_type') == 'flexible') ? 'checked' : '' }}>
                                             Flexible
                                         </label>
                                     </div>

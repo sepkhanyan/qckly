@@ -152,4 +152,15 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('a[title], span[title], button[title]').tooltip({placement: 'bottom'});
+            $('select.form-control').select2({minimumResultsForSearch: 10});
+
+            $('.alert').alert();
+            $('.dropdown-toggle').dropdown();
+
+            // $("#list-form td:contains('Disabled')").addClass('red');
+        });
+    </script>
 @endsection
