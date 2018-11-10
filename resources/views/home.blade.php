@@ -53,36 +53,36 @@
     <link href="{{ asset('js/datepicker/bootstrap-timepicker.css') }}" rel="stylesheet">
 
 
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('a[title], span[title], button[title]').tooltip({placement: 'bottom'});
-            $('select.form-control').select2({minimumResultsForSearch: 10});
+    {{--<script type="text/javascript">--}}
+        {{--$(document).ready(function () {--}}
+            {{--$('a[title], span[title], button[title]').tooltip({placement: 'bottom'});--}}
+            {{--$('select.form-control').select2({minimumResultsForSearch: 10});--}}
 
-            $('.alert').alert();
-            $('.dropdown-toggle').dropdown();
+            {{--$('.alert').alert();--}}
+            {{--$('.dropdown-toggle').dropdown();--}}
 
-            $("#list-form td:contains('Disabled')").addClass('red');
-        });
-    </script>
+            {{--// $("#list-form td:contains('Disabled')").addClass('red');--}}
+        {{--});--}}
+    {{--</script>--}}
 
-    <script src="https://js.pusher.com/4.3/pusher.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/dojo/1.13.0/dojo/dojo.js"></script>
-    <script>
+    {{--<script src="https://js.pusher.com/4.3/pusher.min.js"></script>--}}
+    {{--<script src="https://ajax.googleapis.com/ajax/libs/dojo/1.13.0/dojo/dojo.js"></script>--}}
+    {{--<script>--}}
 
-        // Enable pusher logging - don't include this in production
-        Pusher.logToConsole = true;
+        {{--// Enable pusher logging - don't include this in production--}}
+        {{--Pusher.logToConsole = true;--}}
 
-        var pusher = new Pusher('6dba162777e691fc6a70', {
-            cluster: 'eu',
-            forceTLS: true
-        });
+        {{--var pusher = new Pusher('6dba162777e691fc6a70', {--}}
+            {{--cluster: 'eu',--}}
+            {{--forceTLS: true--}}
+        {{--});--}}
 
-        var channel = pusher.subscribe('messages');
-        channel.bind('.newMessage', function(data) {
-            alert(JSON.stringify(data));
-        });
+        {{--var channel = pusher.subscribe('messages');--}}
+        {{--channel.bind('.newMessage', function(data) {--}}
+            {{--alert(JSON.stringify(data));--}}
+        {{--});--}}
 
-    </script>
+    {{--</script>--}}
     <style>
         #map {
             border: 2px solid black;
@@ -556,27 +556,8 @@
 
     });
     //--></script>
-<script type="text/javascript"><!--
-    $(function () {
-        $('.table-sortable').sortable({
-            containerSelector: 'table',
-            itemPath: '> tbody',
-            itemSelector: 'tr',
-            placeholder: '<tr class="placeholder"><td colspan="5"></td></tr>',
-            handle: '.handle'
-        })
-    });
-
-
-    //--></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        if (document.location.toString().toLowerCase().indexOf(active_menu, 1) != -1) {
-            $('#side-menu .' + active_menu).addClass('active');
-            $('#side-menu .' + active_menu).parents('.collapse').parent().addClass('active');
-            $('#side-menu .' + active_menu).parents('.collapse').collapse('show');
-            $('#side-menu .' + active_menu).parents('.collapse').collapse('show');
-        }
 
         if (window.location.hash) {
             var hash = window.location.hash.substring(1); //Puts hash in variable, and removes the # character

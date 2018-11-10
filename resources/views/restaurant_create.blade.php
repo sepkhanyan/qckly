@@ -114,6 +114,16 @@
                                         </span>
                                     @endif
                                 </div>
+                                <script type="text/javascript">
+                                    $(document).ready(function () {
+                                        $('a[title], span[title], button[title]').tooltip({placement: 'bottom'});
+                                        $('select.form-control').select2({minimumResultsForSearch: 10});
+
+                                        $('.alert').alert();
+                                        $('.dropdown-toggle').dropdown();
+
+                                    });
+                                </script>
                             </div>
                             <div class="form-group{{ $errors->has('restaurant_name_en') ? ' has-error' : '' }}">
                                 <label for="input_restaurant_name_en" class="col-sm-3 control-label">Name En</label>

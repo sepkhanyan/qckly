@@ -114,7 +114,16 @@ class CollectionsController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $user = Auth::user();
+        $collection = New Collection();
+        $restaurant_id = $request->input('restaurant');
+        if ($user->admin == 2) {
+            $user = $user->load('restaurant');
+            $restaurant = $user->restaurant;
+            $restaurant_id = $restaurant->id;
+        }
+//        dd($request->all());
+        $validator = \Validator::make($request->all(), [
             'category' => 'required|integer',
             'name_en' => 'required|string|max:255',
             'description_en' => 'required|string',
@@ -124,22 +133,14 @@ class CollectionsController extends Controller
             'service_provide_ar' => 'required|string',
             'service_presentation_en' => 'required|string',
             'service_presentation_ar' => 'required|string',
-            'menu_item' => 'required|array',
+            'menu_item' => 'required',
         ]);
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
         $category = $request->input('category');
-        if ($category != 1) {
-            $request->validate([
-                'menu' => 'required|array',
-            ]);
-        }
-        $user = Auth::user();
-        $collection = New Collection();
-        $restaurant_id = $request->input('restaurant');
-        if ($user->admin == 2) {
-            $user = $user->load('restaurant');
-            $restaurant = $user->restaurant;
-            $restaurant_id = $restaurant->id;
-        }
         $collection->restaurant_id = $restaurant_id;
         $collection->category_id = $category;
         $collection->name_en = $request->input('name_en');
@@ -188,6 +189,7 @@ class CollectionsController extends Controller
         }
         $collection->save();
         if ($collection->category_id == 1) {
+//            $menu_items = $request['menu_item'];
             foreach ($request['menu_item'] as $key => $value) {
                 $collection_item = new CollectionItem();
                 $collection_item->item_id = $request['menu_item'][$key];
@@ -196,11 +198,11 @@ class CollectionsController extends Controller
                 $collection_item->save();
             }
         } else {
-            foreach ($request['menu_item'] as $item_key => $item_value) {
-                $item = $request['menu_item'][$item_key];
+//            $menu_items = $request['menu_item'];
+            foreach ($request['menu_item'] as $key => $value) {
                 $collection_item = new CollectionItem();
-                $collection_item->item_id = $item;
-                $menu_item = Menu::where('id', $item)->first();
+                $collection_item->item_id = $request['menu_item'][$key];
+                $menu_item = Menu::where('id', $request['menu_item'][$key])->first();
                 $category = MenuCategory::where('id', $menu_item->category_id)->first();
                 $collection_item->collection_menu_id = $category->id;
                 $collection_item->collection_id = $collection->id;
@@ -212,7 +214,6 @@ class CollectionsController extends Controller
                 $collection_menu = new CollectionMenu();
                 $collection_menu->collection_id = $collection->id;
                 $collection_menu->menu_id = $menu['id'];
-                $collection_menu->status = $menu['status'];
                 if ($collection->category_id != 4) {
                     $collection_menu->min_qty = $menu['min_qty'];
                     $collection_menu->max_qty = $menu['max_qty'];
@@ -248,18 +249,19 @@ class CollectionsController extends Controller
             $restaurant = $user->restaurant;
             $collection = Collection::where('id', $id)->where('restaurant_id', $restaurant->id)->first();
             if (!$collection) {
-                return redirect('/collections');
+                return redirect('/collections/' . $restaurant->id);
             }
         } else {
-            $collection = Collection::find($id);
+            $collection = Collection::where('id', $id)->first();
             $restaurant = Restaurant::where('id', $collection->restaurant_id)->first();
         }
-        $collection_menus = CollectionMenu::where('collection_id', $collection->id)->where('status', 1)->with(['collectionItem' => function ($query) use ($collection) {
+        $collection_menus = CollectionMenu::where('collection_id', $collection->id)->with(['collectionItem' => function ($query) use ($collection) {
             $query->where('collection_id', $collection->id);
         }])->whereHas('collectionItem', function ($q) use ($collection) {
             $q->where('collection_id', $collection->id);
         })->get();
-        $menu_categories = MenuCategory::where('restaurant_id', $restaurant->id)->wherehas('menu')->get();
+        $menu_categories = MenuCategory::where('restaurant_id', $restaurant->id)->get();
+        $menu_items = CollectionItem::where('collection_id', $collection->id)->get();
         $categories = CollectionCategory::all();
         $mealtimes = Mealtime::all();
         return view('collection_edit', [
@@ -267,7 +269,8 @@ class CollectionsController extends Controller
             'categories' => $categories,
             'menu_categories' => $menu_categories,
             'mealtimes' => $mealtimes,
-            'collection_menus' => $collection_menus
+            'collection_menus' => $collection_menus,
+            'menu_items' => $menu_items
         ]);
     }
 
@@ -278,18 +281,12 @@ class CollectionsController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
+
+
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name_en' => 'required|string|max:255',
-            'description_en' => 'required|string',
-            'name_ar' => 'required|string|max:255',
-            'description_ar' => 'required|string',
-            'service_provide_en' => 'required|string',
-            'service_provide_ar' => 'required|string',
-            'service_presentation_en' => 'required|string',
-            'service_presentation_ar' => 'required|string',
-        ]);
+//        dd($request->all());
+//        $category = $request->input('category');
         $user = Auth::user();
         $restaurant_id = $request->input('restaurant');
         if ($user->admin == 2) {
@@ -298,73 +295,29 @@ class CollectionsController extends Controller
             $restaurant_id = $restaurant->id;
             $collection = Collection::where('id', $id)->where('restaurant_id', $restaurant->id)->with('restaurant.menu')->first();
             if (!$collection) {
-                return redirect('/collections');
+                return redirect('/collections/' . $restaurant->id);
             }
         } else {
             $collection = Collection::with('restaurant.menu')->find($id);
         }
-        if (isset($request['menu_item'])) {
-            CollectionItem::where('collection_id', $collection->id)->delete();
-            if ($collection->category_id == 1) {
-                $quantity = array_values(array_filter($request['menu_item_qty']));
-                foreach ($request['menu_item'] as $key => $value) {
-                    $item = $request['menu_item'][$key];
-                    $collection_item = new CollectionItem();
-                    $collection_item->item_id = $item;
-                    if (count($quantity) == count($request['menu_item'])) {
-                        $collection_item->quantity = $quantity[$key];;
-                    } else {
-                        $collection_item->quantity = 1;
-                    }
-                    $collection_item->collection_id = $collection->id;
-                    $collection_item->save();
-                }
-            } else {
-                foreach ($request['menu_item'] as $item_key => $item_value) {
-                    $item = $request['menu_item'][$item_key];
-                    $collection_item = new CollectionItem();
-                    $collection_item->item_id = $item;
-                    $menu_item = Menu::where('id', $item)->first();
-                    $category = MenuCategory::where('id', $menu_item->category_id)->first();
-                    $collection_item->collection_menu_id = $category->id;
-                    $collection_item->collection_id = $collection->id;
-                    $collection_item->quantity = 1;
-                    $collection_item->save();
-                }
-                CollectionMenu::where('collection_id', $collection->id)->delete();
-                if ($collection->category_id == 4) {
-                    foreach ($request['menu'] as $key => $value) {
-                        $menu_id = $request['menu'][$key];
-                        $collection_menu = new CollectionMenu();
-                        $collection_menu->collection_id = $collection->id;
-                        $collection_menu->menu_id = $menu_id;
-                        $collection_menu->save();
-                    }
-                } else {
-                    if (isset($request['menu_min_qty']) && isset($request['menu_max_qty'])) {
-                        $min_qty = array_values(array_filter($request['menu_min_qty']));
-                        $max_qty = array_values(array_filter($request['menu_max_qty']));
-                        foreach ($request['menu'] as $key => $value) {
-                            $menu_id = $request['menu'][$key];
-                            $collection_menu = new CollectionMenu();
-                            $collection_menu->collection_id = $collection->id;
-                            $collection_menu->menu_id = $menu_id;
-                            if (count($min_qty) != count($request['menu'])) {
-                                $collection_menu->min_qty = 1;
-                                $collection_menu->max_qty = 1;
-                            } elseif (count($max_qty) != count($request['menu'])) {
-                                $collection_menu->min_qty = 1;
-                                $collection_menu->max_qty = 1;
-                            } else {
-                                $collection_menu->min_qty = $min_qty[$key];
-                                $collection_menu->max_qty = $max_qty[$key];
-                            }
-                            $collection_menu->save();
-                        }
-                    }
-                }
-            }
+        $validator = \Validator::make($request->all(), [
+//            'category' => 'integer',
+            'name_en' => 'string|max:255',
+            'description_en' => 'string',
+            'name_ar' => 'string|max:255',
+            'description_ar' => 'string',
+            'service_provide_en' => 'string',
+            'service_provide_ar' => 'string',
+            'service_presentation_en' => 'string',
+            'service_presentation_ar' => 'string',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
         }
+        $collection->restaurant_id = $restaurant_id;
+//        $collection->category_id = $category;
         $collection->name_en = $request->input('name_en');
         $collection->name_ar = $request->input('name_ar');
         $collection->description_en = $request->input('description_en');
@@ -375,19 +328,110 @@ class CollectionsController extends Controller
         $collection->service_provide_ar = $request->input('service_provide_ar');
         $collection->service_presentation_en = $request->input('service_presentation_en');
         $collection->service_presentation_ar = $request->input('service_presentation_ar');
-        $collection->setup_time = $request->input('setup_time');
-        $collection->max_time = $request->input('max_time');
-        $collection->requirements_en = $request->input('requirements_en');
-        $collection->requirements_ar = $request->input('requirements_ar');
         $collection->is_available = $request->input('is_available');
-        $collection->price = $request->input('collection_price');
-        $collection->max_qty = $request->input('max_quantity');
-        $collection->min_qty = $request->input('min_quantity');
-//        $collection->persons_max_count = $request->input('persons_max_count');
-        $collection->min_serve_to_person = $request->input('min_serve_to_person');
-        $collection->max_serve_to_person = $request->input('max_serve_to_person');
-        $collection->allow_person_increase = $request->input('allow_person_increase');
+        if ($collection->category_id == 1 || $collection->category_id == 3) {
+            $request->validate([
+                'min_quantity' => 'integer',
+                'max_quantity' => 'integer|gte:min_quantity',
+            ]);
+            $collection->max_qty = $request->input('max_quantity');
+            $collection->min_qty = $request->input('min_quantity');
+        }
+        if ($collection->category_id != 4) {
+            $request->validate([
+                'collection_price' => 'required|numeric',
+                'min_serve_to_person' => 'integer',
+                'max_serve_to_person' => 'integer|gte:min_serve_to_person',
+            ]);
+            $collection->price = $request->input('collection_price');
+            $collection->min_serve_to_person = $request->input('min_serve_to_person');
+            $collection->max_serve_to_person = $request->input('max_serve_to_person');
+        }
+        if ($collection->category_id == 2) {
+            $request->validate([
+//                'persons_max_count' => 'required|integer',
+                'setup_time' => 'integer',
+                'max_time' => 'integer|gte:setup_time',
+                'requirements_en' => 'string|max:255',
+                'requirements_ar' => 'string|max:255',
+            ]);
+//            $collection->persons_max_count = $request->input('persons_max_count');
+            $collection->allow_person_increase = $request->input('allow_person_increase');
+            $collection->setup_time = $request->input('setup_time');
+            $collection->max_time = $request->input('max_time');
+            $collection->requirements_en = $request->input('requirements_en');
+            $collection->requirements_ar = $request->input('requirements_ar');
+        }
+//        $request->validate([
+//            'category' => 'integer',
+//            'name_en' => 'string|max:255',
+//            'description_en' => 'string',
+//            'name_ar' => 'string|max:255',
+//            'description_ar' => 'string',
+//            'service_provide_en' => 'string',
+//            'service_provide_ar' => 'string',
+//            'service_presentation_en' => 'string',
+//            'service_presentation_ar' => 'string',
+//        ]);
+//        $collection->name_en = $request->input('name_en');
+//        $collection->name_ar = $request->input('name_ar');
+//        $collection->description_en = $request->input('description_en');
+//        $collection->description_ar = $request->input('description_ar');
+//        $collection->mealtime_id = $request->input('mealtime');
+//        $collection->female_caterer_available = $request->input('female_caterer_available');
+//        $collection->service_provide_en = $request->input('service_provide_en');
+//        $collection->service_provide_ar = $request->input('service_provide_ar');
+//        $collection->service_presentation_en = $request->input('service_presentation_en');
+//        $collection->service_presentation_ar = $request->input('service_presentation_ar');
+//        $collection->setup_time = $request->input('setup_time');
+//        $collection->max_time = $request->input('max_time');
+//        $collection->requirements_en = $request->input('requirements_en');
+//        $collection->requirements_ar = $request->input('requirements_ar');
+//        $collection->is_available = $request->input('is_available');
+//        $collection->price = $request->input('collection_price');
+//        $collection->max_qty = $request->input('max_quantity');
+//        $collection->min_qty = $request->input('min_quantity');
+////        $collection->persons_max_count = $request->input('persons_max_count');
+//        $collection->min_serve_to_person = $request->input('min_serve_to_person');
+//        $collection->max_serve_to_person = $request->input('max_serve_to_person');
+//        $collection->allow_person_increase = $request->input('allow_person_increase');
         $collection->save();
+        if (isset($request['menu_item'])) {
+            CollectionItem::where('collection_id', $collection->id)->delete();
+            if ($collection->category_id == 1) {
+                foreach ($request['menu_item'] as $key => $value) {
+                    $collection_item = new CollectionItem();
+                    $collection_item->item_id = $request['menu_item'][$key];
+                    $collection_item->quantity = $request['menu_item_qty'][$key];
+                    $collection_item->collection_id = $collection->id;
+                    $collection_item->save();
+                }
+            } else {
+                foreach ($request['menu_item'] as $key => $value) {
+                    $collection_item = new CollectionItem();
+                    $collection_item->item_id = $request['menu_item'][$key];
+                    $menu_item = Menu::where('id', $request['menu_item'][$key])->first();
+                    $category = MenuCategory::where('id', $menu_item->category_id)->first();
+                    $collection_item->collection_menu_id = $category->id;
+                    $collection_item->collection_id = $collection->id;
+                    $collection_item->quantity = 1;
+                    $collection_item->save();
+                }
+                CollectionMenu::where('collection_id', $collection->id)->delete();
+                $menus = $request->input('menu');
+                foreach ($menus as $menu) {
+                    $collection_menu = new CollectionMenu();
+                    $collection_menu->collection_id = $collection->id;
+                    $collection_menu->menu_id = $menu['id'];
+                    if ($collection->category_id != 4) {
+                        $collection_menu->min_qty = $menu['min_qty'];
+                        $collection_menu->max_qty = $menu['max_qty'];
+                    }
+                    $collection_menu->save();
+                }
+            }
+            return redirect()->back();
+        }
 
         return redirect('/collections/' . $restaurant_id);
     }

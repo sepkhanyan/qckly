@@ -37,7 +37,7 @@
                                 <label for="input_name_en" class="col-sm-3 control-label">Name En</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="name_en" id="input_name_en" class="form-control"
-                                           value="{{$collection->name_en}}">
+                                           value="{{old('name_en') ?? $collection->name_en}}">
                                     @if ($errors->has('name_en'))
                                         <span class="help-block">
                                             <strong>{{ $errors->first('name_en') }}</strong>
@@ -49,7 +49,7 @@
                                 <label for="input_name_ar" class="col-sm-3 control-label">Name Ar</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="name_ar" id="input_name_ar" class="form-control"
-                                           value="{{$collection->name_ar}}">
+                                           value="{{old('name_ar') ?? $collection->name_ar}}">
                                     @if ($errors->has('name_ar'))
                                         <span class="help-block">
                                             <strong>{{ $errors->first('name_ar') }}</strong>
@@ -61,7 +61,7 @@
                                 <label for="input_description_en" class="col-sm-3 control-label">Description En</label>
                                 <div class="col-sm-5">
                                     <textarea name="description_en" id="input_description_en" class="form-control"
-                                              rows="5">{{$collection->description_en}}</textarea>
+                                              rows="5">{{old('description_en') ?? $collection->description_en}}</textarea>
                                     @if ($errors->has('description_en'))
                                         <span class="help-block">
                                             <strong>{{ $errors->first('description_en') }}</strong>
@@ -73,7 +73,7 @@
                                 <label for="input_description_ar" class="col-sm-3 control-label">Description Ar</label>
                                 <div class="col-sm-5">
                                     <textarea name="description_ar" id="input_description_ar" class="form-control"
-                                              rows="5">{{$collection->description_ar}}</textarea>
+                                              rows="5">{{old('description_ar') ?? $collection->description_ar}}</textarea>
                                     @if ($errors->has('description_ar'))
                                         <span class="help-block">
                                             <strong>{{ $errors->first('description_ar') }}</strong>
@@ -88,7 +88,7 @@
                                         <option value="{{$collection->mealtime_id}}">{{$collection->mealtime->name_en}}</option>
                                         @foreach ($mealtimes as $mealtime)
                                             @if($collection->mealtime_id != $mealtime->id)
-                                                <option value="{{$mealtime->id}}">{{$mealtime->name_en}}</option>
+                                                <option value="{{$mealtime->id}}" {{ (collect(old('mealtime'))->contains($mealtime->id)) ? 'selected':'' }}>{{$mealtime->name_en}}</option>
                                             @endif
                                         @endforeach
                                     </select>
@@ -128,7 +128,7 @@
                                     En</label>
                                 <div class="col-sm-5">
                                     <textarea name="service_provide_en" class="form-control"
-                                              id="service_provide_en">{{$collection->service_provide_en}}</textarea>
+                                              id="service_provide_en">{{old('service_provide_en') ?? $collection->service_provide_en}}</textarea>
                                     @if ($errors->has('service_provide_en'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('service_provide_en') }}</strong>
@@ -141,7 +141,7 @@
                                     Ar</label>
                                 <div class="col-sm-5">
                                     <textarea name="service_provide_ar" class="form-control"
-                                              id="service_provide_ar">{{$collection->service_provide_ar}}</textarea>
+                                              id="service_provide_ar">{{old('service_provide_ar') ?? $collection->service_provide_ar}}</textarea>
                                     @if ($errors->has('service_provide_ar'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('service_provide_ar') }}</strong>
@@ -154,7 +154,7 @@
                                     En</label>
                                 <div class="col-sm-5">
                                     <textarea name="service_presentation_en" class="form-control"
-                                              id="service_presentation_en">{{$collection->service_presentation_en}}</textarea>
+                                              id="service_presentation_en">{{old('service_presentation_en') ?? $collection->service_presentation_en}}</textarea>
                                     @if ($errors->has('service_presentation_en'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('service_presentation_en') }}</strong>
@@ -167,7 +167,7 @@
                                     Ar</label>
                                 <div class="col-sm-5">
                                     <textarea name="service_presentation_ar" class="form-control"
-                                              id="service_presentation_ar">{{$collection->service_presentation_ar}}</textarea>
+                                              id="service_presentation_ar">{{old('service_presentation_ar') ?? $collection->service_presentation_ar}}</textarea>
                                     @if ($errors->has('service_presentation_ar'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('service_presentation_ar') }}</strong>
@@ -208,7 +208,7 @@
                                     <div class="col-sm-5">
                                         <div class="input-group">
                                             <input type="text" name="collection_price" id="input-price"
-                                                   class="form-control" value="{{$collection->price}}"/>
+                                                   class="form-control" value="{{old('collection_price') ?? $collection->price}}"/>
                                             <span class="input-group-addon">
                                                     <i class="fa fa-money"></i>
                                                 </span>
@@ -225,7 +225,7 @@
                                         <label class="col-sm-3 control-label">Collection min quantity</label>
                                         <div class="col-sm-5">
                                             <input type="number" min="1" name="min_quantity" class="form-control"
-                                                   value="{{$collection->min_qty}}">
+                                                   value="{{old('min_quantity') ?? $collection->min_qty}}">
                                             @if ($errors->has('min_quantity'))
                                                 <span class="help-block">
                                                     <strong>{{ $errors->first('min_quantity') }}</strong>
@@ -237,7 +237,7 @@
                                         <label class="col-sm-3 control-label">Collection max quantity</label>
                                         <div class="col-sm-5">
                                             <input type="number" min="1" name="max_quantity" class="form-control"
-                                                   value="{{$collection->max_qty}}">
+                                                   value="{{old('max_quantity') ?? $collection->max_qty}}">
                                             @if ($errors->has('max_quantity'))
                                                 <span class="help-block">
                                                     <strong>{{ $errors->first('max_quantity') }}</strong>
@@ -251,7 +251,7 @@
                                     <label class="col-sm-3 control-label">Min serve to person</label>
                                     <div class="col-sm-5">
                                         <input type="number" min="1" name="min_serve_to_person" class="form-control"
-                                               value="{{$collection->min_serve_to_person}}">
+                                               value="{{old('min_serve_to_person') ?? $collection->min_serve_to_person}}">
                                         @if ($errors->has('min_serve_to_person'))
                                             <span class="help-block">
                                                 <strong>{{ $errors->first('min_serve_to_person') }}</strong>
@@ -264,7 +264,7 @@
                                     <label class="col-sm-3 control-label">Max serve to person</label>
                                     <div class="col-sm-5">
                                         <input type="number" min="1" name="max_serve_to_person" class="form-control"
-                                               value="{{$collection->max_serve_to_person}}">
+                                               value="{{old('max_serve_to_person') ?? $collection->max_serve_to_person}}">
                                         @if ($errors->has('max_serve_to_person'))
                                             <span class="help-block">
                                                 <strong>{{ $errors->first('max_serve_to_person') }}</strong>
@@ -276,17 +276,17 @@
                             @endif
                             @if($collection->category_id == 2)
                                 {{--<div class="form-group{{ $errors->has('persons_max_count') ? ' has-error' : '' }}">--}}
-                                    {{--<label class="col-sm-3 control-label">Persons max count</label>--}}
-                                    {{--<div class="col-sm-5">--}}
-                                        {{--<input type="number" min="1" name="persons_max_count" class="form-control"--}}
-                                               {{--value="{{$collection->persons_max_count}}">--}}
-                                        {{--@if ($errors->has('persons_max_count'))--}}
-                                            {{--<span class="help-block">--}}
-                                                {{--<strong>{{ $errors->first('persons_max_count') }}</strong>--}}
-                                            {{--</span>--}}
-                                        {{--@endif--}}
+                                {{--<label class="col-sm-3 control-label">Persons max count</label>--}}
+                                {{--<div class="col-sm-5">--}}
+                                {{--<input type="number" min="1" name="persons_max_count" class="form-control"--}}
+                                {{--value="{{$collection->persons_max_count}}">--}}
+                                {{--@if ($errors->has('persons_max_count'))--}}
+                                {{--<span class="help-block">--}}
+                                {{--<strong>{{ $errors->first('persons_max_count') }}</strong>--}}
+                                {{--</span>--}}
+                                {{--@endif--}}
 
-                                    {{--</div>--}}
+                                {{--</div>--}}
                                 {{--</div>--}}
                                 <div class="form-group">
                                     <label for="is_available" class="col-sm-3 control-label">Allow Person
@@ -324,7 +324,7 @@
                                     <div class="col-sm-5">
                                         <div class="input-group">
                                             <input type="number" name="setup_time" id="input-setup"
-                                                   class="form-control" min="0" value="{{$collection->setup_time}}"/>
+                                                   class="form-control" min="0" value="{{old('setup_time') ?? $collection->setup_time}}"/>
                                             <span class="input-group-addon">minutes</span>
                                         </div>
                                         @if ($errors->has('setup_time'))
@@ -339,7 +339,7 @@
                                         En</label>
                                     <div class="col-sm-5">
                                             <textarea name="requirements_en" id="input_requirements_en"
-                                                      class="form-control">{{$collection->requirements_en}}</textarea>
+                                                      class="form-control">{{old('requirements_en') ?? $collection->requirements_en}}</textarea>
                                         @if ($errors->has('requirements_en'))
                                             <span class="help-block">
                                                     <strong>{{ $errors->first('requirements_en') }}</strong>
@@ -352,7 +352,7 @@
                                         Ar</label>
                                     <div class="col-sm-5">
                                             <textarea name="requirements_ar" id="input_requirements_ar"
-                                                      class="form-control">{{$collection->requirements_ar}}</textarea>
+                                                      class="form-control">{{old('requirements_ar') ?? $collection->requirements_ar}}</textarea>
                                         @if ($errors->has('requirements_ar'))
                                             <span class="help-block">
                                                     <strong>{{ $errors->first('requirements_ar') }}</strong>
@@ -367,7 +367,7 @@
                                     <div class="col-sm-5">
                                         <div class="input-group">
                                             <input type="number" name="max_time" id="input-max" class="form-control"
-                                                   min="0" value="{{$collection->max_time}}"/>
+                                                   min="0" value="{{old('max_time') ?? $collection->max_time}}"/>
                                             <span class="input-group-addon">minutes</span>
                                         </div>
                                         @if ($errors->has('max_time'))
@@ -460,9 +460,9 @@
                                 </div>
                             </div>
                             <div class="modal fade" id="myModal" role="dialog">
-                                <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8"
+                                <form role="form" class="form-horizontal" accept-charset="utf-8"
                                       method="POST"
-                                      action="{{ url('/collection/update/' . $collection->id) }}"
+                                      action="{{ url('/collection/items/edit/' . $collection->id) }}"
                                       enctype="multipart/form-data">
                                     {{ csrf_field() }}
                                     <div class="modal-dialog modal-lg">
@@ -473,73 +473,111 @@
                                                 <h4 class="modal-title">Menu Items</h4>
                                             </div>
                                             <div class="modal-body">
-                                                <div class="form-group">
-                                                    <label for="" class="col-sm-3 control-label"></label>
-                                                    <div class="col-xs-2">
-                                                        <div class="checkbox" style="font-size: medium;">
-                                                            <label>
-                                                                <input type="checkbox"
-                                                                       onclick="$('input[name*=\'menu_item\']').prop('checked', this.checked);">
-                                                                Select All
-                                                            </label>
-                                                            @if ($errors->has('menu_item_qty'))
-                                                                <span class="help-block">
-                                                    <strong>{{ $errors->first('menu_item_qty') }}</strong>
-                                                </span>
-                                                            @endif
+                                                @if($collection->category_id == 2 || $collection->category_id == 3)
+                                                    <div class="form-group">
+                                                        <label for="" class="col-sm-3 control-label"></label>
+                                                        <div class="col-sm-5">
+                                                            <div class="control-group control-group-2">
+                                                                <div class="input-group" style="font-size: medium">
+                                                                    <b>Menu min quantity</b>
+                                                                </div>
+                                                                <div class="input-group" style="font-size: medium">
+                                                                    <b>Menu max quantity</b>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                @endif
                                                 @foreach($menu_categories as $menu_category)
                                                     <div class="form-group">
-                                                        <label for="" class="col-sm-3 control-label"
-                                                               style="font-size: medium;">
-                                                            {{$menu_category->name_en}}
-                                                            <input type="hidden" name="menu[]"
-                                                                   value="{{$menu_category->id}}">
+                                                        <label for="input-status" class="col-sm-3 control-label text-right">
+                                                <span class="text-right"
+                                                      style="font-size: large">{{$menu_category->name_en}}</span>
+                                                            @if($collection->category_id != 1)
+                                                                <input type="hidden" name="menu[{{$menu_category->id}}][id]"
+                                                                       value="{{$menu_category->id}}">
+                                                            @endif
                                                         </label>
-                                                        @if($collection->category_id == 2 || $collection->category_id == 3)
-                                                            <div class="col-xs-2">
-                                                                <input type="number" name="menu_min_qty[]" min="1"
-                                                                       value=""
-                                                                       class="form-control"
-                                                                       placeholder="Menu min quantity">
+                                                        <div class="col-sm-9">
+                                                            <div class="control-group control-group-3">
+                                                                @if($collection->category_id == 2 || $collection->category_id == 3)
+                                                                    <div class="input-group">
+                                                                        <input type="number"
+                                                                               name="menu[{{$menu_category->id}}][min_qty]"
+                                                                               class="form-control" min="1" value="1">
+                                                                    </div>
+                                                                    <div class="input-group">
+                                                                        <input type="number"
+                                                                               name="menu[{{$menu_category->id}}][max_qty]"
+                                                                               class="form-control" min="1" value="1">
+                                                                    </div>
+                                                                @endif
                                                             </div>
-                                                            <div class="col-xs-2">
-                                                                <input type="number" name="menu_max_qty[]" min="1"
-                                                                       value=""
-                                                                       class="form-control"
-                                                                       placeholder="Menu max quantity">
-                                                            </div>
-                                                        @else
-                                                            <div class="col-xs-2">
-                                                            </div>
-                                                        @endif
+                                                        </div>
                                                     </div>
-                                                    @foreach($menu_category->menu as $menu)
+                                                    @if($collection->category_id == 1)
+                                                        @foreach($menu_category->menu as $menu)
+                                                            <div class="form-group">
+                                                                <label for="" class="col-sm-3 control-label"></label>
+                                                                <div class="col-xs-3">
+                                                                    <div class="checkbox" id="{{$menu->id}}">
+                                                                        <label style="font-size: medium">
+                                                                            <input id="item{{$menu->id}}" type="checkbox"
+                                                                                   name="menu_item[]"
+                                                                                   value="{{$menu->id}}"
+                                                                                   {{ (collect(old('menu_item'))->contains($menu->id)) ? 'checked':'' }} onclick="myFunction('{{$menu->id}}')">{{$menu->name_en}}
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-xs-5">
+                                                                    <div class="control-group control-group-3">
+                                                                        <div class="col-xs-5">
+                                                                            <input type="number"
+                                                                                   name="menu_item_qty[]" id="qty{{$menu->id}}" style="display: none" disabled
+                                                                                   class="form-control" min="1" value="1">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <script>
+                                                                $(document).ready(function () {
+                                                                    var id = '<?php echo $menu->id; ?>';
+                                                                    var item = document.getElementById("item" + id);
+                                                                    if (item.checked == true) {
+                                                                        $('#qty' + id).slideDown('fast');
+                                                                        $('#qty' + id).removeAttr('disabled');
+                                                                    } else {
+                                                                        $('#qty' + id).slideUp('fast');
+                                                                        $('#qty' + id).attr('disabled', true);
+                                                                    }
+                                                                });
+                                                            </script>
+                                                        @endforeach
+                                                    @else
                                                         <div class="form-group">
                                                             <label for="" class="col-sm-3 control-label"></label>
-                                                            <div class="col-xs-2">
-                                                                <div class="checkbox" style="font-size: medium;">
-                                                                    <label>
-                                                                        <input type="checkbox" name="menu_item[]"
-                                                                               value="{{$menu->id}}">
-                                                                        {{$menu->name_en}}
-                                                                    </label>
-                                                                </div>
+                                                            <div class="col-xs-4">
+                                                                <select id="items{{$menu_category->id}}" name="menu_item[]"
+                                                                        class="form-control" multiple
+                                                                        placeholder="Select Items">
+                                                                    @foreach($menu_category->menu as $menu)
+                                                                        <option value="{{$menu->id}}" {{ (collect(old('menu_item'))->contains($menu->id)) ? 'selected':'' }}>{{$menu->name_en}}</option>
+                                                                    @endforeach
+                                                                </select>
                                                             </div>
-                                                            @if($collection->category_id == 1)
-                                                                <div class="col-xs-2">
-                                                                    <input type="number"
-                                                                           min="1"
-                                                                           class="form-control"
-                                                                           name="menu_item_qty[]"
-                                                                           placeholder="Quantity"
-                                                                           value="">
-                                                                </div>
-                                                            @endif
                                                         </div>
-                                                    @endforeach
+                                                        <script type="text/javascript">
+                                                            $(document).ready(function () {
+                                                                var id = '<?php echo $menu_category->id; ?>';
+                                                                $('a[title], span[title], button[title]').tooltip({placement: 'bottom'});
+                                                                $('#items' + id).select2({minimumResultsForSearch: 10});
+
+                                                                $('.alert').alert();
+                                                                $('.dropdown-toggle').dropdown();
+
+                                                            });
+                                                        </script>
+                                                    @endif
                                                 @endforeach
                                             </div>
                                             <div class="modal-footer">
@@ -558,4 +596,18 @@
             </div>
         </div>
     </div>
+    <script>
+        function myFunction(id) {
+            console.log(id);
+            var item = document.getElementById("item" + id);
+            // var qty = document.getElementById("qty" + id);
+            if (item.checked == true) {
+                $('#qty' + id).slideDown('fast');
+                $('#qty' + id).removeAttr('disabled');
+            } else {
+                $('#qty' + id).slideUp('fast');
+                $('#qty' + id).attr('disabled', true);
+            }
+        }
+    </script>
 @endsection

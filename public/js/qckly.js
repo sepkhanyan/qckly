@@ -328,6 +328,8 @@ $(document).ready(function () {
     });
 
 
+
+
     $('.timepicker').timepicker({
         defaultTime: '11:45 AM'
     });
@@ -336,7 +338,6 @@ $(document).ready(function () {
     $('#delivery-areas select.form-control').select2({
         minimumResultsForSearch: Infinity
     });
-
 
     $('input[name="auto_lat_lng"]').on('change', function () {
         $('#lat-lng').slideDown('fast');

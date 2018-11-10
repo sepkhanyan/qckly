@@ -109,10 +109,10 @@ $(document).ready(function() {
 });
 
 // Load messages and activities top navbar dropdown content
-$(function(){
-    $('.dropdown-messages .menu-body').load(js_site_url('messages/latest'));
-    $('.dropdown-activities .menu-body').load(js_site_url('activities/latest'));
-});
+// $(function(){
+//     $('.dropdown-messages .menu-body').load(js_site_url('messages/latest'));
+//     $('.dropdown-activities .menu-body').load(js_site_url('activities/latest'));
+// });
 
 // Panel Table Filter Button Toggle
 $(function(){
