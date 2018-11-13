@@ -249,7 +249,7 @@ class RestaurantsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        dd($request->all());
+//        dd($request->all());
         $validator = \Validator::make($request->all(), [
             'restaurant_name_en' => 'string|max:255',
             'restaurant_name_ar' => 'string|max:255',
