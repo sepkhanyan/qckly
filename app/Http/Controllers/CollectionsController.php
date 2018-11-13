@@ -442,8 +442,7 @@ class CollectionsController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public
-    function deleteCollection(Request $request)
+    public function deleteCollection(Request $request)
     {
         $user = Auth::user();
         $id = $request->get('id');

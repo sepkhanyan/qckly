@@ -25,7 +25,7 @@ class RestaurantRequest extends FormRequest
     {
 //        $rules = [
 //            'manager_name' => 'required|string|max:255',
-//            'manager_email' => 'required|string|max:255',
+//            'manager_email' => 'required|email|max:255',
 //            'manager_username' => 'required|string|max:255',
 //            'password' => 'required|string|min:6|confirmed',
 //            'category' => 'required',
@@ -37,17 +37,15 @@ class RestaurantRequest extends FormRequest
 //            'description_ar' => 'required|string',
 //            'address_en' => 'required|string|max:255',
 //            'address_ar' => 'required|string|max:255',
-////            'city_en' => 'required|string|max:255',
-////            'city_ar' => 'required|string|max:255',
 //            'postcode' => 'required|string|max:255',
 //            'latitude' => 'required|numeric',
 //            'longitude' => 'required|numeric',
-//            'image' => 'required|image'
+//            'image' => 'required|image',
+//            'daily_days' => 'required|array'
 //
 //        ];
 //        if ($this->id) {
 //            $rules = [
-//                'category' => 'required',
 //                'restaurant_name_en' => 'required|string|max:255',
 //                'restaurant_name_ar' => 'required|string|max:255',
 //                'restaurant_email' => 'required|string|max:255',
@@ -56,8 +54,6 @@ class RestaurantRequest extends FormRequest
 //                'description_ar' => 'required|string',
 //                'address_en' => 'required|string|max:255',
 //                'address_ar' => 'required|string|max:255',
-////                'city_en' => 'required|string|max:255',
-////                'city_ar' => 'required|string|max:255',
 //                'postcode' => 'required|string|max:255',
 //                'latitude' => 'required|numeric',
 //                'longitude' => 'required|numeric',
@@ -66,5 +62,15 @@ class RestaurantRequest extends FormRequest
 //        return $rules;
 
 
+    }
+
+
+    public function messages()
+    {
+//        return [
+//            'email.email' => 'Please enter a valid email address',
+//            'email.required' => 'Email address is required',
+//            'password.required' => 'Password is required',
+//        ];
     }
 }
