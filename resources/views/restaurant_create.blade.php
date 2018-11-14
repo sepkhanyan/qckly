@@ -398,35 +398,19 @@
                                 <label for="" class="col-sm-3 control-label">Working Type</label>
                                 <div class="col-sm-5">
                                     <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
-                                        <label class="btn btn-success active" id="daily-flexible-hide">
-                                            <input type="radio" name="opening_type" id="24_7" value="24_7" {{ (old('opening_type') == '24_7') ? 'checked' : '' }} checked="checked">
+                                        <label @if(old('opening_type')) class="btn btn-success{{ (old('opening_type') == '24_7') ? ' active' : '' }}" @else class="btn btn-success active"  @endif  id="daily-flexible-hide">
+                                            <input type="radio" name="opening_type"  value="24_7" {{ (old('opening_type') == '24_7') ? 'checked' : '' }} checked="checked">
                                             24/7
                                         </label>
-                                        <label class="btn btn-success" id="opening-daily-show">
-                                            <input type="radio" name="opening_type" id="daily" value="daily" {{ (old('opening_type') == 'daily') ? 'checked' : '' }}>
+                                        <label class="btn btn-success{{ (old('opening_type') == 'daily') ? ' active' : '' }}" id="opening-daily-show">
+                                            <input type="radio" name="opening_type"  value="daily" {{ (old('opening_type') == 'daily') ? 'checked' : '' }}>
                                             Daily
                                         </label>
-                                        <label class="btn btn-success" id="opening-flexible-show">
-                                            <input type="radio" name="opening_type" id="flexible" value="flexible" {{ (old('opening_type') == 'flexible') ? 'checked' : '' }}>
+                                        <label class="btn btn-success{{ (old('opening_type') == 'flexible') ? ' active' : '' }}" id="opening-flexible-show">
+                                            <input type="radio" name="opening_type"  value="flexible" {{ (old('opening_type') == 'flexible') ? 'checked' : '' }}>
                                             Flexible
                                         </label>
                                     </div>
-                                    <script type="text/javascript">
-                                        $(document).ready(function () {
-                                            var input = document.getElementById("24_7");
-                                            var daily = document.getElementById("daily");
-                                            var flexible = document.getElementById("flexible");
-                                            if (input.checked == true) {
-                                                $('#daily-flexible-hide').attr('class','btn btn-success active');
-                                            }else if(daily.checked == true){
-                                                $('#opening-daily-show').attr('class','btn btn-success active');
-                                                $('#daily-flexible-hide').attr('class','btn btn-success');
-                                            }else if(flexible.checked == true){
-                                                $('#opening-flexible-show').attr('class','btn btn-success active');
-                                                $('#daily-flexible-hide').attr('class','btn btn-success');
-                                            }
-                                        });
-                                    </script>
                                 </div>
                             </div>
                             <div id="opening-daily" style="display: none;">
@@ -434,80 +418,34 @@
                                     <label for="input-opening-days" class="col-sm-3 control-label">Days</label>
                                     <div class="col-sm-5{{ $errors->has('daily_days') ? ' has-error' : '' }}">
                                         <div class="btn-group btn-group-toggle btn-group-7" data-toggle="buttons">
-                                            <label class="btn btn-default" id="mon_active">
+                                            <label  @if(old('daily_days'))  class="btn btn-default{{ (collect(old('daily_days'))->contains(1)) ? ' active':'' }}"  @else class="btn btn-default active"  @endif >
                                                 <input type="checkbox" name="daily_days[]" id="mon" value="1" @if(old('daily_days'))   {{ (collect(old('daily_days'))->contains(1)) ? 'checked':'' }} @else checked="checked" @endif >
                                                 Mon
                                             </label>
-                                            <label class="btn btn-default " id="tue_active">
+                                            <label @if(old('daily_days'))  class="btn btn-default{{ (collect(old('daily_days'))->contains(2)) ? ' active':'' }}"  @else class="btn btn-default active"  @endif>
                                                 <input type="checkbox" name="daily_days[]" id="tue" value="2"  @if(old('daily_days'))   {{ (collect(old('daily_days'))->contains(2)) ? 'checked':'' }} @else checked="checked" @endif >
                                                 Tue
                                             </label>
-                                            <label class="btn btn-default " id="wed_active">
+                                            <label @if(old('daily_days'))  class="btn btn-default{{ (collect(old('daily_days'))->contains(3)) ? ' active':'' }}"  @else class="btn btn-default active"  @endif>
                                                 <input type="checkbox" name="daily_days[]" id="wed" value="3"  @if(old('daily_days'))   {{ (collect(old('daily_days'))->contains(3)) ? 'checked':'' }} @else checked="checked" @endif >
                                                 Wed
                                             </label>
-                                            <label class="btn btn-default" id="thu_active">
+                                            <label @if(old('daily_days'))  class="btn btn-default{{ (collect(old('daily_days'))->contains(4)) ? ' active':'' }}"  @else class="btn btn-default active"  @endif>
                                                 <input type="checkbox" name="daily_days[]" id="thu" value="4"   @if(old('daily_days'))   {{ (collect(old('daily_days'))->contains(4)) ? 'checked':'' }} @else checked="checked" @endif >
                                                 Thu
                                             </label>
-                                            <label class="btn btn-default" id="fri_active">
+                                            <label @if(old('daily_days'))  class="btn btn-default{{ (collect(old('daily_days'))->contains(5)) ? ' active':'' }}"  @else class="btn btn-default active"  @endif>
                                                 <input type="checkbox" name="daily_days[]" id="fri" value="5"  @if(old('daily_days'))   {{ (collect(old('daily_days'))->contains(5)) ? 'checked':'' }} @else checked="checked" @endif >
                                                 Fri
                                             </label>
-                                            <label class="btn btn-default " id="sat_active">
+                                            <label @if(old('daily_days'))  class="btn btn-default{{ (collect(old('daily_days'))->contains(6)) ? ' active':'' }}"  @else class="btn btn-default active"  @endif>
                                                 <input type="checkbox" name="daily_days[]" id="sat" value="6"  @if(old('daily_days'))   {{ (collect(old('daily_days'))->contains(6)) ? 'checked':'' }} @else checked="checked" @endif >
                                                 Sat
                                             </label>
-                                            <label class="btn btn-default " id="sun_active">
+                                            <label @if(old('daily_days'))  class="btn btn-default{{ (collect(old('daily_days'))->contains(0)) ? ' active':'' }}"  @else class="btn btn-default active"  @endif>
                                                 <input type="checkbox" name="daily_days[]" id="sun" value="0"   @if(old('daily_days'))   {{ (collect(old('daily_days'))->contains(0)) ? 'checked':'' }} @else checked="checked" @endif >
                                                 Sun
                                             </label>
-                                            <script>
-                                                $(document).ready(function () {
-                                                    var mon = document.getElementById("mon");
-                                                    var tue = document.getElementById("tue");
-                                                    var wed = document.getElementById("wed");
-                                                    var thu = document.getElementById("thu");
-                                                    var fri = document.getElementById("fri");
-                                                    var sat = document.getElementById("sat");
-                                                    var sun = document.getElementById("sun");
-                                                    if (mon.checked == true) {
-                                                        $('#mon_active').attr('class','btn btn-default active');
-                                                    }else{
-                                                        $('#mon_active').attr('class','btn btn-default');
-                                                    }
-                                                    if (tue.checked == true) {
-                                                        $('#tue_active').attr('class','btn btn-default active');
-                                                    }else{
-                                                        $('#tue_active').attr('class','btn btn-default');
-                                                    }
-                                                    if (wed.checked == true) {
-                                                        $('#wed_active').attr('class','btn btn-default active');
-                                                    }else{
-                                                        $('#wed_active').attr('class','btn btn-default');
-                                                    }
-                                                    if (thu.checked == true) {
-                                                        $('#thu_active').attr('class','btn btn-default active');
-                                                    }else{
-                                                        $('#thu_active').attr('class','btn btn-default');
-                                                    }
-                                                    if (fri.checked == true) {
-                                                        $('#fri_active').attr('class','btn btn-default active');
-                                                    }else{
-                                                        $('#fri_active').attr('class','btn btn-default');
-                                                    }
-                                                    if (sat.checked == true) {
-                                                        $('#sat_active').attr('class','btn btn-default active');
-                                                    }else{
-                                                        $('#sat_active').attr('class','btn btn-default');
-                                                    }
-                                                    if (sun.checked == true) {
-                                                        $('#sun_active').attr('class','btn btn-default active');
-                                                    }else{
-                                                        $('#sun_active').attr('class','btn btn-default');
-                                                    }
-                                                });
-                                            </script>
                                         </div>
                                         @if ($errors->has('daily_days'))
                                             <span class="help-block">
@@ -518,22 +456,32 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="input-opening-hours" class="col-sm-3 control-label">Hours</label>
-                                    <div class="col-sm-5">
+                                    <div class="col-sm-5{{ $errors->has('daily_hours.open') ? ' has-error' : '' }}{{ $errors->has('daily_hours.close') ? ' has-error' : '' }}">
                                         <div class="control-group control-group-2">
                                             <div class="input-group">
                                                 <input id="clock-show" type="text" name="daily_hours[open]"
-                                                       class="form-control timepicker" value="{{ old('daily_hours.open', '09:00 AM') }}"/>
+                                                       class="form-control timepicker" value="{{ old('daily_hours.open') ??  '09:00 AM' }}"/>
                                                 <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                             </div>
                                             <div class="input-group">
                                                 <input type="text" name="daily_hours[close]"
-                                                       class="form-control timepicker" value="{{ old('daily_hours.close', '11:59 PM') }}"/>
+                                                       class="form-control timepicker" value="{{ old('daily_hours.close') ?? '11:59 PM' }}"/>
                                                 <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                             </div>
+                                            @if ($errors->has('daily_hours.open'))
+                                                <span class="help-block">
+                                                <strong>{{ $errors->first('daily_hours.open') }}</strong>
+                                            </span>
+                                            @endif
+                                            @if ($errors->has('daily_hours.close'))
+                                                <span class="help-block">
+                                                <strong>{{ $errors->first('daily_hours.close') }}</strong>
+                                            </span>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -574,26 +522,14 @@
                                             </span>
                                             </div>
                                             <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                                <label class="btn btn-success active" id="mon_open_active">
-                                                    <input type="radio" name="flexible_hours[1][status]" id="mon_open"  value="1" {{ (old('flexible_hours.1.status') == '1') ? 'checked' : '' }} checked="checked">
+                                                <label class="btn btn-success active{{ (old('flexible_hours.1.status') == '0') ? 'btn btn-success' : '' }}">
+                                                    <input type="radio" name="flexible_hours[1][status]"  value="1" {{ (old('flexible_hours.1.status') == '1') ? 'checked' : '' }} checked="checked">
                                                     Open
                                                 </label>
-                                                <label class="btn btn-danger" id="mon_close_active">
-                                                    <input type="radio" name="flexible_hours[1][status]"  id="mon_close" value="0" {{ (old('flexible_hours.1.status') == '0') ? 'checked' : '' }}>
+                                                <label class="btn btn-danger{{ (old('flexible_hours.1.status') == '0') ? ' active' : '' }}">
+                                                    <input type="radio" name="flexible_hours[1][status]"   value="0" {{ (old('flexible_hours.1.status') == '0') ? 'checked' : '' }}>
                                                     Closed
                                                 </label>
-                                                <script type="text/javascript">
-                                                    $(document).ready(function () {
-                                                        var open = document.getElementById("mon_open");
-                                                        var close = document.getElementById("mon_close");
-                                                        if (open.checked == true) {
-                                                            $('#mon_open_active').attr('class','btn btn-success active');
-                                                        }else if(close.checked == true){
-                                                            $('#mon_close_active').attr('class','btn btn-danger active');
-                                                            $('#mon_open_active').attr('class','btn btn-success');
-                                                        }
-                                                    });
-                                                </script>
                                             </div>
                                         </div>
                                     </div>
@@ -620,26 +556,14 @@
                                             </span>
                                             </div>
                                             <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                                <label class="btn btn-success active" id="tue_open_active">
-                                                    <input type="radio" name="flexible_hours[2][status]" id="tue_open"  value="1" {{ (old('flexible_hours.2.status') == '1') ? 'checked' : '' }} checked="checked">
+                                                <label class="btn btn-success active{{ (old('flexible_hours.2.status') == '0') ? 'btn btn-success' : '' }}">
+                                                    <input type="radio" name="flexible_hours[2][status]"  value="1" {{ (old('flexible_hours.2.status') == '1') ? 'checked' : '' }} checked="checked">
                                                     Open
                                                 </label>
-                                                <label class="btn btn-danger" id="tue_close_active">
-                                                    <input type="radio" name="flexible_hours[2][status]"  id="tue_close" value="0" {{ (old('flexible_hours.2.status') == '0') ? 'checked' : '' }}>
+                                                <label class="btn btn-danger{{ (old('flexible_hours.2.status') == '0') ? ' active' : '' }}">
+                                                    <input type="radio" name="flexible_hours[2][status]"   value="0" {{ (old('flexible_hours.2.status') == '0') ? 'checked' : '' }}>
                                                     Closed
                                                 </label>
-                                                <script type="text/javascript">
-                                                    $(document).ready(function () {
-                                                        var open = document.getElementById("tue_open");
-                                                        var close = document.getElementById("tue_close");
-                                                        if (open.checked == true) {
-                                                            $('#tue_open_active').attr('class','btn btn-success active');
-                                                        }else if(close.checked == true){
-                                                            $('#tue_close_active').attr('class','btn btn-danger active');
-                                                            $('#tue_open_active').attr('class','btn btn-success');
-                                                        }
-                                                    });
-                                                </script>
                                             </div>
                                         </div>
                                     </div>
@@ -666,26 +590,14 @@
                                             </span>
                                             </div>
                                             <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                                <label class="btn btn-success active" id="wed_open_active">
-                                                    <input type="radio" name="flexible_hours[3][status]" id="wed_open"  value="1" {{ (old('flexible_hours.3.status') == '1') ? 'checked' : '' }} checked="checked">
+                                                <label class="btn btn-success active{{ (old('flexible_hours.3.status') == '0') ? 'btn btn-success' : '' }}">
+                                                    <input type="radio" name="flexible_hours[3][status]"  value="1" {{ (old('flexible_hours.3.status') == '1') ? 'checked' : '' }} checked="checked">
                                                     Open
                                                 </label>
-                                                <label class="btn btn-danger" id="wed_close_active">
-                                                    <input type="radio" name="flexible_hours[3][status]"  id="wed_close" value="0" {{ (old('flexible_hours.3.status') == '0') ? 'checked' : '' }}>
+                                                <label class="btn btn-danger{{ (old('flexible_hours.3.status') == '0') ? ' active' : '' }}">
+                                                    <input type="radio" name="flexible_hours[3][status]"   value="0" {{ (old('flexible_hours.3.status') == '0') ? 'checked' : '' }}>
                                                     Closed
                                                 </label>
-                                                <script type="text/javascript">
-                                                    $(document).ready(function () {
-                                                        var open = document.getElementById("wed_open");
-                                                        var close = document.getElementById("wed_close");
-                                                        if (open.checked == true) {
-                                                            $('#wed_open_active').attr('class','btn btn-success active');
-                                                        }else if(close.checked == true){
-                                                            $('#wed_close_active').attr('class','btn btn-danger active');
-                                                            $('#wed_open_active').attr('class','btn btn-success');
-                                                        }
-                                                    });
-                                                </script>
                                             </div>
                                         </div>
                                     </div>
@@ -712,26 +624,14 @@
                                             </span>
                                             </div>
                                             <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                                <label class="btn btn-success active" id="thu_open_active">
-                                                    <input type="radio" name="flexible_hours[4][status]" id="thu_open"  value="1" {{ (old('flexible_hours.4.status') == '1') ? 'checked' : '' }} checked="checked">
+                                                <label class="btn btn-success active{{ (old('flexible_hours.4.status') == '0') ? 'btn btn-success' : '' }}">
+                                                    <input type="radio" name="flexible_hours[4][status]"   value="1" {{ (old('flexible_hours.4.status') == '1') ? 'checked' : '' }} checked="checked">
                                                     Open
                                                 </label>
-                                                <label class="btn btn-danger" id="thu_close_active">
-                                                    <input type="radio" name="flexible_hours[4][status]"  id="thu_close" value="0" {{ (old('flexible_hours.4.status') == '0') ? 'checked' : '' }}>
+                                                <label class="btn btn-danger{{ (old('flexible_hours.4.status') == '0') ? ' active' : '' }}">
+                                                    <input type="radio" name="flexible_hours[4][status]"   value="0" {{ (old('flexible_hours.4.status') == '0') ? 'checked' : '' }}>
                                                     Closed
                                                 </label>
-                                                <script type="text/javascript">
-                                                    $(document).ready(function () {
-                                                        var open = document.getElementById("thu_open");
-                                                        var close = document.getElementById("thu_close");
-                                                        if (open.checked == true) {
-                                                            $('#thu_open_active').attr('class','btn btn-success active');
-                                                        }else if(close.checked == true){
-                                                            $('#thu_close_active').attr('class','btn btn-danger active');
-                                                            $('#thu_open_active').attr('class','btn btn-success');
-                                                        }
-                                                    });
-                                                </script>
                                             </div>
                                         </div>
                                     </div>
@@ -758,26 +658,14 @@
                                             </span>
                                             </div>
                                             <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                                <label class="btn btn-success active" id="fri_open_active">
-                                                    <input type="radio" name="flexible_hours[5][status]" id="fri_open"  value="1" {{ (old('flexible_hours.5.status') == '1') ? 'checked' : '' }} checked="checked">
+                                                <label class="btn btn-success active{{ (old('flexible_hours.5.status') == '0') ? 'btn btn-success' : '' }}">
+                                                    <input type="radio" name="flexible_hours[5][status]"   value="1" {{ (old('flexible_hours.5.status') == '1') ? 'checked' : '' }} checked="checked">
                                                     Open
                                                 </label>
-                                                <label class="btn btn-danger" id="fri_close_active">
-                                                    <input type="radio" name="flexible_hours[5][status]"  id="fri_close" value="0" {{ (old('flexible_hours.5.status') == '0') ? 'checked' : '' }}>
+                                                <label class="btn btn-danger{{ (old('flexible_hours.5.status') == '0') ? ' active' : '' }}">
+                                                    <input type="radio" name="flexible_hours[5][status]"   value="0" {{ (old('flexible_hours.5.status') == '0') ? 'checked' : '' }}>
                                                     Closed
                                                 </label>
-                                                <script type="text/javascript">
-                                                    $(document).ready(function () {
-                                                        var open = document.getElementById("fri_open");
-                                                        var close = document.getElementById("fri_close");
-                                                        if (open.checked == true) {
-                                                            $('#fri_open_active').attr('class','btn btn-success active');
-                                                        }else if(close.checked == true){
-                                                            $('#fri_close_active').attr('class','btn btn-danger active');
-                                                            $('#fri_open_active').attr('class','btn btn-success');
-                                                        }
-                                                    });
-                                                </script>
                                             </div>
                                         </div>
                                     </div>
@@ -804,26 +692,14 @@
                                             </span>
                                             </div>
                                             <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                                <label class="btn btn-success active" id="sat_open_active">
-                                                    <input type="radio" name="flexible_hours[6][status]" id="sat_open"  value="1" {{ (old('flexible_hours.6.status') == '1') ? 'checked' : '' }} checked="checked">
+                                                <label class="btn btn-success active{{ (old('flexible_hours.6.status') == '0') ? 'btn btn-success' : '' }}">
+                                                    <input type="radio" name="flexible_hours[6][status]"  value="1" {{ (old('flexible_hours.6.status') == '1') ? 'checked' : '' }} checked="checked">
                                                     Open
                                                 </label>
-                                                <label class="btn btn-danger" id="sat_close_active">
-                                                    <input type="radio" name="flexible_hours[6][status]"  id="sat_close" value="0" {{ (old('flexible_hours.6.status') == '0') ? 'checked' : '' }}>
+                                                <label class="btn btn-danger{{ (old('flexible_hours.6.status') == '0') ? ' active' : '' }}">
+                                                    <input type="radio" name="flexible_hours[6][status]"  value="0" {{ (old('flexible_hours.6.status') == '0') ? 'checked' : '' }}>
                                                     Closed
                                                 </label>
-                                                <script type="text/javascript">
-                                                    $(document).ready(function () {
-                                                        var open = document.getElementById("sat_open");
-                                                        var close = document.getElementById("sat_close");
-                                                        if (open.checked == true) {
-                                                            $('#sat_open_active').attr('class','btn btn-success active');
-                                                        }else if(close.checked == true){
-                                                            $('#sat_close_active').attr('class','btn btn-danger active');
-                                                            $('#sat_open_active').attr('class','btn btn-success');
-                                                        }
-                                                    });
-                                                </script>
                                             </div>
                                         </div>
                                     </div>
@@ -850,26 +726,14 @@
                                             </span>
                                             </div>
                                             <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                                <label class="btn btn-success active" id="sun_open_active">
-                                                    <input type="radio" name="flexible_hours[0][status]" id="sun_open"  value="1" {{ (old('flexible_hours.0.status') == '1') ? 'checked' : '' }} checked="checked">
+                                                <label class="btn btn-success active{{ (old('flexible_hours.0.status') == '0') ? 'btn btn-success' : '' }}">
+                                                    <input type="radio" name="flexible_hours[0][status]"  value="1" {{ (old('flexible_hours.0.status') == '1') ? 'checked' : '' }} checked="checked">
                                                     Open
                                                 </label>
-                                                <label class="btn btn-danger" id="sun_close_active">
-                                                    <input type="radio" name="flexible_hours[0][status]"  id="sun_close" value="0" {{ (old('flexible_hours.0.status') == '0') ? 'checked' : '' }}>
+                                                <label class="btn btn-danger{{ (old('flexible_hours.0.status') == '0') ? ' active' : '' }}">
+                                                    <input type="radio" name="flexible_hours[0][status]"  value="0" {{ (old('flexible_hours.0.status') == '0') ? 'checked' : '' }}>
                                                     Closed
                                                 </label>
-                                                <script type="text/javascript">
-                                                    $(document).ready(function () {
-                                                        var open = document.getElementById("sun_open");
-                                                        var close = document.getElementById("sun_close");
-                                                        if (open.checked == true) {
-                                                            $('#sun_open_active').attr('class','btn btn-success active');
-                                                        }else if(close.checked == true){
-                                                            $('#sun_close_active').attr('class','btn btn-danger active');
-                                                            $('#sun_open_active').attr('class','btn btn-success');
-                                                        }
-                                                    });
-                                                </script>
                                             </div>
                                         </div>
                                     </div>
@@ -951,6 +815,7 @@
                 reader.readAsDataURL(input.files[0]);
             }
         }
+
 
         function removeFile() {
             $('#thumb').attr('src', '/admin/no_photo.png');

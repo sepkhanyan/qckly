@@ -78,7 +78,7 @@ class RestaurantsController extends Controller
             $validator = \Validator::make($request->all(), [
                 'manager_name' => 'required|string|max:255',
                 'manager_email' => 'required|email|max:255',
-                'manager_username' => 'required|string|max:255',
+                'manager_username' => 'required|string',
                 'password' => 'required|string|min:6|confirmed',
                 'category' => 'required',
                 'restaurant_name_en' => 'required|string|max:255',
@@ -102,7 +102,32 @@ class RestaurantsController extends Controller
             }
             if($request->input('opening_type') == 'daily'){
                 $validator = \Validator::make($request->all(), [
-                    'daily_days' => 'required|array'
+                    'daily_days' => 'required|array',
+                    'daily_hours.open' => 'required',
+                    'daily_hours.close' => 'required',
+                ]);
+            }
+            if ($validator->fails()) {
+                return redirect()->back()
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+            if($request->input('opening_type') == 'flexible'){
+                $validator = \Validator::make($request->all(), [
+                    'flexible_hours.1.open' => 'required',
+                    'flexible_hours.1.close' => 'required',
+                    'flexible_hours.2.open' => 'required',
+                    'flexible_hours.2.close' => 'required',
+                    'flexible_hours.3.open' => 'required',
+                    'flexible_hours.3.close' => 'required',
+                    'flexible_hours.4.open' => 'required',
+                    'flexible_hours.4.close' => 'required',
+                    'flexible_hours.5.open' => 'required',
+                    'flexible_hours.5.close' => 'required',
+                    'flexible_hours.6.open' => 'required',
+                    'flexible_hours.6.close' => 'required',
+                    'flexible_hours.0.open' => 'required',
+                    'flexible_hours.0.close' => 'required',
                 ]);
             }
             if ($validator->fails()) {
@@ -217,6 +242,17 @@ class RestaurantsController extends Controller
     {
         $user = Auth::user();
         $restaurant = Restaurant::find($id);
+        // dd();
+            // $week = collect();
+
+        foreach ($restaurant->workingHour as $key => $value) {
+            $week[$value->weekday]=[
+               
+            ];
+
+        }
+            // dd(collect($week));
+
         $areas = Area::all();
 //        $category_restaurants = CategoryRestaurant::where('restaurant_id', $id)->get();
         $categories = RestaurantCategory::whereDoesntHave('categoryRestaurant', function ($query) use ($id) {
@@ -236,6 +272,7 @@ class RestaurantsController extends Controller
             'working' => $working,
             'areas' => $areas,
             'categories' => $categories,
+            'week' => collect($week),
 //            'category_restaurants' => $category_restaurants
         ]);
     }
@@ -251,17 +288,18 @@ class RestaurantsController extends Controller
     {
 //        dd($request->all());
         $validator = \Validator::make($request->all(), [
-            'restaurant_name_en' => 'string|max:255',
-            'restaurant_name_ar' => 'string|max:255',
-            'restaurant_email' => 'string|max:255',
-            'restaurant_telephone' => 'integer',
-            'description_en' => 'string',
-            'description_ar' => 'string',
-            'address_en' => 'string|max:255',
-            'address_ar' => 'string|max:255',
-            'postcode' => 'string|max:255',
-            'latitude' => 'numeric',
-            'longitude' => 'numeric',
+            'category' => 'required',
+            'restaurant_name_en' => 'required|string|max:255',
+            'restaurant_name_ar' => 'required|string|max:255',
+            'restaurant_email' => 'required|string|max:255',
+            'restaurant_telephone' => 'required|integer',
+            'description_en' => 'required|string',
+            'description_ar' => 'required|string',
+            'address_en' => 'required|string|max:255',
+            'address_ar' => 'required|string|max:255',
+            'postcode' => 'required|string|max:255',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
         ]);
         if ($validator->fails()) {
             return redirect()->back()
@@ -277,6 +315,41 @@ class RestaurantsController extends Controller
             } else {
                 return redirect('/restaurants');
             }
+        }
+        if($request->input('opening_type') == 'daily'){
+            $validator = \Validator::make($request->all(), [
+                'daily_days' => 'required|array',
+                'daily_hours.open' => 'required',
+                'daily_hours.close' => 'required',
+            ]);
+        }
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+        if($request->input('opening_type') == 'flexible'){
+            $validator = \Validator::make($request->all(), [
+                'flexible_hours.1.open' => 'required',
+                'flexible_hours.1.close' => 'required',
+                'flexible_hours.2.open' => 'required',
+                'flexible_hours.2.close' => 'required',
+                'flexible_hours.3.open' => 'required',
+                'flexible_hours.3.close' => 'required',
+                'flexible_hours.4.open' => 'required',
+                'flexible_hours.4.close' => 'required',
+                'flexible_hours.5.open' => 'required',
+                'flexible_hours.5.close' => 'required',
+                'flexible_hours.6.open' => 'required',
+                'flexible_hours.6.close' => 'required',
+                'flexible_hours.0.open' => 'required',
+                'flexible_hours.0.close' => 'required',
+            ]);
+        }
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
         }
         $restaurant->name_en = $request->input('restaurant_name_en');
         $restaurant->name_ar = $request->input('restaurant_name_ar');
@@ -346,9 +419,6 @@ class RestaurantsController extends Controller
                         $working->closing_time = Carbon::parse($daily['close']);
                         $working->save();
                     }
-                }else{
-                    $daily = $request->input('daily_hours');
-                    WorkingHour::where('restaurant_id', $id)->update(['opening_time' => Carbon::parse($daily['open']), 'closing_time' => Carbon::parse($daily['close'])]);
                 }
             }elseif ($request->input('opening_type') == 'flexible'){
                 WorkingHour::where('restaurant_id', $id)->delete();
@@ -409,9 +479,8 @@ class RestaurantsController extends Controller
                 $restaurant_images[] = public_path('images/' . $restaurant->image);
             }
             File::delete($restaurant_images);
-            $rest = Restaurant::whereIn('id', $id)->first();
-            $rest->delete();
-            User::where('id', $rest->user_id)->delete();
+            Restaurant::whereIn('id', $id)->delete();
+//            User::where('id', $rest->user_id)->delete();
             return redirect('/restaurants');
         } else {
             return redirect('/restaurants');
