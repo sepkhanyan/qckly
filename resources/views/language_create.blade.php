@@ -119,6 +119,7 @@
         function removeFile() {
             $('#thumb').attr('src', '/admin/flags/no_flag.png');
             $('input[id=image_name]').attr('value', '');
+            $('input[name=image]').val("");
         }
     </script>
 @endsection

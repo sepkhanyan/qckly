@@ -816,9 +816,9 @@
             }
         }
 
-
         function removeFile() {
             $('#thumb').attr('src', '/admin/no_photo.png');
+            $('input[name=image]').val("");
         }
     </script>
 @endsection

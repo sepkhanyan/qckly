@@ -158,6 +158,7 @@
         }
         function removeFile() {
             $('#thumb').attr('src', '/admin/no_photo.png');
+            $('input[name=image]').val("");
         }
     </script>
     <script type="text/javascript">
