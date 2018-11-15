@@ -94,7 +94,6 @@ class AddressesController extends Controller
                     $address->latitude = $DataRequests['latitude'];
                     $address->longitude = $DataRequests['longitude'];
                     $address->save();
-                    UserCart::where('user_id', $user->id)->update(['delivery_address_id' => $address->id]);
                 }
 
                 return response()->json(array(

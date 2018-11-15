@@ -663,7 +663,6 @@ class RestaurantsController extends Controller
             $working_day = Carbon::parse($DataRequests['working_day'])->dayOfWeek;
             $working_time = $DataRequests['working_time'];
             $working_time = Carbon::parse($working_time);
-//            dd($working_time);
             $restaurants = Restaurant::
             where('area_id', $id)
                 ->whereHas('workingHour', function ($query) use ($working_day, $working_time) {
@@ -682,12 +681,19 @@ class RestaurantsController extends Controller
             } else {
                 $restaurants = $restaurants->paginate(20);
             }
+//            dd($restaurants);
 
             if (count($restaurants) > 0) {
                 foreach ($restaurants as $restaurant) {
                     foreach ($restaurant->workingHour as $workingHour) {
                         $opening = $workingHour->opening_time;
                         $closing = $workingHour->closing_time;
+                        $working_type =  $workingHour->type;
+                        if($working_type == '24_7'){
+                            $availability_hours = '24_7';
+                        }else{
+                            $availability_hours = date("g:i A", strtotime($opening)) . ' - ' . date("g:i A", strtotime($closing));
+                        }
                     }
                     if ($restaurant->status == 1) {
                         $status = \Lang::get('message.open');
@@ -743,7 +749,7 @@ class RestaurantsController extends Controller
                         'famous_images' => $famous,
                         'ratings_count' => $rating_count,
                         'review_count' => $review_count,
-                        'availability_hours' => date("g:i A", strtotime($opening)) . ' - ' . date("g:i A", strtotime($closing)),
+//                        'availability_hours' => $availability_hours,
                         'description' => $restaurant_description,
                         'status' => $status,
                         'category' => $category
