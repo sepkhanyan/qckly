@@ -39,7 +39,7 @@
                                 <label for="input_name_en" class="col-sm-3 control-label">Name En</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="name_en" id="input_name_en" class="form-control"
-                                           value="{{ $category->name_en }}">
+                                           value="{{old('name_en') ?? $category->name_en }}">
                                     @if ($errors->has('name_en'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('name_en') }}</strong>
@@ -51,7 +51,7 @@
                                 <label for="input_name_ar" class="col-sm-3 control-label">Name Ar</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="name_ar" id="input_name_ar" class="form-control"
-                                           value="{{ $category->name_ar }}">
+                                           value="{{old('name_ar') ?? $category->name_ar }}">
                                     @if ($errors->has('name_ar'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('name_ar') }}</strong>
@@ -63,7 +63,7 @@
                                 <label for="input_description_en" class="col-sm-3 control-label">Description En</label>
                                 <div class="col-sm-5">
                                     <textarea name="description_en" id="input_description_en" class="form-control"
-                                              rows="7">{{ $category->description_en }}</textarea>
+                                              rows="7">{{old('description_en') ?? $category->description_en }}</textarea>
                                     @if ($errors->has('description_en'))
                                         <span class="help-block">
                                     <strong>{{ $errors->first('description_en') }}</strong>
@@ -75,7 +75,7 @@
                                 <label for="input_description_ar" class="col-sm-3 control-label">Description Ar</label>
                                 <div class="col-sm-5">
                                     <textarea name="description_ar" id="input_description_ar" class="form-control"
-                                              rows="7">{{ $category->description_ar}}</textarea>
+                                              rows="7">{{old('description_en') ?? $category->description_en }}</textarea>
                                     @if ($errors->has('description_ar'))
                                         <span class="help-block">
                                     <strong>{{ $errors->first('description_ar') }}</strong>
@@ -160,8 +160,5 @@
             $('#thumb').attr('src', '/admin/no_photo.png');
             $('input[name=image]').val("");
         }
-    </script>
-    <script type="text/javascript">
-        $('#category ').select2();
     </script>
 @endsection

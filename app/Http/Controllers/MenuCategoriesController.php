@@ -84,6 +84,7 @@ class MenuCategoriesController extends Controller
             'description_en' => 'required|string',
             'name_ar' => 'required|string|max:255',
             'description_ar' => 'required|string',
+            'image' => 'required|image'
         ]);
         $restaurant_id = $request->input('restaurant');
         $user = Auth::user();

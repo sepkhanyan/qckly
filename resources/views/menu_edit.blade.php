@@ -36,7 +36,7 @@
                                 <label for="input_name_en" class="col-sm-3 control-label">Name En</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="name_en" id="input_name_en" class="form-control"
-                                           value="{{ $menu->name_en }}">
+                                           value="{{ old('name_en') ?? $menu->name_en }}">
                                     @if ($errors->has('name_en'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('name_en') }}</strong>
@@ -48,7 +48,7 @@
                                 <label for="input_name_ar" class="col-sm-3 control-label">Name Ar</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="name_ar" id="input_name_ar" class="form-control"
-                                           value="{{ $menu->name_ar }}">
+                                           value="{{ old('name_ar') ?? $menu->name_ar }}">
                                     @if ($errors->has('name_ar'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('name_ar') }}</strong>
@@ -60,7 +60,7 @@
                                 <label for="input_description_en" class="col-sm-3 control-label">Description En</label>
                                 <div class="col-sm-5">
                                     <textarea name="description_en" id="input_description_en" class="form-control"
-                                              rows="5">{{ $menu->description_en }}</textarea>
+                                              rows="5">{{ old('description_en') ?? $menu->description_en }}</textarea>
                                     @if ($errors->has('description_en'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('description_en') }}</strong>
@@ -72,7 +72,7 @@
                                 <label for="input_description_ar" class="col-sm-3 control-label">Description Ar</label>
                                 <div class="col-sm-5">
                                     <textarea name="description_ar" id="input_description_ar" class="form-control"
-                                              rows="5">{{ $menu->description_ar }}</textarea>
+                                              rows="5">{{ old('description_ar') ?? $menu->description_ar }}</textarea>
                                     @if ($errors->has('description_ar'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('description_ar') }}</strong>
@@ -85,7 +85,7 @@
                                 <div class="col-sm-5">
                                     <div class="input-group">
                                         <input type="text" name="price" id="input_price" class="form-control"
-                                               value="{{ $menu->price }}"/>
+                                               value="{{ old('price') ?? $menu->price }}"/>
                                         <span class="input-group-addon">
                                         <i class="fa fa-money"></i>
                                     </span>
@@ -101,25 +101,14 @@
                                 <label for="famous" class="col-sm-3 control-label">Famous</label>
                                 <div class="col-sm-5">
                                     <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                        @if($menu->famous == 1)
-                                            <label class="btn btn-danger">
-                                                <input type="radio" name="famous" value="0">
+                                            <label @if(old('famous')) class="btn btn-danger{{ (old('famous') == '0') ? ' active' : '' }}" @else class="btn btn-danger{{$menu->famous == 0 ? ' active' : ''}} " @endif>
+                                                <input type="radio" name="famous" value="0"  @if(old('famous')) {{ (old('famous') == '0') ? 'checked' : '' }} @else {{$menu->famous == 0 ? 'checked' : ''}} @endif>
                                                 No
                                             </label>
-                                            <label class="btn btn-success active">
-                                                <input type="radio" name="famous" value="1" checked="checked">
+                                            <label @if(old('famous')) class="btn btn-success{{(old('famous') == '1') ? ' active' : '' }}" @else class="btn btn-success{{$menu->famous == 1 ? ' active' : ''}} " @endif>
+                                                <input type="radio" name="famous" value="1" @if(old('famous')) {{ (old('famous') == '1') ? 'checked' : '' }} @else {{$menu->famous == 1 ? 'checked' : ''}} @endif>
                                                 Yes
                                             </label>
-                                        @else
-                                            <label class="btn btn-danger  active">
-                                                <input type="radio" name="famous" value="0" checked="checked">
-                                                No
-                                            </label>
-                                            <label class="btn btn-success">
-                                                <input type="radio" name="famous" value="1">
-                                                Yes
-                                            </label>
-                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -189,25 +178,14 @@
                                 <label for="input-status" class="col-sm-3 control-label">Status</label>
                                 <div class="col-sm-5">
                                     <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                        @if($menu->status == 1)
-                                            <label class="btn btn-danger">
-                                                <input type="radio" name="status" value="0">
-                                                Disabled
-                                            </label>
-                                            <label class="btn btn-success active">
-                                                <input type="radio" name="status" value="1" checked="checked">
-                                                Enabled
-                                            </label>
-                                        @else
-                                            <label class="btn btn-danger active">
-                                                <input type="radio" name="status" value="0" checked="checked">
-                                                Disabled
-                                            </label>
-                                            <label class="btn btn-success ">
-                                                <input type="radio" name="status" value="1">
-                                                Enabled
-                                            </label>
-                                        @endif
+                                        <label @if(old('status')) class="btn btn-danger{{ (old('status') == '0') ? ' active' : '' }}" @else class="btn btn-danger{{$menu->status == 0 ? ' active' : ''}} " @endif>
+                                            <input type="radio" name="status" value="0"  @if(old('status')) {{ (old('status') == '0') ? 'checked' : '' }} @else {{$menu->status == 0 ? 'checked' : ''}} @endif>
+                                            Disabled
+                                        </label>
+                                        <label @if(old('status')) class="btn btn-success{{(old('status') == '1') ? ' active' : '' }}" @else class="btn btn-success{{$menu->status == 1 ? ' active' : ''}} " @endif>
+                                            <input type="radio" name="status" value="1" @if(old('status')) {{ (old('status') == '1') ? 'checked' : '' }} @else {{$menu->status == 1 ? 'checked' : ''}} @endif>
+                                            Enabled
+                                        </label>
                                     </div>
                                 </div>
                             </div>
@@ -232,8 +210,5 @@
             $('#thumb').attr('src', '/admin/no_photo.png');
             $('input[name=image]').val("");
         }
-    </script>
-    <script type="text/javascript">
-        $('#restaurant ').select2();
     </script>
 @endsection

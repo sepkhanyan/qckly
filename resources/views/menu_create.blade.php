@@ -97,12 +97,11 @@
                                 </div>
                             </div>
                             <div class="form-group{{ $errors->has('category') ? ' has-error' : '' }}">
-                                <label for="input_category" class="col-sm-3 control-label">Category</label>
+                                <label for="category" class="col-sm-3 control-label">Category</label>
                                 <div class="col-sm-5">
-                                    <select name="category" id="input_category" class="form-control">
-                                        <option value="">Select category</option>
+                                    <select name="category" id="category" class="form-control">
                                         @foreach ($categories as $category)
-                                            <option value="{{$category->id}}">{{$category->name_en}}</option>
+                                            <option value="{{$category->id}}"{{ old('category') == $category->id ? 'selected':'' }}>{{$category->name_en}}</option>
                                         @endforeach
                                     </select>
                                     @if ($errors->has('category'))
@@ -116,12 +115,12 @@
                                 <label for="famous" class="col-sm-3 control-label">Famous</label>
                                 <div class="col-sm-5">
                                     <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                        <label class="btn btn-danger">
-                                            <input type="radio" name="famous" value="0">
+                                        <label class="btn btn-danger active{{ (old('famous') == '1') ? 'btn btn-danger' : '' }}">
+                                            <input type="radio" name="famous" value="0" {{ (old('famous') == '0') ? 'checked' : '' }} checked="checked">
                                             No
                                         </label>
-                                        <label class="btn btn-success active">
-                                            <input type="radio" name="famous" value="1" checked="checked">
+                                        <label class="btn btn-success{{ (old('famous') == '1') ? ' active' : '' }}">
+                                            <input type="radio" name="famous" value="1" {{ (old('famous') == '1') ? 'checked' : '' }} >
                                             Yes
                                         </label>
                                     </div>
@@ -150,7 +149,7 @@
                             {{--</div>--}}
                             {{--</div>--}}
                             {{--</div>--}}
-                            <div class="form-group">
+                            <div class="form-group{{ $errors->has('image') ? ' has-error' : '' }}">
                                 <label for="input-image" class="col-sm-3 control-label">
                                     Image
                                     <span class="help-block">Select a file to update menu image, otherwise leave blank.</span>
@@ -176,18 +175,23 @@
                                             </p>
                                         </div>
                                     </div>
+                                    @if ($errors->has('image'))
+                                        <span class="help-block">
+                                        <strong>{{ $errors->first('image') }}</strong>
+                                    </span>
+                                    @endif
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="input-status" class="col-sm-3 control-label">Status</label>
                                 <div class="col-sm-5">
                                     <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                        <label class="btn btn-danger">
-                                            <input type="radio" name="status" value="0">
+                                        <label class="btn btn-danger{{ (old('status') == '0') ? ' active' : '' }}">
+                                            <input type="radio" name="status" value="0" {{ (old('status') == '0') ? 'checked' : '' }}>
                                             Disabled
                                         </label>
-                                        <label class="btn btn-success active">
-                                            <input type="radio" name="status" value="1" checked="checked">
+                                        <label class="btn btn-success active{{ (old('status') == '0') ? 'btn btn-success' : '' }}">
+                                            <input type="radio" name="status" value="1" {{ (old('status') == '1') ? 'checked' : '' }} checked="checked">
                                             Enabled
                                         </label>
                                     </div>
@@ -216,6 +220,6 @@
         }
     </script>
     <script type="text/javascript">
-        $('#restaurant ').select2();
+        $('#category ').select2();
     </script>
 @endsection

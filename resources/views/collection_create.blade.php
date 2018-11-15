@@ -93,7 +93,7 @@
                                 <div class="col-sm-5">
                                     <select name="mealtime" id="mealtime" class="form-control">
                                         @foreach ($mealtimes as $mealtime)
-                                            <option value="{{$mealtime->id}}"{{ (collect(old('mealtime'))->contains($mealtime->id)) ? 'selected':'' }}>{{$mealtime->name_en}}</option>
+                                            <option value="{{$mealtime->id}}"{{ old('mealtime') == $mealtime->id ? 'selected':'' }}>{{$mealtime->name_en}}</option>
                                         @endforeach
                                     </select>
                                 </div>

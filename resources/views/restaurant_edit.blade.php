@@ -58,22 +58,12 @@
                                         </span>
                                     @endif
                                 </div>
-                                <script type="text/javascript">
-                                    $(document).ready(function () {
-                                        $('a[title], span[title], button[title]').tooltip({placement: 'bottom'});
-                                        $('select.form-control').select2({minimumResultsForSearch: 10});
-
-                                        $('.alert').alert();
-                                        $('.dropdown-toggle').dropdown();
-
-                                    });
-                                </script>
                             </div>
                             <div class="form-group{{ $errors->has('restaurant_name_en') ? ' has-error' : '' }}">
                                 <label for="input_restaurant_name_en" class="col-sm-3 control-label">Name En</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="restaurant_name_en" id="input_restaurant_name_en"
-                                           class="form-control" value="{{ $restaurant->name_en }}"/>
+                                           class="form-control" value="{{old('restaurant_name_en') ?? $restaurant->name_en }}"/>
                                     @if ($errors->has('restaurant_name_en'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('restaurant_name_en') }}</strong>
@@ -85,7 +75,7 @@
                                 <label for="input_restaurant_name_ar" class="col-sm-3 control-label">Name Ar</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="restaurant_name_ar" id="input_restaurant_name_ar"
-                                           class="form-control" value="{{ $restaurant->name_ar }}"/>
+                                           class="form-control" value="{{old('restaurant_name_ar') ?? $restaurant->name_ar }}"/>
                                     @if ($errors->has('restaurant_name_ar'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('restaurant_name_ar') }}</strong>
@@ -97,7 +87,7 @@
                                 <label for="input_restaurant_email" class="col-sm-3 control-label">Email</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="restaurant_email" id="input_restaurant_email"
-                                           class="form-control" value="{{ $restaurant->email }}"/>
+                                           class="form-control" value="{{old('restaurant_email') ?? $restaurant->email }}}"/>
                                     @if ($errors->has('restaurant_email'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('restaurant_email') }}</strong>
@@ -109,7 +99,7 @@
                                 <label for="input_restaurant_telephone" class="col-sm-3 control-label">Telephone</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="restaurant_telephone" id="input_restaurant_telephone"
-                                           class="form-control" value="{{ $restaurant->telephone }}"/>
+                                           class="form-control" value="{{old('restaurant_telephone') ?? $restaurant->telephone }}"/>
                                     @if ($errors->has('restaurant_telephone'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('restaurant_telephone') }}</strong>
@@ -123,7 +113,7 @@
                                 <label for="input_address_en" class="col-sm-3 control-label">Address En</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="address_en" id="input_address_en" class="form-control"
-                                           value="{{ $restaurant->address_en }}"/>
+                                           value="{{old('address_en') ?? $restaurant->address_en }}"/>
                                     @if ($errors->has('address_en'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('address_en') }}</strong>
@@ -135,7 +125,7 @@
                                 <label for="input_address_ar" class="col-sm-3 control-label">Address Ar</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="address_ar" id="input_address_en" class="form-control"
-                                           value="{{ $restaurant->address_ar }}"/>
+                                           value="{{old('address_ar') ?? $restaurant->address_ar }}"/>
                                     @if ($errors->has('address_ar'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('address_ar') }}</strong>
@@ -161,7 +151,7 @@
                                 <label for="input-postcode" class="col-sm-3 control-label">Postcode</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="postcode" id="input-postcode" class="form-control"
-                                           value="{{ $restaurant->postcode }}"/>
+                                           value="{{old('postcode') ?? $restaurant->postcode }}"/>
                                     @if ($errors->has('postcode'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('postcode') }}</strong>
@@ -173,11 +163,8 @@
                                 <label for="input-country" class="col-sm-3 control-label">City</label>
                                 <div class="col-sm-5">
                                     <select name="country" id="input-country" class="form-control">
-                                        <option value="{{$restaurant->area_id}}">{{$restaurant->area->name_en}}</option>
                                         @foreach($areas as $area)
-                                            @if($restaurant->area_id != $area->id)
-                                                <option value="{{$area->id}}">{{$area->name_en}}</option>
-                                            @endif
+                                                <option value="{{$area->id}}" @if(old('country')){{ old('country') == $area->id ? 'selected':'' }} @else {{$restaurant->area_id == $area->id ? 'selected' : ''}} @endif>{{$area->name_en}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -204,7 +191,7 @@
                                     <label for="lat" class="col-sm-3 control-label">Latitude</label>
                                     <div class="col-sm-5">
                                         <input type="text" name="latitude" id="lat"
-                                               class="form-control" value="{{ $restaurant->latitude}}"/>
+                                               class="form-control" value="{{old('latitude') ?? $restaurant->latitude }}"/>
                                         @if ($errors->has('latitude'))
                                             <span class="help-block">
                                         <strong>{{ $errors->first('latitude') }}</strong>
@@ -217,7 +204,7 @@
                                            class="col-sm-3 control-label">Longitude</label>
                                     <div class="col-sm-5">
                                         <input type="text" name="longitude" id="long"
-                                               class="form-control" value="{{ $restaurant->longitude}}"/>
+                                               class="form-control" value="{{old('longitude') ?? $restaurant->latitude }}"/>
                                         @if ($errors->has('longitude'))
                                             <span class="help-block">
                                         <strong>{{ $errors->first('longitude') }}</strong>
@@ -242,7 +229,7 @@
                                 <label for="input_description_en" class="col-sm-3 control-label">Description En</label>
                                 <div class="col-sm-5">
                                     <textarea name="description_en" id="input_description_en" class="form-control"
-                                              rows="5">{{ $restaurant->description_en }}</textarea>
+                                              rows="5">{{old('description_en') ?? $restaurant->description_en }}</textarea>
                                     @if ($errors->has('description_en'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('description_en') }}</strong>
@@ -254,7 +241,7 @@
                                 <label for="input_description_ar" class="col-sm-3 control-label">Description Ar</label>
                                 <div class="col-sm-5">
                                     <textarea name="description_ar" id="input_description_ar" class="form-control"
-                                              rows="5">{{ $restaurant->description_ar }}</textarea>
+                                              rows="5">{{old('description_ar') ?? $restaurant->description_ar }}</textarea>
                                     @if ($errors->has('description_ar'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('description_ar') }}</strong>

@@ -662,7 +662,7 @@ class RestaurantsController extends Controller
             $id = $DataRequests['area_id'];
             $working_day = Carbon::parse($DataRequests['working_day'])->dayOfWeek;
             $working_time = $DataRequests['working_time'];
-            $working_time = Carbon::parse($working_time);
+            $working_time = date('H:i:s', strtotime($working_time));
             $restaurants = Restaurant::
             where('area_id', $id)
                 ->whereHas('workingHour', function ($query) use ($working_day, $working_time) {
@@ -695,6 +695,7 @@ class RestaurantsController extends Controller
                             $availability_hours = date("g:i A", strtotime($opening)) . ' - ' . date("g:i A", strtotime($closing));
                         }
                     }
+
                     if ($restaurant->status == 1) {
                         $status = \Lang::get('message.open');
                     } else {

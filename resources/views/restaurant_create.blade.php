@@ -114,16 +114,6 @@
                                         </span>
                                     @endif
                                 </div>
-                                <script type="text/javascript">
-                                    $(document).ready(function () {
-                                        $('a[title], span[title], button[title]').tooltip({placement: 'bottom'});
-                                        $('select.form-control').select2({minimumResultsForSearch: 10});
-
-                                        $('.alert').alert();
-                                        $('.dropdown-toggle').dropdown();
-
-                                    });
-                                </script>
                             </div>
                             <div class="form-group{{ $errors->has('restaurant_name_en') ? ' has-error' : '' }}">
                                 <label for="input_restaurant_name_en" class="col-sm-3 control-label">Name En</label>
@@ -254,7 +244,7 @@
                                 <div class="col-sm-5">
                                     <select name="country" id="input-country" class="form-control">
                                         @foreach($areas as $area)
-                                            <option value="{{$area->id}}">{{$area->name_en}}</option>
+                                            <option value="{{$area->id}}"{{ old('country') == $area->id ? 'selected':'' }}>{{$area->name_en}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -509,14 +499,14 @@
                                         <div class="control-group control-group-3">
                                             <div class="input-group">
                                                 <input type="text" name="flexible_hours[1][open]"
-                                                       class="form-control timepicker" value="{{ old('flexible_hours.1.open', '12:00 AM') }}"/>
+                                                       class="form-control timepicker" value="{{ old('flexible_hours.1.open') ?? '12:00 AM' }}"/>
                                                 <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                             </div>
                                             <div class="input-group">
                                                 <input type="text" name="flexible_hours[1][close]"
-                                                       class="form-control timepicker" value="{{ old('flexible_hours.1.close', '11:59 PM') }}"/>
+                                                       class="form-control timepicker" value="{{ old('flexible_hours.1.close') ?? '11:59 PM'}}"/>
                                                 <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
@@ -543,14 +533,14 @@
                                         <div class="control-group control-group-3">
                                             <div class="input-group">
                                                 <input type="text" name="flexible_hours[2][open]"
-                                                       class="form-control timepicker" value="{{ old('flexible_hours.2.open', '12:00 AM') }}"/>
+                                                       class="form-control timepicker" value="{{ old('flexible_hours.2.open') ?? '12:00 AM' }}"/>
                                                 <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                             </div>
                                             <div class="input-group">
                                                 <input type="text" name="flexible_hours[2][close]"
-                                                       class="form-control timepicker" value="{{ old('flexible_hours.2.close', '11:59 PM') }}"/>
+                                                       class="form-control timepicker" value="{{ old('flexible_hours.2.close') ?? '11:59 PM' }}"/>
                                                 <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
@@ -577,14 +567,14 @@
                                         <div class="control-group control-group-3">
                                             <div class="input-group">
                                                 <input type="text" name="flexible_hours[3][open]"
-                                                       class="form-control timepicker" value="{{ old('flexible_hours.3.open', '12:00 AM') }}"/>
+                                                       class="form-control timepicker" value="{{ old('flexible_hours.3.open') ?? '12:00 AM' }}"/>
                                                 <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                             </div>
                                             <div class="input-group">
                                                 <input type="text" name="flexible_hours[3][close]"
-                                                       class="form-control timepicker" value="{{ old('flexible_hours.3.close', '11:59 PM') }}"/>
+                                                       class="form-control timepicker" value="{{ old('flexible_hours.3.close') ?? '11:59 PM' }}"/>
                                                 <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
@@ -611,14 +601,14 @@
                                         <div class="control-group control-group-3">
                                             <div class="input-group">
                                                 <input type="text" name="flexible_hours[4][open]"
-                                                       class="form-control timepicker" value="{{ old('flexible_hours.4.open', '12:00 AM') }}"/>
+                                                       class="form-control timepicker" value="{{ old('flexible_hours.4.open') ?? '12:00 AM' }}"/>
                                                 <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                             </div>
                                             <div class="input-group">
                                                 <input type="text" name="flexible_hours[4][close]"
-                                                       class="form-control timepicker" value="{{ old('flexible_hours.4.close', '11:59 PM') }}"/>
+                                                       class="form-control timepicker" value="{{ old('flexible_hours.4.close') ?? '11:59 PM' }}"/>
                                                 <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
@@ -645,14 +635,14 @@
                                         <div class="control-group control-group-3">
                                             <div class="input-group">
                                                 <input type="text" name="flexible_hours[5][open]"
-                                                       class="form-control timepicker" value="{{ old('flexible_hours.5.open', '12:00 AM') }}"/>
+                                                       class="form-control timepicker" value="{{ old('flexible_hours.5.open') ?? '12:00 AM' }}"/>
                                                 <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                             </div>
                                             <div class="input-group">
                                                 <input type="text" name="flexible_hours[5][close]"
-                                                       class="form-control timepicker" value="{{ old('flexible_hours.5.close', '11:59 PM') }}"/>
+                                                       class="form-control timepicker" value="{{ old('flexible_hours.5.close') ?? '11:59 PM' }}"/>
                                                 <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
@@ -679,14 +669,14 @@
                                         <div class="control-group control-group-3">
                                             <div class="input-group">
                                                 <input type="text" name="flexible_hours[6][open]"
-                                                       class="form-control timepicker" value="{{ old('flexible_hours.6.open', '12:00 AM') }}"/>
+                                                       class="form-control timepicker" value="{{ old('flexible_hours.6.open') ?? '12:00 AM' }}"/>
                                                 <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                             </div>
                                             <div class="input-group">
                                                 <input type="text" name="flexible_hours[6][close]"
-                                                       class="form-control timepicker" value="{{ old('flexible_hours.6.close', '11:59 PM') }}"/>
+                                                       class="form-control timepicker" value="{{ old('flexible_hours.6.close') ?? '11:59 PM' }}"/>
                                                 <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
@@ -713,14 +703,14 @@
                                         <div class="control-group control-group-3">
                                             <div class="input-group">
                                                 <input type="text" name="flexible_hours[0][open]"
-                                                       class="form-control timepicker" value="{{ old('flexible_hours.0.open', '12:00 AM') }}"/>
+                                                       class="form-control timepicker" value="{{ old('flexible_hours.0.open') ?? '12:00 AM' }}"/>
                                                 <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                             </div>
                                             <div class="input-group">
                                                 <input type="text" name="flexible_hours[0][close]"
-                                                       class="form-control timepicker" value="{{ old('flexible_hours.0.close', '11:59 PM') }}"/>
+                                                       class="form-control timepicker" value="{{ old('flexible_hours.0.close') ?? '11:59 PM' }}"/>
                                                 <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
@@ -820,5 +810,8 @@
             $('#thumb').attr('src', '/admin/no_photo.png');
             $('input[name=image]').val("");
         }
+    </script>
+    <script type="text/javascript">
+        $('#category ').select2();
     </script>
 @endsection
