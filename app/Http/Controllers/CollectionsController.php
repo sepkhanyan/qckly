@@ -189,20 +189,19 @@ class CollectionsController extends Controller
         }
         $collection->save();
         if ($collection->category_id == 1) {
-//            $menu_items = $request['menu_item'];
-            foreach ($request['menu_item'] as $key => $value) {
+            foreach ($request['menu_item'] as $menu_item) {
                 $collection_item = new CollectionItem();
-                $collection_item->item_id = $request['menu_item'][$key];
-                $collection_item->quantity = $request['menu_item_qty'][$key];
+                $collection_item->item_id = $menu_item['id'];
+                $collection_item->quantity = $menu_item['qty'];
                 $collection_item->collection_id = $collection->id;
                 $collection_item->save();
             }
         } else {
-//            $menu_items = $request['menu_item'];
-            foreach ($request['menu_item'] as $key => $value) {
+
+            foreach ($request['menu_item'] as $menu) {
                 $collection_item = new CollectionItem();
-                $collection_item->item_id = $request['menu_item'][$key];
-                $menu_item = Menu::where('id', $request['menu_item'][$key])->first();
+                $collection_item->item_id = $menu;
+                $menu_item = Menu::where('id', $menu)->first();
                 $category = MenuCategory::where('id', $menu_item->category_id)->first();
                 $collection_item->collection_menu_id = $category->id;
                 $collection_item->collection_id = $collection->id;
@@ -302,14 +301,14 @@ class CollectionsController extends Controller
         }
         $validator = \Validator::make($request->all(), [
 //            'category' => 'integer',
-            'name_en' => 'string|max:255',
-            'description_en' => 'string',
-            'name_ar' => 'string|max:255',
-            'description_ar' => 'string',
-            'service_provide_en' => 'string',
-            'service_provide_ar' => 'string',
-            'service_presentation_en' => 'string',
-            'service_presentation_ar' => 'string',
+            'name_en' => 'required|string|max:255',
+            'description_en' => 'required|string',
+            'name_ar' => 'required|string|max:255',
+            'description_ar' => 'required|string',
+            'service_provide_en' => 'required|string',
+            'service_provide_ar' => 'required|string',
+            'service_presentation_en' => 'required|string',
+            'service_presentation_ar' => 'required|string',
         ]);
         if ($validator->fails()) {
             return redirect()->back()
@@ -362,47 +361,14 @@ class CollectionsController extends Controller
             $collection->requirements_en = $request->input('requirements_en');
             $collection->requirements_ar = $request->input('requirements_ar');
         }
-//        $request->validate([
-//            'category' => 'integer',
-//            'name_en' => 'string|max:255',
-//            'description_en' => 'string',
-//            'name_ar' => 'string|max:255',
-//            'description_ar' => 'string',
-//            'service_provide_en' => 'string',
-//            'service_provide_ar' => 'string',
-//            'service_presentation_en' => 'string',
-//            'service_presentation_ar' => 'string',
-//        ]);
-//        $collection->name_en = $request->input('name_en');
-//        $collection->name_ar = $request->input('name_ar');
-//        $collection->description_en = $request->input('description_en');
-//        $collection->description_ar = $request->input('description_ar');
-//        $collection->mealtime_id = $request->input('mealtime');
-//        $collection->female_caterer_available = $request->input('female_caterer_available');
-//        $collection->service_provide_en = $request->input('service_provide_en');
-//        $collection->service_provide_ar = $request->input('service_provide_ar');
-//        $collection->service_presentation_en = $request->input('service_presentation_en');
-//        $collection->service_presentation_ar = $request->input('service_presentation_ar');
-//        $collection->setup_time = $request->input('setup_time');
-//        $collection->max_time = $request->input('max_time');
-//        $collection->requirements_en = $request->input('requirements_en');
-//        $collection->requirements_ar = $request->input('requirements_ar');
-//        $collection->is_available = $request->input('is_available');
-//        $collection->price = $request->input('collection_price');
-//        $collection->max_qty = $request->input('max_quantity');
-//        $collection->min_qty = $request->input('min_quantity');
-////        $collection->persons_max_count = $request->input('persons_max_count');
-//        $collection->min_serve_to_person = $request->input('min_serve_to_person');
-//        $collection->max_serve_to_person = $request->input('max_serve_to_person');
-//        $collection->allow_person_increase = $request->input('allow_person_increase');
         $collection->save();
         if (isset($request['menu_item'])) {
             CollectionItem::where('collection_id', $collection->id)->delete();
             if ($collection->category_id == 1) {
-                foreach ($request['menu_item'] as $key => $value) {
+                foreach ($request['menu_item'] as $menu_item) {
                     $collection_item = new CollectionItem();
-                    $collection_item->item_id = $request['menu_item'][$key];
-                    $collection_item->quantity = $request['menu_item_qty'][$key];
+                    $collection_item->item_id = $menu_item['id'];
+                    $collection_item->quantity = $menu_item['qty'];
                     $collection_item->collection_id = $collection->id;
                     $collection_item->save();
                 }

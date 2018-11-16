@@ -85,11 +85,8 @@
                                 <label for="input_mealtime" class="col-sm-3 control-label">Mealtime</label>
                                 <div class="col-sm-5">
                                     <select name="mealtime" id="mealtime" class="form-control">
-                                        <option value="{{$collection->mealtime_id}}">{{$collection->mealtime->name_en}}</option>
                                         @foreach ($mealtimes as $mealtime)
-                                            @if($collection->mealtime_id != $mealtime->id)
-                                                <option value="{{$mealtime->id}}" {{ (collect(old('mealtime'))->contains($mealtime->id)) ? 'selected':'' }}>{{$mealtime->name_en}}</option>
-                                            @endif
+                                                <option value="{{$mealtime->id}}"  @if(old('mealtime')){{ old('mealtime') == $mealtime->id ? 'selected':'' }} @else {{$collection->mealtime_id == $mealtime->id ? 'selected' : ''}} @endif>{{$mealtime->name_en}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -99,25 +96,28 @@
                                     Available</label>
                                 <div class="col-sm-5">
                                     <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                        @if($collection->female_caterer_available == 0)
-                                            <label class="btn btn-danger active">
-                                                <input type="radio" name="female_caterer_available" value="0"
-                                                       checked="checked">
-                                                NO
+                                        @if(old('female_caterer_available') !== null)
+                                            <label class="btn btn-success{{ (old('female_caterer_available') == '1') ? ' active' : '' }}">
+                                                <input type="radio" name="female_caterer_available"
+                                                       value="1" {{ (old('female_caterer_available') == '1') ? 'checked' : '' }}>
+                                                Yes
                                             </label>
-                                            <label class="btn btn-success">
-                                                <input type="radio" name="female_caterer_available" value="1">
-                                                YES
+                                            <label class="btn btn-danger{{ (old('female_caterer_available') == '0') ? ' active' : '' }}">
+                                                <input type="radio" name="female_caterer_available"
+                                                       value="0" {{ (old('female_caterer_available') == '0') ? 'checked' : '' }}>
+                                               No
                                             </label>
                                         @else
-                                            <label class="btn btn-danger ">
-                                                <input type="radio" name="female_caterer_available" value="0">
-                                                NO
+                                            <label class="btn btn-success{{$collection->female_caterer_available == 1 ? ' active' : ''}}">
+                                                <input type="radio"
+                                                       name="female_caterer_available" value="1" {{$collection->female_caterer_available == 1 ? 'checked' : ''}} >
+                                                Yes
                                             </label>
-                                            <label class="btn btn-success active">
-                                                <input type="radio" name="female_caterer_available" value="1"
-                                                       checked="checked">
-                                                YES
+                                            <label class="btn btn-danger{{$collection->female_caterer_available == 0 ? ' active' : ''}} ">
+                                                <input type="radio"
+                                                       name="female_caterer_available"
+                                                       value="0" {{$collection->female_caterer_available == 0 ? 'checked' : ''}} >
+                                                No
                                             </label>
                                         @endif
                                     </div>
@@ -179,29 +179,33 @@
                                 <label for="is_available" class="col-sm-3 control-label">Is Available</label>
                                 <div class="col-sm-5">
                                     <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                        @if($collection->is_available == 0)
-                                            <label class="btn btn-danger active">
-                                                <input type="radio" name="is_available" value="0" checked="checked">
-                                                NO
-                                            </label>
-                                            <label class="btn btn-success">
-                                                <input type="radio" name="is_available" value="1">
-                                                YES
-                                            </label>
-                                        @else
-                                            <label class="btn btn-danger ">
-                                                <input type="radio" name="is_available" value="0">
-                                                NO
-                                            </label>
-                                            <label class="btn btn-success active">
-                                                <input type="radio" name="is_available" value="1" checked="checked">
-                                                YES
-                                            </label>
-                                        @endif
+                                            @if(old('is_available') !== null)
+                                                <label class="btn btn-success{{ (old('is_available') == '1') ? ' active' : '' }}">
+                                                    <input type="radio" name="is_available"
+                                                           value="1" {{ (old('is_available') == '1') ? 'checked' : '' }}>
+                                                    Yes
+                                                </label>
+                                                <label class="btn btn-danger{{ (old('is_available') == '0') ? ' active' : '' }}">
+                                                    <input type="radio" name="is_available"
+                                                           value="0" {{ (old('is_available') == '0') ? 'checked' : '' }}>
+                                                    No
+                                                </label>
+                                            @else
+                                                <label class="btn btn-success{{$collection->is_available == 1 ? ' active' : ''}}">
+                                                    <input type="radio"
+                                                           name="is_available" value="1" {{$collection->is_available == 1 ? 'checked' : ''}} >
+                                                    Yes
+                                                </label>
+                                                <label class="btn btn-danger{{$collection->is_available == 0 ? ' active' : ''}} ">
+                                                    <input type="radio"
+                                                           name="is_available"
+                                                           value="0" {{$collection->is_available == 0 ? 'checked' : ''}} >
+                                                    No
+                                                </label>
+                                            @endif
                                     </div>
                                 </div>
                             </div>
-
                             @if($collection->category_id != 4)
                                 <div class="form-group{{ $errors->has('collection_price') ? ' has-error' : '' }}">
                                     <label for="input-price" class="col-sm-3 control-label">Price</label>
@@ -293,27 +297,30 @@
                                         Increase</label>
                                     <div class="col-sm-5">
                                         <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                            @if($collection->allow_person_increase == 0)
-                                                <label class="btn btn-danger active">
-                                                    <input type="radio" name="allow_person_increase" value="0"
-                                                           checked="checked">
-                                                    NO
-                                                </label>
-                                                <label class="btn btn-success">
-                                                    <input type="radio" name="allow_person_increase" value="1">
-                                                    YES
-                                                </label>
-                                            @else
-                                                <label class="btn btn-danger">
-                                                    <input type="radio" name="allow_person_increase" value="0">
-                                                    NO
-                                                </label>
-                                                <label class="btn btn-success  active">
-                                                    <input type="radio" name="allow_person_increase" value="1"
-                                                           checked="checked">
-                                                    YES
-                                                </label>
-                                            @endif
+                                                @if(old('allow_person_increase') !== null)
+                                                    <label class="btn btn-success{{ (old('allow_person_increase') == '1') ? ' active' : '' }}">
+                                                        <input type="radio" name="allow_person_increase"
+                                                               value="1" {{ (old('allow_person_increase') == '1') ? 'checked' : '' }}>
+                                                        Yes
+                                                    </label>
+                                                    <label class="btn btn-danger{{ (old('allow_person_increase') == '0') ? ' active' : '' }}">
+                                                        <input type="radio" name="allow_person_increase"
+                                                               value="0" {{ (old('allow_person_increase') == '0') ? 'checked' : '' }}>
+                                                        No
+                                                    </label>
+                                                @else
+                                                    <label class="btn btn-success{{$collection->allow_person_increase == 1 ? ' active' : ''}}">
+                                                        <input type="radio"
+                                                               name="allow_person_increase" value="1" {{$collection->allow_person_increase == 1 ? 'checked' : ''}} >
+                                                        Yes
+                                                    </label>
+                                                    <label class="btn btn-danger{{$collection->is_available == 0 ? ' active' : ''}} ">
+                                                        <input type="radio"
+                                                               name="allow_person_increase"
+                                                               value="0" {{$collection->allow_person_increase == 0 ? 'checked' : ''}} >
+                                                        No
+                                                    </label>
+                                                @endif
                                         </div>
                                     </div>
                                 </div>
@@ -523,9 +530,9 @@
                                                                     <div class="checkbox" id="{{$menu->id}}">
                                                                         <label style="font-size: medium">
                                                                             <input id="item{{$menu->id}}" type="checkbox"
-                                                                                   name="menu_item[]"
+                                                                                   name="menu_item[{{$menu->id}}][id]"
                                                                                    value="{{$menu->id}}"
-                                                                                   {{ (collect(old('menu_item'))->contains($menu->id)) ? 'checked':'' }} onclick="myFunction('{{$menu->id}}')">{{$menu->name_en}}
+                                                                                   {{ (collect(old('menu_item.' . $menu->id . '.id'))->contains($menu->id)) ? 'checked':'' }} onclick="myFunction('{{$menu->id}}')">{{$menu->name_en}}
                                                                         </label>
                                                                     </div>
                                                                 </div>
@@ -533,8 +540,9 @@
                                                                     <div class="control-group control-group-3">
                                                                         <div class="col-xs-5">
                                                                             <input type="number"
-                                                                                   name="menu_item_qty[]" id="qty{{$menu->id}}" style="display: none" disabled
-                                                                                   class="form-control" min="1" value="1">
+                                                                                   name="menu_item[{{$menu->id}}][qty]" id="qty{{$menu->id}}"
+                                                                                   style="display: none" disabled
+                                                                                   class="form-control" min="1" value="{{old('menu_item.' . $menu->id . '.qty') ?? 1}}">
                                                                         </div>
                                                                     </div>
                                                                 </div>

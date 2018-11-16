@@ -103,14 +103,13 @@
                                     Available</label>
                                 <div class="col-sm-5">
                                     <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                        <label class="btn btn-danger active">
-                                            <input type="radio" name="female_caterer_available" value="0"
-                                                   checked="checked" >
-                                            NO
+                                        <label class="btn btn-success active{{ (old('female_caterer_available') == '0') ? 'btn btn-success' : '' }}">
+                                            <input type="radio" name="female_caterer_available" value="1" {{ (old('female_caterer_available') == '1') ? 'checked' : '' }} checked="checked">
+                                            Yes
                                         </label>
-                                        <label class="btn btn-success">
-                                            <input type="radio" name="female_caterer_available" value="1" >
-                                            YES
+                                        <label class="btn btn-danger{{ (old('female_caterer_available') == '0') ? ' active' : '' }}">
+                                            <input type="radio" name="female_caterer_available" value="0" {{ (old('female_caterer_available') == '0') ? 'checked' : '' }}>
+                                            No
                                         </label>
                                     </div>
                                 </div>
@@ -174,13 +173,13 @@
                                 <label for="is_available" class="col-sm-3 control-label">Is Available</label>
                                 <div class="col-sm-5">
                                     <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                        <label class="btn btn-danger active">
-                                            <input type="radio" name="is_available" value="0" checked="checked">
-                                            NO
+                                        <label class="btn btn-success active{{ (old('is_available') == '0') ? 'btn btn-success' : '' }}">
+                                            <input type="radio" name="is_available" value="1" {{ (old('is_available') == '1') ? 'checked' : '' }} checked="checked">
+                                            Yes
                                         </label>
-                                        <label class="btn btn-success">
-                                            <input type="radio" name="is_available" value="1">
-                                            YES
+                                        <label class="btn btn-danger{{ (old('is_available') == '0') ? ' active' : '' }}">
+                                            <input type="radio" name="is_available" value="0" {{ (old('is_available') == '0') ? 'checked' : '' }}>
+                                            No
                                         </label>
                                     </div>
                                 </div>
@@ -275,14 +274,13 @@
                                         Increase</label>
                                     <div class="col-sm-5">
                                         <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                            <label class="btn btn-danger active">
-                                                <input type="radio" name="allow_person_increase" value="0"
-                                                       checked="checked">
-                                                NO
+                                            <label class="btn btn-success active{{ (old('allow_person_increase') == '0') ? 'btn btn-success' : '' }}">
+                                                <input type="radio" name="allow_person_increase" value="1" {{ (old('allow_person_increase') == '1') ? 'checked' : '' }} checked="checked">
+                                                Yes
                                             </label>
-                                            <label class="btn btn-success">
-                                                <input type="radio" name="allow_person_increase" value="1">
-                                                YES
+                                            <label class="btn btn-danger{{ (old('allow_person_increase') == '0') ? ' active' : '' }}">
+                                                <input type="radio" name="allow_person_increase" value="0" {{ (old('allow_person_increase') == '0') ? 'checked' : '' }}>
+                                                No
                                             </label>
                                         </div>
                                     </div>
@@ -383,12 +381,12 @@
                                                 <div class="input-group">
                                                     <input type="number"
                                                            name="menu[{{$menu_category->id}}][min_qty]"
-                                                           class="form-control" min="1" value="1">
+                                                           class="form-control" min="1" value="{{old('menu.' . $menu_category->id . '.min_qty') ?? 1}}">
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number"
                                                            name="menu[{{$menu_category->id}}][max_qty]"
-                                                           class="form-control" min="1" value="1">
+                                                           class="form-control" min="1" value="{{old('menu.' . $menu_category->id . '.max_qty') ?? 1}}">
                                                 </div>
                                             @endif
                                         </div>
@@ -402,9 +400,9 @@
                                                 <div class="checkbox" id="{{$menu->id}}">
                                                     <label style="font-size: medium">
                                                         <input id="item{{$menu->id}}" type="checkbox"
-                                                               name="menu_item[]"
+                                                               name="menu_item[{{$menu->id}}][id]"
                                                                value="{{$menu->id}}"
-                                                               {{ (collect(old('menu_item'))->contains($menu->id)) ? 'checked':'' }} onclick="myFunction('{{$menu->id}}')">{{$menu->name_en}}
+                                                               {{ (collect(old('menu_item.' . $menu->id . '.id'))->contains($menu->id)) ? 'checked':'' }} onclick="myFunction('{{$menu->id}}')">{{$menu->name_en}}
                                                     </label>
                                                 </div>
                                             </div>
@@ -412,9 +410,9 @@
                                                 <div class="control-group control-group-3">
                                                     <div class="col-xs-2">
                                                         <input type="number"
-                                                               name="menu_item_qty[]" id="qty{{$menu->id}}"
+                                                               name="menu_item[{{$menu->id}}][qty]" id="qty{{$menu->id}}"
                                                                style="display: none" disabled
-                                                               class="form-control" min="1" value="1">
+                                                               class="form-control" min="1" value="{{old('menu_item.' . $menu->id . '.qty') ?? 1}}">
                                                     </div>
                                                 </div>
                                             </div>

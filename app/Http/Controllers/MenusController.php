@@ -210,13 +210,19 @@ class MenusController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
+//        dd($request->all());
+        $validator = \Validator::make($request->all(), [
             'name_en' => 'required|string|max:255',
             'description_en' => 'required|string',
             'name_ar' => 'required|string|max:255',
             'description_ar' => 'required|string',
             'price' => 'required|numeric',
         ]);
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
         $user = Auth::user();
         $menu = Menu::find($id);
         $restaurant_id = $request->input('restaurant');

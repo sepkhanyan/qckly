@@ -41,7 +41,8 @@
                             <div class="form-group{{ $errors->has('category') ? ' has-error' : '' }}">
                                 <label for="category" class="col-sm-3 control-label">Category</label>
                                 <div class="col-sm-5">
-                                    <select name="category[]" class="form-control" placeholder="Select Category"
+                                    <select name="category[]" id="category" class="form-control"
+                                            placeholder="Select Category"
                                             multiple>
                                         @foreach($restaurant->categoryRestaurant as $category_restaurant)
                                             <option
@@ -63,7 +64,8 @@
                                 <label for="input_restaurant_name_en" class="col-sm-3 control-label">Name En</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="restaurant_name_en" id="input_restaurant_name_en"
-                                           class="form-control" value="{{old('restaurant_name_en') ?? $restaurant->name_en }}"/>
+                                           class="form-control"
+                                           value="{{old('restaurant_name_en') ?? $restaurant->name_en }}"/>
                                     @if ($errors->has('restaurant_name_en'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('restaurant_name_en') }}</strong>
@@ -75,7 +77,8 @@
                                 <label for="input_restaurant_name_ar" class="col-sm-3 control-label">Name Ar</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="restaurant_name_ar" id="input_restaurant_name_ar"
-                                           class="form-control" value="{{old('restaurant_name_ar') ?? $restaurant->name_ar }}"/>
+                                           class="form-control"
+                                           value="{{old('restaurant_name_ar') ?? $restaurant->name_ar }}"/>
                                     @if ($errors->has('restaurant_name_ar'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('restaurant_name_ar') }}</strong>
@@ -87,7 +90,8 @@
                                 <label for="input_restaurant_email" class="col-sm-3 control-label">Email</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="restaurant_email" id="input_restaurant_email"
-                                           class="form-control" value="{{old('restaurant_email') ?? $restaurant->email }}}"/>
+                                           class="form-control"
+                                           value="{{old('restaurant_email') ?? $restaurant->email }}"/>
                                     @if ($errors->has('restaurant_email'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('restaurant_email') }}</strong>
@@ -99,7 +103,8 @@
                                 <label for="input_restaurant_telephone" class="col-sm-3 control-label">Telephone</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="restaurant_telephone" id="input_restaurant_telephone"
-                                           class="form-control" value="{{old('restaurant_telephone') ?? $restaurant->telephone }}"/>
+                                           class="form-control"
+                                           value="{{old('restaurant_telephone') ?? $restaurant->telephone }}"/>
                                     @if ($errors->has('restaurant_telephone'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('restaurant_telephone') }}</strong>
@@ -164,7 +169,7 @@
                                 <div class="col-sm-5">
                                     <select name="country" id="input-country" class="form-control">
                                         @foreach($areas as $area)
-                                                <option value="{{$area->id}}" @if(old('country')){{ old('country') == $area->id ? 'selected':'' }} @else {{$restaurant->area_id == $area->id ? 'selected' : ''}} @endif>{{$area->name_en}}</option>
+                                            <option value="{{$area->id}}" @if(old('country')){{ old('country') == $area->id ? 'selected':'' }} @else {{$restaurant->area_id == $area->id ? 'selected' : ''}} @endif>{{$area->name_en}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -191,7 +196,8 @@
                                     <label for="lat" class="col-sm-3 control-label">Latitude</label>
                                     <div class="col-sm-5">
                                         <input type="text" name="latitude" id="lat"
-                                               class="form-control" value="{{old('latitude') ?? $restaurant->latitude }}"/>
+                                               class="form-control"
+                                               value="{{old('latitude') ?? $restaurant->latitude }}"/>
                                         @if ($errors->has('latitude'))
                                             <span class="help-block">
                                         <strong>{{ $errors->first('latitude') }}</strong>
@@ -204,7 +210,8 @@
                                            class="col-sm-3 control-label">Longitude</label>
                                     <div class="col-sm-5">
                                         <input type="text" name="longitude" id="long"
-                                               class="form-control" value="{{old('longitude') ?? $restaurant->latitude }}"/>
+                                               class="form-control"
+                                               value="{{old('longitude') ?? $restaurant->latitude }}"/>
                                         @if ($errors->has('longitude'))
                                             <span class="help-block">
                                         <strong>{{ $errors->first('longitude') }}</strong>
@@ -312,17 +319,20 @@
                                 <div class="col-sm-5">
                                     <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
                                         @if(old('opening_type'))
-                                            <label class="btn btn-success{{ (old('opening_type') == '24_7') ? 'btn btn-success active' : '' }}" id="daily-flexible-hide">
+                                            <label class="btn btn-success{{ (old('opening_type') == '24_7') ? ' active' : '' }}"
+                                                   id="daily-flexible-hide">
                                                 <input type="radio" name="opening_type" id="24_7"
                                                        value="24_7" {{ (old('opening_type') == '24_7') ? 'checked' : '' }}>
                                                 24/7
                                             </label>
-                                            <label class="btn btn-success{{ (old('opening_type') == 'daily') ? 'btn btn-success active' : '' }}" id="opening-daily-show">
+                                            <label class="btn btn-success{{ (old('opening_type') == 'daily') ? ' active' : '' }}"
+                                                   id="opening-daily-show">
                                                 <input type="radio" name="opening_type" id="daily"
                                                        value="daily" {{ (old('opening_type') == 'daily') ? 'checked' : '' }}>
                                                 Daily
                                             </label>
-                                            <label class="btn btn-success{{ (old('opening_type') == 'flexible') ? 'btn btn-success active' : '' }}" id="opening-flexible-show">
+                                            <label class="btn btn-success{{ (old('opening_type') == 'flexible') ? ' active' : '' }}"
+                                                   id="opening-flexible-show">
                                                 <input type="radio" name="opening_type" id="flexible"
                                                        value="flexible" {{ (old('opening_type') == 'flexible') ? 'checked' : '' }}>
                                                 Flexible
@@ -372,76 +382,83 @@
                                 </div>
                             </div>
                             <div id="opening-daily" style="display: none;">
-                                    <div class="form-group">
-                                        <label for="input-opening-days" class="col-sm-3 control-label"></label>
-                                        <div class="col-sm-5{{ $errors->has('daily_days') ? ' has-error' : '' }}">
-                                            <div class="btn-group btn-group-toggle btn-group-7" data-toggle="buttons">
-                                                <label @if(old('daily_days') )  class="btn btn-default{{ (collect(old('daily_days'))->contains(1)) ? ' active':'' }}"  @else class="btn btn-default {{ $week->has('1') ? ' active' : '' }}" @endif >
-                                                    <input type="checkbox" name="daily_days[]"
-                                                           value="1" @if(old('daily_days') )  {{ (collect(old('daily_days'))->contains(1)) ? 'checked':'' }}  @else {{ $week->has('1') ? 'checked' : '' }} @endif >
-                                                    Mon
-                                                </label>
-                                                <label @if(old('daily_days') )  class="btn btn-default{{ (collect(old('daily_days'))->contains(2)) ? ' active':'' }}"  @else class="btn btn-default {{ $week->has('2') ? ' active' : '' }}" @endif >
-                                                    <input type="checkbox" name="daily_days[]"
-                                                                                        value="2" @if(old('daily_days') )  {{ (collect(old('daily_days'))->contains(2)) ? 'checked':'' }}  @else {{ $week->has('2') ? 'checked' : '' }} @endif>
-                                                    Tue
-                                                </label>
-                                                <label @if(old('daily_days') )  class="btn btn-default{{ (collect(old('daily_days'))->contains(3)) ? ' active':'' }}"  @else class="btn btn-default {{ $week->has('3') ? ' active' : '' }}" @endif >
-                                                    <input type="checkbox" name="daily_days[]"
-                                                           value="3" @if(old('daily_days') )  {{ (collect(old('daily_days'))->contains(3)) ? 'checked':'' }}  @else {{ $week->has('3') ? 'checked' : '' }} @endif>
-                                                    Wed
-                                                </label>
-                                                <label @if(old('daily_days') )  class="btn btn-default{{ (collect(old('daily_days'))->contains(4)) ? ' active':'' }}"  @else class="btn btn-default {{ $week->has('4') ? ' active' : '' }}" @endif >
-                                                    <input type="checkbox" name="daily_days[]"
-                                                           value="4" @if(old('daily_days') )  {{ (collect(old('daily_days'))->contains(4)) ? 'checked':'' }}  @else {{ $week->has('4') ? 'checked' : '' }} @endif>
-                                                    Thu
-                                                </label>
-                                                <label @if(old('daily_days') )  class="btn btn-default{{ (collect(old('daily_days'))->contains(5)) ? ' active':'' }}"  @else class="btn btn-default {{ $week->has('5') ? ' active' : '' }}" @endif >
-                                                    <input type="checkbox" name="daily_days[]"
-                                                           value="5" @if(old('daily_days') )  {{ (collect(old('daily_days'))->contains(5)) ? 'checked':'' }}  @else {{ $week->has('5') ? 'checked' : '' }} @endif>
-                                                    Fri
-                                                </label>
-                                                <label @if(old('daily_days') )  class="btn btn-default{{ (collect(old('daily_days'))->contains(6)) ? ' active':'' }}"  @else class="btn btn-default {{ $week->has('6') ? ' active' : '' }}" @endif >
-                                                    <input type="checkbox" name="daily_days[]"
-                                                           value="6" @if(old('daily_days') )  {{ (collect(old('daily_days'))->contains(6)) ? 'checked':'' }}  @else {{ $week->has('6') ? 'checked' : '' }} @endif>
-                                                    Sat
-                                                </label>
-                                                <label @if(old('daily_days') )  class="btn btn-default{{ (collect(old('daily_days'))->contains(0)) ? ' active':'' }}"  @else class="btn btn-default {{ $week->has('0') ? ' active' : '' }}" @endif >
-                                                    <input type="checkbox" name="daily_days[]"
-                                                           value="0" @if(old('daily_days') )  {{ (collect(old('daily_days'))->contains(0)) ? 'checked':'' }}  @else {{ $week->has('0') ? 'checked' : '' }} @endif>
-                                                    Sun
-                                                </label>
-                                            </div>
-                                            @if ($errors->has('daily_days'))
-                                                <span class="help-block">
+                                <div class="form-group">
+                                    <label for="input-opening-days" class="col-sm-3 control-label"></label>
+                                    <div class="col-sm-5{{ $errors->has('daily_days') ? ' has-error' : '' }}">
+                                        <div class="btn-group btn-group-toggle btn-group-7" data-toggle="buttons">
+                                            <label @if(old('daily_days') )  class="btn btn-default{{ (collect(old('daily_days'))->contains(1)) ? ' active':'' }}"
+                                                   @else class="btn btn-default {{ $week->has('1') ? ' active' : '' }}" @endif >
+                                                <input type="checkbox" name="daily_days[]"
+                                                       value="1" @if(old('daily_days') )  {{ (collect(old('daily_days'))->contains(1)) ? 'checked':'' }}  @else {{ $week->has('1') ? 'checked' : '' }} @endif >
+                                                Mon
+                                            </label>
+                                            <label @if(old('daily_days') )  class="btn btn-default{{ (collect(old('daily_days'))->contains(2)) ? ' active':'' }}"
+                                                   @else class="btn btn-default {{ $week->has('2') ? ' active' : '' }}" @endif >
+                                                <input type="checkbox" name="daily_days[]"
+                                                       value="2" @if(old('daily_days') )  {{ (collect(old('daily_days'))->contains(2)) ? 'checked':'' }}  @else {{ $week->has('2') ? 'checked' : '' }} @endif>
+                                                Tue
+                                            </label>
+                                            <label @if(old('daily_days') )  class="btn btn-default{{ (collect(old('daily_days'))->contains(3)) ? ' active':'' }}"
+                                                   @else class="btn btn-default {{ $week->has('3') ? ' active' : '' }}" @endif >
+                                                <input type="checkbox" name="daily_days[]"
+                                                       value="3" @if(old('daily_days') )  {{ (collect(old('daily_days'))->contains(3)) ? 'checked':'' }}  @else {{ $week->has('3') ? 'checked' : '' }} @endif>
+                                                Wed
+                                            </label>
+                                            <label @if(old('daily_days') )  class="btn btn-default{{ (collect(old('daily_days'))->contains(4)) ? ' active':'' }}"
+                                                   @else class="btn btn-default {{ $week->has('4') ? ' active' : '' }}" @endif >
+                                                <input type="checkbox" name="daily_days[]"
+                                                       value="4" @if(old('daily_days') )  {{ (collect(old('daily_days'))->contains(4)) ? 'checked':'' }}  @else {{ $week->has('4') ? 'checked' : '' }} @endif>
+                                                Thu
+                                            </label>
+                                            <label @if(old('daily_days') )  class="btn btn-default{{ (collect(old('daily_days'))->contains(5)) ? ' active':'' }}"
+                                                   @else class="btn btn-default {{ $week->has('5') ? ' active' : '' }}" @endif >
+                                                <input type="checkbox" name="daily_days[]"
+                                                       value="5" @if(old('daily_days') )  {{ (collect(old('daily_days'))->contains(5)) ? 'checked':'' }}  @else {{ $week->has('5') ? 'checked' : '' }} @endif>
+                                                Fri
+                                            </label>
+                                            <label @if(old('daily_days') )  class="btn btn-default{{ (collect(old('daily_days'))->contains(6)) ? ' active':'' }}"
+                                                   @else class="btn btn-default {{ $week->has('6') ? ' active' : '' }}" @endif >
+                                                <input type="checkbox" name="daily_days[]"
+                                                       value="6" @if(old('daily_days') )  {{ (collect(old('daily_days'))->contains(6)) ? 'checked':'' }}  @else {{ $week->has('6') ? 'checked' : '' }} @endif>
+                                                Sat
+                                            </label>
+                                            <label @if(old('daily_days') )  class="btn btn-default{{ (collect(old('daily_days'))->contains(0)) ? ' active':'' }}"
+                                                   @else class="btn btn-default {{ $week->has('0') ? ' active' : '' }}" @endif >
+                                                <input type="checkbox" name="daily_days[]"
+                                                       value="0" @if(old('daily_days') )  {{ (collect(old('daily_days'))->contains(0)) ? 'checked':'' }}  @else {{ $week->has('0') ? 'checked' : '' }} @endif>
+                                                Sun
+                                            </label>
+                                        </div>
+                                        @if ($errors->has('daily_days'))
+                                            <span class="help-block">
                                                 <strong>{{ $errors->first('daily_days') }}</strong>
                                             </span>
-                                            @endif
-                                        </div>
+                                        @endif
                                     </div>
-                                    <div class="form-group">
-                                        <label for="input-opening-hours" class="col-sm-3 control-label">Hours</label>
-                                        <div class="col-sm-5">
-                                            <div class="control-group control-group-2">
-                                                <div class="input-group">
-                                                    <input id="clock-show" type="text" name="daily_hours[open]"
-                                                           class="form-control timepicker"
-                                                           value="{{ old('daily_hours.open') ?? date("g:i A", strtotime($working->opening_time)) }}"/>
-                                                    <span class="input-group-addon">
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-opening-hours" class="col-sm-3 control-label">Hours</label>
+                                    <div class="col-sm-5">
+                                        <div class="control-group control-group-2">
+                                            <div class="input-group">
+                                                <input id="clock-show" type="text" name="daily_hours[open]"
+                                                       class="form-control timepicker"
+                                                       value="{{ old('daily_hours.open') ?? date("g:i A", strtotime($working->opening_time)) }}"/>
+                                                <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
-                                                </div>
-                                                <div class="input-group">
-                                                    <input type="text" name="daily_hours[close]"
-                                                           class="form-control timepicker"
-                                                           value="{{ old('daily_hours.close') ?? date("g:i A", strtotime($working->closing_time))   }}"/>
-                                                    <span class="input-group-addon">
+                                            </div>
+                                            <div class="input-group">
+                                                <input type="text" name="daily_hours[close]"
+                                                       class="form-control timepicker"
+                                                       value="{{ old('daily_hours.close') ?? date("g:i A", strtotime($working->closing_time))   }}"/>
+                                                <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
                             </div>
                             <div id="opening-flexible" style="display: none;">
                                 <div class="form-group">
@@ -503,29 +520,33 @@
                                             </span>
                                                     </div>
                                                     <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                                        <label @if(old('flexible_hours.' . $working_hour->weekday .'.status')) class="btn btn-success{{ (old('flexible_hours.' . $working_hour->weekday .'.status') == '1') ? ' active' : '' }}" @else class="btn btn-success{{$working_hour->status == 1 ? ' active' : ''}}" @endif>
-                                                            <input type="radio"
-                                                                   name="flexible_hours[{{$working_hour->weekday}}][status]" value="1" @if(old('flexible_hours.' . $working_hour->weekday .'.status')) {{ (old('flexible_hours.' . $working_hour->weekday .'.status') == '1') ? 'checked' : '' }} @else {{$working_hour->status == 1 ? 'checked' : ''}} @endif>
-                                                            Open
-                                                        </label>
-                                                        <label @if(old('flexible_hours.' . $working_hour->weekday .'.status')) class="btn btn-danger{{ (old('flexible_hours.' . $working_hour->weekday .'.status') == '0') ? ' active' : '' }}" @else class="btn btn-danger{{$working_hour->status == 0 ? ' active' : ''}} " @endif>
-                                                            <input type="radio"
-                                                                   name="flexible_hours[{{$working_hour->weekday}}][status]"
-                                                                   value="0" @if(old('flexible_hours.' . $working_hour->weekday .'.status')) {{ (old('flexible_hours.' . $working_hour->weekday .'.status') == '0') ? 'checked' : '' }} @else {{$working_hour->status == 0 ? 'checked' : ''}} @endif>
-                                                            Closed
-                                                        </label>
-                                                        {{--<script type="text/javascript">--}}
-                                                            {{--$(document).ready(function () {--}}
-                                                                {{--var open = document.getElementById("open" + id);--}}
-                                                                {{--var close = document.getElementById("close" + id);--}}
-                                                                {{--if (open.checked == true) {--}}
-                                                                    {{--$('#open_active' + id).attr('class', 'btn btn-success active');--}}
-                                                                {{--} else if (close.checked == true) {--}}
-                                                                    {{--$('#close_active' + id).attr('class', 'btn btn-danger active');--}}
-                                                                    {{--$('#open_active' + id).attr('class', 'btn btn-success');--}}
-                                                                {{--}--}}
-                                                            {{--});--}}
-                                                        {{--</script>--}}
+                                                        @if(old('flexible_hours'))
+                                                            <label class="btn btn-success{{ (old('flexible_hours.' . $working_hour->weekday . '.status') == '1') ? ' active' : '' }}">
+                                                                <input type="radio"
+                                                                       name="flexible_hours[{{$working_hour->weekday}}][status]"
+                                                                       value="1" {{ (old('flexible_hours.' . $working_hour->weekday . '.status') == '1') ? 'checked' : '' }} >
+                                                                Open
+                                                            </label>
+                                                            <label class="btn btn-danger{{ (old('flexible_hours.' . $working_hour->weekday . '.status') == '0') ? ' active' : '' }}">
+                                                                <input type="radio"
+                                                                       name="flexible_hours[{{$working_hour->weekday}}][status]"
+                                                                       value="0" {{ (old('flexible_hours.' . $working_hour->weekday . '.status') == '0') ? 'checked' : '' }}>
+                                                                Closed
+                                                            </label>
+                                                        @else
+                                                            <label class="btn btn-success{{$working_hour->status == 1 ? ' active' : ''}}">
+                                                                <input type="radio"
+                                                                       name="flexible_hours[{{$working_hour->weekday}}][status]"
+                                                                       value="1" {{$working_hour->status == 1 ? 'checked' : ''}}>
+                                                                Open
+                                                            </label>
+                                                            <label class="btn btn-danger{{$working_hour->status == 0 ? ' active' : ''}} ">
+                                                                <input type="radio"
+                                                                       name="flexible_hours[{{$working_hour->weekday}}][status]"
+                                                                       value="0" {{$working_hour->status == 0 ? 'checked' : ''}}>
+                                                                Closed
+                                                            </label>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -541,25 +562,29 @@
                                             <div class="control-group control-group-3">
                                                 <div class="input-group">
                                                     <input type="text" name="flexible_hours[1][open]"
-                                                           class="form-control timepicker" value="{{ old('flexible_hours.1.open', '12:00 AM') }}"/>
+                                                           class="form-control timepicker"
+                                                           value="{{ old('flexible_hours.1.open', '12:00 AM') }}"/>
                                                     <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="text" name="flexible_hours[1][close]"
-                                                           class="form-control timepicker" value="{{ old('flexible_hours.1.close', '11:59 PM') }}"/>
+                                                           class="form-control timepicker"
+                                                           value="{{ old('flexible_hours.1.close', '11:59 PM') }}"/>
                                                     <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                                 </div>
                                                 <div class="btn-group btn-group-switch" data-toggle="buttons">
                                                     <label class="btn btn-success active{{ (old('flexible_hours.1.status') == '0') ? 'btn btn-success' : '' }}">
-                                                        <input type="radio" name="flexible_hours[1][status]"  value="1" {{ (old('flexible_hours.1.status') == '1') ? 'checked' : '' }} checked="checked">
+                                                        <input type="radio" name="flexible_hours[1][status]" value="1"
+                                                               {{ (old('flexible_hours.1.status') == '1') ? 'checked' : '' }} checked="checked">
                                                         Open
                                                     </label>
                                                     <label class="btn btn-danger{{ (old('flexible_hours.1.status') == '0') ? ' active' : '' }}">
-                                                        <input type="radio" name="flexible_hours[1][status]"   value="0" {{ (old('flexible_hours.1.status') == '0') ? 'checked' : '' }}>
+                                                        <input type="radio" name="flexible_hours[1][status]"
+                                                               value="0" {{ (old('flexible_hours.1.status') == '0') ? 'checked' : '' }}>
                                                         Closed
                                                     </label>
                                                 </div>
@@ -575,25 +600,29 @@
                                             <div class="control-group control-group-3">
                                                 <div class="input-group">
                                                     <input type="text" name="flexible_hours[2][open]"
-                                                           class="form-control timepicker" value="{{ old('flexible_hours.2.open', '12:00 AM') }}"/>
+                                                           class="form-control timepicker"
+                                                           value="{{ old('flexible_hours.2.open', '12:00 AM') }}"/>
                                                     <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="text" name="flexible_hours[2][close]"
-                                                           class="form-control timepicker" value="{{ old('flexible_hours.2.close', '11:59 PM') }}"/>
+                                                           class="form-control timepicker"
+                                                           value="{{ old('flexible_hours.2.close', '11:59 PM') }}"/>
                                                     <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                                 </div>
                                                 <div class="btn-group btn-group-switch" data-toggle="buttons">
                                                     <label class="btn btn-success active{{ (old('flexible_hours.2.status') == '0') ? 'btn btn-success' : '' }}">
-                                                        <input type="radio" name="flexible_hours[2][status]"  value="1" {{ (old('flexible_hours.2.status') == '1') ? 'checked' : '' }} checked="checked">
+                                                        <input type="radio" name="flexible_hours[2][status]" value="1"
+                                                               {{ (old('flexible_hours.2.status') == '1') ? 'checked' : '' }} checked="checked">
                                                         Open
                                                     </label>
                                                     <label class="btn btn-danger{{ (old('flexible_hours.2.status') == '0') ? ' active' : '' }}">
-                                                        <input type="radio" name="flexible_hours[2][status]"   value="0" {{ (old('flexible_hours.2.status') == '0') ? 'checked' : '' }}>
+                                                        <input type="radio" name="flexible_hours[2][status]"
+                                                               value="0" {{ (old('flexible_hours.2.status') == '0') ? 'checked' : '' }}>
                                                         Closed
                                                     </label>
                                                 </div>
@@ -609,25 +638,29 @@
                                             <div class="control-group control-group-3">
                                                 <div class="input-group">
                                                     <input type="text" name="flexible_hours[3][open]"
-                                                           class="form-control timepicker" value="{{ old('flexible_hours.3.open', '12:00 AM') }}"/>
+                                                           class="form-control timepicker"
+                                                           value="{{ old('flexible_hours.3.open', '12:00 AM') }}"/>
                                                     <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="text" name="flexible_hours[3][close]"
-                                                           class="form-control timepicker" value="{{ old('flexible_hours.3.close', '11:59 PM') }}"/>
+                                                           class="form-control timepicker"
+                                                           value="{{ old('flexible_hours.3.close', '11:59 PM') }}"/>
                                                     <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                                 </div>
                                                 <div class="btn-group btn-group-switch" data-toggle="buttons">
                                                     <label class="btn btn-success active{{ (old('flexible_hours.3.status') == '0') ? 'btn btn-success' : '' }}">
-                                                        <input type="radio" name="flexible_hours[3][status]"  value="1" {{ (old('flexible_hours.3.status') == '1') ? 'checked' : '' }} checked="checked">
+                                                        <input type="radio" name="flexible_hours[3][status]" value="1"
+                                                               {{ (old('flexible_hours.3.status') == '1') ? 'checked' : '' }} checked="checked">
                                                         Open
                                                     </label>
                                                     <label class="btn btn-danger{{ (old('flexible_hours.3.status') == '0') ? ' active' : '' }}">
-                                                        <input type="radio" name="flexible_hours[3][status]"   value="0" {{ (old('flexible_hours.3.status') == '0') ? 'checked' : '' }}>
+                                                        <input type="radio" name="flexible_hours[3][status]"
+                                                               value="0" {{ (old('flexible_hours.3.status') == '0') ? 'checked' : '' }}>
                                                         Closed
                                                     </label>
                                                 </div>
@@ -643,25 +676,29 @@
                                             <div class="control-group control-group-3">
                                                 <div class="input-group">
                                                     <input type="text" name="flexible_hours[4][open]"
-                                                           class="form-control timepicker" value="{{ old('flexible_hours.4.open', '12:00 AM') }}"/>
+                                                           class="form-control timepicker"
+                                                           value="{{ old('flexible_hours.4.open', '12:00 AM') }}"/>
                                                     <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="text" name="flexible_hours[4][close]"
-                                                           class="form-control timepicker" value="{{ old('flexible_hours.4.close', '11:59 PM') }}"/>
+                                                           class="form-control timepicker"
+                                                           value="{{ old('flexible_hours.4.close', '11:59 PM') }}"/>
                                                     <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                                 </div>
                                                 <div class="btn-group btn-group-switch" data-toggle="buttons">
                                                     <label class="btn btn-success active{{ (old('flexible_hours.4.status') == '0') ? 'btn btn-success' : '' }}">
-                                                        <input type="radio" name="flexible_hours[4][status]"   value="1" {{ (old('flexible_hours.4.status') == '1') ? 'checked' : '' }} checked="checked">
+                                                        <input type="radio" name="flexible_hours[4][status]" value="1"
+                                                               {{ (old('flexible_hours.4.status') == '1') ? 'checked' : '' }} checked="checked">
                                                         Open
                                                     </label>
                                                     <label class="btn btn-danger{{ (old('flexible_hours.4.status') == '0') ? ' active' : '' }}">
-                                                        <input type="radio" name="flexible_hours[4][status]"   value="0" {{ (old('flexible_hours.4.status') == '0') ? 'checked' : '' }}>
+                                                        <input type="radio" name="flexible_hours[4][status]"
+                                                               value="0" {{ (old('flexible_hours.4.status') == '0') ? 'checked' : '' }}>
                                                         Closed
                                                     </label>
                                                 </div>
@@ -677,25 +714,29 @@
                                             <div class="control-group control-group-3">
                                                 <div class="input-group">
                                                     <input type="text" name="flexible_hours[5][open]"
-                                                           class="form-control timepicker" value="{{ old('flexible_hours.5.open', '12:00 AM') }}"/>
+                                                           class="form-control timepicker"
+                                                           value="{{ old('flexible_hours.5.open', '12:00 AM') }}"/>
                                                     <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="text" name="flexible_hours[5][close]"
-                                                           class="form-control timepicker" value="{{ old('flexible_hours.5.close', '11:59 PM') }}"/>
+                                                           class="form-control timepicker"
+                                                           value="{{ old('flexible_hours.5.close', '11:59 PM') }}"/>
                                                     <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                                 </div>
                                                 <div class="btn-group btn-group-switch" data-toggle="buttons">
                                                     <label class="btn btn-success active{{ (old('flexible_hours.5.status') == '0') ? 'btn btn-success' : '' }}">
-                                                        <input type="radio" name="flexible_hours[5][status]"   value="1" {{ (old('flexible_hours.5.status') == '1') ? 'checked' : '' }} checked="checked">
+                                                        <input type="radio" name="flexible_hours[5][status]" value="1"
+                                                               {{ (old('flexible_hours.5.status') == '1') ? 'checked' : '' }} checked="checked">
                                                         Open
                                                     </label>
                                                     <label class="btn btn-danger{{ (old('flexible_hours.5.status') == '0') ? ' active' : '' }}">
-                                                        <input type="radio" name="flexible_hours[5][status]"   value="0" {{ (old('flexible_hours.5.status') == '0') ? 'checked' : '' }}>
+                                                        <input type="radio" name="flexible_hours[5][status]"
+                                                               value="0" {{ (old('flexible_hours.5.status') == '0') ? 'checked' : '' }}>
                                                         Closed
                                                     </label>
                                                 </div>
@@ -711,25 +752,29 @@
                                             <div class="control-group control-group-3">
                                                 <div class="input-group">
                                                     <input type="text" name="flexible_hours[6][open]"
-                                                           class="form-control timepicker" value="{{ old('flexible_hours.6.open', '12:00 AM') }}"/>
+                                                           class="form-control timepicker"
+                                                           value="{{ old('flexible_hours.6.open', '12:00 AM') }}"/>
                                                     <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="text" name="flexible_hours[6][close]"
-                                                           class="form-control timepicker" value="{{ old('flexible_hours.6.close', '11:59 PM') }}"/>
+                                                           class="form-control timepicker"
+                                                           value="{{ old('flexible_hours.6.close', '11:59 PM') }}"/>
                                                     <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                                 </div>
                                                 <div class="btn-group btn-group-switch" data-toggle="buttons">
                                                     <label class="btn btn-success active{{ (old('flexible_hours.6.status') == '0') ? 'btn btn-success' : '' }}">
-                                                        <input type="radio" name="flexible_hours[6][status]"  value="1" {{ (old('flexible_hours.6.status') == '1') ? 'checked' : '' }} checked="checked">
+                                                        <input type="radio" name="flexible_hours[6][status]" value="1"
+                                                               {{ (old('flexible_hours.6.status') == '1') ? 'checked' : '' }} checked="checked">
                                                         Open
                                                     </label>
                                                     <label class="btn btn-danger{{ (old('flexible_hours.6.status') == '0') ? ' active' : '' }}">
-                                                        <input type="radio" name="flexible_hours[6][status]"  value="0" {{ (old('flexible_hours.6.status') == '0') ? 'checked' : '' }}>
+                                                        <input type="radio" name="flexible_hours[6][status]"
+                                                               value="0" {{ (old('flexible_hours.6.status') == '0') ? 'checked' : '' }}>
                                                         Closed
                                                     </label>
                                                 </div>
@@ -745,25 +790,29 @@
                                             <div class="control-group control-group-3">
                                                 <div class="input-group">
                                                     <input type="text" name="flexible_hours[0][open]"
-                                                           class="form-control timepicker" value="{{ old('flexible_hours.0.open', '12:00 AM') }}"/>
+                                                           class="form-control timepicker"
+                                                           value="{{ old('flexible_hours.0.open', '12:00 AM') }}"/>
                                                     <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="text" name="flexible_hours[0][close]"
-                                                           class="form-control timepicker" value="{{ old('flexible_hours.0.close', '11:59 PM') }}"/>
+                                                           class="form-control timepicker"
+                                                           value="{{ old('flexible_hours.0.close', '11:59 PM') }}"/>
                                                     <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                                 </div>
                                                 <div class="btn-group btn-group-switch" data-toggle="buttons">
                                                     <label class="btn btn-success active{{ (old('flexible_hours.0.status') == '0') ? 'btn btn-success' : '' }}">
-                                                        <input type="radio" name="flexible_hours[0][status]"  value="1" {{ (old('flexible_hours.0.status') == '1') ? 'checked' : '' }} checked="checked">
+                                                        <input type="radio" name="flexible_hours[0][status]" value="1"
+                                                               {{ (old('flexible_hours.0.status') == '1') ? 'checked' : '' }} checked="checked">
                                                         Open
                                                     </label>
                                                     <label class="btn btn-danger{{ (old('flexible_hours.0.status') == '0') ? ' active' : '' }}">
-                                                        <input type="radio" name="flexible_hours[0][status]"  value="0" {{ (old('flexible_hours.0.status') == '0') ? 'checked' : '' }}>
+                                                        <input type="radio" name="flexible_hours[0][status]"
+                                                               value="0" {{ (old('flexible_hours.0.status') == '0') ? 'checked' : '' }}>
                                                         Closed
                                                     </label>
                                                 </div>
@@ -852,5 +901,8 @@
             $('#thumb').attr('src', '/admin/no_photo.png');
             $('input[name=image]').val("");
         }
+    </script>
+    <script type="text/javascript">
+        $('#category ').select2();
     </script>
 @endsection

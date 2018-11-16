@@ -101,14 +101,30 @@
                                 <label for="famous" class="col-sm-3 control-label">Famous</label>
                                 <div class="col-sm-5">
                                     <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                            <label @if(old('famous')) class="btn btn-danger{{ (old('famous') == '0') ? ' active' : '' }}" @else class="btn btn-danger{{$menu->famous == 0 ? ' active' : ''}} " @endif>
-                                                <input type="radio" name="famous" value="0"  @if(old('famous')) {{ (old('famous') == '0') ? 'checked' : '' }} @else {{$menu->famous == 0 ? 'checked' : ''}} @endif>
-                                                No
-                                            </label>
-                                            <label @if(old('famous')) class="btn btn-success{{(old('famous') == '1') ? ' active' : '' }}" @else class="btn btn-success{{$menu->famous == 1 ? ' active' : ''}} " @endif>
-                                                <input type="radio" name="famous" value="1" @if(old('famous')) {{ (old('famous') == '1') ? 'checked' : '' }} @else {{$menu->famous == 1 ? 'checked' : ''}} @endif>
+                                        @if(old('famous') !== null)
+                                            <label class="btn btn-success{{ (old('famous') == '1') ? ' active' : '' }}">
+                                                <input type="radio" name="famous"
+                                                       value="1" {{ (old('famous') == '1') ? 'checked' : '' }}>
                                                 Yes
                                             </label>
+                                            <label class="btn btn-danger{{ (old('famous') == '0') ? ' active' : '' }}">
+                                                <input type="radio" name="famous"
+                                                       value="0" {{ (old('famous') == '0') ? 'checked' : '' }}>
+                                                No
+                                            </label>
+                                        @else
+                                            <label class="btn btn-success{{$menu->famous == 1 ? ' active' : ''}}">
+                                                <input type="radio"
+                                                       name="famous" value="1" {{$menu->famous == 1 ? 'checked' : ''}} >
+                                                Yes
+                                            </label>
+                                            <label class="btn btn-danger{{$menu->famous == 0 ? ' active' : ''}} ">
+                                                <input type="radio"
+                                                       name="famous"
+                                                       value="0" {{$menu->famous == 0 ? 'checked' : ''}} >
+                                                No
+                                            </label>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -162,7 +178,8 @@
                                                 <label class=" btn btn-primary btn-file ">
                                                     <i class="fa fa-picture-o"></i>
                                                     Select
-                                                    <input type="file" name="image" style="display: none;" onchange="readURL(this);">
+                                                    <input type="file" name="image" style="display: none;"
+                                                           onchange="readURL(this);">
 
                                                 </label>
                                                 <label class="btn btn-danger " onclick="removeFile()">
@@ -178,14 +195,30 @@
                                 <label for="input-status" class="col-sm-3 control-label">Status</label>
                                 <div class="col-sm-5">
                                     <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                        <label @if(old('status')) class="btn btn-danger{{ (old('status') == '0') ? ' active' : '' }}" @else class="btn btn-danger{{$menu->status == 0 ? ' active' : ''}} " @endif>
-                                            <input type="radio" name="status" value="0"  @if(old('status')) {{ (old('status') == '0') ? 'checked' : '' }} @else {{$menu->status == 0 ? 'checked' : ''}} @endif>
-                                            Disabled
-                                        </label>
-                                        <label @if(old('status')) class="btn btn-success{{(old('status') == '1') ? ' active' : '' }}" @else class="btn btn-success{{$menu->status == 1 ? ' active' : ''}} " @endif>
-                                            <input type="radio" name="status" value="1" @if(old('status')) {{ (old('status') == '1') ? 'checked' : '' }} @else {{$menu->status == 1 ? 'checked' : ''}} @endif>
-                                            Enabled
-                                        </label>
+                                        @if(old('status') !== null)
+                                            <label class="btn btn-success{{ (old('status') == '1') ? ' active' : '' }}">
+                                                <input type="radio" name="status"
+                                                       value="1" {{ (old('status') == '1') ? 'checked' : '' }}>
+                                                Enabled
+                                            </label>
+                                            <label class="btn btn-danger{{ (old('status') == '0') ? ' active' : '' }}">
+                                                <input type="radio" name="status"
+                                                       value="0" {{ (old('status') == '0') ? 'checked' : '' }}>
+                                                Disabled
+                                            </label>
+                                        @else
+                                            <label class="btn btn-success{{$menu->status == 1 ? ' active' : ''}}">
+                                                <input type="radio"
+                                                       name="status" value="1" {{$menu->status == 1 ? 'checked' : ''}} >
+                                                Enabled
+                                            </label>
+                                            <label class="btn btn-danger{{$menu->status == 0 ? ' active' : ''}} ">
+                                                <input type="radio"
+                                                       name="status"
+                                                       value="0" {{$menu->status == 0 ? 'checked' : ''}} >
+                                                Disabled
+                                            </label>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -206,6 +239,7 @@
                 reader.readAsDataURL(input.files[0]);
             }
         }
+
         function removeFile() {
             $('#thumb').attr('src', '/admin/no_photo.png');
             $('input[name=image]').val("");

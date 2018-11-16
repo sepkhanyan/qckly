@@ -115,13 +115,13 @@
                                 <label for="famous" class="col-sm-3 control-label">Famous</label>
                                 <div class="col-sm-5">
                                     <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                        <label class="btn btn-danger active{{ (old('famous') == '1') ? 'btn btn-danger' : '' }}">
-                                            <input type="radio" name="famous" value="0" {{ (old('famous') == '0') ? 'checked' : '' }} checked="checked">
-                                            No
-                                        </label>
-                                        <label class="btn btn-success{{ (old('famous') == '1') ? ' active' : '' }}">
-                                            <input type="radio" name="famous" value="1" {{ (old('famous') == '1') ? 'checked' : '' }} >
+                                        <label class="btn btn-success active{{ (old('famous') == '0') ? 'btn btn-success' : '' }}">
+                                            <input type="radio" name="famous" value="1" {{ (old('famous') == '1') ? 'checked' : '' }} checked="checked">
                                             Yes
+                                        </label>
+                                        <label class="btn btn-danger{{ (old('famous') == '0') ? ' active' : '' }}">
+                                            <input type="radio" name="famous" value="0" {{ (old('famous') == '0') ? 'checked' : '' }}>
+                                            No
                                         </label>
                                     </div>
                                 </div>
@@ -186,13 +186,13 @@
                                 <label for="input-status" class="col-sm-3 control-label">Status</label>
                                 <div class="col-sm-5">
                                     <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                        <label class="btn btn-danger{{ (old('status') == '0') ? ' active' : '' }}">
-                                            <input type="radio" name="status" value="0" {{ (old('status') == '0') ? 'checked' : '' }}>
-                                            Disabled
-                                        </label>
                                         <label class="btn btn-success active{{ (old('status') == '0') ? 'btn btn-success' : '' }}">
                                             <input type="radio" name="status" value="1" {{ (old('status') == '1') ? 'checked' : '' }} checked="checked">
                                             Enabled
+                                        </label>
+                                        <label class="btn btn-danger{{ (old('status') == '0') ? ' active' : '' }}">
+                                            <input type="radio" name="status" value="0" {{ (old('status') == '0') ? 'checked' : '' }}>
+                                            Disabled
                                         </label>
                                     </div>
                                 </div>

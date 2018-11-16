@@ -251,7 +251,7 @@ class RestaurantsController extends Controller
             ];
 
         }
-            // dd(collect($week));
+//             dd(collect($week));
 
         $areas = Area::all();
 //        $category_restaurants = CategoryRestaurant::where('restaurant_id', $id)->get();
