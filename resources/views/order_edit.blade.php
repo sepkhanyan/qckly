@@ -107,7 +107,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @if($restaurantOrder->status_id !=2)
+                            @if($restaurantOrder->status_id != 3)
                                 <div class="row">
                                     <div class="col-xs-12">
                                         <div class="panel panel-default">
@@ -116,12 +116,9 @@
                                                 <div class="col-xs-12 col-sm-3">
                                                     <label for="input-name" class="control-label">Order Status</label>
                                                     <div class="">
-                                                        <select name="status" id="category" class="form-control">
-                                                            <option value="{{$restaurantOrder->status_id}}">{{$restaurantOrder->status->name_en}}</option>
+                                                        <select name="status" id="status" class="form-control">
                                                             @foreach ($statuses as $status)
-                                                                @if($restaurantOrder->status_id != $status->id)
-                                                                    <option value="{{$status->id}}">{{$status->name_en}}</option>
-                                                                @endif
+                                                                    <option value="{{$status->id}}" {{$restaurantOrder->status_id == $status->id ? 'selected' : ''}}>{{$status->name_en}}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>

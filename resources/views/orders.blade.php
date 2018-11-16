@@ -11,9 +11,9 @@
                             {{--Delete--}}
                             {{--</a>--}}
                         @endif
-                        @if(Auth::user()->admin == 1)
+                        @if($user->admin == 1)
                             <div class="form-group col-md-4">
-                                <select name="restaurant_name" id="input-name" class="form-control" tabindex="-1"
+                                <select name="restaurant_name" id="restaurant" class="form-control" tabindex="-1"
                                         title="" onchange="top.location.href = this.options[this.selectedIndex].value">
                                     @if($selectedRestaurant)
                                         <option value>{{$selectedRestaurant->name_en . ', ' . $selectedRestaurant->area->area_en . ', ' . $selectedRestaurant->address_en}}</option>
@@ -87,7 +87,7 @@
                             <table border="0" class="table table-striped table-border">
                                 <thead>
                                 <tr>
-                                    @if(Auth::user()->admin == 2)
+                                    @if($user->admin == 2)
                                         <th class="action action-three">
                                             {{--<input type="checkbox"--}}
                                             {{--onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">--}}
@@ -99,6 +99,12 @@
                                     <th>Total</th>
                                     <th>Status</th>
                                     <th>Time - Date</th>
+                                    @if($user->admin == 2)
+                                        <th class="action action-three">
+                                            {{--<input type="checkbox"--}}
+                                            {{--onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">--}}
+                                        </th>
+                                    @endif
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -106,7 +112,7 @@
                                     @if(count($orders) > 0)
                                         @foreach($orders as $order)
                                             <tr>
-                                                @if(Auth::user()->admin == 2)
+                                                @if($user->admin == 2)
                                                     <td class="action">
                                                         {{--<input type="checkbox" value="{{ $order->order_id }}"--}}
                                                         {{--name="delete"/>--}}
@@ -133,18 +139,30 @@
                                                 <td>
                                                     @if($order->status_id == 1)
                                                         <span class="label label-default"
-                                                              style="background-color: #00c0ef;">{{$order->status->name_en}}</span>
+                                                              style="background-color: #686663;">{{$order->status->name_en}}</span>
                                                     @elseif($order->status_id == 2)
                                                         <span class="label label-default"
-                                                              style="background-color: #00a65a;">{{$order->status->name_en}}</span>
-                                                    @else
+                                                              style="background-color: #00c0ef;">{{$order->status->name_en}}</span>
+                                                    @elseif($order->status_id == 3)
                                                         <span class="label label-default"
-                                                              style="background-color: #ea0b29;">{{$order->status->name_en}}</span>
+                                                              style="background-color: #00a65a;">{{$order->status->name_en}}</span>
                                                     @endif
                                                 </td>
                                                 <td>
                                                     {{date("g:i A", strtotime($order->updated_at)) . ', ' . date("j M Y", strtotime($order->updated_at))}}
                                                 </td>
+                                                @if($user->admin == 2)
+                                                    <td>
+                                                        {{--<input type="checkbox" value="{{ $order->order_id }}"--}}
+                                                        {{--name="delete"/>--}}
+                                                        @if($order->status_id == 1)
+                                                            <a class="btn btn-primary" title=""
+                                                               href="{{ url('/order/confirmation/' . $order->order_id )}}">
+                                                                Confirm
+                                                            </a>&nbsp;&nbsp;
+                                                        @endif
+                                                    </td>
+                                                @endif
                                             </tr>
                                         @endforeach
                                     @else
@@ -165,14 +183,6 @@
         </div>
     </div>
     <script type="text/javascript">
-        $(document).ready(function () {
-            $('a[title], span[title], button[title]').tooltip({placement: 'bottom'});
-            $('select.form-control').select2({minimumResultsForSearch: 10});
-
-            $('.alert').alert();
-            $('.dropdown-toggle').dropdown();
-
-            // $("#list-form td:contains('Disabled')").addClass('red');
-        });
+        $('#restaurant').select2();
     </script>
 @endsection
