@@ -104,7 +104,7 @@ class RestaurantsController extends Controller
                 $validator = \Validator::make($request->all(), [
                     'daily_days' => 'required|array',
                     'daily_hours.open' => 'required',
-                    'daily_hours.close' => 'required',
+                    'daily_hours.close' => 'required|after:daily_hours.open',
                 ]);
             }
             if ($validator->fails()) {
@@ -115,19 +115,19 @@ class RestaurantsController extends Controller
             if($request->input('opening_type') == 'flexible'){
                 $validator = \Validator::make($request->all(), [
                     'flexible_hours.1.open' => 'required',
-                    'flexible_hours.1.close' => 'required',
+                    'flexible_hours.1.close' => 'required|after:flexible_hours.1.open',
                     'flexible_hours.2.open' => 'required',
-                    'flexible_hours.2.close' => 'required',
+                    'flexible_hours.2.close' => 'required|after:flexible_hours.2.open',
                     'flexible_hours.3.open' => 'required',
-                    'flexible_hours.3.close' => 'required',
+                    'flexible_hours.3.close' => 'required|after:flexible_hours.3.open',
                     'flexible_hours.4.open' => 'required',
-                    'flexible_hours.4.close' => 'required',
+                    'flexible_hours.4.close' => 'required|after:flexible_hours.4.open',
                     'flexible_hours.5.open' => 'required',
-                    'flexible_hours.5.close' => 'required',
+                    'flexible_hours.5.close' => 'required|after:flexible_hours.5.open',
                     'flexible_hours.6.open' => 'required',
-                    'flexible_hours.6.close' => 'required',
+                    'flexible_hours.6.close' => 'required|after:flexible_hours.6.open',
                     'flexible_hours.0.open' => 'required',
-                    'flexible_hours.0.close' => 'required',
+                    'flexible_hours.0.close' => 'required|after:flexible_hours.0.open',
                 ]);
             }
             if ($validator->fails()) {
@@ -320,7 +320,7 @@ class RestaurantsController extends Controller
             $validator = \Validator::make($request->all(), [
                 'daily_days' => 'required|array',
                 'daily_hours.open' => 'required',
-                'daily_hours.close' => 'required',
+                'daily_hours.close' => 'required|after:daily_hours.open',
             ]);
         }
         if ($validator->fails()) {
@@ -331,19 +331,19 @@ class RestaurantsController extends Controller
         if($request->input('opening_type') == 'flexible'){
             $validator = \Validator::make($request->all(), [
                 'flexible_hours.1.open' => 'required',
-                'flexible_hours.1.close' => 'required',
+                'flexible_hours.1.close' => 'required|after:flexible_hours.1.open',
                 'flexible_hours.2.open' => 'required',
-                'flexible_hours.2.close' => 'required',
+                'flexible_hours.2.close' => 'required|after:flexible_hours.2.open',
                 'flexible_hours.3.open' => 'required',
-                'flexible_hours.3.close' => 'required',
+                'flexible_hours.3.close' => 'required|after:flexible_hours.3.open',
                 'flexible_hours.4.open' => 'required',
-                'flexible_hours.4.close' => 'required',
+                'flexible_hours.4.close' => 'required|after:flexible_hours.4.open',
                 'flexible_hours.5.open' => 'required',
-                'flexible_hours.5.close' => 'required',
+                'flexible_hours.5.close' => 'required|after:flexible_hours.5.open',
                 'flexible_hours.6.open' => 'required',
-                'flexible_hours.6.close' => 'required',
+                'flexible_hours.6.close' => 'required|after:flexible_hours.6.open',
                 'flexible_hours.0.open' => 'required',
-                'flexible_hours.0.close' => 'required',
+                'flexible_hours.0.close' => 'required|after:flexible_hours.0.open',
             ]);
         }
         if ($validator->fails()) {

@@ -411,25 +411,12 @@
                                                     <div class="col-xs-2">
                                                         <input type="number"
                                                                name="menu_item[{{$menu->id}}][qty]" id="qty{{$menu->id}}"
-                                                               style="display: none" disabled
+                                                               style="display: none{{ (collect(old('menu_item.' . $menu->id . '.id'))->contains($menu->id)) ? 'block':'' }}" {{(!old('menu_item.' . $menu->id . '.id')) ? 'disabled': '' }}
                                                                class="form-control" min="1" value="{{old('menu_item.' . $menu->id . '.qty') ?? 1}}">
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <script>
-                                            $(document).ready(function () {
-                                                var id = '<?php echo $menu->id; ?>';
-                                                var item = document.getElementById("item" + id);
-                                                if (item.checked == true) {
-                                                    $('#qty' + id).slideDown('fast');
-                                                    $('#qty' + id).removeAttr('disabled');
-                                                } else {
-                                                    $('#qty' + id).slideUp('fast');
-                                                    $('#qty' + id).attr('disabled', true);
-                                                }
-                                            });
-                                        </script>
                                     @endforeach
                                 @else
                                     <div class="form-group">
@@ -447,12 +434,7 @@
                                     <script type="text/javascript">
                                         $(document).ready(function () {
                                             var id = '<?php echo $menu_category->id; ?>';
-                                            $('a[title], span[title], button[title]').tooltip({placement: 'bottom'});
-                                            $('#items' + id).select2({minimumResultsForSearch: 10});
-
-                                            $('.alert').alert();
-                                            $('.dropdown-toggle').dropdown();
-
+                                            $('#items' + id).select2();
                                         });
                                     </script>
                                 @endif
@@ -477,7 +459,6 @@
         function myFunction(id) {
             console.log(id);
             var item = document.getElementById("item" + id);
-            // var qty = document.getElementById("qty" + id);
             if (item.checked == true) {
                 $('#qty' + id).slideDown('fast');
                 $('#qty' + id).removeAttr('disabled');

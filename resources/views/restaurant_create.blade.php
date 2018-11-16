@@ -444,9 +444,9 @@
                                         @endif
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group{{ $errors->has('daily_hours.open') ? ' has-error' : '' }}{{ $errors->has('daily_hours.close') ? ' has-error' : '' }}">
                                     <label for="input-opening-hours" class="col-sm-3 control-label">Hours</label>
-                                    <div class="col-sm-5{{ $errors->has('daily_hours.open') ? ' has-error' : '' }}{{ $errors->has('daily_hours.close') ? ' has-error' : '' }}">
+                                    <div class="col-sm-5">
                                         <div class="control-group control-group-2">
                                             <div class="input-group">
                                                 <input id="clock-show" type="text" name="daily_hours[open]"
@@ -462,18 +462,18 @@
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                             </div>
-                                            @if ($errors->has('daily_hours.open'))
-                                                <span class="help-block">
-                                                <strong>{{ $errors->first('daily_hours.open') }}</strong>
-                                            </span>
-                                            @endif
-                                            @if ($errors->has('daily_hours.close'))
-                                                <span class="help-block">
-                                                <strong>{{ $errors->first('daily_hours.close') }}</strong>
-                                            </span>
-                                            @endif
                                         </div>
                                     </div>
+                                    @if ($errors->has('daily_hours.open'))
+                                        <span class="help-block">
+                                                <strong>{{ $errors->first('daily_hours.open') }}</strong>
+                                            </span>
+                                    @endif
+                                    @if ($errors->has('daily_hours.close'))
+                                        <span class="help-block">
+                                                <strong>Close hour must be after open hour.</strong>
+                                            </span>
+                                    @endif
                                 </div>
                             </div>
                             <div id="opening-flexible" style="display: none;">
@@ -490,7 +490,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group{{ $errors->has('flexible_hours.1.open') ? ' has-error' : '' }}{{ $errors->has('flexible_hours.1.close') ? ' has-error' : '' }}">
                                     <label for="input-status" class="col-sm-3 control-label text-right">
                                         <span class="text-right">Monday</span>
                                         <input type="hidden" name="flexible_hours[1][day]" value="1"/>
@@ -523,8 +523,18 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @if ($errors->has('flexible_hours.1.open'))
+                                        <span class="help-block">
+                                                <strong>{{ $errors->first('flexible_hours.1.open') }}</strong>
+                                            </span>
+                                    @endif
+                                    @if ($errors->has('flexible_hours.1.close'))
+                                        <span class="help-block">
+                                                <strong>Close hour must be after open hour.</strong>
+                                            </span>
+                                    @endif
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group{{ $errors->has('flexible_hours.2.open') ? ' has-error' : '' }}{{ $errors->has('flexible_hours.2.close') ? ' has-error' : '' }}">
                                     <label for="input-status" class="col-sm-3 control-label text-right">
                                         <span class="text-right">Tuesday</span>
                                         <input type="hidden" name="flexible_hours[2][day]" value="2"/>
@@ -557,8 +567,18 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @if ($errors->has('flexible_hours.2.open'))
+                                        <span class="help-block">
+                                                <strong>{{ $errors->first('flexible_hours.2.open') }}</strong>
+                                            </span>
+                                    @endif
+                                    @if ($errors->has('flexible_hours.2.close'))
+                                        <span class="help-block">
+                                                <strong>Close hour must be after open hour.</strong>
+                                            </span>
+                                    @endif
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group{{ $errors->has('flexible_hours.3.open') ? ' has-error' : '' }}{{ $errors->has('flexible_hours.3.close') ? ' has-error' : '' }}">
                                     <label for="input-status" class="col-sm-3 control-label text-right">
                                         <span class="text-right">Wednesday</span>
                                         <input type="hidden" name="flexible_hours[3][day]" value="3"/>
@@ -591,8 +611,18 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @if ($errors->has('flexible_hours.3.open'))
+                                        <span class="help-block">
+                                                <strong>{{ $errors->first('flexible_hours.3.open') }}</strong>
+                                            </span>
+                                    @endif
+                                    @if ($errors->has('flexible_hours.3.close'))
+                                        <span class="help-block">
+                                                <strong>Close hour must be after open hour.</strong>
+                                            </span>
+                                    @endif
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group{{ $errors->has('flexible_hours.4.open') ? ' has-error' : '' }}{{ $errors->has('flexible_hours.4.close') ? ' has-error' : '' }}">
                                     <label for="input-status" class="col-sm-3 control-label text-right">
                                         <span class="text-right">Thursday</span>
                                         <input type="hidden" name="flexible_hours[4][day]" value="4"/>
@@ -625,8 +655,18 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @if ($errors->has('flexible_hours.4.open'))
+                                        <span class="help-block">
+                                                <strong>{{ $errors->first('flexible_hours.4.open') }}</strong>
+                                            </span>
+                                    @endif
+                                    @if ($errors->has('flexible_hours.4.close'))
+                                        <span class="help-block">
+                                                <strong>Close hour must be after open hour.</strong>
+                                            </span>
+                                    @endif
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group{{ $errors->has('flexible_hours.5.open') ? ' has-error' : '' }}{{ $errors->has('flexible_hours.5.close') ? ' has-error' : '' }}">
                                     <label for="input-status" class="col-sm-3 control-label text-right">
                                         <span class="text-right">Friday</span>
                                         <input type="hidden" name="flexible_hours[5][day]" value="5"/>
@@ -659,8 +699,18 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @if ($errors->has('flexible_hours.5.open'))
+                                        <span class="help-block">
+                                                <strong>{{ $errors->first('flexible_hours.5.open') }}</strong>
+                                            </span>
+                                    @endif
+                                    @if ($errors->has('flexible_hours.5.close'))
+                                        <span class="help-block">
+                                               <strong>Close hour must be after open hour.</strong>
+                                            </span>
+                                    @endif
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group{{ $errors->has('flexible_hours.6.open') ? ' has-error' : '' }}{{ $errors->has('flexible_hours.6.close') ? ' has-error' : '' }}">
                                     <label for="input-status" class="col-sm-3 control-label text-right">
                                         <span class="text-right">Saturday</span>
                                         <input type="hidden" name="flexible_hours[6][day]" value="6"/>
@@ -693,8 +743,18 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @if ($errors->has('flexible_hours.6.open'))
+                                        <span class="help-block">
+                                                <strong>{{ $errors->first('flexible_hours.6.open') }}</strong>
+                                            </span>
+                                    @endif
+                                    @if ($errors->has('flexible_hours.6.close'))
+                                        <span class="help-block">
+                                                <strong>Close hour must be after open hour.</strong>
+                                            </span>
+                                    @endif
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group{{ $errors->has('flexible_hours.0.open') ? ' has-error' : '' }}{{ $errors->has('flexible_hours.0.close') ? ' has-error' : '' }}">
                                     <label for="input-status" class="col-sm-3 control-label text-right">
                                         <span class="text-right">Sunday</span>
                                         <input type="hidden" name="flexible_hours[0][day]" value="0"/>
@@ -727,6 +787,16 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @if ($errors->has('flexible_hours.0.open'))
+                                        <span class="help-block">
+                                                <strong>{{ $errors->first('flexible_hours.0.open') }}</strong>
+                                            </span>
+                                    @endif
+                                    @if ($errors->has('flexible_hours.0.close'))
+                                        <span class="help-block">
+                                                <strong>Close hour must be after open hour.</strong>
+                                            </span>
+                                    @endif
                                 </div>
                             </div>
                         </div>
