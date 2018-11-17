@@ -27,7 +27,7 @@ class RestaurantCategoriesController extends Controller
             }
             return view('restaurant_categories', ['categories' => $categories]);
         } else {
-            return redirect('/');
+            return redirect()->back();
         }
     }
 
@@ -63,7 +63,7 @@ class RestaurantCategoriesController extends Controller
                 return redirect('/restaurant_categories');
             }
         } else {
-            return redirect('/');
+            return redirect()->back();
         }
 
     }
@@ -111,7 +111,7 @@ class RestaurantCategoriesController extends Controller
             $category->save();
             return redirect('/restaurant_categories');
         } else {
-            return redirect('/');
+            return redirect()->back();
         }
     }
 
@@ -146,7 +146,7 @@ class RestaurantCategoriesController extends Controller
             RestaurantCategory::whereIn('id', $id)->delete();
             return redirect('/restaurant_categories');
         } else {
-            return redirect('/');
+            return redirect()->back();
         }
     }
 

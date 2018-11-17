@@ -73,6 +73,7 @@ class MenusController extends Controller
             'restaurants' => $restaurants,
             'categories' => $categories,
             'selectedRestaurant' => $selectedRestaurant,
+            'user' => $user
         ]);
     }
 
@@ -93,7 +94,8 @@ class MenusController extends Controller
         if (count($categories) > 0) {
             return view('menu_create', [
                 'restaurant' => $restaurant,
-                'categories' => $categories
+                'categories' => $categories,
+                'user' => $user
             ]);
         } else {
             return redirect('/menu_categories/' . $id);
@@ -193,11 +195,12 @@ class MenusController extends Controller
             $restaurant = $user->restaurant;
             $menu = Menu::where('id', $id)->where('restaurant_id', $restaurant->id)->first();
             if (!$menu) {
-                return redirect('/menus');
+                return redirect()->back();
             }
         }
         return view('menu_edit', [
-            'menu' => $menu
+            'menu' => $menu,
+            'user' => $user
         ]);
     }
 
@@ -232,7 +235,7 @@ class MenusController extends Controller
             $restaurant_id = $restaurant->id;
             $menu = Menu::where('id', $id)->where('restaurant_id', $restaurant->id)->first();
             if (!$menu) {
-                return redirect('/menus');
+                return redirect()->back();
             }
         }
         $menu->name_en = $request->input('name_en');

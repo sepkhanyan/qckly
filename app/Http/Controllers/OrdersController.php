@@ -77,7 +77,7 @@ class OrdersController extends Controller
             $restaurant = $user->restaurant;
             $restaurantOrder = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $restaurant->id)->where('status_id', 1)->first();
             if (!$restaurantOrder) {
-                return redirect('/orders');
+                return redirect()->back();
             }
 
                 $restaurantOrder->status_id = 2;
@@ -88,7 +88,7 @@ class OrdersController extends Controller
                 }
 
         } else {
-            return redirect('/orders');
+            return redirect()->back();
         }
         return redirect('/orders');
     }
@@ -107,7 +107,7 @@ class OrdersController extends Controller
             }])->where('id', $id)->where('status_id', 2)->first();
             $restaurantOrder = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $restaurant->id)->where('status_id', 2)->first();
             if (!$restaurantOrder) {
-                return redirect('/orders');
+                return redirect()->back();
             }
             return view('order_edit', [
                 'order' => $order,
@@ -115,7 +115,7 @@ class OrdersController extends Controller
                 'statuses' => $statuses
             ]);
         } else {
-            return redirect('/orders');
+            return redirect()->back();
         }
     }
 
@@ -137,7 +137,7 @@ class OrdersController extends Controller
                 }
 
         } else {
-            return redirect('/orders');
+            return redirect()->back();
         }
         return redirect('/orders');
     }

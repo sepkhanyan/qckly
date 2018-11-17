@@ -15,8 +15,12 @@ class MealtimesController extends Controller
      */
     public function index()
     {
+        $user = Auth::user();
         $mealtimes = Mealtime::all();
-        return view('mealtimes', ['mealtimes' => $mealtimes]);
+        return view('mealtimes', [
+            'mealtimes' => $mealtimes,
+            'user' => $user
+            ]);
     }
 
     /**
@@ -51,7 +55,7 @@ class MealtimesController extends Controller
             $mealtime->save();
             return redirect('/mealtimes');
         } else {
-            return redirect('/mealtimes');
+            return redirect()->back();
         }
 
     }
@@ -102,7 +106,7 @@ class MealtimesController extends Controller
             $mealtime->save();
             return redirect('/mealtimes');
         } else {
-            return redirect('/mealtimes');
+            return redirect()->back();
         }
 
     }
@@ -132,7 +136,7 @@ class MealtimesController extends Controller
             Mealtime::whereIn('id', $id)->delete();
             return redirect('/mealtimes');
         } else {
-            return redirect('/mealtimes');
+            return redirect()->back();
         }
     }
 }

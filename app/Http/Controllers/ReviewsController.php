@@ -57,6 +57,7 @@ class ReviewsController extends Controller
             'reviews' => $reviews,
             'restaurants' => $restaurants,
             'selectedRestaurant' => $selectedRestaurant,
+            'user' => $user
         ]);
     }
 

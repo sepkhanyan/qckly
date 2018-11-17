@@ -41,7 +41,10 @@ class RestaurantsController extends Controller
 
         }
 
-        return view('restaurants', ['restaurants' => $restaurants]);
+        return view('restaurants', [
+            'restaurants' => $restaurants,
+            'user' => $user
+            ]);
     }
 
     /**
@@ -60,7 +63,7 @@ class RestaurantsController extends Controller
                 'categories' => $categories,
             ]);
         } else {
-            return redirect('restaurants');
+            return redirect()->back();
         }
     }
 
@@ -217,7 +220,7 @@ class RestaurantsController extends Controller
                 return redirect('/restaurants');
             }
         } else {
-            return redirect('restaurants');
+            return redirect()->back();
         }
     }
 
@@ -263,11 +266,12 @@ class RestaurantsController extends Controller
             if ($user->restaurant->id == $id) {
                 $restaurant = Restaurant::find($id);
             } else {
-                return redirect('/restaurants');
+                return redirect()->back();
             }
         }
         $working = WorkingHour::where('restaurant_id', $restaurant->id)->first();
         return view('restaurant_edit', [
+            'user' => $user,
             'restaurant' => $restaurant,
             'working' => $working,
             'areas' => $areas,
@@ -313,7 +317,7 @@ class RestaurantsController extends Controller
             if ($user->restaurant->id == $id) {
                 $restaurant = Restaurant::find($id);
             } else {
-                return redirect('/restaurants');
+                return redirect()->back();
             }
         }
         if($request->input('opening_type') == 'daily'){
@@ -446,7 +450,7 @@ class RestaurantsController extends Controller
             if ($user->restaurant->id == $id) {
                 Restaurant::where('id', $id)->update(['status' => $status]);
             } else {
-                return redirect('/restaurants');
+                return redirect()->back();
             }
         } else {
             Restaurant::where('id', $id)->update(['status' => $status]);
@@ -483,7 +487,7 @@ class RestaurantsController extends Controller
 //            User::where('id', $rest->user_id)->delete();
             return redirect('/restaurants');
         } else {
-            return redirect('/restaurants');
+            return redirect()->back();
         }
     }
 

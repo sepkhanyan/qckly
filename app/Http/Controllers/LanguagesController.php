@@ -24,7 +24,10 @@ class LanguagesController extends Controller
             if (isset($data['language_search'])) {
                 $languages = Language::where('name', 'like', $data['language_search'])->paginate(20);
             }
-            return view('languages', ['languages' => $languages]);
+            return view('languages', [
+                'languages' => $languages,
+                'user' => $user
+                ]);
         } else {
             return redirect()->back();
         }
@@ -41,7 +44,7 @@ class LanguagesController extends Controller
         if ($user->admin == 1) {
             return view('language_create');
         } else {
-            return redirect('/languages');
+            return redirect()->back();
         }
 
     }
@@ -75,7 +78,7 @@ class LanguagesController extends Controller
             $language->save();
             return redirect('/languages');
         } else {
-            return redirect('/languages');
+            return redirect()->back();
         }
     }
 
@@ -103,7 +106,7 @@ class LanguagesController extends Controller
             $language = Language::find($id);
             return view('language_edit', ['language' => $language]);
         } else {
-            return redirect('/languages');
+            return redirect()->back();
         }
     }
 
@@ -140,7 +143,7 @@ class LanguagesController extends Controller
             $language->save();
             return redirect('/languages');
         } else {
-            return redirect('/languages');
+            return redirect()->back();
         }
     }
 
@@ -164,7 +167,7 @@ class LanguagesController extends Controller
             Language::whereIn('id', $id)->delete();
             return redirect('/languages');
         } else {
-            return redirect('/languages');
+            return redirect()->back();
         }
     }
 }

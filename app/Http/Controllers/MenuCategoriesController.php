@@ -51,6 +51,7 @@ class MenuCategoriesController extends Controller
             'restaurants' => $restaurants,
             'categories' => $categories,
             'selectedRestaurant' => $selectedRestaurant,
+            'user' => $user
         ]);
     }
 
@@ -67,7 +68,10 @@ class MenuCategoriesController extends Controller
             $user = $user->load('restaurant');
             $restaurant = $user->restaurant;
         }
-        return view('menu_category_create', ['restaurant' => $restaurant,]);
+        return view('menu_category_create', [
+            'restaurant' => $restaurant,
+            'user' => $user
+            ]);
     }
 
     /**
@@ -135,10 +139,13 @@ class MenuCategoriesController extends Controller
             $restaurant = $user->restaurant;
             $category = MenuCategory::where('id', $id)->where('restaurant_id', $restaurant->id)->first();
             if (!$category) {
-                return redirect('/menu_categories');
+                return redirect()->back();
             }
         }
-        return view('menu_category_edit', ['category' => $category]);
+        return view('menu_category_edit', [
+            'category' => $category,
+            'user' => $user
+            ]);
     }
 
     /**

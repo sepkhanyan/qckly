@@ -29,7 +29,7 @@
                     {{ csrf_field() }}
                     <div class="tab-content">
                         <div id="general" class="tab-pane row wrap-all active">
-                            @if(Auth::user()->admin == 1)
+                            @if($user->admin == 1)
                                 <input type="hidden" name="restaurant" value="{{$collection->restaurant_id}}">
                             @endif
                             <h4 class="tab-pane-title">{{$collection->category->name_en}}</h4>
@@ -606,7 +606,6 @@
     </div>
     <script>
         function myFunction(id) {
-            console.log(id);
             var item = document.getElementById("item" + id);
             // var qty = document.getElementById("qty" + id);
             if (item.checked == true) {

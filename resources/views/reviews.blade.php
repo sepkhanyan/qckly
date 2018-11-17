@@ -11,7 +11,7 @@
                             {{--Delete--}}
                             {{--</a>--}}
                         @endif
-                        @if(Auth::user()->admin == 1)
+                        @if($user->admin == 1)
                             <div class="form-group col-md-4">
                                 <select name="restaurant_name" id="input-name" class="form-control" tabindex="-1"
                                         title="" onchange="top.location.href = this.options[this.selectedIndex].value">
@@ -154,13 +154,7 @@
     </div>
     <script type="text/javascript">
         $(document).ready(function () {
-            $('a[title], span[title], button[title]').tooltip({placement: 'bottom'});
-            $('select.form-control').select2({minimumResultsForSearch: 10});
-
-            $('.alert').alert();
-            $('.dropdown-toggle').dropdown();
-
-            // $("#list-form td:contains('Disabled')").addClass('red');
+            $('select.form-control').select2();
         });
     </script>
 @endsection

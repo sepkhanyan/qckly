@@ -26,9 +26,12 @@ class AreasController extends Controller
             if (isset($data['area_search'])) {
                 $areas = Area::where('name_en', 'like', $data['area_search'])->paginate(20);
             }
-            return view('areas', ['areas' => $areas]);
+            return view('areas', [
+                'areas' => $areas,
+                'user' => $user
+            ]);
         } else {
-            return redirect('/');
+            return redirect()->back();
         }
 
 
@@ -64,7 +67,7 @@ class AreasController extends Controller
             $area->save();
             return redirect('/areas');
         } else {
-            return redirect('/');
+            return redirect()->back();
         }
 
 
@@ -102,7 +105,7 @@ class AreasController extends Controller
             $area->save();
             return redirect('/areas');
         } else {
-            return redirect('/');
+            return redirect()->back();
         }
     }
 
@@ -148,7 +151,7 @@ class AreasController extends Controller
             Area::whereIn('id', $id)->delete();
             return redirect('/areas');
         } else {
-            return redirect('/');
+            return redirect()->back();
         }
     }
 

@@ -16,8 +16,12 @@ class CollectionCategoriesController extends Controller
      */
     public function index()
     {
+        $user = Auth::user();
         $categories = CollectionCategory::all();
-        return view('collection_categories', ['categories' => $categories]);
+        return view('collection_categories', [
+            'categories' => $categories,
+            'user' => $user
+            ]);
     }
 
     /**
@@ -52,7 +56,7 @@ class CollectionCategoriesController extends Controller
             $category->save();
             return redirect('/collection_categories');
         } else {
-            return redirect('/collection_categories');
+            return redirect()->back();
         }
 
     }
@@ -100,7 +104,7 @@ class CollectionCategoriesController extends Controller
             $category->save();
             return redirect('/collection_categories');
         } else {
-            return redirect('/collection_categories');
+            return redirect()->back();
         }
     }
 
@@ -118,7 +122,7 @@ class CollectionCategoriesController extends Controller
             CollectionCategory::whereIn('id', $id)->delete();
             return redirect('/collection_categories');
         } else {
-            return redirect('/collection_categories');
+            return redirect()->back();
         }
 
 

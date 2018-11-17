@@ -31,7 +31,7 @@
                       action="{{ url('/menu_category/store') }}">
                     {{ csrf_field() }}
                     <div class="tab-content">
-                        @if(Auth::user()->admin == 1)
+                        @if($user->admin == 1)
                             <input type="hidden" name="restaurant" value="{{$restaurant->id}}">
                         @endif
                         <div id="general" class="tab-pane row wrap-all active">

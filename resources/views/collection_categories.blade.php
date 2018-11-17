@@ -1,7 +1,7 @@
 @extends('home', ['title' => 'Collection Categories'])
 @section('content')
     <div id="page-wrapper">
-        @if(Auth::user()->admin == 1)
+        @if($user->admin == 1)
             <div class="page-header">
                 <div class="page-action">
                     <a href="" class="btn btn-primary" data-toggle="modal" data-target="#modalCreateCollectionCategory">
@@ -56,7 +56,7 @@
                             <table border="0" class="table table-striped table-border">
                                 <thead>
                                 <tr>
-                                    @if(Auth::user()->admin == 1)
+                                    @if($user->admin == 1)
                                         <th class="action action-three">
                                             <input type="checkbox"
                                                    onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">
@@ -70,7 +70,7 @@
                                 @if(count($categories) > 0)
                                     @foreach($categories as $category)
                                         <tr>
-                                            @if(Auth::user()->admin == 1)
+                                            @if($user->admin == 1)
                                                 <td class="action">
                                                     <input type="checkbox" value="{{ $category->id }}" name="delete"/>
                                                     <a class="btn btn-edit" href="#" data-toggle="modal"
@@ -97,7 +97,7 @@
             </div>
         </div>
     </div>
-    @if(Auth::user()->admin == 1)
+    @if($user->admin == 1)
         <div class="modal fade" id="modalCreateCollectionCategory" role="dialog" tabindex="-1">
             <form role="form" id="create-form" class="form-horizontal" accept-charset="utf-8" method="GET"
                   action="{{ url('/collection_category/store') }}">

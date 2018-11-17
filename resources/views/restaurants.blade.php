@@ -3,7 +3,7 @@
     <div id="page-wrapper">
         <div class="page-header">
             <div class="page-action">
-                @if(Auth::user()->admin == 1)
+                @if($user->admin == 1)
                     <a href="{{ url('/restaurant/create') }}" class="btn btn-primary">
                         <i class="fa fa-plus"></i>
                         New
@@ -19,7 +19,7 @@
             <div class="col-md-12">
                 <div class="panel panel-default panel-table">
                     <div class="panel-heading">
-                        @if(Auth::user()->admin == 1)
+                        @if($user->admin == 1)
                             <h3 class="panel-title">Restaurant List</h3>
                         @else
                             <h3 class="panel-title">Restaurant</h3>
@@ -58,7 +58,7 @@
                             <table border="0" class="table table-striped table-border">
                                 <thead>
                                 <tr>
-                                    @if(Auth::user()->admin == 1)
+                                    @if($user->admin == 1)
                                         <th class="action action-three">
                                             <input type="checkbox"
                                                    onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">
@@ -80,7 +80,7 @@
                                     @foreach($restaurants as $restaurant)
                                         <tr>
                                             <td class="action">
-                                                @if(Auth::user()->admin == 1)
+                                                @if($user->admin == 1)
                                                     <input type="checkbox" value="{{ $restaurant->id }}" name="delete"/>
                                                     &nbsp;&nbsp;&nbsp;
                                                 @endif

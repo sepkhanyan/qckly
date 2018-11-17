@@ -1,7 +1,7 @@
 @extends('home', ['title' => 'Languages'])
 @section('content')
     <div id="page-wrapper">
-        @if(Auth::user()->admin == 1)
+        @if($user->admin == 1)
             <div class="page-header">
                 <div class="page-action">
                     <a href="{{url('language/create')}}" class="btn btn-primary">

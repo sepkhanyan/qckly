@@ -237,7 +237,7 @@
                             <span class="content">Dashboard</span>
                         </a>
                     </li>
-                    @if(Auth::user()->admin == 1)
+                    @if(auth()->user()->admin == 1)
                         <li>
                              <a class="area">
                                 <i class="fa fa-map-marker fa-fw"></i>
@@ -344,7 +344,7 @@
                             </li>
                         </ul>
                     </li>
-                    @if(Auth::user()->admin == 1)
+                    @if(auth()->user()->admin == 1)
                         <li>
                             <a class="users">
                                 <i class="fa fa-users fa-fw"></i>
@@ -449,24 +449,24 @@
                     <li>
                         <div class="row wrap-vertical text-center">
                             <div class="col-xs-12 wrap-top">
-                                @if(isset(Auth::user()->image))
-                                    <img src="/images/{{Auth::user()->image}}" width="30px" height="30px">
+                                @if(isset(auth()->user()->image))
+                                    <img src="/images/{{auth()->user()->image}}" width="30px" height="30px">
                                 @endif
                             </div>
                             <div class="col-xs-12 wrap-none wrap-top wrap-right">
                                 <span>
-                                    <strong>{{Auth::user()->first_name}}</strong>
+                                    <strong>{{auth()->user()->first_name}}</strong>
                                 </span>
                                 <br>
                                 <span>
-                                    <i>{{Auth::user()->username}}</i>
+                                    <i>{{auth()->user()->username}}</i>
                                 </span>
                             </div>
                         </div>
                     </li>
                     <li class="divider"></li>
                     <li>
-                        <a href="{{url('/admin/edit/' . Auth::user()->id)}}">
+                        <a href="{{url('/admin/edit/' . auth()->user()->id)}}">
                             <i class="fa fa-user fa-fw"></i>
                             &nbsp;&nbsp;Edit Details
                         </a>
@@ -526,7 +526,7 @@
 <script type="text/javascript"><!--
     $(document).ready(function () {
         $('.timepicker').timepicker({
-            defaultTime: '11:45 AM'
+            // defaultTime: '11:45 AM'
         });
 
         $('input[name="auto_lat_lng"]').on('change', function () {

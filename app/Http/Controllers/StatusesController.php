@@ -26,7 +26,7 @@ class StatusesController extends Controller
             }
             return view('statuses', ['statuses' => $statuses]);
         } else {
-            return redirect('/');
+            return redirect()->back();
         }
 
 
@@ -62,7 +62,7 @@ class StatusesController extends Controller
             $status->save();
             return redirect('/statuses');
         } else {
-            return redirect('/');
+            return redirect()->back();
         }
     }
 
@@ -109,7 +109,7 @@ class StatusesController extends Controller
             $status->save();
             return redirect('/statuses');
         } else {
-            return redirect('/');
+            return redirect()->back();
         }
     }
 
@@ -127,7 +127,7 @@ class StatusesController extends Controller
             Status::whereIn('id', $id)->delete();
             return redirect('/statuses');
         } else {
-            return redirect('/');
+            return redirect()->back();
         }
     }
 }

@@ -67,6 +67,7 @@ class CollectionsController extends Controller
             'collections' => $collections,
             'restaurants' => $restaurants,
             'selectedRestaurant' => $selectedRestaurant,
+            'user' => $user
         ]);
     }
 
@@ -248,7 +249,7 @@ class CollectionsController extends Controller
             $restaurant = $user->restaurant;
             $collection = Collection::where('id', $id)->where('restaurant_id', $restaurant->id)->first();
             if (!$collection) {
-                return redirect('/collections/' . $restaurant->id);
+                return redirect()->back();
             }
         } else {
             $collection = Collection::where('id', $id)->first();
@@ -269,7 +270,8 @@ class CollectionsController extends Controller
             'menu_categories' => $menu_categories,
             'mealtimes' => $mealtimes,
             'collection_menus' => $collection_menus,
-            'menu_items' => $menu_items
+            'menu_items' => $menu_items,
+            'user' => $user
         ]);
     }
 

@@ -3,7 +3,7 @@
     <div id="page-wrapper">
         <div class="page-header">
             <div class="page-action">
-                @if(Auth::user()->admin == 1)
+                @if($user->admin == 1)
                     <a data-toggle="modal" data-target="#modalCreateMealtime" href="" class="btn btn-primary">
                         <i class="fa fa-plus"></i>
                         New
@@ -54,7 +54,7 @@
                             <table border="0" class="table table-striped table-border">
                                 <thead>
                                 <tr>
-                                    @if(Auth::user()->admin == 1)
+                                    @if($user->admin == 1)
                                         <th class="action action-three">
                                             <input type="checkbox"
                                                    onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">
@@ -69,7 +69,7 @@
                                 @if(count($mealtimes) > 0)
                                     @foreach($mealtimes as $mealtime)
                                         <tr>
-                                            @if(Auth::user()->admin == 1)
+                                            @if($user->admin == 1)
                                                 <td class="action">
                                                     <input type="checkbox" value="{{ $mealtime->id }}" name="delete"/>&nbsp;&nbsp;&nbsp;
                                                     <a class="btn btn-edit" href="#" data-toggle="modal"
@@ -97,7 +97,7 @@
             </div>
         </div>
     </div>
-    @if(Auth::user()->admin == 1)
+    @if($user->admin == 1)
         <div class="modal fade" id="modalCreateMealtime" role="dialog" tabindex="-1">
             <form role="form" id="create-form" class="form-horizontal" accept-charset="utf-8" method="GET"
                   action="{{ url('/mealtime/store') }}">

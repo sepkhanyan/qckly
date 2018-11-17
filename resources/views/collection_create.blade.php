@@ -35,7 +35,7 @@
                     {{ csrf_field() }}
                     <div class="tab-content">
                         <div id="general" class="tab-pane row wrap-all active">
-                            @if(Auth::user()->admin == 1)
+                            @if($user->admin == 1)
                                 <input type="hidden" name="restaurant" value="{{$restaurant->id}}">
                             @endif
                             <h4 class="tab-pane-title">{{$collection_category->name_en}}</h4>

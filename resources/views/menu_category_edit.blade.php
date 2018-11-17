@@ -32,7 +32,7 @@
                     {{ csrf_field() }}
                     <div class="tab-content">
                         <div id="general" class="tab-pane row wrap-all active">
-                            @if(Auth::user()->admin == 1)
+                            @if($user->admin == 1)
                                 <input type="hidden" name="restaurant" value="{{$category->restaurant_id}}">
                             @endif
                             <div class="form-group{{ $errors->has('name_en') ? ' has-error' : '' }}">
