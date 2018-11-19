@@ -341,8 +341,8 @@ class UserCartsController extends Controller
             $cart = UserCart::where('id', $id)
                 ->where('user_id', $user->id)
                 ->where('completed', 0)
-                ->with(['address', 'cartCollection' => function ($query) {
-                    $query->with(['cartItem', 'collection.category']);
+                ->with(['cartCollection' => function ($query) {
+                    $query->orderby('created_at', 'desc');
                 }])->first();
             if ($cart) {
                 $address = (object)array();

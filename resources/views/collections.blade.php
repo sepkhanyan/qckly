@@ -22,11 +22,8 @@
                                 <select name="restaurant_name" id="input-name" class="form-control" tabindex="-1"
                                         title="" onchange="top.location.href = this.options[this.selectedIndex].value">
                                     @if($selectedRestaurant)
-                                        <option value>{{$selectedRestaurant->name_en . ', ' . $selectedRestaurant->area->area_en . ', ' . $selectedRestaurant->address_en}}</option>
                                         @foreach($restaurants as $restaurant)
-                                            @if($selectedRestaurant->id != $restaurant->id)
-                                                <option value="{{url('/collections/' . $restaurant->id)}}">{{$restaurant->name_en . ', ' . $restaurant->area->area_en . ', ' . $restaurant->address_en}}</option>
-                                            @endif
+                                                <option value="{{url('/collections/' . $restaurant->id)}}" {{($restaurant->id == $selectedRestaurant->id) ? 'selected' : ''}}>{{$restaurant->name_en . ', ' . $restaurant->area->area_en . ', ' . $restaurant->address_en}}</option>
                                         @endforeach
                                     @else
                                         <option value>Select Restaurant</option>
