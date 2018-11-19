@@ -61,7 +61,7 @@ class UserCartsController extends Controller
                 'female_caterer' => 'required|integer',
             ]);
             if ($validator->fails()) {
-                return response()->json(array('success' => 1, 'status_code' => 400,
+                return response()->json(array('success' => 0, 'status_code' => 400,
                     'message' => 'Invalid inputs',
                     'error_details' => $validator->messages()));
             } else {
@@ -80,7 +80,7 @@ class UserCartsController extends Controller
                         'delivery_order_time' => 'required',
                     ]);
                     if ($validator->fails()) {
-                        return response()->json(array('success' => 1, 'status_code' => 400,
+                        return response()->json(array('success' => 0, 'status_code' => 400,
                             'message' => 'Invalid inputs',
                             'error_details' => $validator->messages()));
                     } else {
@@ -105,7 +105,7 @@ class UserCartsController extends Controller
                         'collection_quantity' => 'required|integer',
                     ]);
                     if ($validator->fails()) {
-                        return response()->json(array('success' => 1, 'status_code' => 400,
+                        return response()->json(array('success' => 0, 'status_code' => 400,
                             'message' => 'Invalid inputs',
                             'error_details' => $validator->messages()));
                     } else {
@@ -150,7 +150,7 @@ class UserCartsController extends Controller
                         'menus' => 'required',
                     ]);
                     if ($validator->fails()) {
-                        return response()->json(array('success' => 1, 'status_code' => 400,
+                        return response()->json(array('success' => 0, 'status_code' => 400,
                             'message' => 'Invalid inputs',
                             'error_details' => $validator->messages()));
                     } else {
@@ -204,7 +204,7 @@ class UserCartsController extends Controller
                         'menus' => 'required',
                     ]);
                     if ($validator->fails()) {
-                        return response()->json(array('success' => 1, 'status_code' => 400,
+                        return response()->json(array('success' => 0, 'status_code' => 400,
                             'message' => 'Invalid inputs',
                             'error_details' => $validator->messages()));
                     } else {
@@ -255,7 +255,7 @@ class UserCartsController extends Controller
                         'menus' => 'required',
                     ]);
                     if ($validator->fails()) {
-                        return response()->json(array('success' => 1, 'status_code' => 400,
+                        return response()->json(array('success' => 0, 'status_code' => 400,
                             'message' => 'Invalid inputs',
                             'error_details' => $validator->messages()));
                     } else {
@@ -314,7 +314,7 @@ class UserCartsController extends Controller
             }
         } else {
             return response()->json(array(
-                'success' => 1,
+                'success' => 0,
                 'status_code' => 200,
                 'message' => \Lang::get('message.loginError')));
         }
@@ -482,13 +482,13 @@ class UserCartsController extends Controller
                     'data' => $arr));
             } else {
                 return response()->json(array(
-                    'success' => 1,
+                    'success' => 0,
                     'status_code' => 200,
                     'data' => []));
             }
         } else {
             return response()->json(array(
-                'success' => 1,
+                'success' => 0,
                 'status_code' => 200,
                 'message' => \Lang::get('message.loginError')));
         }
@@ -545,7 +545,7 @@ class UserCartsController extends Controller
             'collection_id' => 'required|integer',
         ]);
         if ($validator->fails()) {
-            return response()->json(array('success' => 1, 'status_code' => 400,
+            return response()->json(array('success' => 0, 'status_code' => 400,
                 'message' => 'Invalid inputs',
                 'error_details' => $validator->messages()));
         } else {
@@ -760,7 +760,7 @@ class UserCartsController extends Controller
                     'data' => $menu_collection));
             } else {
                 return response()->json(array(
-                    'success' => 1,
+                    'success' => 0,
                     'status_code' => 200,
                     'data' => [],
                     'message' => \Lang::get('message.noCollection')));
@@ -809,6 +809,11 @@ class UserCartsController extends Controller
                     'status_code' => 200,
                     'message' => \Lang::get('message.cartRemove')));
             }
+        }else {
+            return response()->json(array(
+                'success' => 0,
+                'status_code' => 200,
+                'message' => \Lang::get('message.loginError')));
         }
 
     }
@@ -835,19 +840,19 @@ class UserCartsController extends Controller
                         'status_code' => 200));
                 } else {
                     return response()->json(array(
-                        'success' => 1,
+                        'success' => 0,
                         'status_code' => 200,
                         'message' => \Lang::get('message.noCart')));
                 }
             } else {
                 return response()->json(array(
-                    'success' => 1,
+                    'success' => 0,
                     'status_code' => 200,
                     'message' => \Lang::get('message.noAddress')));
             }
         } else {
             return response()->json(array(
-                'success' => 1,
+                'success' => 0,
                 'status_code' => 200,
                 'message' => \Lang::get('message.loginError')));
         }

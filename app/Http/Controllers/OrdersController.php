@@ -324,14 +324,14 @@ class OrdersController extends Controller
                     'data' => $wholeData));
             } else {
                 return response()->json(array(
-                    'success' => 1,
+                    'success' => 0,
                     'status_code' => 200,
                     'data' => [],
                     'message' => \Lang::get('message.noOrder')));
             }
         } else {
             return response()->json(array(
-                'success' => 1,
+                'success' => 0,
                 'status_code' => 200,
                 'message' => \Lang::get('message.loginError')));
         }
@@ -368,7 +368,7 @@ class OrdersController extends Controller
                 'orders' => 'required'
             ]);
             if ($validator->fails()) {
-                return response()->json(array('success' => 1, 'status_code' => 400,
+                return response()->json(array('success' => 0, 'status_code' => 400,
                     'message' => 'Invalid inputs',
                     'error_details' => $validator->messages()));
             } else {
@@ -381,7 +381,7 @@ class OrdersController extends Controller
                     if ($cart->completed == 0) {
                         if ($cart->delivery_address_id == null) {
                             return response()->json(array(
-                                'success' => 1,
+                                'success' => 0,
                                 'status_code' => 200,
                                 'message' => \Lang::get('message.addAddress')));
                         }
@@ -421,13 +421,13 @@ class OrdersController extends Controller
                         $delivery_address->save();
                     } else {
                         return response()->json(array(
-                            'success' => 1,
+                            'success' => 0,
                             'status_code' => 200,
                             'message' => \Lang::get('message.orderComplete')));
                     }
                 } else {
                     return response()->json(array(
-                        'success' => 1,
+                        'success' => 0,
                         'status_code' => 200,
                         'message' => \Lang::get('message.noCart')));
                 }
@@ -458,7 +458,7 @@ class OrdersController extends Controller
             }
         } else {
             return response()->json(array(
-                'success' => 1,
+                'success' => 0,
                 'status_code' => 200,
                 'message' => \Lang::get('message.loginError')));
         }

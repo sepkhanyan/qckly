@@ -74,7 +74,7 @@ class ReviewsController extends Controller
             'restaurant_id' => 'required|integer',
         ]);
         if ($validator->fails()) {
-            return response()->json(array('success' => 1, 'status_code' => 400,
+            return response()->json(array('success' => 0, 'status_code' => 400,
                 'message' => 'Invalid inputs',
                 'error_details' => $validator->messages()));
         } else {
@@ -119,7 +119,7 @@ class ReviewsController extends Controller
                 'data' => $wholeData));
         } else {
             return response()->json(array(
-                'success' => 1,
+                'success' => 0,
                 'status_code' => 200,
                 'message' => \Lang::get('message.noReview')));
         }
@@ -158,7 +158,7 @@ class ReviewsController extends Controller
                 'reviews' => 'required',
             ]);
             if ($validator->fails()) {
-                return response()->json(array('success' => 1, 'status_code' => 400,
+                return response()->json(array('success' => 0, 'status_code' => 400,
                     'message' => 'Invalid inputs',
                     'error_details' => $validator->messages()));
             } else {
@@ -184,7 +184,7 @@ class ReviewsController extends Controller
             }
         } else {
             return response()->json(array(
-                'success' => 1,
+                'success' => 0,
                 'status_code' => 200,
                 'message' => \Lang::get('message.loginError')));
         }

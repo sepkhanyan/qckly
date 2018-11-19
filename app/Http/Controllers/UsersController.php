@@ -167,7 +167,7 @@ class UsersController extends Controller
             'mobile_number' => 'required|numeric|digits:8',
         ]);
         if ($validator->fails()) {
-            return response()->json(array('success' => 1, 'status_code' => 400,
+            return response()->json(array('success' => 0, 'status_code' => 400,
                 'message' => 'Invalid inputs',
                 'error_details' => $validator->messages()));
         } else {
@@ -197,7 +197,7 @@ class UsersController extends Controller
                 $client->save();
                 // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=Your%20Syaanh%20code%20is%20:%20$random_val&destination=00974$mobile&source=97772&mask=Syaanh";
 //                file($url);
-                return response()->json(['success' => 0,
+                return response()->json(['success' => 1,
                     'status_code' => 200,
                     'message' => \Lang::get('message.otpSent'),
                     'otp' => $random_val
@@ -208,7 +208,7 @@ class UsersController extends Controller
                     'mobile_number' => 'required|numeric|digits:8'
                 ]);
                 if ($validator->fails()) {
-                    return response()->json(array('success' => 1, 'status_code' => 400,
+                    return response()->json(array('success' => 0, 'status_code' => 400,
                         'message' => 'Invalid inputs',
                         'error_details' => $validator->messages()));
                 } else {
@@ -239,7 +239,7 @@ class UsersController extends Controller
 //                    }
                     /// here will send code
                     if ($u_id) {
-                        return response()->json(['success' => 0,
+                        return response()->json(['success' => 1,
                             'status_code' => 200,
                             'message' => \Lang::get('message.otpSent'),
                             'otp' => $random_val]);
@@ -263,7 +263,7 @@ class UsersController extends Controller
             'otp' => 'required|numeric|digits:4',
         ]);
         if ($validator->fails()) {
-            return response()->json(array('success' => 1, 'status_code' => 400,
+            return response()->json(array('success' => 0, 'status_code' => 400,
                 'message' => 'Invalid inputs',
                 'error_details' => $validator->messages()));
         } else {
@@ -292,7 +292,7 @@ class UsersController extends Controller
 
                 return response()->json(
                     array(
-                        'success' => 0,
+                        'success' => 1,
                         'status_code' => 200,
                         'data' => [
                             'user_id' => $update->id,
@@ -312,7 +312,7 @@ class UsersController extends Controller
 //                }
             } else {
                 return response()->json([
-                    'success' => 1,
+                    'success' => 0,
                     'status_code' => 400,
                     'message' => \Lang::get('message.otpError')
                 ]);
@@ -333,7 +333,7 @@ class UsersController extends Controller
             'mobile_number' => 'required|numeric|digits:8',
         ]);
         if ($validator->fails()) {
-            return response()->json(array('success' => 1, 'status_code' => 400,
+            return response()->json(array('success' => 0, 'status_code' => 400,
                 'message' => \Lang::get('message.invalid_inputs'),
                 'error_details' => $validator->messages()));
         } else {
@@ -352,7 +352,7 @@ class UsersController extends Controller
                 $client->save();
                 // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=Your%20Syaanh%20code%20is%20:%20$random_val&destination=00974$mobile&source=97772&mask=Syaanh";
 //                file($url);
-                return response()->json(['success' => 0,
+                return response()->json(['success' => 1,
                     'status_code' => 200,
                     'message' => \Lang::get('message.otpResent'),
                     'otp' => $random_val
@@ -373,11 +373,11 @@ class UsersController extends Controller
         $user = User::where('api_token', '=', $token)->first();
         if ($user) {
             $validator = \Validator::make($request->all(), [
-                'email' => 'required|string',
-                'username' => 'required|string'
+                'email' => 'required|email',
+                'username' => 'required|regex:/^[\s\w-]*$/'
             ]);
             if ($validator->fails()) {
-                return response()->json(array('success' => 1, 'status_code' => 400,
+                return response()->json(array('success' => 0, 'status_code' => 400,
                     'message' => \Lang::get('message.invalid_inputs'),
                     'error_details' => $validator->messages()));
             } else {
@@ -413,7 +413,7 @@ class UsersController extends Controller
             }
         } else {
             return response()->json(array(
-                'success' => 1,
+                'success' => 0,
                 'status_code' => 200,
                 'message' => \Lang::get('message.loginError')));
         }
@@ -437,6 +437,11 @@ class UsersController extends Controller
                 'success' => 1,
                 'status_code' => 200,
                 'data' => $arr));
+        } else {
+            return response()->json(array(
+                'success' => 0,
+                'status_code' => 200,
+                'message' => \Lang::get('message.loginError')));
         }
     }
 
@@ -444,17 +449,40 @@ class UsersController extends Controller
     public function editAdmin()
     {
         $admin = Auth::user();
-        return view('admin_edit', ['admin' => $admin]);
+        return view('admin_edit', [
+            'admin' => $admin,
+            ]);
 
     }
 
     public function updateAdmin(Request $request)
     {
+        if($request->input('password')){
+            $validator = \Validator::make($request->all(), [
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|max:255',
+                'username' => 'required|regex:/^[\s\w-]*$/',
+                'password' => 'min:6|confirmed',
+                'image' => 'image'
+            ]);
+        }else{
+            $validator = \Validator::make($request->all(), [
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|max:255',
+                'username' => 'required|regex:/^[\s\w-]*$/',
+                'image' => 'image'
+            ]);
+        }
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
         $admin = Auth::user();
         $admin->first_name = $request->input('name');
         $admin->email = $request->input('email');
         $admin->username = $request->input('username');
-        $admin->username = $request->input('username');
+        $admin->password = $request->input('password');
         if ($request->hasFile('image')) {
             if ($admin->image) {
                 File::delete(public_path('images/' . $admin->image));

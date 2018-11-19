@@ -1,4 +1,4 @@
-@extends('home', ['title' => 'Staff: ' . Auth::user()->first_name])
+@extends('home', ['title' => 'Staff: ' . $admin->first_name])
 @section('content')
     <div id="page-wrapper">
         <div class="page-header clearfix">
@@ -25,32 +25,47 @@
                 </div>
                 <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST"
                       enctype="multipart/form-data"
-                      action="{{url('/admin/update/' . Auth::user()->id)}}">
+                      action="{{url('/admin/update/' . $admin->id)}}">
                     {{ csrf_field() }}
                     <div class="tab-content">
                         <div id="staff-details" class="tab-pane row wrap-all active">
-                            <div class="form-group">
+                            <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                                 <label for="input-name" class="col-sm-3 control-label">Name</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="name" id="input-name" class="form-control"
-                                           value="{{Auth::user()->first_name}}">
+                                           value="{{ old('first_name') ?? $admin->first_name}}">
                                 </div>
+                                @if ($errors->has('name'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('name') }}</strong>
+                                    </span>
+                                @endif
                             </div>
-                            <div class="form-group">
+                            <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                                 <label for="input-email" class="col-sm-3 control-label">Email</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="email" id="input-email" class="form-control"
-                                           value="{{Auth::user()->email}}">
+                                           value="{{ old('email') ?? $admin->email}}">
                                 </div>
+                                @if ($errors->has('email'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('email') }}</strong>
+                                    </span>
+                                @endif
                             </div>
-                            <div class="form-group">
+                            <div class="form-group{{ $errors->has('username') ? ' has-error' : '' }}">
                                 <label for="input-username" class="col-sm-3 control-label">Username</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="username" id="input-username" class="form-control"
-                                           value="{{Auth::user()->username}}">
+                                           value="{{ old('username') ?? $admin->username}}">
                                 </div>
+                                @if ($errors->has('username'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('username') }}</strong>
+                                    </span>
+                                @endif
                             </div>
-                            <div class="form-group">
+                            <div class="form-group{{ $errors->has('image') ? ' has-error' : '' }}">
                                 <label for="input-image" class="col-sm-3 control-label">
                                     Image
                                     <span class="help-block">Select a file to update category image, otherwise leave blank.</span>
@@ -59,7 +74,7 @@
                                     <div class="thumbnail imagebox">
                                         <div class="preview">
                                             @if(isset(Auth::user()->image))
-                                                <img src="{{url('/') . '/images/' . Auth::user()->image}}"
+                                                <img src="{{url('/') . '/images/' . $admin->image}}"
                                                      class="thumb img-responsive" id="thumb">
                                             @else
                                                 <img src="{{url('/') . '/admin/no_photo.png'}}"
@@ -82,23 +97,33 @@
                                             </p>
                                         </div>
                                     </div>
+                                    @if ($errors->has('image'))
+                                        <span class="help-block">
+                                        <strong>{{ $errors->first('image') }}</strong>
+                                    </span>
+                                    @endif
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="input-password" class="col-sm-3 control-label">
+                            <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+                                <label for="input_password" class="col-sm-3 control-label">
                                     Password
                                     <span class="help-block">Leave blank to leave password unchanged</span>
                                 </label>
                                 <div class="col-sm-5">
-                                    <input type="password" name="password" id="input-password" class="form-control"
-                                           value="" autocomplete="off">
+                                    <input type="password" name="password" id="input_password" class="form-control"
+                                           value="{{ old('password') }}"  autocomplete="off"/>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="input-name" class="col-sm-3 control-label">Password Confirm</label>
+                            <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+                                <label for="password-confirm" class="col-sm-3 control-label">Confirm Password</label>
                                 <div class="col-sm-5">
-                                    <input type="password" name="password_confirm" id="" class="form-control"
-                                           autocomplete="off">
+                                    <input type="password" name="password_confirmation" id="password-confirm"
+                                           class="form-control" value="{{ old('password_confirmation') }}"/>
+                                    @if ($errors->has('password'))
+                                        <span class="help-block">
+                                        <strong>{{ $errors->first('password') }}</strong>
+                                    </span>
+                                    @endif
                                 </div>
                             </div>
                         </div>

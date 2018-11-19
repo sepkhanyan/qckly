@@ -81,12 +81,12 @@ class RestaurantsController extends Controller
             $validator = \Validator::make($request->all(), [
                 'manager_name' => 'required|string|max:255',
                 'manager_email' => 'required|email|max:255',
-                'manager_username' => 'required|string',
+                'manager_username' => 'required|regex:/^[\s\w-]*$/',
                 'password' => 'required|string|min:6|confirmed',
                 'category' => 'required',
                 'restaurant_name_en' => 'required|string|max:255',
                 'restaurant_name_ar' => 'required|string|max:255',
-                'restaurant_email' => 'required|string|max:255',
+                'restaurant_email' => 'required|email|max:255',
                 'restaurant_telephone' => 'required|integer',
                 'description_en' => 'required|string',
                 'description_ar' => 'required|string',
@@ -553,7 +553,7 @@ class RestaurantsController extends Controller
                 'data' => $wholeData));
         } else {
             return response()->json(array(
-                'success' => 1,
+                'success' => 0,
                 'status_code' => 200,
                 'message' => \Lang::get('message.noRestaurant')));
         }
@@ -574,7 +574,7 @@ class RestaurantsController extends Controller
             'category_id' => 'required|integer',
         ]);
         if ($validator->fails()) {
-            return response()->json(array('success' => 1, 'status_code' => 400,
+            return response()->json(array('success' => 0, 'status_code' => 400,
                 'message' => 'Invalid inputs',
                 'error_details' => $validator->messages()));
         } else {
@@ -637,7 +637,7 @@ class RestaurantsController extends Controller
 
             } else {
                 return response()->json(array(
-                    'success' => 1,
+                    'success' => 0,
                     'status_code' => 200,
                     'message' => \Lang::get('message.noRestaurant')));
             }
@@ -659,7 +659,7 @@ class RestaurantsController extends Controller
             'working_time' => 'required',
         ]);
         if ($validator->fails()) {
-            return response()->json(array('success' => 1, 'status_code' => 400,
+            return response()->json(array('success' => 0, 'status_code' => 400,
                 'message' => 'Invalid inputs',
                 'error_details' => $validator->messages()));
         } else {
@@ -782,7 +782,7 @@ class RestaurantsController extends Controller
 
             } else {
                 return response()->json(array(
-                    'success' => 1,
+                    'success' => 0,
                     'status_code' => 200,
                     'message' => \Lang::get('message.selectAreaDateTime')));
             }
@@ -845,7 +845,7 @@ class RestaurantsController extends Controller
 
         } else {
             return response()->json(array(
-                'success' => 1,
+                'success' => 0,
                 'status_code' => 200,
                 'message' => \Lang::get('message.noRestaurant')));
         }
@@ -865,7 +865,7 @@ class RestaurantsController extends Controller
             'restaurant_id' => 'required|integer',
         ]);
         if ($validator->fails()) {
-            return response()->json(array('success' => 1, 'status_code' => 400,
+            return response()->json(array('success' => 0, 'status_code' => 400,
                 'message' => 'Invalid inputs',
                 'error_details' => $validator->messages()));
         } else {
@@ -1104,7 +1104,7 @@ class RestaurantsController extends Controller
                         ];
                     } else {
                         return response()->json(array(
-                            'success' => 1,
+                            'success' => 0,
                             'status_code' => 200,
                             'message' => \Lang::get('message.noCollection')));
                     }
@@ -1118,7 +1118,7 @@ class RestaurantsController extends Controller
 
             } else {
                 return response()->json(array(
-                    'success' => 1,
+                    'success' => 0,
                     'status_code' => 200,
                     'message' => \Lang::get('message.noRestaurant')));
             }
