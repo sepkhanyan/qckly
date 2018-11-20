@@ -102,8 +102,8 @@ class OrdersController extends Controller
                 $query->with(['cartCollection' => function ($q) use ($restaurant) {
                     $q->where('restaurant_id', $restaurant->id);
                 }]);
-            }])->where('id', $id)->where('status_id', 2)->first();
-            $restaurantOrder = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $restaurant->id)->where('status_id', 2)->first();
+            }])->where('id', $id)->first();
+            $restaurantOrder = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $restaurant->id)->first();
             if (!$restaurantOrder) {
                 return redirect()->back();
             }
@@ -131,7 +131,7 @@ class OrdersController extends Controller
                 $restaurantOrder->save();
                 $orders = OrderRestaurant::where('order_id', $id)->where('status_id', '!=', 3)->get();
                 if (count($orders) <= 0) {
-                    Order::where('id', $id)->update(['status_id' => 3]);
+                    Order::whereIn('id', $id)->update(['status_id' => 3]);
                 }
 
         } else {
