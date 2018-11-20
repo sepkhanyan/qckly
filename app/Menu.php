@@ -41,4 +41,15 @@ class Menu extends Model
     {
         return $this->hasMany('App\UserCartItem', 'item_id');
     }
+
+    public function scopeName($query, $val)
+    {
+        if (!empty($val)) {
+            return $query->where('name_en', 'like', '%' . $val . '%')
+                ->orWhere('price', 'like', '%' . $val . '%')
+                ->orWhere('description_en', 'like', '%' . $val . '%');
+        }
+
+        return $query;
+    }
 }

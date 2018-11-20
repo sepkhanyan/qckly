@@ -38,8 +38,7 @@ class OrdersController extends Controller
             }
 
             if (isset($data['order_search'])) {
-                $orders = $orders->where('id', 'like', $data['order_search'])
-                    ->orWhere('total_price', 'like', $data['order_search']);
+                $orders = $orders->name($data['order_search']);
             }
             $selectedRestaurant = Restaurant::find($id);
             $orders = $orders->orderby('created_at', 'desc')->paginate(20);
@@ -54,8 +53,7 @@ class OrdersController extends Controller
             }
 
             if (isset($data['order_search'])) {
-                $orders = $orders->where('id', 'like', $data['order_search'])
-                    ->orWhere('total_price', 'like', $data['order_search']);
+                $orders = $orders->name($data['order_search']);
             }
             $orders = $orders->orderby('created_at', 'desc')->paginate(20);
         }

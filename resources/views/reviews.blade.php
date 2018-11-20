@@ -53,7 +53,7 @@
                                             <div class="form-group">
                                                 <input type="text" name="review_search"
                                                        class="form-control input-sm" value=""
-                                                       placeholder="Search order id.">&nbsp;&nbsp;&nbsp;
+                                                       placeholder="Search rate order id.">&nbsp;&nbsp;&nbsp;
                                             </div>
                                             <a class="btn btn-grey" onclick="filterList();" title=""
                                                data-original-title="Search">

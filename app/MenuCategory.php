@@ -43,4 +43,14 @@ class MenuCategory extends Model
         return $this->hasMany('App\CollectionItem', 'collection_menu_id');
     }
 
+    public function scopeName($query, $val)
+    {
+        if (!empty($val)) {
+            return $query->where('name_en', 'like', '%' . $val . '%')
+                ->orWhere('description_en', 'like', '%' . $val . '%');
+        }
+
+        return $query;
+    }
+
 }

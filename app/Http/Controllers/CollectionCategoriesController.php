@@ -14,10 +14,14 @@ class CollectionCategoriesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
         $categories = CollectionCategory::all();
+        $data = $request->all();
+        if (isset($data['collection_category_search'])) {
+            $categories = $categories->where('name_en', 'like', $data['collection_category_search']);
+        }
         return view('collection_categories', [
             'categories' => $categories,
             'user' => $user

@@ -3,14 +3,16 @@
     <div id="page-wrapper">
         <div class="page-header">
             <div class="page-action">
-                <a href="{{ url('/customer/create') }}" class="btn btn-primary">
-                    <i class="fa fa-plus"></i>
-                    New
-                </a>
-                <a class="btn btn-danger " id="delete_customer">
-                    <i class="fa fa-trash-o"></i>
-                    Delete
-                </a>
+                {{--<a href="{{ url('/customer/create') }}" class="btn btn-primary">--}}
+                {{--<i class="fa fa-plus"></i>--}}
+                {{--New--}}
+                {{--</a>--}}
+                @if($user->admin == 1)
+                    <a class="btn btn-danger " id="delete_customer">
+                        <i class="fa fa-trash-o"></i>
+                        Delete
+                    </a>
+                @endif
             </div>
         </div>
         <div class="row content">
@@ -66,10 +68,12 @@
                             <table border="0" class="table table-striped table-border">
                                 <thead>
                                 <tr>
-                                    <th class="action action-three">
-                                        <input type="checkbox"
-                                               onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">
-                                    </th>
+                                    @if($user->admin == 1)
+                                        <th class="action action-three">
+                                            <input type="checkbox"
+                                                   onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">
+                                        </th>
+                                    @endif
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Country Code</th>
@@ -83,13 +87,16 @@
                                 @if(count($customers) > 0)
                                     @foreach($customers as $customer)
                                         <tr>
-                                            <td class="action"><input type="checkbox" value="{{$customer->id}}"
-                                                                      name="delete"/>&nbsp;&nbsp;&nbsp;
-                                                <a class="btn btn-edit" title=""
-                                                   href="{{ url('/customer/edit/' . $customer->id )}}">
-                                                    <i class="fa fa-pencil"></i>
-                                                </a>&nbsp;&nbsp;
-                                            </td>
+                                            @if($user->admin == 1)
+                                                <td class="action">
+                                                    <input type="checkbox" value="{{$customer->id}}"
+                                                           name="delete"/>&nbsp;&nbsp;&nbsp;
+                                                    {{--<a class="btn btn-edit" title=""--}}
+                                                    {{--href="{{ url('/customer/edit/' . $customer->id )}}">--}}
+                                                    {{--<i class="fa fa-pencil"></i>--}}
+                                                    {{--</a>&nbsp;&nbsp;--}}
+                                                </td>
+                                            @endif
                                             <td>{{$customer->username}}</td>
                                             <td>{{$customer->email}}</td>
                                             <td>{{$customer->country_code}}</td>

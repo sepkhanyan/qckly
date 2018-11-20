@@ -44,7 +44,7 @@
                                     <select name="category[]" id="category" class="form-control"
                                             placeholder="Select Category"
                                             multiple>
-                                        @foreach($restaurant->categoryRestaurant as $category_restaurant)
+                                        @foreach($category_restaurants as $category_restaurant)
                                             <option
                                                     value="{{$category_restaurant->category_id}}"
                                                     @if(old('category')) {{ (collect(old('category'))->contains($category_restaurant->category_id)) ? 'selected':'' }} @else selected @endif>{{$category_restaurant->name_en}}</option>
@@ -142,14 +142,14 @@
                                 <label for="input_state_en" class="col-sm-3 control-label">State En</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="state_en" id="input_state_en" class="form-control"
-                                           value=""/>
+                                           value="{{old('state_en') ?? $restaurant->state_en}}"/>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="input_state_ar" class="col-sm-3 control-label">State Ar</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="state_ar" id="input_state_ar" class="form-control"
-                                           value=""/>
+                                           value="{{old('state_ar') ?? $restaurant->state_ar}}"/>
                                 </div>
                             </div>
                             <div class="form-group{{ $errors->has('postcode') ? ' has-error' : '' }}">
@@ -485,7 +485,7 @@
                                     </div>
                                 </div>
                                 @if($working->type == 'flexible')
-                                    @foreach($restaurant->workingHour as $working_hour)
+                                    @foreach($working_hours as $working_hour)
                                         <div class="form-group{{ $errors->has('flexible_hours.' . $working_hour->weekday . '.open') ? ' has-error' : '' }}{{ $errors->has('flexible_hours.' . $working_hour->weekday . '.close') ? ' has-error' : '' }}">
                                             <label for="input-status" class="col-sm-3 control-label text-right">
                                                 <span class="text-right">

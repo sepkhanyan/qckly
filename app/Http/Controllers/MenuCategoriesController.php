@@ -28,8 +28,7 @@ class MenuCategoriesController extends Controller
         if ($id) {
             $categories = MenuCategory::where('restaurant_id', $id);
             if (isset($data['category_search'])) {
-                $categories = MenuCategory::where('name_en', 'like', $data['category_search'])
-                    ->orWhere('description_en', 'like', $data['category_search']);
+                $categories = $categories->name($data['category_search']);
             }
             $selectedRestaurant = Restaurant::find($id);
             $categories = $categories->paginate(20);
@@ -39,8 +38,7 @@ class MenuCategoriesController extends Controller
             $restaurant = $user->restaurant;
             $categories = MenuCategory::where('restaurant_id', $restaurant->id);
             if (isset($data['category_search'])) {
-                $categories = MenuCategory::where('name_en', 'like', $data['category_search'])
-                    ->orWhere('description_en', 'like', $data['category_search']);
+                $categories = $categories->name($data['category_search']);
             }
             $selectedRestaurant = Restaurant::find($restaurant->id);
             $categories = $categories->paginate(20);

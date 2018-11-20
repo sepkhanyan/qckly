@@ -257,7 +257,7 @@ class RestaurantsController extends Controller
 //             dd(collect($week));
 
         $areas = Area::all();
-//        $category_restaurants = CategoryRestaurant::where('restaurant_id', $id)->get();
+        $category_restaurants = CategoryRestaurant::where('restaurant_id', $id)->get();
         $categories = RestaurantCategory::whereDoesntHave('categoryRestaurant', function ($query) use ($id) {
             $query->where('restaurant_id', '=', $id);
         })->get();
@@ -270,6 +270,7 @@ class RestaurantsController extends Controller
             }
         }
         $working = WorkingHour::where('restaurant_id', $restaurant->id)->first();
+        $working_hours = WorkingHour::where('restaurant_id', $restaurant->id)->get();
         return view('restaurant_edit', [
             'user' => $user,
             'restaurant' => $restaurant,
@@ -277,7 +278,8 @@ class RestaurantsController extends Controller
             'areas' => $areas,
             'categories' => $categories,
             'week' => collect($week),
-//            'category_restaurants' => $category_restaurants
+            'category_restaurants' => $category_restaurants,
+            'working_hours' => $working_hours
         ]);
     }
 

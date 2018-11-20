@@ -78,4 +78,14 @@ class User extends Authenticatable
 //        }
 //        return false;
 //    }
+
+    public function scopeName($query, $val)
+    {
+        if (!empty($val)) {
+            return $query->where('username', 'like', '%' . $val . '%')
+                ->orWhere('email', 'like', '%' . $val . '%');
+        }
+
+        return $query;
+    }
 }

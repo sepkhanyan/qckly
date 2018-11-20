@@ -67,4 +67,14 @@ class Collection extends Model
     {
         return $this->hasMany('App\UserCartCollection', 'collection_id');
     }
+
+    public function scopeName($query, $val)
+    {
+        if (!empty($val)) {
+            return $query->where('name_en', 'like', '%' . $val . '%')
+                ->orWhere('price', 'like', '%' . $val . '%');
+        }
+
+        return $query;
+    }
 }

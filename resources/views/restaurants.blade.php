@@ -19,40 +19,40 @@
             <div class="col-md-12">
                 <div class="panel panel-default panel-table">
                     <div class="panel-heading">
+                        <h3 class="panel-title">Restaurant{{($user->admin == 1) ? ' List' : ''}}</h3>
                         @if($user->admin == 1)
-                            <h3 class="panel-title">Restaurant List</h3>
-                        @else
-                            <h3 class="panel-title">Restaurant</h3>
+                            <div class="pull-right">
+                                <button class="btn btn-filter btn-xs">
+                                    <i class="fa fa-filter"></i>
+                                </button>
+                            </div>
                         @endif
-                        <div class="pull-right">
-                            <button class="btn btn-filter btn-xs">
-                                <i class="fa fa-filter"></i>
-                            </button>
-                        </div>
                     </div>
-                    <div class="panel-body panel-filter" style="display: none">
-                        <form role="form" id="filter-form" accept-charset="utf-8" method="GET" action="" enctype="">
-                            <div class="filter-bar">
-                                <div class="form-inline">
-                                    <div class="row">
-                                        <div class="col-md-3 pull-right text-right">
-                                            <div class="form-group">
-                                                <input type="text" name="restaurant_search"
-                                                       class="form-control input-sm" value=""
-                                                       placeholder="Search name or description."/>&nbsp;&nbsp;&nbsp;
+                    @if($user->admin == 1)
+                        <div class="panel-body panel-filter" style="display: none">
+                            <form role="form" id="filter-form" accept-charset="utf-8" method="GET" action="" enctype="">
+                                <div class="filter-bar">
+                                    <div class="form-inline">
+                                        <div class="row">
+                                            <div class="col-md-3 pull-right text-right">
+                                                <div class="form-group">
+                                                    <input type="text" name="restaurant_search"
+                                                           class="form-control input-sm" value=""
+                                                           placeholder="Search name or description."/>&nbsp;&nbsp;&nbsp;
+                                                </div>
+                                                <a class="btn btn-grey" onclick="filterList();" title="Search">
+                                                    <i class="fa fa-search"></i>
+                                                </a>
+                                                <a class="btn btn-grey" href="{{url('/restaurants')}}" title="Clear">
+                                                    <i class="fa fa-times"></i>
+                                                </a>
                                             </div>
-                                            <a class="btn btn-grey" onclick="filterList();" title="Search">
-                                                <i class="fa fa-search"></i>
-                                            </a>
-                                            <a class="btn btn-grey" href="{{url('/restaurants')}}" title="Clear">
-                                                <i class="fa fa-times"></i>
-                                            </a>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </form>
-                    </div>
+                            </form>
+                        </div>
+                    @endif
                     <form role="form" id="list-form" accept-charset="utf-8" method="POST" action="">
                         <div class="table-responsive">
                             <table border="0" class="table table-striped table-border">
@@ -156,7 +156,6 @@
     </div>
     <script type="text/javascript">
         function myFunction(id, status) {
-            console.log(status);
             if (status == 1) {
                 $('#open').attr('class', 'btn btn-success active');
                 $('#busy').attr('class', 'btn btn-danger');

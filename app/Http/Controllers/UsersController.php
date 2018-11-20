@@ -21,24 +21,37 @@ class UsersController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
+        $customers = [];
+        $data = $request->all();
         if ($user->admin == 1) {
             $customers = User::where('group_id', 0);
-            $data = $request->all();
-            /*if(isset($data['customer_status'])){
-                $users = User::where('user_status',$data['customer_status'])->get();
-            }*/
             if (isset($data['customer_date'])) {
-                $customers = User::where('created_at', $data['customer_date']);
+                $customers = $customers->where('created_at', $data['customer_date']);
             }
             if (isset($data['customer_search'])) {
-                $customers = User::where('email', 'like', $data['customer_search'])
-                    ->orWhere('username', 'like', $data['customer_search']);
+                $customers = $customers->name($data['customer_search']);
             }
             $customers = $customers->paginate(20);
-            return view('customers', ['customers' => $customers]);
-        } else {
-            return redirect('/');
+        } elseif($user->admin == 2) {
+            $user = $user->load('restaurant');
+            $restaurant = $user->restaurant;
+            $customers = User::where('group_id', 0)->whereHas('order', function ($query) use($restaurant){
+                $query->whereHas('orderRestaurant', function ($q) use ($restaurant) {
+                    $q->where('restaurant_id', $restaurant->id);
+                });
+            });
+            if (isset($data['customer_date'])) {
+                $customers = $customers->where('created_at', $data['customer_date']);
+            }
+            if (isset($data['customer_search'])) {
+                $customers = $customers->name($data['customer_search']);
+            }
+            $customers = $customers->paginate(20);
         }
+        return view('customers', [
+            'customers' => $customers,
+            'user' => $user
+            ]);
     }
 
     /**
@@ -46,15 +59,15 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        $user = Auth::user();
-        if ($user->admin == 1) {
-            return view('customer_create');
-        } else {
-            return redirect('/');
-        }
-    }
+//    public function create()
+//    {
+//        $user = Auth::user();
+//        if ($user->admin == 1) {
+//            return view('customer_create');
+//        } else {
+//            return redirect('/');
+//        }
+//    }
 
     /**
      * Store a newly created resource in storage.
@@ -62,24 +75,24 @@ class UsersController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        $user = Auth::user();
-        if ($user->admin == 1) {
-            $customer = new User();
-            $customer->username = $request->input('name');
-            $customer->password = bcrypt($request->input('password'));
-            $customer->country_code = $request->input('country_code');
-            $customer->mobile_number = $request->input('telephone');
-            $customer->email = $request->input('email');
-            $customer->otp = rand(1500, 5000);
-            $customer->lang = 'en';
-            $customer->save();
-            return redirect('/customers');
-        } else {
-            return redirect('/');
-        }
-    }
+//    public function store(Request $request)
+//    {
+//        $user = Auth::user();
+//        if ($user->admin == 1) {
+//            $customer = new User();
+//            $customer->username = $request->input('name');
+//            $customer->password = bcrypt($request->input('password'));
+//            $customer->country_code = $request->input('country_code');
+//            $customer->mobile_number = $request->input('telephone');
+//            $customer->email = $request->input('email');
+//            $customer->otp = rand(1500, 5000);
+//            $customer->lang = 'en';
+//            $customer->save();
+//            return redirect('/customers');
+//        } else {
+//            return redirect('/');
+//        }
+//    }
 
     /**
      * Display the specified resource.
@@ -98,16 +111,16 @@ class UsersController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        $user = Auth::user();
-        if ($user->admin == 1) {
-            $customer = User::find($id);
-            return view('customer_edit', ['customer' => $customer]);
-        } else {
-            return redirect('/');
-        }
-    }
+//    public function edit($id)
+//    {
+//        $user = Auth::user();
+//        if ($user->admin == 1) {
+//            $customer = User::find($id);
+//            return view('customer_edit', ['customer' => $customer]);
+//        } else {
+//            return redirect('/');
+//        }
+//    }
 
     /**
      * Update the specified resource in storage.
@@ -116,24 +129,24 @@ class UsersController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        $user = Auth::user();
-        if ($user->admin == 1) {
-            $customer = User::find($id);
-            $customer->username = $request->input('name');
-            $customer->password = bcrypt($request->input('password'));
-            $customer->country_code = $request->input('country_code');
-            $customer->mobile_number = $request->input('telephone');
-            $customer->email = $request->input('email');
-            $customer->otp = rand(1500, 5000);
-            $customer->lang = 'en';
-            $customer->save();
-            return redirect('/customers');
-        } else {
-            return redirect('/');
-        }
-    }
+//    public function update(Request $request, $id)
+//    {
+//        $user = Auth::user();
+//        if ($user->admin == 1) {
+//            $customer = User::find($id);
+//            $customer->username = $request->input('name');
+//            $customer->password = bcrypt($request->input('password'));
+//            $customer->country_code = $request->input('country_code');
+//            $customer->mobile_number = $request->input('telephone');
+//            $customer->email = $request->input('email');
+//            $customer->otp = rand(1500, 5000);
+//            $customer->lang = 'en';
+//            $customer->save();
+//            return redirect('/customers');
+//        } else {
+//            return redirect('/');
+//        }
+//    }
 
     /**
      * Remove the specified resource from storage.
@@ -147,10 +160,9 @@ class UsersController extends Controller
         if ($user->admin == 1) {
             $id = $request->get('id');
             User::whereIn('id', $id)->delete();
-
             return redirect('/customers');
         } else {
-            return redirect('/');
+            return redirect()->back();
         }
     }
 

@@ -39,8 +39,7 @@ class CollectionsController extends Controller
 
             }
             if (isset($data['collection_search'])) {
-                $collections = $collections->where('name_en', 'like', $data['collection_search'])
-                    ->orWhere('price', 'like', $data['collection_search']);
+                $collections = $collections->name($data['collection_search']);
             }
             $selectedRestaurant = Restaurant::find($id);
             $collections = $collections->paginate(20);
@@ -54,9 +53,7 @@ class CollectionsController extends Controller
 
             }
             if (isset($data['collection_search'])) {
-                $collections = $collections->where('name_en', 'like', $data['collection_search'])
-                    ->orWhere('price', 'like', $data['collection_search'])
-                    ->orWhere('mealtime_id', 'like', $data['collection_search']);
+                $collections = $collections->name($data['collection_search']);
             }
             $selectedRestaurant = Restaurant::find($restaurant->id);
             $collections = $collections->paginate(20);

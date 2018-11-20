@@ -377,7 +377,6 @@
                                     <div class="col-sm-7">
                                         <div class="control-group control-group-3">
                                             @if($collection_category->id == 2 || $collection_category->id == 3)
-                                                @php($count = $collection_category->count())
                                                 <div class="input-group">
                                                     <input type="number"
                                                            name="menu[{{$menu_category->id}}][min_qty]"

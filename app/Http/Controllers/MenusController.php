@@ -40,8 +40,7 @@ class MenusController extends Controller
 
             }
             if (isset($data['menu_search'])) {
-                $menus = $menus->where('name_en', 'like', $data['menu_search'])
-                    ->orWhere('price', 'like', $data['menu_search']);
+                $menus = $menus->name($data['menu_search']);
             }
             $selectedRestaurant = Restaurant::find($id);
             $menus = $menus->orderby('category_id', 'asc')->paginate(20);
@@ -59,9 +58,7 @@ class MenusController extends Controller
 
             }
             if (isset($data['menu_search'])) {
-                $menus = $menus->where('name_en', 'like', $data['menu_search'])
-                    ->orWhere('price', 'like', $data['menu_search'])
-                    ->orWhere('description_en', 'like', $data['menu_search']);
+                $menus = $menus->name($data['menu_search']);
             }
             $selectedRestaurant = Restaurant::find($restaurant->id);
             $menus = $menus->orderby('category_id', 'asc')->paginate(20);

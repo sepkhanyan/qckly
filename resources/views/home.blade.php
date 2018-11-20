@@ -344,22 +344,22 @@
                             </li>
                         </ul>
                     </li>
+                    <li>
+                        <a class="users">
+                            <i class="fa fa-users fa-fw"></i>
+                            <span class="content">Users</span>
+                            <span class="fa arrow"></span>
+                        </a>
+                        <ul class="nav nav-second-level collapse">
+                            <li>
+                                <a href="{{ url('/customers') }}" class="customers">
+                                    <i class="fa fa-square-o fa-fw"></i>
+                                    Customers
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                     @if(auth()->user()->admin == 1)
-                        <li>
-                            <a class="users">
-                                <i class="fa fa-users fa-fw"></i>
-                                <span class="content">Users</span>
-                                <span class="fa arrow"></span>
-                            </a>
-                            <ul class="nav nav-second-level collapse">
-                                <li>
-                                    <a href="{{ url('/customers') }}" class="customers">
-                                        <i class="fa fa-square-o fa-fw"></i>
-                                        Customers
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
                         <li>
                             <a class="locations">
                                 <i class="fa fa-globe fa-fw"></i>
@@ -573,6 +573,11 @@
         $('#edit-form').submit();
     }
 </script>
+<script type="text/javascript"><!--
+    function filterList() {
+        $('#filter-form').submit();
+    }
+    //--></script>
 </body>
 </html>
 

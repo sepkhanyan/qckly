@@ -43,15 +43,11 @@
                 <div class="panel panel-default panel-table">
                     <div class="panel-heading">
                         <h3 class="panel-title">Collection List</h3>
-                        @if($selectedRestaurant)
-                            @if(count($collections) > 0)
                                 <div class="pull-right">
                                     <button class="btn btn-filter btn-xs">
                                         <i class="fa fa-filter"></i>
                                     </button>
                                 </div>
-                            @endif
-                        @endif
                     </div>
                     <div class="panel-body panel-filter" style="display: none;">
                         <form role="form" id="filter-form" accept-charset="utf-8" method="GET"
