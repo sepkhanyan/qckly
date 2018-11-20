@@ -134,7 +134,6 @@ class OrdersController extends Controller
                 $restaurantOrders = OrderRestaurant::where('order_id', $id)->where('status_id', '!=', 3)->get();
                 if (count($restaurantOrders) <= 0) {
                     $order = Order::where('id', $id)->first();
-                    dd($order);
                     $order->status_id = 3;
                     $order->save();
                 }
