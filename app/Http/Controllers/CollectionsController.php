@@ -97,7 +97,8 @@ class CollectionsController extends Controller
                 'menu_categories' => $menu_categories,
                 'mealtimes' => $mealtimes,
                 'collection_category' => $collection_category,
-                'menu_items' => $menu_items
+                'menu_items' => $menu_items,
+                'user' => $user
             ]);
         } else {
             return redirect('/menus/' . $restaurant->id);

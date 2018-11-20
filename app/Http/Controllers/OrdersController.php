@@ -80,9 +80,11 @@ class OrdersController extends Controller
 
                 $restaurantOrder->status_id = 2;
                 $restaurantOrder->save();
-                $orders = OrderRestaurant::where('order_id', $id)->where('status_id', '!=', 2)->get();
-                if (count($orders) <= 0) {
-                    Order::where('id', $id)->update(['status_id' => 2]);
+            $restaurantOrders = OrderRestaurant::where('order_id', $id)->where('status_id', '!=', 2)->get();
+                if (count($restaurantOrders) <= 0) {
+                    $order = Order::where('id', $id)->first();
+                    $order->status_id = 2;
+                    $order->save();
                 }
 
         } else {
@@ -129,9 +131,11 @@ class OrdersController extends Controller
             }
                 $restaurantOrder->status_id = $request->input('status');
                 $restaurantOrder->save();
-                $orders = OrderRestaurant::where('order_id', $id)->where('status_id', '!=', 3)->get();
-                if (count($orders) <= 0) {
-                    Order::where('id', $id)->update(['status_id' => 3]);
+                $restaurantOrders = OrderRestaurant::where('order_id', $id)->where('status_id', '!=', 3)->get();
+                if (count($restaurantOrders) <= 0) {
+                    $order = Order::where('id', $id)->first();
+                    $order->status_id = 3;
+                    $order->save();
                 }
 
         } else {
