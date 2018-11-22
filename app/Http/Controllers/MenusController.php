@@ -123,7 +123,7 @@ class MenusController extends Controller
         $menu->category_id = $request->input('category');
         $image = $request->file('image');
         $name = 'menu_' . time() . '.' . $image->getClientOriginalExtension();
-        $path = public_path('/images/menu');
+        $path = public_path('/images');
         $image->move($path, $name);
         $menu->image = $name;
         $menu->name_en = $request->input('name_en');
@@ -214,11 +214,11 @@ class MenusController extends Controller
         $menu->famous = $request->input('famous');
         if ($request->hasFile('image')) {
             if ($menu->image) {
-                File::delete(public_path('images/menu/' . $menu->image));
+                File::delete(public_path('images/' . $menu->image));
             }
             $image = $request->file('image');
             $name = 'menu_' . time() . '.' . $image->getClientOriginalExtension();
-            $path = public_path('/images/menu');
+            $path = public_path('/images');
             $image->move($path, $name);
             $menu->image = $name;
         }

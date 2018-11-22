@@ -14,7 +14,7 @@ class DropRestaurantCountryIdFromRestaurantsTable extends Migration
     public function up()
     {
         Schema::table('restaurants', function (Blueprint $table) {
-//            $table->dropForeign(['restaurant_country_id']);
+            $table->dropForeign(['restaurant_country_id']);
             $table->dropColumn('restaurant_country_id');
         });
     }

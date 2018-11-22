@@ -144,7 +144,7 @@ class RestaurantsController extends Controller
             $restaurant = new Restaurant();
             $image = $request->file('image');
             $name = 'restaurant_' . time() . '.' . $image->getClientOriginalExtension();
-            $path = public_path('/images/restaurant');
+            $path = public_path('/images');
             $image->move($path, $name);
             $restaurant->image = $name;
             $restaurant->name_en = $request->input('restaurant_name_en');
@@ -389,7 +389,7 @@ class RestaurantsController extends Controller
             }
             $image = $request->file('image');
             $name = 'restaurant_' . time() . '.' . $image->getClientOriginalExtension();
-            $path = public_path('/images/restaurant');
+            $path = public_path('/images');
             $image->move($path, $name);
             $restaurant->image = $name;
         }
@@ -515,7 +515,7 @@ class RestaurantsController extends Controller
                 foreach ($restaurant->menu as $menu) {
 
                     if ($menu->famous == 1) {
-                        $image = url('/') . '/images/menu/' . $menu->image;
+                        $image = url('/') . '/images/' . $menu->image;
                         array_push($famous, $image);
                     }
                 }
@@ -534,7 +534,7 @@ class RestaurantsController extends Controller
 
                 $arr [] = [
                     'restaurant_id' => $restaurant->id,
-                    'restaurant_image' => url('/') . '/images/restaurant/' . $restaurant->image,
+                    'restaurant_image' => url('/') . '/images/' . $restaurant->image,
                     'famous_images' => $famous,
                     'restaurant_name' => $restaurant_name,
                     'category' => $category
@@ -597,7 +597,7 @@ class RestaurantsController extends Controller
                     foreach ($restaurant->menu as $menu) {
 
                         if ($menu->famous == 1) {
-                            $image = url('/') . '/images/menu/' . $menu->image;
+                            $image = url('/') . '/images/' . $menu->image;
                             array_push($famous, $image);
                         }
                     }
@@ -616,7 +616,7 @@ class RestaurantsController extends Controller
                     }
                     $arr[] = [
                         'restaurant_id' => $restaurant->id,
-                        'restaurant_image' => url('/') . '/images/restaurant/' . $restaurant->image,
+                        'restaurant_image' => url('/') . '/images/' . $restaurant->image,
                         'famous_images' => $famous,
                         'restaurant_name' => $restaurant_name,
                         'category' => $category
@@ -717,7 +717,7 @@ class RestaurantsController extends Controller
                     foreach ($restaurant->menu as $menu) {
 
                         if ($menu->famous == 1) {
-                            $image = url('/') . '/images/menu/' . $menu->image;
+                            $image = url('/') . '/images/' . $menu->image;
                             array_push($famous, $image);
                         }
                     }
@@ -756,7 +756,7 @@ class RestaurantsController extends Controller
                     $arr [] = [
                         'restaurant_id' => $restaurant->id,
                         'restaurant_name' => $restaurant_name,
-                        'restaurant_image' => url('/') . '/images/restaurant/' . $restaurant->image,
+                        'restaurant_image' => url('/') . '/images/' . $restaurant->image,
                         'famous_images' => $famous,
                         'ratings_count' => $rating_count,
                         'review_count' => $review_count,
@@ -839,7 +839,7 @@ class RestaurantsController extends Controller
                 $arr [] = [
                     'restaurant_id' => $restaurant->id,
                     'restaurant_name' => $restaurant_name,
-                    'restaurant_image' => url('/') . '/images/restaurant/' . $restaurant->image,
+                    'restaurant_image' => url('/') . '/images/' . $restaurant->image,
                     'menu' => $restaurant_menu
                 ];
             }
@@ -948,7 +948,7 @@ class RestaurantsController extends Controller
                                     $items  [] = [
                                         'item_id' => $collection_item->item_id,
                                         'item_name' => $item_name,
-                                        'item_image' => url('/') . '/images/menu/' . $collection_item->menu->image,
+                                        'item_image' => url('/') . '/images/' . $collection_item->menu->image,
                                         'item_qty' => $collection_item->quantity,
                                         'item_price' => $collection_item->menu->price,
                                         'item_price_unit' => \Lang::get('message.priceUnit'),
@@ -985,7 +985,7 @@ class RestaurantsController extends Controller
                                             $item_name = $collection_item->menu->name_en;
                                             $menu_name = $collectionMenu->category->name_en;
                                         }
-                                        $image = url('/') . '/images/menu/' . $collection_item->menu->image;
+                                        $image = url('/') . '/images/' . $collection_item->menu->image;
                                         array_push($foodlist_images, $image);
                                         if ($collection->category_id == 2) {
                                             if ($collection->allow_person_increase == 1) {
@@ -1026,7 +1026,7 @@ class RestaurantsController extends Controller
                                         $items [] = [
                                             'item_id' => $collection_item->menu->id,
                                             'item_name' => $item_name,
-                                            'item_image' => url('/') . '/images/menu/' . $collection_item->menu->image,
+                                            'item_image' => url('/') . '/images/' . $collection_item->menu->image,
                                             'item_price' => $collection_item->menu->price,
                                             'item_price_unit' => \Lang::get('message.priceUnit'),
                                             'item_availability' => $status
@@ -1093,7 +1093,7 @@ class RestaurantsController extends Controller
                                 'food_list' => $foodlist,
                                 'service_presentation' => $service_presentation,
                                 'special_instruction' => '',
-                                'food_item_image' => url('/') . '/images/menu/' . $collection_item->menu->image,
+                                'food_item_image' => url('/') . '/images/' . $collection_item->menu->image,
                                 'food_list_images' => $foodlist_images,
                                 'setup_time' => $setup,
                                 'requirement' => $requirement,

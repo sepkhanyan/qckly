@@ -499,11 +499,11 @@ class UsersController extends Controller
         }
         if ($request->hasFile('image')) {
             if ($admin->image) {
-                File::delete(public_path('images/admin/' . $admin->image));
+                File::delete(public_path('images/' . $admin->image));
             }
             $image = $request->file('image');
             $name = 'admin_' . time() . '.' . $image->getClientOriginalExtension();
-            $path = public_path('/images/admin');
+            $path = public_path('/images');
             $image->move($path, $name);
             $admin->image = $name;
         }

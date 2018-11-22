@@ -450,7 +450,7 @@
                         <div class="row wrap-vertical text-center">
                             <div class="col-xs-12 wrap-top">
                                 @if(isset(auth()->user()->image))
-                                    <img src="/images/admin/{{auth()->user()->image}}" width="30px" height="30px">
+                                    <img src="/images/{{auth()->user()->image}}" width="30px" height="30px">
                                 @endif
                             </div>
                             <div class="col-xs-12 wrap-none wrap-top wrap-right">

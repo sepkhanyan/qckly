@@ -74,7 +74,7 @@
                                     <div class="thumbnail imagebox">
                                         <div class="preview">
                                             @if(isset(Auth::user()->image))
-                                                <img src="{{url('/') . '/images/admin/' . $admin->image}}"
+                                                <img src="{{url('/') . '/images/' . $admin->image}}"
                                                      class="thumb img-responsive" id="thumb">
                                             @else
                                                 <img src="{{url('/') . '/admin/no_photo.png'}}"

@@ -99,7 +99,7 @@ class MenuCategoriesController extends Controller
         $category->description_ar = $request->input('description_ar');
         $image = $request->file('image');
         $name = 'category_' . time() . '.' . $image->getClientOriginalExtension();
-        $path = public_path('/images/menu_category');
+        $path = public_path('/images');
         $image->move($path, $name);
         $category->image =  $name;
         $category->save();
@@ -172,11 +172,11 @@ class MenuCategoriesController extends Controller
         $category->description_ar = $request->input('description_ar');
         if ($request->hasFile('image')) {
             if ($category->image) {
-                File::delete(public_path('images/menu_category/' . $category->image));
+                File::delete(public_path('images/' . $category->image));
             }
             $image = $request->file('image');
             $name = 'category_' . time() . '.' . $image->getClientOriginalExtension();
-            $path = public_path('/images/menu_category');
+            $path = public_path('/images');
             $image->move($path, $name);
             $category->image =  $name;
         }

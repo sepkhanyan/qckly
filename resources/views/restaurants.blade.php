@@ -91,7 +91,7 @@
                                                 </a>&nbsp;&nbsp;
                                             </td>
                                             <td>
-                                                <img src="/images/restaurant/{{$restaurant->image}}" width="30px" height="30px">
+                                                <img src="/images/{{$restaurant->image}}" width="30px" height="30px">
                                             </td>
                                             <td>
                                                 {{$restaurant->name_en}}
