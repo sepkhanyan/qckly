@@ -56,6 +56,11 @@ class Restaurant extends Model
         return $this->belongsTo('App\Area', 'area_id');
     }
 
+    public function restaurantArea()
+    {
+        return $this->hasMany('App\RestaurantArea', 'restaurant_id');
+    }
+
     public function menuCategory()
     {
         return $this->hasMany('App\MenuCategory', 'restaurant_id');
@@ -78,7 +83,7 @@ class Restaurant extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\User', 'user_id');
+        return $this->hasOne('App\User', 'restaurant_id');
     }
 
     public function orderRestaurant()

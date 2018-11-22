@@ -165,7 +165,7 @@
                                     <div class="thumbnail imagebox">
                                         <div class="preview">
                                             @if(isset($menu->image))
-                                                <img src="{{url('/') . '/images/' . $menu->image}}"
+                                                <img src="{{url('/') . '/images/menu/' . $menu->image}}"
                                                      class="thumb img-responsive" id="thumb">
                                             @else
                                                 <img src="{{url('/') . '/admin/no_photo.png'}}"

@@ -20,6 +20,10 @@ class Area extends Model
         return $this->hasMany('App\Restaurant', 'area_id');
     }
 
+    public function restaurantArea()
+    {
+        return $this->hasMany('App\RestaurantArea', 'area_id');
+    }
 
     public function cart()
     {

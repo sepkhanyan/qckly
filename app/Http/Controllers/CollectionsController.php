@@ -45,9 +45,7 @@ class CollectionsController extends Controller
             $collections = $collections->paginate(20);
         }
         if ($user->admin == 2) {
-            $user = $user->load('restaurant');
-            $restaurant = $user->restaurant;
-            $collections = Collection::where('restaurant_id', $restaurant->id);
+            $collections = Collection::where('restaurant_id', $user->restaurant_id);
             if (isset($data['collection_type'])) {
                 $collections = $collections->where('category_id', $data['collection_type']);
 
@@ -55,7 +53,7 @@ class CollectionsController extends Controller
             if (isset($data['collection_search'])) {
                 $collections = $collections->name($data['collection_search']);
             }
-            $selectedRestaurant = Restaurant::find($restaurant->id);
+            $selectedRestaurant = Restaurant::find($user->restaurant_id);
             $collections = $collections->paginate(20);
         }
         return view('collections', [
@@ -82,8 +80,7 @@ class CollectionsController extends Controller
         $restaurant = Restaurant::where('id', $id)->first();
         $categories = CollectionCategory::all();
         if ($user->admin == 2) {
-            $user = $user->load('restaurant');
-            $restaurant = $user->restaurant;
+            $restaurant = Restaurant::where('id', $user->restaurant_id)->first();
         }
         $menu_categories = MenuCategory::where('restaurant_id', $restaurant->id)->wherehas('menu')->get();
         $mealtimes = Mealtime::all();
@@ -117,9 +114,7 @@ class CollectionsController extends Controller
         $collection = New Collection();
         $restaurant_id = $request->input('restaurant');
         if ($user->admin == 2) {
-            $user = $user->load('restaurant');
-            $restaurant = $user->restaurant;
-            $restaurant_id = $restaurant->id;
+            $restaurant_id = $user->restaurant_id;
         }
 //        dd($request->all());
         $validator = \Validator::make($request->all(), [
@@ -243,9 +238,8 @@ class CollectionsController extends Controller
     {
         $user = Auth::user();
         if ($user->admin == 2) {
-            $user = $user->load('restaurant');
-            $restaurant = $user->restaurant;
-            $collection = Collection::where('id', $id)->where('restaurant_id', $restaurant->id)->first();
+            $collection = Collection::where('id', $id)->where('restaurant_id', $user->restaurant_id)->first();
+            $restaurant = Restaurant::where('id', $user->restaurant_id)->first();
             if (!$collection) {
                 return redirect()->back();
             }
@@ -289,12 +283,10 @@ class CollectionsController extends Controller
         $user = Auth::user();
         $restaurant_id = $request->input('restaurant');
         if ($user->admin == 2) {
-            $user = $user->load('restaurant');
-            $restaurant = $user->restaurant;
-            $restaurant_id = $restaurant->id;
-            $collection = Collection::where('id', $id)->where('restaurant_id', $restaurant->id)->with('restaurant.menu')->first();
+            $restaurant_id = $user->restaurant_id;
+            $collection = Collection::where('id', $id)->where('restaurant_id', $user->restaurant_id)->with('restaurant.menu')->first();
             if (!$collection) {
-                return redirect('/collections/' . $restaurant->id);
+                return redirect('/collections/' .  $restaurant_id);
             }
         } else {
             $collection = Collection::with('restaurant.menu')->find($id);
@@ -413,9 +405,12 @@ class CollectionsController extends Controller
         $user = Auth::user();
         $id = $request->get('id');
         if ($user->admin == 2) {
-            $user = $user->load('restaurant');
-            $restaurant = $user->restaurant;
-            Collection::whereIn('id', $id)->where('restaurant_id', $restaurant->id)->delete();
+            $collection = Collection::where('id', $id)->where('restaurant_id', $user->restaurant_id)->first();
+            if($collection){
+                Collection::whereIn('id', $id)->delete();
+            }else{
+                return redirect()->back();
+            }
         } else {
             Collection::whereIn('id', $id)->delete();
         }

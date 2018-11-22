@@ -47,9 +47,7 @@ class MenusController extends Controller
             $categories = MenuCategory::where('restaurant_id', $selectedRestaurant->id)->get();
         }
         if ($user->admin == 2) {
-            $user = $user->load('restaurant');
-            $restaurant = $user->restaurant;
-            $menus = Menu::where('restaurant_id', $restaurant->id);
+            $menus = Menu::where('restaurant_id', $user->restaurant_id);
             if (isset($data['menu_status'])) {
                 $menus = $menus->where('status', $data['menu_status']);
             }
@@ -60,9 +58,9 @@ class MenusController extends Controller
             if (isset($data['menu_search'])) {
                 $menus = $menus->name($data['menu_search']);
             }
-            $selectedRestaurant = Restaurant::find($restaurant->id);
+            $selectedRestaurant = Restaurant::find($user->restaurant_id);
             $menus = $menus->orderby('category_id', 'asc')->paginate(20);
-            $categories = MenuCategory::where('restaurant_id', $selectedRestaurant->id)->get();
+            $categories = MenuCategory::where('restaurant_id', $user->restaurant_id)->get();
         }
         return view('menus', [
             'id' => $id,
@@ -84,8 +82,7 @@ class MenusController extends Controller
         $user = Auth::user();
         $restaurant = Restaurant::where('id', $id)->first();
         if ($user->admin == 2) {
-            $user = $user->load('restaurant');
-            $restaurant = $user->restaurant;
+            $restaurant = Restaurant::where('id', $user->restaurant_id)->first();
         }
         $categories = MenuCategory::where('restaurant_id', $restaurant->id)->get();
         if (count($categories) > 0) {
@@ -120,15 +117,14 @@ class MenusController extends Controller
         $menu = new Menu();
         $restaurant_id = $request->input('restaurant');
         if ($user->admin == 2) {
-            $user = $user->load('restaurant');
-            $restaurant_id = $user->restaurant->id;
+            $restaurant_id = $user->restaurant_id;
         }
         $menu->restaurant_id = $restaurant_id;
         $menu->category_id = $request->input('category');
         $image = $request->file('image');
-        $name = time() . '.' . $image->getClientOriginalExtension();
-        $destinationPath = public_path('/images');
-        $image->move($destinationPath, $name);
+        $name = 'menu_' . time() . '.' . $image->getClientOriginalExtension();
+        $path = public_path('/images/menu');
+        $image->move($path, $name);
         $menu->image = $name;
         $menu->name_en = $request->input('name_en');
         $menu->description_en = $request->input('description_en');
@@ -139,29 +135,6 @@ class MenusController extends Controller
         $menu->famous = $request->input('famous');
         $menu->save();
         if ($menu) {
-            $collections = Collection::where('restaurant_id', $restaurant_id)->where('category_id', '!=', 1)->get();
-            if (count($collections) > 0) {
-                foreach ($collections as $collection) {
-                    $collection_item = new CollectionItem();
-                    $collection_item->item_id = $menu->id;
-                    $collection_item->collection_menu_id = $menu->category_id;
-                    $collection_item->collection_id = $collection->id;
-                    $collection_item->quantity = 1;
-                    $collection_item->save();
-                    $collection_menu = CollectionMenu::where('collection_id', $collection->id)->where('menu_id', $menu->category_id)->first();
-                    if (!$collection_menu) {
-                        $collection_menu = new CollectionMenu();
-                        $collection_menu->collection_id = $collection->id;
-                        $collection_menu->menu_id = $menu->category_id;
-                        $collection_menu->name = $menu->category->name_en;
-                        if ($collection->id != 4) {
-                            $collection_menu->min_qty = 1;
-                            $collection_menu->max_qty = 1;
-                        }
-                        $collection_menu->save();
-                    }
-                }
-            }
             return redirect('/menus/' . $restaurant_id);
         }
     }
@@ -188,9 +161,7 @@ class MenusController extends Controller
         $user = Auth::user();
         $menu = Menu::find($id);
         if ($user->admin == 2) {
-            $user = $user->load('restaurant');
-            $restaurant = $user->restaurant;
-            $menu = Menu::where('id', $id)->where('restaurant_id', $restaurant->id)->first();
+            $menu = Menu::where('id', $id)->where('restaurant_id', $user->restaurant_id)->first();
             if (!$menu) {
                 return redirect()->back();
             }
@@ -227,10 +198,8 @@ class MenusController extends Controller
         $menu = Menu::find($id);
         $restaurant_id = $request->input('restaurant');
         if ($user->admin == 2) {
-            $user = $user->load('restaurant');
-            $restaurant = $user->restaurant;
-            $restaurant_id = $restaurant->id;
-            $menu = Menu::where('id', $id)->where('restaurant_id', $restaurant->id)->first();
+            $restaurant_id = $user->restaurant_id;
+            $menu = Menu::where('id', $id)->where('restaurant_id', $user->restaurant_idd)->first();
             if (!$menu) {
                 return redirect()->back();
             }
@@ -245,12 +214,12 @@ class MenusController extends Controller
         $menu->famous = $request->input('famous');
         if ($request->hasFile('image')) {
             if ($menu->image) {
-                File::delete(public_path('images/' . $menu->image));
+                File::delete(public_path('images/menu/' . $menu->image));
             }
             $image = $request->file('image');
-            $name = time() . '.' . $image->getClientOriginalExtension();
-            $destinationPath = public_path('/images');
-            $image->move($destinationPath, $name);
+            $name = 'menu_' . time() . '.' . $image->getClientOriginalExtension();
+            $path = public_path('/images/menu');
+            $image->move($path, $name);
             $menu->image = $name;
         }
         $menu->save();
@@ -266,24 +235,15 @@ class MenusController extends Controller
     public function deleteMenu(Request $request)
     {
         $id = $request->get('id');
-        $menus = Menu::where('id', $id)->get();
         $user = Auth::user();
+        $menu = Menu::where('id', $id)->first();
         if ($user->admin == 2) {
-            $user = $user->load('restaurant');
-            $restaurant = $user->restaurant;
-            $menus = Menu::where('id', $id)->where('restaurant_id', $restaurant->id)->get();
-            $images = [];
-            foreach ($menus as $menu) {
-                $images[] = public_path('images/' . $menu->image);
+            if($menu->restaurant_id == $user->restaurant_id){
+                Menu::whereIn('id', $id)->delete();
+            }else{
+                return redirect()->back();
             }
-            File::delete($images);
-            Menu::whereIn('id', $id)->where('restaurant_id')->delete();
         } else {
-            $images = [];
-            foreach ($menus as $menu) {
-                $images[] = public_path('images/' . $menu->image);
-            }
-            File::delete($images);
             Menu::whereIn('id', $id)->delete();
         }
 

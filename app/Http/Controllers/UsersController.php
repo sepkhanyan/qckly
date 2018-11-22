@@ -494,15 +494,17 @@ class UsersController extends Controller
         $admin->first_name = $request->input('name');
         $admin->email = $request->input('email');
         $admin->username = $request->input('username');
-        $admin->password = $request->input('password');
+        if($request->input('password') !== null){
+            $admin->password = $request->input('password');
+        }
         if ($request->hasFile('image')) {
             if ($admin->image) {
-                File::delete(public_path('images/' . $admin->image));
+                File::delete(public_path('images/admin/' . $admin->image));
             }
             $image = $request->file('image');
-            $name = time() . '.' . $image->getClientOriginalExtension();
-            $destinationPath = public_path('/images');
-            $image->move($destinationPath, $name);
+            $name = 'admin_' . time() . '.' . $image->getClientOriginalExtension();
+            $path = public_path('/images/admin');
+            $image->move($path, $name);
             $admin->image = $name;
         }
         $admin->save();

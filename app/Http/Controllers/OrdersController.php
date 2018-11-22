@@ -44,9 +44,7 @@ class OrdersController extends Controller
             $orders = $orders->orderby('created_at', 'desc')->paginate(20);
         }
         if ($user->admin == 2) {
-            $user = $user->load('restaurant');
-            $restaurant = $user->restaurant;
-            $selectedRestaurant = Restaurant::find($restaurant->id);
+            $selectedRestaurant = Restaurant::find($user->restaurant_id);
             $orders = OrderRestaurant::where('restaurant_id', $restaurant->id);
             if (isset($data['order_status'])) {
                 $orders = $orders->where('status_id', $data['order_status']);
@@ -71,16 +69,14 @@ class OrdersController extends Controller
     {
         $user = Auth::user();
         if ($user->admin == 2) {
-            $user = $user->load('restaurant');
-            $restaurant = $user->restaurant;
-            $restaurantOrder = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $restaurant->id)->where('status_id', 1)->first();
+            $restaurantOrder = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $user->restaurant_id)->where('status_id', 1)->first();
             if (!$restaurantOrder) {
                 return redirect()->back();
             }
 
                 $restaurantOrder->status_id = 2;
                 $restaurantOrder->save();
-            $restaurantOrders = OrderRestaurant::where('order_id', $id)->where('status_id', '!=', 2)->get();
+            $restaurantOrders = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $user->restaurant_id)->where('status_id', '!=', 2)->get();
                 if (count($restaurantOrders) <= 0) {
                     $order = Order::where('id', $id)->first();
                     $order->status_id = 2;
@@ -98,14 +94,12 @@ class OrdersController extends Controller
         $user = Auth::user();
         if ($user->admin == 2) {
             $statuses = Status::where('id', '!=', 1)->get();
-            $user = $user->load('restaurant');
-            $restaurant = $user->restaurant;
-            $order = Order::with(['cart' => function ($query) use ($restaurant) {
-                $query->with(['cartCollection' => function ($q) use ($restaurant) {
-                    $q->where('restaurant_id', $restaurant->id);
+            $order = Order::with(['cart' => function ($query) use ($user) {
+                $query->with(['cartCollection' => function ($q) use ($user) {
+                    $q->where('restaurant_id', $user->restaurant_id);
                 }]);
             }])->where('id', $id)->first();
-            $restaurantOrder = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $restaurant->id)->first();
+            $restaurantOrder = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $user->restaurant_id)->first();
             if (!$restaurantOrder) {
                 return redirect()->back();
             }
@@ -123,15 +117,13 @@ class OrdersController extends Controller
     {
         $user = Auth::user();
         if ($user->admin == 2) {
-            $user = $user->load('restaurant');
-            $restaurant = $user->restaurant;
-            $restaurantOrder = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $restaurant->id)->where('status_id', 2)->first();
+            $restaurantOrder = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $user->restaurant_id)->where('status_id', 2)->first();
             if (!$restaurantOrder) {
                 return redirect('/orders');
             }
                 $restaurantOrder->status_id = $request->input('status');
                 $restaurantOrder->save();
-                $restaurantOrders = OrderRestaurant::where('order_id', $id)->where('status_id', '!=', 3)->get();
+                $restaurantOrders = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $user->restaurant_id)->where('status_id', '!=', 3)->get();
                 if (count($restaurantOrders) <= 0) {
                     $order = Order::where('id', $id)->first();
                     $order->status_id = 3;

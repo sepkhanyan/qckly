@@ -10,6 +10,7 @@ use App\MenuCategory;
 use App\Menu;
 use App\Restaurant;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class MenuCategoriesController extends Controller
 {
@@ -34,13 +35,11 @@ class MenuCategoriesController extends Controller
             $categories = $categories->paginate(20);
         }
         if ($user->admin == 2) {
-            $user = $user->load('restaurant');
-            $restaurant = $user->restaurant;
-            $categories = MenuCategory::where('restaurant_id', $restaurant->id);
+            $categories = MenuCategory::where('restaurant_id', $user->restaurant_id);
             if (isset($data['category_search'])) {
                 $categories = $categories->name($data['category_search']);
             }
-            $selectedRestaurant = Restaurant::find($restaurant->id);
+            $selectedRestaurant = Restaurant::find($user->restaurant_id);
             $categories = $categories->paginate(20);
 
         }
@@ -63,8 +62,7 @@ class MenuCategoriesController extends Controller
         $user = Auth::user();
         $restaurant = Restaurant::where('id', $id)->first();
         if ($user->admin == 2) {
-            $user = $user->load('restaurant');
-            $restaurant = $user->restaurant;
+            $restaurant = Restaurant::where('id', $user->restaurant_id)->first();
         }
         return view('menu_category_create', [
             'restaurant' => $restaurant,
@@ -91,8 +89,7 @@ class MenuCategoriesController extends Controller
         $restaurant_id = $request->input('restaurant');
         $user = Auth::user();
         if ($user->admin == 2) {
-            $user = $user->load('restaurant');
-            $restaurant_id = $user->restaurant->id;
+            $restaurant_id = $user->restaurant_id;
         }
         $category = new MenuCategory();
         $category->restaurant_id = $restaurant_id;
@@ -101,10 +98,10 @@ class MenuCategoriesController extends Controller
         $category->name_ar = $request->input('name_ar');
         $category->description_ar = $request->input('description_ar');
         $image = $request->file('image');
-        $name = time() . '.' . $image->getClientOriginalExtension();
-        $destinationPath = public_path('/images');
-        $image->move($destinationPath, $name);
-        $category->image = $name;
+        $name = 'category_' . time() . '.' . $image->getClientOriginalExtension();
+        $path = public_path('/images/menu_category');
+        $image->move($path, $name);
+        $category->image =  $name;
         $category->save();
         if ($category) {
             return redirect('/menu_categories/' . $restaurant_id);
@@ -133,9 +130,7 @@ class MenuCategoriesController extends Controller
         $user = Auth::user();
         $category = MenuCategory::find($id);
         if ($user->admin == 2) {
-            $user = $user->load('restaurant');
-            $restaurant = $user->restaurant;
-            $category = MenuCategory::where('id', $id)->where('restaurant_id', $restaurant->id)->first();
+            $category = MenuCategory::where('id', $id)->where('restaurant_id', $user->restaurant_id)->first();
             if (!$category) {
                 return redirect()->back();
             }
@@ -165,10 +160,8 @@ class MenuCategoriesController extends Controller
         $category = MenuCategory::find($id);
         $restaurant_id = $request->input('restaurant');
         if ($user->admin == 2) {
-            $user = $user->load('restaurant');
-            $restaurant = $user->restaurant;
-            $restaurant_id = $restaurant->id;
-            $category = MenuCategory::where('id', $id)->where('restaurant_id', $restaurant->id)->first();
+            $restaurant_id = $user->restaurant_id;
+            $category = MenuCategory::where('id', $id)->where('restaurant_id', $user->restaurant_id)->first();
             if (!$category) {
                 return redirect('/categories');
             }
@@ -179,13 +172,13 @@ class MenuCategoriesController extends Controller
         $category->description_ar = $request->input('description_ar');
         if ($request->hasFile('image')) {
             if ($category->image) {
-                File::delete(public_path('images/' . $category->image));
+                File::delete(public_path('images/menu_category/' . $category->image));
             }
             $image = $request->file('image');
-            $name = time() . '.' . $image->getClientOriginalExtension();
-            $destinationPath = public_path('/images');
-            $image->move($destinationPath, $name);
-            $category->image = $name;
+            $name = 'category_' . time() . '.' . $image->getClientOriginalExtension();
+            $path = public_path('/images/menu_category');
+            $image->move($path, $name);
+            $category->image =  $name;
         }
         $category->save();
         return redirect('/menu_categories/' . $restaurant_id);
@@ -199,37 +192,16 @@ class MenuCategoriesController extends Controller
      */
     public function deleteCategory(Request $request)
     {
-        $id = $request->get('id');
-        $categories = MenuCategory::where('id', $id)->get();
         $user = Auth::user();
+        $id = $request->get('id');
+        $menuCategory = MenuCategory::where('id', $id)->first();
         if ($user->admin == 2) {
-            $user = $user->load('restaurant');
-            $restaurant = $user->restaurant;
-            $categories = MenuCategory::where('id', $id)->where('restaurant_id', $restaurant->id)->get();
-            foreach ($categories as $category) {
-                if ($category->menu) {
-                    $menu_images = [];
-                    foreach ($category->menu as $menu) {
-                        $menu_images[] = public_path('images/' . $menu->image);
-                    }
-                    File::delete($menu_images);
-                }
-                $category_images[] = public_path('images/' . $category->image);
+            if($menuCategory->restaurant_id == $user->restaurant_id){
+                MenuCategory::whereIn('id', $id)->delete();
+            }else{
+                return redirect()->back();
             }
-            File::delete($category_images);
-            MenuCategory::whereIn('id', $id)->where('restaurant_id', $restaurant->id)->delete();
-        } else {
-            foreach ($categories as $category) {
-                if ($category->menu) {
-                    $menu_images = [];
-                    foreach ($category->menu as $menu) {
-                        $menu_images[] = public_path('images/' . $menu->image);
-                    }
-                    File::delete($menu_images);
-                }
-                $category_images[] = public_path('images/' . $category->image);
-            }
-            File::delete($category_images);
+        }elseif($user->admin == 1){
             MenuCategory::whereIn('id', $id)->delete();
         }
         return redirect('/menu_categories');

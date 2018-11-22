@@ -42,7 +42,7 @@
                                 <label for="category" class="col-sm-3 control-label">Category</label>
                                 <div class="col-sm-5">
                                     <select name="category[]" id="category" class="form-control"
-                                            placeholder="Select Category"
+                                            placeholder="Select Categories"
                                             multiple>
                                         @foreach($category_restaurants as $category_restaurant)
                                             <option
@@ -113,65 +113,75 @@
                                 </div>
                             </div>
 
-                            <h4 class="tab-pane-title">Address</h4>
-                            <div class="form-group{{ $errors->has('address_en') ? ' has-error' : '' }}">
-                                <label for="input_address_en" class="col-sm-3 control-label">Address En</label>
-                                <div class="col-sm-5">
-                                    <input type="text" name="address_en" id="input_address_en" class="form-control"
-                                           value="{{old('address_en') ?? $restaurant->address_en }}"/>
-                                    @if ($errors->has('address_en'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('address_en') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="form-group{{ $errors->has('address_ar') ? ' has-error' : '' }}">
-                                <label for="input_address_ar" class="col-sm-3 control-label">Address Ar</label>
-                                <div class="col-sm-5">
-                                    <input type="text" name="address_ar" id="input_address_en" class="form-control"
-                                           value="{{old('address_ar') ?? $restaurant->address_ar }}"/>
-                                    @if ($errors->has('address_ar'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('address_ar') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="input_state_en" class="col-sm-3 control-label">State En</label>
-                                <div class="col-sm-5">
-                                    <input type="text" name="state_en" id="input_state_en" class="form-control"
-                                           value="{{old('state_en') ?? $restaurant->state_en}}"/>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="input_state_ar" class="col-sm-3 control-label">State Ar</label>
-                                <div class="col-sm-5">
-                                    <input type="text" name="state_ar" id="input_state_ar" class="form-control"
-                                           value="{{old('state_ar') ?? $restaurant->state_ar}}"/>
-                                </div>
-                            </div>
-                            <div class="form-group{{ $errors->has('postcode') ? ' has-error' : '' }}">
-                                <label for="input-postcode" class="col-sm-3 control-label">Postcode</label>
-                                <div class="col-sm-5">
-                                    <input type="text" name="postcode" id="input-postcode" class="form-control"
-                                           value="{{old('postcode') ?? $restaurant->postcode }}"/>
-                                    @if ($errors->has('postcode'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('postcode') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="form-group">
+                            {{--<h4 class="tab-pane-title">Address</h4>--}}
+                            {{--<div class="form-group{{ $errors->has('address_en') ? ' has-error' : '' }}">--}}
+                                {{--<label for="input_address_en" class="col-sm-3 control-label">Address En</label>--}}
+                                {{--<div class="col-sm-5">--}}
+                                    {{--<input type="text" name="address_en" id="input_address_en" class="form-control"--}}
+                                           {{--value="{{old('address_en') ?? $restaurant->address_en }}"/>--}}
+                                    {{--@if ($errors->has('address_en'))--}}
+                                        {{--<span class="help-block">--}}
+                                        {{--<strong>{{ $errors->first('address_en') }}</strong>--}}
+                                    {{--</span>--}}
+                                    {{--@endif--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                            {{--<div class="form-group{{ $errors->has('address_ar') ? ' has-error' : '' }}">--}}
+                                {{--<label for="input_address_ar" class="col-sm-3 control-label">Address Ar</label>--}}
+                                {{--<div class="col-sm-5">--}}
+                                    {{--<input type="text" name="address_ar" id="input_address_en" class="form-control"--}}
+                                           {{--value="{{old('address_ar') ?? $restaurant->address_ar }}"/>--}}
+                                    {{--@if ($errors->has('address_ar'))--}}
+                                        {{--<span class="help-block">--}}
+                                        {{--<strong>{{ $errors->first('address_ar') }}</strong>--}}
+                                    {{--</span>--}}
+                                    {{--@endif--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                            {{--<div class="form-group">--}}
+                                {{--<label for="input_state_en" class="col-sm-3 control-label">State En</label>--}}
+                                {{--<div class="col-sm-5">--}}
+                                    {{--<input type="text" name="state_en" id="input_state_en" class="form-control"--}}
+                                           {{--value="{{old('state_en') ?? $restaurant->state_en}}"/>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                            {{--<div class="form-group">--}}
+                                {{--<label for="input_state_ar" class="col-sm-3 control-label">State Ar</label>--}}
+                                {{--<div class="col-sm-5">--}}
+                                    {{--<input type="text" name="state_ar" id="input_state_ar" class="form-control"--}}
+                                           {{--value="{{old('state_ar') ?? $restaurant->state_ar}}"/>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                            {{--<div class="form-group{{ $errors->has('postcode') ? ' has-error' : '' }}">--}}
+                                {{--<label for="input-postcode" class="col-sm-3 control-label">Postcode</label>--}}
+                                {{--<div class="col-sm-5">--}}
+                                    {{--<input type="text" name="postcode" id="input-postcode" class="form-control"--}}
+                                           {{--value="{{old('postcode') ?? $restaurant->postcode }}"/>--}}
+                                    {{--@if ($errors->has('postcode'))--}}
+                                        {{--<span class="help-block">--}}
+                                        {{--<strong>{{ $errors->first('postcode') }}</strong>--}}
+                                    {{--</span>--}}
+                                    {{--@endif--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                            <div class="form-group{{ $errors->has('area') ? ' has-error' : '' }}">
                                 <label for="input-country" class="col-sm-3 control-label">City</label>
                                 <div class="col-sm-5">
-                                    <select name="country" id="input-country" class="form-control">
+                                    <select name="area[]" id="area" class="form-control" multiple placeholder="Select Cities">
+                                        @foreach($restaurantAreas as $restaurantArea)
+                                            <option
+                                                    value="{{$restaurantArea->area_id}}"
+                                                    @if(old('area')) {{ (collect(old('area'))->contains($restaurantArea->area_id)) ? 'selected':'' }} @else selected @endif>{{$restaurantArea->name_en}}</option>
+                                        @endforeach
                                         @foreach($areas as $area)
-                                            <option value="{{$area->id}}" @if(old('country')){{ old('country') == $area->id ? 'selected':'' }} @else {{$restaurant->area_id == $area->id ? 'selected' : ''}} @endif>{{$area->name_en}}</option>
+                                            <option value="{{$area->id}}"{{ (collect(old('area'))->contains($area->id)) ? 'selected':'' }}>{{$area->name_en}}</option>
                                         @endforeach
                                     </select>
+                                    @if ($errors->has('area'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('area') }}</strong>
+                                        </span>
+                                    @endif
                                 </div>
                             </div>
                             {{--<div class="form-group">--}}
@@ -191,44 +201,44 @@
                             {{--</div>--}}
                             {{--<br/>--}}
 
-                            <div id="lat-lng">
-                                <div class="form-group{{ $errors->has('latitude') ? ' has-error' : '' }}">
-                                    <label for="lat" class="col-sm-3 control-label">Latitude</label>
-                                    <div class="col-sm-5">
-                                        <input type="text" name="latitude" id="lat"
-                                               class="form-control"
-                                               value="{{old('latitude') ?? $restaurant->latitude }}"/>
-                                        @if ($errors->has('latitude'))
-                                            <span class="help-block">
-                                        <strong>{{ $errors->first('latitude') }}</strong>
-                                    </span>
-                                        @endif
-                                    </div>
-                                </div>
-                                <div class="form-group{{ $errors->has('longitude') ? ' has-error' : '' }}">
-                                    <label for="long"
-                                           class="col-sm-3 control-label">Longitude</label>
-                                    <div class="col-sm-5">
-                                        <input type="text" name="longitude" id="long"
-                                               class="form-control"
-                                               value="{{old('longitude') ?? $restaurant->latitude }}"/>
-                                        @if ($errors->has('longitude'))
-                                            <span class="help-block">
-                                        <strong>{{ $errors->first('longitude') }}</strong>
-                                    </span>
-                                        @endif
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="lat" class="col-sm-3 control-label"></label>
-                                    <div class="col-sm-5">
-                                        <div id="map"></div>
-                                    </div>
-                                </div>
-                                <script async defer
-                                        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAU2aEUn440lIbc-dt9swUPO-jB0HMmCl8&callback=initMap">
-                                </script>
-                            </div>
+                            {{--<div id="lat-lng">--}}
+                                {{--<div class="form-group{{ $errors->has('latitude') ? ' has-error' : '' }}">--}}
+                                    {{--<label for="lat" class="col-sm-3 control-label">Latitude</label>--}}
+                                    {{--<div class="col-sm-5">--}}
+                                        {{--<input type="text" name="latitude" id="lat"--}}
+                                               {{--class="form-control"--}}
+                                               {{--value="{{old('latitude') ?? $restaurant->latitude }}"/>--}}
+                                        {{--@if ($errors->has('latitude'))--}}
+                                            {{--<span class="help-block">--}}
+                                        {{--<strong>{{ $errors->first('latitude') }}</strong>--}}
+                                    {{--</span>--}}
+                                        {{--@endif--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
+                                {{--<div class="form-group{{ $errors->has('longitude') ? ' has-error' : '' }}">--}}
+                                    {{--<label for="long"--}}
+                                           {{--class="col-sm-3 control-label">Longitude</label>--}}
+                                    {{--<div class="col-sm-5">--}}
+                                        {{--<input type="text" name="longitude" id="long"--}}
+                                               {{--class="form-control"--}}
+                                               {{--value="{{old('longitude') ?? $restaurant->latitude }}"/>--}}
+                                        {{--@if ($errors->has('longitude'))--}}
+                                            {{--<span class="help-block">--}}
+                                        {{--<strong>{{ $errors->first('longitude') }}</strong>--}}
+                                    {{--</span>--}}
+                                        {{--@endif--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
+                                {{--<div class="form-group">--}}
+                                    {{--<label for="lat" class="col-sm-3 control-label"></label>--}}
+                                    {{--<div class="col-sm-5">--}}
+                                        {{--<div id="map"></div>--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
+                                {{--<script async defer--}}
+                                        {{--src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAU2aEUn440lIbc-dt9swUPO-jB0HMmCl8&callback=initMap">--}}
+                                {{--</script>--}}
+                            {{--</div>--}}
                         </div>
 
                         <div id="data" class="tab-pane row wrap-all">
@@ -287,7 +297,7 @@
                                     <div class="thumbnail imagebox">
                                         <div class="preview">
                                             @if(isset($restaurant->image))
-                                                <img src="{{url('/') . '/images/' . $restaurant->image}}"
+                                                <img src="{{url('/') . '/images/restaurant/' . $restaurant->image}}"
                                                      class="thumb img-responsive" id="thumb">
                                             @else
                                                 <img src="{{url('/') . '/admin/no_photo.png'}}"
@@ -443,7 +453,7 @@
                                             <div class="input-group">
                                                 <input id="clock-show" type="text" name="daily_hours[open]"
                                                        class="form-control timepicker"
-                                                       value="{{ old('daily_hours.open') ?? date("g:i A", strtotime($working->opening_time)) }}"/>
+                                                       value="@if($working->type == 'daily'){{ old('daily_hours.open') ?? date("g:i A", strtotime($working->opening_time)) }}@else{{ old('daily_hours.open') ?? '09:00 AM' }}@endif"/>
                                                 <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
@@ -451,7 +461,7 @@
                                             <div class="input-group">
                                                 <input type="text" name="daily_hours[close]"
                                                        class="form-control timepicker"
-                                                       value="{{ old('daily_hours.close') ?? date("g:i A", strtotime($working->closing_time))   }}"/>
+                                                       value="@if($working->type == 'daily'){{ old('daily_hours.close') ?? date("g:i A", strtotime($working->closing_time))   }}@else{{ old('daily_hours.close') ??  '11:59 PM'   }}@endif"/>
                                                 <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
@@ -890,62 +900,62 @@
         </div>
     </div>
     <script type="text/javascript">
-        var map;
-        var markers = [];
-        var lat = parseFloat(document.getElementById('lat').value);
-        var lng = parseFloat(document.getElementById('long').value);
-
-        function initMap() {
-            var haightAshbury = {lat: lat, lng: lng};
-            map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 11,
-                panControl: true,
-                zoomControl: true,
-                mapTypeControl: true,
-                scaleControl: true,
-                streetViewControl: true,
-                overviewMapControl: true,
-                rotateControl: true,
-                center: haightAshbury,
-                mapTypeId: 'terrain'
-            });
-
-            map.addListener('click', function (event) {
-                if (markers.length >= 1) {
-                    deleteMarkers();
-                }
-
-                addMarker(event.latLng);
-                document.getElementById('lat').value = event.latLng.lat();
-                document.getElementById('long').value = event.latLng.lng();
-            });
-        }
-
-        function addMarker(location) {
-            var marker = new google.maps.Marker({
-                position: location,
-                map: map
-            });
-            markers.push(marker);
-        }
-
-
-        function setMapOnAll(map) {
-            for (var i = 0; i < markers.length; i++) {
-                markers[i].setMap(map);
-            }
-        }
-
-
-        function clearMarkers() {
-            setMapOnAll(null);
-        }
-
-
-        function deleteMarkers() {
-            clearMarkers();
-            markers = [];
-        }
+        // var map;
+        // var markers = [];
+        // var lat = parseFloat(document.getElementById('lat').value);
+        // var lng = parseFloat(document.getElementById('long').value);
+        //
+        // function initMap() {
+        //     var haightAshbury = {lat: lat, lng: lng};
+        //     map = new google.maps.Map(document.getElementById('map'), {
+        //         zoom: 11,
+        //         panControl: true,
+        //         zoomControl: true,
+        //         mapTypeControl: true,
+        //         scaleControl: true,
+        //         streetViewControl: true,
+        //         overviewMapControl: true,
+        //         rotateControl: true,
+        //         center: haightAshbury,
+        //         mapTypeId: 'terrain'
+        //     });
+        //
+        //     map.addListener('click', function (event) {
+        //         if (markers.length >= 1) {
+        //             deleteMarkers();
+        //         }
+        //
+        //         addMarker(event.latLng);
+        //         document.getElementById('lat').value = event.latLng.lat();
+        //         document.getElementById('long').value = event.latLng.lng();
+        //     });
+        // }
+        //
+        // function addMarker(location) {
+        //     var marker = new google.maps.Marker({
+        //         position: location,
+        //         map: map
+        //     });
+        //     markers.push(marker);
+        // }
+        //
+        //
+        // function setMapOnAll(map) {
+        //     for (var i = 0; i < markers.length; i++) {
+        //         markers[i].setMap(map);
+        //     }
+        // }
+        //
+        //
+        // function clearMarkers() {
+        //     setMapOnAll(null);
+        // }
+        //
+        //
+        // function deleteMarkers() {
+        //     clearMarkers();
+        //     markers = [];
+        // }
 
         function readURL(input) {
             if (input.files && input.files[0]) {
@@ -965,6 +975,7 @@
         }
     </script>
     <script type="text/javascript">
-        $('#category ').select2();
+        $('#category').select2();
+        $('#area').select2();
     </script>
 @endsection

@@ -23,12 +23,12 @@
                                         title="" onchange="top.location.href = this.options[this.selectedIndex].value">
                                     @if($selectedRestaurant)
                                         @foreach($restaurants as $restaurant)
-                                                <option value="{{url('/collections/' . $restaurant->id)}}" {{($restaurant->id == $selectedRestaurant->id) ? 'selected' : ''}}>{{$restaurant->name_en . ', ' . $restaurant->area->area_en . ', ' . $restaurant->address_en}}</option>
+                                                <option value="{{url('/collections/' . $restaurant->id)}}" {{($restaurant->id == $selectedRestaurant->id) ? 'selected' : ''}}>{{$restaurant->name_en}}</option>
                                         @endforeach
                                     @else
                                         <option value>Select Restaurant</option>
                                         @foreach($restaurants as $restaurant)
-                                            <option value="{{url('/collections/' . $restaurant->id)}}">{{$restaurant->name_en . ', ' . $restaurant->area->area_en . ', ' . $restaurant->address_en}}</option>
+                                            <option value="{{url('/collections/' . $restaurant->id)}}">{{$restaurant->name_en}}</option>
                                         @endforeach
                                     @endif
                                 </select>

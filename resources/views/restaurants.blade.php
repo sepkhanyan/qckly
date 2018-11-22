@@ -66,10 +66,11 @@
                                     @else
                                         <th class="action action-three"></th>
                                     @endif
+                                    <th>Logo</th>
                                     <th>Name</th>
                                     <th>Description</th>
-                                    <th>City</th>
-                                    <th>Address</th>
+                                    {{--<th>City</th>--}}
+                                    {{--<th>Address</th>--}}
                                     <th>Telephone</th>
                                     <th>Status</th>
                                     <th>ID</th>
@@ -90,12 +91,13 @@
                                                 </a>&nbsp;&nbsp;
                                             </td>
                                             <td>
-                                                <img src="/images/{{$restaurant->image}}" width="30px" height="30px">
+                                                <img src="/images/restaurant/{{$restaurant->image}}" width="30px" height="30px">
+                                            </td>
+                                            <td>
                                                 {{$restaurant->name_en}}
                                             </td>
                                             <td>{{$restaurant->description_en}}</td>
-                                            <td>{{$restaurant->area->name_en}}</td>
-                                            <td>{{$restaurant->address_en}}</td>
+                                            {{--<td>{{$restaurant->area->name_en}}</td>--}}
                                             <td>{{$restaurant->telephone}}</td>
                                             <td data-toggle="modal" data-target="#changeStatus"
                                                 onclick="myFunction('{{$restaurant->id}}','{{$restaurant->status}}')"

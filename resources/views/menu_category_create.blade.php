@@ -159,7 +159,4 @@
             $('input[name=image]').val("");
         }
     </script>
-    <script type="text/javascript">
-        $('#category ').select2();
-    </script>
 @endsection

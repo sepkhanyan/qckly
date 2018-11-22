@@ -61,7 +61,7 @@ class User extends Authenticatable
 
     public function restaurant()
     {
-        return $this->hasOne('App\Restaurant', 'user_id');
+        return $this->belongsTo('App\Restaurant', 'restaurant_id');
     }
 
     public function image()

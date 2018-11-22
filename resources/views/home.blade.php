@@ -42,7 +42,7 @@
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
 
     <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
-    <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet">
+    {{--<link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet">--}}
     <link href="{{ asset('css/metisMenu.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2.css') }}" rel="stylesheet">
     <link href="{{ asset('css/select2-bootstrap.css') }}" rel="stylesheet">
@@ -450,7 +450,7 @@
                         <div class="row wrap-vertical text-center">
                             <div class="col-xs-12 wrap-top">
                                 @if(isset(auth()->user()->image))
-                                    <img src="/images/{{auth()->user()->image}}" width="30px" height="30px">
+                                    <img src="/images/admin/{{auth()->user()->image}}" width="30px" height="30px">
                                 @endif
                             </div>
                             <div class="col-xs-12 wrap-none wrap-top wrap-right">

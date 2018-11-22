@@ -75,6 +75,18 @@
                                     @endif
                                 </div>
                             </div>
+                            <div class="form-group{{ $errors->has('manager_telephone') ? ' has-error' : '' }}">
+                                <label for="input_manager_telephone" class="col-sm-3 control-label">Telephone</label>
+                                <div class="col-sm-5">
+                                    <input type="text" name="manager_telephone" id="input_manager_telephone"
+                                           class="form-control" value="{{ old('manager_telephone') }}"/>
+                                    @if ($errors->has('manager_telephone'))
+                                        <span class="help-block">
+                                        <strong>{{ $errors->first('manager_telephone') }}</strong>
+                                    </span>
+                                    @endif
+                                </div>
+                            </div>
                             <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
                                 <label for="input_password" class="col-sm-3 control-label">
                                     Password
@@ -103,7 +115,7 @@
                                 <label for="category" class="col-sm-3 control-label">Category</label>
                                 <div class="col-sm-5">
                                     <select name="category[]" id="category" class="form-control" multiple
-                                            placeholder="Select Category">
+                                            placeholder="Select Categories">
                                         @foreach($categories as $category)
                                             <option value="{{$category->id}}" {{ (collect(old('category'))->contains($category->id)) ? 'selected':'' }}>{{$category->name_en}}</option>
                                         @endforeach
@@ -164,31 +176,31 @@
                                 </div>
                             </div>
 
-                            <h4 class="tab-pane-title">Address</h4>
-                            <div class="form-group{{ $errors->has('address_en') ? ' has-error' : '' }}">
-                                <label for="input_address_en" class="col-sm-3 control-label">Address En</label>
-                                <div class="col-sm-5">
-                                    <input type="text" name="address_en" id="input_address_en" class="form-control"
-                                           value="{{ old('address_en') }}"/>
-                                    @if ($errors->has('address_en'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('address_en') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="form-group{{ $errors->has('address_ar') ? ' has-error' : '' }}">
-                                <label for="input_address_ar" class="col-sm-3 control-label">Address Ar</label>
-                                <div class="col-sm-5">
-                                    <input type="text" name="address_ar" id="input_address_ar" class="form-control"
-                                           value="{{ old('address_ar') }}"/>
-                                    @if ($errors->has('address_ar'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('address_ar') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-                            </div>
+                            {{--<h4 class="tab-pane-title">Address</h4>--}}
+                            {{--<div class="form-group{{ $errors->has('address_en') ? ' has-error' : '' }}">--}}
+                                {{--<label for="input_address_en" class="col-sm-3 control-label">Address En</label>--}}
+                                {{--<div class="col-sm-5">--}}
+                                    {{--<input type="text" name="address_en" id="input_address_en" class="form-control"--}}
+                                           {{--value="{{ old('address_en') }}"/>--}}
+                                    {{--@if ($errors->has('address_en'))--}}
+                                        {{--<span class="help-block">--}}
+                                        {{--<strong>{{ $errors->first('address_en') }}</strong>--}}
+                                    {{--</span>--}}
+                                    {{--@endif--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                            {{--<div class="form-group{{ $errors->has('address_ar') ? ' has-error' : '' }}">--}}
+                                {{--<label for="input_address_ar" class="col-sm-3 control-label">Address Ar</label>--}}
+                                {{--<div class="col-sm-5">--}}
+                                    {{--<input type="text" name="address_ar" id="input_address_ar" class="form-control"--}}
+                                           {{--value="{{ old('address_ar') }}"/>--}}
+                                    {{--@if ($errors->has('address_ar'))--}}
+                                        {{--<span class="help-block">--}}
+                                        {{--<strong>{{ $errors->first('address_ar') }}</strong>--}}
+                                    {{--</span>--}}
+                                    {{--@endif--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
                             {{--<div class="form-group{{ $errors->has('city_en') ? ' has-error' : '' }}">--}}
                             {{--<label for="input_city_en" class="col-sm-3 control-label">City En</label>--}}
                             {{--<div class="col-sm-5">--}}
@@ -213,40 +225,45 @@
                             {{--@endif--}}
                             {{--</div>--}}
                             {{--</div>--}}
-                            <div class="form-group">
-                                <label for="input_state_en" class="col-sm-3 control-label">State En</label>
-                                <div class="col-sm-5">
-                                    <input type="text" name="state_en" id="input_state_en" class="form-control"
-                                           value="{{ old('state_en') }}"/>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="input_state_ar" class="col-sm-3 control-label">State Ar</label>
-                                <div class="col-sm-5">
-                                    <input type="text" name="state_ar" id="input_state_ar" class="form-control"
-                                           value="{{ old('state_ar') }}"/>
-                                </div>
-                            </div>
-                            <div class="form-group{{ $errors->has('postcode') ? ' has-error' : '' }}">
-                                <label for="input-postcode" class="col-sm-3 control-label">Postcode</label>
-                                <div class="col-sm-5">
-                                    <input type="text" name="postcode" id="input-postcode" class="form-control"
-                                           value="{{ old('postcode') }}"/>
-                                    @if ($errors->has('postcode'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('postcode') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="form-group">
+                            {{--<div class="form-group">--}}
+                                {{--<label for="input_state_en" class="col-sm-3 control-label">State En</label>--}}
+                                {{--<div class="col-sm-5">--}}
+                                    {{--<input type="text" name="state_en" id="input_state_en" class="form-control"--}}
+                                           {{--value="{{ old('state_en') }}"/>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                            {{--<div class="form-group">--}}
+                                {{--<label for="input_state_ar" class="col-sm-3 control-label">State Ar</label>--}}
+                                {{--<div class="col-sm-5">--}}
+                                    {{--<input type="text" name="state_ar" id="input_state_ar" class="form-control"--}}
+                                           {{--value="{{ old('state_ar') }}"/>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                            {{--<div class="form-group{{ $errors->has('postcode') ? ' has-error' : '' }}">--}}
+                                {{--<label for="input-postcode" class="col-sm-3 control-label">Postcode</label>--}}
+                                {{--<div class="col-sm-5">--}}
+                                    {{--<input type="text" name="postcode" id="input-postcode" class="form-control"--}}
+                                           {{--value="{{ old('postcode') }}"/>--}}
+                                    {{--@if ($errors->has('postcode'))--}}
+                                        {{--<span class="help-block">--}}
+                                        {{--<strong>{{ $errors->first('postcode') }}</strong>--}}
+                                    {{--</span>--}}
+                                    {{--@endif                                 --}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                            <div class="form-group{{ $errors->has('area') ? ' has-error' : '' }}">
                                 <label for="input-country" class="col-sm-3 control-label">City</label>
                                 <div class="col-sm-5">
-                                    <select name="country" id="input-country" class="form-control">
+                                    <select name="area[]" id="area" class="form-control" multiple placeholder="Select Cities">
                                         @foreach($areas as $area)
-                                            <option value="{{$area->id}}"{{ old('country') == $area->id ? 'selected':'' }}>{{$area->name_en}}</option>
+                                            <option value="{{$area->id}}"{{ (collect(old('area'))->contains($area->id)) ? 'selected':'' }}>{{$area->name_en}}</option>
                                         @endforeach
                                     </select>
+                                    @if ($errors->has('area'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('area') }}</strong>
+                                        </span>
+                                    @endif
                                 </div>
                             </div>
                             {{--<div class="form-group">--}}
@@ -265,42 +282,42 @@
                                 {{--</div>--}}
                             {{--</div>--}}
                             {{--<br/>--}}
-                            <div id="lat-lng">
-                                <div class="form-group{{ $errors->has('latitude') ? ' has-error' : '' }}">
-                                    <label for="lat" class="col-sm-3 control-label">Latitude</label>
-                                    <div class="col-sm-5">
-                                        <input type="text" name="latitude" id="lat"
-                                               class="form-control" value="{{ old('latitude') }}"/>
-                                        @if ($errors->has('latitude'))
-                                            <span class="help-block">
-                                        <strong>{{ $errors->first('latitude') }}</strong>
-                                    </span>
-                                        @endif
-                                    </div>
-                                </div>
-                                <div class="form-group{{ $errors->has('longitude') ? ' has-error' : '' }}">
-                                    <label for="long"
-                                           class="col-sm-3 control-label">Longitude</label>
-                                    <div class="col-sm-5">
-                                        <input type="text" name="longitude" id="long"
-                                               class="form-control" value="{{ old('longitude') }}"/>
-                                        @if ($errors->has('longitude'))
-                                            <span class="help-block">
-                                        <strong>{{ $errors->first('longitude') }}</strong>
-                                    </span>
-                                        @endif
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="lat" class="col-sm-3 control-label"></label>
-                                    <div class="col-sm-5">
-                                        <div id="map"></div>
-                                    </div>
-                                </div>
-                                <script async defer
-                                        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAU2aEUn440lIbc-dt9swUPO-jB0HMmCl8&callback=initMap">
-                                </script>
-                            </div>
+                            {{--<div id="lat-lng">--}}
+                                {{--<div class="form-group{{ $errors->has('latitude') ? ' has-error' : '' }}">--}}
+                                    {{--<label for="lat" class="col-sm-3 control-label">Latitude</label>--}}
+                                    {{--<div class="col-sm-5">--}}
+                                        {{--<input type="text" name="latitude" id="lat"--}}
+                                               {{--class="form-control" value="{{ old('latitude') }}"/>--}}
+                                        {{--@if ($errors->has('latitude'))--}}
+                                            {{--<span class="help-block">--}}
+                                        {{--<strong>{{ $errors->first('latitude') }}</strong>--}}
+                                    {{--</span>--}}
+                                        {{--@endif--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
+                                {{--<div class="form-group{{ $errors->has('longitude') ? ' has-error' : '' }}">--}}
+                                    {{--<label for="long"--}}
+                                           {{--class="col-sm-3 control-label">Longitude</label>--}}
+                                    {{--<div class="col-sm-5">--}}
+                                        {{--<input type="text" name="longitude" id="long"--}}
+                                               {{--class="form-control" value="{{ old('longitude') }}"/>--}}
+                                        {{--@if ($errors->has('longitude'))--}}
+                                            {{--<span class="help-block">--}}
+                                        {{--<strong>{{ $errors->first('longitude') }}</strong>--}}
+                                    {{--</span>--}}
+                                        {{--@endif--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
+                                {{--<div class="form-group">--}}
+                                    {{--<label for="lat" class="col-sm-3 control-label"></label>--}}
+                                    {{--<div class="col-sm-5">--}}
+                                        {{--<div id="map"></div>--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
+                                {{--<script async defer--}}
+                                        {{--src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAU2aEUn440lIbc-dt9swUPO-jB0HMmCl8&callback=initMap">--}}
+                                {{--</script>--}}
+                            {{--</div>--}}
                         </div>
                         <div id="data" class="tab-pane row wrap-all">
                             <div class="form-group{{ $errors->has('description_en') ? ' has-error' : '' }}">
@@ -806,63 +823,63 @@
         </div>
     </div>
     <script type="text/javascript">
-        var map;
-        var markers = [];
-
-        function initMap() {
-            var haightAshbury = {lat: 40.7143528, lng: -74.0059731};
-
-            map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 11,
-                panControl: true,
-                zoomControl: true,
-                mapTypeControl: true,
-                scaleControl: true,
-                streetViewControl: true,
-                overviewMapControl: true,
-                rotateControl: true,
-                center: haightAshbury,
-                mapTypeId: 'terrain'
-            });
-
-
-            map.addListener('click', function (event) {
-                if (markers.length >= 1) {
-                    deleteMarkers();
-                }
-
-                addMarker(event.latLng);
-                document.getElementById('lat').value = event.latLng.lat();
-                document.getElementById('long').value = event.latLng.lng();
-            });
-        }
-
-
-        function addMarker(location) {
-            var marker = new google.maps.Marker({
-                position: location,
-                map: map
-            });
-            markers.push(marker);
-        }
-
-
-        function setMapOnAll(map) {
-            for (var i = 0; i < markers.length; i++) {
-                markers[i].setMap(map);
-            }
-        }
-
-
-        function clearMarkers() {
-            setMapOnAll(null);
-        }
-
-
-        function deleteMarkers() {
-            clearMarkers();
-            markers = [];
-        }
+        // var map;
+        // var markers = [];
+        //
+        // function initMap() {
+        //     var haightAshbury = {lat: 40.7143528, lng: -74.0059731};
+        //
+        //     map = new google.maps.Map(document.getElementById('map'), {
+        //         zoom: 11,
+        //         panControl: true,
+        //         zoomControl: true,
+        //         mapTypeControl: true,
+        //         scaleControl: true,
+        //         streetViewControl: true,
+        //         overviewMapControl: true,
+        //         rotateControl: true,
+        //         center: haightAshbury,
+        //         mapTypeId: 'terrain'
+        //     });
+        //
+        //
+        //     map.addListener('click', function (event) {
+        //         if (markers.length >= 1) {
+        //             deleteMarkers();
+        //         }
+        //
+        //         addMarker(event.latLng);
+        //         document.getElementById('lat').value = event.latLng.lat();
+        //         document.getElementById('long').value = event.latLng.lng();
+        //     });
+        // }
+        //
+        //
+        // function addMarker(location) {
+        //     var marker = new google.maps.Marker({
+        //         position: location,
+        //         map: map
+        //     });
+        //     markers.push(marker);
+        // }
+        //
+        //
+        // function setMapOnAll(map) {
+        //     for (var i = 0; i < markers.length; i++) {
+        //         markers[i].setMap(map);
+        //     }
+        // }
+        //
+        //
+        // function clearMarkers() {
+        //     setMapOnAll(null);
+        // }
+        //
+        //
+        // function deleteMarkers() {
+        //     clearMarkers();
+        //     markers = [];
+        // }
 
         function readURL(input) {
             if (input.files && input.files[0]) {
@@ -882,6 +899,7 @@
         }
     </script>
     <script type="text/javascript">
-        $('#category ').select2();
+        $('#category').select2();
+        $('#area').select2();
     </script>
 @endsection

@@ -37,9 +37,7 @@ class ReviewsController extends Controller
                 ->with('order.user')->paginate(20);
         }
         if ($user->admin == 2) {
-            $user = $user->load('restaurant');
-            $restaurant = $user->restaurant;
-            $reviews = Review::where('restaurant_id', $restaurant->id);
+            $reviews = Review::where('restaurant_id', $user->restaurant_id);
             if (isset($data['review_date'])) {
                 $reviews = $reviews->where('created_at', $data['review_date']);
             }
@@ -47,7 +45,7 @@ class ReviewsController extends Controller
             if (isset($data['review_search'])) {
                 $reviews = $reviews->where('order_id', 'like', $data['review_search']);
             }
-            $selectedRestaurant = Restaurant::find($restaurant->id);
+            $selectedRestaurant = Restaurant::find($user->restaurant_id);
             $reviews = $reviews->orderby('created_at', 'desc')
                 ->with('order.user')->paginate(20);
         }
