@@ -131,23 +131,6 @@ class AreasController extends Controller
         $user = Auth::user();
         if ($user->admin == 1) {
             $id = $request->get('id');
-            $areas = Area::with('restaurant')->where('id', $id)->get();
-            foreach ($areas as $area) {
-                if ($area->restaurant) {
-                    $restaurant_images = [];
-                    $menu_images = [];
-                    foreach ($area->restaurant as $restaurant) {
-                        if ($restaurant->menu) {
-                            foreach ($restaurant->menu as $menu) {
-                                $menu_images[] = public_path('images/' . $menu->image);
-                            }
-                            File::delete($menu_images);
-                        }
-                        $restaurant_images[] = public_path('images/' . $restaurant->image);
-                    }
-                    File::delete($restaurant_images);
-                }
-            }
             Area::whereIn('id', $id)->delete();
             return redirect('/areas');
         } else {

@@ -127,6 +127,7 @@ class MenuCategoriesController extends Controller
      */
     public function edit($id)
     {
+        $menuCategories = MenuCategory::where('id', $id)->get();
         $user = Auth::user();
         $category = MenuCategory::find($id);
         if ($user->admin == 2) {
@@ -194,14 +195,25 @@ class MenuCategoriesController extends Controller
     {
         $user = Auth::user();
         $id = $request->get('id');
+        $menuCategories = MenuCategory::whereIn('id', $id)->get();
         $menuCategory = MenuCategory::where('id', $id)->first();
         if ($user->admin == 2) {
             if($menuCategory->restaurant_id == $user->restaurant_id){
+                $images = [];
+                foreach ($menuCategories as $category){
+                    $images[] = public_path('images/' . $category->image);
+                }
+                File::delete($images);
                 MenuCategory::whereIn('id', $id)->delete();
             }else{
                 return redirect()->back();
             }
         }elseif($user->admin == 1){
+            $images = [];
+            foreach ($menuCategories as $category){
+                $images[] = public_path('images/' . $category->image);
+            }
+            File::delete($images);
             MenuCategory::whereIn('id', $id)->delete();
         }
         return redirect('/menu_categories');
