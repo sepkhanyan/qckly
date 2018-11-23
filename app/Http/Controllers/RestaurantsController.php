@@ -502,12 +502,13 @@ class RestaurantsController extends Controller
                     File::delete($menu_category_images);
                 }
                 if(count($restaurant->menu) > 0){
+                    $menu_images = [];
                     foreach($restaurant->menu as $menu){
                         $menu_images[] = public_path('images/' . $menu->image);
                     }
                     File::delete($menu_images);
                 }
-                $menu_images = [];
+//                $user_images = [];
                 if($restaurant->user->image){
                     $user_images[] = public_path('images/' . $restaurant->user->image);
                     File::delete($user_images);

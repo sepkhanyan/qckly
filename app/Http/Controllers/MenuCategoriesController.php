@@ -199,21 +199,35 @@ class MenuCategoriesController extends Controller
         $menuCategory = MenuCategory::where('id', $id)->first();
         if ($user->admin == 2) {
             if($menuCategory->restaurant_id == $user->restaurant_id){
-                $images = [];
+                $category_images = [];
                 foreach ($menuCategories as $category){
-                    $images[] = public_path('images/' . $category->image);
+                    if(count($category->menu) > 0){
+                        $menu_images = [];
+                        foreach($category->menu as $menu){
+                            $menu_images[] = public_path('images/' . $menu->image);
+                        }
+                        File::delete($menu_images);
+                    }
+                    $category_images[] = public_path('images/' . $category->image);
                 }
-                File::delete($images);
+                File::delete($category_images);
                 MenuCategory::whereIn('id', $id)->delete();
             }else{
                 return redirect()->back();
             }
         }elseif($user->admin == 1){
-            $images = [];
+            $category_images = [];
             foreach ($menuCategories as $category){
-                $images[] = public_path('images/' . $category->image);
+                if(count($category->menu) > 0){
+                    $menu_images = [];
+                    foreach($category->menu as $menu){
+                        $menu_images[] = public_path('images/' . $menu->image);
+                    }
+                    File::delete($menu_images);
+                }
+                $category_images[] = public_path('images/' . $category->image);
             }
-            File::delete($images);
+            File::delete($category_images);
             MenuCategory::whereIn('id', $id)->delete();
         }
         return redirect('/menu_categories');

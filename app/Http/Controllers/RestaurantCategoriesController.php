@@ -126,23 +126,6 @@ class RestaurantCategoriesController extends Controller
         $user = Auth::user();
         if ($user->admin == 1) {
             $id = $request->get('id');
-            $categories = RestaurantCategory::where('id', $id)->get();
-            foreach ($categories as $category) {
-                if ($category->restaurant) {
-                    $restaurant_images = [];
-                    $menu_images = [];
-                    foreach ($category->restaurant as $restaurant) {
-                        if ($restaurant->menu) {
-                            foreach ($restaurant->menu as $menu) {
-                                $menu_images[] = public_path('images/' . $menu->menu_photo);
-                            }
-                            File::delete($menu_images);
-                        }
-                        $restaurant_images[] = public_path('images/' . $restaurant->restaurant_image);
-                    }
-                    File::delete($restaurant_images);
-                }
-            }
             RestaurantCategory::whereIn('id', $id)->delete();
             return redirect('/restaurant_categories');
         } else {
