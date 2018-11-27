@@ -27,7 +27,7 @@ return [
     'cartRemove'         => 'Cart deleted successfully.',
     'otpSent'            => 'Please enter OTP sent to your registered mobile number.',
     'otpResent'          => 'OTP has been resent on your registered mobile number.',
-    'otpError'           => 'Enter valid OTP Number',
+    'otpError'           => 'You have entered an invalid OTP. Please try again.',
     'orderComplete'      => 'Cart already ordered.',
     'emptyCart'          => 'Cart is empty.',
     'noCart'             => 'No Cart.'

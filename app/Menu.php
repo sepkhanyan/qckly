@@ -18,9 +18,15 @@ class Menu extends Model
         'image',
         'category_id',
         'status',
-        'famous'
+        'famous',
+        'approved'
     ];
 
+
+    public function editingMenu()
+    {
+        return $this->hasOne('App\EditingMenu', 'menu_id');
+    }
 
     public function category()
     {
@@ -35,6 +41,11 @@ class Menu extends Model
     public function collectionItem()
     {
         return $this->hasMany('App\CollectionItem', 'item_id');
+    }
+
+    public function editingCollectionItem()
+    {
+        return $this->hasMany('App\EditingCollectionItem', 'item_id');
     }
 
     public function cartItem()

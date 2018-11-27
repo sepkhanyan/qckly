@@ -14,7 +14,8 @@ class MenuCategory extends Model
         'name_ar',
         'description_en',
         'description_ar',
-        'image'
+        'image',
+        'approved'
     ];
 
 
@@ -27,6 +28,7 @@ class MenuCategory extends Model
     {
         return $this->hasMany('App\Menu', 'category_id');
     }
+
 
     public function cartItem()
     {
@@ -41,6 +43,21 @@ class MenuCategory extends Model
     public function collectionItem()
     {
         return $this->hasMany('App\CollectionItem', 'collection_menu_id');
+    }
+
+    public function editingCollectionMenu()
+    {
+        return $this->hasOne('App\EditingCollectionMenu', 'menu_id');
+    }
+
+    public function editingCollectionItem()
+    {
+        return $this->hasMany('App\EditingCollectionItem', 'collection_menu_id');
+    }
+
+    public function editingMenuCategory()
+    {
+        return $this->hasOne('App\EditingMenuCategory', 'category_id');
     }
 
     public function scopeName($query, $val)

@@ -21,4 +21,8 @@ class Mealtime extends Model
         return $this->hasMany('App\Collection', 'mealtime_id');
     }
 
+    public function editingCollection()
+    {
+        return $this->hasMany('App\EditingCollection', 'mealtime_id');
+    }
 }

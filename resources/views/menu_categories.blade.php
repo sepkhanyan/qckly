@@ -29,7 +29,7 @@
                                         title="" onchange="top.location.href = this.options[this.selectedIndex].value">
                                     @if($selectedRestaurant)
                                         @foreach($restaurants as $restaurant)
-                                                <option value="{{url('/menu_categories/' . $restaurant->id)}}"{{($restaurant->id == $selectedRestaurant->id) ? 'selected' : ''}}>{{$restaurant->name_en}}</option>
+                                            <option value="{{url('/menu_categories/' . $restaurant->id)}}"{{($restaurant->id == $selectedRestaurant->id) ? 'selected' : ''}}>{{$restaurant->name_en}}</option>
                                         @endforeach
                                     @else
                                         <option value>Select Restaurant</option>
@@ -70,7 +70,8 @@
                                             <a class="btn btn-grey" onclick="filterList();" title="Search">
                                                 <i class="fa fa-search"></i>
                                             </a>
-                                            <a class="btn btn-grey" href="{{url('/menu_categories/' . $id)}}" title="Clear">
+                                            <a class="btn btn-grey" href="{{url('/menu_categories/' . $id)}}"
+                                               title="Clear">
                                                 <i class="fa fa-times"></i>
                                             </a>
                                         </div>&nbsp;
@@ -91,8 +92,10 @@
                                     <th>Name</th>
                                     <th>Description</th>
                                     <th>ID</th>
+                                    <th></th>
                                 </tr>
                                 </thead>
+
                                 <tbody>
                                 @if($selectedRestaurant)
                                     @if(count($categories) > 0)
@@ -104,10 +107,34 @@
                                                        href="{{ url('menu_category/edit/' . $category->id )}}">
                                                         <i class="fa fa-pencil"></i>
                                                     </a>&nbsp;&nbsp;
+                                                    @if($user->admin == 1)
+                                                        @if($category->approved == 0)
+                                                            <a class="btn btn-edit" title=""
+                                                               href="{{ url('menu_category/approve/' . $category->id )}}">
+                                                                <i class="fa fa-check"></i>
+                                                                Approve
+                                                            </a>&nbsp;&nbsp;
+                                                            <a class="btn btn-danger" title=""
+                                                               href="{{ url('menu_category/reject/' . $category->id )}}">
+                                                                <i class="fa fa-ban"></i>
+                                                                Reject
+                                                            </a>&nbsp;
+                                                        @endif
+                                                    @endif
                                                 </td>
                                                 <td>{{$category->name_en}}</td>
                                                 <td>{{$category->description_en}}</td>
                                                 <td>{{$category->id}}</td>
+                                                <td>
+                                                    @if($category->approved == 0)
+                                                        <span class="label label-default">Pending Approval</span>
+                                                    @elseif($category->approved == 2)
+                                                        <span class="label label-danger">Rejected</span>
+                                                    @endif
+                                                        @if($category->editingMenuCategory)
+                                                            <span class="label label-default">Pending Edit Approval</span>
+                                                        @endif
+                                                </td>
                                             </tr>
                                         @endforeach
                                     @else

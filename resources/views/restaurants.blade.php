@@ -74,6 +74,7 @@
                                     <th>Telephone</th>
                                     <th>Status</th>
                                     <th>ID</th>
+                                    <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -109,6 +110,11 @@
                                                 @endif
                                             </td>
                                             <td>{{$restaurant->id}}</td>
+                                            <td>
+                                                @if($restaurant->editingRestaurant)
+                                                    <span class="label label-default">Pending Edit Approval</span>
+                                                @endif
+                                            </td>
                                         </tr>
                                     @endforeach
                                 @else

@@ -113,6 +113,7 @@
                                     <th>Category</th>
                                     <th>Status</th>
                                     <th>ID</th>
+                                    <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -126,6 +127,20 @@
                                                        href="{{ url('/menu/edit/' . $menu->id )}}">
                                                         <i class="fa fa-pencil"></i>
                                                     </a>&nbsp;&nbsp;
+                                                    @if($user->admin == 1)
+                                                        @if($menu->approved == 0)
+                                                            <a class="btn btn-edit" title=""
+                                                               href="{{ url('menu/approve/' . $menu->id )}}">
+                                                                <i class="fa fa-check"></i>
+                                                                Approve
+                                                            </a>&nbsp;&nbsp;
+                                                            <a class="btn btn-danger" title=""
+                                                               href="{{ url('menu/reject/' . $menu->id )}}">
+                                                                <i class="fa fa-ban"></i>
+                                                                Reject
+                                                            </a>&nbsp;
+                                                        @endif
+                                                    @endif
                                                 </td>
                                                 <td>{{$menu->name_en}}</td>
                                                 <td>{{$menu->description_en}}</td>
@@ -139,6 +154,15 @@
                                                     @endif
                                                 </td>
                                                 <td>{{$menu->id}}</td>
+                                                <td>  @if($menu->approved == 0)
+                                                        <span class="label label-default">Pending Approval</span>
+                                                    @elseif($menu->approved == 2)
+                                                        <span class="label label-danger">Rejected</span>
+                                                    @endif
+                                                    @if($menu->editingMenu)
+                                                        <span class="label label-default">Pending Edit Approval</span>
+                                                    @endif
+                                                </td>
                                             </tr>
                                         @endforeach
                                     @else

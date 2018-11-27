@@ -244,6 +244,26 @@ $(document).ready(function () {
         });
 
     });
+
+    $('#edit_menu_category_reject').click(function () {
+        window.checkValues = $('input[name=edit_menu_category]:checked').map(function () {
+            return $(this).val();
+        }).get();
+        console.log(checkValues);
+        $.ajax({
+
+            method: "POST",
+            url: "/menu_category/edit_reject",
+            data: {id: checkValues, _token: token},
+            success: function (data) {
+
+                // window.location.reload();
+            }
+
+        });
+
+    });
+
     $('#delete_customer').click(function () {
         window.checkValues = $('input[name=delete]:checked').map(function () {
             return $(this).val();

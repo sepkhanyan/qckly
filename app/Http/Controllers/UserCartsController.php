@@ -484,7 +484,8 @@ class UserCartsController extends Controller
                 return response()->json(array(
                     'success' => 0,
                     'status_code' => 200,
-                    'data' => []));
+                    'data' => [],
+                    'message' => \Lang::get('message.emptyCart')));
             }
         } else {
             return response()->json(array(

@@ -4,22 +4,18 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class CategoryRestaurant extends Model
+class EditingCategoryRestaurant extends Model
 {
-    protected $table = 'category_restaurant';
+    protected $table = 'editing_category_restaurant';
 
 
     protected $fillable = [
         'category_id',
-        'restaurant_id',
+        'editing_restaurant_id',
         'name_ar',
         'name_en',
     ];
 
-    public function restaurant()
-    {
-        return $this->belongsTo('App\Restaurant', 'restaurant_id');
-    }
 
     public function editingRestaurant()
     {
@@ -30,5 +26,4 @@ class CategoryRestaurant extends Model
     {
         return $this->belongsTo('App\RestaurantCategory', 'category_id');
     }
-
 }

@@ -4,28 +4,26 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class RestaurantArea extends Model
+class EditingRestaurantArea extends Model
 {
-    protected $table = 'restaurant_area';
+    protected $table = 'editing_restaurant_area';
 
     protected $fillable = [
-        'restaurant_id',
         'area_id',
         'name_en',
         'name_ar',
+        'editing_restaurant_id'
     ];
 
 
 
-    public function restaurant()
+    public function editingRestaurant()
     {
-        return $this->belongsTo('App\Restaurant', 'restaurant_id');
+        return $this->belongsTo('App\EditingRestaurant', 'editing_restaurant_id');
     }
-
 
     public function area()
     {
         return $this->belongsTo('App\Area', 'area_id');
     }
-
 }

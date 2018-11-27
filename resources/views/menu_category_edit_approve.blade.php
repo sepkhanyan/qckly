@@ -4,16 +4,14 @@
         <div class="page-header clearfix">
             <div class="page-action">
                 <a class="btn btn-primary" onclick="$('#edit-form').submit();">
-                    <i class="fa fa-save"></i>
-                    Save
+                    <i class="fa fa-check"></i>
+                    Approve
                 </a>
-                <a class="btn btn-default" onclick="saveClose();">
-                    <i class="fa fa-save"></i>
-                    Save & Close
-                </a>
-                <a href="{{ redirect()->back()->getTargetUrl() }}" class="btn btn-default">
-                    <i class="fa fa-angle-double-left"></i>
-                </a>
+                <a class="btn btn-danger" title=""
+                   href="{{ url('menu_category/edit_reject/' . $category->category_id )}}">
+                    <i class="fa fa-ban"></i>
+                    Reject
+                </a>&nbsp;
             </div>
         </div>
         <div class="row content">
@@ -28,12 +26,12 @@
                     </ul>
                 </div>
                 <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST" enctype="multipart/form-data"
-                      action="{{ url('/menu_category/update/' . $category->id) }}">
+                      action="{{ url('/menu_category/edit_approve/' . $category->category_id ) }}">
                     {{ csrf_field() }}
                     <div class="tab-content">
                         <div id="general" class="tab-pane row wrap-all active">
                             @if($user->admin == 1)
-                                <input type="hidden" name="restaurant" value="{{$category->restaurant_id}}">
+                                <input type="hidden" name="restaurant" value="{{$category->menuCategory->restaurant_id}}">
                             @endif
                             <div class="form-group{{ $errors->has('name_en') ? ' has-error' : '' }}">
                                 <label for="input_name_en" class="col-sm-3 control-label">Name En</label>

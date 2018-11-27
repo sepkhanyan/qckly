@@ -18,4 +18,9 @@ class RestaurantCategory extends Model
     {
         return $this->hasMany('App\CategoryRestaurant', 'category_id');
     }
+
+    public function editingCategoryRestaurant()
+    {
+        return $this->hasMany('App\EditingCategoryRestaurant', 'category_id');
+    }
 }

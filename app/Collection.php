@@ -26,14 +26,15 @@ class Collection extends Model
         'service_presentation_ar',
         'description_en',
         'description_ar',
-        'mealtime',
+        'mealtime_id',
         'female_caterer_available',
         'max_qty',
         'min_qty',
         'persons_max_count',
         'allow_person_increase',
         'min_serve_to_person',
-        'max_serve_to_person'
+        'max_serve_to_person',
+        'approved'
     ];
 
 
@@ -50,6 +51,11 @@ class Collection extends Model
     public function mealtime()
     {
         return $this->belongsTo('App\Mealtime', 'mealtime_id');
+    }
+
+    public function editingCollection()
+    {
+        return $this->hasOne('App\EditingCollection', 'collection_id');
     }
 
     public function collectionMenu()

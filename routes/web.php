@@ -48,12 +48,14 @@ Route::group(['middleware' => ['web', 'auth']], function () {
             Route::post('store', 'RestaurantsController@store');
             Route::get('edit/{id}', 'RestaurantsController@edit');
             Route::post('update/{id}', 'RestaurantsController@update');
+            Route::post('edit_approve/{id}', 'RestaurantsController@editApprove');
+            Route::get('edit_reject/{id}', 'RestaurantsController@editReject');
             Route::post('delete', 'RestaurantsController@deleteRestaurant');
             Route::post('status/update/{id}', 'RestaurantsController@changeStatus');
         });
         Route::get('/restaurant_categories', 'RestaurantCategoriesController@index');
         Route::group(['prefix' => 'restaurant_category'], function () {
-            Route::get('store', 'RestaurantCategoriesController@store');
+            Route::post('store', 'RestaurantCategoriesController@store');
             Route::post('update/{id}', 'RestaurantCategoriesController@update');
             Route::post('delete', 'RestaurantCategoriesController@deleteRestaurantCategory');
         });
@@ -61,8 +63,12 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::group(['prefix' => 'menu_category'], function () {
             Route::get('create/{id?}', 'MenuCategoriesController@create');
             Route::post('store', 'MenuCategoriesController@store');
+            Route::get('approve/{id}', 'MenuCategoriesController@approve');
+            Route::get('reject/{id}', 'MenuCategoriesController@reject');
             Route::get('edit/{id}', 'MenuCategoriesController@edit');
             Route::post('update/{id}', 'MenuCategoriesController@update');
+            Route::post('edit_approve/{id}', 'MenuCategoriesController@editApprove');
+            Route::get('edit_reject/{id}', 'MenuCategoriesController@editReject');
             Route::post('delete', 'MenuCategoriesController@deleteCategory');
         });
         Route::get('/collection_categories', 'CollectionCategoriesController@index');
@@ -75,17 +81,24 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::group(['prefix' => 'menu'], function () {
             Route::get('create/{id?}', 'MenusController@create');
             Route::post('store', 'MenusController@store');
+            Route::get('approve/{id}', 'MenusController@approve');
+            Route::get('reject/{id}', 'MenusController@reject');
             Route::get('edit/{id}', 'MenusController@edit');
             Route::post('update/{id}', 'MenusController@update');
+            Route::post('edit_approve/{id}', 'MenusController@editApprove');
+            Route::get('edit_reject/{id}', 'MenusController@editReject');
             Route::post('delete', 'MenusController@deleteMenu');
         });
         Route::get('/collections/{id?}', 'CollectionsController@index');
         Route::group(['prefix' => 'collection'], function () {
             Route::get('create/{id?}', 'CollectionsController@create');
             Route::get('store', 'CollectionsController@store');
+            Route::get('approve/{id}', 'CollectionsController@approve');
+            Route::get('reject/{id}', 'CollectionsController@reject');
             Route::get('edit/{id}', 'CollectionsController@edit');
             Route::post('update/{id}', 'CollectionsController@update');
-            Route::post('items/edit/{id}', 'CollectionsController@collectionItemsEdit');
+            Route::post('edit_approve/{id}', 'CollectionsController@editApprove');
+            Route::get('edit_reject/{id}', 'CollectionsController@editReject');
             Route::post('delete', 'CollectionsController@deleteCollection');
         });
         Route::get('/orders/{id?}', 'OrdersController@index');

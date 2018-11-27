@@ -102,6 +102,7 @@
                                     <th>Price</th>
                                     <th>Mealtime</th>
                                     <th>ID</th>
+                                    <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -115,6 +116,20 @@
                                                        href="{{ url('/collection/edit/' . $collection->id )}}">
                                                         <i class="fa fa-pencil"></i>
                                                     </a>&nbsp;&nbsp;
+                                                    @if($user->admin == 1)
+                                                        @if($collection->approved == 0)
+                                                            <a class="btn btn-edit" title=""
+                                                               href="{{ url('collection/approve/' . $collection->id )}}">
+                                                                <i class="fa fa-check"></i>
+                                                                Approve
+                                                            </a>&nbsp;&nbsp;
+                                                            <a class="btn btn-danger" title=""
+                                                               href="{{ url('collection/reject/' . $collection->id )}}">
+                                                                <i class="fa fa-ban"></i>
+                                                                Reject
+                                                            </a>&nbsp;
+                                                        @endif
+                                                    @endif
                                                 </td>
                                                 <td>{{$collection->name_en}}</td>
                                                 <td>{{$collection->description_en}}</td>
@@ -122,6 +137,16 @@
                                                 <td>{{$collection->price}}</td>
                                                 <td>{{$collection->mealtime->name_en}}</td>
                                                 <td>{{$collection->id}}</td>
+                                                <td>
+                                                    @if($collection->approved == 0)
+                                                        <span class="label label-default">Pending Approval</span>
+                                                    @elseif($collection->approved == 2)
+                                                        <span class="label label-danger">Rejected</span>
+                                                    @endif
+                                                        @if($collection->editingCollection)
+                                                            <span class="label label-default">Pending Edit Approval</span>
+                                                        @endif
+                                                </td>
                                             </tr>
                                         @endforeach
                                     @else

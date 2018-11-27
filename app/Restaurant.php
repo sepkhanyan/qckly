@@ -15,20 +15,25 @@ class Restaurant extends Model
         'email',
         'description_en',
         'description_ar',
-        'address_en',
-        'address_ar',
-        'state_en',
-        'state_ar',
-        'postcode',
-        'area_id',
+//        'address_en',
+//        'address_ar',
+//        'state_en',
+//        'state_ar',
+//        'postcode',
+//        'area_id',
         'telephone',
-        'latitude',
-        'longitude',
+//        'latitude',
+//        'longitude',
         'status',
         'image',
-        'user_id'
+        'editing_restaurant_id'
     ];
 
+
+    public function editingRestaurant()
+    {
+        return $this->hasOne('App\EditingRestaurant', 'restaurant_id');
+    }
 
     public function collection()
     {
