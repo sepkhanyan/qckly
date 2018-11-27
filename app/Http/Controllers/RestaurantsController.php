@@ -177,6 +177,7 @@ class RestaurantsController extends Controller
             $manager->email = $request->input('manager_email');
             $manager->mobile_number = $request->input('manager_telephone');
             $manager->admin = 2;
+            $manager->group_id = 2;
             $manager->restaurant_id = $restaurant->id;
             $manager->save();
 
