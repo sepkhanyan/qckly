@@ -318,6 +318,11 @@
                         <a href="sales">
                             <i class="fa fa-bar-chart-o fa-fw"></i>
                             <span class="content">Sales</span>
+                            @if(auth()->user()->admin == 2)
+                                @if(auth()->user()->restaurant->orderRestaurant->where('status_id', 1)->count() > 0)
+                                    <span class="badge">{{auth()->user()->restaurant->orderRestaurant->where('status_id', 1)->count()}}</span>
+                                @endif
+                            @endif
                             <span class="fa arrow"></span>
                         </a>
                         <ul class="nav nav-second-level collapse">
@@ -325,6 +330,11 @@
                                 <a href="{{ url('/orders') }}" class="orders">
                                     <i class="fa fa-square-o fa-fw"></i>
                                     Orders
+                                    @if(auth()->user()->admin == 2)
+                                        @if(auth()->user()->restaurant->orderRestaurant->where('status_id', 1)->count() > 0)
+                                            <span class="badge">{{auth()->user()->restaurant->orderRestaurant->where('status_id', 1)->count()}}</span>
+                                        @endif
+                                    @endif
                                 </a>
                             </li>
                         </ul>

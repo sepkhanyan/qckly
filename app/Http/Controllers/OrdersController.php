@@ -45,7 +45,7 @@ class OrdersController extends Controller
         }
         if ($user->admin == 2) {
             $selectedRestaurant = Restaurant::find($user->restaurant_id);
-            $orders = OrderRestaurant::where('restaurant_id', $restaurant->id);
+            $orders = OrderRestaurant::where('restaurant_id', $user->restaurant_id);
             if (isset($data['order_status'])) {
                 $orders = $orders->where('status_id', $data['order_status']);
             }

@@ -178,8 +178,8 @@ class CollectionsController extends Controller
 //                'persons_max_count' => 'required|integer',
                 'setup_time' => 'required|integer',
                 'max_time' => 'required|integer|gte:setup_time',
-                'requirements_en' => 'required|string|max:255',
-                'requirements_ar' => 'required|string|max:255',
+                'requirements_en' => 'required|string',
+                'requirements_ar' => 'required|string',
             ]);
 //            $collection->persons_max_count = $request->input('persons_max_count');
             $collection->allow_person_increase = $request->input('allow_person_increase');

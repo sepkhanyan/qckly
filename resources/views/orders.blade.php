@@ -108,7 +108,7 @@
                                 @if($selectedRestaurant)
                                     @if(count($orders) > 0)
                                         @foreach($orders as $order)
-                                            <tr>
+                                            <tr class="{{($order->status_id == 1) ? 'info' : ''}}">
                                                 @if($user->admin == 2)
                                                     <td class="action">
                                                         {{--<input type="checkbox" value="{{ $order->order_id }}"--}}
