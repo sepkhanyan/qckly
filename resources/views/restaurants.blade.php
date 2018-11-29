@@ -80,7 +80,7 @@
                                 <tbody>
                                 @if(count($restaurants) > 0)
                                     @foreach($restaurants as $restaurant)
-                                        <tr>
+                                        <tr  class="{{($restaurant->editingRestaurant) ? 'info' : ''}}">
                                             <td class="action">
                                                 @if($user->admin == 1)
                                                     <input type="checkbox" value="{{ $restaurant->id }}" name="delete"/>

@@ -264,7 +264,7 @@ class RestaurantsController extends Controller
         $user = Auth::user();
 
         $restaurant = Restaurant::find($id);
-        if($user->admin == 2) {
+        if ($user->admin == 2) {
             if ($user->restaurant_id == $id) {
                 $restaurant = Restaurant::find($id);
             } else {

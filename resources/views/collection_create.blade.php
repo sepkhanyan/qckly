@@ -30,7 +30,7 @@
                         </li>
                     </ul>
                 </div>
-                <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="GET"
+                <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST" enctype="multipart/form-data"
                       action="{{ url('/collection/store') }}">
                     {{ csrf_field() }}
                     <div class="tab-content">
@@ -88,6 +88,40 @@
                                     @endif
                                 </div>
                             </div>
+                            <div class="form-group{{ $errors->has('image') ? ' has-error' : '' }}">
+                                <label for="input-image" class="col-sm-3 control-label">
+                                    Image
+                                    <span class="help-block">Select a file to update menu image, otherwise leave blank.</span>
+                                </label>
+                                <div class="col-sm-5">
+                                    <div class="thumbnail imagebox">
+                                        <div class="preview">
+                                            <img src="{{url('/') . '/admin/no_photo.png'}}"
+                                                 class="thumb img-responsive" id="thumb">
+                                        </div>
+                                        <div class="caption">
+                                            <span class="name text-center"></span>
+                                            <p>
+                                                <label class=" btn btn-primary btn-file ">
+                                                    <i class="fa fa-picture-o"></i>
+                                                    Select
+                                                    <input type="file" name="image" style="display: none;"
+                                                           onchange="readURL(this);">
+                                                </label>
+                                                <label class="btn btn-danger " onclick="removeFile()">
+                                                    <i class="fa fa-times-circle"></i>
+                                                    &nbsp;&nbsp;Remove
+                                                </label>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    @if ($errors->has('image'))
+                                        <span class="help-block">
+                                        <strong>{{ $errors->first('image') }}</strong>
+                                    </span>
+                                    @endif
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <label for="input_mealtime" class="col-sm-3 control-label">Mealtime</label>
                                 <div class="col-sm-5">
@@ -104,11 +138,13 @@
                                 <div class="col-sm-5">
                                     <div class="btn-group btn-group-switch" data-toggle="buttons">
                                         <label class="btn btn-success active{{ (old('female_caterer_available') == '0') ? 'btn btn-success' : '' }}">
-                                            <input type="radio" name="female_caterer_available" value="1" {{ (old('female_caterer_available') == '1') ? 'checked' : '' }} checked="checked">
+                                            <input type="radio" name="female_caterer_available" value="1"
+                                                   {{ (old('female_caterer_available') == '1') ? 'checked' : '' }} checked="checked">
                                             Yes
                                         </label>
                                         <label class="btn btn-danger{{ (old('female_caterer_available') == '0') ? ' active' : '' }}">
-                                            <input type="radio" name="female_caterer_available" value="0" {{ (old('female_caterer_available') == '0') ? 'checked' : '' }}>
+                                            <input type="radio" name="female_caterer_available"
+                                                   value="0" {{ (old('female_caterer_available') == '0') ? 'checked' : '' }}>
                                             No
                                         </label>
                                     </div>
@@ -174,11 +210,13 @@
                                 <div class="col-sm-5">
                                     <div class="btn-group btn-group-switch" data-toggle="buttons">
                                         <label class="btn btn-success active{{ (old('is_available') == '0') ? 'btn btn-success' : '' }}">
-                                            <input type="radio" name="is_available" value="1" {{ (old('is_available') == '1') ? 'checked' : '' }} checked="checked">
+                                            <input type="radio" name="is_available" value="1"
+                                                   {{ (old('is_available') == '1') ? 'checked' : '' }} checked="checked">
                                             Yes
                                         </label>
                                         <label class="btn btn-danger{{ (old('is_available') == '0') ? ' active' : '' }}">
-                                            <input type="radio" name="is_available" value="0" {{ (old('is_available') == '0') ? 'checked' : '' }}>
+                                            <input type="radio" name="is_available"
+                                                   value="0" {{ (old('is_available') == '0') ? 'checked' : '' }}>
                                             No
                                         </label>
                                     </div>
@@ -275,11 +313,13 @@
                                     <div class="col-sm-5">
                                         <div class="btn-group btn-group-switch" data-toggle="buttons">
                                             <label class="btn btn-success active{{ (old('allow_person_increase') == '0') ? 'btn btn-success' : '' }}">
-                                                <input type="radio" name="allow_person_increase" value="1" {{ (old('allow_person_increase') == '1') ? 'checked' : '' }} checked="checked">
+                                                <input type="radio" name="allow_person_increase" value="1"
+                                                       {{ (old('allow_person_increase') == '1') ? 'checked' : '' }} checked="checked">
                                                 Yes
                                             </label>
                                             <label class="btn btn-danger{{ (old('allow_person_increase') == '0') ? ' active' : '' }}">
-                                                <input type="radio" name="allow_person_increase" value="0" {{ (old('allow_person_increase') == '0') ? 'checked' : '' }}>
+                                                <input type="radio" name="allow_person_increase"
+                                                       value="0" {{ (old('allow_person_increase') == '0') ? 'checked' : '' }}>
                                                 No
                                             </label>
                                         </div>
@@ -380,12 +420,14 @@
                                                 <div class="input-group">
                                                     <input type="number"
                                                            name="menu[{{$menu_category->id}}][min_qty]"
-                                                           class="form-control" min="1" value="{{old('menu.' . $menu_category->id . '.min_qty') ?? 1}}">
+                                                           class="form-control" min="1"
+                                                           value="{{old('menu.' . $menu_category->id . '.min_qty') ?? 1}}">
                                                 </div>
                                                 <div class="input-group">
                                                     <input type="number"
                                                            name="menu[{{$menu_category->id}}][max_qty]"
-                                                           class="form-control" min="1" value="{{old('menu.' . $menu_category->id . '.max_qty') ?? 1}}">
+                                                           class="form-control" min="1"
+                                                           value="{{old('menu.' . $menu_category->id . '.max_qty') ?? 1}}">
                                                 </div>
                                             @endif
                                         </div>
@@ -409,9 +451,12 @@
                                                 <div class="control-group control-group-3">
                                                     <div class="col-xs-2">
                                                         <input type="number"
-                                                               name="menu_item[{{$menu->id}}][qty]" id="qty{{$menu->id}}"
-                                                               style="display: none{{ (collect(old('menu_item.' . $menu->id . '.id'))->contains($menu->id)) ? 'block':'' }}" {{(!old('menu_item.' . $menu->id . '.id')) ? 'disabled': '' }}
-                                                               class="form-control" min="1" value="{{old('menu_item.' . $menu->id . '.qty') ?? 1}}">
+                                                               name="menu_item[{{$menu->id}}][qty]"
+                                                               id="qty{{$menu->id}}"
+                                                               style="display: none{{ (collect(old('menu_item.' . $menu->id . '.id'))->contains($menu->id)) ? 'block':'' }}"
+                                                               {{(!old('menu_item.' . $menu->id . '.id')) ? 'disabled': '' }}
+                                                               class="form-control" min="1"
+                                                               value="{{old('menu_item.' . $menu->id . '.qty') ?? 1}}">
                                                     </div>
                                                 </div>
                                             </div>
@@ -454,6 +499,23 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#thumb')
+                        .attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function removeFile() {
+            $('#thumb').attr('src', '/admin/no_photo.png');
+            $('input[name=image]').val("");
+        }
+    </script>
     <script>
         function myFunction(id) {
             console.log(id);

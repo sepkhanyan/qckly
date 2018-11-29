@@ -34,7 +34,8 @@ class Collection extends Model
         'allow_person_increase',
         'min_serve_to_person',
         'max_serve_to_person',
-        'approved'
+        'approved',
+        'image'
     ];
 
 

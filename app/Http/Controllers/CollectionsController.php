@@ -18,6 +18,7 @@ use Auth;
 use App\User;
 use App\CollectionMenu;
 use App\Mealtime;
+use Illuminate\Support\Facades\File;
 
 class CollectionsController extends Controller
 {
@@ -123,7 +124,6 @@ class CollectionsController extends Controller
         if ($user->admin == 2) {
             $restaurant_id = $user->restaurant_id;
         }
-//        dd($request->all());
         $validator = \Validator::make($request->all(), [
             'category' => 'required|integer',
             'name_en' => 'required|string|max:255',
@@ -134,6 +134,7 @@ class CollectionsController extends Controller
             'service_provide_ar' => 'required|string',
             'service_presentation_en' => 'required|string',
             'service_presentation_ar' => 'required|string',
+            'image' => 'required|image',
             'menu_item' => 'required',
         ]);
         if ($validator->fails()) {
@@ -148,6 +149,11 @@ class CollectionsController extends Controller
         $collection->name_ar = $request->input('name_ar');
         $collection->description_en = $request->input('description_en');
         $collection->description_ar = $request->input('description_ar');
+        $image = $request->file('image');
+        $name = 'restaurant_' . time() . '.' . $image->getClientOriginalExtension();
+        $path = public_path('/images');
+        $image->move($path, $name);
+        $collection->image = $name;
         $collection->mealtime_id = $request->input('mealtime');
         $collection->female_caterer_available = $request->input('female_caterer_available');
         $collection->service_provide_en = $request->input('service_provide_en');
@@ -358,6 +364,13 @@ class CollectionsController extends Controller
             $collection->name_ar = $request->input('name_ar');
             $collection->description_en = $request->input('description_en');
             $collection->description_ar = $request->input('description_ar');
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $name = 'collection_' . time() . '.' . $image->getClientOriginalExtension();
+                $path = public_path('/images');
+                $image->move($path, $name);
+                $collection->image = $name;
+            }
             $collection->mealtime_id = $request->input('mealtime');
             $collection->female_caterer_available = $request->input('female_caterer_available');
             $collection->service_provide_en = $request->input('service_provide_en');
@@ -398,36 +411,40 @@ class CollectionsController extends Controller
             }
             $collection->save();
             if ($oldCollection->category_id == 1) {
-                foreach ($request['menu_item'] as $menu_item) {
-                    $collection_item = new EditingCollectionItem();
-                    $collection_item->item_id = $menu_item['id'];
-                    $collection_item->quantity = $menu_item['qty'];
-                    $collection_item->editing_collection_id = $collection->id;
-                    $collection_item->save();
+                if(isset($request['menu_item'])){
+                    foreach ($request['menu_item'] as $menu_item) {
+                        $collection_item = new EditingCollectionItem();
+                        $collection_item->item_id = $menu_item['id'];
+                        $collection_item->quantity = $menu_item['qty'];
+                        $collection_item->editing_collection_id = $collection->id;
+                        $collection_item->save();
+                    }
                 }
             } else {
-
-                foreach ($request['menu_item'] as $menu) {
-                    $collection_item = new EditingCollectionItem();
-                    $collection_item->item_id = $menu;
-                    $menu_item = Menu::where('id', $menu)->first();
-                    $category = MenuCategory::where('id', $menu_item->category_id)->first();
-                    $collection_item->collection_menu_id = $category->id;
-                    $collection_item->editing_collection_id = $collection->id;
-                    $collection_item->quantity = 1;
-                    $collection_item->save();
-                }
-                $menus = $request->input('menu');
-                foreach ($menus as $menu) {
-                    $collection_menu = new EditingCollectionMenu();
-                    $collection_menu->editing_collection_id = $collection->id;
-                    $collection_menu->menu_id = $menu['id'];
-                    if ($oldCollection->category_id != 4) {
-                        $collection_menu->min_qty = $menu['min_qty'];
-                        $collection_menu->max_qty = $menu['max_qty'];
+                if(isset($request['menu_item'])){
+                    foreach ($request['menu_item'] as $menu) {
+                        $collection_item = new EditingCollectionItem();
+                        $collection_item->item_id = $menu;
+                        $menu_item = Menu::where('id', $menu)->first();
+                        $category = MenuCategory::where('id', $menu_item->category_id)->first();
+                        $collection_item->collection_menu_id = $category->id;
+                        $collection_item->editing_collection_id = $collection->id;
+                        $collection_item->quantity = 1;
+                        $collection_item->save();
                     }
-                    $collection_menu->save();
+                    $menus = $request->input('menu');
+                    foreach ($menus as $menu) {
+                        $collection_menu = new EditingCollectionMenu();
+                        $collection_menu->editing_collection_id = $collection->id;
+                        $collection_menu->menu_id = $menu['id'];
+                        if ($oldCollection->category_id != 4) {
+                            $collection_menu->min_qty = $menu['min_qty'];
+                            $collection_menu->max_qty = $menu['max_qty'];
+                        }
+                        $collection_menu->save();
+                    }
                 }
+
             }
         } elseif($user->admin == 1) {
             $collection = Collection::find($id);
@@ -437,6 +454,16 @@ class CollectionsController extends Controller
             $collection->name_ar = $request->input('name_ar');
             $collection->description_en = $request->input('description_en');
             $collection->description_ar = $request->input('description_ar');
+            if ($request->hasFile('image')) {
+                if ($collection->image) {
+                    File::delete(public_path('images/' . $collection->image));
+                }
+                $image = $request->file('image');
+                $name = 'collection_' . time() . '.' . $image->getClientOriginalExtension();
+                $path = public_path('/images');
+                $image->move($path, $name);
+                $collection->image = $name;
+            }
             $collection->mealtime_id = $request->input('mealtime');
             $collection->female_caterer_available = $request->input('female_caterer_available');
             $collection->service_provide_en = $request->input('service_provide_en');
@@ -467,8 +494,8 @@ class CollectionsController extends Controller
 //                'persons_max_count' => 'required|integer',
                     'setup_time' => 'integer',
                     'max_time' => 'integer|gte:setup_time',
-                    'requirements_en' => 'string|max:255',
-                    'requirements_ar' => 'string|max:255',
+                    'requirements_en' => 'string',
+                    'requirements_ar' => 'string',
                 ]);
 //            $collection->persons_max_count = $request->input('persons_max_count');
                 $collection->allow_person_increase = $request->input('allow_person_increase');
@@ -532,6 +559,16 @@ class CollectionsController extends Controller
             $collection->name_ar = $request->input('name_ar');
             $collection->description_en = $request->input('description_en');
             $collection->description_ar = $request->input('description_ar');
+            if ($request->hasFile('image')) {
+                if ($collection->image) {
+                    File::delete(public_path('images/' . $collection->image));
+                }
+                $image = $request->file('image');
+                $name = 'collection_' . time() . '.' . $image->getClientOriginalExtension();
+                $path = public_path('/images');
+                $image->move($path, $name);
+                $collection->image = $name;
+            }
             $collection->mealtime_id = $request->input('mealtime');
             $collection->female_caterer_available = $request->input('female_caterer_available');
             $collection->service_provide_en = $request->input('service_provide_en');
@@ -572,6 +609,12 @@ class CollectionsController extends Controller
                 $collection->requirements_ar = $request->input('requirements_ar');
             }
             $collection->save();
+            $editingCollections = EditingCollection::where('collection_id', $id)->get();
+            $collection_images = [];
+            foreach ($editingCollections as $editingCollection) {
+                $collection_images[] = public_path('images/' . $editingCollection->image);
+            }
+            File::delete($collection_images);
             CollectionItem::where('collection_id', $collection->id)->delete();
              $menu_items = EditingCollectionItem::where('editing_collection_id', $collection->editingCollection->id)->get();
                 if ($collection->category_id == 1) {
@@ -615,7 +658,13 @@ class CollectionsController extends Controller
     {
         $user = Auth::user();
         if($user->admin ==1){
+            $editingCollections = EditingCollection::where('collection_id', $id)->get();
             $collection = Collection::find($id);
+            $collection_images = [];
+            foreach ($editingCollections as $editingCollection) {
+                $collection_images[] = public_path('images/' . $editingCollection->image);
+            }
+            File::delete($collection_images);
             EditingCollection::where('collection_id', $id)->delete();
             return redirect('/collections/' . $collection->restaurant_id);
         }else{
