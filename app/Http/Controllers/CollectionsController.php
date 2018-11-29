@@ -505,7 +505,6 @@ class CollectionsController extends Controller
                 $collection->requirements_ar = $request->input('requirements_ar');
             }
             $collection->save();
-            EditingCollection::where('collection_id', $id)->delete();
             if (isset($request['menu_item'])) {
                 CollectionItem::where('collection_id', $collection->id)->delete();
                 if ($collection->category_id == 1) {
