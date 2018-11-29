@@ -34,7 +34,7 @@ class MenuCategoriesController extends Controller
                 $categories = $categories->name($data['category_search']);
             }
             $selectedRestaurant = Restaurant::find($id);
-            $categories = $categories->paginate(20);
+            $categories = $categories->orderby('approved', 'asc')->paginate(20);
         }
         if ($user->admin == 2) {
             $categories = MenuCategory::where('restaurant_id', $user->restaurant_id);
@@ -42,7 +42,7 @@ class MenuCategoriesController extends Controller
                 $categories = $categories->name($data['category_search']);
             }
             $selectedRestaurant = Restaurant::find($user->restaurant_id);
-            $categories = $categories->paginate(20);
+            $categories = $categories->orderby('approved', 'asc')->paginate(20);
 
         }
         return view('menu_categories', [
@@ -183,7 +183,7 @@ class MenuCategoriesController extends Controller
         $request->validate([
             'name_en' => 'required|string|max:255',
             'description_en' => 'required|string',
-            'name_ar' => 'required|string|max:255',
+            'name_ar' => 'requir     ed|string|max:255',
             'description_ar' => 'required|string',
         ]);
         $user = Auth::user();
@@ -225,6 +225,7 @@ class MenuCategoriesController extends Controller
                 $image->move($path, $name);
                 $category->image =  $name;
             }
+            $category->approved = 1;
             $category->save();
             EditingMenuCategory::where('category_id', $category->id)->delete();
         }
@@ -252,6 +253,7 @@ class MenuCategoriesController extends Controller
                 $image->move($path, $name);
                 $category->image =  $name;
             }
+            $category->approved = 1;
             $category->save();
             $editingMenuCategories = EditingMenuCategory::where('category_id', $id)->get();
             $category_images = [];

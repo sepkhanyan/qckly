@@ -100,7 +100,7 @@
                                 @if($selectedRestaurant)
                                     @if(count($categories) > 0)
                                         @foreach($categories as $category)
-                                            <tr>
+                                            <tr  class="{{($category->editingMenuCategory || $category->approved == 0) ? 'info' : ''}}">
                                                 <td class="action">
                                                     <input type="checkbox" value="{{ $category->id }}" name="delete"/>
                                                     <a class="btn btn-edit" title=""

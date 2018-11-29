@@ -44,7 +44,7 @@ class MenusController extends Controller
                 $menus = $menus->name($data['menu_search']);
             }
             $selectedRestaurant = Restaurant::find($id);
-            $menus = $menus->orderby('category_id', 'asc')->paginate(20);
+            $menus = $menus->orderby('approved', 'asc')->orderby('category_id', 'asc')->paginate(20);
             $categories = MenuCategory::where('restaurant_id', $selectedRestaurant->id)->get();
         }
         if ($user->admin == 2) {
@@ -60,7 +60,7 @@ class MenusController extends Controller
                 $menus = $menus->name($data['menu_search']);
             }
             $selectedRestaurant = Restaurant::find($user->restaurant_id);
-            $menus = $menus->orderby('category_id', 'asc')->paginate(20);
+            $menus = $menus->orderby('approved', 'asc')->orderby('category_id', 'asc')->paginate(20);
             $categories = MenuCategory::where('restaurant_id', $user->restaurant_id)->get();
         }
         return view('menus', [
@@ -272,8 +272,8 @@ class MenusController extends Controller
                 $image->move($path, $name);
                 $menu->image = $name;
             }
+            $menu->approved = 1;
             $menu->save();
-            EditingMenu::where('menu_id', $menu->id)->delete();
         }
         return redirect('/menus/' . $restaurant_id);
     }
@@ -319,6 +319,7 @@ class MenusController extends Controller
                 $image->move($path, $name);
                 $menu->image = $name;
             }
+            $menu->approved = 1;
             $menu->save();
             $editingMenus = EditingMenu::where('menu_id', $id)->get();
             $menu_images = [];

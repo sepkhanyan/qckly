@@ -46,7 +46,7 @@ class CollectionsController extends Controller
                 $collections = $collections->name($data['collection_search']);
             }
             $selectedRestaurant = Restaurant::find($id);
-            $collections = $collections->paginate(20);
+            $collections = $collections->orderby('approved', 'asc')->paginate(20);
         }
         if ($user->admin == 2) {
             $collections = Collection::where('restaurant_id', $user->restaurant_id);
@@ -58,7 +58,7 @@ class CollectionsController extends Controller
                 $collections = $collections->name($data['collection_search']);
             }
             $selectedRestaurant = Restaurant::find($user->restaurant_id);
-            $collections = $collections->paginate(20);
+            $collections = $collections->orderby('approved', 'asc')->paginate(20);
         }
         return view('collections', [
             'id' => $id,
@@ -504,6 +504,7 @@ class CollectionsController extends Controller
                 $collection->requirements_en = $request->input('requirements_en');
                 $collection->requirements_ar = $request->input('requirements_ar');
             }
+            $collection->approved = 1;
             $collection->save();
             if (isset($request['menu_item'])) {
                 CollectionItem::where('collection_id', $collection->id)->delete();
@@ -607,6 +608,7 @@ class CollectionsController extends Controller
                 $collection->requirements_en = $request->input('requirements_en');
                 $collection->requirements_ar = $request->input('requirements_ar');
             }
+            $collection->approved = 1;
             $collection->save();
             $editingCollections = EditingCollection::where('collection_id', $id)->get();
             $collection_images = [];

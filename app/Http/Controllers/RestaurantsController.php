@@ -477,7 +477,6 @@ class RestaurantsController extends Controller
                 return redirect()->back();
             }
         } elseif ($user->admin == 1) {
-            EditingRestaurant::where('restaurant_id', $id)->delete();
             $restaurant->name_en = $request->input('restaurant_name_en');
             $restaurant->name_ar = $request->input('restaurant_name_ar');
             $restaurant->email = $request->input('restaurant_email');
@@ -1335,6 +1334,7 @@ class RestaurantsController extends Controller
                             $menu_collection [] = [
                                 'collection_id' => $collection->id,
                                 'collection_name' => $collection_name,
+                                'collection_image' => url('/') . '/images/' . $collection->image,
                                 'collection_description' => $collection_description,
                                 'collection_type_id' => $collection->category_id,
                                 'collection_type' => $collection_type,
