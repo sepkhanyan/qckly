@@ -288,7 +288,11 @@ class CollectionsController extends Controller
             }])->whereHas('editingCollectionItem', function ($q) use ($collection) {
                 $q->where('editing_collection_id', $collection->id);
             })->get();
-            $menu_categories = MenuCategory::where('restaurant_id', $restaurant->id)->get();
+            $menu_categories = MenuCategory::where('restaurant_id', $restaurant->id)->whereHas('menu', function ($query){
+                $query->where('approved', 1);
+            })->with(['menu' => function ($q){
+                $q->where('approved', 1);
+            }])->get();
             $menu_items = EditingCollectionItem::where('editing_collection_id', $collection->id)->get();
             $categories = CollectionCategory::all();
             $mealtimes = Mealtime::all();
@@ -616,38 +620,41 @@ class CollectionsController extends Controller
                 $collection_images[] = public_path('images/' . $editingCollection->image);
             }
             File::delete($collection_images);
-            CollectionItem::where('collection_id', $collection->id)->delete();
+
              $menu_items = EditingCollectionItem::where('editing_collection_id', $collection->editingCollection->id)->get();
-                if ($collection->category_id == 1) {
-                    foreach ($menu_items as $menu_item) {
-                        $collection_item = new CollectionItem();
-                        $collection_item->item_id = $menu_item->item_id;
-                        $collection_item->quantity = $menu_item->quantity;
-                        $collection_item->collection_id = $collection->id;
-                        $collection_item->save();
-                    }
-                } else {
-                    foreach ($menu_items as $menu_item) {
-                        $collection_item = new CollectionItem();
-                        $collection_item->item_id = $menu_item->item_id;
-                        $collection_item->collection_menu_id =  $menu_item->collection_menu_id;
-                        $collection_item->collection_id = $collection->id;
-                        $collection_item->quantity = 1;
-                        $collection_item->save();
-                    }
-                    CollectionMenu::where('collection_id', $collection->id)->delete();
-                    $menus = EditingCollectionMenu::where('editing_collection_id', $collection->editingCollection->id)->get();
-                    foreach ($menus as $menu) {
-                        $collection_menu = new CollectionMenu();
-                        $collection_menu->collection_id = $collection->id;
-                        $collection_menu->menu_id = $menu->menu_id;
-                        if ($collection->category_id != 4) {
-                            $collection_menu->min_qty = $menu->min_qty;
-                            $collection_menu->max_qty = $menu->max_qty;
-                        }
-                        $collection_menu->save();
-                    }
-                }
+             if(count($menu_items) > 0){
+                 CollectionItem::where('collection_id', $collection->id)->delete();
+                 if ($collection->category_id == 1) {
+                     foreach ($menu_items as $menu_item) {
+                         $collection_item = new CollectionItem();
+                         $collection_item->item_id = $menu_item->item_id;
+                         $collection_item->quantity = $menu_item->quantity;
+                         $collection_item->collection_id = $collection->id;
+                         $collection_item->save();
+                     }
+                 } else {
+                     foreach ($menu_items as $menu_item) {
+                         $collection_item = new CollectionItem();
+                         $collection_item->item_id = $menu_item->item_id;
+                         $collection_item->collection_menu_id =  $menu_item->collection_menu_id;
+                         $collection_item->collection_id = $collection->id;
+                         $collection_item->quantity = 1;
+                         $collection_item->save();
+                     }
+                     CollectionMenu::where('collection_id', $collection->id)->delete();
+                     $menus = EditingCollectionMenu::where('editing_collection_id', $collection->editingCollection->id)->get();
+                     foreach ($menus as $menu) {
+                         $collection_menu = new CollectionMenu();
+                         $collection_menu->collection_id = $collection->id;
+                         $collection_menu->menu_id = $menu->menu_id;
+                         if ($collection->category_id != 4) {
+                             $collection_menu->min_qty = $menu->min_qty;
+                             $collection_menu->max_qty = $menu->max_qty;
+                         }
+                         $collection_menu->save();
+                     }
+                 }
+             }
             EditingCollection::where('collection_id', $id)->delete();
             return redirect('/collections/' . $collection->restaurant_id);
         }else{
