@@ -19,10 +19,10 @@ class CreateEditingMenuCategoriesTable extends Migration
             $table->foreign('category_id')
                 ->references('id')->on('menu_categories')
                 ->onDelete('cascade');
-            $table->string('name_en');
-            $table->string('name_ar');
-            $table->text('description_en');
-            $table->text('description_ar');
+            $table->string('name_en')->nullable();
+            $table->string('name_ar')->nullable();
+            $table->text('description_en')->nullable();
+            $table->text('description_ar')->nullable();
             $table->string('image')->nullable();
             $table->tinyInteger('approved')->default(0);
             $table->timestamps();

@@ -159,9 +159,10 @@ class MenuCategoriesController extends Controller
             }
         }
         if($user->admin == 1 && $category->editingMenuCategory !== null){
-            $category = $category->editingMenuCategory;
+            $editingMenuCategory = $category->editingMenuCategory;
             return view('menu_category_edit_approve', [
                 'category' => $category,
+                'editingMenuCategory' => $editingMenuCategory,
                 'user' => $user
             ]);
         }
@@ -183,7 +184,7 @@ class MenuCategoriesController extends Controller
         $request->validate([
             'name_en' => 'required|string|max:255',
             'description_en' => 'required|string',
-            'name_ar' => 'requir     ed|string|max:255',
+            'name_ar' => 'required|string|max:255',
             'description_ar' => 'required|string',
         ]);
         $user = Auth::user();
@@ -238,29 +239,20 @@ class MenuCategoriesController extends Controller
         $user = Auth::user();
         if($user->admin ==1){
             $category = MenuCategory::find($id);
+            $editingMenuCategory = EditingMenuCategory::where('category_id', $id)->first();
             $restaurant_id = $request->input('restaurant');
             $category->name_en = $request->input('name_en');
             $category->description_en = $request->input('description_en');
             $category->name_ar = $request->input('name_ar');
             $category->description_ar = $request->input('description_ar');
-            if ($request->hasFile('image')) {
+            if ($editingMenuCategory->image) {
                 if ($category->image) {
                     File::delete(public_path('images/' . $category->image));
                 }
-                $image = $request->file('image');
-                $name = 'category_' . time() . '.' . $image->getClientOriginalExtension();
-                $path = public_path('/images');
-                $image->move($path, $name);
-                $category->image =  $name;
+                $category->image =  $editingMenuCategory->image;
             }
             $category->approved = 1;
             $category->save();
-            $editingMenuCategories = EditingMenuCategory::where('category_id', $id)->get();
-            $category_images = [];
-            foreach ($editingMenuCategories as $editingMenuCategory){
-                $category_images[] = public_path('images/' . $editingMenuCategory->image);
-            }
-            File::delete($category_images);
             EditingMenuCategory::where('category_id', $category->id)->delete();
             return redirect('/menu_categories/' . $restaurant_id);
         }else{

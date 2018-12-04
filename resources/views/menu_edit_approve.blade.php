@@ -8,7 +8,7 @@
                     Approve
                 </a>
                 <a class="btn btn-danger" title=""
-                   href="{{ url('menu/edit_reject/' . $menu->menu_id )}}">
+                   href="{{ url('menu/edit_reject/' . $menu->id )}}">
                     <i class="fa fa-ban"></i>
                     Reject
                 </a>&nbsp;
@@ -22,78 +22,78 @@
                     </ul>
                 </div>
                 <form role="form" id="edit-form" class="form-horizontal" enctype="multipart/form-data"
-                      accept-charset="utf-8" method="POST" action="{{ url('/menu/edit_approve/' . $menu->menu_id) }}">
+                      accept-charset="utf-8" method="POST" action="{{ url('/menu/edit_approve/' . $menu->id) }}">
                     {{ csrf_field() }}
                     <div class="tab-content">
                         <div id="general" class="tab-pane row wrap-all active">
                             @if($user->admin == 1)
-                                <input type="hidden" name="restaurant" value="{{$menu->menu->restaurant_id}}">
+                                <input type="hidden" name="restaurant" value="{{$menu->restaurant_id}}">
                             @endif
-                            <h4 class="tab-pane-title">{{$menu->menu->category->name_en}}</h4>
+                            <h4 class="tab-pane-title">{{$menu->category->name_en}}</h4>
                             <div class="form-group{{ $errors->has('name_en') ? ' has-error' : '' }}">
                                 <label for="input_name_en" class="col-sm-3 control-label">Name En</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="name_en" id="input_name_en" class="form-control"
-                                           value="{{ old('name_en') ?? $menu->name_en }}">
-                                    @if ($errors->has('name_en'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('name_en') }}</strong>
-                                    </span>
-                                    @endif
+                                           value="{{ old('name_en') ?? $editingMenu->name_en }}">
                                 </div>
+                                @if ($menu->name_en != $editingMenu->name_en)
+                                    <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                @endif
                             </div>
                             <div class="form-group{{ $errors->has('name_ar') ? ' has-error' : '' }}">
                                 <label for="input_name_ar" class="col-sm-3 control-label">Name Ar</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="name_ar" id="input_name_ar" class="form-control"
-                                           value="{{ old('name_ar') ?? $menu->name_ar }}">
-                                    @if ($errors->has('name_ar'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('name_ar') }}</strong>
-                                    </span>
-                                    @endif
+                                           value="{{ old('name_ar') ?? $editingMenu->name_ar }}">
                                 </div>
+                                @if ($menu->name_ar != $editingMenu->name_ar)
+                                    <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                @endif
                             </div>
                             <div class="form-group{{ $errors->has('description_en') ? ' has-error' : '' }}">
                                 <label for="input_description_en" class="col-sm-3 control-label">Description En</label>
                                 <div class="col-sm-5">
                                     <textarea name="description_en" id="input_description_en" class="form-control"
-                                              rows="5">{{ old('description_en') ?? $menu->description_en }}</textarea>
-                                    @if ($errors->has('description_en'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('description_en') }}</strong>
-                                    </span>
-                                    @endif
+                                              rows="5">{{ old('description_en') ?? $editingMenu->description_en }}</textarea>
                                 </div>
+                                @if ($menu->description_en != $editingMenu->description_en)
+                                    <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                @endif
                             </div>
                             <div class="form-group{{ $errors->has('description_ar') ? ' has-error' : '' }}">
                                 <label for="input_description_ar" class="col-sm-3 control-label">Description Ar</label>
                                 <div class="col-sm-5">
                                     <textarea name="description_ar" id="input_description_ar" class="form-control"
-                                              rows="5">{{ old('description_ar') ?? $menu->description_ar }}</textarea>
-                                    @if ($errors->has('description_ar'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('description_ar') }}</strong>
-                                    </span>
-                                    @endif
+                                              rows="5">{{ old('description_ar') ?? $editingMenu->description_ar }}</textarea>
                                 </div>
+                                @if ($menu->description_ar != $editingMenu->description_ar)
+                                    <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                @endif
                             </div>
                             <div class="form-group{{ $errors->has('price') ? ' has-error' : '' }}">
                                 <label for="input_price" class="col-sm-3 control-label">Price</label>
                                 <div class="col-sm-5">
                                     <div class="input-group">
                                         <input type="text" name="price" id="input_price" class="form-control"
-                                               value="{{ old('price') ?? $menu->price }}"/>
+                                               value="{{ old('price') ?? $editingMenu->price }}"/>
                                         <span class="input-group-addon">
                                         <i class="fa fa-money"></i>
                                     </span>
                                     </div>
-                                    @if ($errors->has('price'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('price') }}</strong>
-                                    </span>
-                                    @endif
                                 </div>
+                                @if ($menu->price != $editingMenu->price)
+                                    <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                @endif
                             </div>
                             <div class="form-group">
                                 <label for="famous" class="col-sm-3 control-label">Famous</label>
@@ -111,20 +111,25 @@
                                                 No
                                             </label>
                                         @else
-                                            <label class="btn btn-success{{$menu->famous == 1 ? ' active' : ''}}">
+                                            <label class="btn btn-success{{$editingMenu->famous == 1 ? ' active' : ''}}">
                                                 <input type="radio"
-                                                       name="famous" value="1" {{$menu->famous == 1 ? 'checked' : ''}} >
+                                                       name="famous" value="1" {{$editingMenu->famous == 1 ? 'checked' : ''}} >
                                                 Yes
                                             </label>
-                                            <label class="btn btn-danger{{$menu->famous == 0 ? ' active' : ''}} ">
+                                            <label class="btn btn-danger{{$editingMenu->famous == 0 ? ' active' : ''}} ">
                                                 <input type="radio"
                                                        name="famous"
-                                                       value="0" {{$menu->famous == 0 ? 'checked' : ''}} >
+                                                       value="0" {{$editingMenu->famous == 0 ? 'checked' : ''}} >
                                                 No
                                             </label>
                                         @endif
                                     </div>
                                 </div>
+                                @if ($menu->famous != $editingMenu->famous)
+                                    <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                @endif
                             </div>
                             <div class="form-group">
                                 <label for="input-image" class="col-sm-3 control-label">
@@ -134,8 +139,8 @@
                                 <div class="col-sm-5">
                                     <div class="thumbnail imagebox">
                                         <div class="preview">
-                                            @if(isset($menu->image))
-                                                <img src="{{url('/') . '/images/' . $menu->image}}"
+                                            @if(isset($editingMenu->image))
+                                                <img src="{{url('/') . '/images/' . $editingMenu->image}}"
                                                      class="thumb img-responsive" id="thumb">
                                             @else
                                                 <img src="{{url('/') . '/admin/no_photo.png'}}"
@@ -159,38 +164,35 @@
                                             </p>
                                         </div>
                                     </div>
+                                    @if ($editingMenu->image)
+                                        <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                    @endif
                                 </div>
                             </div>
                                 <div class="form-group">
                                     <label for="input-status" class="col-sm-3 control-label">Status</label>
                                     <div class="col-sm-5">
                                         <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                            @if(old('status') !== null)
-                                                <label class="btn btn-success{{ (old('status') == '1') ? ' active' : '' }}">
-                                                    <input type="radio" name="status"
-                                                           value="1" {{ (old('status') == '1') ? 'checked' : '' }}>
-                                                    Enabled
-                                                </label>
-                                                <label class="btn btn-danger{{ (old('status') == '0') ? ' active' : '' }}">
-                                                    <input type="radio" name="status"
-                                                           value="0" {{ (old('status') == '0') ? 'checked' : '' }}>
-                                                    Disabled
-                                                </label>
-                                            @else
-                                                <label class="btn btn-success{{$menu->status == 1 ? ' active' : ''}}">
+                                                <label class="btn btn-success{{$editingMenu->status == 1 ? ' active' : ''}}">
                                                     <input type="radio"
-                                                           name="status" value="1" {{$menu->status == 1 ? 'checked' : ''}} >
+                                                           name="status" value="1" {{$editingMenu->status == 1 ? 'checked' : ''}} >
                                                     Enabled
                                                 </label>
-                                                <label class="btn btn-danger{{$menu->status == 0 ? ' active' : ''}} ">
+                                                <label class="btn btn-danger{{$editingMenu->status == 0 ? ' active' : ''}} ">
                                                     <input type="radio"
                                                            name="status"
-                                                           value="0" {{$menu->status == 0 ? 'checked' : ''}} >
+                                                           value="0" {{$editingMenu->status == 0 ? 'checked' : ''}} >
                                                     Disabled
                                                 </label>
-                                            @endif
                                         </div>
                                     </div>
+                                    @if ($menu->status != $editingMenu->status)
+                                        <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                    @endif
                                 </div>
                         </div>
                     </div>

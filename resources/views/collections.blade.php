@@ -109,7 +109,7 @@
                                 @if($selectedRestaurant)
                                     @if(count($collections) > 0)
                                         @foreach($collections as $collection)
-                                            <tr>
+                                            <tr class="{{($collection->editingCollection || $collection->approved == 0) ? 'info' : ''}}">
                                                 <td class="action">
                                                     <input type="checkbox" value="{{$collection->id}}" name="delete"/>
                                                     <a class="btn btn-edit" title=""

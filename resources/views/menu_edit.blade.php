@@ -164,7 +164,7 @@
                                 <div class="col-sm-5">
                                     <div class="thumbnail imagebox">
                                         <div class="preview">
-                                            @if(isset($menu->image))
+                                            @if($menu->image)
                                                 <img src="{{url('/') . '/images/' . $menu->image}}"
                                                      class="thumb img-responsive" id="thumb">
                                             @else

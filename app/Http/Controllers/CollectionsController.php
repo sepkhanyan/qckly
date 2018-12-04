@@ -278,31 +278,39 @@ class CollectionsController extends Controller
             if (!$collection) {
                 return redirect()->back();
             }
-
         }
         if ($user->admin == 1 && $collection->editingCollection!== null) {
-            $collection = $collection->editingCollection;
-            $restaurant = Restaurant::where('id', $collection->collection->restaurant_id)->first();
-            $collection_menus = EditingCollectionMenu::where('editing_collection_id', $collection->id)->with(['editingCollectionItem' => function ($query) use ($collection) {
-                $query->where('editing_collection_id', $collection->id);
-            }])->whereHas('editingCollectionItem', function ($q) use ($collection) {
-                $q->where('editing_collection_id', $collection->id);
+            $editingCollection = $collection->editingCollection;
+            $restaurant = Restaurant::where('id', $collection->restaurant_id)->first();
+            $collection_menus = CollectionMenu::where('collection_id', $collection->id)->with(['collectionItem' => function ($query) use ($collection) {
+                $query->where('collection_id', $collection->id);
+            }])->whereHas('collectionItem', function ($q) use ($collection) {
+                $q->where('collection_id', $collection->id);
+            })->get();
+            $editingCollectionMenus = EditingCollectionMenu::where('editing_collection_id', $editingCollection->id)->with(['editingCollectionItem' => function ($query) use ($editingCollection) {
+                $query->where('editing_collection_id', $editingCollection->id);
+            }])->whereHas('editingCollectionItem', function ($q) use ($editingCollection) {
+                $q->where('editing_collection_id', $editingCollection->id);
             })->get();
             $menu_categories = MenuCategory::where('restaurant_id', $restaurant->id)->whereHas('menu', function ($query){
                 $query->where('approved', 1);
             })->with(['menu' => function ($q){
                 $q->where('approved', 1);
             }])->get();
-            $menu_items = EditingCollectionItem::where('editing_collection_id', $collection->id)->get();
+            $menu_items = CollectionItem::where('collection_id', $collection->id)->get();
+            $editingMenuItems = EditingCollectionItem::where('editing_collection_id', $editingCollection->id)->get();
             $categories = CollectionCategory::all();
             $mealtimes = Mealtime::all();
             return view('collection_edit_approve', [
                 'collection' => $collection,
+                'editingCollection' => $editingCollection,
                 'categories' => $categories,
                 'menu_categories' => $menu_categories,
                 'mealtimes' => $mealtimes,
                 'collection_menus' => $collection_menus,
+                'editingCollectionMenus' => $editingCollectionMenus,
                 'menu_items' => $menu_items,
+                'editingMenuItems' => $editingMenuItems,
                 'user' => $user
             ]);
         }
@@ -311,7 +319,11 @@ class CollectionsController extends Controller
         }])->whereHas('collectionItem', function ($q) use ($collection) {
             $q->where('collection_id', $collection->id);
         })->get();
-        $menu_categories = MenuCategory::where('restaurant_id', $restaurant->id)->get();
+        $menu_categories = MenuCategory::where('restaurant_id', $restaurant->id)->whereHas('menu', function ($query){
+            $query->where('approved', 1);
+        })->with(['menu' => function ($q){
+            $q->where('approved', 1);
+        }])->get();
         $menu_items = CollectionItem::where('collection_id', $collection->id)->get();
         $categories = CollectionCategory::all();
         $mealtimes = Mealtime::all();
@@ -361,7 +373,14 @@ class CollectionsController extends Controller
             if (!$oldCollection) {
                 return redirect('/collections/' .  $restaurant_id);
             }
-            EditingCollection::where('collection_id', $id)->delete();
+            $oldEditingCollection = EditingCollection::where('collection_id', $id)->first();
+            if($oldEditingCollection){
+                if ($oldEditingCollection->image) {
+                    File::delete(public_path('images/' . $oldEditingCollection->image));
+                }
+                EditingCollection::where('collection_id', $id)->delete();
+            }
+
             $collection = new EditingCollection();
             $collection->collection_id = $id;
             $collection->name_en = $request->input('name_en');
@@ -558,20 +577,18 @@ class CollectionsController extends Controller
         if($user->admin ==1){
             $restaurant_id = $request->input('restaurant');
             $collection = Collection::find($id);
+            $editingCollection  = EditingCollection::where('collection_id', $id)->first();
             $collection->restaurant_id = $restaurant_id;
             $collection->name_en = $request->input('name_en');
             $collection->name_ar = $request->input('name_ar');
             $collection->description_en = $request->input('description_en');
             $collection->description_ar = $request->input('description_ar');
-            if ($request->hasFile('image')) {
+            if ($editingCollection->image) {
                 if ($collection->image) {
                     File::delete(public_path('images/' . $collection->image));
                 }
-                $image = $request->file('image');
-                $name = 'collection_' . time() . '.' . $image->getClientOriginalExtension();
-                $path = public_path('/images');
-                $image->move($path, $name);
-                $collection->image = $name;
+
+                $collection->image = $editingCollection->image;
             }
             $collection->mealtime_id = $request->input('mealtime');
             $collection->female_caterer_available = $request->input('female_caterer_available');
@@ -614,14 +631,7 @@ class CollectionsController extends Controller
             }
             $collection->approved = 1;
             $collection->save();
-            $editingCollections = EditingCollection::where('collection_id', $id)->get();
-            $collection_images = [];
-            foreach ($editingCollections as $editingCollection) {
-                $collection_images[] = public_path('images/' . $editingCollection->image);
-            }
-            File::delete($collection_images);
-
-             $menu_items = EditingCollectionItem::where('editing_collection_id', $collection->editingCollection->id)->get();
+            $menu_items = EditingCollectionItem::where('editing_collection_id', $editingCollection->id)->get();
              if(count($menu_items) > 0){
                  CollectionItem::where('collection_id', $collection->id)->delete();
                  if ($collection->category_id == 1) {
@@ -642,7 +652,7 @@ class CollectionsController extends Controller
                          $collection_item->save();
                      }
                      CollectionMenu::where('collection_id', $collection->id)->delete();
-                     $menus = EditingCollectionMenu::where('editing_collection_id', $collection->editingCollection->id)->get();
+                     $menus = EditingCollectionMenu::where('editing_collection_id', $editingCollection->id)->get();
                      foreach ($menus as $menu) {
                          $collection_menu = new CollectionMenu();
                          $collection_menu->collection_id = $collection->id;

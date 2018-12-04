@@ -20,10 +20,10 @@ class CreateEditingWorkingHoursTable extends Migration
                 ->references('id')->on('editing_restaurants')
                 ->onDelete('cascade');
             $table->integer('weekday')->nullable();
-            $table->time('opening_time')->default('00:00:00');
-            $table->time('closing_time')->default('00:00:00');
-            $table->tinyInteger('status');
-            $table->string('type');
+            $table->time('opening_time')->nullable();
+            $table->time('closing_time')->nullable();
+            $table->tinyInteger('status')->nullable();
+            $table->string('type')->nullable();
             $table->timestamps();
         });
     }

@@ -23,8 +23,8 @@ class CreateEditingRestaurantAreaTable extends Migration
             $table->foreign('area_id')
                 ->references('id')->on('areas')
                 ->onDelete('cascade');
-            $table->string('name_en');
-            $table->string('name_ar');
+            $table->string('name_en')->nullable();
+            $table->string('name_ar')->nullable();
             $table->timestamps();
         });
     }

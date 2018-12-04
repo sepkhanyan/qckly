@@ -8,7 +8,7 @@
                     Approve
                 </a>
                 <a class="btn btn-danger" title=""
-                   href="{{ url('menu_category/edit_reject/' . $category->category_id )}}">
+                   href="{{ url('menu_category/edit_reject/' . $category->id )}}">
                     <i class="fa fa-ban"></i>
                     Reject
                 </a>&nbsp;
@@ -26,60 +26,60 @@
                     </ul>
                 </div>
                 <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST" enctype="multipart/form-data"
-                      action="{{ url('/menu_category/edit_approve/' . $category->category_id ) }}">
+                      action="{{ url('/menu_category/edit_approve/' . $category->id ) }}">
                     {{ csrf_field() }}
                     <div class="tab-content">
                         <div id="general" class="tab-pane row wrap-all active">
                             @if($user->admin == 1)
-                                <input type="hidden" name="restaurant" value="{{$category->menuCategory->restaurant_id}}">
+                                <input type="hidden" name="restaurant" value="{{$category->restaurant_id}}">
                             @endif
                             <div class="form-group{{ $errors->has('name_en') ? ' has-error' : '' }}">
                                 <label for="input_name_en" class="col-sm-3 control-label">Name En</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="name_en" id="input_name_en" class="form-control"
-                                           value="{{old('name_en') ?? $category->name_en }}">
-                                    @if ($errors->has('name_en'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('name_en') }}</strong>
-                                    </span>
-                                    @endif
+                                           value="{{old('name_en') ?? $editingMenuCategory->name_en }}">
                                 </div>
+                                @if ($category->name_en != $editingMenuCategory->name_en)
+                                    <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                @endif
                             </div>
                             <div class="form-group{{ $errors->has('name_ar') ? ' has-error' : '' }}">
                                 <label for="input_name_ar" class="col-sm-3 control-label">Name Ar</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="name_ar" id="input_name_ar" class="form-control"
-                                           value="{{old('name_ar') ?? $category->name_ar }}">
-                                    @if ($errors->has('name_ar'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('name_ar') }}</strong>
-                                    </span>
-                                    @endif
+                                           value="{{old('name_ar') ?? $editingMenuCategory->name_ar }}">
                                 </div>
+                                @if ($category->name_ar != $editingMenuCategory->name_ar)
+                                    <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                @endif
                             </div>
                             <div class="form-group{{ $errors->has('description_en') ? ' has-error' : '' }}">
                                 <label for="input_description_en" class="col-sm-3 control-label">Description En</label>
                                 <div class="col-sm-5">
                                     <textarea name="description_en" id="input_description_en" class="form-control"
-                                              rows="7">{{old('description_en') ?? $category->description_en }}</textarea>
-                                    @if ($errors->has('description_en'))
-                                        <span class="help-block">
-                                    <strong>{{ $errors->first('description_en') }}</strong>
-                                </span>
-                                    @endif
+                                              rows="7">{{old('description_en') ?? $editingMenuCategory->description_en }}</textarea>
                                 </div>
+                                @if ($category->description_en != $editingMenuCategory->description_en)
+                                    <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                @endif
                             </div>
                             <div class="form-group{{ $errors->has('description_ar') ? ' has-error' : '' }}">
                                 <label for="input_description_ar" class="col-sm-3 control-label">Description Ar</label>
                                 <div class="col-sm-5">
                                     <textarea name="description_ar" id="input_description_ar" class="form-control"
-                                              rows="7">{{old('description_en') ?? $category->description_en }}</textarea>
-                                    @if ($errors->has('description_ar'))
-                                        <span class="help-block">
-                                    <strong>{{ $errors->first('description_ar') }}</strong>
-                                </span>
-                                    @endif
+                                              rows="7">{{old('description_en') ?? $editingMenuCategory->description_en }}</textarea>
                                 </div>
+                                @if ($category->description_ar != $editingMenuCategory->description_ar)
+                                    <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                @endif
                             </div>
                             {{--<div class="form-group">--}}
                             {{--<label for="" class="col-sm-3 control-label">--}}
@@ -112,8 +112,8 @@
                                 <div class="col-sm-5">
                                     <div class="thumbnail imagebox">
                                         <div class="preview">
-                                            @if(isset($category->image))
-                                                <img src="{{url('/') . '/images/' . $category->image}}"
+                                            @if(isset($editingMenuCategory->image))
+                                                <img src="{{url('/') . '/images/' . $editingMenuCategory->image}}"
                                                      class="thumb img-responsive" id="thumb">
                                             @else
                                                 <img src="{{url('/') . '/admin/no_photo.png'}}"
@@ -135,6 +135,11 @@
                                             </p>
                                         </div>
                                     </div>
+                                    @if ($editingMenuCategory->image)
+                                        <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                    @endif
                                 </div>
                             </div>
                         </div>

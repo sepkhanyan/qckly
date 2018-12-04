@@ -19,14 +19,14 @@ class CreateEditingMenusTable extends Migration
             $table->foreign('menu_id')
                 ->references('id')->on('menus')
                 ->onDelete('cascade');
-            $table->string('name_en');
-            $table->string('name_ar');
-            $table->text('description_en');
-            $table->text('description_ar');
-            $table->float('price');
+            $table->string('name_en')->nullable();
+            $table->string('name_ar')->nullable();
+            $table->text('description_en')->nullable();
+            $table->text('description_ar')->nullable();
+            $table->float('price')->nullable();
             $table->string('image')->nullable();
-            $table->tinyInteger('famous');
-            $table->tinyInteger('status');
+            $table->tinyInteger('famous')->nullable();
+            $table->tinyInteger('status')->nullable();
             $table->timestamps();
         });
     }

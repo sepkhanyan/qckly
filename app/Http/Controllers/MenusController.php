@@ -188,9 +188,10 @@ class MenusController extends Controller
             }
         }
         if($user->admin == 1 && $menu->editingMenu !== null){
-            $menu = $menu->editingMenu;
+            $editingMenu = $menu->editingMenu;
             return view('menu_edit_approve', [
                 'menu' => $menu,
+                'editingMenu' => $editingMenu,
                 'user' => $user
             ]);
         }
@@ -210,18 +211,6 @@ class MenusController extends Controller
     public function update(Request $request, $id)
     {
 //        dd($request->all());
-        $validator = \Validator::make($request->all(), [
-            'name_en' => 'required|string|max:255',
-            'description_en' => 'required|string',
-            'name_ar' => 'required|string|max:255',
-            'description_ar' => 'required|string',
-            'price' => 'required|numeric',
-        ]);
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
         $user = Auth::user();
         $menu = Menu::find($id);
         $restaurant_id = $request->input('restaurant');
@@ -231,29 +220,44 @@ class MenusController extends Controller
             if (!$menu) {
                 return redirect()->back();
             }else{
-                EditingMenu::where('menu_id', $id)->delete();
-                $menu = new EditingMenu();
-                $menu->menu_id = $id;
-                $menu->name_en = $request->input('name_en');
-                $menu->description_en = $request->input('description_en');
-                $menu->name_ar = $request->input('name_ar');
-                $menu->description_ar = $request->input('description_ar');
-                $menu->price = $request->input('price');
-                $menu->famous = $request->input('famous');
-                $menu->status = $request->input('status');
-                if ($request->hasFile('image')) {
-                    if ($menu->image) {
-                        File::delete(public_path('images/' . $menu->image));
+                $oldEditingMenu = EditingMenu::where('menu_id', $id)->first();
+                if($oldEditingMenu){
+                    if ($oldEditingMenu->image) {
+                        File::delete(public_path('images/' . $oldEditingMenu->image));
                     }
+                    EditingMenu::where('menu_id', $id)->delete();
+                }
+                $editingMenu = new EditingMenu();
+                $editingMenu->menu_id = $id;
+                $editingMenu->name_en = $request->input('name_en');
+                $editingMenu->description_en = $request->input('description_en');
+                $editingMenu->name_ar = $request->input('name_ar');
+                $editingMenu->description_ar = $request->input('description_ar');
+                $editingMenu->price = $request->input('price');
+                $editingMenu->famous = $request->input('famous');
+                $editingMenu->status = $request->input('status');
+                if ($request->hasFile('image')) {
                     $image = $request->file('image');
                     $name = 'menu_' . time() . '.' . $image->getClientOriginalExtension();
                     $path = public_path('/images');
                     $image->move($path, $name);
-                    $menu->image = $name;
+                    $editingMenu->image = $name;
                 }
-                $menu->save();
+                $editingMenu->save();
             }
         }elseif ($user->admin == 1){
+            $validator = \Validator::make($request->all(), [
+                'name_en' => 'string|max:255',
+                'description_en' => 'string',
+                'name_ar' => 'string|max:255',
+                'description_ar' => 'string',
+                'price' => 'numeric',
+            ]);
+            if ($validator->fails()) {
+                return redirect()->back()
+                    ->withErrors($validator)
+                    ->withInput();
+            }
             $menu->name_en = $request->input('name_en');
             $menu->description_en = $request->input('description_en');
             $menu->name_ar = $request->input('name_ar');
@@ -303,30 +307,22 @@ class MenusController extends Controller
         if($user->admin ==1){
             $restaurant_id = $request->input('restaurant');
             $menu = Menu::find($id);
+            $editingMenu = EditingMenu::where('menu_id', $id)->first();
             $menu->name_en = $request->input('name_en');
             $menu->description_en = $request->input('description_en');
             $menu->name_ar = $request->input('name_ar');
             $menu->description_ar = $request->input('description_ar');
             $menu->price = $request->input('price');
             $menu->famous = $request->input('famous');
-            if ($request->hasFile('image')) {
+            $menu->status = $request->input('status');
+            if ($editingMenu->image) {
                 if ($menu->image) {
                     File::delete(public_path('images/' . $menu->image));
                 }
-                $image = $request->file('image');
-                $name = 'menu_' . time() . '.' . $image->getClientOriginalExtension();
-                $path = public_path('/images');
-                $image->move($path, $name);
-                $menu->image = $name;
+                $menu->image = $editingMenu->image;
             }
             $menu->approved = 1;
             $menu->save();
-            $editingMenus = EditingMenu::where('menu_id', $id)->get();
-            $menu_images = [];
-            foreach ($editingMenus as $editingMenu){
-                $menu_images[] = public_path('images/' . $editingMenu->image);
-            }
-            File::delete($menu_images);
             EditingMenu::where('menu_id', $menu->id)->delete();
             return redirect('/menus/' . $restaurant_id);
         }else{

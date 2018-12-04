@@ -116,7 +116,7 @@
                                                 @endif
                                             </td>
                                         </tr>
-                                    @endforeach
+                                    @endforeach                              
                                 @else
                                     <tr>
                                         <td colspan="7" class="center">There are no restaurants available.</td>

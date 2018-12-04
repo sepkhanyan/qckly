@@ -19,12 +19,12 @@ class CreateEditingRestaurantsTable extends Migration
             $table->foreign('restaurant_id')
                 ->references('id')->on('restaurants')
                 ->onDelete('cascade');
-            $table->string('name_en');
-            $table->string('name_ar');
-            $table->string('email');
-            $table->text('description_en');
-            $table->text('description_ar');
-            $table->integer('telephone');
+            $table->string('name_en')->nullable();
+            $table->string('name_ar')->nullable();
+            $table->string('email')->nullable();
+            $table->text('description_en')->nullable();
+            $table->text('description_ar')->nullable();
+            $table->integer('telephone')->nullable();
             $table->string('image')->nullable();
             $table->timestamps();
         });

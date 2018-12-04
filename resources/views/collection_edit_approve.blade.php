@@ -8,7 +8,7 @@
                     Approve
                 </a>
                 <a class="btn btn-danger" title=""
-                   href="{{ url('collection/edit_reject/' . $collection->collection_id )}}">
+                   href="{{ url('collection/edit_reject/' . $collection->id )}}">
                     <i class="fa fa-ban"></i>
                     Reject
                 </a>&nbsp;
@@ -23,61 +23,61 @@
                     </ul>
                 </div>
                 <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST"
-                      action="{{ url('/collection/edit_approve/' . $collection->collection_id) }}" enctype="multipart/form-data">
+                      action="{{ url('/collection/edit_approve/' . $collection->id) }}" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     <div class="tab-content">
                         <div id="general" class="tab-pane row wrap-all active">
                             @if($user->admin == 1)
-                                <input type="hidden" name="restaurant" value="{{$collection->collection->restaurant_id}}">
+                                <input type="hidden" name="restaurant" value="{{$collection->restaurant_id}}">
                             @endif
-                            <h4 class="tab-pane-title">{{$collection->collection->category->name_en}}</h4>
+                            <h4 class="tab-pane-title">{{$collection->category->name_en}}</h4>
                             <div class="form-group{{ $errors->has('name_en') ? ' has-error' : '' }}">
                                 <label for="input_name_en" class="col-sm-3 control-label">Name En</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="name_en" id="input_name_en" class="form-control"
-                                           value="{{old('name_en') ?? $collection->name_en}}">
-                                    @if ($errors->has('name_en'))
-                                        <span class="help-block">
-                                            <strong>{{ $errors->first('name_en') }}</strong>
-                                        </span>
-                                    @endif
+                                           value="{{old('name_en') ?? $editingCollection->name_en}}">
                                 </div>
+                                @if ($collection->name_en != $editingCollection->name_en)
+                                    <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                @endif
                             </div>
                             <div class="form-group{{ $errors->has('name_ar') ? ' has-error' : '' }}">
                                 <label for="input_name_ar" class="col-sm-3 control-label">Name Ar</label>
                                 <div class="col-sm-5">
                                     <input type="text" name="name_ar" id="input_name_ar" class="form-control"
-                                           value="{{old('name_ar') ?? $collection->name_ar}}">
-                                    @if ($errors->has('name_ar'))
-                                        <span class="help-block">
-                                            <strong>{{ $errors->first('name_ar') }}</strong>
-                                        </span>
-                                    @endif
+                                           value="{{old('name_ar') ?? $editingCollection->name_ar}}">
                                 </div>
+                                @if ($collection->name_ar != $editingCollection->name_ar)
+                                    <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                @endif
                             </div>
                             <div class="form-group{{ $errors->has('description_en') ? ' has-error' : '' }}">
                                 <label for="input_description_en" class="col-sm-3 control-label">Description En</label>
                                 <div class="col-sm-5">
                                     <textarea name="description_en" id="input_description_en" class="form-control"
-                                              rows="5">{{old('description_en') ?? $collection->description_en}}</textarea>
-                                    @if ($errors->has('description_en'))
-                                        <span class="help-block">
-                                            <strong>{{ $errors->first('description_en') }}</strong>
-                                        </span>
-                                    @endif
+                                              rows="5">{{old('description_en') ?? $editingCollection->description_en}}</textarea>
                                 </div>
+                                @if ($collection->description_en != $editingCollection->description_en)
+                                    <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                @endif
                             </div>
                             <div class="form-group{{ $errors->has('description_ar') ? ' has-error' : '' }}">
                                 <label for="input_description_ar" class="col-sm-3 control-label">Description Ar</label>
                                 <div class="col-sm-5">
                                     <textarea name="description_ar" id="input_description_ar" class="form-control"
-                                              rows="5">{{old('description_ar') ?? $collection->description_ar}}</textarea>
-                                    @if ($errors->has('description_ar'))
-                                        <span class="help-block">
-                                            <strong>{{ $errors->first('description_ar') }}</strong>
-                                        </span>
-                                    @endif
+                                              rows="5">{{old('description_ar') ?? $editingCollection->description_ar}}</textarea>
                                 </div>
+                                @if ($collection->description_ar != $editingCollection->description_ar)
+                                    <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                @endif
                             </div>
                                 <div class="form-group">
                                     <label for="input-image" class="col-sm-3 control-label">
@@ -87,8 +87,8 @@
                                     <div class="col-sm-5">
                                         <div class="thumbnail imagebox">
                                             <div class="preview">
-                                                @if(isset($collection->image))
-                                                    <img src="{{url('/') . '/images/' . $collection->image}}"
+                                                @if(isset($editingCollection->image))
+                                                    <img src="{{url('/') . '/images/' . $editingCollection->image}}"
                                                          class="thumb img-responsive" id="thumb">
                                                 @else
                                                     <img src="{{url('/') . '/admin/no_photo.png'}}"
@@ -112,6 +112,11 @@
                                                 </p>
                                             </div>
                                         </div>
+                                        @if ($editingCollection->image)
+                                            <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                        @endif
                                     </div>
                                 </div>
                             <div class="form-group">
@@ -119,10 +124,15 @@
                                 <div class="col-sm-5">
                                     <select name="mealtime" id="mealtime" class="form-control">
                                         @foreach ($mealtimes as $mealtime)
-                                            <option value="{{$mealtime->id}}"  @if(old('mealtime')){{ old('mealtime') == $mealtime->id ? 'selected':'' }} @else {{$collection->mealtime_id == $mealtime->id ? 'selected' : ''}} @endif>{{$mealtime->name_en}}</option>
+                                            <option value="{{$mealtime->id}}"  @if(old('mealtime')){{ old('mealtime') == $mealtime->id ? 'selected':'' }} @else {{$editingCollection->mealtime_id == $mealtime->id ? 'selected' : ''}} @endif>{{$mealtime->name_en}}</option>
                                         @endforeach
                                     </select>
                                 </div>
+                                @if ($collection->mealtime_id != $editingCollection->mealtime_id)
+                                    <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                @endif
                             </div>
                             <div class="form-group">
                                 <label for="female_caterer_available" class="col-sm-3 control-label">Female Caterer
@@ -141,72 +151,77 @@
                                                 No
                                             </label>
                                         @else
-                                            <label class="btn btn-success{{$collection->female_caterer_available == 1 ? ' active' : ''}}">
+                                            <label class="btn btn-success{{$editingCollection->female_caterer_available == 1 ? ' active' : ''}}">
                                                 <input type="radio"
-                                                       name="female_caterer_available" value="1" {{$collection->female_caterer_available == 1 ? 'checked' : ''}} >
+                                                       name="female_caterer_available" value="1" {{$editingCollection->female_caterer_available == 1 ? 'checked' : ''}} >
                                                 Yes
                                             </label>
-                                            <label class="btn btn-danger{{$collection->female_caterer_available == 0 ? ' active' : ''}} ">
+                                            <label class="btn btn-danger{{$editingCollection->female_caterer_available == 0 ? ' active' : ''}} ">
                                                 <input type="radio"
                                                        name="female_caterer_available"
-                                                       value="0" {{$collection->female_caterer_available == 0 ? 'checked' : ''}} >
+                                                       value="0" {{$editingCollection->female_caterer_available == 0 ? 'checked' : ''}} >
                                                 No
                                             </label>
                                         @endif
                                     </div>
                                 </div>
+                                @if ($collection->female_caterer_available != $editingCollection->female_caterer_available)
+                                    <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                @endif
                             </div>
                             <div class="form-group{{ $errors->has('service_provide_en') ? ' has-error' : '' }}">
                                 <label for="service_provide_en" class="col-sm-3 control-label">Service Provide
                                     En</label>
                                 <div class="col-sm-5">
                                     <textarea name="service_provide_en" class="form-control"
-                                              id="service_provide_en">{{old('service_provide_en') ?? $collection->service_provide_en}}</textarea>
-                                    @if ($errors->has('service_provide_en'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('service_provide_en') }}</strong>
-                                    </span>
-                                    @endif
+                                              id="service_provide_en">{{old('service_provide_en') ?? $editingCollection->service_provide_en}}</textarea>
                                 </div>
+                                @if ($collection->service_provide_en != $editingCollection->service_provide_en)
+                                    <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                @endif
                             </div>
                             <div class="form-group{{ $errors->has('service_provide_ar') ? ' has-error' : '' }}">
                                 <label for="service_provide_ar" class="col-sm-3 control-label">Service Provide
                                     Ar</label>
                                 <div class="col-sm-5">
                                     <textarea name="service_provide_ar" class="form-control"
-                                              id="service_provide_ar">{{old('service_provide_ar') ?? $collection->service_provide_ar}}</textarea>
-                                    @if ($errors->has('service_provide_ar'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('service_provide_ar') }}</strong>
-                                    </span>
-                                    @endif
+                                              id="service_provide_ar">{{old('service_provide_ar') ?? $editingCollection->service_provide_ar}}</textarea>
                                 </div>
+                                @if ($collection->service_provide_ar != $editingCollection->service_provide_ar)
+                                    <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                @endif
                             </div>
                             <div class="form-group{{ $errors->has('service_presentation_en') ? ' has-error' : '' }}">
                                 <label for="service_presentation_en" class="col-sm-3 control-label">Service Presentation
                                     En</label>
                                 <div class="col-sm-5">
                                     <textarea name="service_presentation_en" class="form-control"
-                                              id="service_presentation_en">{{old('service_presentation_en') ?? $collection->service_presentation_en}}</textarea>
-                                    @if ($errors->has('service_presentation_en'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('service_presentation_en') }}</strong>
-                                    </span>
-                                    @endif
+                                              id="service_presentation_en">{{old('service_presentation_en') ?? $editingCollection->service_presentation_en}}</textarea>
                                 </div>
+                                @if ($collection->service_presentation_en != $editingCollection->service_presentation_en)
+                                    <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                @endif
                             </div>
                             <div class="form-group{{ $errors->has('service_presentation_ar') ? ' has-error' : '' }}">
                                 <label for="service_presentation_ar" class="col-sm-3 control-label">Service Presentation
                                     Ar</label>
                                 <div class="col-sm-5">
                                     <textarea name="service_presentation_ar" class="form-control"
-                                              id="service_presentation_ar">{{old('service_presentation_ar') ?? $collection->service_presentation_ar}}</textarea>
-                                    @if ($errors->has('service_presentation_ar'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('service_presentation_ar') }}</strong>
-                                    </span>
-                                    @endif
+                                              id="service_presentation_ar">{{old('service_presentation_ar') ?? $editingCollection->service_presentation_ar}}</textarea>
                                 </div>
+                                @if ($collection->service_presentation_ar != $editingCollection->service_presentation_ar)
+                                    <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                @endif
                             </div>
                             <div class="form-group">
                                 <label for="is_available" class="col-sm-3 control-label">Is Available</label>
@@ -224,20 +239,25 @@
                                                 No
                                             </label>
                                         @else
-                                            <label class="btn btn-success{{$collection->is_available == 1 ? ' active' : ''}}">
+                                            <label class="btn btn-success{{$editingCollection->is_available == 1 ? ' active' : ''}}">
                                                 <input type="radio"
-                                                       name="is_available" value="1" {{$collection->is_available == 1 ? 'checked' : ''}} >
+                                                       name="is_available" value="1" {{$editingCollection->is_available == 1 ? 'checked' : ''}} >
                                                 Yes
                                             </label>
-                                            <label class="btn btn-danger{{$collection->is_available == 0 ? ' active' : ''}} ">
+                                            <label class="btn btn-danger{{$editingCollection->is_available == 0 ? ' active' : ''}} ">
                                                 <input type="radio"
                                                        name="is_available"
-                                                       value="0" {{$collection->is_available == 0 ? 'checked' : ''}} >
+                                                       value="0" {{$editingCollection->is_available == 0 ? 'checked' : ''}} >
                                                 No
                                             </label>
                                         @endif
                                     </div>
                                 </div>
+                                @if ($collection->is_available != $editingCollection->is_available)
+                                    <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                @endif
                             </div>
                             @if($collection->category_id != 4)
                                 <div class="form-group{{ $errors->has('collection_price') ? ' has-error' : '' }}">
@@ -245,73 +265,71 @@
                                     <div class="col-sm-5">
                                         <div class="input-group">
                                             <input type="text" name="collection_price" id="input-price"
-                                                   class="form-control" value="{{old('collection_price') ?? $collection->price}}"/>
+                                                   class="form-control" value="{{old('collection_price') ?? $editingCollection->price}}"/>
                                             <span class="input-group-addon">
                                                     <i class="fa fa-money"></i>
                                                 </span>
                                         </div>
-                                        @if ($errors->has('collection_price'))
-                                            <span class="help-block">
-                                            <strong>{{ $errors->first('collection_price') }}</strong>
-                                        </span>
-                                        @endif
                                     </div>
+                                    @if ($collection->price != $editingCollection->price)
+                                        <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                    @endif
                                 </div>
                                 @if($collection->category_id != 2)
                                     <div class="form-group{{ $errors->has('min_quantity') ? ' has-error' : '' }}">
                                         <label class="col-sm-3 control-label">Collection min quantity</label>
                                         <div class="col-sm-5">
                                             <input type="number" min="1" name="min_quantity" class="form-control"
-                                                   value="{{old('min_quantity') ?? $collection->min_qty}}">
-                                            @if ($errors->has('min_quantity'))
-                                                <span class="help-block">
-                                                    <strong>{{ $errors->first('min_quantity') }}</strong>
-                                                </span>
-                                            @endif
+                                                   value="{{old('min_quantity') ?? $editingCollection->min_qty}}">
                                         </div>
+                                        @if ($collection->min_qty != $editingCollection->min_qty)
+                                            <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                        @endif
                                     </div>
                                     <div class="form-group{{ $errors->has('max_quantity') ? ' has-error' : '' }}">
                                         <label class="col-sm-3 control-label">Collection max quantity</label>
                                         <div class="col-sm-5">
                                             <input type="number" min="1" name="max_quantity" class="form-control"
-                                                   value="{{old('max_quantity') ?? $collection->max_qty}}">
-                                            @if ($errors->has('max_quantity'))
-                                                <span class="help-block">
-                                                    <strong>{{ $errors->first('max_quantity') }}</strong>
-                                                </span>
-                                            @endif
-
+                                                   value="{{old('max_quantity') ?? $editingCollection->max_qty}}">
                                         </div>
+                                        @if ($collection->max_qty != $editingCollection->max_qty)
+                                            <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                        @endif
                                     </div>
                                 @endif
                                 <div class="form-group{{ $errors->has('min_serve_to_person') ? ' has-error' : '' }}">
                                     <label class="col-sm-3 control-label">Min serve to person</label>
                                     <div class="col-sm-5">
                                         <input type="number" min="1" name="min_serve_to_person" class="form-control"
-                                               value="{{old('min_serve_to_person') ?? $collection->min_serve_to_person}}">
-                                        @if ($errors->has('min_serve_to_person'))
-                                            <span class="help-block">
-                                                <strong>{{ $errors->first('min_serve_to_person') }}</strong>
-                                            </span>
-                                        @endif
+                                               value="{{old('min_serve_to_person') ?? $editingCollection->min_serve_to_person}}">
 
                                     </div>
+                                    @if ($collection->min_serve_to_person != $editingCollection->min_serve_to_person)
+                                        <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                    @endif
                                 </div>
                                 <div class="form-group{{ $errors->has('max_serve_to_person') ? ' has-error' : '' }}">
                                     <label class="col-sm-3 control-label">Max serve to person</label>
                                     <div class="col-sm-5">
                                         <input type="number" min="1" name="max_serve_to_person" class="form-control"
-                                               value="{{old('max_serve_to_person') ?? $collection->max_serve_to_person}}">
-                                        @if ($errors->has('max_serve_to_person'))
-                                            <span class="help-block">
-                                                <strong>{{ $errors->first('max_serve_to_person') }}</strong>
-                                            </span>
-                                        @endif
-
+                                               value="{{old('max_serve_to_person') ?? $editingCollection->max_serve_to_person}}">
                                     </div>
+                                    @if ($collection->max_serve_to_person != $editingCollection->max_serve_to_person)
+                                        <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                    @endif
                                 </div>
                             @endif
-                            @if($collection->collection->category_id == 2)
+                            @if($collection->category_id == 2)
                                 <div class="form-group">
                                     <label for="is_available" class="col-sm-3 control-label">Allow Person
                                         Increase</label>
@@ -329,20 +347,25 @@
                                                     No
                                                 </label>
                                             @else
-                                                <label class="btn btn-success{{$collection->allow_person_increase == 1 ? ' active' : ''}}">
+                                                <label class="btn btn-success{{$editingCollection->allow_person_increase == 1 ? ' active' : ''}}">
                                                     <input type="radio"
-                                                           name="allow_person_increase" value="1" {{$collection->allow_person_increase == 1 ? 'checked' : ''}} >
+                                                           name="allow_person_increase" value="1" {{$editingCollection->allow_person_increase == 1 ? 'checked' : ''}} >
                                                     Yes
                                                 </label>
-                                                <label class="btn btn-danger{{$collection->is_available == 0 ? ' active' : ''}} ">
+                                                <label class="btn btn-danger{{$editingCollection->is_available == 0 ? ' active' : ''}} ">
                                                     <input type="radio"
                                                            name="allow_person_increase"
-                                                           value="0" {{$collection->allow_person_increase == 0 ? 'checked' : ''}} >
+                                                           value="0" {{$editingCollection->allow_person_increase == 0 ? 'checked' : ''}} >
                                                     No
                                                 </label>
                                             @endif
                                         </div>
                                     </div>
+                                    @if ($collection->allow_person_increase != $editingCollection->allow_person_increase)
+                                        <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                    @endif
                                 </div>
                                 <div class="form-group{{ $errors->has('setup_time') ? ' has-error' : '' }}">
                                     <label for="input-setup" class="col-sm-3 control-label">
@@ -351,41 +374,41 @@
                                     <div class="col-sm-5">
                                         <div class="input-group">
                                             <input type="number" name="setup_time" id="input-setup"
-                                                   class="form-control" min="0" value="{{old('setup_time') ?? $collection->setup_time}}"/>
+                                                   class="form-control" min="0" value="{{old('setup_time') ?? $editingCollection->setup_time}}"/>
                                             <span class="input-group-addon">minutes</span>
                                         </div>
-                                        @if ($errors->has('setup_time'))
-                                            <span class="help-block">
-                                                    <strong>{{ $errors->first('setup_time') }}</strong>
-                                                </span>
-                                        @endif
                                     </div>
+                                    @if ($collection->setup_time != $editingCollection->setup_time)
+                                        <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                    @endif
                                 </div>
                                 <div class="form-group{{ $errors->has('requirements_en') ? ' has-error' : '' }}">
                                     <label for="input_requirements_en" class="col-sm-3 control-label">Requirements
                                         En</label>
                                     <div class="col-sm-5">
                                             <textarea name="requirements_en" id="input_requirements_en"
-                                                      class="form-control">{{old('requirements_en') ?? $collection->requirements_en}}</textarea>
-                                        @if ($errors->has('requirements_en'))
-                                            <span class="help-block">
-                                                    <strong>{{ $errors->first('requirements_en') }}</strong>
-                                            </span>
-                                        @endif
+                                                      class="form-control">{{old('requirements_en') ?? $editingCollection->requirements_en}}</textarea>
                                     </div>
+                                    @if ($collection->requirements_en != $editingCollection->requirements_en)
+                                        <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                    @endif
                                 </div>
                                 <div class="form-group{{ $errors->has('requirements_ar') ? ' has-error' : '' }}">
                                     <label for="input_requirements_ar" class="col-sm-3 control-label">Requirements
                                         Ar</label>
                                     <div class="col-sm-5">
                                             <textarea name="requirements_ar" id="input_requirements_ar"
-                                                      class="form-control">{{old('requirements_ar') ?? $collection->requirements_ar}}</textarea>
-                                        @if ($errors->has('requirements_ar'))
-                                            <span class="help-block">
-                                                    <strong>{{ $errors->first('requirements_ar') }}</strong>
-                                            </span>
-                                        @endif
+                                                      class="form-control">{{old('requirements_ar') ?? $editingCollection->requirements_ar}}</textarea>
                                     </div>
+                                    @if ($collection->requirements_ar != $editingCollection->requirements_ar)
+                                        <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                    @endif
                                 </div>
                                 <div class="form-group{{ $errors->has('max_time') ? ' has-error' : '' }}">
                                     <label for="input-max" class="col-sm-3 control-label">
@@ -394,15 +417,15 @@
                                     <div class="col-sm-5">
                                         <div class="input-group">
                                             <input type="number" name="max_time" id="input-max" class="form-control"
-                                                   min="0" value="{{old('max_time') ?? $collection->max_time}}"/>
+                                                   min="0" value="{{old('max_time') ?? $editingCollection->max_time}}"/>
                                             <span class="input-group-addon">minutes</span>
                                         </div>
-                                        @if ($errors->has('max_time'))
-                                            <span class="help-block">
-                                                    <strong>{{ $errors->first('max_time') }}</strong>
-                                                </span>
-                                        @endif
                                     </div>
+                                    @if ($collection->max_time != $editingCollection->max_time)
+                                        <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
+                                    @endif
                                 </div>
                             @endif
                         </div>
@@ -411,9 +434,10 @@
                                 <div class="panel-heading">
                                     <h3 class="panel-title">Collection Items</h3>
                                 </div>
+                                @if($editingCollection->editingCollectionItem->count() > 0)
                                 <div class="table-responsive">
                                     <table border="0" class="table table-striped table-border">
-                                        @if($collection->collection->category_id == 1)
+                                        @if($collection->category_id == 1)
                                             <thead>
                                             <tr>
                                                 <th>Item ID</th>
@@ -422,7 +446,7 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @foreach($collection->editingCollectionItem as $collectionItem)
+                                            @foreach($editingCollection->editingCollectionItem as $collectionItem)
                                                 <tr>
                                                     <td style="font-size: medium">{{$collectionItem->item_id}}</td>
                                                     <td>
@@ -443,7 +467,7 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @foreach($collection_menus as $collectionMenu)
+                                            @foreach($editingCollectionMenus as $collectionMenu)
                                                 <tr>
                                                     <td style="font-size: medium">
                                                         {{$collectionMenu->menu_id}}
@@ -452,7 +476,7 @@
                                                         <h3>{{$collectionMenu->category->name_en}}</h3>
                                                     </td>
                                                     <td style="font-size: medium">
-                                                        @if($collection->collection->category_id != 4)
+                                                        @if($collection->category_id != 4)
                                                             {{$collectionMenu->min_qty . '/' . $collectionMenu->max_qty}}
                                                         @endif
                                                     </td>
@@ -472,7 +496,74 @@
                                             </tbody>
                                         @endif
                                     </table>
+                                    <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
                                 </div>
+                                    @else
+                                    <div class="table-responsive">
+                                        <table border="0" class="table table-striped table-border">
+                                            @if($collection->category_id == 1)
+                                                <thead>
+                                                <tr>
+                                                    <th>Item ID</th>
+                                                    <th>Item</th>
+                                                    <th>Price</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                @foreach($collection->collectionItem as $collectionItem)
+                                                    <tr>
+                                                        <td style="font-size: medium">{{$collectionItem->item_id}}</td>
+                                                        <td>
+                                                            {{$collectionItem->quantity}}x
+                                                            <sppan style="font-size: medium">{{$collectionItem->menu->name_en}}</sppan>
+                                                        </td>
+                                                        <td style="font-size: medium">{{$collectionItem->menu->price . ' ' . \Lang::get('message.priceUnit')}}</td>
+                                                    </tr>
+                                                @endforeach
+                                                </tbody>
+                                            @else
+                                                <thead>
+                                                <tr>
+                                                    <th>Menu ID</th>
+                                                    <th>Menu</th>
+                                                    <th>Menu Min/Max Quantity</th>
+                                                    <th>Items(Id/Name - Price)</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                @foreach($collection_menus as $collectionMenu)
+                                                    <tr>
+                                                        <td style="font-size: medium">
+                                                            {{$collectionMenu->menu_id}}
+                                                        </td>
+                                                        <td>
+                                                            <h3>{{$collectionMenu->category->name_en}}</h3>
+                                                        </td>
+                                                        <td style="font-size: medium">
+                                                            @if($collection->category_id != 4)
+                                                                {{$collectionMenu->min_qty . '/' . $collectionMenu->max_qty}}
+                                                            @endif
+                                                        </td>
+                                                        <td>
+                                                            @foreach($collectionMenu->collectionItem->sortBy('collection_menu_id') as $collectionItem)
+                                                                <div>
+                                                                    #{{$collectionItem->item_id}}
+                                                                    <span style="font-size: medium">/ {{$collectionItem->menu->name_en}}
+                                                                        -</span>
+                                                                    <span style="font-style: oblique">{{$collectionItem->menu->price . ' ' . \Lang::get('message.priceUnit')}}</span>
+                                                                </div>
+
+                                                            @endforeach
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                                </tbody>
+                                            @endif
+                                        </table>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>

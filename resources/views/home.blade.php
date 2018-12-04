@@ -497,17 +497,19 @@
             </li>
         </ul>
         <h1 class="navbar-heading">
-            @php
-                $s = ':';
-                $pos = strpos($title,$s);
-            @endphp
-            @if($pos === false)
-                {{$title}}
-            @else
-                @php($title = explode(':', $title))
-                {{$title[0]}}&nbsp;&nbsp;
-                <small>{{$title[1]}}</small>
-            @endif
+            @isset($title)
+                @php
+                    $s = ':';
+                    $pos = strpos($title,$s);
+                @endphp
+                @if($pos === false)
+                    {{$title}}
+                @else
+                    @php($title = explode(':', $title))
+                    {{$title[0]}}&nbsp;&nbsp;
+                    <small>{{$title[1]}}</small>
+                @endif
+            @endisset
         </h1>
     </nav>
     {{--<div class="container">--}}

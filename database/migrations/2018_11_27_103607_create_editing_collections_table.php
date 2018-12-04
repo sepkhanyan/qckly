@@ -19,20 +19,20 @@ class CreateEditingCollectionsTable extends Migration
             $table->foreign('collection_id')
                 ->references('id')->on('collections')
                 ->onDelete('cascade');
-            $table->tinyInteger('is_available');
+            $table->tinyInteger('is_available')->nullable();
             $table->float('price')->nullable();
-            $table->string('name_en');
-            $table->string('name_ar');
-            $table->text('service_provide_en');
-            $table->text('service_provide_ar');
+            $table->string('name_en')->nullable();
+            $table->string('name_ar')->nullable();
+            $table->text('service_provide_en')->nullable();
+            $table->text('service_provide_ar')->nullable();
             $table->integer('setup_time')->nullable();
             $table->integer('max_time')->nullable();
             $table->text('requirements_en')->nullable();
             $table->text('requirements_ar')->nullable();
-            $table->text('service_presentation_en');
-            $table->text('service_presentation_ar');
-            $table->text('description_en');
-            $table->text('description_ar');
+            $table->text('service_presentation_en')->nullable();
+            $table->text('service_presentation_ar')->nullable();
+            $table->text('description_en')->nullable();
+            $table->text('description_ar')->nullable();
             $table->unsignedInteger('mealtime_id');
             $table->foreign('mealtime_id')
                 ->references('id')->on('mealtimes')
