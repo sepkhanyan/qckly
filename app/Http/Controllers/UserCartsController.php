@@ -86,17 +86,17 @@ class UserCartsController extends Controller
                             'error_details' => $validator->messages()));
                     } else {
                         $delivery_area = $DataRequests['delivery_order_area'];
-                        $delivery_date = Carbon::parse($DataRequests['delivery_order_date'])->dayOfWeek;
-                        $delivery_time = Carbon::parse($DataRequests['delivery_order_time']);
+                        $delivery_date = $DataRequests['delivery_order_date'];
+                        $delivery_time = $DataRequests['delivery_order_time'];
+                        $day = Carbon::parse($delivery_date)->dayOfWeek;
                         $collection = Collection::where('id', $collection_id)->first();
-                        $restaurant = Restaurant::where('id', $collection->restaurant_id)->whereHas('workingHour', function ($query) use ($delivery_date, $delivery_time) {
-                            $query->where('weekday', $delivery_date)
-                                ->where('opening_time', '<=', $delivery_time)
-                                ->where('closing_time', '>=', $delivery_time)
+                        $restaurant = Restaurant::where('id', $collection->restaurant_id)->whereHas('workingHour', function ($query) use ($day, $delivery_time) {
+                            $query->where('weekday', $day)
+                                ->where('opening_time', '<=', Carbon::parse($delivery_time))
+                                ->where('closing_time', '>=', Carbon::parse($delivery_time))
                                 ->where('status', 1)
                                 ->orWhere('type', '=', '24_7');
                         })->first();
-
                         if($restaurant){
                             $cart = new UserCart();
                             $cart->user_id = $user->id;
@@ -105,8 +105,8 @@ class UserCartsController extends Controller
                                 $cart->delivery_address_id = $address->id;
                             }
                             $cart->delivery_order_area = $delivery_area;
-                            $cart->delivery_order_date = $delivery_date;
-                            $cart->delivery_order_time = $delivery_time;
+                            $cart->delivery_order_date = Carbon::parse($delivery_date);
+                            $cart->delivery_order_time = Carbon::parse($delivery_time);
                             $cart->save();
                         }else{
                             return response()->json(array(
