@@ -86,21 +86,34 @@ class UserCartsController extends Controller
                             'error_details' => $validator->messages()));
                     } else {
                         $delivery_area = $DataRequests['delivery_order_area'];
-                        $delivery_date = $DataRequests['delivery_order_date'];
-                        $delivery_time = $DataRequests['delivery_order_time'];
-//                        dd(Carbon::parse($delivery_time));
-//                        $collection = Collection::where('id', $collection_id)->first();
-//                        $working_hours = WorkingHour::where('restaurant_id', $collection->restaurant_id)->where()
-                        $cart = new UserCart();
-                        $cart->user_id = $user->id;
-                        $address = Address::where('user_id', $user->id)->where('is_default', 1)->first();
-                        if ($address) {
-                            $cart->delivery_address_id = $address->id;
+                        $delivery_date = Carbon::parse($DataRequests['delivery_order_date'])->dayOfWeek;
+                        $delivery_time = Carbon::parse($DataRequests['delivery_order_time']);
+                        $collection = Collection::where('id', $collection_id)->first();
+                        $restaurant = Restaurant::where('id', $collection->restaurant_id)->whereHas('workingHour', function ($query) use ($delivery_date, $delivery_time) {
+                            $query->where('weekday', $delivery_date)
+                                ->where('opening_time', '<=', $delivery_time)
+                                ->where('closing_time', '>=', $delivery_time)
+                                ->where('status', 1)
+                                ->orWhere('type', '=', '24_7');
+                        })->first();
+
+                        if($restaurant){
+                            $cart = new UserCart();
+                            $cart->user_id = $user->id;
+                            $address = Address::where('user_id', $user->id)->where('is_default', 1)->first();
+                            if ($address) {
+                                $cart->delivery_address_id = $address->id;
+                            }
+                            $cart->delivery_order_area = $delivery_area;
+                            $cart->delivery_order_date = $delivery_date;
+                            $cart->delivery_order_time = $delivery_time;
+                            $cart->save();
+                        }else{
+                            return response()->json(array(
+                                'success' => 0,
+                                'status_code' => 200,
+                                'message' => \Lang::get('message.availabilityChanged')));
                         }
-                        $cart->delivery_order_area = $delivery_area;
-                        $cart->delivery_order_date = Carbon::parse($delivery_date);
-                        $cart->delivery_order_time = Carbon::parse($delivery_time);
-                        $cart->save();
                     }
                 }
                 if ($collection_type == 1) {

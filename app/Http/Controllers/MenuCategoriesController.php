@@ -236,6 +236,12 @@ class MenuCategoriesController extends Controller
 
     public function editApprove(Request $request, $id)
     {
+        $request->validate([
+            'name_en' => 'required|string|max:255',
+            'description_en' => 'required|string',
+            'name_ar' => 'required|string|max:255',
+            'description_ar' => 'required|string',
+        ]);
         $user = Auth::user();
         if($user->admin ==1){
             $category = MenuCategory::find($id);

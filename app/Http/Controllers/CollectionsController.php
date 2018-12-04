@@ -573,6 +573,21 @@ class CollectionsController extends Controller
 
     public function editApprove(Request $request, $id)
     {
+        $validator = \Validator::make($request->all(), [
+            'name_en' => 'required|string|max:255',
+            'description_en' => 'required|string',
+            'name_ar' => 'required|string|max:255',
+            'description_ar' => 'required|string',
+            'service_provide_en' => 'required|string',
+            'service_provide_ar' => 'required|string',
+            'service_presentation_en' => 'required|string',
+            'service_presentation_ar' => 'required|string',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
         $user = Auth::user();
         if($user->admin ==1){
             $restaurant_id = $request->input('restaurant');
@@ -587,7 +602,6 @@ class CollectionsController extends Controller
                 if ($collection->image) {
                     File::delete(public_path('images/' . $collection->image));
                 }
-
                 $collection->image = $editingCollection->image;
             }
             $collection->mealtime_id = $request->input('mealtime');
@@ -700,14 +714,25 @@ class CollectionsController extends Controller
     {
         $user = Auth::user();
         $id = $request->get('id');
+        $collections = Collection::whereIn('id', $id)->get();
         if ($user->admin == 2) {
             $collection = Collection::where('id', $id)->where('restaurant_id', $user->restaurant_id)->first();
             if($collection){
+                $collection_images = [];
+                foreach($collections as $collection){
+                    $collection_images[] = public_path('images/' . $collection->image);
+                }
+                File::delete($collection_images);
                 Collection::whereIn('id', $id)->delete();
             }else{
                 return redirect()->back();
             }
         } else {
+            $collection_images = [];
+            foreach($collections as $collection){
+                $collection_images[] = public_path('images/' . $collection->image);
+            }
+            File::delete($collection_images);
             Collection::whereIn('id', $id)->delete();
         }
         return redirect('/collections');

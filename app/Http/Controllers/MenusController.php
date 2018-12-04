@@ -212,6 +212,18 @@ class MenusController extends Controller
     {
 //        dd($request->all());
         $user = Auth::user();
+        $validator = \Validator::make($request->all(), [
+            'name_en' => 'string|max:255',
+            'description_en' => 'string',
+            'name_ar' => 'string|max:255',
+            'description_ar' => 'string',
+            'price' => 'numeric',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
         $menu = Menu::find($id);
         $restaurant_id = $request->input('restaurant');
         if ($user->admin == 2) {
@@ -246,18 +258,6 @@ class MenusController extends Controller
                 $editingMenu->save();
             }
         }elseif ($user->admin == 1){
-            $validator = \Validator::make($request->all(), [
-                'name_en' => 'string|max:255',
-                'description_en' => 'string',
-                'name_ar' => 'string|max:255',
-                'description_ar' => 'string',
-                'price' => 'numeric',
-            ]);
-            if ($validator->fails()) {
-                return redirect()->back()
-                    ->withErrors($validator)
-                    ->withInput();
-            }
             $menu->name_en = $request->input('name_en');
             $menu->description_en = $request->input('description_en');
             $menu->name_ar = $request->input('name_ar');
@@ -303,6 +303,18 @@ class MenusController extends Controller
 
     public function editApprove(Request $request, $id)
     {
+        $validator = \Validator::make($request->all(), [
+            'name_en' => 'string|max:255',
+            'description_en' => 'string',
+            'name_ar' => 'string|max:255',
+            'description_ar' => 'string',
+            'price' => 'numeric',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
         $user = Auth::user();
         if($user->admin ==1){
             $restaurant_id = $request->input('restaurant');

@@ -333,43 +333,61 @@ class RestaurantsController extends Controller
     {
         $user = Auth::user();
         $restaurant = Restaurant::find($id);
-        if ($user->admin == 2) {
-            if ($request->input('opening_type') == 'daily') {
-                $validator = \Validator::make($request->all(), [
-                    'daily_days' => 'required|array',
-                    'daily_hours.open' => 'required',
-                    'daily_hours.close' => 'required|after:daily_hours.open',
-                ]);
-                if ($validator->fails()) {
-                    return redirect()->back()
-                        ->withErrors($validator)
-                        ->withInput();
-                }
+        $validator = \Validator::make($request->all(), [
+            'restaurant_name_en' => 'required|string|max:255',
+            'restaurant_name_ar' => 'required|string|max:255',
+            'restaurant_email' => 'required|string|max:255',
+            'restaurant_telephone' => 'required|numeric|digits:8',
+            'description_en' => 'required|string',
+            'description_ar' => 'required|string',
+//            'address_en' => 'required|string|max:255',
+//            'address_ar' => 'required|string|max:255',
+//            'postcode' => 'required|string|max:255',
+//            'latitude' => 'required|numeric',
+//            'longitude' => 'required|numeric',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+        if ($request->input('opening_type') == 'daily') {
+            $validator = \Validator::make($request->all(), [
+                'daily_days' => 'required|array',
+                'daily_hours.open' => 'required',
+                'daily_hours.close' => 'required|after:daily_hours.open',
+            ]);
+            if ($validator->fails()) {
+                return redirect()->back()
+                    ->withErrors($validator)
+                    ->withInput();
             }
+        }
 
-            if ($request->input('opening_type') == 'flexible') {
-                $validator = \Validator::make($request->all(), [
-                    'flexible_hours.1.open' => 'required',
-                    'flexible_hours.1.close' => 'required|after:flexible_hours.1.open',
-                    'flexible_hours.2.open' => 'required',
-                    'flexible_hours.2.close' => 'required|after:flexible_hours.2.open',
-                    'flexible_hours.3.open' => 'required',
-                    'flexible_hours.3.close' => 'required|after:flexible_hours.3.open',
-                    'flexible_hours.4.open' => 'required',
-                    'flexible_hours.4.close' => 'required|after:flexible_hours.4.open',
-                    'flexible_hours.5.open' => 'required',
-                    'flexible_hours.5.close' => 'required|after:flexible_hours.5.open',
-                    'flexible_hours.6.open' => 'required',
-                    'flexible_hours.6.close' => 'required|after:flexible_hours.6.open',
-                    'flexible_hours.0.open' => 'required',
-                    'flexible_hours.0.close' => 'required|after:flexible_hours.0.open',
-                ]);
-                if ($validator->fails()) {
-                    return redirect()->back()
-                        ->withErrors($validator)
-                        ->withInput();
-                }
+        if ($request->input('opening_type') == 'flexible') {
+            $validator = \Validator::make($request->all(), [
+                'flexible_hours.1.open' => 'required',
+                'flexible_hours.1.close' => 'required|after:flexible_hours.1.open',
+                'flexible_hours.2.open' => 'required',
+                'flexible_hours.2.close' => 'required|after:flexible_hours.2.open',
+                'flexible_hours.3.open' => 'required',
+                'flexible_hours.3.close' => 'required|after:flexible_hours.3.open',
+                'flexible_hours.4.open' => 'required',
+                'flexible_hours.4.close' => 'required|after:flexible_hours.4.open',
+                'flexible_hours.5.open' => 'required',
+                'flexible_hours.5.close' => 'required|after:flexible_hours.5.open',
+                'flexible_hours.6.open' => 'required',
+                'flexible_hours.6.close' => 'required|after:flexible_hours.6.open',
+                'flexible_hours.0.open' => 'required',
+                'flexible_hours.0.close' => 'required|after:flexible_hours.0.open',
+            ]);
+            if ($validator->fails()) {
+                return redirect()->back()
+                    ->withErrors($validator)
+                    ->withInput();
             }
+        }
+        if ($user->admin == 2) {
             if ($user->restaurant_id == $id) {
                 $restaurant = Restaurant::find($id);
                 $oldEditingRestaurant = EditingRestaurant::where('restaurant_id', $id)->first();
@@ -466,62 +484,6 @@ class RestaurantsController extends Controller
                 return redirect()->back();
             }
         } elseif ($user->admin == 1) {
-            $validator = \Validator::make($request->all(), [
-                'category' => 'required',
-                'area' => 'required',
-                'restaurant_name_en' => 'required|string|max:255',
-                'restaurant_name_ar' => 'required|string|max:255',
-                'restaurant_email' => 'required|string|max:255',
-                'restaurant_telephone' => 'required|numeric|digits:8',
-                'description_en' => 'required|string',
-                'description_ar' => 'required|string',
-//            'address_en' => 'required|string|max:255',
-//            'address_ar' => 'required|string|max:255',
-//            'postcode' => 'required|string|max:255',
-//            'latitude' => 'required|numeric',
-//            'longitude' => 'required|numeric',
-            ]);
-            if ($validator->fails()) {
-                return redirect()->back()
-                    ->withErrors($validator)
-                    ->withInput();
-            }
-            if ($request->input('opening_type') == 'daily') {
-                $validator = \Validator::make($request->all(), [
-                    'daily_days' => 'required|array',
-                    'daily_hours.open' => 'required',
-                    'daily_hours.close' => 'required|after:daily_hours.open',
-                ]);
-                if ($validator->fails()) {
-                    return redirect()->back()
-                        ->withErrors($validator)
-                        ->withInput();
-                }
-            }
-
-            if ($request->input('opening_type') == 'flexible') {
-                $validator = \Validator::make($request->all(), [
-                    'flexible_hours.1.open' => 'required',
-                    'flexible_hours.1.close' => 'required|after:flexible_hours.1.open',
-                    'flexible_hours.2.open' => 'required',
-                    'flexible_hours.2.close' => 'required|after:flexible_hours.2.open',
-                    'flexible_hours.3.open' => 'required',
-                    'flexible_hours.3.close' => 'required|after:flexible_hours.3.open',
-                    'flexible_hours.4.open' => 'required',
-                    'flexible_hours.4.close' => 'required|after:flexible_hours.4.open',
-                    'flexible_hours.5.open' => 'required',
-                    'flexible_hours.5.close' => 'required|after:flexible_hours.5.open',
-                    'flexible_hours.6.open' => 'required',
-                    'flexible_hours.6.close' => 'required|after:flexible_hours.6.open',
-                    'flexible_hours.0.open' => 'required',
-                    'flexible_hours.0.close' => 'required|after:flexible_hours.0.open',
-                ]);
-                if ($validator->fails()) {
-                    return redirect()->back()
-                        ->withErrors($validator)
-                        ->withInput();
-                }
-            }
             $restaurant->name_en = $request->input('restaurant_name_en');
             $restaurant->name_ar = $request->input('restaurant_name_ar');
             $restaurant->email = $request->input('restaurant_email');
@@ -639,6 +601,19 @@ class RestaurantsController extends Controller
 
     public function editApprove(Request $request, $id)
     {
+        $validator = \Validator::make($request->all(), [
+            'restaurant_name_en' => 'required|string|max:255',
+            'restaurant_name_ar' => 'required|string|max:255',
+            'restaurant_email' => 'required|string|max:255',
+            'restaurant_telephone' => 'required|numeric|digits:8',
+            'description_en' => 'required|string',
+            'description_ar' => 'required|string',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
         $user = Auth::user();
         if ($user->admin == 1) {
 //            dd($request->all());
@@ -689,6 +664,7 @@ class RestaurantsController extends Controller
                 foreach($working_hours as $working_hour){
                     $working = new WorkingHour();
                     $working->type = $working_hour->type;
+                    $working->weekday = $working_hour->weekday;
                     $working->status = $working_hour->status;
                     $working->opening_time = $working_hour->opening_time;
                     $working->closing_time = $working_hour->closing_time;
@@ -966,7 +942,6 @@ class RestaurantsController extends Controller
             } else {
                 $restaurants = $restaurants->paginate(20);
             }
-//            dd($restaurants);
 
             if (count($restaurants) > 0) {
                 foreach ($restaurants as $restaurant) {
