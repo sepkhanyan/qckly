@@ -11,6 +11,7 @@ use App\UserCartCollection;
 use App\Menu;
 use App\Collection;
 use App\CollectionItem;
+use App\WorkingHour;
 use Carbon\Carbon;
 use App\User;
 use App\CollectionMenu;
@@ -86,7 +87,10 @@ class UserCartsController extends Controller
                     } else {
                         $delivery_area = $DataRequests['delivery_order_area'];
                         $delivery_date = $DataRequests['delivery_order_date'];
-                        $delivery_time = $DataRequests['delivery_order_time'];
+//                        $delivery_time = $DataRequests['delivery_order_time'];
+//                        dd(Carbon::parse($delivery_time));
+//                        $collection = Collection::where('id', $collection_id)->first();
+//                        $working_hours = WorkingHour::where('restaurant_id', $collection->restaurant_id)->where()
                         $cart = new UserCart();
                         $cart->user_id = $user->id;
                         $address = Address::where('user_id', $user->id)->where('is_default', 1)->first();

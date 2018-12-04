@@ -17,7 +17,7 @@ class AddImageColumnToCollectionsTable extends Migration
             $table->string('image')->after('description_ar');
         });
         Schema::table('editing_collections', function (Blueprint $table) {
-            $table->string('image')->after('description_ar');
+            $table->string('image')->nullable()->after('description_ar');
         });
     }
 
