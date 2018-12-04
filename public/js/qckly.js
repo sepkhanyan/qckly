@@ -14,100 +14,13 @@ $(document).ready(function () {
     });
 
 
-    $('#editCategory').click(function () {
-        $('#editing_category').slideDown();
-    });
-    $('#editCategoryCancel').click(function () {
-        $('#editing_category').slideUp();
-        $('#category').val(null).trigger("change");
-    });
-    $('#editArea').click(function () {
-        $('#editing_area').slideDown();
-    });
-    $('#editAreaCancel').click(function () {
-        $('#editing_area').slideUp();
-        $('#area').val(null).trigger("change");
-    });
 
-    $('#editNameEn').click(function () {
-        $('#editing_name_en').slideDown();
-    });
-    $('#editNameEnCancel').click(function () {
-        $('#editing_name_en').slideUp();
-        $('input[name=restaurant_name_en]').val("");
-    });
-
-    $('#editNameAr').click(function () {
-        $('#editing_name_ar').slideDown();
-    });
-    $('#editNameArCancel').click(function () {
-        $('#editing_name_ar').slideUp();
-        $('input[name=restaurant_name_ar]').val("");
-    });
-
-    $('#editTelephone').click(function () {
-        $('#editing_telephone').slideDown();
-    });
     $('#input_restaurant_telephone').on('keypress', function(evt) {
         var charCode = (evt.which) ? evt.which : event.keyCode;
         return !(charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57));
     });
-    $('#editTelephoneCancel').click(function () {
-        $('#editing_telephone').slideUp();
-        $('input[name=restaurant_telephone]').val("");
-    });
-
-    $('#editDescriptionEn').click(function () {
-        $('#editing_description_en').slideDown();
-    });
-    $('#editDescriptionEnCancel').click(function () {
-        $('#editing_description_en').slideUp();
-        $('#input_description_en').val("");
-    });
-    $('#editDescriptionAr').click(function () {
-        $('#editing_description_ar').slideDown();
-    });
-    $('#editDescriptionArCancel').click(function () {
-        $('#editing_description_ar').slideUp();
-        $('#input_description_ar').val("");
-    });
-
-    $('#editImage').click(function () {
-        $('#editing_image').slideDown();
-    });
-    $('#editImageCancel').click(function () {
-        $('#editing_image').slideUp();
-        $('input[name=image]').val("");
-        $('#thumb').attr('src', '/admin/no_photo.png');
-    });
-
-    $('#editWorkingHour').click(function () {
-        $('#editing_working_hour').slideDown();
-    });
-    $('#editWorkingHourCancel').click(function () {
-        $('#editing_working_hour').slideUp();
-        $('#opening-daily').slideUp('fast');
-        $('#opening-flexible').slideUp('fast');
-        $('input[name=opening_type]').prop('checked', false);
-        $('#opening-type label').removeClass('active');
-    });
-
-    $('#editCategory').click(function () {
-        $('#editing_category').slideDown();
-    });
-    $('#editCategoryCancel').click(function () {
-        $('#editing_category').slideUp();
-        $('input[name=category]').prop('selected', false);
-    });
 
 
-    $('#editArea').click(function () {
-        $('#editing_area').slideDown();
-    });
-    $('#editAreaCancel').click(function () {
-        $('#editing_area').slideUp();
-        $('input[name=area]').prop('selected', false);
-    });
 
     $('#lat-lng-no').click(function () {
         $('#lat-lng').slideDown('fast');

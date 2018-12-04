@@ -949,6 +949,33 @@
         }
     </script>
     <script type="text/javascript">
+        $('#editWorkingHour').click(function () {
+            $('#editing_working_hour').slideDown();
+        });
+        $('#editWorkingHourCancel').click(function () {
+            $('#editing_working_hour').slideUp();
+            $('#opening-daily').slideUp('fast');
+            $('#opening-flexible').slideUp('fast');
+            $('input[name=opening_type]').prop('checked', false);
+            $('#opening-type label').removeClass('active');
+        });
+
+        $('#editCategory').click(function () {
+            $('#editing_category').slideDown();
+        });
+        $('#editCategoryCancel').click(function () {
+            $('#editing_category').slideUp();
+            $("#category").val(null).trigger("change");
+        });
+
+
+        $('#editArea').click(function () {
+            $('#editing_area').slideDown();
+        });
+        $('#editAreaCancel').click(function () {
+            $('#editing_area').slideUp();
+            $("#area").val(null).trigger("change");
+        });
         $('#category').select2();
         $('#area').select2();
     </script>
