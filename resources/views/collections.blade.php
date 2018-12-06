@@ -101,6 +101,7 @@
                                     <th>Collection Type</th>
                                     <th>Price</th>
                                     <th>Mealtime</th>
+                                    <th>Status</th>
                                     <th>ID</th>
                                     <th></th>
                                 </tr>
@@ -136,6 +137,13 @@
                                                 <td>{{$collection->category->name_en}}</td>
                                                 <td>{{$collection->price}}</td>
                                                 <td>{{$collection->mealtime->name_en}}</td>
+                                                <td>
+                                                    @if($collection->is_available == 1)
+                                                        <span class="label label-success">Is Available</span>
+                                                        @else
+                                                        <span class="label label-danger">Not Available</span>
+                                                        @endif
+                                                </td>
                                                 <td>{{$collection->id}}</td>
                                                 <td>
                                                     @if($collection->approved == 0)

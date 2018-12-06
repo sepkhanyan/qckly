@@ -118,6 +118,7 @@ class CollectionsController extends Controller
      */
     public function store(Request $request)
     {
+        dd($request->all());
         $user = Auth::user();
         $collection = New Collection();
         $restaurant_id = $request->input('restaurant');

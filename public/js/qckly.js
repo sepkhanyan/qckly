@@ -21,6 +21,12 @@ $(document).ready(function () {
     });
 
 
+    $('#not_available').click(function () {
+        $('#unavailability_hours').slideDown('fast');
+    });
+    $('#available').click(function () {
+        $('#unavailability_hours').slideUp('fast');
+    });
 
     $('#lat-lng-no').click(function () {
         $('#lat-lng').slideDown('fast');

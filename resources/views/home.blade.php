@@ -549,6 +549,14 @@
             }
         });
 
+        $('input[name="is_available"]').on('change', function () {
+            $('#unavailability_hours').slideDown('fast');
+
+            if (this.value == '1') {
+                $('#unavailability_hours').slideUp('fast');
+            }
+        });
+
         $('input[name="opening_type"]').on('change', function () {
             if (this.value == '24_7') {
                 $('#opening-daily').slideUp('fast');
@@ -563,6 +571,23 @@
             if (this.value == 'flexible') {
                 $('#opening-daily').slideUp('fast');
                 $('#opening-flexible').slideDown('fast');
+            }
+        });
+
+        $('input[name="type"]').on('change', function () {
+            if (this.value == '24_7') {
+                $('#daily').slideUp('fast');
+                $('#flexible').slideUp('fast');
+            }
+
+            if (this.value == 'daily') {
+                $('#flexible').slideUp('fast');
+                $('#daily').slideDown('fast');
+            }
+
+            if (this.value == 'flexible') {
+                $('#daily').slideUp('fast');
+                $('#flexible').slideDown('fast');
             }
         });
 
