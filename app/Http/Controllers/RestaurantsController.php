@@ -1008,9 +1008,9 @@ class RestaurantsController extends Controller
                 $category = $DataRequests['category_id'];
                 $restaurants = $restaurants->whereHas('categoryRestaurant', function ($query) use ($category) {
                     $query->where('category_id', $category);
-                })->paginate(20);
+                })->paginate(1);
             } else {
-                $restaurants = $restaurants->paginate(20);
+                $restaurants = $restaurants->paginate(1);
             }
 
             if (count($restaurants) > 0) {
