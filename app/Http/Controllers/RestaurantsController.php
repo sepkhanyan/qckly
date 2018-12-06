@@ -1008,9 +1008,9 @@ class RestaurantsController extends Controller
                 $category = $DataRequests['category_id'];
                 $restaurants = $restaurants->whereHas('categoryRestaurant', function ($query) use ($category) {
                     $query->where('category_id', $category);
-                })->paginate(1);
+                })->paginate(20);
             } else {
-                $restaurants = $restaurants->paginate(1);
+                $restaurants = $restaurants->paginate(20);
             }
 
             if (count($restaurants) > 0) {
@@ -1091,7 +1091,7 @@ class RestaurantsController extends Controller
                 $wholeData = [
                     "total" => $restaurants->total(),
                     "count" => $restaurants->count(),
-                    "per_page" => 1,
+                    "per_page" => 20,
                     "current_page" => $restaurants->currentPage(),
                     "next_page_url" => $restaurants->nextPageUrl(),
                     "prev_page_url" => $restaurants->previousPageUrl(),

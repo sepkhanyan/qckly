@@ -43,6 +43,22 @@
                             @endif
                             <h4 class="tab-pane-title">{{$collection_category->name_en}}</h4>
                             <input type="hidden" name="category" value="{{$collection_category->id}}">
+                                {{--<div class="form-group{{ $errors->has('service_type') ? ' has-error' : '' }}">--}}
+                                    {{--<label for="service_type" class="col-sm-3 control-label">Service Type</label>--}}
+                                    {{--<div class="col-sm-5">--}}
+                                        {{--<select name="service_type[]" id="service_type" class="form-control" multiple--}}
+                                                {{--placeholder="Select Categories">--}}
+                                            {{--@foreach($categoryRestaurants as $categoryRestaurant)--}}
+                                                {{--<option value="{{$categoryRestaurant->id}}" {{ (collect(old('service_type'))->contains($categoryRestaurant->id)) ? 'selected':'' }}>{{$categoryRestaurant->name_en}}</option>--}}
+                                            {{--@endforeach--}}
+                                        {{--</select>--}}
+                                        {{--@if ($errors->has('service_type'))--}}
+                                            {{--<span class="help-block">--}}
+                                            {{--<strong>{{ $errors->first('service_type') }}</strong>--}}
+                                        {{--</span>--}}
+                                        {{--@endif--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
                             <div class="form-group {{ $errors->has('name_en') ? ' has-error' : '' }}">
                                 <label for="input_name_en" class="col-sm-3 control-label">Name En</label>
                                 <div class="col-sm-5">
@@ -1015,5 +1031,8 @@
                 $('#qty' + id).attr('disabled', true);
             }
         }
+    </script>
+    <script type="text/javascript">
+        $('#service_type').select2();
     </script>
 @endsection

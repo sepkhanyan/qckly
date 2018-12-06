@@ -16,7 +16,7 @@ class AddServiceTypeColumnToCollectionsTable extends Migration
         Schema::table('collections', function (Blueprint $table) {
             $table->unsignedInteger('service_type')->nullable()->after('category_id');
             $table->foreign('service_type')
-                ->references('category_id')->on('category_restaurant')
+                ->references('id')->on('category_restaurant')
                 ->onDelete('cascade');
         });
     }

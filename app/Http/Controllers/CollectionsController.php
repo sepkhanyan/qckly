@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\CategoryRestaurant;
 use App\EditingCollection;
 use App\EditingCollectionItem;
 use App\EditingCollectionMenu;
@@ -86,6 +87,7 @@ class CollectionsController extends Controller
         if ($user->admin == 2) {
             $restaurant = Restaurant::where('id', $user->restaurant_id)->first();
         }
+        $categoryRestaurants = CategoryRestaurant::where('restaurant_id', $restaurant->id)->get();
         $menu_categories = MenuCategory::where('restaurant_id', $restaurant->id)->whereHas('menu', function ($query){
             $query->where('approved', 1);
         })->with(['menu' => function ($q){
@@ -99,6 +101,7 @@ class CollectionsController extends Controller
             return view('collection_create', [
                 'restaurant' => $restaurant,
                 'categories' => $categories,
+                'categoryRestaurants' => $categoryRestaurants,
                 'menu_categories' => $menu_categories,
                 'mealtimes' => $mealtimes,
                 'collection_category' => $collection_category,
@@ -118,7 +121,6 @@ class CollectionsController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
         $user = Auth::user();
         $collection = New Collection();
         $restaurant_id = $request->input('restaurant');

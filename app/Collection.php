@@ -12,6 +12,7 @@ class Collection extends Model
     protected $fillable = [
         'restaurant_id',
         'category_id',
+        'service_type',
         'is_available',
         'price',
         'name_en',
@@ -47,6 +48,11 @@ class Collection extends Model
     public function category()
     {
         return $this->belongsTo('App\CollectionCategory', 'category_id');
+    }
+
+    public function categoryRestaurant()
+    {
+        return $this->belongsTo('App\CategoryRestaurant', 'service_type');
     }
 
     public function mealtime()
