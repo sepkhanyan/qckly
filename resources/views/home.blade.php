@@ -549,13 +549,6 @@
             }
         });
 
-        $('input[name="is_available"]').on('change', function () {
-            $('#unavailability_hours').slideDown('fast');
-
-            if (this.value == '1') {
-                $('#unavailability_hours').slideUp('fast');
-            }
-        });
 
         $('input[name="opening_type"]').on('change', function () {
             if (this.value == '24_7') {
@@ -574,6 +567,15 @@
             }
         });
 
+
+        $('input[name="is_available"]').on('change', function () {
+            if (this.value == '1') {
+                $('#unavailability_hours').slideUp();
+            }
+            if (this.value == '0') {
+                $('#unavailability_hours').slideDown();
+            }
+        });
         $('input[name="type"]').on('change', function () {
             if (this.value == '24_7') {
                 $('#daily').slideUp('fast');

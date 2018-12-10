@@ -210,37 +210,6 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="is_available" class="col-sm-3 control-label">Is Available</label>
-                                <div class="col-sm-5">
-                                    <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                            @if(old('is_available') !== null)
-                                                <label class="btn btn-success{{ (old('is_available') == '1') ? ' active' : '' }}">
-                                                    <input type="radio" name="is_available"
-                                                           value="1" {{ (old('is_available') == '1') ? 'checked' : '' }}>
-                                                    Yes
-                                                </label>
-                                                <label class="btn btn-danger{{ (old('is_available') == '0') ? ' active' : '' }}">
-                                                    <input type="radio" name="is_available"
-                                                           value="0" {{ (old('is_available') == '0') ? 'checked' : '' }}>
-                                                    No
-                                                </label>
-                                            @else
-                                                <label class="btn btn-success{{$collection->is_available == 1 ? ' active' : ''}}">
-                                                    <input type="radio"
-                                                           name="is_available" value="1" {{$collection->is_available == 1 ? 'checked' : ''}} >
-                                                    Yes
-                                                </label>
-                                                <label class="btn btn-danger{{$collection->is_available == 0 ? ' active' : ''}} ">
-                                                    <input type="radio"
-                                                           name="is_available"
-                                                           value="0" {{$collection->is_available == 0 ? 'checked' : ''}} >
-                                                    No
-                                                </label>
-                                            @endif
-                                    </div>
-                                </div>
-                            </div>
                             @if($collection->category_id != 4)
                                 <div class="form-group{{ $errors->has('collection_price') ? ' has-error' : '' }}">
                                     <label for="input-price" class="col-sm-3 control-label">Price</label>
@@ -349,7 +318,7 @@
                                                                name="allow_person_increase" value="1" {{$collection->allow_person_increase == 1 ? 'checked' : ''}} >
                                                         Yes
                                                     </label>
-                                                    <label class="btn btn-danger{{$collection->is_available == 0 ? ' active' : ''}} ">
+                                                    <label class="btn btn-danger{{$collection->allow_person_increase == 0 ? ' active' : ''}} ">
                                                         <input type="radio"
                                                                name="allow_person_increase"
                                                                value="0" {{$collection->allow_person_increase == 0 ? 'checked' : ''}} >
@@ -422,198 +391,179 @@
                             @endif
                         </div>
                         <div id="menus" class="tab-pane row wrap-all">
-                            <div class="panel panel-default panel-table">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">Collection Items</h3>
-                                </div>
-                                <div class="table-responsive">
-                                    <table border="0" class="table table-striped table-border">
-                                        @if($collection->category_id == 1)
-                                            <thead>
-                                            <tr>
-                                                <th>Item ID</th>
-                                                <th>Item</th>
-                                                <th>Price</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            @foreach($collection->collectionItem as $collectionItem)
-                                                <tr>
-                                                    <td style="font-size: medium">{{$collectionItem->item_id}}</td>
-                                                    <td>
-                                                        {{$collectionItem->quantity}}x
-                                                        <sppan style="font-size: medium">{{$collectionItem->menu->name_en}}</sppan>
-                                                    </td>
-                                                    <td style="font-size: medium">{{$collectionItem->menu->price . ' ' . \Lang::get('message.priceUnit')}}</td>
-                                                </tr>
-                                            @endforeach
-                                            <tr>
-                                                <td class="thick-line text-left" style="font-size: 20px">
-                                                    <a class="btn btn-primary" type="button" class="btn btn-info btn-lg"
-                                                       data-toggle="modal" data-target="#myModal">Edit</a>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        @else
-                                            <thead>
-                                            <tr>
-                                                <th>Menu ID</th>
-                                                <th>Menu</th>
-                                                <th>Menu Min/Max Quantity</th>
-                                                <th>Items(Id/Name - Price)</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            @foreach($collection_menus as $collectionMenu)
-                                                <tr>
-                                                    <td style="font-size: medium">
-                                                        {{$collectionMenu->menu_id}}
-                                                    </td>
-                                                    <td>
-                                                        <h3>{{$collectionMenu->category->name_en}}</h3>
-                                                    </td>
-                                                    <td style="font-size: medium">
-                                                        @if($collection->category_id != 4)
-                                                            {{$collectionMenu->min_qty . '/' . $collectionMenu->max_qty}}
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                        @foreach($collectionMenu->collectionItem->sortBy('collection_menu_id') as $collectionItem)
-                                                            <div>
-                                                                #{{$collectionItem->item_id}}
-                                                                <span style="font-size: medium">/ {{$collectionItem->menu->name_en}}
-                                                                    -</span>
-                                                                <span style="font-style: oblique">{{$collectionItem->menu->price . ' ' . \Lang::get('message.priceUnit')}}</span>
-                                                            </div>
+                            <div class="form-group">
+                                <label for="input_requirements_ar" class="col-sm-3 control-label">Collection Items</label>
+                                <div class="col-sm-5">
+                                    <div class="panel panel-default panel-table">
+                                        <div class="table-responsive">
+                                            <table border="0" class="table table-striped table-border">
+                                                @if($collection->category_id == 1)
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Item ID</th>
+                                                        <th>Item</th>
+                                                        <th>Price</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    @foreach($collection->collectionItem as $collectionItem)
+                                                        <tr>
+                                                            <td style="font-size: medium">{{$collectionItem->item_id}}</td>
+                                                            <td>
+                                                                {{$collectionItem->quantity}}x
+                                                                <sppan style="font-size: medium">{{$collectionItem->menu->name_en}}</sppan>
+                                                            </td>
+                                                            <td style="font-size: medium">{{$collectionItem->menu->price . ' ' . \Lang::get('message.priceUnit')}}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                    </tbody>
+                                                @else
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Menu ID</th>
+                                                        <th>Menu</th>
+                                                        <th>Menu Min/Max Quantity</th>
+                                                        <th>Items(Id/Name - Price)</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    @foreach($collection_menus as $collectionMenu)
+                                                        <tr>
+                                                            <td style="font-size: medium">
+                                                                {{$collectionMenu->menu_id}}
+                                                            </td>
+                                                            <td>
+                                                                <h3>{{$collectionMenu->category->name_en}}</h3>
+                                                            </td>
+                                                            <td style="font-size: medium">
+                                                                @if($collection->category_id != 4)
+                                                                    {{$collectionMenu->min_qty . '/' . $collectionMenu->max_qty}}
+                                                                @endif
+                                                            </td>
+                                                            <td>
+                                                                @foreach($collectionMenu->collectionItem->sortBy('collection_menu_id') as $collectionItem)
+                                                                    <div>
+                                                                        #{{$collectionItem->item_id}}
+                                                                        <span style="font-size: medium">/ {{$collectionItem->menu->name_en}}
+                                                                            -</span>
+                                                                        <span style="font-style: oblique">{{$collectionItem->menu->price . ' ' . \Lang::get('message.priceUnit')}}</span>
+                                                                    </div>
 
-                                                        @endforeach
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                            <tr>
-                                                <td class="thick-line text-left" style="font-size: 20px">
-                                                    <a class="btn btn-primary" type="button" class="btn btn-info btn-lg"
-                                                       data-toggle="modal" data-target="#myModal">Edit</a>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        @endif
-                                    </table>
+                                                                @endforeach
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                    </tbody>
+                                                @endif
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="modal fade" id="myModal" role="dialog">
-                                <form role="form" class="form-horizontal" accept-charset="utf-8"
-                                      method="POST"
-                                      action="{{ url('/collection/items/edit/' . $collection->id) }}"
-                                      enctype="multipart/form-data">
-                                    {{ csrf_field() }}
-                                    <div class="modal-dialog modal-lg">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal">&times;
-                                                </button>
-                                                <h4 class="modal-title">Menu Items</h4>
-                                            </div>
-                                            <div class="modal-body">
-                                                @if($collection->category_id == 2 || $collection->category_id == 3)
-                                                    <div class="form-group">
-                                                        <label for="" class="col-sm-3 control-label"></label>
-                                                        <div class="col-sm-5">
-                                                            <div class="control-group control-group-2">
-                                                                <div class="input-group" style="font-size: medium">
-                                                                    <b>Menu min quantity</b>
-                                                                </div>
-                                                                <div class="input-group" style="font-size: medium">
-                                                                    <b>Menu max quantity</b>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @endif
-                                                @foreach($menu_categories as $menu_category)
-                                                    <div class="form-group">
-                                                        <label for="input-status" class="col-sm-3 control-label text-right">
-                                                <span class="text-right"
-                                                      style="font-size: large">{{$menu_category->name_en}}</span>
-                                                            @if($collection->category_id != 1)
-                                                                <input type="hidden" name="menu[{{$menu_category->id}}][id]"
-                                                                       value="{{$menu_category->id}}">
-                                                            @endif
-                                                        </label>
-                                                        <div class="col-sm-9">
-                                                            <div class="control-group control-group-3">
-                                                                @if($collection->category_id == 2 || $collection->category_id == 3)
-                                                                    <div class="input-group">
-                                                                        <input type="number"
-                                                                               name="menu[{{$menu_category->id}}][min_qty]"
-                                                                               class="form-control" min="1" value="{{old('menu.' . $menu_category->id . '.min_qty') ?? 1}}">
-                                                                    </div>
-                                                                    <div class="input-group">
-                                                                        <input type="number"
-                                                                               name="menu[{{$menu_category->id}}][max_qty]"
-                                                                               class="form-control" min="1" value="{{old('menu.' . $menu_category->id . '.max_qty') ?? 1}}">
-                                                                    </div>
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    @if($collection->category_id == 1)
-                                                        @foreach($menu_category->menu as $menu)
-                                                            <div class="form-group">
-                                                                <label for="" class="col-sm-3 control-label"></label>
-                                                                <div class="col-xs-3">
-                                                                    <div class="checkbox" id="{{$menu->id}}">
-                                                                        <label style="font-size: medium">
-                                                                            <input id="item{{$menu->id}}" type="checkbox"
-                                                                                   name="menu_item[{{$menu->id}}][id]"
-                                                                                   value="{{$menu->id}}"
-                                                                                   {{ (collect(old('menu_item.' . $menu->id . '.id'))->contains($menu->id)) ? 'checked':'' }} onclick="myFunction('{{$menu->id}}')">{{$menu->name_en}}
-                                                                        </label>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-xs-5">
-                                                                    <div class="control-group control-group-3">
-                                                                        <div class="col-xs-5">
-                                                                            <input type="number"
-                                                                                   name="menu_item[{{$menu->id}}][qty]" id="qty{{$menu->id}}"
-                                                                                   style="display: none{{ (collect(old('menu_item.' . $menu->id . '.id'))->contains($menu->id)) ? 'block':'' }}" {{(!old('menu_item.' . $menu->id . '.id')) ? 'disabled': '' }}
-                                                                                   class="form-control" min="1" value="{{old('menu_item.' . $menu->id . '.qty') ?? 1}}">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        @endforeach
-                                                    @else
-                                                        <div class="form-group">
-                                                            <label for="" class="col-sm-3 control-label"></label>
-                                                            <div class="col-xs-4">
-                                                                <select id="items{{$menu_category->id}}" name="menu_item[]"
-                                                                        class="form-control" multiple
-                                                                        placeholder="Select Items">
-                                                                    @foreach($menu_category->menu as $menu)
-                                                                        <option value="{{$menu->id}}" {{ (collect(old('menu_item'))->contains($menu->id)) ? 'selected':'' }}>{{$menu->name_en}}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <script type="text/javascript">
-                                                            $(document).ready(function () {
-                                                                var id = '<?php echo $menu_category->id; ?>';
-                                                                $('#items' + id).select2();
-                                                            });
-                                                        </script>
-                                                    @endif
-                                                @endforeach
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">
-                                                    Close
-                                                </button>
-                                                <button type="submit" class="btn btn-primary">Save</button>
+                            <div class="form-group">
+                                <label for="input_requirements_ar" class="col-sm-3 control-label"></label>
+                                <div class="col-sm-5">
+                                    <label class="action">
+                                        <a class="btn btn-primary" type="button"  id="itemsEdit">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="menuItems" style="display: none{{(old('menu_item')) ? 'block' : ''}}">
+                                @if($collection->category_id == 2 || $collection->category_id == 3)
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-3 control-label"></label>
+                                        <div class="col-sm-5">
+                                            <div class="control-group control-group-2">
+                                                <div class="input-group" style="font-size: medium">
+                                                    <b>Menu min quantity</b>
+                                                </div>
+                                                <div class="input-group" style="font-size: medium">
+                                                    <b>Menu max quantity</b>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </form>
+                                @endif
+                                @foreach($menu_categories as $menu_category)
+                                    <div class="form-group" id="collectionMenus">
+                                        <label for="input-status" class="col-sm-3 control-label text-right">
+                                                <span class="text-right"
+                                                      style="font-size: large">{{$menu_category->name_en}}</span>
+                                            @if($collection->category_id != 1)
+                                                <input type="hidden" name="menu[{{$menu_category->id}}][id]"
+                                                       value="{{$menu_category->id}}">
+                                            @endif
+                                        </label>
+                                        <div class="col-sm-7">
+                                            <div class="control-group control-group-3">
+                                                @if($collection->category_id == 2 || $collection->category_id == 3)
+                                                    <div class="input-group">
+                                                        <input type="number"
+                                                               name="menu[{{$menu_category->id}}][min_qty]"
+                                                               class="form-control" min="1" value="{{old('menu.' . $menu_category->id . '.min_qty') ?? 1}}">
+                                                    </div>
+                                                    <div class="input-group">
+                                                        <input type="number"
+                                                               name="menu[{{$menu_category->id}}][max_qty]"
+                                                               class="form-control" min="1" value="{{old('menu.' . $menu_category->id . '.max_qty') ?? 1}}">
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @if($collection->category_id == 1)
+                                        @foreach($menu_category->menu as $menu)
+                                            <div class="form-group" id="collectionItems">
+                                                <label for="" class="col-sm-3 control-label"></label>
+                                                <div class="col-xs-3">
+                                                    <div class="checkbox" id="{{$menu->id}}">
+                                                        <label style="font-size: medium">
+                                                            <input id="item{{$menu->id}}" type="checkbox"
+                                                                   name="menu_item[{{$menu->id}}][id]"
+                                                                   value="{{$menu->id}}"
+                                                                   {{ (collect(old('menu_item.' . $menu->id . '.id'))->contains($menu->id)) ? 'checked':'' }} onclick="myFunction('{{$menu->id}}')">{{$menu->name_en}}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-3">
+                                                    <div class="control-group control-group-3">
+                                                        <div class="col-xs-3">
+                                                            <input type="number"
+                                                                   name="menu_item[{{$menu->id}}][qty]" id="qty{{$menu->id}}"
+                                                                   style="display: none{{ (collect(old('menu_item.' . $menu->id . '.id'))->contains($menu->id)) ? 'block':'' }}" {{(!old('menu_item.' . $menu->id . '.id')) ? 'disabled': '' }}
+                                                                   class="form-control" min="1" value="{{old('menu_item.' . $menu->id . '.qty') ?? 1}}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <div class="form-group" id="collectionItems">
+                                            <label for="" class="col-sm-3 control-label"></label>
+                                            <div class="col-xs-3">
+                                                <select id="items" name="menu_item[]"
+                                                        class="form-control" multiple
+                                                        placeholder="Select Items">
+                                                    @foreach($menu_category->menu as $menu)
+                                                        <option value="{{$menu->id}}" {{ (collect(old('menu_item'))->contains($menu->id)) ? 'selected':'' }}>{{$menu->name_en}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    @endif
+                                @endforeach
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-3 control-label"></label>
+                                        <div class="col-sm-5">
+                                            <label class="action">
+                                                <a class="btn btn-danger" type="button" id="editCancel">
+                                                   Cancel
+                                                </a>
+                                            </label>
+                                        </div>
+                                    </div>
                             </div>
                         </div>
                     </div>
@@ -622,6 +572,23 @@
         </div>
     </div>
     <script type="text/javascript">
+        $(document).ready(function () {
+            $('#collectionItems select').select2();
+        });
+        $('#itemsEdit').click(function () {
+            $('#menuItems').slideDown('fast');
+        });
+        $('#editCancel').click(function () {
+            $('#menuItems').slideUp('fast');
+            $('#collectionItems input[type=checkbox]').prop('checked', false);
+            $('#collectionItems input[type=number]').slideUp('fast');
+            $('#collectionItems input[type=number]').val(1);
+            $('#collectionItems input[type=number]').attr('disabled', true);
+            $("#collectionItems select").each(function () {
+                $(this).select2('val', '')
+            });
+            $('#collectionMenus input[type=number]').val(1);
+        });
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();

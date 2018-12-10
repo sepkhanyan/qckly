@@ -137,12 +137,11 @@
                                                 <td>{{$collection->category->name_en}}</td>
                                                 <td>{{$collection->price}}</td>
                                                 <td>{{$collection->mealtime->name_en}}</td>
-                                                <td>
-                                                    @if($collection->is_available == 1)
-                                                        <span class="label label-success">Is Available</span>
-                                                        @else
-                                                        <span class="label label-danger">Not Available</span>
-                                                        @endif
+                                                <td class="action">
+                                                        <a  href="{{ url('/collection/availability/edit/' . $collection->id )}}" class="btn btn-success{{($collection->is_available == 0) ? 'btn btn-danger' : ''}}">
+                                                            {{($collection->is_available == 0) ? 'Not Available' : 'Is Available'}}
+                                                            <i class="fa fa-pencil"></i>
+                                                        </a>
                                                 </td>
                                                 <td>{{$collection->id}}</td>
                                                 <td>

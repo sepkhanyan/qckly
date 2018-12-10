@@ -223,42 +223,6 @@
                                     </span>
                                 @endif
                             </div>
-                            <div class="form-group">
-                                <label for="is_available" class="col-sm-3 control-label">Is Available</label>
-                                <div class="col-sm-5">
-                                    <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                        @if(old('is_available') !== null)
-                                            <label class="btn btn-success{{ (old('is_available') == '1') ? ' active' : '' }}">
-                                                <input type="radio" name="is_available"
-                                                       value="1" {{ (old('is_available') == '1') ? 'checked' : '' }}>
-                                                Yes
-                                            </label>
-                                            <label class="btn btn-danger{{ (old('is_available') == '0') ? ' active' : '' }}">
-                                                <input type="radio" name="is_available"
-                                                       value="0" {{ (old('is_available') == '0') ? 'checked' : '' }}>
-                                                No
-                                            </label>
-                                        @else
-                                            <label class="btn btn-success{{$editingCollection->is_available == 1 ? ' active' : ''}}">
-                                                <input type="radio"
-                                                       name="is_available" value="1" {{$editingCollection->is_available == 1 ? 'checked' : ''}} >
-                                                Yes
-                                            </label>
-                                            <label class="btn btn-danger{{$editingCollection->is_available == 0 ? ' active' : ''}} ">
-                                                <input type="radio"
-                                                       name="is_available"
-                                                       value="0" {{$editingCollection->is_available == 0 ? 'checked' : ''}} >
-                                                No
-                                            </label>
-                                        @endif
-                                    </div>
-                                </div>
-                                @if ($collection->is_available != $editingCollection->is_available)
-                                    <span class="help-block">
-                                        <strong class="text-danger">Edited</strong>
-                                    </span>
-                                @endif
-                            </div>
                             @if($collection->category_id != 4)
                                 <div class="form-group{{ $errors->has('collection_price') ? ' has-error' : '' }}">
                                     <label for="input-price" class="col-sm-3 control-label">Price</label>

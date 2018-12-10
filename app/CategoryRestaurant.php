@@ -31,9 +31,4 @@ class CategoryRestaurant extends Model
         return $this->belongsTo('App\RestaurantCategory', 'category_id');
     }
 
-    public function collection()
-    {
-        return $this->hasMany('App\Collection', 'service_type');
-    }
-
 }

@@ -116,12 +116,13 @@ class RestaurantsController extends Controller
                     'daily_hours.open' => 'required',
                     'daily_hours.close' => 'required|after:daily_hours.open',
                 ]);
+                if ($validator->fails()) {
+                    return redirect()->back()
+                        ->withErrors($validator)
+                        ->withInput();
+                }
             }
-            if ($validator->fails()) {
-                return redirect()->back()
-                    ->withErrors($validator)
-                    ->withInput();
-            }
+
             if ($request->input('opening_type') == 'flexible') {
                 $validator = \Validator::make($request->all(), [
                     'flexible_hours.1.open' => 'required',
@@ -139,12 +140,13 @@ class RestaurantsController extends Controller
                     'flexible_hours.0.open' => 'required',
                     'flexible_hours.0.close' => 'required|after:flexible_hours.0.open',
                 ]);
+                if ($validator->fails()) {
+                    return redirect()->back()
+                        ->withErrors($validator)
+                        ->withInput();
+                }
             }
-            if ($validator->fails()) {
-                return redirect()->back()
-                    ->withErrors($validator)
-                    ->withInput();
-            }
+
             $restaurant = new Restaurant();
             $image = $request->file('image');
             $name = 'restaurant_' . time() . '.' . $image->getClientOriginalExtension();

@@ -50,9 +50,10 @@ class Collection extends Model
         return $this->belongsTo('App\CollectionCategory', 'category_id');
     }
 
-    public function categoryRestaurant()
+
+    public function unavailabilityHour()
     {
-        return $this->belongsTo('App\CategoryRestaurant', 'service_type');
+        return $this->hasMany('App\CollectionUnavailabilityHour', 'collection_id');
     }
 
     public function mealtime()
