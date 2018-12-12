@@ -23,7 +23,7 @@
                                         title="" onchange="top.location.href = this.options[this.selectedIndex].value">
                                     @if($selectedRestaurant)
                                         @foreach($restaurants as $restaurant)
-                                                <option value="{{url('/collections/' . $restaurant->id)}}" {{($restaurant->id == $selectedRestaurant->id) ? 'selected' : ''}}>{{$restaurant->name_en}}</option>
+                                            <option value="{{url('/collections/' . $restaurant->id)}}" {{($restaurant->id == $selectedRestaurant->id) ? 'selected' : ''}}>{{$restaurant->name_en}}</option>
                                         @endforeach
                                     @else
                                         <option value>Select Restaurant</option>
@@ -43,11 +43,11 @@
                 <div class="panel panel-default panel-table">
                     <div class="panel-heading">
                         <h3 class="panel-title">Collection List</h3>
-                                <div class="pull-right">
-                                    <button class="btn btn-filter btn-xs">
-                                        <i class="fa fa-filter"></i>
-                                    </button>
-                                </div>
+                        <div class="pull-right">
+                            <button class="btn btn-filter btn-xs">
+                                <i class="fa fa-filter"></i>
+                            </button>
+                        </div>
                     </div>
                     <div class="panel-body panel-filter" style="display: none;">
                         <form role="form" id="filter-form" accept-charset="utf-8" method="GET"
@@ -137,11 +137,26 @@
                                                 <td>{{$collection->category->name_en}}</td>
                                                 <td>{{$collection->price}}</td>
                                                 <td>{{$collection->mealtime->name_en}}</td>
-                                                <td class="action">
-                                                        <a  href="{{ url('/collection/availability/edit/' . $collection->id )}}" class="btn btn-success{{($collection->is_available == 0) ? 'btn btn-danger' : ''}}">
-                                                            {{($collection->is_available == 0) ? 'Not Available' : 'Is Available'}}
+                                                <td>
+                                                    @if($collection->is_available == 1)
+                                                        @php
+                                                            $unavailability = $collection->unavailabilityHour->where('collection_id', $collection->id)->where('weekday', $requestDay)
+                                                         ->where('start_time', '<=', $requestTime)
+                                                         ->where('end_time', '>=', $requestTime)
+                                                         ->where('status', 1)->first();
+                                                        @endphp
+                                                        <a href="{{ url('/collection/availability/edit/' . $collection->id )}}"
+                                                           class="{{($unavailability) ? 'btn btn-danger' : 'btn btn-success'}}">
+                                                            {{($unavailability) ? 'Not Available' : 'Is Available'}}
                                                             <i class="fa fa-pencil"></i>
                                                         </a>
+                                                    @elseif($collection->is_available == 0)
+                                                        <a href="{{ url('/collection/availability/edit/' . $collection->id )}}"
+                                                           class="btn btn-danger">
+                                                            Not Available
+                                                            <i class="fa fa-pencil"></i>
+                                                        </a>
+                                                    @endif
                                                 </td>
                                                 <td>{{$collection->id}}</td>
                                                 <td>
@@ -150,9 +165,9 @@
                                                     @elseif($collection->approved == 2)
                                                         <span class="label label-danger">Rejected</span>
                                                     @endif
-                                                        @if($collection->editingCollection)
-                                                            <span class="label label-default">Pending Edit Approval</span>
-                                                        @endif
+                                                    @if($collection->editingCollection)
+                                                        <span class="label label-default">Pending Edit Approval</span>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach

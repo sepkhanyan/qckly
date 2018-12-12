@@ -37,14 +37,14 @@
                                 <label for="" class="col-sm-3 control-label">Availability</label>
                                 <div class="col-sm-5">
                                     <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
-                                        <label class="btn btn-default{{$collection->is_available == 1 ? ' active' : ''}}{{ (old('is_available') == '0') ? 'btn btn-default' : '' }}">
+                                        <label class="btn btn-default{{(count($hours) == 0) ? ' active' : ''}}{{ (old('is_available') == '0') ? 'btn btn-default' : '' }}">
                                             <input type="radio" name="is_available"
-                                                   value="1" {{$collection->is_available == 1 ? 'checked' : ''}} {{ (old('is_available') == '1') ? 'checked' : '' }}>
+                                                   value="1" {{(count($hours) == 0) ? 'checked' : ''}} {{ (old('is_available') == '1') ? 'checked' : '' }}>
                                             Is Available
                                         </label>
-                                        <label class="btn btn-default{{$collection->is_available == 0 ? ' active' : ''}}{{ (old('is_available') == '0') ? ' active' : '' }} ">
+                                        <label class="btn btn-default{{(count($hours) > 0) ? ' active' : ''}}{{ (old('is_available') == '0') ? ' active' : '' }} ">
                                             <input type="radio" name="is_available"
-                                                   value="0" {{$collection->is_available == 0 ? 'checked' : ''}}{{ (old('is_available') == '0') ? 'checked' : '' }} >
+                                                   value="0" {{(count($hours) > 0) ? 'checked' : ''}}{{ (old('is_available') == '0') ? 'checked' : '' }} >
                                             Not Available
                                         </label>
                                     </div>
@@ -56,66 +56,21 @@
                                     <label for="" class="col-sm-3 control-label">Type</label>
                                     <div class="col-sm-5">
                                         <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
-                                            @if(old('type') !== null)
-                                                <label class="btn btn-success{{ (old('type') == '24_7') ? ' active' : '' }}"
-                                                       id="daily-flexible-hide">
-                                                    <input type="radio" name="type"
-                                                           value="24_7" {{ (old('type') == '24_7') ? 'checked' : '' }}>
-                                                    24/7
-                                                </label>
-                                                <label class="btn btn-success{{ (old('type') == 'daily') ? ' active' : '' }}"
-                                                       id="opening-daily-show">
-                                                    <input type="radio" name="type"
-                                                           value="daily" {{ (old('type') == 'daily') ? 'checked' : '' }}>
-                                                    Daily
-                                                </label>
-                                                <label class="btn btn-success{{ (old('type') == 'flexible') ? ' active' : '' }}"
-                                                       id="opening-flexible-show">
-                                                    <input type="radio" name="type"
-                                                           value="flexible" {{ (old('type') == 'flexible') ? 'checked' : '' }}>
-                                                    Flexible
-                                                </label>
-                                            @elseif($unavailability->type == '24_7')
-                                                <label class="btn btn-success active">
-                                                    <input type="radio" name="ype" value="24_7" checked="checked">
-                                                    24/7
-                                                </label>
-                                                <label class="btn btn-success">
-                                                    <input type="radio" name="type" value="daily">
-                                                    Daily
-                                                </label>
-                                                <label class="btn btn-success">
-                                                    <input type="radio" name="type" value="flexible">
-                                                    Flexible
-                                                </label>
-                                            @elseif($unavailability->type == 'daily')
-                                                <label class="btn btn-success ">
-                                                    <input type="radio" name="type" value="24_7">
-                                                    24/7
-                                                </label>
-                                                <label class="btn btn-success active">
-                                                    <input type="radio" name="type" value="daily" checked="checked">
-                                                    Daily
-                                                </label>
-                                                <label class="btn btn-success">
-                                                    <input type="radio" name="type" value="flexible">
-                                                    Flexible
-                                                </label>
-                                            @else
-                                                <label class="btn btn-success ">
-                                                    <input type="radio" name="type" value="24_7">
-                                                    24/7
-                                                </label>
-                                                <label class="btn btn-success ">
-                                                    <input type="radio" name="type" value="daily">
-                                                    Daily
-                                                </label>
-                                                <label class="btn btn-success active">
-                                                    <input type="radio" name="type" value="flexible"
-                                                           checked="checked">
-                                                    Flexible
-                                                </label>
-                                            @endif
+                                                    <label @if(old('type'))class="btn btn-success{{ (old('type') == '24_7') ? ' active' : '' }}" @elseif($unavailability !== null) class="btn btn-success{{($unavailability->type == '24_7') ? ' active' : ''}}" @else class="btn btn-success active" @endif>
+                                                        <input type="radio" name="type" value="24_7"
+                                                               @if(old('type')){{ (old('type') == '24_7') ? 'checked' : '' }} @elseif($unavailability !== null) {{($unavailability->type == '24_7') ? 'checked' : ''}} @else checked="checked" @endif>
+                                                        24/7
+                                                    </label>
+                                                    <label @if(old('type'))class="btn btn-success{{ (old('type') == 'daily') ? ' active' : '' }}" @else class="btn btn-success{{($unavailability !== null && $unavailability->type == 'daily') ? ' active' : ''}}"@endif>
+                                                        <input type="radio" name="type"
+                                                               value="daily" @if(old('type')) {{ (old('type') == 'daily') ? 'checked' : '' }} @else {{($unavailability !== null && $unavailability->type == 'daily') ? 'checked' : ''}}@endif>
+                                                        Daily
+                                                    </label>
+                                                    <label @if(old('type'))class="btn btn-success{{ (old('type') == 'flexible') ? ' active' : '' }}" @else class="btn btn-success{{($unavailability !== null && $unavailability->type == 'flexible') ? ' active' : ''}}"@endif>
+                                                        <input type="radio" name="type"
+                                                               value="flexible" @if(old('type')) {{ (old('type') == 'flexible') ? 'checked' : '' }} @else {{($unavailability !== null && $unavailability->type == 'flexible') ? 'checked' : ''}}@endif>
+                                                        Flexible
+                                                    </label>
                                         </div>
                                     </div>
                                 </div>
@@ -181,7 +136,7 @@
                                                 <div class="input-group">
                                                     <input id="clock-show" type="text" name="daily_hours[start]"
                                                            class="form-control timepicker"
-                                                           value="@if($unavailability->type == 'daily'){{ old('daily_hours.start') ?? date("g:i A", strtotime($unavailability->start_time)) }}@else{{ old('daily_hours.start') ?? '09:00 AM' }}@endif"/>
+                                                           value="@if($unavailability !== null && $unavailability->type == 'daily'){{ old('daily_hours.start') ?? date("g:i A", strtotime($unavailability->start_time)) }}@else{{ old('daily_hours.start') ?? '09:00 AM' }}@endif"/>
                                                     <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
@@ -189,7 +144,7 @@
                                                 <div class="input-group">
                                                     <input type="text" name="daily_hours[end]"
                                                            class="form-control timepicker"
-                                                           value="@if($unavailability->type == 'daily'){{ old('daily_hours.end') ?? date("g:i A", strtotime($unavailability->end_time))   }}@else{{ old('daily_hours.end') ??  '11:59 PM'   }}@endif"/>
+                                                           value="@if($unavailability !== null && $unavailability->type == 'daily'){{ old('daily_hours.end') ?? date("g:i A", strtotime($unavailability->end_time))   }}@else{{ old('daily_hours.end') ??  '11:59 PM'   }}@endif"/>
                                                     <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
@@ -222,7 +177,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @if($unavailability->type == 'flexible')
+                                    @if($unavailability !== null && $unavailability->type == 'flexible')
                                         @foreach($hours as $hour)
                                             <div class="form-group{{ $errors->has('flexible_hours.' . $hour->weekday . '.start') ? ' has-error' : '' }}{{ $errors->has('flexible_hours.' . $hour->weekday . '.end') ? ' has-error' : '' }}">
                                                 <label for="input-status" class="col-sm-3 control-label text-right">
@@ -321,7 +276,7 @@
                                                     <div class="input-group">
                                                         <input type="text" name="flexible_hours[1][start]"
                                                                class="form-control timepicker"
-                                                               value="{{ old('flexible_hours.1.start') ?? '12:00 AM' }}"/>
+                                                               value="{{ old('flexible_hours.1.start') ?? '09:00 AM' }}"/>
                                                         <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
@@ -370,7 +325,7 @@
                                                     <div class="input-group">
                                                         <input type="text" name="flexible_hours[2][start]"
                                                                class="form-control timepicker"
-                                                               value="{{ old('flexible_hours.2.start') ?? '12:00 AM' }}"/>
+                                                               value="{{ old('flexible_hours.2.start') ?? '09:00 AM' }}"/>
                                                         <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
@@ -419,7 +374,7 @@
                                                     <div class="input-group">
                                                         <input type="text" name="flexible_hours[3][start]"
                                                                class="form-control timepicker"
-                                                               value="{{ old('flexible_hours.3.start') ?? '12:00 AM' }}"/>
+                                                               value="{{ old('flexible_hours.3.start') ?? '09:00 AM' }}"/>
                                                         <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
@@ -468,7 +423,7 @@
                                                     <div class="input-group">
                                                         <input type="text" name="flexible_hours[4][start]"
                                                                class="form-control timepicker"
-                                                               value="{{ old('flexible_hours.4.start') ?? '12:00 AM' }}"/>
+                                                               value="{{ old('flexible_hours.4.start') ?? '09:00 AM' }}"/>
                                                         <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
@@ -517,7 +472,7 @@
                                                     <div class="input-group">
                                                         <input type="text" name="flexible_hours[5][start]"
                                                                class="form-control timepicker"
-                                                               value="{{ old('flexible_hours.5.start') ?? '12:00 AM' }}"/>
+                                                               value="{{ old('flexible_hours.5.start') ?? '09:00 AM' }}"/>
                                                         <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
@@ -566,7 +521,7 @@
                                                     <div class="input-group">
                                                         <input type="text" name="flexible_hours[6][start]"
                                                                class="form-control timepicker"
-                                                               value="{{ old('flexible_hours.6.start') ?? '12:00 AM' }}"/>
+                                                               value="{{ old('flexible_hours.6.start') ?? '09:00 AM' }}"/>
                                                         <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
@@ -615,7 +570,7 @@
                                                     <div class="input-group">
                                                         <input type="text" name="flexible_hours[0][start]"
                                                                class="form-control timepicker"
-                                                               value="{{ old('flexible_hours.0.start') ?? '12:00 AM' }}"/>
+                                                               value="{{ old('flexible_hours.0.start') ?? '09:00 AM' }}"/>
                                                         <span class="input-group-addon">
                                                 <i class="fa fa-clock-o"></i>
                                             </span>

@@ -62,13 +62,17 @@ class CollectionsController extends Controller
             $selectedRestaurant = Restaurant::find($user->restaurant_id);
             $collections = $collections->orderby('approved', 'asc')->paginate(20);
         }
+        $requestDay = Carbon::today()->dayOfWeek;
+        $requestTime = Carbon::now()->toTimeString();
         return view('collections', [
             'id' => $id,
             'categories' => $categories,
             'collections' => $collections,
             'restaurants' => $restaurants,
             'selectedRestaurant' => $selectedRestaurant,
-            'user' => $user
+            'user' => $user,
+            'requestDay' => $requestDay,
+            'requestTime' => $requestTime
         ]);
     }
 
@@ -184,7 +188,6 @@ class CollectionsController extends Controller
             $restaurant_id = $user->restaurant_id;
         }
         $category = $request->input('category');
-        $service = $request->input('service_type');
         $collection = New Collection();
         $collection->restaurant_id = $restaurant_id;
         $collection->category_id = $category;
@@ -241,11 +244,6 @@ class CollectionsController extends Controller
             $collection->approved = 1;
         }
         $collection->save();
-        $hour = new CollectionUnavailabilityHour();
-        $hour->type = '24_7';
-        $hour->status = 0;
-        $hour->collection_id = $collection->id;
-        $hour->save();
         if ($collection->category_id == 1) {
             foreach ($request['menu_item'] as $menu_item) {
                 $collection_item = new CollectionItem();
@@ -328,9 +326,11 @@ class CollectionsController extends Controller
         }
         $unavailability = CollectionUnavailabilityHour::where('collection_id', $collection->id)->first();
         $hours = CollectionUnavailabilityHour::where('collection_id', $collection->id)->get();
-
-        foreach ($hours as $key => $value) {
-            $week[$value->weekday] = [];
+        $week = [];
+        if(count($hours) > 0){
+            foreach ($hours as $key => $value) {
+                $week[$value->weekday] = [];
+            }
         }
         return view('collection_availability_edit', [
             'collection' => $collection,
@@ -351,8 +351,6 @@ class CollectionsController extends Controller
                 return redirect()->back();
             }
         }
-
-        if ($request->has('is_available')) {
             if ($request->input('is_available') == 0) {
                 if ($request->input('type') == 'daily') {
                     $validator = \Validator::make($request->all(), [
@@ -390,57 +388,47 @@ class CollectionsController extends Controller
                             ->withInput();
                     }
                 }
-                Collection::where('id', $id)->update(['is_available' => 0]);
+                CollectionUnavailabilityHour::where('collection_id', $id)->delete();
                 if ($request->input('type') == '24_7') {
-                    $hour = CollectionUnavailabilityHour::where('collection_id', $id)->where('type', '24_7')->first();
-                    if (!$hour) {
-                        CollectionUnavailabilityHour::where('collection_id', $id)->delete();
-                        $hour = new CollectionUnavailabilityHour();
-                    }
+                    $hour = new CollectionUnavailabilityHour();
                     $hour->type = $request->input('type');
                     $hour->status = 1;
                     $hour->collection_id = $collection->id;
                     $hour->save();
+                    Collection::where('id', $collection->id)->update(['is_available' => 0]);
                 } elseif ($request->input('type') == 'daily') {
+                    Collection::where('id', $collection->id)->update(['is_available' => 1]);
                     $days = $request->input('daily_days');
                     if ($days) {
-                        $hour = CollectionUnavailabilityHour::where('collection_id', $id)->where('type', '24_7')->first();
-                        if ($hour) {
-                            $hour->delete();
-                        }
                         foreach ($days as $day) {
                             $daily = $request->input('daily_hours');
-                            $hour = CollectionUnavailabilityHour::updateOrCreate(
-                                ['weekday' => $day, 'collection_id' => $id],
-                                ['type' => $request->input('type'),
-                                    'status' => 1,
-                                    'start_time' => Carbon::parse($daily['start']),
-                                    'end_time' => Carbon::parse($daily['end'])
-                                ]
-                            );
+                            $hour = new CollectionUnavailabilityHour();
+                            $hour->weekday = $day;
+                            $hour->collection_id = $collection->id;
+                            $hour->type = $request->input('type');
+                            $hour->status = 1;
+                            $hour->start_time = Carbon::parse($daily['start']);
+                            $hour->end_time = Carbon::parse($daily['end']);
+                            $hour->save();
                         }
                     }
                 } elseif ($request->input('type') == 'flexible') {
-                    $hour = CollectionUnavailabilityHour::where('collection_id', $id)->where('type', '24_7')->first();
-                    if ($hour) {
-                        $hour->delete();
-                    }
+                    Collection::where('id', $collection->id)->update(['is_available' => 1]);
                     foreach ($request->input('flexible_hours') as $flexible) {
-                        $hour = CollectionUnavailabilityHour::updateOrCreate(
-                            ['weekday' => $flexible['day'], 'collection_id' => $id],
-                            ['type' => $request->input('type'),
-                                'status' => $flexible['status'],
-                                'start_time' => Carbon::parse($flexible['start']),
-                                'end_time' => Carbon::parse($flexible['end'])
-                            ]
-                        );
+                        $hour = new CollectionUnavailabilityHour();
+                        $hour->weekday = $flexible['day'];
+                        $hour->collection_id = $collection->id;
+                        $hour->type = $request->input('type');
+                        $hour->status = $flexible['status'];
+                        $hour->start_time = Carbon::parse($flexible['start']);
+                        $hour->end_time = Carbon::parse($flexible['end']);
+                        $hour->save();
                     }
                 }
-            } else {
-                Collection::where('id', $id)->update(['is_available' => 1]);
-                CollectionUnavailabilityHour::where('collection_id', $id)->update(['status' => 0]);
+            }else {
+                CollectionUnavailabilityHour::where('collection_id', $id)->delete();
+                Collection::where('id', $collection->id)->update(['is_available' => 1]);
             }
-        }
         return redirect('/collections/' . $collection->restaurant_id);
     }
 

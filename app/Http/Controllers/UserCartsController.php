@@ -15,6 +15,7 @@ use App\WorkingHour;
 use Carbon\Carbon;
 use App\User;
 use App\CollectionMenu;
+use App\CollectionUnavailabilityHour;
 
 
 //use Illuminate\Foundation\Auth\User;
@@ -578,10 +579,21 @@ class UserCartsController extends Controller
                 }
                 $foodlist = [];
                 $foodlist_images = [];
-                if ($collection->is_available == 1) {
-                    $is_available = true;
-                } else {
-                    $is_available = false;
+                $requestDay = Carbon::today()->dayOfWeek;
+                $requestTime = Carbon::now()->toTimeString();
+                if($collection->is_available == 1){
+                    $unavailability = CollectionUnavailabilityHour::where('collection_id', $collection->id)->where('weekday', $requestDay)
+                        ->where('start_time', '<=', $requestTime)
+                        ->where('end_time', '>=', $requestTime)
+                        ->where('status', 1)->first();
+
+                    if($unavailability){
+                        $collectionStatus = 0;
+                    }else{
+                        $collectionStatus = 1;
+                    }
+                }elseif($collection->is_available == 0){
+                    $collectionStatus = 0;
                 }
                 $setup = '';
                 $max = '';
@@ -756,7 +768,7 @@ class UserCartsController extends Controller
                     'collection_max_qty' => $collection_max,
                     'collection_price' => $collection_price,
                     'collection_price_unit' => \Lang::get('message.priceUnit'),
-                    'is_available' => $is_available,
+                    'collection_status' => $collectionStatus,
                     'min_serve_to_person' => $min_serve,
                     'max_serve_to_person' => $max_serve,
                     'allow_person_increase' => $person_increase,

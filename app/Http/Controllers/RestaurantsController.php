@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\CollectionMenu;
+use App\CollectionUnavailabilityHour;
 use App\EditingCategoryRestaurant;
 use App\EditingRestaurant;
 use App\EditingRestaurantArea;
@@ -567,50 +568,38 @@ class RestaurantsController extends Controller
 
             $opening_type = $request->input('opening_type');
             if ($opening_type) {
-                if ($request->input('opening_type') == '24_7') {
-                    $working = WorkingHour::where('restaurant_id', $restaurant->id)->where('type', '24_7')->first();
-                    if (!$working) {
-                        WorkingHour::where('restaurant_id', $restaurant->id)->delete();
-                        $working = new WorkingHour();
-                    }
+                WorkingHour::where('restaurant_id', $restaurant->id)->delete();
+                if ($opening_type == '24_7') {
+                    $working = new WorkingHour();
                     $working->type = $request->input('opening_type');
                     $working->status = 1;
                     $working->restaurant_id = $restaurant->id;
                     $working->save();
-                } elseif ($request->input('opening_type') == 'daily') {
+                } elseif ($opening_type == 'daily') {
                     $days = $request->input('daily_days');
                     if ($days) {
-                        $work = WorkingHour::where('restaurant_id', $restaurant->id)->where('type', '24_7')->first();
-                        if ($work) {
-                            $work->delete();
-                        }
                         foreach ($days as $day) {
-//                            $working = new WorkingHour();
+                            $working = new WorkingHour();
+                            $working->type = $request->input('opening_type');
+                            $working->weekday = $day;
+                            $working->status = 1;
+                            $working->restaurant_id = $restaurant->id;
                             $daily = $request->input('daily_hours');
-                            $working = WorkingHour::updateOrCreate(
-                                ['weekday' => $day, 'restaurant_id' => $restaurant->id],
-                                ['type' => $request->input('opening_type'),
-                                    'status' => 1,
-                                    'opening_time' => Carbon::parse($daily['open']),
-                                    'closing_time' => Carbon::parse($daily['close'])
-                                ]
-                            );
+                            $working->opening_time = Carbon::parse($daily['open']);
+                            $working->closing_time = Carbon::parse($daily['close']);
+                            $working->save();
                         }
                     }
-                } elseif ($request->input('opening_type') == 'flexible') {
-                    $work = WorkingHour::where('restaurant_id', $restaurant->id)->where('type', '24_7')->first();
-                    if ($work) {
-                        $work->delete();
-                    }
+                } elseif ($opening_type == 'flexible') {
                     foreach ($request->input('flexible_hours') as $flexible) {
-                        $working = WorkingHour::updateOrCreate(
-                            ['weekday' => $flexible['day'], 'restaurant_id' => $restaurant->id],
-                            ['type' => $request->input('opening_type'),
-                                'status' => $flexible['status'],
-                                'opening_time' => Carbon::parse($flexible['open']),
-                                'closing_time' => Carbon::parse($flexible['close'])
-                            ]
-                        );
+                        $working = new WorkingHour();
+                        $working->restaurant_id = $restaurant->id;
+                        $working->type = $request->input('opening_type');
+                        $working->weekday = $flexible['day'];
+                        $working->opening_time = Carbon::parse($flexible['open']);
+                        $working->closing_time = Carbon::parse($flexible['close']);
+                        $working->status = $flexible['status'];
+                        $working->save();
                     }
                 }
             }
@@ -1224,13 +1213,26 @@ class RestaurantsController extends Controller
                             } else {
                                 $female_caterer_available = false;
                             }
+
+                            $requestDay = Carbon::today()->dayOfWeek;
+                            $requestTime = Carbon::now()->toTimeString();
+//                            dd($requestTime);
+                            if($collection->is_available == 1){
+                                $unavailability = CollectionUnavailabilityHour::where('collection_id', $collection->id)->where('weekday', $requestDay)
+                                    ->where('start_time', '<=', $requestTime)
+                                    ->where('end_time', '>=', $requestTime)
+                                    ->where('status', 1)->first();
+
+                                if($unavailability){
+                                    $collectionStatus = 0;
+                                }else{
+                                    $collectionStatus = 1;
+                                }
+                            }elseif($collection->is_available == 0){
+                                $collectionStatus = 0;
+                            }
                             $foodlist = [];
                             $foodlist_images = [];
-                            if ($collection->is_available == 1) {
-                                $is_available = true;
-                            } else {
-                                $is_available = false;
-                            }
                             $setup = '';
                             $max = '';
                             $requirement = '';
@@ -1411,7 +1413,7 @@ class RestaurantsController extends Controller
                                 'collection_max_qty' => $collection_max,
                                 'collection_price' => $collection_price,
                                 'collection_price_unit' => \Lang::get('message.priceUnit'),
-                                'is_available' => $is_available,
+                                'collection_status' => $collectionStatus,
                                 'min_serve_to_person' => $min_serve,
                                 'max_serve_to_person' => $max_serve,
                                 'allow_person_increase' => $person_increase,
@@ -1428,9 +1430,9 @@ class RestaurantsController extends Controller
                                 'menu_items' => $menu
                             ];
                         }
-                        usort($menu_collection, function ($menu1, $menu2) {
-                            return $menu2['is_available'] <=> $menu1['is_available'];
-                        });
+//                        usort($menu_collection, function ($menu1, $menu2) {
+//                            return $menu2['is_available'] <=> $menu1['is_available'];
+//                        });
                         $arr = [
                             'restaurant_id' => $restaurant->id,
                             'collections' => $menu_collection
