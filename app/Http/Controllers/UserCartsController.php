@@ -60,7 +60,7 @@ class UserCartsController extends Controller
             $validator = \Validator::make($DataRequests, [
                 'collection_category_id' => 'required|integer',
                 'collection_id' => 'required|integer',
-                'service_type_id' => 'required|integer',
+//                'service_type_id' => 'required|integer',
                 'female_caterer' => 'required|integer',
             ]);
             if ($validator->fails()) {
