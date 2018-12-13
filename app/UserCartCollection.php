@@ -12,6 +12,7 @@ class UserCartCollection extends Model
     protected $fillable = [
         'cart_id',
         'collection_id',
+        'service_type',
         'price',
         'quantity',
         'persons_count',
@@ -41,5 +42,10 @@ class UserCartCollection extends Model
     public function restaurant()
     {
         return $this->belongsTo('App\Restaurant', 'restaurant_id');
+    }
+
+    public function serviceType()
+    {
+        return $this->belongsTo('App\CategoryRestaurant', 'service_type');
     }
 }

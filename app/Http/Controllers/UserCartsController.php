@@ -58,8 +58,9 @@ class UserCartsController extends Controller
         if ($user) {
             $DataRequests = $request->all();
             $validator = \Validator::make($DataRequests, [
-                'collection_type' => 'required|integer',
+                'collection_category_id' => 'required|integer',
                 'collection_id' => 'required|integer',
+                'service_type_id' => 'required|integer',
                 'female_caterer' => 'required|integer',
             ]);
             if ($validator->fails()) {
@@ -67,7 +68,7 @@ class UserCartsController extends Controller
                     'message' => 'Invalid inputs',
                     'error_details' => $validator->messages()));
             } else {
-                $collection_type = $DataRequests['collection_type'];
+                $collection_type = $DataRequests['collection_category_id'];
                 $collection_id = $DataRequests['collection_id'];
                 $female_caterer = $DataRequests['female_caterer'];
                 $special_instruction = '';
@@ -466,8 +467,8 @@ class UserCartsController extends Controller
                             'restaurant_id' => $cart_collection->collection->restaurant->id,
                             'restaurant_name' => $restaurant_name,
                             'collection_id' => $cart_collection->collection_id,
-                            'collection_type_id' => $cart_collection->collection->category_id,
-                            'collection_type' => $collection_type,
+                            'collection_category_id' => $cart_collection->collection->category_id,
+                            'collection_category' => $collection_type,
                             'collection_name' => $collection_name,
                             'collection_price' => $collection_price,
                             'collection_price_unit' => \Lang::get('message.priceUnit'),
@@ -560,7 +561,7 @@ class UserCartsController extends Controller
         }
         $DataRequests = $request->all();
         $validator = \Validator::make($DataRequests, [
-            'collection_type' => 'required|integer',
+            'collection_category_id' => 'required|integer',
             'collection_id' => 'required|integer',
         ]);
         if ($validator->fails()) {
@@ -568,7 +569,7 @@ class UserCartsController extends Controller
                 'message' => 'Invalid inputs',
                 'error_details' => $validator->messages()));
         } else {
-            $collection_type = $DataRequests['collection_type'];
+            $collection_type = $DataRequests['collection_category_id'];
             $collection_id = $DataRequests['collection_id'];
             $collection = Collection::where('id', $collection_id)->with('collectionItem.menu')->first();
             if ($collection) {
@@ -759,8 +760,8 @@ class UserCartsController extends Controller
                     'collection_id' => $collection->id,
                     'collection_name' => $collection_name,
                     'collection_description' => $collection_description,
-                    'collection_type_id' => $collection->category_id,
-                    'collection_type' => $collection_type,
+                    'collection_category_id' => $collection->category_id,
+                    'collection_category' => $collection_type,
                     'female_caterer_available' => $female_caterer_available,
                     'mealtime_id' => $collection->mealtime_id,
                     'mealtime' => $mealtime,

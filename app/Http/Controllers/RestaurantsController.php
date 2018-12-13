@@ -1399,13 +1399,31 @@ class RestaurantsController extends Controller
                                 $service_presentation = $collection->service_presentation_en;
                             }
 
+
+                            $services = [];
+                            foreach ($restaurant->categoryRestaurant as $categoryRestaurant) {
+                                if ($lang == 'ar') {
+                                    $service_type = $categoryRestaurant->name_ar;
+
+                                } else {
+                                    $service_type = $categoryRestaurant->name_en;
+                                }
+                                $service = [
+                                    'service_type_id' => $categoryRestaurant->category_id,
+                                    'service_type' => $service_type,
+                                ];
+                                array_push($services, $service);
+                            }
+
+
                             $menu_collection [] = [
                                 'collection_id' => $collection->id,
                                 'collection_name' => $collection_name,
                                 'collection_image' => url('/') . '/images/' . $collection->image,
                                 'collection_description' => $collection_description,
-                                'collection_type_id' => $collection->category_id,
-                                'collection_type' => $collection_type,
+                                'collection_category_id' => $collection->category_id,
+                                'collection_category' => $collection_type,
+                                'services' => $services,
                                 'female_caterer_available' => $female_caterer_available,
                                 'mealtime_id' => $collection->mealtime_id,
                                 'mealtime' => $mealtime,
@@ -1433,9 +1451,12 @@ class RestaurantsController extends Controller
 //                        usort($menu_collection, function ($menu1, $menu2) {
 //                            return $menu2['is_available'] <=> $menu1['is_available'];
 //                        });
+
+
+
                         $arr = [
                             'restaurant_id' => $restaurant->id,
-                            'collections' => $menu_collection
+                            'collections' => $menu_collection,
                         ];
                     } else {
                         return response()->json(array(
