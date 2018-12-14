@@ -288,6 +288,46 @@ class CollectionsController extends Controller
         return redirect('/collections/' . $restaurant_id);
     }
 
+    public function collectionCopy($id)
+    {
+        $user = Auth::user();
+        $collection = Collection::find($id);
+        $restaurant = Restaurant::where('id', $collection->restaurant_id)->first();
+        if ($user->admin == 2) {
+            $collection = Collection::where('id', $id)->where('restaurant_id', $user->restaurant_id)->first();
+            $restaurant = Restaurant::where('id', $user->restaurant_id)->first();
+            if (!$collection) {
+                return redirect()->back();
+            }
+        }
+        $collection_menus = CollectionMenu::where('collection_id', $collection->id)->with(['collectionItem' => function ($query) use ($collection) {
+            $query->where('collection_id', $collection->id);
+        }])->whereHas('collectionItem', function ($q) use ($collection) {
+            $q->where('collection_id', $collection->id);
+        })->get();
+        $menu_categories = MenuCategory::where('restaurant_id', $restaurant->id)->whereHas('menu', function ($query) {
+            $query->where('approved', 1);
+        })->with(['menu' => function ($q) {
+            $q->where('approved', 1);
+        }])->get();
+        $menu_items = CollectionItem::where('collection_id', $collection->id)->get();
+        $categories = CollectionCategory::all();
+        $mealtimes = Mealtime::all();
+        $categoryRestaurants = CategoryRestaurant::where('restaurant_id', $restaurant->id)->whereDoesntHave('collection', function($query)use($collection){
+            $query->where('id', $collection->id);
+        })->get();
+        return view('collection_copy', [
+            'collection' => $collection,
+            'categories' => $categories,
+            'menu_categories' => $menu_categories,
+            'mealtimes' => $mealtimes,
+            'collection_menus' => $collection_menus,
+            'menu_items' => $menu_items,
+            'categoryRestaurants' => $categoryRestaurants,
+            'user' => $user
+        ]);
+    }
+
     /**
      * Display the specified resource.
      *

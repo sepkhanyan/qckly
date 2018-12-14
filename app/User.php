@@ -69,15 +69,6 @@ class User extends Authenticatable
         return $this->hasMany('App\ImageTool', 'user_id');
     }
 
-//    public static function getUserByToken($api_token){
-//        $token = str_replace("Bearer ","" ,$api_token);
-//        $user = User::where('api_token', '=',$token)->first();
-//
-//        if($user){
-//            return $user->id;
-//        }
-//        return false;
-//    }
 
     public function scopeName($query, $val)
     {
@@ -87,5 +78,15 @@ class User extends Authenticatable
         }
 
         return $query;
+    }
+
+    public static function getUserByToken($req_auth){
+       $acual_token = str_replace("Bearer ","" ,$req_auth);
+       $ud = \DB::table('users')->where('api_token', '=',$acual_token)->first();
+
+       if($ud){
+           return $ud->id;
+       }
+       return false;
     }
 }

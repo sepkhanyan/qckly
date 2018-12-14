@@ -9,6 +9,7 @@ use App\Restaurant;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Auth;
+use App\Device;
 
 
 class UsersController extends Controller
@@ -510,6 +511,84 @@ class UsersController extends Controller
         $admin->save();
         return redirect('/');
 
+    }
+
+    public function changeLangauge(Request $request)
+    {
+        $lang = $request->get('lang');
+        $userId =$request->header('Authorization');
+        if ($userId) {
+            $user_id = User::getUserByToken($userId);
+        } else {
+            $user_id = Auth::id();
+        }
+        $lang = $request->get('lang');
+        $user = User::where('id',$user_id)->update(['lang'=>$lang]);
+        if ($user) {
+            return response()->json(array('success' => 0, 'status_code' => 200, 'message' => 'Language changed successfully'));
+
+
+        }
+    }
+
+
+    public function allDevicesPost(Request $request)
+    {
+        $req_auth = $request->header('Authorization');
+        $req_lang = $request->header('Accept-Language');
+
+        $newuser = $request->all();
+        $validator = \Validator::make($newuser, [                
+            'device_token' => 'required',
+            'device_type' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(array('success' => 1, 'status_code' => 400, \Lang::get('message.invalid_inputs'),
+                'error_details' => $validator->messages()));
+        } else {
+            $device_exist = Device::where('device_token', $request->get('device_token'))->get();
+            if (count($device_exist) > 0) {
+                if (isset($req_lang) && isset($req_auth)) {
+                    $user_id = User::getUserByToken($req_auth);
+                    $doneSend = Device::where('device_token', $request->get('device_token'))
+                        ->update([
+                            'user_id' => $user_id,
+                            'lang' => $req_lang]);
+                    if ($doneSend) {
+                        return response()->json(array('success' => 0, 'status_code' => 200, 'message' => 'successfully registered'));
+                    }
+                } else {
+                    $doneSend = Device::where('device_token', $request->get('device_token'))
+                        ->update([
+                            'device_token' => $request->get('device_token')]);
+                    if ($doneSend) {
+                        return response()->json(array('success' => 0, 'status_code' => 200, 'message' => 'successfully registered'));
+                    }
+                }
+            } else {
+                if (isset($req_lang) && isset($req_auth)) {
+                    $user_id = User::getUserByToken($req_auth);
+                    Device::create(array(
+                            'device_token' => $request->get('device_token'),
+                            'device_type' => $request->get('device_type'),
+                            'user_id' => $user_id,
+                            'lang' => $req_lang
+                        )
+                    );
+                } else {
+                    Device::create(array(
+                            'device_token' => $request->get('device_token'),
+                            'device_type' => $request->get('device_type')
+                        )
+                    );
+                }
+                return response()->json(array('success' => 0, 'status_code' => 200,
+                    'message' => 'successfully registered'));
+
+            }
+
+
+        }
     }
 
 }

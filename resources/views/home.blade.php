@@ -535,7 +535,7 @@
         </div>
     </div>
 </div>
-<script type="text/javascript"><!--
+<script type="text/javascript">
     $(document).ready(function () {
         $('.timepicker').timepicker({
             // defaultTime: '11:45 AM'
@@ -604,7 +604,7 @@
         });
 
     });
-    //--></script>
+    </script>
 <script type="text/javascript">
     $(document).ready(function () {
 

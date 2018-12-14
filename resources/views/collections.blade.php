@@ -120,8 +120,7 @@
                                                     </a>&nbsp;&nbsp;
 
                                                     {{--<a class="btn btn-edit" title=""--}}
-                                                       {{--data-toggle="modal"--}}
-                                                       {{--data-target="#modalCopyCollection" onclick="copyCollection('{{$collection->id}}')">--}}
+                                                       {{--href="{{ url('/collection/copy/' . $collection->id )}}">--}}
                                                         {{--Copy Collection--}}
                                                         {{--<i class="fa fa-copy"></i>--}}
                                                     {{--</a>&nbsp;--}}
