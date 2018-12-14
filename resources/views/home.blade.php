@@ -567,6 +567,16 @@
             }
         });
 
+        $('input[name="service_type"]').on('change', function () {
+            if (this.value == 'Delivery') {
+                $('#delivery_hours').slideDown('fast');
+
+            }else{
+                $('#delivery_hours').slideUp('fast');
+            }
+
+        });
+
 
         $('input[name="is_available"]').on('change', function () {
             if (this.value == '1') {

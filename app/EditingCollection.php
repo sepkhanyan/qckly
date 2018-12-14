@@ -11,7 +11,9 @@ class EditingCollection extends Model
 
     protected $fillable = [
         'restaurant_id',
-        'category_id',
+        'collection_id',
+        'service_type_id',
+        'delivery_hours',
         'is_available',
         'price',
         'name_en',
@@ -35,6 +37,11 @@ class EditingCollection extends Model
         'min_serve_to_person',
         'max_serve_to_person',
     ];
+
+    public function serviceType()
+    {
+        return $this->belongsTo('App\CategoryRestaurant', 'service_type_id');
+    }
 
     public function mealtime()
     {

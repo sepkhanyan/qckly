@@ -13,6 +13,7 @@ class Collection extends Model
         'restaurant_id',
         'category_id',
         'service_type_id',
+        'delivery_hours',
         'is_available',
         'price',
         'name_en',

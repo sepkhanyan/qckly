@@ -1346,6 +1346,7 @@ class RestaurantsController extends Controller
                                         }
 
 
+
                                         if ($collection_item->menu->status == 1) {
                                             $status = true;
                                         } else {
@@ -1380,6 +1381,17 @@ class RestaurantsController extends Controller
 //                                        $x->where('collection_id', $collection->id);
 //                                    });
 //                                }])->get();
+
+                            }
+                            $delivery_time = '';
+                            if($collection->serviceType->name_en == 'Delivery'){
+                                $delivery_hours = $collection->delivery_hours / 60;
+                                $delivery_minutes = $collection->delivery_hours % 60;
+                                if ($delivery_minutes > 0) {
+                                    $delivery_time = floor($delivery_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($delivery_minutes) . ' ' . \Lang::get('message.minute');
+                                } else {
+                                    $delivery_time = floor( $delivery_hours) . ' ' . \Lang::get('message.hour');
+                                }
 
                             }
 
@@ -1423,6 +1435,7 @@ class RestaurantsController extends Controller
                                 'persons_max_count' => $max_persons,
                                 'service_type_id' => $collection->service_type_id,
                                 'service_type' => $service_type,
+                                'delivery_hours' =>  $delivery_time,
                                 'service_provide' => $service_provide,
                                 'service_presentation' => $service_presentation,
                                 'food_list' => $foodlist,

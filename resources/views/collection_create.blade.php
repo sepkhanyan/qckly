@@ -28,6 +28,9 @@
                         <li>
                             <a href="#menus" data-toggle="tab">Collection Items</a>
                         </li>
+                        <li>
+                            <a href="#data" data-toggle="tab">Service</a>
+                        </li>
                     </ul>
                 </div>
                 <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST" enctype="multipart/form-data"
@@ -40,16 +43,6 @@
                             @endif
                             <h4 class="tab-pane-title">{{$collection_category->name_en}}</h4>
                             <input type="hidden" name="category" value="{{$collection_category->id}}">
-                                <div class="form-group">
-                                    <label for="input_service" class="col-sm-3 control-label">Service Type</label>
-                                    <div class="col-sm-5">
-                                        <select name="service_type" id="input_service" class="form-control">
-                                            @foreach ($categoryRestaurants as $categoryRestaurant)
-                                                <option value="{{$categoryRestaurant->id}}"{{ old('service_type') == $categoryRestaurant->id ? 'selected':'' }}>{{$categoryRestaurant->name_en}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
                             <div class="form-group {{ $errors->has('name_en') ? ' has-error' : '' }}">
                                 <label for="input_name_en" class="col-sm-3 control-label">Name En</label>
                                 <div class="col-sm-5">
@@ -158,61 +151,6 @@
                                             No
                                         </label>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="form-group{{ $errors->has('service_provide_en') ? ' has-error' : '' }}">
-                                <label for="service_provide_en" class="col-sm-3 control-label">Service Provide
-                                    En</label>
-                                <div class="col-sm-5">
-                                    <textarea name="service_provide_en" class="form-control"
-                                              id="service_provide_en">{{ old('service_provide_en') }}</textarea>
-                                    @if ($errors->has('service_provide_en'))
-                                        <span class="help-block">
-                                                <strong>{{ $errors->first('service_provide_en') }}</strong>
-                                            </span>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="form-group{{ $errors->has('service_provide_ar') ? ' has-error' : '' }}">
-                                <label for="service_provide_ar" class="col-sm-3 control-label">
-                                    Service Provide Ar
-                                </label>
-                                <div class="col-sm-5">
-                                    <textarea name="service_provide_ar" class="form-control"
-                                              id="service_provide_ar">{{ old('service_provide_ar') }}</textarea>
-                                    @if ($errors->has('service_provide_ar'))
-                                        <span class="help-block">
-                                            <strong>{{ $errors->first('service_provide_ar') }}</strong>
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="form-group{{ $errors->has('service_presentation_en') ? ' has-error' : '' }}">
-                                <label for="service_presentation_en" class="col-sm-3 control-label">
-                                    Service Presentation En
-                                </label>
-                                <div class="col-sm-5">
-                                    <textarea name="service_presentation_en" class="form-control"
-                                              id="service_presentation_en">{{ old('service_presentation_en') }}</textarea>
-                                    @if ($errors->has('service_presentation_en'))
-                                        <span class="help-block">
-                                            <strong>{{ $errors->first('service_presentation_en') }}</strong>
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="form-group{{ $errors->has('service_presentation_ar') ? ' has-error' : '' }}">
-                                <label for="service_presentation_ar" class="col-sm-3 control-label">
-                                    Service Presentation Ar
-                                </label>
-                                <div class="col-sm-5">
-                                    <textarea name="service_presentation_ar" class="form-control"
-                                              id="service_presentation_ar">{{ old('service_presentation_ar') }}</textarea>
-                                    @if ($errors->has('service_presentation_ar'))
-                                        <span class="help-block">
-                                            <strong>{{ $errors->first('service_presentation_ar') }}</strong>
-                                        </span>
-                                    @endif
                                 </div>
                             </div>
                             @if($collection_category->id != 4)
@@ -380,8 +318,7 @@
                                 </div>
                             @endif
                         </div>
-                        <div id="menus"
-                             class="tab-pane row wrap-all{{ $errors->has('menu_item') ? ' has-error' : '' }}">
+                        <div id="menus" class="tab-pane row wrap-all{{ $errors->has('menu_item') ? ' has-error' : '' }}">
                             @if($collection_category->id == 2 || $collection_category->id == 3)
                                 <div class="form-group">
                                     <label for="" class="col-sm-3 control-label"></label>
@@ -483,6 +420,93 @@
                                         <span class="help-block">
                                                     <strong>{{ $errors->first('menu_item') }}</strong>
                                                 </span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                        <div id="data" class="tab-pane row wrap-all">
+                            <div id="type" class="form-group">
+                                <label for="" class="col-sm-3 control-label">Service Type</label>
+                                <div class="col-sm-5">
+                                    <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
+                                        @foreach ($categoryRestaurants as $categoryRestaurant)
+                                            <label  class="btn btn-success" >
+                                                <input type="radio" name="service_type" value="{{$categoryRestaurant->name_en}}">
+                                                {{$categoryRestaurant->name_en}}
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group{{ $errors->has('delivery_time') ? ' has-error' : '' }}" id="delivery_hours" style="display: none">
+                                <label for="input-max" class="col-sm-3 control-label">
+                                    Delivery Time
+                                </label>
+                                <div class="col-sm-5">
+                                    <div class="input-group">
+                                        <input type="number" name="delivery_time"  class="form-control"
+                                               min="0" value="{{old('delivery_time') ?? 0}}"/>
+                                        <span class="input-group-addon">minutes</span>
+                                    </div>
+                                    @if ($errors->has('delivery_time'))
+                                        <span class="help-block">
+                                                    <strong>{{ $errors->first('delivery_time') }}</strong>
+                                                </span>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="form-group{{ $errors->has('service_provide_en') ? ' has-error' : '' }}">
+                                <label for="service_provide_en" class="col-sm-3 control-label">Service Provide
+                                    En</label>
+                                <div class="col-sm-5">
+                                    <textarea name="service_provide_en" class="form-control"
+                                              id="service_provide_en">{{ old('service_provide_en') }}</textarea>
+                                    @if ($errors->has('service_provide_en'))
+                                        <span class="help-block">
+                                                <strong>{{ $errors->first('service_provide_en') }}</strong>
+                                            </span>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="form-group{{ $errors->has('service_provide_ar') ? ' has-error' : '' }}">
+                                <label for="service_provide_ar" class="col-sm-3 control-label">
+                                    Service Provide Ar
+                                </label>
+                                <div class="col-sm-5">
+                                    <textarea name="service_provide_ar" class="form-control"
+                                              id="service_provide_ar">{{ old('service_provide_ar') }}</textarea>
+                                    @if ($errors->has('service_provide_ar'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('service_provide_ar') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="form-group{{ $errors->has('service_presentation_en') ? ' has-error' : '' }}">
+                                <label for="service_presentation_en" class="col-sm-3 control-label">
+                                    Service Presentation En
+                                </label>
+                                <div class="col-sm-5">
+                                    <textarea name="service_presentation_en" class="form-control"
+                                              id="service_presentation_en">{{ old('service_presentation_en') }}</textarea>
+                                    @if ($errors->has('service_presentation_en'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('service_presentation_en') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="form-group{{ $errors->has('service_presentation_ar') ? ' has-error' : '' }}">
+                                <label for="service_presentation_ar" class="col-sm-3 control-label">
+                                    Service Presentation Ar
+                                </label>
+                                <div class="col-sm-5">
+                                    <textarea name="service_presentation_ar" class="form-control"
+                                              id="service_presentation_ar">{{ old('service_presentation_ar') }}</textarea>
+                                    @if ($errors->has('service_presentation_ar'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('service_presentation_ar') }}</strong>
+                                        </span>
                                     @endif
                                 </div>
                             </div>

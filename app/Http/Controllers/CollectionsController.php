@@ -131,7 +131,7 @@ class CollectionsController extends Controller
     public function store(Request $request)
     {
         $validator = \Validator::make($request->all(), [
-            'service_type' => 'required|integer',
+            'service_type' => 'required',
             'category' => 'required|integer',
             'name_en' => 'required|string|max:255',
             'description_en' => 'required|string',
@@ -192,10 +192,13 @@ class CollectionsController extends Controller
         if ($user->admin == 2) {
             $restaurant_id = $user->restaurant_id;
         }
+        $service_type = $request->input('service_type');
+        $service = CategoryRestaurant::where('restaurant_id', $restaurant_id)->where('name_en', $service_type)->first();
         $category = $request->input('category');
         $collection = New Collection();
         $collection->restaurant_id = $restaurant_id;
-        $collection->service_type_id = $request->input('service_type');
+        $collection->service_type_id = $service->id;
+        $collection->delivery_hours  = $request->input('delivery_time');
         $collection->category_id = $category;
         $collection->name_en = $request->input('name_en');
         $collection->name_ar = $request->input('name_ar');
@@ -335,11 +338,7 @@ class CollectionsController extends Controller
         $newCollection->name_ar = $collection->name_ar;
         $newCollection->description_en = $collection->description_en;
         $newCollection->description_ar = $collection->description_ar;
-        $image = $request->file('image');
-        $name = 'collection_' . time() . '.' . $image->getClientOriginalExtension();
-        $path = public_path('/images');
-        $image->move($path, $name);
-        $newCollection->image = $name;
+        $newCollection->image = $collection->image ;
         $newCollection->mealtime_id = $collection->mealtime_id;
         $newCollection->female_caterer_available = $collection->female_caterer_available;
         $newCollection->service_provide_en = $collection->service_provide_en;
@@ -560,6 +559,7 @@ class CollectionsController extends Controller
             $editingMenuItems = EditingCollectionItem::where('editing_collection_id', $editingCollection->id)->get();
             $categories = CollectionCategory::all();
             $mealtimes = Mealtime::all();
+            $categoryRestaurants = CategoryRestaurant::where('restaurant_id', $restaurant->id)->get();
             return view('collection_edit_approve', [
                 'collection' => $collection,
                 'editingCollection' => $editingCollection,
@@ -570,6 +570,7 @@ class CollectionsController extends Controller
                 'editingCollectionMenus' => $editingCollectionMenus,
                 'menu_items' => $menu_items,
                 'editingMenuItems' => $editingMenuItems,
+                'categoryRestaurants' => $categoryRestaurants,
                 'user' => $user
             ]);
         }
@@ -586,6 +587,7 @@ class CollectionsController extends Controller
         $menu_items = CollectionItem::where('collection_id', $collection->id)->get();
         $categories = CollectionCategory::all();
         $mealtimes = Mealtime::all();
+        $categoryRestaurants = CategoryRestaurant::where('restaurant_id', $restaurant->id)->get();
         return view('collection_edit', [
             'collection' => $collection,
             'categories' => $categories,
@@ -593,6 +595,7 @@ class CollectionsController extends Controller
             'mealtimes' => $mealtimes,
             'collection_menus' => $collection_menus,
             'menu_items' => $menu_items,
+            'categoryRestaurants' => $categoryRestaurants,
             'user' => $user
         ]);
 
@@ -610,6 +613,7 @@ class CollectionsController extends Controller
     public function update(Request $request, $id)
     {
         $validator = \Validator::make($request->all(), [
+            'service_type' => 'required',
             'name_en' => 'required|string|max:255',
             'description_en' => 'required|string',
             'name_ar' => 'required|string|max:255',
@@ -642,6 +646,10 @@ class CollectionsController extends Controller
             }
             $editingCollection = new EditingCollection();
             $editingCollection->collection_id = $collection->id;
+            $service_type = $request->input('service_type');
+            $service = CategoryRestaurant::where('restaurant_id', $collection->restaurant_id)->where('name_en', $service_type)->first();
+            $editingCollection->service_type_id = $service->id;
+            $editingCollection->delivery_hours = $request->input('delivery_time');
             $editingCollection->name_en = $request->input('name_en');
             $editingCollection->name_ar = $request->input('name_ar');
             $editingCollection->description_en = $request->input('description_en');
@@ -726,14 +734,15 @@ class CollectionsController extends Controller
                 }
             }
         } elseif ($user->admin == 1) {
+            $service_type = $request->input('service_type');
+            $service = CategoryRestaurant::where('restaurant_id', $collection->restaurant_id)->where('name_en', $service_type)->first();
+            $collection->service_type_id = $service->id;
+            $collection->delivery_hours = $request->input('delivery_time');
             $collection->name_en = $request->input('name_en');
             $collection->name_ar = $request->input('name_ar');
             $collection->description_en = $request->input('description_en');
             $collection->description_ar = $request->input('description_ar');
             if ($request->hasFile('image')) {
-                if ($collection->image) {
-                    File::delete(public_path('images/' . $collection->image));
-                }
                 $image = $request->file('image');
                 $name = 'collection_' . time() . '.' . $image->getClientOriginalExtension();
                 $path = public_path('/images');
@@ -842,6 +851,10 @@ class CollectionsController extends Controller
         if ($user->admin == 1) {
             $restaurant_id = $request->input('restaurant');
             $collection = Collection::find($id);
+            $service_type = $request->input('service_type');
+            $service = CategoryRestaurant::where('restaurant_id', $collection->restaurant_id)->where('name_en', $service_type)->first();
+            $collection->service_type_id = $service->id;
+            $collection->delivery_hours = $request->input('delivery_time');
             $editingCollection = EditingCollection::where('collection_id', $id)->first();
             $collection->restaurant_id = $restaurant_id;
             $collection->name_en = $request->input('name_en');
@@ -849,9 +862,6 @@ class CollectionsController extends Controller
             $collection->description_en = $request->input('description_en');
             $collection->description_ar = $request->input('description_ar');
             if ($editingCollection->image) {
-                if ($collection->image) {
-                    File::delete(public_path('images/' . $collection->image));
-                }
                 $collection->image = $editingCollection->image;
             }
             $collection->mealtime_id = $request->input('mealtime');
@@ -965,25 +975,14 @@ class CollectionsController extends Controller
     {
         $user = Auth::user();
         $id = $request->get('id');
-        $collections = Collection::whereIn('id', $id)->get();
         if ($user->admin == 2) {
             $subCollection = Collection::where('id', $id)->where('restaurant_id', $user->restaurant_id)->first();
             if ($subCollection) {
-                $collection_images = [];
-                foreach ($collections as $collection) {
-                    $collection_images[] = public_path('images/' . $collection->image);
-                }
-                File::delete($collection_images);
                 Collection::whereIn('id', $id)->delete();
             } else {
                 return redirect()->back();
             }
         } else {
-            $collection_images = [];
-            foreach ($collections as $collection) {
-                $collection_images[] = public_path('images/' . $collection->image);
-            }
-            File::delete($collection_images);
             Collection::whereIn('id', $id)->delete();
         }
         return redirect('/collections');
