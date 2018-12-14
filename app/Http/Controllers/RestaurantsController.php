@@ -1390,6 +1390,7 @@ class RestaurantsController extends Controller
                                 $mealtime = $collection->mealtime->name_ar;
                                 $service_provide = $collection->service_provide_ar;
                                 $service_presentation = $collection->service_presentation_ar;
+                                $service_type = $collection->serviceType->name_ar;
                             } else {
                                 $collection_name = $collection->name_en;
                                 $collection_description = $collection->description_en;
@@ -1397,22 +1398,7 @@ class RestaurantsController extends Controller
                                 $mealtime = $collection->mealtime->name_en;
                                 $service_provide = $collection->service_provide_en;
                                 $service_presentation = $collection->service_presentation_en;
-                            }
-
-
-                            $services = [];
-                            foreach ($restaurant->categoryRestaurant as $categoryRestaurant) {
-                                if ($lang == 'ar') {
-                                    $service_type = $categoryRestaurant->name_ar;
-
-                                } else {
-                                    $service_type = $categoryRestaurant->name_en;
-                                }
-                                $service = [
-                                    'service_type_id' => $categoryRestaurant->category_id,
-                                    'service_type' => $service_type,
-                                ];
-                                array_push($services, $service);
+                                $service_type = $collection->serviceType->name_en;
                             }
 
 
@@ -1423,7 +1409,6 @@ class RestaurantsController extends Controller
                                 'collection_description' => $collection_description,
                                 'collection_category_id' => $collection->category_id,
                                 'collection_category' => $collection_type,
-                                'services' => $services,
                                 'female_caterer_available' => $female_caterer_available,
                                 'mealtime_id' => $collection->mealtime_id,
                                 'mealtime' => $mealtime,
@@ -1436,9 +1421,11 @@ class RestaurantsController extends Controller
                                 'max_serve_to_person' => $max_serve,
                                 'allow_person_increase' => $person_increase,
                                 'persons_max_count' => $max_persons,
+                                'service_type_id' => $collection->service_type_id,
+                                'service_type' => $service_type,
                                 'service_provide' => $service_provide,
-                                'food_list' => $foodlist,
                                 'service_presentation' => $service_presentation,
+                                'food_list' => $foodlist,
                                 'special_instruction' => '',
                                 'food_item_image' => url('/') . '/images/' . $collection_item->menu->image,
                                 'food_list_images' => $foodlist_images,

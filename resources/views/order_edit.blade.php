@@ -139,6 +139,7 @@
                                             <th>Name</th>
                                             <th class="text-left">Female Caterer</th>
                                             <th class="text-left">Special Instruction</th>
+                                            <th class="text-left">Service Type</th>
                                             <th class="text-left">Price</th>
                                             <th class="text-right">Total</th>
                                         </tr>
@@ -176,6 +177,7 @@
                                                     @endif
                                                 </td>
                                                 <td>{{$cartCollection->special_instruction}}</td>
+                                                <td>{{$cartCollection->collection->serviceType->name_en}}</td>
                                                 <td class="text-left">
                                                     @if($cartCollection->collection->category_id != 4)
                                                         {{$cartCollection->collection->price}} {{\Lang::get('message.priceUnit')}}

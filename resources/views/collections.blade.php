@@ -98,7 +98,8 @@
                                     </th>
                                     <th>Collection Name</th>
                                     <th>Description</th>
-                                    <th>Collection Type</th>
+                                    <th>Collection Category</th>
+                                    <th>Service Type</th>
                                     <th>Price</th>
                                     <th>Mealtime</th>
                                     <th>Status</th>
@@ -117,6 +118,14 @@
                                                        href="{{ url('/collection/edit/' . $collection->id )}}">
                                                         <i class="fa fa-pencil"></i>
                                                     </a>&nbsp;&nbsp;
+
+                                                    <a class="btn btn-edit" title=""
+                                                       data-toggle="modal"
+                                                       data-target="#modalCopyCollection" onclick="copyCollection('{{$collection->id}}')">
+                                                        Copy Collection
+                                                        <i class="fa fa-copy"></i>
+                                                    </a>&nbsp;
+
                                                     @if($user->admin == 1)
                                                         @if($collection->approved == 0)
                                                             <a class="btn btn-edit" title=""
@@ -135,6 +144,7 @@
                                                 <td>{{$collection->name_en}}</td>
                                                 <td>{{$collection->description_en}}</td>
                                                 <td>{{$collection->category->name_en}}</td>
+                                                <td>{{$collection->serviceType->name_en}}</td>
                                                 <td>{{$collection->price}}</td>
                                                 <td>{{$collection->mealtime->name_en}}</td>
                                                 <td>
@@ -188,9 +198,75 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modalCopyCollection" role="dialog" tabindex="-1">
+        @if($selectedRestaurant)
+            <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST" enctype="multipart/form-data">
+                {{ csrf_field() }}
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="input_name_en" class="col-sm-3 control-label">Select Service Type</label>
+                                <div class="col-sm-5">
+                                    <select name="service_type" class="form-control">
+                                        <option value="">View all Categories</option>
+                                        @foreach ($categoryRestaurants as $category)
+                                            <option value="{{$category->id}}">{{$category->name_en}}</option>
+                                        @endforeach
+                                    </select>&nbsp;
+                                </div>
+                            </div>
+                            <div class="form-group{{ $errors->has('image') ? ' has-error' : '' }}">
+                                <label for="input-image" class="col-sm-3 control-label">
+                                    Image
+                                    <span class="help-block">Select image.</span>
+                                </label>
+                                <div class="col-sm-5">
+                                    <div class="thumbnail imagebox">
+                                        <div class="preview">
+                                            <img src="{{url('/') . '/admin/no_photo.png'}}"
+                                                 class="thumb img-responsive" id="thumb">
+                                        </div>
+                                        <div class="caption">
+                                            <span class="name text-center"></span>
+                                            <p>
+                                                <label class=" btn btn-primary btn-file ">
+                                                    <i class="fa fa-picture-o"></i>
+                                                    Select
+                                                    <input type="file" name="image" style="display: none;"
+                                                           onchange="readURL(this);">
+                                                </label>
+                                                <label class="btn btn-danger " onclick="removeFile()">
+                                                    <i class="fa fa-times-circle"></i>
+                                                    &nbsp;&nbsp;Remove
+                                                </label>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    @if ($errors->has('image'))
+                                        <span class="help-block">
+                                        <strong>{{ $errors->first('image') }}</strong>
+                                    </span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                            </button>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            @endif
+    </div>
     <div class="modal fade" id="modalNewCollection" role="dialog" tabindex="-1">
         @if($selectedRestaurant)
-            <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="GET"
+            <form role="form"  class="form-horizontal" accept-charset="utf-8" method="GET"
                   @if($user->admin == 1)
                   action="{{ url('/collection/create/' . $selectedRestaurant->id ) }}"
                   @else
@@ -224,6 +300,26 @@
         @endif
     </div>
     <script type="text/javascript">
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#thumb')
+                        .attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function removeFile() {
+            $('#thumb').attr('src', '/admin/no_photo.png');
+            $('input[name=image]').val("");
+        }
+    </script>
+    <script type="text/javascript">
+        function copyCollection(id) {
+            $("#edit-form").attr('action', 'collection/copy/' + id);
+        }
         $(document).ready(function () {
             $('select.form-control').select2();
         });

@@ -12,7 +12,7 @@ class Collection extends Model
     protected $fillable = [
         'restaurant_id',
         'category_id',
-        'service_type',
+        'service_type_id',
         'is_available',
         'price',
         'name_en',
@@ -61,6 +61,11 @@ class Collection extends Model
         return $this->belongsTo('App\Mealtime', 'mealtime_id');
     }
 
+    public function serviceType()
+    {
+        return $this->belongsTo('App\CategoryRestaurant', 'service_type_id');
+    }
+
     public function editingCollection()
     {
         return $this->hasOne('App\EditingCollection', 'collection_id');
@@ -76,6 +81,10 @@ class Collection extends Model
         return $this->hasMany('App\CollectionItem', 'collection_id');
     }
 
+//    public function serviceType()
+//    {
+//        return $this->hasMany('App\Collection', 'collection_id');
+//    }
 
     public function cartCollection()
     {

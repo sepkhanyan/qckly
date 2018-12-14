@@ -37,6 +37,7 @@ class CollectionsController extends Controller
         $data = $request->all();
         $collections = [];
         $selectedRestaurant = [];
+        $categoryRestaurants = [];
         if ($id) {
             $collections = Collection::where('restaurant_id', $id)
                 ->with(['category', 'collectionItem.menu']);
@@ -48,6 +49,7 @@ class CollectionsController extends Controller
                 $collections = $collections->name($data['collection_search']);
             }
             $selectedRestaurant = Restaurant::find($id);
+            $categoryRestaurants = CategoryRestaurant::where('restaurant_id', $selectedRestaurant->id)->whereDoesntHave('collection')->get();
             $collections = $collections->orderby('approved', 'asc')->paginate(20);
         }
         if ($user->admin == 2) {
@@ -60,6 +62,7 @@ class CollectionsController extends Controller
                 $collections = $collections->name($data['collection_search']);
             }
             $selectedRestaurant = Restaurant::find($user->restaurant_id);
+            $categoryRestaurants = CategoryRestaurant::where('restaurant_id', $selectedRestaurant->id)->whereDoesntHave('collection')->get();
             $collections = $collections->orderby('approved', 'asc')->paginate(20);
         }
         $requestDay = Carbon::today()->dayOfWeek;
@@ -72,7 +75,8 @@ class CollectionsController extends Controller
             'selectedRestaurant' => $selectedRestaurant,
             'user' => $user,
             'requestDay' => $requestDay,
-            'requestTime' => $requestTime
+            'requestTime' => $requestTime,
+            'categoryRestaurants' => $categoryRestaurants
         ]);
     }
 
@@ -127,6 +131,7 @@ class CollectionsController extends Controller
     public function store(Request $request)
     {
         $validator = \Validator::make($request->all(), [
+            'service_type' => 'required|integer',
             'category' => 'required|integer',
             'name_en' => 'required|string|max:255',
             'description_en' => 'required|string',
@@ -190,6 +195,7 @@ class CollectionsController extends Controller
         $category = $request->input('category');
         $collection = New Collection();
         $collection->restaurant_id = $restaurant_id;
+        $collection->service_type_id = $request->input('service_type');
         $collection->category_id = $category;
         $collection->name_en = $request->input('name_en');
         $collection->name_ar = $request->input('name_ar');
@@ -307,6 +313,94 @@ class CollectionsController extends Controller
         }
     }
 
+    public function copy(Request $request, $id)
+    {
+        $user = Auth::user();
+        $validator = \Validator::make($request->all(), [
+            'service_type' => 'required|integer',
+            'image' => 'required|image',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+        $collection = Collection::find($id);
+        $service_type_id = $request->input('service_type');
+        $newCollection = new Collection();
+        $newCollection->restaurant_id = $collection->restaurant_id;
+        $newCollection->service_type_id = $service_type_id;
+        $newCollection->category_id = $collection->category_id;
+        $newCollection->name_en = $collection->name_en;
+        $newCollection->name_ar = $collection->name_ar;
+        $newCollection->description_en = $collection->description_en;
+        $newCollection->description_ar = $collection->description_ar;
+        $image = $request->file('image');
+        $name = 'collection_' . time() . '.' . $image->getClientOriginalExtension();
+        $path = public_path('/images');
+        $image->move($path, $name);
+        $newCollection->image = $name;
+        $newCollection->mealtime_id = $collection->mealtime_id;
+        $newCollection->female_caterer_available = $collection->female_caterer_available;
+        $newCollection->service_provide_en = $collection->service_provide_en;
+        $newCollection->service_provide_ar = $collection->service_provide_ar;
+        $newCollection->service_presentation_en = $collection->service_presentation_en;
+        $newCollection->service_presentation_ar = $collection->service_presentation_ar;
+        $newCollection->is_available = 1;
+        if ($collection->category_id == 1 || $collection->category_id == 3) {
+            $newCollection->max_qty = $collection->max_qty;
+            $newCollection->min_qty = $collection->min_qty;
+        }
+        if ($collection->category_id != 4) {
+            $newCollection->price = $collection->price;
+            $newCollection->min_serve_to_person = $collection->min_serve_to_person;
+            $newCollection->max_serve_to_person = $collection->max_serve_to_person;
+        }
+        if ($collection->category_id == 1) {
+            $newCollection->allow_person_increase = $collection->allow_person_increase;
+            $newCollection->setup_time = $collection->setup_time;
+            $newCollection->max_time = $collection->max_time;
+            $newCollection->requirements_en = $collection->requirements_en;
+            $newCollection->requirements_ar = $collection->requirements_ar;
+        }
+        $newCollection->approved = 1;
+        $newCollection->save();
+        $menu_items = CollectionItem::where('collection_id', $collection->id)->get();
+        if (count($menu_items) > 0) {
+            if ($collection->category_id == 1) {
+                foreach ($menu_items as $menu_item) {
+                    $collection_item = new CollectionItem();
+                    $collection_item->item_id = $menu_item->item_id;
+                    $collection_item->quantity = $menu_item->quantity;
+                    $collection_item->collection_id = $newCollection->id;
+                    $collection_item->save();
+                }
+            } else {
+                foreach ($menu_items as $menu_item) {
+                    $collection_item = new CollectionItem();
+                    $collection_item->item_id = $menu_item->item_id;
+                    $collection_item->collection_menu_id = $menu_item->collection_menu_id;
+                    $collection_item->collection_id = $newCollection->id;
+                    $collection_item->quantity = 1;
+                    $collection_item->save();
+                }
+                $menus = CollectionMenu::where('collection_id', $collection->id)->get();
+                foreach ($menus as $menu) {
+                    $collection_menu = new CollectionMenu();
+                    $collection_menu->collection_id = $newCollection->id;
+                    $collection_menu->menu_id = $menu->menu_id;
+                    if ($collection->category_id != 4) {
+                        $collection_menu->min_qty = $menu->min_qty;
+                        $collection_menu->max_qty = $menu->max_qty;
+                    }
+                    $collection_menu->save();
+                }
+            }
+        }
+        return redirect()->back();
+
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -327,7 +421,7 @@ class CollectionsController extends Controller
         $unavailability = CollectionUnavailabilityHour::where('collection_id', $collection->id)->first();
         $hours = CollectionUnavailabilityHour::where('collection_id', $collection->id)->get();
         $week = [];
-        if(count($hours) > 0){
+        if (count($hours) > 0) {
             foreach ($hours as $key => $value) {
                 $week[$value->weekday] = [];
             }
@@ -351,84 +445,84 @@ class CollectionsController extends Controller
                 return redirect()->back();
             }
         }
-            if ($request->input('is_available') == 0) {
-                if ($request->input('type') == 'daily') {
-                    $validator = \Validator::make($request->all(), [
-                        'daily_days' => 'required|array',
-                        'daily_hours.start' => 'required',
-                        'daily_hours.end' => 'required|after:daily_hours.start',
-                    ]);
-                    if ($validator->fails()) {
-                        return redirect()->back()
-                            ->withErrors($validator)
-                            ->withInput();
-                    }
+        if ($request->input('is_available') == 0) {
+            if ($request->input('type') == 'daily') {
+                $validator = \Validator::make($request->all(), [
+                    'daily_days' => 'required|array',
+                    'daily_hours.start' => 'required',
+                    'daily_hours.end' => 'required|after:daily_hours.start',
+                ]);
+                if ($validator->fails()) {
+                    return redirect()->back()
+                        ->withErrors($validator)
+                        ->withInput();
                 }
+            }
 
-                if ($request->input('type') == 'flexible') {
-                    $validator = \Validator::make($request->all(), [
-                        'flexible_hours.1.start' => 'required',
-                        'flexible_hours.1.end' => 'required|after:flexible_hours.1.start',
-                        'flexible_hours.2.start' => 'required',
-                        'flexible_hours.2.end' => 'required|after:flexible_hours.2.start',
-                        'flexible_hours.3.start' => 'required',
-                        'flexible_hours.3.end' => 'required|after:flexible_hours.3.start',
-                        'flexible_hours.4.start' => 'required',
-                        'flexible_hours.4.end' => 'required|after:flexible_hours.4.start',
-                        'flexible_hours.5.start' => 'required',
-                        'flexible_hours.5.end' => 'required|after:flexible_hours.5.start',
-                        'flexible_hours.6.start' => 'required',
-                        'flexible_hours.6.end' => 'required|after:flexible_hours.6.start',
-                        'flexible_hours.0.start' => 'required',
-                        'flexible_hours.0.end' => 'required|after:flexible_hours.0.start',
-                    ]);
-                    if ($validator->fails()) {
-                        return redirect()->back()
-                            ->withErrors($validator)
-                            ->withInput();
-                    }
+            if ($request->input('type') == 'flexible') {
+                $validator = \Validator::make($request->all(), [
+                    'flexible_hours.1.start' => 'required',
+                    'flexible_hours.1.end' => 'required|after:flexible_hours.1.start',
+                    'flexible_hours.2.start' => 'required',
+                    'flexible_hours.2.end' => 'required|after:flexible_hours.2.start',
+                    'flexible_hours.3.start' => 'required',
+                    'flexible_hours.3.end' => 'required|after:flexible_hours.3.start',
+                    'flexible_hours.4.start' => 'required',
+                    'flexible_hours.4.end' => 'required|after:flexible_hours.4.start',
+                    'flexible_hours.5.start' => 'required',
+                    'flexible_hours.5.end' => 'required|after:flexible_hours.5.start',
+                    'flexible_hours.6.start' => 'required',
+                    'flexible_hours.6.end' => 'required|after:flexible_hours.6.start',
+                    'flexible_hours.0.start' => 'required',
+                    'flexible_hours.0.end' => 'required|after:flexible_hours.0.start',
+                ]);
+                if ($validator->fails()) {
+                    return redirect()->back()
+                        ->withErrors($validator)
+                        ->withInput();
                 }
-                CollectionUnavailabilityHour::where('collection_id', $id)->delete();
-                if ($request->input('type') == '24_7') {
-                    $hour = new CollectionUnavailabilityHour();
-                    $hour->type = $request->input('type');
-                    $hour->status = 1;
-                    $hour->collection_id = $collection->id;
-                    $hour->save();
-                    Collection::where('id', $collection->id)->update(['is_available' => 0]);
-                } elseif ($request->input('type') == 'daily') {
-                    Collection::where('id', $collection->id)->update(['is_available' => 1]);
-                    $days = $request->input('daily_days');
-                    if ($days) {
-                        foreach ($days as $day) {
-                            $daily = $request->input('daily_hours');
-                            $hour = new CollectionUnavailabilityHour();
-                            $hour->weekday = $day;
-                            $hour->collection_id = $collection->id;
-                            $hour->type = $request->input('type');
-                            $hour->status = 1;
-                            $hour->start_time = Carbon::parse($daily['start']);
-                            $hour->end_time = Carbon::parse($daily['end']);
-                            $hour->save();
-                        }
-                    }
-                } elseif ($request->input('type') == 'flexible') {
-                    Collection::where('id', $collection->id)->update(['is_available' => 1]);
-                    foreach ($request->input('flexible_hours') as $flexible) {
+            }
+            CollectionUnavailabilityHour::where('collection_id', $id)->delete();
+            if ($request->input('type') == '24_7') {
+                $hour = new CollectionUnavailabilityHour();
+                $hour->type = $request->input('type');
+                $hour->status = 1;
+                $hour->collection_id = $collection->id;
+                $hour->save();
+                Collection::where('id', $collection->id)->update(['is_available' => 0]);
+            } elseif ($request->input('type') == 'daily') {
+                Collection::where('id', $collection->id)->update(['is_available' => 1]);
+                $days = $request->input('daily_days');
+                if ($days) {
+                    foreach ($days as $day) {
+                        $daily = $request->input('daily_hours');
                         $hour = new CollectionUnavailabilityHour();
-                        $hour->weekday = $flexible['day'];
+                        $hour->weekday = $day;
                         $hour->collection_id = $collection->id;
                         $hour->type = $request->input('type');
-                        $hour->status = $flexible['status'];
-                        $hour->start_time = Carbon::parse($flexible['start']);
-                        $hour->end_time = Carbon::parse($flexible['end']);
+                        $hour->status = 1;
+                        $hour->start_time = Carbon::parse($daily['start']);
+                        $hour->end_time = Carbon::parse($daily['end']);
                         $hour->save();
                     }
                 }
-            }else {
-                CollectionUnavailabilityHour::where('collection_id', $id)->delete();
+            } elseif ($request->input('type') == 'flexible') {
                 Collection::where('id', $collection->id)->update(['is_available' => 1]);
+                foreach ($request->input('flexible_hours') as $flexible) {
+                    $hour = new CollectionUnavailabilityHour();
+                    $hour->weekday = $flexible['day'];
+                    $hour->collection_id = $collection->id;
+                    $hour->type = $request->input('type');
+                    $hour->status = $flexible['status'];
+                    $hour->start_time = Carbon::parse($flexible['start']);
+                    $hour->end_time = Carbon::parse($flexible['end']);
+                    $hour->save();
+                }
             }
+        } else {
+            CollectionUnavailabilityHour::where('collection_id', $id)->delete();
+            Collection::where('id', $collection->id)->update(['is_available' => 1]);
+        }
         return redirect('/collections/' . $collection->restaurant_id);
     }
 

@@ -60,7 +60,6 @@ class UserCartsController extends Controller
             $validator = \Validator::make($DataRequests, [
                 'collection_category_id' => 'required|integer',
                 'collection_id' => 'required|integer',
-//                'service_type_id' => 'required|integer',
                 'female_caterer' => 'required|integer',
             ]);
             if ($validator->fails()) {
@@ -457,10 +456,12 @@ class UserCartsController extends Controller
                             $restaurant_name = $cart_collection->collection->restaurant->name_ar;
                             $collection_type = $cart_collection->collection->category->name_ar;
                             $collection_name = $cart_collection->collection->name_ar;
+                            $service_type = $cart_collection->collection->serviceType->name_ar;
                         } else {
                             $restaurant_name = $cart_collection->collection->restaurant->name_en;
                             $collection_type = $cart_collection->collection->category->name_en;
                             $collection_name = $cart_collection->collection->name_en;
+                            $service_type = $cart_collection->collection->serviceType->name_en;
                         }
 
                         $collections [] = [
@@ -474,6 +475,8 @@ class UserCartsController extends Controller
                             'collection_price_unit' => \Lang::get('message.priceUnit'),
                             'female_caterer' => $female_caterer,
                             'special_instruction' => $cart_collection->special_instruction,
+                            'service_type_id' => $cart_collection->collection->service_type_id,
+                            'service_type' => $service_type,
                             'menu_items' => $menu,
                             'quantity' => $quantity,
                             'persons_count' => $persons_count,
@@ -744,6 +747,7 @@ class UserCartsController extends Controller
                     $mealtime = $collection->mealtime->name_ar;
                     $service_provide = $collection->service_provide_ar;
                     $service_presentation = $collection->service_presentation_ar;
+                    $service_type = $collection->serviceType->name_ar;
                 } else {
                     $restaurant_name = $collection->restaurant->name_en;
                     $collection_name = $collection->name_en;
@@ -752,6 +756,7 @@ class UserCartsController extends Controller
                     $mealtime = $collection->mealtime->name_en;
                     $service_provide = $collection->service_provide_en;
                     $service_presentation = $collection->service_presentation_en;
+                    $service_type = $collection->serviceType->name_en;
                 }
 
                 $menu_collection [] = [
@@ -774,9 +779,11 @@ class UserCartsController extends Controller
                     'max_serve_to_person' => $max_serve,
                     'allow_person_increase' => $person_increase,
                     'persons_max_count' => $max_persons,
+                    'service_type_id' => $collection->service_type_id,
+                    'service_type' => $service_type,
                     'service_provide' => $service_provide,
-                    'food_list' => $foodlist,
                     'service_presentation' => $service_presentation,
+                    'food_list' => $foodlist,
                     'special_instruction' => '',
                     'food_item_image' => url('/') . '/images/' . $collection_item->menu->image,
                     'food_list_images' => $foodlist_images,

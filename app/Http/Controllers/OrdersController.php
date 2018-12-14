@@ -235,10 +235,12 @@ class OrdersController extends Controller
                             $restaurant_name = $cart_collection->collection->restaurant->name_ar;
                             $collection_type = $cart_collection->collection->category->name_ar;
                             $collection_name = $cart_collection->collection->name_ar;
+                            $service_type = $cart_collection->collection->serviceType->name_ar;
                         } else {
                             $restaurant_name = $cart_collection->collection->restaurant->name_en;
                             $collection_type = $cart_collection->collection->category->name_en;
                             $collection_name = $cart_collection->collection->name_en;
+                            $service_type = $cart_collection->collection->serviceType->name_en;
                         }
 
                         $collections [] = [
@@ -252,6 +254,8 @@ class OrdersController extends Controller
                             'collection_price_unit' => \Lang::get('message.priceUnit'),
                             'female_caterer' => $female_caterer,
                             'special_instruction' => $cart_collection->special_instruction,
+                            'service_type_id' => $cart_collection->collection->service_type_id,
+                            'service_type' => $service_type,
                             'menu_items' => $menu,
                             'quantity' => $quantity,
                             'persons_count' => $persons_count,

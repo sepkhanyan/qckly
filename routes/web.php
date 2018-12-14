@@ -90,6 +90,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
             Route::post('delete', 'MenusController@deleteMenu');
         });
         Route::get('/collections/{id?}', 'CollectionsController@index');
+        Route::post('collections/collection/copy/{id}', 'CollectionsController@copy');
         Route::group(['prefix' => 'collection'], function () {
             Route::get('create/{id?}', 'CollectionsController@create');
             Route::post('store', 'CollectionsController@store');
@@ -98,6 +99,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
             Route::get('availability/edit/{id}', 'CollectionsController@editAvailability');
             Route::post('availability/update/{id}', 'CollectionsController@updateAvailability');
             Route::get('edit/{id}', 'CollectionsController@edit');
+            Route::post('copy/{id}', 'CollectionsController@copy');
             Route::post('update/{id}', 'CollectionsController@update');
             Route::post('edit_approve/{id}', 'CollectionsController@editApprove');
             Route::get('edit_reject/{id}', 'CollectionsController@editReject');

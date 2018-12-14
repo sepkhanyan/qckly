@@ -46,6 +46,6 @@ class UserCartCollection extends Model
 
     public function serviceType()
     {
-        return $this->belongsTo('App\CategoryRestaurant', 'service_type');
+        return $this->belongsTo('App\CategoryRestaurant', 'service_type_id');
     }
 }
