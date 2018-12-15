@@ -119,11 +119,11 @@
                                                         <i class="fa fa-pencil"></i>
                                                     </a>&nbsp;&nbsp;
 
-                                                    {{--<a class="btn btn-edit" title=""--}}
-                                                       {{--href="{{ url('/collection/copy/' . $collection->id )}}">--}}
-                                                        {{--Copy Collection--}}
-                                                        {{--<i class="fa fa-copy"></i>--}}
-                                                    {{--</a>&nbsp;--}}
+                                                    <a class="btn btn-edit" title=""
+                                                       href="{{ url('/collection/copy/' . $collection->id )}}">
+                                                        Copy Collection
+                                                        <i class="fa fa-copy"></i>
+                                                    </a>&nbsp;
 
                                                     @if($user->admin == 1)
                                                         @if($collection->approved == 0)

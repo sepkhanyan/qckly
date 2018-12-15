@@ -1,4 +1,4 @@
-@extends('home', ['title' => 'Collection: ' . $collection->name_en])
+@extends('home', ['title' => 'Collection Copy: ' . $collection->name_en])
 @section('content')
     <div id="page-wrapper">
         <div class="page-header clearfix">
@@ -36,6 +36,7 @@
                                 <input type="hidden" name="restaurant" value="{{$collection->restaurant_id}}">
                             @endif
                             <h4 class="tab-pane-title">{{$collection->category->name_en}}</h4>
+                                <input type="hidden" name="category" value="{{$collection->category_id}}">
                             <div class="form-group{{ $errors->has('name_en') ? ' has-error' : '' }}">
                                 <label for="input_name_en" class="col-sm-3 control-label">Name En</label>
                                 <div class="col-sm-5">
@@ -523,17 +524,10 @@
                                 <div class="col-sm-5">
                                     <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
                                         @foreach ($categoryRestaurants as $categoryRestaurant)
-                                            @if(old('service_type'))
-                                                <label  class="btn btn-success {{(old('service_type') == $categoryRestaurant->name_en) ? ' active' : ''}}" >
-                                                    <input type="radio" name="service_type" value="{{$categoryRestaurant->name_en}}" {{(old('service_type') == $categoryRestaurant->name_en) ? 'checked' : ''}}>
-                                                    {{$categoryRestaurant->name_en}}
-                                                </label>
-                                            @else
-                                                <label  class="btn btn-success {{($collection->serviceType->name_en == $categoryRestaurant->name_en) ? ' active' : ''}}" >
-                                                    <input type="radio" name="service_type" value="{{$categoryRestaurant->name_en}}" {{($collection->serviceType->name_en == $categoryRestaurant->name_en) ? 'checked' : ''}}>
-                                                    {{$categoryRestaurant->name_en}}
-                                                </label>
-                                            @endif
+                                            <label  class="btn btn-success{{(old('service_type') == $categoryRestaurant->name_en) ? ' active' : ''}}" >
+                                                <input type="radio" name="service_type" value="{{$categoryRestaurant->name_en}}" {{(old('service_type') == $categoryRestaurant->name_en) ? 'checked' : ''}}>
+                                                {{$categoryRestaurant->name_en}}
+                                            </label>
                                         @endforeach
                                     </div>
                                 </div>
@@ -545,7 +539,7 @@
                                 <div class="col-sm-5">
                                     <div class="input-group">
                                         <input type="number" name="delivery_time"  class="form-control"
-                                               min="0" value="{{old('delivery_time') ?? $collection->delivery_hours}}"/>
+                                               min="0" value="{{old('delivery_time') ?? 0}}"/>
                                         <span class="input-group-addon">minutes</span>
                                     </div>
                                     @if ($errors->has('delivery_time'))

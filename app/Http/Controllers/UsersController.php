@@ -513,7 +513,7 @@ class UsersController extends Controller
 
     }
 
-    public function changeLangauge(Request $request)
+    public function changeLanguage(Request $request)
     {
         $lang = $request->get('lang');
         $userId =$request->header('Authorization');
@@ -522,8 +522,7 @@ class UsersController extends Controller
         } else {
             $user_id = Auth::id();
         }
-        $lang = $request->get('lang');
-        $user = User::where('id',$user_id)->update(['lang'=>$lang]);
+        $user = User::where('id',$user_id)->update(['lang'=> $lang]);
         if ($user) {
             return response()->json(array('success' => 0, 'status_code' => 200, 'message' => 'Language changed successfully'));
 
