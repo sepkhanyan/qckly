@@ -67,6 +67,7 @@ class OrdersController extends Controller
 
     public function orderConfirmation($id)
     {
+
         $user = Auth::user();
         if ($user->admin == 2) {
             $restaurantOrder = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $user->restaurant_id)->where('status_id', 1)->first();
@@ -74,14 +75,27 @@ class OrdersController extends Controller
                 return redirect()->back();
             }
 
-                $restaurantOrder->status_id = 2;
-                $restaurantOrder->save();
+            $restaurantOrder->status_id = 2;
+            $restaurantOrder->save();
             $restaurantOrders = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $user->restaurant_id)->where('status_id', '!=', 2)->get();
-                if (count($restaurantOrders) <= 0) {
-                    $order = Order::where('id', $id)->first();
-                    $order->status_id = 2;
-                    $order->save();
-                }
+            $order = Order::where('id', $id)->first();
+            if (count($restaurantOrders) <= 0) {
+                $order->status_id = 2;
+                $order->save();
+            }
+            $client = User::where('id', $order->user_id)->first();
+
+            if (!$client->lang) {
+                \App::setLocale("en");
+            } else {
+                \App::setLocale($client->lang);
+            }
+            $userId = $order->user_id;
+            $from = $user->id;
+            $msg = \Lang::get('message.orderConfirmation', ['order_id' => $order->id]);
+            $order_id = $order->id;
+            $notification = new NotificationsController();
+            $notification->sendNot($userId, $from, $msg, $order_id);
 
         } else {
             return redirect()->back();
@@ -121,14 +135,14 @@ class OrdersController extends Controller
             if (!$restaurantOrder) {
                 return redirect('/orders');
             }
-                $restaurantOrder->status_id = $request->input('status');
-                $restaurantOrder->save();
-                $restaurantOrders = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $user->restaurant_id)->where('status_id', '!=', 3)->get();
-                if (count($restaurantOrders) <= 0) {
-                    $order = Order::where('id', $id)->first();
-                    $order->status_id = 3;
-                    $order->save();
-                }
+            $restaurantOrder->status_id = $request->input('status');
+            $restaurantOrder->save();
+            $restaurantOrders = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $user->restaurant_id)->where('status_id', '!=', 3)->get();
+            if (count($restaurantOrders) <= 0) {
+                $order = Order::where('id', $id)->first();
+                $order->status_id = 3;
+                $order->save();
+            }
 
         } else {
             return redirect()->back();

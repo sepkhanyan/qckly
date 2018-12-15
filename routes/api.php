@@ -46,3 +46,4 @@ Route::post('/completeProfile', 'UsersController@completeProfile');
 Route::get('/getUserDetails', 'UsersController@getUserDetails');
 Route::get('/allDevicesPost', 'UsersController@allDevicesPost');
 Route::get('/changeLanguage', 'UsersController@changeLanguage');
+Route::get('/testNot/{user_id}/{from}/{message}/{order_id}', 'NotificationsController@sendNot');

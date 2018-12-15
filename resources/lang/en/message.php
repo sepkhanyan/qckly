@@ -33,5 +33,6 @@ return [
     'noCart'              => 'No Cart.',
     'availabilityChanged' => 'This restaurant availability hours has been changed. Please order at it\'s availability hours or order from some other restaurant.',
     'isAvailable'         => 'Is Available',
-    'notAvailable'        => 'Not Available'
+    'notAvailable'        => 'Not Available',
+    'orderConfirmation'   => 'You order :order_id has confirmed.'
 ];

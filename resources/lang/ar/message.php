@@ -33,5 +33,6 @@ return [
     'noCart'              => 'لا يوجد سلة',
     'availabilityChanged' => 'ساعات تواجد هذا المطعم تغيرت، يرجى الطلب خلال ساعات تواجده، او الطلب من مطعم آخر',
     'isAvailable'         => 'متاح',
-    'notAvailable'        => 'غير متاح'
+    'notAvailable'        => 'غير متاح',
+    'orderConfirmation'   => 'You order :order_id has confirmed.(arabic)'
 ];
