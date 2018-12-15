@@ -380,7 +380,7 @@ class CollectionsController extends Controller
         }
             $collection->approved = 1;
         $collection->save();
-        $menu_items = CollectionItem::where('collection_id', $collection->id)->get();
+        $menu_items = CollectionItem::where('collection_id', $id)->get();
         if (count($menu_items) > 0) {
             if ($collection->category_id == 1) {
                 foreach ($menu_items as $menu_item) {
@@ -399,7 +399,7 @@ class CollectionsController extends Controller
                     $collection_item->quantity = 1;
                     $collection_item->save();
                 }
-                $menus = CollectionMenu::where('collection_id', $collection->id)->get();
+                $menus = CollectionMenu::where('collection_id', $id)->get();
                 foreach ($menus as $menu) {
                     $collection_menu = new CollectionMenu();
                     $collection_menu->collection_id = $collection->id;
