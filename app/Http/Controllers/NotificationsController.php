@@ -9,7 +9,7 @@ use App\Notification;
 
 class NotificationsController extends Controller
 {
-    public function sendNot($userId, $from, $msg, $order_id, $type = null,  $NotificationType = null, $getDetails = null, $getDetailsOffers = null, $isForOfferList = false)
+    public function sendNot($userId, $from, $msg, $order_id, $NotificationType = null, $type = null, $getDetails = null, $getDetailsOffers = null, $isForOfferList = false)
     {
         $devicetoken = Device::where('user_id', $userId)->where('device_type', 'android')->get();
         $Not_id = Notification::create([
@@ -25,8 +25,8 @@ class NotificationsController extends Controller
                 'NotificationId' => $Not_id->id,
                 'message' => $msg,
 //                'typeOfService' => $type,
-                'order_id' => $order_id
-                // 'NotificationType' => $NotificationType,
+                'order_id' => $order_id,
+                 'NotificationType' => $NotificationType,
 
             ];
         foreach ($devicetoken as $dev) {

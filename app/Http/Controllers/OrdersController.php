@@ -94,8 +94,9 @@ class OrdersController extends Controller
             $from = $user->id;
             $msg = \Lang::get('message.orderConfirmation', ['order_id' => $order->id]);
             $order_id = $order->id;
+            $NotificationType = 1;
             $notification = new NotificationsController();
-            $notification->sendNot($userId, $from, $msg, $order_id);
+            $notification->sendNot($userId, $from, $msg, $order_id, $NotificationType);
 
         } else {
             return redirect()->back();
