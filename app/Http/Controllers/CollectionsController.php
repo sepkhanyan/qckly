@@ -156,6 +156,16 @@ class CollectionsController extends Controller
         }
         $service_type = $request->input('service_type');
         $service = CategoryRestaurant::where('restaurant_id', $restaurant_id)->where('name_en', $service_type)->first();
+        if($service_type == 'Delivery'){
+            $validator = \Validator::make($request->all(), [
+                'delivery_time' => 'required|integer|gt:0',
+            ]);
+            if ($validator->fails()) {
+                return redirect()->back()
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+        }
         $category = $request->input('category');
         $collection = New Collection();
         $collection->restaurant_id = $restaurant_id;
@@ -180,7 +190,7 @@ class CollectionsController extends Controller
         $collection->is_available = 1;
         if ($category == 1 || $category == 3) {
             $request->validate([
-                'min_quantity' => 'required|integer',
+                'min_quantity' => 'required|integer|gt:0',
                 'max_quantity' => 'required|integer|gte:min_quantity',
             ]);
             $collection->max_qty = $request->input('max_quantity');
@@ -189,7 +199,7 @@ class CollectionsController extends Controller
         if ($category != 4) {
             $request->validate([
                 'collection_price' => 'required|numeric',
-                'min_serve_to_person' => 'required|integer',
+                'min_serve_to_person' => 'required|integer|gt:0',
                 'max_serve_to_person' => 'required|integer|gte:min_serve_to_person',
             ]);
             $collection->price = $request->input('collection_price');
@@ -199,7 +209,7 @@ class CollectionsController extends Controller
         if ($category == 2) {
             $request->validate([
 //                'persons_max_count' => 'required|integer',
-                'setup_time' => 'required|integer',
+                'setup_time' => 'required|integer|gt:0',
                 'max_time' => 'required|integer|gte:setup_time',
                 'requirements_en' => 'required|string',
                 'requirements_ar' => 'required|string',
@@ -318,6 +328,16 @@ class CollectionsController extends Controller
         }
         $service_type = $request->input('service_type');
         $service = CategoryRestaurant::where('restaurant_id', $restaurant_id)->where('name_en', $service_type)->first();
+        if($service_type == 'Delivery'){
+            $validator = \Validator::make($request->all(), [
+                'delivery_time' => 'required|integer|gt:0',
+            ]);
+            if ($validator->fails()) {
+                return redirect()->back()
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+        }
         $category = $request->input('category');
         $collection = New Collection();
         $collection->category_id = $category;
@@ -347,7 +367,7 @@ class CollectionsController extends Controller
         $collection->is_available = 1;
         if ($oldCollection->category_id == 1 || $oldCollection->category_id == 3) {
             $request->validate([
-                'min_quantity' => 'required|integer',
+                'min_quantity' => 'required|integer|gt:0',
                 'max_quantity' => 'required|integer|gte:min_quantity',
             ]);
             $collection->max_qty = $request->input('max_quantity');
@@ -356,7 +376,7 @@ class CollectionsController extends Controller
         if ($oldCollection->category_id != 4) {
             $request->validate([
                 'collection_price' => 'required|numeric',
-                'min_serve_to_person' => 'required|integer',
+                'min_serve_to_person' => 'required|integer|gt:0',
                 'max_serve_to_person' => 'required|integer|gte:min_serve_to_person',
             ]);
             $collection->price = $request->input('collection_price');
@@ -366,7 +386,7 @@ class CollectionsController extends Controller
         if ($oldCollection->category_id == 2) {
             $request->validate([
 //                'persons_max_count' => 'required|integer',
-                'setup_time' => 'required|integer',
+                'setup_time' => 'required|integer|gt:0',
                 'max_time' => 'required|integer|gte:setup_time',
                 'requirements_en' => 'required|string',
                 'requirements_ar' => 'required|string',
@@ -693,6 +713,16 @@ class CollectionsController extends Controller
             $editingCollection->collection_id = $collection->id;
             $service_type = $request->input('service_type');
             $service = CategoryRestaurant::where('restaurant_id', $collection->restaurant_id)->where('name_en', $service_type)->first();
+            if($service_type == 'Delivery'){
+                $validator = \Validator::make($request->all(), [
+                    'delivery_time' => 'required|integer|gt:0',
+                ]);
+                if ($validator->fails()) {
+                    return redirect()->back()
+                        ->withErrors($validator)
+                        ->withInput();
+                }
+            }
             $editingCollection->service_type_id = $service->id;
             $editingCollection->delivery_hours = $request->input('delivery_time');
             $editingCollection->name_en = $request->input('name_en');
@@ -714,7 +744,7 @@ class CollectionsController extends Controller
             $editingCollection->service_presentation_ar = $request->input('service_presentation_ar');
             if ($collection->category_id == 1 || $collection->category_id == 3) {
                 $request->validate([
-                    'min_quantity' => 'required|integer',
+                    'min_quantity' => 'required|integer|gt:0',
                     'max_quantity' => 'required|integer|gte:min_quantity',
                 ]);
                 $editingCollection->max_qty = $request->input('max_quantity');
@@ -723,7 +753,7 @@ class CollectionsController extends Controller
             if ($collection->category_id != 4) {
                 $request->validate([
                     'collection_price' => 'required|numeric',
-                    'min_serve_to_person' => 'required|integer',
+                    'min_serve_to_person' => 'required|integer|gt:0',
                     'max_serve_to_person' => 'required|integer|gte:min_serve_to_person',
                 ]);
                 $editingCollection->price = $request->input('collection_price');
@@ -732,7 +762,7 @@ class CollectionsController extends Controller
             }
             if ($collection->category_id == 2) {
                 $request->validate([
-                    'setup_time' => 'required|integer',
+                    'setup_time' => 'required|integer|gt:0',
                     'max_time' => 'required|integer|gte:setup_time',
                     'requirements_en' => 'required|string|max:255',
                     'requirements_ar' => 'required|string|max:255',
@@ -781,6 +811,16 @@ class CollectionsController extends Controller
         } elseif ($user->admin == 1) {
             $service_type = $request->input('service_type');
             $service = CategoryRestaurant::where('restaurant_id', $collection->restaurant_id)->where('name_en', $service_type)->first();
+            if($service_type == 'Delivery'){
+                $validator = \Validator::make($request->all(), [
+                    'delivery_time' => 'required|integer|gt:0',
+                ]);
+                if ($validator->fails()) {
+                    return redirect()->back()
+                        ->withErrors($validator)
+                        ->withInput();
+                }
+            }
             $collection->service_type_id = $service->id;
             $collection->delivery_hours = $request->input('delivery_time');
             $collection->name_en = $request->input('name_en');
@@ -802,7 +842,7 @@ class CollectionsController extends Controller
             $collection->service_presentation_ar = $request->input('service_presentation_ar');
             if ($collection->category_id == 1 || $collection->category_id == 3) {
                 $request->validate([
-                    'min_quantity' => 'integer',
+                    'min_quantity' => 'integer|gt:0',
                     'max_quantity' => 'integer|gte:min_quantity',
                 ]);
                 $collection->max_qty = $request->input('max_quantity');
@@ -811,7 +851,7 @@ class CollectionsController extends Controller
             if ($collection->category_id != 4) {
                 $request->validate([
                     'collection_price' => 'required|numeric',
-                    'min_serve_to_person' => 'integer',
+                    'min_serve_to_person' => 'integer|gt:0',
                     'max_serve_to_person' => 'integer|gte:min_serve_to_person',
                 ]);
                 $collection->price = $request->input('collection_price');
@@ -821,7 +861,7 @@ class CollectionsController extends Controller
             if ($collection->category_id == 2) {
                 $request->validate([
 //                'persons_max_count' => 'required|integer',
-                    'setup_time' => 'integer',
+                    'setup_time' => 'integer|gt:0',
                     'max_time' => 'integer|gte:setup_time',
                     'requirements_en' => 'string',
                     'requirements_ar' => 'string',
@@ -898,6 +938,16 @@ class CollectionsController extends Controller
             $collection = Collection::find($id);
             $service_type = $request->input('service_type');
             $service = CategoryRestaurant::where('restaurant_id', $collection->restaurant_id)->where('name_en', $service_type)->first();
+            if($service_type == 'Delivery'){
+                $validator = \Validator::make($request->all(), [
+                    'delivery_time' => 'required|integer|gt:0',
+                ]);
+                if ($validator->fails()) {
+                    return redirect()->back()
+                        ->withErrors($validator)
+                        ->withInput();
+                }
+            }
             $collection->service_type_id = $service->id;
             $collection->delivery_hours = $request->input('delivery_time');
             $editingCollection = EditingCollection::where('collection_id', $id)->first();
@@ -917,7 +967,7 @@ class CollectionsController extends Controller
             $collection->service_presentation_ar = $request->input('service_presentation_ar');
             if ($collection->category_id == 1 || $collection->category_id == 3) {
                 $request->validate([
-                    'min_quantity' => 'integer',
+                    'min_quantity' => 'integer|gt:0',
                     'max_quantity' => 'integer|gte:min_quantity',
                 ]);
                 $collection->max_qty = $request->input('max_quantity');
@@ -936,7 +986,7 @@ class CollectionsController extends Controller
             if ($collection->category_id == 2) {
                 $request->validate([
 //                'persons_max_count' => 'required|integer',
-                    'setup_time' => 'integer',
+                    'setup_time' => 'integer|gt:0',
                     'max_time' => 'integer|gte:setup_time',
                     'requirements_en' => 'string|max:255',
                     'requirements_ar' => 'string|max:255',

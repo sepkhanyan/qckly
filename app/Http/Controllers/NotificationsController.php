@@ -9,7 +9,7 @@ use App\Notification;
 
 class NotificationsController extends Controller
 {
-    public function sendNot($userId, $from, $msg, $order_id, $NotificationType = null, $type = null, $getDetails = null, $getDetailsOffers = null, $isForOfferList = false)
+    public function sendNot($userId, $from, $msg, $order_id, $type = null,  $NotificationType = null, $getDetails = null, $getDetailsOffers = null, $isForOfferList = false)
     {
         $devicetoken = Device::where('user_id', $userId)->where('device_type', 'android')->get();
         $Not_id = Notification::create([
@@ -25,17 +25,17 @@ class NotificationsController extends Controller
                 'NotificationId' => $Not_id->id,
                 'message' => $msg,
 //                'typeOfService' => $type,
-                'order_id' => $order_id,
-                 'NotificationType' => $NotificationType,
+                'order_id' => $order_id
+                'NotificationType' => $NotificationType,
 
             ];
         foreach ($devicetoken as $dev) {
-            $device[] = $dev->device_token;
+            $device[] = $dev->device_token; 
 
         }
         // dd($device);
-         $this->sendToIos($messages, $msg, $userId);
-//        $this->sendToAndroid($messages, $device);
+        // $this->sendToIos($messages, $msg, $userId);
+        $this->sendToAndroid($messages, $device);
         // try {
         //     $this->dispatch(new sendToClientAndroid($messages, $device));
         //     $this->dispatch(new sendToClientiOS($messages, $msg, $userId));
@@ -48,7 +48,7 @@ class NotificationsController extends Controller
 
     public function sendToIos($messages, $msg, $userId)
     {
-        // $tokenFilter = new TokenAuthController();
+        $tokenFilter = new TokenAuthController();
         /*
      *send push notification to client
      */
@@ -74,6 +74,7 @@ class NotificationsController extends Controller
             //     $tCert = public_path() . '/DevAgentCertificates.pem';
             // }
         } else if (\App::environment('production')) {
+            dd(1);
             // Provide the Host Information.
             $tHost = 'gateway.push.apple.com';
             // Provide the Certificate and Key Data.
@@ -154,6 +155,7 @@ class NotificationsController extends Controller
 
     public function sendToAndroid($message, $device)
     {
+        // dd(1);
         $msg = array
         (
             'message'     => $message
@@ -177,8 +179,8 @@ class NotificationsController extends Controller
         curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
         curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
         $result = curl_exec($ch );
-        \Log::info($result);
-        
+dd($result);
+
         curl_close( $ch );
 
     }
