@@ -34,8 +34,8 @@ class NotificationsController extends Controller
 
         }
         // dd($device);
-        // $this->sendToIos($messages, $msg, $userId);
-        $this->sendToAndroid($messages, $device);
+         $this->sendToIos($messages, $msg, $userId);
+//        $this->sendToAndroid($messages, $device);
         // try {
         //     $this->dispatch(new sendToClientAndroid($messages, $device));
         //     $this->dispatch(new sendToClientiOS($messages, $msg, $userId));
@@ -74,7 +74,6 @@ class NotificationsController extends Controller
             //     $tCert = public_path() . '/DevAgentCertificates.pem';
             // }
         } else if (\App::environment('production')) {
-            dd(1);
             // Provide the Host Information.
             $tHost = 'gateway.push.apple.com';
             // Provide the Certificate and Key Data.
@@ -155,7 +154,6 @@ class NotificationsController extends Controller
 
     public function sendToAndroid($message, $device)
     {
-        // dd(1);
         $msg = array
         (
             'message'     => $message
