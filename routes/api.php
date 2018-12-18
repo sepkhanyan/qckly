@@ -37,6 +37,7 @@ Route::get('/getAddresses', 'AddressesController@getAddresses');
 Route::get('/deleteAddress/{id}', 'AddressesController@deleteAddress');
 Route::post('/completeOrder', 'OrdersController@completeOrder');
 Route::get('/orderList', 'OrdersController@orderList');
+Route::get('/orderDetails/{id}', 'OrdersController@orderDetails');
 Route::post('/rateOrder', 'ReviewsController@rateOrder');
 Route::get('/reviews', 'ReviewsController@reviews');
 Route::get('/login', 'UsersController@login');

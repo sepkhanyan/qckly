@@ -94,20 +94,28 @@
                                     <div class="panel panel-default">
                                         <div class="panel-heading"><h3 class="panel-title">Delivery Address</h3></div>
                                         <div class="panel-body">
-                                            <b>Address:</b>
-                                            {{$order->deliveryAddress->name}},
-                                            {{$order->deliveryAddress->location}},
-                                            {{$order->deliveryAddress->building_number}},
-                                            {{$order->deliveryAddress->zone}},
-                                            {{$order->deliveryAddress->apartment_number}}
+                                            <b>Name:</b>
+                                            {{$order->deliveryAddress->name}}
                                             <br>
-                                            <b>Telephone:</b>
+                                            <b>Mobile Number:</b>
                                             {{$order->deliveryAddress->mobile_number}}
+                                            <br>
+                                            <b>Location:</b>
+                                            {{$order->deliveryAddress->location}}
+                                            <br>
+                                            <b>Street Number:</b>
+                                            {{$order->deliveryAddress->street_number}}
+                                            <br>
+                                            <b>Building Number:</b>
+                                            {{$order->deliveryAddress->building_number}}
+                                            <br>
+                                            <b>Apartment Number:</b>
+                                            {{$order->deliveryAddress->apartment_number}}
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            @if($restaurantOrder->status_id != 3)
+                            @if($restaurantOrder->status_id != 3 && $restaurantOrder->status_id != 1)
                                 <div class="row">
                                     <div class="col-xs-12">
                                         <div class="panel panel-default">

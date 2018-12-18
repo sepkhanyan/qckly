@@ -70,6 +70,7 @@ class OrdersController extends Controller
 
         $user = Auth::user();
         if ($user->admin == 2) {
+            $restaurant = Restaurant::where('id', $user->restaurant_id)->first();
             $restaurantOrder = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $user->restaurant_id)->where('status_id', 1)->first();
             if (!$restaurantOrder) {
                 return redirect()->back();
@@ -87,12 +88,18 @@ class OrdersController extends Controller
 
             if (!$client->lang) {
                 \App::setLocale("en");
+                $restaurant_name = $restaurant->name_en;
             } else {
                 \App::setLocale($client->lang);
+                if ($client->lang == 'ar') {
+                    $restaurant_name = $restaurant->name_ar;
+                } else {
+                    $restaurant_name = $restaurant->name_en;
+                }
             }
             $userId = $order->user_id;
             $from = $user->id;
-            $msg = \Lang::get('message.orderConfirmation', ['order_id' => $order->id]);
+            $msg = \Lang::get('message.orderConfirmation', ['restaurant_name' => $restaurant_name, 'order_id' => $order->id]);
             $order_id = $order->id;
             $NotificationType = 1;
             $notification = new NotificationsController();
@@ -335,6 +342,189 @@ class OrdersController extends Controller
                     'success' => 1,
                     'status_code' => 200,
                     'data' => $wholeData));
+            } else {
+                return response()->json(array(
+                    'success' => 0,
+                    'status_code' => 200,
+                    'data' => [],
+                    'message' => \Lang::get('message.noOrder')));
+            }
+        } else {
+            return response()->json(array(
+                'success' => 0,
+                'status_code' => 200,
+                'message' => \Lang::get('message.loginError')));
+        }
+    }
+
+    public function orderDetails(Request $request, $id)
+    {
+        \Log::info($request->all());
+        $lang = $request->header('Accept-Language');
+        $validator = \Validator::make($request->all(), []);
+        if ($lang == 'ar') {
+            $validator->getTranslator()->setLocale('ar');
+        }
+        $token = str_replace("Bearer ", "", $request->header('Authorization'));
+        $user = User::where('api_token', '=', $token)->first();
+        if ($user) {
+            $order = Order::where('id', $id)->where('user_id', $user->id)->first();
+            if ($order) {
+                if ($order->deliveryAddress->is_apartment == 1) {
+                    $is_apartment = true;
+                } else {
+                    $is_apartment = false;
+                }
+                if ($order->deliveryAddress->is_default == 1) {
+                    $default = true;
+                } else {
+                    $default = false;
+                }
+                $address_id = $order->deliveryAddress->id;
+                $address = [
+                    'address_name' => $order->deliveryAddress->name,
+                    'mobile_number' => $order->deliveryAddress->mobile_number,
+                    'location' => $order->deliveryAddress->location,
+                    'street_number' => $order->deliveryAddress->street_number,
+                    'building_number' => $order->deliveryAddress->building_number,
+                    'zone' => $order->deliveryAddress->zone,
+                    'is_apartment' => $is_apartment,
+                    'apartment_number' => $order->deliveryAddress->apartment_number,
+                    'is_default' => $default,
+                    'latitude' => $order->deliveryAddress->latitude,
+                    'longitude' => $order->deliveryAddress->longitude,
+                ];
+                $total = 0;
+                $collections = [];
+                foreach ($order->cart->cartCollection as $cart_collection) {
+                    $menu = [];
+                    $categories = MenuCategory::whereHas('cartItem', function ($query) use ($cart_collection) {
+                        $query->where('cart_collection_id', $cart_collection->id);
+                    })->with(['cartItem' => function ($x) use ($cart_collection) {
+                        $x->where('cart_collection_id', $cart_collection->id);
+                    }])->get();
+                    foreach ($categories as $category) {
+                        $items = [];
+                        foreach ($category->cartItem as $cartItem) {
+                            if ($lang == 'ar') {
+                                $item_name = $cartItem->menu->name_ar;
+                            } else {
+                                $item_name = $cartItem->menu->name_en;
+                            }
+                            $items [] = [
+                                'item_id' => $cartItem->item_id,
+                                'item_name' => $item_name,
+                                'item_price' => $cartItem->menu->price,
+                                'item_quantity' => $cartItem->quantity,
+                                'item_price_unit' => \Lang::get('message.priceUnit')
+                            ];
+                        }
+                        if ($lang == 'ar') {
+                            $menu_name = $category->name_ar;
+                        } else {
+                            $menu_name = $category->name_en;
+                        }
+                        $menu [] = [
+                            'menu_id' => $category->id,
+                            'menu_name' => $menu_name,
+                            'items' => $items
+                        ];
+                    }
+                    if ($cart_collection->collection->price == null) {
+                        $collection_price = '';
+                    } else {
+                        $collection_price = $cart_collection->collection->price;
+                    }
+                    if ($cart_collection->persons_count == null) {
+                        $persons_count = -1;
+                    } else {
+                        $persons_count = $cart_collection->persons_count;
+                    }
+                    if ($cart_collection->quantity == null) {
+                        $quantity = '';
+                    } else {
+                        $quantity = $cart_collection->quantity;
+                    }
+                    if ($cart_collection->female_caterer == 1) {
+                        $female_caterer = true;
+                    } else {
+                        $female_caterer = false;
+                    }
+
+                    if ($lang == 'ar') {
+                        $restaurant_name = $cart_collection->collection->restaurant->name_ar;
+                        $collection_type = $cart_collection->collection->category->name_ar;
+                        $collection_name = $cart_collection->collection->name_ar;
+                        $service_type = $cart_collection->collection->serviceType->name_ar;
+                    } else {
+                        $restaurant_name = $cart_collection->collection->restaurant->name_en;
+                        $collection_type = $cart_collection->collection->category->name_en;
+                        $collection_name = $cart_collection->collection->name_en;
+                        $service_type = $cart_collection->collection->serviceType->name_en;
+                    }
+
+                    $collections [] = [
+                        'restaurant_id' => $cart_collection->collection->restaurant->id,
+                        'restaurant_name' => $restaurant_name,
+                        'collection_id' => $cart_collection->collection_id,
+                        'collection_type_id' => $cart_collection->collection->category_id,
+                        'collection_type' => $collection_type,
+                        'collection_name' => $collection_name,
+                        'collection_price' => $collection_price,
+                        'collection_price_unit' => \Lang::get('message.priceUnit'),
+                        'female_caterer' => $female_caterer,
+                        'special_instruction' => $cart_collection->special_instruction,
+                        'service_type_id' => $cart_collection->collection->service_type_id,
+                        'service_type' => $service_type,
+                        'menu_items' => $menu,
+                        'quantity' => $quantity,
+                        'persons_count' => $persons_count,
+                        'subtotal' => $cart_collection->price,
+                        'subtotal_unit' => \Lang::get('message.priceUnit'),
+                    ];
+                    $total += $cart_collection->price;
+                }
+
+                $cart = [
+                    'cart_id' => $order->cart->id,
+                    'delivery_area' => $order->cart->delivery_order_area,
+                    'delivery_date' => date("j M Y", strtotime($order->cart->delivery_order_date)),
+                    'delivery_time' => date("g:i A", strtotime($order->cart->delivery_order_time)),
+                    'delivery_address_id' => $address_id,
+                    'delivery_address' => $address,
+                    'collections' => $collections,
+                    'total' => $total,
+                    'total_unit' => \Lang::get('message.priceUnit'),
+                ];
+
+                if ($order->is_rated == 1) {
+                    $rated = true;
+                } else {
+                    $rated = false;
+                }
+                if ($lang == 'ar') {
+                    $status = $order->status->name_ar;
+                } else {
+                    $status = $order->status->name_en;
+                }
+
+                $arr [] = [
+                    'order_id' => $order->id,
+                    'order_status_id' => $order->status_id,
+                    'order_status' => $status,
+                    'order_date' => date("j M Y", strtotime($order->created_at)),
+                    'order_time' => date("g:i A", strtotime($order->created_at)),
+                    'total_price' => $order->total_price,
+                    'total_price_unit' => \Lang::get('message.priceUnit'),
+                    'is_rated' => $rated,
+                    'cart' => $cart
+                ];
+
+
+                return response()->json(array(
+                    'success' => 1,
+                    'status_code' => 200,
+                    'data' => $arr));
             } else {
                 return response()->json(array(
                     'success' => 0,
