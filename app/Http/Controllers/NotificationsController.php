@@ -9,7 +9,7 @@ use App\Notification;
 
 class NotificationsController extends Controller
 {
-    public function sendNot($userId, $from, $msg, $order_id, $type = null,  $NotificationType = null, $getDetails = null, $getDetailsOffers = null, $isForOfferList = false)
+    public function sendNot($userId, $from, $msg, $order_id, $NotificationType = null, $getDetails = null, $getDetailsOffers = null, $isForOfferList = false)
     {
         $devicetoken = Device::where('user_id', $userId)->where('device_type', 'android')->get();
         $Not_id = Notification::create([
@@ -25,7 +25,7 @@ class NotificationsController extends Controller
                 'NotificationId' => $Not_id->id,
                 'message' => $msg,
 //                'typeOfService' => $type,
-                'order_id' => $order_id
+                'order_id' => $order_id,
                 'NotificationType' => $NotificationType,
 
             ];
@@ -34,8 +34,8 @@ class NotificationsController extends Controller
 
         }
         // dd($device);
-        // $this->sendToIos($messages, $msg, $userId);
-        $this->sendToAndroid($messages, $device);
+        $this->sendToIos($messages, $msg, $userId); 
+        // $this->sendToAndroid($messages, $device);
         // try {
         //     $this->dispatch(new sendToClientAndroid($messages, $device));
         //     $this->dispatch(new sendToClientiOS($messages, $msg, $userId));
@@ -48,7 +48,7 @@ class NotificationsController extends Controller
 
     public function sendToIos($messages, $msg, $userId)
     {
-        $tokenFilter = new TokenAuthController();
+//        $tokenFilter = new TokenAuthController();
         /*
      *send push notification to client
      */
@@ -62,7 +62,8 @@ class NotificationsController extends Controller
             $tHost = 'gateway.sandbox.push.apple.com';
             // // Provide the Certificate and Key Data.
             // // if ($cert->certificate == 1) {
-              $tCert = public_path().'/QcklyCertificates.p12';
+              $tCert = public_path().'/QcklyCertificates.pem';
+              \Log::info($tCert);
             // // } else{
             // //    $tCert = public_path().'/AgentDevelopmentCertificates.pem';
             // // }
