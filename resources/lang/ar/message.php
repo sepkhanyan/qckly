@@ -34,5 +34,5 @@ return [
     'availabilityChanged' => 'ساعات تواجد هذا المطعم تغيرت، يرجى الطلب خلال ساعات تواجده، او الطلب من مطعم آخر',
     'isAvailable'         => 'متاح',
     'notAvailable'        => 'غير متاح',
-    'orderConfirmation'   => ':restaurant_name قبل طلبك # :order_id وبدأ في تجهيزه'
+    'orderConfirmation'   => ':restaurant_name قبل طلبك# :order_id وبدأ في تجهيزه'
 ];
