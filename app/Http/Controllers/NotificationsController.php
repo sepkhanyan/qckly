@@ -6,7 +6,7 @@ use App\Device;
 use App\User;
 use Illuminate\Http\Request;
 use App\Notification;
-
+use InvalidArgumentException;
 class NotificationsController extends Controller
 {
     public function sendNot($userId, $from, $msg, $order_id, $NotificationType = null, $getDetails = null, $getDetailsOffers = null, $isForOfferList = false)
@@ -35,7 +35,7 @@ class NotificationsController extends Controller
         }
         // dd($device);
         $this->sendToIos($messages, $msg, $userId); 
-        // $this->sendToAndroid($messages, $device);
+        $this->sendToAndroid($messages, $device);
         // try {
         //     $this->dispatch(new sendToClientAndroid($messages, $device));
         //     $this->dispatch(new sendToClientiOS($messages, $msg, $userId));
@@ -180,7 +180,6 @@ class NotificationsController extends Controller
         curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
         curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
         $result = curl_exec($ch );
-dd($result);
 
         curl_close( $ch );
 
