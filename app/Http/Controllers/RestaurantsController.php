@@ -1204,9 +1204,10 @@ class RestaurantsController extends Controller
             }
 
             if (count($restaurants) > 0) {
+                $restaurant_details = [];
                 foreach ($restaurants as $restaurant) {
+                    $menu_collection = [];
                     if (count($restaurant->collection) > 0) {
-                        $menu_collection = [];
                         foreach ($restaurant->collection as $collection) {
                             if ($collection->female_caterer_available == 1) {
                                 $female_caterer_available = true;
@@ -1216,7 +1217,6 @@ class RestaurantsController extends Controller
 
                             $requestDay = Carbon::today()->dayOfWeek;
                             $requestTime = Carbon::now()->toTimeString();
-//                            dd($requestTime);
                             if($collection->is_available == 1){
                                 $unavailability = CollectionUnavailabilityHour::where('collection_id', $collection->id)->where('weekday', $requestDay)
                                     ->where('start_time', '<=', $requestTime)
@@ -1464,20 +1464,50 @@ class RestaurantsController extends Controller
 //                            return $menu2['is_available'] <=> $menu1['is_available'];
 //                        });
 
-
-
-                        $arr = [
-                            'restaurant_id' => $restaurant->id,
-                            'collections' => $menu_collection,
-                        ];
-                    } else {
+                    } /*else {
                         return response()->json(array(
                             'success' => 0,
                             'status_code' => 200,
                             'message' => \Lang::get('message.noCollection')));
-                    }
+                    }*/
+                    $category = [];
+                    foreach ($restaurant->categoryRestaurant as $categoryRestaurant) {
+                        $id = $categoryRestaurant->category_id;
+                        if ($lang == 'ar') {
+                            $name = $categoryRestaurant->name_ar;
 
+                        } else {
+                            $name = $categoryRestaurant->name_en;
+                        }
+
+                        $category [] = [
+                            'category_id' => $id,
+                            'category_name' => $name
+                        ];
+
+                    }
+                    if ($lang == 'ar') {
+                        $restaurant_name = $restaurant->name_ar;
+                        $restaurant_description = $restaurant->description_ar;
+
+                    } else {
+                        $restaurant_name = $restaurant->name_en;
+                        $restaurant_description = $restaurant->description_en;
+                    }
+                    $restaurant_details [] = [
+                        'restaurant_id' => $restaurant->id,
+                        'restaurant_name' =>  $restaurant_name,
+                        'restaurant_description' => $restaurant_description,
+                        'restaurant_image' => url('/') . '/images/' . $restaurant->image,
+                        'restaurant_category' => $category
+                    ];
+
+                    $arr = [
+                        'restaurant' => $restaurant_details,
+                        'collections' => $menu_collection
+                    ];
                 }
+
 
                 return response()->json(array(
                     'success' => 1,

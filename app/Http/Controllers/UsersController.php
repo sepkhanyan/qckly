@@ -524,7 +524,7 @@ class UsersController extends Controller
         }
         $user = User::where('id',$user_id)->update(['lang'=> $lang]);
         if ($user) {
-            return response()->json(array('success' => 0, 'status_code' => 200, 'message' => 'Language changed successfully'));
+            return response()->json(array('success' => 1, 'status_code' => 200, 'message' => 'Language changed successfully'));
 
 
         }
@@ -542,7 +542,7 @@ class UsersController extends Controller
             'device_type' => 'required',
         ]);
         if ($validator->fails()) {
-            return response()->json(array('success' => 1, 'status_code' => 400, \Lang::get('message.invalid_inputs'),
+            return response()->json(array('success' => 0, 'status_code' => 400, \Lang::get('message.invalid_inputs'),
                 'error_details' => $validator->messages()));
         } else {
             $device_exist = Device::where('device_token', $request->get('device_token'))->get();
@@ -582,7 +582,7 @@ class UsersController extends Controller
                         )
                     );
                 }*/
-                return response()->json(array('success' => 0, 'status_code' => 200,
+                return response()->json(array('success' => 1, 'status_code' => 200,
                     'message' => 'successfully registered'));
 
             }
@@ -601,7 +601,7 @@ class UsersController extends Controller
                 $token = Device::where('user_id',$user_id)->where('device_token',$device_token)->delete();
             }
             return response()->json(array(
-                'success' => 0,
+                'success' => 1,
                 'status_code' => 200,
             ));
         }
