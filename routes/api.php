@@ -46,5 +46,6 @@ Route::get('/resendOtp', 'UsersController@resendOtp');
 Route::post('/completeProfile', 'UsersController@completeProfile');
 Route::get('/getUserDetails', 'UsersController@getUserDetails');
 Route::get('/allDevicesPost', 'UsersController@allDevicesPost');
+Route::get('/logout', 'UsersController@logout');
 Route::get('/changeLanguage', 'UsersController@changeLanguage');
 Route::get('/test', 'NotificationsController@test');

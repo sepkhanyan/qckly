@@ -9,7 +9,7 @@ use App\Notification;
 use InvalidArgumentException;
 class NotificationsController extends Controller
 {
-    public function sendNot($userId, $from, $msg, $order_id, $NotificationType = null, $getDetails = null, $getDetailsOffers = null, $isForOfferList = false)
+    public function sendNot($userId, $from, $msg, $order_id = null, $NotificationType = null, $getDetails = null, $getDetailsOffers = null, $isForOfferList = false)
     {
         $devicetoken = Device::where('user_id', $userId)->where('device_type', 'android')->get();
         $Not_id = Notification::create([

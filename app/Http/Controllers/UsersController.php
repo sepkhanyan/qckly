@@ -546,6 +546,7 @@ class UsersController extends Controller
                 'error_details' => $validator->messages()));
         } else {
             $device_exist = Device::where('device_token', $request->get('device_token'))->get();
+
             if (count($device_exist) > 0) {
                 if (isset($req_lang) && isset($req_auth)) {
                     $user_id = User::getUserByToken($req_auth);
@@ -574,19 +575,35 @@ class UsersController extends Controller
                             'lang' => $req_lang
                         )
                     );
-                } else {
+                }/* else {
                     Device::create(array(
                             'device_token' => $request->get('device_token'),
                             'device_type' => $request->get('device_type')
                         )
                     );
-                }
+                }*/
                 return response()->json(array('success' => 0, 'status_code' => 200,
                     'message' => 'successfully registered'));
 
             }
 
 
+        }
+    }
+
+    public function logout(Request $request)
+    {
+        $req_auth = $request->header('Authorization');
+        $user_id = User::getUserByToken($req_auth);
+        if ($user_id) {
+            if ($request->has('device_token') && $request->get('device_token') != '') {
+                $device_token = $request->get('device_token');
+                $token = Device::where('user_id',$user_id)->where('device_token',$device_token)->delete();
+            }
+            return response()->json(array(
+                'success' => 0,
+                'status_code' => 200,
+            ));
         }
     }
 
