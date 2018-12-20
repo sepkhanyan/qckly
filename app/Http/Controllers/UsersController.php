@@ -555,14 +555,14 @@ class UsersController extends Controller
                             'user_id' => $user_id,
                             'lang' => $req_lang]);
                     if ($doneSend) {
-                        return response()->json(array('success' => 0, 'status_code' => 200, 'message' => 'successfully registered'));
+                        return response()->json(array('success' => 1, 'status_code' => 200, 'message' => 'successfully registered'));
                     }
                 } else {
                     $doneSend = Device::where('device_token', $request->get('device_token'))
                         ->update([
                             'device_token' => $request->get('device_token')]);
                     if ($doneSend) {
-                        return response()->json(array('success' => 0, 'status_code' => 200, 'message' => 'successfully registered'));
+                        return response()->json(array('success' => 1, 'status_code' => 200, 'message' => 'successfully registered'));
                     }
                 }
             } else {

@@ -156,7 +156,6 @@ class NotificationsController extends Controller
 
     public function sendToAndroid($message, $device)
     {
-        // dd(1);
         $msg = array
         (
             'message'     => $message

@@ -85,7 +85,6 @@ class OrdersController extends Controller
                 $order->save();
             }
             $client = User::where('id', $order->user_id)->first();
-
             if (!$client->lang) {
                 \App::setLocale("en");
                 $restaurant_name = $restaurant->name_en;

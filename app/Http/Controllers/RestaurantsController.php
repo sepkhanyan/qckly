@@ -1470,6 +1470,36 @@ class RestaurantsController extends Controller
                             'status_code' => 200,
                             'message' => \Lang::get('message.noCollection')));
                     }*/
+
+
+                    if ($restaurant->status == 1) {
+                        $status = \Lang::get('message.open');
+                    } else {
+                        $status = \Lang::get('message.busy');
+                    }
+
+                    $famous = null;
+                    $famous = [];
+                    foreach ($restaurant->menu as $menu) {
+
+                        if ($menu->famous == 1) {
+                            $image = url('/') . '/images/' . $menu->image;
+                            array_push($famous, $image);
+                        }
+                    }
+
+
+                    $rate_sum = 0;
+                    $review_count = $restaurant->review->count();
+                    foreach ($restaurant->review as $review) {
+                        $rate_sum += $review->rate_value;
+                    }
+                    if ($review_count) {
+                        $rating_count = $rate_sum / $review_count;
+                    } else {
+                        $rating_count = 0;
+                    }
+
                     $category = [];
                     foreach ($restaurant->categoryRestaurant as $categoryRestaurant) {
                         $id = $categoryRestaurant->category_id;
@@ -1496,10 +1526,14 @@ class RestaurantsController extends Controller
                     }
                     $restaurant_details [] = [
                         'restaurant_id' => $restaurant->id,
-                        'restaurant_name' =>  $restaurant_name,
-                        'restaurant_description' => $restaurant_description,
+                        'restaurant_name' => $restaurant_name,
                         'restaurant_image' => url('/') . '/images/' . $restaurant->image,
-                        'restaurant_category' => $category
+                        'famous_images' => $famous,
+                        'ratings_count' => $rating_count,
+                        'review_count' => $review_count,
+                        'description' => $restaurant_description,
+                        'status' => $status,
+                        'category' => $category
                     ];
 
                     $arr = [
