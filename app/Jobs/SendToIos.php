@@ -1,59 +1,49 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Jobs;
 
+use Illuminate\Bus\Queueable;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
 use App\Device;
-use App\User;
-use Illuminate\Http\Request;
 use App\Notification;
 use InvalidArgumentException;
-class NotificationsController extends Controller
+
+class SendToIos implements ShouldQueue
 {
-    public function sendNot($userId, $from, $msg, $order_id = null, $NotificationType = null, $getDetails = null, $getDetailsOffers = null, $isForOfferList = false)
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    protected $user_id;
+    protected $message;
+    protected $messages;
+
+    /**
+     * Create a new job instance.
+     *
+     * @return void
+     */
+    public function __construct($user_id, $message,  $messages)
     {
-        $devicetoken = Device::where('user_id', $userId)->where('device_type', 'android')->get();
-        $Not_id = Notification::create([
-            'to_device' => $userId,
-            'from_device' => $from,
-            'message' => $msg,
-            'notification_type' => $NotificationType,
-            'order_id' => $order_id
-             
-        ]);
-        $device = array();
-        $messages =
-            [
-                'NotificationId' => $Not_id->id,
-                'message' => $msg,
-//                'typeOfService' => $type,
-                'order_id' => $order_id,
-                'NotificationType' => $NotificationType,
-
-            ];
-        foreach ($devicetoken as $dev) {
-            $device[] = $dev->device_token; 
-
-        }
-        $this->sendToIos($messages, $msg, $userId); 
-        $this->sendToAndroid($messages, $device);
-        // try {
-        //     $this->dispatch(new sendToClientAndroid($messages, $device));
-        //     $this->dispatch(new sendToClientiOS($messages, $msg, $userId));
-        // } catch (Exception $e) {
-        //     $e->getMessage();
-        // }
+        $this->user_id = $user_id;
+        $this->message = $message;
+        $this->messages = $messages;
     }
 
-
-
-    public function sendToIos($messages, $msg, $userId)
+    /**
+     * Execute the job.
+     *
+     * @return void
+     */
+    public function handle()
     {
 //        $tokenFilter = new TokenAuthController();
         /*
      *send push notification to client
      */
         //iOS app
-    // Provide the Host Information.
+        // Provide the Host Information.
         $tPort = 2195;
 // Provide the Certificate and Key Data.
         // $tCert = public_path().'/AgentCertificate.pem';
@@ -62,8 +52,8 @@ class NotificationsController extends Controller
             $tHost = 'gateway.sandbox.push.apple.com';
             // // Provide the Certificate and Key Data.
             // // if ($cert->certificate == 1) {
-              $tCert = public_path().'/QcklyCertificates.pem';
-//              \Log::info($tCert);
+            $tCert = public_path() . '/QcklyCertificates.pem';
+//            \Log::info($tCert);
             // // } else{
             // //    $tCert = public_path().'/AgentDevelopmentCertificates.pem';
             // // }
@@ -75,6 +65,7 @@ class NotificationsController extends Controller
             //     $tCert = public_path() . '/DevAgentCertificates.pem';
             // }
         } else if (\App::environment('production')) {
+//            dd(1);
             // Provide the Host Information.
             $tHost = 'gateway.push.apple.com';
             // Provide the Certificate and Key Data.
@@ -106,8 +97,8 @@ class NotificationsController extends Controller
         $tPayload = 'APNS Message Handled by LiveCode';
 // Create the message content that is to be sent to the device.
         $tBody['aps'] = array(
-            "alert" => $msg,// 
-            "message" => $messages,
+            "alert" => $this->message,//
+            "message" => $this->messages,
             'sound' => $tSound,
             'content-available' => 1
 
@@ -125,13 +116,13 @@ class NotificationsController extends Controller
         $tSocket = stream_socket_client('ssl://' . $tHost . ':' . $tPort, $error, $errstr, 30, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $tContext);
 
 // Check if we were able to open a socket.
-        
+
         if (!$tSocket)
             exit ("APNS Connection Failed: $error $errstr" . PHP_EOL);
 // Build the Binary Notification.
         $tResult = '';
         try {
-            $devicetoken = Device::where('user_id', $userId)
+            $devicetoken = Device::where('user_id', $this->user_id)
                 ->where('device_type', 'ios')
                 ->orderBy('id', 'desc')->take(5)
                 ->get();
@@ -150,36 +141,6 @@ class NotificationsController extends Controller
            echo 'Could not Deliver Message to APNS' . PHP_EOL;*/
 // Close the Connection to the Server.
         fclose($tSocket);
-    }
-
-    public function sendToAndroid($message, $device)
-    {
-        $msg = array
-        (
-            'message'     => $message
-        );
-        $fields = array
-        (
-            'registration_ids'     => $device,
-            'data'            => $msg
-        );
-
-        $headers = array
-        (
-            'Authorization: key=AAAADqKcxjE:APA91bEBFOqJeois_VnE6TIT33Nax62sCHwDKm_YHb9scdCrQ65i_rluwqwVKsCcDzVnzwbFEzx38XhvhPmapqXSDlqtNQgRSB9lGzZLiELjdFVv-G2XluwKYdTWxhBN72bSGc5FoiTw',
-            'Content-Type: application/json'
-        );
-        $ch = curl_init();
-        curl_setopt( $ch,CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );
-        curl_setopt( $ch,CURLOPT_POST, true );
-        curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
-        curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
-        curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
-        curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
-        $result = curl_exec($ch );
-
-        curl_close( $ch );
-
     }
 
     public function filterToken($token)
@@ -209,5 +170,4 @@ class NotificationsController extends Controller
 
         return $token;
     }
-
 }

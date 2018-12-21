@@ -14,6 +14,7 @@ class Notification extends Model
         'message',
         'is_read',
         'notification_type',
-        'order_id'
+        'order_id',
+        'restaurant_id'
     ];
 }

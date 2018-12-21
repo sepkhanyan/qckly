@@ -34,5 +34,6 @@ return [
     'availabilityChanged' => 'This restaurant availability hours has been changed. Please order at it\'s availability hours or order from some other restaurant.',
     'isAvailable'         => 'Is Available',
     'notAvailable'        => 'Not Available',
-    'orderConfirmation'   => ':restaurant_name accepted your order# :order_id and started working on it.'
+    'orderConfirmation'   => ':restaurant_name accepted your order# :order_id and started working on it.',
+    'newRestaurant'       => ":restaurant_name has been joined Qckly app, we hope you enjoy it's services."
 ];

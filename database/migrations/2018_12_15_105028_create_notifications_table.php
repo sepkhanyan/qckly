@@ -21,6 +21,10 @@ class CreateNotificationsTable extends Migration
             $table->tinyInteger('is_read')->default(0);
             $table->integer('notification_type')->nullable();
             $table->integer('order_id')->nullable();
+            $table->unsignedInteger('restaurant_id')->nullable();
+            $table->foreign('restaurant_id')
+                ->references('id')->on('restaurants')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }

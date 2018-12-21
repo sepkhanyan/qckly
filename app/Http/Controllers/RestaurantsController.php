@@ -23,6 +23,7 @@ use App\CategoryRestaurant;
 use DB;
 use App\Quotation;
 use Carbon\Carbon;
+use App\Jobs\NewRestaurant;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
@@ -81,7 +82,6 @@ class RestaurantsController extends Controller
      */
     public function store(Request $request)
     {
-//        dd($request->all());
         $user = Auth::user();
         if ($user->admin == 1) {
             $validator = \Validator::make($request->all(), [
@@ -238,6 +238,9 @@ class RestaurantsController extends Controller
                 }
             }
             if ($restaurant) {
+                $from = $user->id;
+                $usersId = User::where('group_id', 0)->get();
+                $this->dispatch(new NewRestaurant($usersId, $from, $restaurant->id, $restaurant->name_en, $restaurant->name_ar));
                 return redirect('/restaurants');
             }
         } else {
@@ -686,50 +689,38 @@ class RestaurantsController extends Controller
 
             $opening_type = $request->input('opening_type');
             if ($opening_type) {
-                if ($request->input('opening_type') == '24_7') {
-                    $working = WorkingHour::where('restaurant_id', $restaurant->id)->where('type', '24_7')->first();
-                    if (!$working) {
-                        WorkingHour::where('restaurant_id', $restaurant->id)->delete();
-                        $working = new WorkingHour();
-                    }
+                WorkingHour::where('restaurant_id', $restaurant->id)->delete();
+                if ($opening_type == '24_7') {
+                    $working = new WorkingHour();
                     $working->type = $request->input('opening_type');
                     $working->status = 1;
                     $working->restaurant_id = $restaurant->id;
                     $working->save();
-                } elseif ($request->input('opening_type') == 'daily') {
+                } elseif ($opening_type == 'daily') {
                     $days = $request->input('daily_days');
                     if ($days) {
-                        $work = WorkingHour::where('restaurant_id', $restaurant->id)->where('type', '24_7')->first();
-                        if ($work) {
-                            $work->delete();
-                        }
                         foreach ($days as $day) {
-//                            $working = new WorkingHour();
+                            $working = new WorkingHour();
+                            $working->type = $request->input('opening_type');
+                            $working->weekday = $day;
+                            $working->status = 1;
+                            $working->restaurant_id = $restaurant->id;
                             $daily = $request->input('daily_hours');
-                            $working = WorkingHour::updateOrCreate(
-                                ['weekday' => $day, 'restaurant_id' => $restaurant->id],
-                                ['type' => $request->input('opening_type'),
-                                    'status' => 1,
-                                    'opening_time' => Carbon::parse($daily['open']),
-                                    'closing_time' => Carbon::parse($daily['close'])
-                                ]
-                            );
+                            $working->opening_time = Carbon::parse($daily['open']);
+                            $working->closing_time = Carbon::parse($daily['close']);
+                            $working->save();
                         }
                     }
-                } elseif ($request->input('opening_type') == 'flexible') {
-                    $work = WorkingHour::where('restaurant_id', $restaurant->id)->where('type', '24_7')->first();
-                    if ($work) {
-                        $work->delete();
-                    }
+                } elseif ($opening_type == 'flexible') {
                     foreach ($request->input('flexible_hours') as $flexible) {
-                        $working = WorkingHour::updateOrCreate(
-                            ['weekday' => $flexible['day'], 'restaurant_id' => $restaurant->id],
-                            ['type' => $request->input('opening_type'),
-                                'status' => $flexible['status'],
-                                'opening_time' => Carbon::parse($flexible['open']),
-                                'closing_time' => Carbon::parse($flexible['close'])
-                            ]
-                        );
+                        $working = new WorkingHour();
+                        $working->restaurant_id = $restaurant->id;
+                        $working->type = $request->input('opening_type');
+                        $working->weekday = $flexible['day'];
+                        $working->opening_time = Carbon::parse($flexible['open']);
+                        $working->closing_time = Carbon::parse($flexible['close']);
+                        $working->status = $flexible['status'];
+                        $working->save();
                     }
                 }
             }
