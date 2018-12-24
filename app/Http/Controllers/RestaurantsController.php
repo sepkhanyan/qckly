@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Collection;
 use App\CollectionMenu;
 use App\CollectionUnavailabilityHour;
 use App\EditingCategoryRestaurant;
@@ -41,13 +42,11 @@ class RestaurantsController extends Controller
         $restaurants = Restaurant::paginate(20);
         $data = $request->all();
         if (isset($data['restaurant_search'])) {
-            $restaurants = Restaurant::where('name_en', 'like', $data['restaurant_search'])
-                ->orWhere('description_en', 'like', $data['restaurant_search'])->paginate(20);
+            $restaurants = Restaurant::where('name_en', 'like', $data['restaurant_search'])->paginate(20);
         }
         if ($user->admin == 2) {
             $restaurants = Restaurant::where('id', $user->restaurant_id)->paginate(20);
         }
-
         return view('restaurants', [
             'restaurants' => $restaurants,
             'user' => $user
@@ -238,14 +237,30 @@ class RestaurantsController extends Controller
                 }
             }
             if ($restaurant) {
-                $from = $user->id;
-                $usersId = User::where('group_id', 0)->get();
-                $this->dispatch(new NewRestaurant($usersId, $from, $restaurant->id, $restaurant->name_en, $restaurant->name_ar));
                 return redirect('/restaurants');
             }
         } else {
             return redirect()->back();
         }
+    }
+
+    public function activate($id)
+    {
+        $user = Auth::user();  
+        if($user->admin == 1){
+            $restaurant = Restaurant::find($id);
+            $collections = Collection::where('restaurant_id', $id)->get();
+            if(count($collections) > 0){
+               $activate = Restaurant::where('id', $id)->where('active', 0)->update(['active' => 1]);
+                $from = $user->id;
+                $usersId = User::where('group_id', 0)->get();
+                $this->dispatch(new NewRestaurant($usersId, $from, $restaurant->id, $restaurant->name_en, $restaurant->name_ar));
+            }
+
+        }else{
+            return redirect()->back();
+        }
+        return redirect()->back();
     }
 
     /**
@@ -804,7 +819,7 @@ class RestaurantsController extends Controller
         }
         $restaurants = Restaurant::with(['menu' => function ($query) {
             $query->where('approved', 1);
-        }])->paginate(20);
+        }])->where('active', 1)->paginate(20);
         if (count($restaurants) > 0) {
             foreach ($restaurants as $restaurant) {
                 $famous = null;
@@ -887,7 +902,7 @@ class RestaurantsController extends Controller
                 $query->where('category_id', $id);
             })->with(['menu' => function ($query) {
                 $query->where('approved', 1);
-            }])->paginate(20);
+            }])->where('active', 1)->paginate(20);
 
             if (count($restaurants) > 0) {
                 foreach ($restaurants as $restaurant) {
@@ -973,7 +988,7 @@ class RestaurantsController extends Controller
             $working_day = Carbon::parse($DataRequests['working_day'])->dayOfWeek;
             $working_time = $DataRequests['working_time'];
             $working_time = Carbon::parse($working_time);
-            $restaurants = Restaurant::
+            $restaurants = Restaurant::where('active', 1)->
             whereHas('restaurantArea', function ($q) use ($id) {
                 $q->where('area_id', $id);
             })->whereHas('workingHour', function ($query) use ($working_day, $working_time) {
@@ -1109,7 +1124,7 @@ class RestaurantsController extends Controller
         }
         $restaurants = Restaurant::where('id', $id)->with(['menu' => function ($query) {
             $query->where('approved', 1);
-        }])->get();
+        }])->where('active',1)->get();
         if (count($restaurants) > 0) {
             foreach ($restaurants as $restaurant) {
                 if (count($restaurant->menu) > 0) {
@@ -1181,7 +1196,7 @@ class RestaurantsController extends Controller
         } else {
             $restaurant_id = $DataRequests['restaurant_id'];
 
-            $restaurants = Restaurant::where('id', $restaurant_id)
+            $restaurants = Restaurant::where('id', $restaurant_id)->where('active',1)
                 ->with(['collection' => function ($query) {
                     $query->where('approved', 1);
                 }]);

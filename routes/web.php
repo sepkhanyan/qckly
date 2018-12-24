@@ -46,6 +46,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::group(['prefix' => 'restaurant'], function () {
             Route::get('create', 'RestaurantsController@create');
             Route::post('store', 'RestaurantsController@store');
+            Route::get('activate/{id}', 'RestaurantsController@activate');
             Route::get('edit/{id}', 'RestaurantsController@edit');
             Route::post('update/{id}', 'RestaurantsController@update');
             Route::post('edit_approve/{id}', 'RestaurantsController@editApprove');

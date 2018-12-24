@@ -80,7 +80,7 @@
                                 <tbody>
                                 @if(count($restaurants) > 0)
                                     @foreach($restaurants as $restaurant)
-                                        <tr  class="{{($restaurant->editingRestaurant) ? 'info' : ''}}">
+                                        <tr class="{{($restaurant->editingRestaurant) ? 'info' : ''}}">
                                             <td class="action">
                                                 @if($user->admin == 1)
                                                     <input type="checkbox" value="{{ $restaurant->id }}" name="delete"/>
@@ -114,9 +114,17 @@
                                                 @if($restaurant->editingRestaurant)
                                                     <span class="label label-default">Pending Edit Approval</span>
                                                 @endif
+                                                @if($user->admin == 1)
+                                                    @if($restaurant->active == 0 && $restaurant->collection->count() > 0)
+                                                            <a class="btn btn-edit"
+                                                               href="{{ url('/restaurant/activate/' . $restaurant->id )}}">
+                                                              Activate
+                                                            </a>
+                                                    @endif
+                                                @endif
                                             </td>
                                         </tr>
-                                    @endforeach                              
+                                    @endforeach
                                 @else
                                     <tr>
                                         <td colspan="7" class="center">There are no restaurants available.</td>
