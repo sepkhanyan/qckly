@@ -115,9 +115,9 @@
                                                     <span class="label label-default">Pending Edit Approval</span>
                                                 @endif
                                                 @if($user->admin == 1)
-                                                    @if($restaurant->active == 0 && $restaurant->collection->count() > 0)
+                                                    @if($restaurant->active == 0)
                                                             <a class="btn btn-edit"
-                                                               href="{{ url('/restaurant/activate/' . $restaurant->id )}}">
+                                                               href="{{ url('/restaurant/activate/' . $restaurant->id )}}" {{($restaurant->collection->count() ==  0) ? 'disabled' : ''}}>
                                                               Activate
                                                             </a>
                                                     @endif

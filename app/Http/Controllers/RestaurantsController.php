@@ -246,7 +246,7 @@ class RestaurantsController extends Controller
 
     public function activate($id)
     {
-        $user = Auth::user();  
+        $user = Auth::user();
         if($user->admin == 1){
             $restaurant = Restaurant::find($id);
             $collections = Collection::where('restaurant_id', $id)->get();

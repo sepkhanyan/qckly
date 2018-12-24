@@ -156,7 +156,7 @@ class CollectionsController extends Controller
         }
         $service_type = $request->input('service_type');
         $service = CategoryRestaurant::where('restaurant_id', $restaurant_id)->where('name_en', $service_type)->first();
-        if($service_type == 'Delivery'){
+        if ($service_type == 'Delivery') {
             $validator = \Validator::make($request->all(), [
                 'delivery_time' => 'required|integer|gt:0',
             ]);
@@ -170,7 +170,7 @@ class CollectionsController extends Controller
         $collection = New Collection();
         $collection->restaurant_id = $restaurant_id;
         $collection->service_type_id = $service->id;
-        $collection->delivery_hours  = $request->input('delivery_time');
+        $collection->delivery_hours = $request->input('delivery_time');
         $collection->category_id = $category;
         $collection->name_en = $request->input('name_en');
         $collection->name_ar = $request->input('name_ar');
@@ -285,7 +285,7 @@ class CollectionsController extends Controller
         $menu_items = CollectionItem::where('collection_id', $collection->id)->get();
         $categories = CollectionCategory::all();
         $mealtimes = Mealtime::all();
-        $categoryRestaurants = CategoryRestaurant::where('restaurant_id', $restaurant->id)->whereDoesntHave('collection', function($query)use($collection){
+        $categoryRestaurants = CategoryRestaurant::where('restaurant_id', $restaurant->id)->whereDoesntHave('collection', function ($query) use ($collection) {
             $query->where('id', $collection->id);
         })->get();
         return view('collection_copy', [
@@ -328,7 +328,7 @@ class CollectionsController extends Controller
         }
         $service_type = $request->input('service_type');
         $service = CategoryRestaurant::where('restaurant_id', $restaurant_id)->where('name_en', $service_type)->first();
-        if($service_type == 'Delivery'){
+        if ($service_type == 'Delivery') {
             $validator = \Validator::make($request->all(), [
                 'delivery_time' => 'required|integer|gt:0',
             ]);
@@ -343,19 +343,19 @@ class CollectionsController extends Controller
         $collection->category_id = $category;
         $collection->restaurant_id = $restaurant_id;
         $collection->service_type_id = $service->id;
-        $collection->delivery_hours  = $request->input('delivery_time');
+        $collection->delivery_hours = $request->input('delivery_time');
         $collection->category_id = $category;
         $collection->name_en = $request->input('name_en');
         $collection->name_ar = $request->input('name_ar');
         $collection->description_en = $request->input('description_en');
         $collection->description_ar = $request->input('description_ar');
-        if($request->hasFile('image')){
+        if ($request->hasFile('image')) {
             $image = $request->file('image');
             $name = 'collection_' . time() . '.' . $image->getClientOriginalExtension();
             $path = public_path('/images');
             $image->move($path, $name);
             $collection->image = $name;
-        }else{
+        } else {
             $collection->image = $oldCollection->image;
         }
         $collection->mealtime_id = $request->input('mealtime');
@@ -398,7 +398,7 @@ class CollectionsController extends Controller
             $collection->requirements_en = $request->input('requirements_en');
             $collection->requirements_ar = $request->input('requirements_ar');
         }
-            $collection->approved = 1;
+        $collection->approved = 1;
         $collection->save();
         $menu_items = CollectionItem::where('collection_id', $id)->get();
         if (count($menu_items) > 0) {
@@ -713,7 +713,7 @@ class CollectionsController extends Controller
             $editingCollection->collection_id = $collection->id;
             $service_type = $request->input('service_type');
             $service = CategoryRestaurant::where('restaurant_id', $collection->restaurant_id)->where('name_en', $service_type)->first();
-            if($service_type == 'Delivery'){
+            if ($service_type == 'Delivery') {
                 $validator = \Validator::make($request->all(), [
                     'delivery_time' => 'required|integer|gt:0',
                 ]);
@@ -811,7 +811,7 @@ class CollectionsController extends Controller
         } elseif ($user->admin == 1) {
             $service_type = $request->input('service_type');
             $service = CategoryRestaurant::where('restaurant_id', $collection->restaurant_id)->where('name_en', $service_type)->first();
-            if($service_type == 'Delivery'){
+            if ($service_type == 'Delivery') {
                 $validator = \Validator::make($request->all(), [
                     'delivery_time' => 'required|integer|gt:0',
                 ]);
@@ -938,7 +938,7 @@ class CollectionsController extends Controller
             $collection = Collection::find($id);
             $service_type = $request->input('service_type');
             $service = CategoryRestaurant::where('restaurant_id', $collection->restaurant_id)->where('name_en', $service_type)->first();
-            if($service_type == 'Delivery'){
+            if ($service_type == 'Delivery') {
                 $validator = \Validator::make($request->all(), [
                     'delivery_time' => 'required|integer|gt:0',
                 ]);
@@ -1040,8 +1040,7 @@ class CollectionsController extends Controller
         }
     }
 
-    public
-    function editReject($id)
+    public function editReject($id)
     {
         $user = Auth::user();
         if ($user->admin == 1) {
@@ -1065,13 +1064,12 @@ class CollectionsController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public
-    function deleteCollection(Request $request)
+    public function deleteCollection(Request $request)
     {
         $user = Auth::user();
         $id = $request->get('id');
         if ($user->admin == 2) {
-            $subCollection = Collection::where('id', $id)->where('restaurant_id', $user->restaurant_id)->first();
+            $subCollection = Collection::whereIn('id', $id)->where('restaurant_id', $user->restaurant_id)->first();
             if ($subCollection) {
                 Collection::whereIn('id', $id)->delete();
             } else {
@@ -1080,6 +1078,9 @@ class CollectionsController extends Controller
         } else {
             Collection::whereIn('id', $id)->delete();
         }
+
+        Restaurant::whereDoesntHave('collection')->update(['active' => 0]);
+
         return redirect('/collections');
     }
 
