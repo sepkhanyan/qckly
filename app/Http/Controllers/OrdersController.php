@@ -100,7 +100,7 @@ class OrdersController extends Controller
             $from = $user->id;
             $msg = \Lang::get('message.orderConfirmation', ['restaurant_name' => $restaurant_name, 'order_id' => $order->id]);
             $order_id = $order->id;
-            $NotificationType = 1;
+            $NotificationType = 3;
             $notification = new NotificationsController();
             $notification->sendNot($userId, $from, $msg, $order_id, $NotificationType);
 
