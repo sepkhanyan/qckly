@@ -24,6 +24,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
 //            Route::post('update/{id}', 'UsersController@update');
             Route::post('delete', 'UsersController@deleteCustomer');
         });
+        Route::post('general/notification', 'UsersController@generalNotification');
         Route::get('/areas', 'AreasController@index');
         Route::group(['prefix' => 'area'], function () {
             Route::get('store', 'AreasController@store');

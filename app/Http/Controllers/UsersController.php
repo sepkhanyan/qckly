@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\GeneralNotification;
 use Illuminate\Http\Request;
 use App\User;
 use Carbon\Carbon;
@@ -605,6 +606,22 @@ class UsersController extends Controller
                 'status_code' => 200,
             ));
         }
+    }
+
+    public function generalNotification(Request $request)
+    {
+        $user = Auth::user();
+        if($user->admin == 1){
+            $lang = $request->input('lang');
+            $from = $user->id;
+            $message = $request->input('message');
+            $usersId = User::where('group_id', 0)->where('lang', $lang)->get();
+            $this->dispatch(new GeneralNotification($usersId, $from, $message));
+        }else{
+            return redirect()->back();
+        }
+        return redirect()->back();
+
     }
 
 }

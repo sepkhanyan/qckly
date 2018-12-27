@@ -12,7 +12,13 @@
                         <i class="fa fa-trash-o"></i>
                         Delete
                     </a>
-                    <a data-toggle="modal" data-target="#modalSendNotification" href="" class="btn btn-primary">
+                @endif
+            </div>
+        </div>
+        <div class="page-header">
+            <div class="page-action">
+                @if($user->admin == 1)
+                    <a data-toggle="modal" data-target="#modalSendNotification" href="" class="btn btn-success">
                         Send Notification
                     </a>
                 @endif
@@ -123,5 +129,49 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="modal fade" id="modalSendNotification" role="dialog" tabindex="-1">
+        <form role="form" id="edit-form" class="form-horizontal"  accept-charset="utf-8" method="POST" enctype="multipart/form-data" action="{{ url('/general/notification') }}">
+            {{ csrf_field() }}
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"> Send Notification</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="area-en">Message</label>
+                            <div class="col-sm-7">
+                                <textarea class="form-control" name="message" id="" cols="50" rows="10"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="area-en">Language</label>
+                            <div class="col-sm-5">
+                                <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
+                                    <label class="btn btn-success active">
+                                        <input type="radio" name="lang"
+                                               value="en" checked>
+                                        En
+                                    </label>
+                                    <label class="btn btn-success">
+                                        <input type="radio" name="lang"
+                                               value="ar">
+                                        Ar
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 @endsection

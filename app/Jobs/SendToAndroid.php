@@ -15,9 +15,7 @@ class SendToAndroid implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $user_id;
-    protected $from;
     protected $messages;
-    protected $restaurant_id;
 
     /**
      * Create a new job instance.
