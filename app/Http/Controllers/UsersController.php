@@ -23,7 +23,6 @@ class UsersController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        $customers = [];
         $data = $request->all();
         if ($user->admin == 1) {
             $customers = User::where('group_id', 0);
@@ -34,26 +33,13 @@ class UsersController extends Controller
                 $customers = $customers->name($data['customer_search']);
             }
             $customers = $customers->paginate(20);
-        } elseif($user->admin == 2) {
-            $user = $user->load('restaurant');
-            $restaurant = $user->restaurant;
-            $customers = User::where('group_id', 0)->whereHas('order', function ($query) use($restaurant){
-                $query->whereHas('orderRestaurant', function ($q) use ($restaurant) {
-                    $q->where('restaurant_id', $restaurant->id);
-                });
-            });
-            if (isset($data['customer_date'])) {
-                $customers = $customers->where('created_at', $data['customer_date']);
-            }
-            if (isset($data['customer_search'])) {
-                $customers = $customers->name($data['customer_search']);
-            }
-            $customers = $customers->paginate(20);
+        } else {
+            return redirect()->back();
         }
         return view('customers', [
             'customers' => $customers,
             'user' => $user
-            ]);
+        ]);
     }
 
     /**
@@ -465,13 +451,13 @@ class UsersController extends Controller
         $admin = Auth::user();
         return view('admin_edit', [
             'admin' => $admin,
-            ]);
+        ]);
 
     }
 
     public function updateAdmin(Request $request)
     {
-        if($request->input('password')){
+        if ($request->input('password')) {
             $validator = \Validator::make($request->all(), [
                 'name' => 'required|string|max:255',
                 'email' => 'required|email|max:255',
@@ -479,7 +465,7 @@ class UsersController extends Controller
                 'password' => 'min:6|confirmed',
                 'image' => 'image'
             ]);
-        }else{
+        } else {
             $validator = \Validator::make($request->all(), [
                 'name' => 'required|string|max:255',
                 'email' => 'required|email|max:255',
@@ -496,7 +482,7 @@ class UsersController extends Controller
         $admin->first_name = $request->input('name');
         $admin->email = $request->input('email');
         $admin->username = $request->input('username');
-        if($request->input('password') !== null){
+        if ($request->input('password') !== null) {
             $admin->password = $request->input('password');
         }
         if ($request->hasFile('image')) {
@@ -517,13 +503,13 @@ class UsersController extends Controller
     public function changeLanguage(Request $request)
     {
         $lang = $request->get('lang');
-        $userId =$request->header('Authorization');
+        $userId = $request->header('Authorization');
         if ($userId) {
             $user_id = User::getUserByToken($userId);
         } else {
             $user_id = Auth::id();
         }
-        $user = User::where('id',$user_id)->update(['lang'=> $lang]);
+        $user = User::where('id', $user_id)->update(['lang' => $lang]);
         if ($user) {
             return response()->json(array('success' => 1, 'status_code' => 200, 'message' => 'Language changed successfully'));
 
@@ -538,7 +524,7 @@ class UsersController extends Controller
         $req_lang = $request->header('Accept-Language');
 
         $newuser = $request->all();
-        $validator = \Validator::make($newuser, [                
+        $validator = \Validator::make($newuser, [
             'device_token' => 'required',
             'device_type' => 'required',
         ]);
@@ -599,7 +585,7 @@ class UsersController extends Controller
         if ($user_id) {
             if ($request->has('device_token') && $request->get('device_token') != '') {
                 $device_token = $request->get('device_token');
-                $token = Device::where('user_id',$user_id)->where('device_token',$device_token)->delete();
+                $token = Device::where('user_id', $user_id)->where('device_token', $device_token)->delete();
             }
             return response()->json(array(
                 'success' => 1,
@@ -611,13 +597,13 @@ class UsersController extends Controller
     public function generalNotification(Request $request)
     {
         $user = Auth::user();
-        if($user->admin == 1){
+        if ($user->admin == 1) {
             $lang = $request->input('lang');
             $from = $user->id;
             $message = $request->input('message');
             $usersId = User::where('group_id', 0)->where('lang', $lang)->get();
             $this->dispatch(new GeneralNotification($usersId, $from, $message));
-        }else{
+        } else {
             return redirect()->back();
         }
         return redirect()->back();

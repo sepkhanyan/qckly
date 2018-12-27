@@ -21,7 +21,6 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 
 
-
     <script src="{{ asset('js/jquery-1.11.2.min.js') }}"></script>
     <script src="{{ asset('js/jquery.js') }}"></script>
     <script src="{{ asset('js/jquery-sortable.js') }}"></script>
@@ -54,33 +53,33 @@
 
 
     {{--<script type="text/javascript">--}}
-        {{--$(document).ready(function () {--}}
-            {{--$('a[title], span[title], button[title]').tooltip({placement: 'bottom'});--}}
-            {{--$('select.form-control').select2({minimumResultsForSearch: 10});--}}
+    {{--$(document).ready(function () {--}}
+    {{--$('a[title], span[title], button[title]').tooltip({placement: 'bottom'});--}}
+    {{--$('select.form-control').select2({minimumResultsForSearch: 10});--}}
 
-            {{--$('.alert').alert();--}}
-            {{--$('.dropdown-toggle').dropdown();--}}
+    {{--$('.alert').alert();--}}
+    {{--$('.dropdown-toggle').dropdown();--}}
 
-            {{--// $("#list-form td:contains('Disabled')").addClass('red');--}}
-        {{--});--}}
+    {{--// $("#list-form td:contains('Disabled')").addClass('red');--}}
+    {{--});--}}
     {{--</script>--}}
 
     {{--<script src="https://js.pusher.com/4.3/pusher.min.js"></script>--}}
     {{--<script src="https://ajax.googleapis.com/ajax/libs/dojo/1.13.0/dojo/dojo.js"></script>--}}
     {{--<script>--}}
 
-        {{--// Enable pusher logging - don't include this in production--}}
-        {{--Pusher.logToConsole = true;--}}
+    {{--// Enable pusher logging - don't include this in production--}}
+    {{--Pusher.logToConsole = true;--}}
 
-        {{--var pusher = new Pusher('6dba162777e691fc6a70', {--}}
-            {{--cluster: 'eu',--}}
-            {{--forceTLS: true--}}
-        {{--});--}}
+    {{--var pusher = new Pusher('6dba162777e691fc6a70', {--}}
+    {{--cluster: 'eu',--}}
+    {{--forceTLS: true--}}
+    {{--});--}}
 
-        {{--var channel = pusher.subscribe('messages');--}}
-        {{--channel.bind('.newMessage', function(data) {--}}
-            {{--alert(JSON.stringify(data));--}}
-        {{--});--}}
+    {{--var channel = pusher.subscribe('messages');--}}
+    {{--channel.bind('.newMessage', function(data) {--}}
+    {{--alert(JSON.stringify(data));--}}
+    {{--});--}}
 
     {{--</script>--}}
     <style>
@@ -203,10 +202,10 @@
     {{--<script src="https://js.pusher.com/4.3/pusher.min.js"></script>--}}
     {{--<script>--}}
 
-        {{--Echo.channel('messages.' + self.user_id)--}}
-            {{--.listen('NewMessage', (e) => {--}}
-                {{--console.log(e);--}}
-            {{--});--}}
+    {{--Echo.channel('messages.' + self.user_id)--}}
+    {{--.listen('NewMessage', (e) => {--}}
+    {{--console.log(e);--}}
+    {{--});--}}
     {{--</script>--}}
 </head>
 <body>
@@ -239,7 +238,7 @@
                     </li>
                     @if(auth()->user()->admin == 1)
                         <li>
-                             <a class="area">
+                            <a class="area">
                                 <i class="fa fa-map-marker fa-fw"></i>
                                 <span class="content ">Areas</span>
                                 <span class="fa arrow"></span>
@@ -354,22 +353,22 @@
                             </li>
                         </ul>
                     </li>
-                    <li>
-                        <a class="users">
-                            <i class="fa fa-users fa-fw"></i>
-                            <span class="content">Users</span>
-                            <span class="fa arrow"></span>
-                        </a>
-                        <ul class="nav nav-second-level collapse">
-                            <li>
-                                <a href="{{ url('/customers') }}" class="customers">
-                                    <i class="fa fa-square-o fa-fw"></i>
-                                    Customers
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
                     @if(auth()->user()->admin == 1)
+                        <li>
+                            <a class="users">
+                                <i class="fa fa-users fa-fw"></i>
+                                <span class="content">Users</span>
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level collapse">
+                                <li>
+                                    <a href="{{ url('/customers') }}" class="customers">
+                                        <i class="fa fa-square-o fa-fw"></i>
+                                        Customers
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                         <li>
                             <a class="locations">
                                 <i class="fa fa-globe fa-fw"></i>
@@ -513,17 +512,17 @@
         </h1>
     </nav>
     {{--<div class="container">--}}
-        {{--<div class="row">--}}
-            {{--<div class="col-md-8 col-md-offset-2">--}}
-                {{--<div class="panel panel-default">--}}
-                    {{--<div class="panel-heading">Dashboard</div>--}}
+    {{--<div class="row">--}}
+    {{--<div class="col-md-8 col-md-offset-2">--}}
+    {{--<div class="panel panel-default">--}}
+    {{--<div class="panel-heading">Dashboard</div>--}}
 
-                    {{--<div class="panel-body">--}}
-                        {{--<example></example>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
-            {{--</div>--}}
-        {{--</div>--}}
+    {{--<div class="panel-body">--}}
+    {{--<example></example>--}}
+    {{--</div>--}}
+    {{--</div>--}}
+    {{--</div>--}}
+    {{--</div>--}}
     {{--</div>--}}
     @yield('content')
     <div id="footer" class="">
@@ -571,7 +570,7 @@
             if (this.value == 'Delivery') {
                 $('#delivery_hours').slideDown('fast');
 
-            }else{
+            } else {
                 $('#delivery_hours').slideUp('fast');
             }
 
@@ -604,7 +603,7 @@
         });
 
     });
-    </script>
+</script>
 <script type="text/javascript">
     $(document).ready(function () {
 
@@ -626,6 +625,7 @@
     function filterList() {
         $('#filter-form').submit();
     }
+
     //--></script>
 </body>
 </html>
