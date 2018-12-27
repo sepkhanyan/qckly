@@ -121,6 +121,12 @@
                                                               Activate
                                                             </a>
                                                     @endif
+                                                        @if($restaurant->active == 1)
+                                                            <a class="btn btn-edit"
+                                                               href="{{ url('/restaurant/notification/' . $restaurant->id )}}">
+                                                                Send Notification
+                                                            </a>
+                                                        @endif
                                                 @endif
                                             </td>
                                         </tr>

@@ -197,38 +197,6 @@
             </div>
         </div>
     </div>
-    {{--<div class="modal fade" id="modalCopyCollection" role="dialog" tabindex="-1">--}}
-        {{--@if($selectedRestaurant)--}}
-            {{--<form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST" enctype="multipart/form-data">--}}
-                {{--{{ csrf_field() }}--}}
-                {{--<div class="modal-dialog">--}}
-                    {{--<div class="modal-content">--}}
-                        {{--<div class="modal-header">--}}
-                            {{--<button type="button" class="close" data-dismiss="modal">&times;</button>--}}
-                        {{--</div>--}}
-                        {{--<div class="modal-body">--}}
-                            {{--<div class="form-group">--}}
-                                {{--<label for="input_name_en" class="col-sm-3 control-label">Select Service Type</label>--}}
-                                {{--<div class="col-sm-5">--}}
-                                    {{--<select name="service_type" class="form-control">--}}
-                                        {{--<option value="">View all Categories</option>--}}
-                                        {{--@foreach ($categoryRestaurants as $category)--}}
-                                            {{--<option value="{{$category->id}}">{{$category->name_en}}</option>--}}
-                                        {{--@endforeach--}}
-                                    {{--</select>&nbsp;--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        {{--<div class="modal-footer">--}}
-                            {{--<button type="button" class="btn btn-default" data-dismiss="modal">Close--}}
-                            {{--</button>--}}
-                            {{--<button type="submit" class="btn btn-primary">Save</button>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
-            {{--</form>--}}
-            {{--@endif--}}
-    {{--</div>--}}
     <div class="modal fade" id="modalNewCollection" role="dialog" tabindex="-1">
         @if($selectedRestaurant)
             <form role="form"  class="form-horizontal" accept-charset="utf-8" method="GET"
@@ -265,9 +233,6 @@
         @endif
     </div>
     <script type="text/javascript">
-        function copyCollection(id) {
-            $("#edit-form").attr('action', 'collection/copy/' + id);
-        }
         $(document).ready(function () {
             $('select.form-control').select2();
         });

@@ -12,6 +12,9 @@
                         <i class="fa fa-trash-o"></i>
                         Delete
                     </a>
+                    <a data-toggle="modal" data-target="#modalSendNotification" href="" class="btn btn-primary">
+                        Send Notification
+                    </a>
                 @endif
             </div>
         </div>

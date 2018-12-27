@@ -67,9 +67,9 @@ class SendToIos implements ShouldQueue
         } else if (\App::environment('production')) {
 //            dd(1);
             // Provide the Host Information.
-            $tHost = 'gateway.push.apple.com';
+            $tHost = ' gateway.push.apple.com';
             // Provide the Certificate and Key Data.
-            $tCert = public_path() . '/QcklyCertificates.p12';
+            $tCert = public_path() . '/QcklyCertificates.pem';
             // if ($cert->certificate == 1) {
             //     $tHost = 'gateway.push.apple.com';
             //     $tCert = public_path() . '/LiveAgentCertificate.pem';

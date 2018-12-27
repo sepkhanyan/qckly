@@ -379,7 +379,7 @@
                                             </div>
                                             <div class="col-xs-5">
                                                 <div class="control-group control-group-3">
-                                                    <div class="col-xs-2">
+                                                    <div class="col-xs-3">
                                                         <input type="number"
                                                                name="menu_item[{{$menu->id}}][qty]"
                                                                id="qty{{$menu->id}}"

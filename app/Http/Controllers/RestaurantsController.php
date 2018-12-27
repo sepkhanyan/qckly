@@ -251,18 +251,35 @@ class RestaurantsController extends Controller
             $restaurant = Restaurant::find($id);
             $collections = Collection::where('restaurant_id', $id)->get();
             if(count($collections) > 0){
-               $activate = Restaurant::where('id', $id)->where('active', 0)->update(['active' => 1]);
-                $from = $user->id;
-                $usersId = User::where('group_id', 0)->get();
-                $this->dispatch(new NewRestaurant($usersId, $from, $restaurant->id, $restaurant->name_en, $restaurant->name_ar));
+                if($restaurant->active == 0){
+                    $restaurant->active = 1;
+                    $restaurant->save();
+                }
             }
-
         }else{
             return redirect()->back();
         }
         return redirect()->back();
     }
 
+
+
+    public function notification($id)
+    {
+        $user = Auth::user();
+        if($user->admin == 1){
+            $restaurant = Restaurant::find($id);
+                if($restaurant->active == 1){
+                    $from = $user->id;
+                    $usersId = User::where('group_id', 0)->get();
+                    $this->dispatch(new NewRestaurant($usersId, $from, $restaurant->id, $restaurant->name_en, $restaurant->name_ar));
+                }
+
+        }else{
+            return redirect()->back();
+        }
+        return redirect()->back();
+    }
     /**
      * Display the specified resource.
      *
@@ -1220,23 +1237,6 @@ class RestaurantsController extends Controller
                             } else {
                                 $female_caterer_available = false;
                             }
-
-                            $requestDay = Carbon::today()->dayOfWeek;
-                            $requestTime = Carbon::now()->toTimeString();
-                            if($collection->is_available == 1){
-                                $unavailability = CollectionUnavailabilityHour::where('collection_id', $collection->id)->where('weekday', $requestDay)
-                                    ->where('start_time', '<=', $requestTime)
-                                    ->where('end_time', '>=', $requestTime)
-                                    ->where('status', 1)->first();
-
-                                if($unavailability){
-                                    $collectionStatus = 0;
-                                }else{
-                                    $collectionStatus = 1;
-                                }
-                            }elseif($collection->is_available == 0){
-                                $collectionStatus = 0;
-                            }
                             $foodlist = [];
                             $foodlist_images = [];
                             $setup = '';
@@ -1431,6 +1431,23 @@ class RestaurantsController extends Controller
                                 $service_type = $collection->serviceType->name_en;
                             }
 
+
+                            $requestDay = Carbon::today()->dayOfWeek;
+                            $requestTime = Carbon::now()->toTimeString();
+                            if($collection->is_available == 1){
+                                $unavailability = CollectionUnavailabilityHour::where('collection_id', $collection->id)->where('weekday', $requestDay)
+                                    ->where('start_time', '<=', $requestTime)
+                                    ->where('end_time', '>=', $requestTime)
+                                    ->where('status', 1)->first();
+
+                                if($unavailability){
+                                    $collectionStatus = 0;
+                                }else{
+                                    $collectionStatus = 1;
+                                }
+                            }elseif($collection->is_available == 0){
+                                $collectionStatus = 0;
+                            }
 
                             $menu_collection [] = [
                                 'collection_id' => $collection->id,

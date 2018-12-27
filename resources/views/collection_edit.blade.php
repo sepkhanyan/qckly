@@ -478,7 +478,7 @@
                                                         </label>
                                                     </div>
                                                 </div>
-                                                <div class="col-xs-3">
+                                                <div class="col-xs-5">
                                                     <div class="control-group control-group-3">
                                                         <div class="col-xs-3">
                                                             <input type="number"
