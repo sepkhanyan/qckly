@@ -38,7 +38,7 @@ class AddressesController extends Controller
      */
     public function addAddress(Request $request, $id = null)
     {
-        \Log::info($request->all());
+//        \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
         if ($lang == 'ar') {
@@ -117,7 +117,7 @@ class AddressesController extends Controller
      */
     public function getAddresses(Request $request)
     {
-        \Log::info($request->all());
+//        \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
         if ($lang == 'ar') {
@@ -194,7 +194,7 @@ class AddressesController extends Controller
      */
     public function changeDefaultAddress(Request $request, $id)
     {
-        \Log::info($request->all());
+//        \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
         if ($lang == 'ar') {
@@ -234,7 +234,7 @@ class AddressesController extends Controller
      */
     public function deleteAddress(Request $request, $id)
     {
-        \Log::info($request->all());
+//        \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
         if ($lang == 'ar') {

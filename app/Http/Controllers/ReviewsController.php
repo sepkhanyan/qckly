@@ -60,7 +60,7 @@ class ReviewsController extends Controller
 
     public function reviews(Request $request)
     {
-        \Log::info($request->all());
+//        \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
         if ($lang == 'ar') {
@@ -141,7 +141,7 @@ class ReviewsController extends Controller
      */
     public function rateOrder(Request $request)
     {
-        \Log::info($request->all());
+//        \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
         if ($lang == 'ar') {

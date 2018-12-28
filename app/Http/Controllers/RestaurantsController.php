@@ -830,7 +830,7 @@ class RestaurantsController extends Controller
 
     public function getRestaurants(Request $request)
     {
-        \Log::info($request->all());
+//        \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
         if ($lang == 'ar') {
@@ -901,7 +901,7 @@ class RestaurantsController extends Controller
 
     public function getRestaurantByCategory(Request $request)
     {
-        \Log::info($request->all());
+//        \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
         if ($lang == 'ar') {
@@ -986,7 +986,7 @@ class RestaurantsController extends Controller
 
     public function availableRestaurants(Request $request)
     {
-        \Log::info($request->all());
+//        \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
         if ($lang == 'ar') {
@@ -1135,7 +1135,7 @@ class RestaurantsController extends Controller
 
     public function getRestaurant(Request $request, $id)
     {
-        \Log::info($request->all());
+//        \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
         if ($lang == 'ar') {
@@ -1198,7 +1198,7 @@ class RestaurantsController extends Controller
 
     public function restaurantMenuItems(Request $request)
     {
-        \Log::info($request->all());
+//        \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
         if ($lang == 'ar') {

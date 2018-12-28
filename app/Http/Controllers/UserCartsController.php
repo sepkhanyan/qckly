@@ -47,7 +47,7 @@ class UserCartsController extends Controller
      */
     public function createCart(Request $request)
     {
-        \Log::info($request->all());
+//        \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
         if ($lang == 'ar') {
@@ -347,7 +347,7 @@ class UserCartsController extends Controller
      */
     public function showCart(Request $request, $id)
     {
-        \Log::info($request->all());
+//        \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
         if ($lang == 'ar') {
@@ -520,7 +520,7 @@ class UserCartsController extends Controller
 
     public function cartCount(Request $request)
     {
-        \Log::info($request->all());
+//        \Log::info($request->all());
         $token = str_replace("Bearer ", "", $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->with('cart.cartCollection')->first();
         if ($user) {
@@ -556,7 +556,7 @@ class UserCartsController extends Controller
 
     public function collectionDetails(Request $request)
     {
-        \Log::info($request->all());
+//        \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
         if ($lang == 'ar') {
@@ -822,7 +822,7 @@ class UserCartsController extends Controller
 
     public function removeCart(Request $request, $id)
     {
-        \Log::info($request->all());
+//        \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
         if ($lang == 'ar') {
@@ -870,7 +870,7 @@ class UserCartsController extends Controller
 
     public function changeDeliveryAddress(Request $request, $id)
     {
-        \Log::info($request->all());
+//        \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
         if ($lang == 'ar') {

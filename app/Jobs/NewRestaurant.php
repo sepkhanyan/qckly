@@ -43,6 +43,7 @@ class NewRestaurant implements ShouldQueue
         foreach ($this->usersId as $userId){
             $user_id = $userId->id;
             $NotificationType = 2;
+            \Log::info( $this->msg);
             $Not_id = Notification::create([
                 'to_device' => $user_id,
                 'from_device' => $this->from,

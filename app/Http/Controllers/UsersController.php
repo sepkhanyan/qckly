@@ -156,7 +156,7 @@ class UsersController extends Controller
 
     public function login(Request $request)
     {
-        \Log::info($request->all());
+//        \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
         if ($lang == 'ar') {
@@ -251,7 +251,7 @@ class UsersController extends Controller
 
     public function submitOtp(Request $request)
     {
-        \Log::info($request->all());
+//        \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
         if ($lang == 'ar') {
@@ -322,7 +322,7 @@ class UsersController extends Controller
 
     public function resendOtp(Request $request)
     {
-        \Log::info($request->all());
+//        \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
         if ($lang == 'ar') {
@@ -363,7 +363,7 @@ class UsersController extends Controller
 
     public function completeProfile(Request $request)
     {
-        \Log::info($request->all());
+//        \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
         if ($lang == 'ar') {
@@ -421,7 +421,7 @@ class UsersController extends Controller
 
     public function getUserDetails(Request $request)
     {
-        \Log::info($request->all());
+//        \Log::info($request->all());
         $token = str_replace("Bearer ", "", $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->first();
         if ($user) {
