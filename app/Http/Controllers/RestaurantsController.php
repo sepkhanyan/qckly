@@ -272,9 +272,9 @@ class RestaurantsController extends Controller
                 if($restaurant->active == 1){
                     $lang = $request->input('lang');
                     $from = $user->id;
-                    $message = $request->input('message');
+                    $msg = $request->input('message');
                     $usersId = User::where('group_id', 0)->where('lang', $lang)->get();
-                    $this->dispatch(new NewRestaurant($usersId, $from, $restaurant->id, $message));
+                    $this->dispatch(new NewRestaurant($usersId, $from, $restaurant->id, $msg));
                 }
 
         }else{
