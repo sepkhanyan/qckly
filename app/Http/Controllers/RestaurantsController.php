@@ -273,6 +273,8 @@ class RestaurantsController extends Controller
                     $lang = $request->input('lang');
                     $from = $user->id;
                     $msg = $request->input('message');
+        \Log::info($msg);
+
                     $usersId = User::where('group_id', 0)->where('lang', $lang)->get();
                     $this->dispatch(new NewRestaurant($usersId, $from, $restaurant->id, $msg));
                 }

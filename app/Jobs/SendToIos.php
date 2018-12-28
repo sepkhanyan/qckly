@@ -97,7 +97,7 @@ class SendToIos implements ShouldQueue
         $tPayload = 'APNS Message Handled by LiveCode';
 // Create the message content that is to be sent to the device.
         $tBody['aps'] = array(
-            "alert" => $this->message,//
+            "alert" => $this->msg,//
             "message" => $this->messages,
             'sound' => $tSound,
             'content-available' => 1
