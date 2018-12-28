@@ -264,15 +264,17 @@ class RestaurantsController extends Controller
 
 
 
-    public function notification($id)
+    public function notification(Request $request,$id)
     {
         $user = Auth::user();
         if($user->admin == 1){
             $restaurant = Restaurant::find($id);
                 if($restaurant->active == 1){
+                    $lang = $request->input('lang');
                     $from = $user->id;
-                    $usersId = User::where('group_id', 0)->get();
-                    $this->dispatch(new NewRestaurant($usersId, $from, $restaurant->id, $restaurant->name_en, $restaurant->name_ar));
+                    $message = $request->input('message');
+                    $usersId = User::where('group_id', 0)->where('lang', $lang)->get();
+                    $this->dispatch(new NewRestaurant($usersId, $from, $restaurant->id, $message));
                 }
 
         }else{
