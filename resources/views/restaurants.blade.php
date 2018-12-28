@@ -122,7 +122,7 @@
                                                             </a>
                                                     @endif
                                                         @if($restaurant->active == 1)
-                                                            <a class="btn btn-edit" data-toggle="modal" data-target="#modalSendNotification"
+                                                            <a class="btn btn-edit" data-toggle="modal" data-target="#modalSendRestaurantNotification"
                                                                onclick="sendNotification('{{$restaurant->id}}')">
                                                                 Send Notification
                                                             </a>
@@ -176,7 +176,7 @@
             </div>
         </form>
     </div>
-    <div class="modal fade" id="modalSendNotification" role="dialog" tabindex="-1">
+    <div class="modal fade" id="modalSendRestaurantNotification" role="dialog" tabindex="-1">
         <form role="form" id="notification-form" class="form-horizontal"  accept-charset="utf-8" method="POST" enctype="multipart/form-data">
             {{ csrf_field() }}
             <div class="modal-dialog">
