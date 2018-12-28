@@ -123,8 +123,7 @@
                                                     @endif
                                                         @if($restaurant->active == 1)
                                                             <a class="btn btn-edit" data-toggle="modal" data-target="#modalSendNotification"
-                                                               onclick="sendNotification('{{$restaurant->id}}')"
-                                                            {{--   href="{{ url('/restaurant/notification/' . $restaurant->id )}}"--}}>
+                                                               onclick="sendNotification('{{$restaurant->id}}')">
                                                                 Send Notification
                                                             </a>
                                                         @endif

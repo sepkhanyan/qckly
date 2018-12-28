@@ -35,5 +35,4 @@ return [
     'isAvailable'         => 'Is Available',
     'notAvailable'        => 'Not Available',
     'orderConfirmation'   => ':restaurant_name accepted your order# :order_id and started working on it.'
-//    'newRestaurant'       => ":restaurant_name has been joined Qckly app, we hope you enjoy it's services."
 ];

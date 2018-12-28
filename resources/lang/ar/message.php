@@ -35,5 +35,4 @@ return [
     'isAvailable'         => 'متاح',
     'notAvailable'        => 'غير متاح',
     'orderConfirmation'   => 'restaurant_name: قبل طلبك# order_id: وبدأ في تجهيزه'
-//    'newRestaurant'       => "انضم :restaurant_name إلى تطبيق كوكلي، نتمنى أن تستمع بخدماته"
 ];
