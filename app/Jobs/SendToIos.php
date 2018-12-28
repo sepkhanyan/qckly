@@ -16,7 +16,7 @@ class SendToIos implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $user_id;
-    protected $message;
+    protected $msg;
     protected $messages;
 
     /**
@@ -24,10 +24,10 @@ class SendToIos implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($user_id, $message,  $messages)
+    public function __construct($user_id, $msg,  $messages)
     {
         $this->user_id = $user_id;
-        $this->message = $message;
+        $this->msg = $msg;
         $this->messages = $messages;
     }
 

@@ -18,18 +18,18 @@ class NewRestaurant implements ShouldQueue
     protected $usersId;
     protected $from;
     protected $restaurant_id;
-    protected $message;
+    protected $msg;
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($usersId, $from, $restaurant_id, $message)
+    public function __construct($usersId, $from, $restaurant_id, $msg)
     {
         $this->usersId = $usersId;
         $this->from = $from;
         $this->restaurant_id = $restaurant_id;
-        $this->message = $message;
+        $this->msg = $msg;
 
     }
 
@@ -46,7 +46,7 @@ class NewRestaurant implements ShouldQueue
             $Not_id = Notification::create([
                 'to_device' => $user_id,
                 'from_device' => $this->from,
-                'message' => $this->message,
+                'message' => $this->msg,
                 'notification_type' =>  $NotificationType,
                 'restaurant_id' => $this->restaurant_id
 
@@ -54,14 +54,14 @@ class NewRestaurant implements ShouldQueue
             $messages =
                 [
                     'NotificationId' => $Not_id->id,
-                    'message' => $this->message,
+                    'message' => $this->msg,
                     'restaurant_id' => $this->restaurant_id,
                     'NotificationType' => $NotificationType,
 
                 ];
 
             dispatch(new SendToAndroid($user_id, $messages));
-            dispatch(new SendToIos($user_id, $this->message,  $messages));
+            dispatch(new SendToIos($user_id, $this->msg,  $messages));
 
         }
     }
