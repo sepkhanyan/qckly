@@ -62,7 +62,6 @@ class NewRestaurant implements ShouldQueue
 
             dispatch(new SendToAndroid($user_id, $messages));
             dispatch(new SendToIos($user_id, $this->message,  $messages));
-            \Log::info($this->message);
 
         }
     }

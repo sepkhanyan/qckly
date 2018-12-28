@@ -66,6 +66,5 @@ class SendToAndroid implements ShouldQueue
         $result = curl_exec($ch);
 
         curl_close($ch);
-        \Log::info($this->messages);
     }
 }
