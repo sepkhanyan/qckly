@@ -137,13 +137,13 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title"> Send Notification</h4>
+                        <h4 class="modal-title">Send Notification</h4>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label class="col-sm-3 control-label" for="area-en">Message</label>
+                            <label class="col-sm-3 control-label" for="message">Message</label>
                             <div class="col-sm-7">
-                                <textarea class="form-control" name="message" id="" cols="50" rows="10"></textarea>
+                                <textarea class="form-control" name="message" id="message" cols="50" rows="10"></textarea>
                             </div>
                         </div>
                     </div>
