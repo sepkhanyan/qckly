@@ -268,13 +268,20 @@ class RestaurantsController extends Controller
     {
         $user = Auth::user();
         if($user->admin == 1){
+            $validator = \Validator::make($request->all(), [
+                'lang' => 'required',
+                'message' => 'required|string'
+            ]);
+            if ($validator->fails()) {
+                return redirect()->back()
+                    ->withErrors($validator)
+                    ->withInput();
+            }
             $restaurant = Restaurant::find($id);
                 if($restaurant->active == 1){
                     $lang = $request->input('lang');
                     $from = $user->id;
                     $msg = $request->input('message');
-        \Log::info($msg);
-
                     $usersId = User::where('group_id', 0)->where('lang', $lang)->get();
                     $this->dispatch(new NewRestaurant($usersId, $from, $restaurant->id, $msg));
                 }
