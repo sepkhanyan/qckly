@@ -585,12 +585,12 @@ class UsersController extends Controller
         if ($user_id) {
             if ($request->has('device_token') && $request->get('device_token') != '') {
                 $device_token = $request->get('device_token');
-                $token = Device::where('user_id', $user_id)->where('device_token', $device_token)->delete();
+                Device::where('user_id', $user_id)->where('device_token', $device_token)->delete();
+                return response()->json(array(
+                    'success' => 1,
+                    'status_code' => 200,
+                ));
             }
-            return response()->json(array(
-                'success' => 1,
-                'status_code' => 200,
-            ));
         }
     }
 

@@ -41,7 +41,6 @@ class SendToAndroid implements ShouldQueue
             $device[] = $dev->device_token;
 
         }
-        \Log::info($this->messages);
         $msg = array
         (
             'message' => $this->messages

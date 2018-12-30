@@ -285,7 +285,6 @@ class RestaurantsController extends Controller
                     $usersId = User::where('group_id', 0)->where('lang', $lang)->get();
                     $this->dispatch(new NewRestaurant($usersId, $from, $restaurant->id, $msg));
                 }
-
         }else{
             return redirect()->back();
         }
