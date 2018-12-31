@@ -30,7 +30,9 @@ class User extends Authenticatable
         'last_name',
         'group_id',
         'image',
-        'lang'
+        'lang',
+        'device_type',
+        'version_number'
     ];
 
     /**

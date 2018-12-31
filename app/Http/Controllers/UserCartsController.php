@@ -527,7 +527,6 @@ class UserCartsController extends Controller
         if ($user) {
             $unreadNot = Notification::where('to_device', $user->id)->where('is_read', 0)->get();
            $unreadCount = count($unreadNot);
-//           dd($unreadCount);
             if ($user->cart->count() > 0) {
                 $cart = $user->cart->where('completed', 0)->first();
                 if ($cart) {
@@ -535,18 +534,18 @@ class UserCartsController extends Controller
                     $arr = [
                         'cart_id' => $cart->id,
                         'cart_count' => $cart_count,
-                        'unread_not_count' => $unreadCount
+                        'unread_notifications_count' => $unreadCount
                     ];
                 } else {
                     $arr = [
                         'cart_count' => 0,
-                        'unread_not_count' => $unreadCount
+                        'unread_notifications_count' => $unreadCount
                     ];
                 }
             } else {
                 $arr = [
                     'cart_count' => 0,
-                    'unread_not_count' => $unreadCount
+                    'unread_notifications_count' => $unreadCount
                 ];
 
             }

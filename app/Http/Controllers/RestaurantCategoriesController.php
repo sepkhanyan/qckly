@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 use App\RestaurantCategory;
 use App\Restaurant;
@@ -136,6 +137,15 @@ class RestaurantCategoriesController extends Controller
     public function getCategories(Request $request)
     {
         $lang = $request->header('Accept-Language');
+        $device = $request->header('Device-Type');
+        $version = $request->header('Version-Number');
+        $token = str_replace("Bearer ", "", $request->header('Authorization'));
+        $user = User::where('api_token', '=', $token)->with('cart.cartCollection')->first();
+        if ($user) {
+            $user->device_type = $device;
+            $user->version_number = $version;
+            $user->save();
+        }
         $categories = RestaurantCategory::all();
         foreach ($categories as $category) {
             if ($lang == 'ar') {
