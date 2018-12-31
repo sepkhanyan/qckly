@@ -139,12 +139,10 @@ class RestaurantCategoriesController extends Controller
         $lang = $request->header('Accept-Language');
         $device = $request->header('Device-Type');
         $version = $request->header('Version-Number');
-        $token = str_replace("Bearer ", "", $request->header('Authorization'));
-        $user = User::where('api_token', '=', $token)->with('cart.cartCollection')->first();
-        if ($user) {
-            $user->device_type = $device;
-            $user->version_number = $version;
-            $user->save();
+        $req_auth = $request->header('Authorization');
+        $user_id = User::getUserByToken($req_auth);
+        if ($user_id) {
+          User::where('id', $user_id)->update(['device_type' => $device, 'version_number' => $version]);
         }
         $categories = RestaurantCategory::all();
         foreach ($categories as $category) {

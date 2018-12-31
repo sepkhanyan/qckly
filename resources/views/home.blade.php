@@ -51,37 +51,6 @@
     <link href="{{ asset('js/datepicker/datepicker.css') }}" rel="stylesheet">
     <link href="{{ asset('js/datepicker/bootstrap-timepicker.css') }}" rel="stylesheet">
 
-
-    {{--<script type="text/javascript">--}}
-    {{--$(document).ready(function () {--}}
-    {{--$('a[title], span[title], button[title]').tooltip({placement: 'bottom'});--}}
-    {{--$('select.form-control').select2({minimumResultsForSearch: 10});--}}
-
-    {{--$('.alert').alert();--}}
-    {{--$('.dropdown-toggle').dropdown();--}}
-
-    {{--// $("#list-form td:contains('Disabled')").addClass('red');--}}
-    {{--});--}}
-    {{--</script>--}}
-
-    {{--<script src="https://js.pusher.com/4.3/pusher.min.js"></script>--}}
-    {{--<script src="https://ajax.googleapis.com/ajax/libs/dojo/1.13.0/dojo/dojo.js"></script>--}}
-    {{--<script>--}}
-
-    {{--// Enable pusher logging - don't include this in production--}}
-    {{--Pusher.logToConsole = true;--}}
-
-    {{--var pusher = new Pusher('6dba162777e691fc6a70', {--}}
-    {{--cluster: 'eu',--}}
-    {{--forceTLS: true--}}
-    {{--});--}}
-
-    {{--var channel = pusher.subscribe('messages');--}}
-    {{--channel.bind('.newMessage', function(data) {--}}
-    {{--alert(JSON.stringify(data));--}}
-    {{--});--}}
-
-    {{--</script>--}}
     <style>
         #map {
             border: 2px solid black;
@@ -104,31 +73,6 @@
             padding-left: 10px;
         }
 
-        /*#lat {*/
-        /*margin-left: 1em;*/
-        /*margin-top: 2em;*/
-        /*height: 25px;*/
-        /*width: 150px;*/
-        /*font-size: 13px;*/
-        /*padding: 0;*/
-        /*padding-left: 0.5em;*/
-        /*border: 3px solid #cccccc;*/
-        /*border-radius: 5px;*/
-
-        /*}*/
-
-        /*#long {*/
-        /*margin-top: 2em;*/
-        /*height: 25px;*/
-        /*width: 150px;*/
-        /*font-size: 13px;*/
-        /*padding: 0;*/
-        /*padding-left: 0.5em;*/
-        /*border: 3px solid #cccccc;*/
-        /*border-radius: 5px;*/
-        /*}*/
-    </style>
-    <style>
         .container {
             display: block;
             position: relative;
@@ -199,14 +143,6 @@
             display: block;
         }
     </style>
-    {{--<script src="https://js.pusher.com/4.3/pusher.min.js"></script>--}}
-    {{--<script>--}}
-
-    {{--Echo.channel('messages.' + self.user_id)--}}
-    {{--.listen('NewMessage', (e) => {--}}
-    {{--console.log(e);--}}
-    {{--});--}}
-    {{--</script>--}}
 </head>
 <body>
 <div id="wrapper" class="">
