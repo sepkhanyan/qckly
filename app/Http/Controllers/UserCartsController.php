@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Address;
 use App\MenuCategory;
+use App\Notification;
 use App\Restaurant;
 use App\UserCart;
 use App\UserCartItem;
@@ -524,22 +525,28 @@ class UserCartsController extends Controller
         $token = str_replace("Bearer ", "", $request->header('Authorization'));
         $user = User::where('api_token', '=', $token)->with('cart.cartCollection')->first();
         if ($user) {
+            $unreadNot = Notification::where('to_device', $user->id)->where('is_read', 0)->get();
+           $unreadCount = count($unreadNot);
+//           dd($unreadCount);
             if ($user->cart->count() > 0) {
                 $cart = $user->cart->where('completed', 0)->first();
                 if ($cart) {
                     $cart_count = $cart->cartCollection->count();
                     $arr = [
                         'cart_id' => $cart->id,
-                        'cart_count' => $cart_count
+                        'cart_count' => $cart_count,
+                        'unread_not_count' => $unreadCount
                     ];
                 } else {
                     $arr = [
-                        'cart_count' => 0
+                        'cart_count' => 0,
+                        'unread_not_count' => $unreadCount
                     ];
                 }
             } else {
                 $arr = [
-                    'cart_count' => 0
+                    'cart_count' => 0,
+                    'unread_not_count' => $unreadCount
                 ];
 
             }
