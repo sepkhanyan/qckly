@@ -44,9 +44,9 @@ class AddressesController extends Controller
         if ($lang == 'ar') {
             $validator->getTranslator()->setLocale('ar');
         }
-        $token = str_replace("Bearer ", "", $request->header('Authorization'));
-        $user = User::where('api_token', '=', $token)->first();
-        if ($user) {
+        $req_auth = $request->header('Authorization');
+        $user_id = User::getUserByToken($req_auth);
+        if ($user_id) {
             $DataRequests = $request->all();
             $validator = \Validator::make($DataRequests, [
                 'name' => 'required|string',
@@ -66,7 +66,7 @@ class AddressesController extends Controller
                     'error_details' => $validator->messages()));
             } else {
                 if ($id) {
-                    $address = Address::where('id', $id)->where('user_id', $user->id)->first();
+                    $address = Address::where('id', $id)->where('user_id', $user_id)->first();
                     $address->name = $DataRequests['name'];
                     $address->mobile_number = $DataRequests['mobile_number'];
                     $address->location = $DataRequests['location'];
@@ -79,9 +79,9 @@ class AddressesController extends Controller
                     $address->longitude = $DataRequests['longitude'];
                     $address->save();
                 } else {
-                    Address::where('user_id', $user->id)->where('is_default', 1)->update(['is_default' => 0]);
+                    Address::where('user_id', $user_id)->where('is_default', 1)->update(['is_default' => 0]);
                     $address = new Address();
-                    $address->user_id = $user->id;
+                    $address->user_id = $user_id;
                     $address->is_default = 1;
                     $address->name = $DataRequests['name'];
                     $address->mobile_number = $DataRequests['mobile_number'];
@@ -123,10 +123,10 @@ class AddressesController extends Controller
         if ($lang == 'ar') {
             $validator->getTranslator()->setLocale('ar');
         }
-        $token = str_replace("Bearer ", "", $request->header('Authorization'));
-        $user = User::where('api_token', '=', $token)->first();
-        if ($user) {
-            $addresses = Address::where('user_id', $user->id)->orderby('created_at', 'desc')->get();
+        $req_auth = $request->header('Authorization');
+        $user_id = User::getUserByToken($req_auth);
+        if ($user_id) {
+            $addresses = Address::where('user_id', $user_id)->orderby('created_at', 'desc')->get();
             if (count($addresses) > 0) {
                 foreach ($addresses as $address) {
                     if ($address->is_apartment == 1) {
@@ -200,12 +200,12 @@ class AddressesController extends Controller
         if ($lang == 'ar') {
             $validator->getTranslator()->setLocale('ar');
         }
-        $token = str_replace("Bearer ", "", $request->header('Authorization'));
-        $user = User::where('api_token', '=', $token)->with('cart.cartCollection')->first();
-        if ($user) {
-            $address = Address::where('id', $id)->where('user_id', $user->id)->first();
+        $req_auth = $request->header('Authorization');
+        $user_id = User::getUserByToken($req_auth);
+        if ($user_id) {
+            $address = Address::where('id', $id)->where('user_id', $user_id)->first();
             if ($address) {
-                Address::where('user_id', $user->id)->where('is_default', 1)->update(['is_default' => 0]);
+                Address::where('user_id', $user_id)->where('is_default', 1)->update(['is_default' => 0]);
                 $address->is_default = 1;
                 $address->save();
                 return response()->json(array(
@@ -240,10 +240,10 @@ class AddressesController extends Controller
         if ($lang == 'ar') {
             $validator->getTranslator()->setLocale('ar');
         }
-        $token = str_replace("Bearer ", "", $request->header('Authorization'));
-        $user = User::where('api_token', '=', $token)->first();
-        if ($user) {
-            $address = Address::where('id', $id)->where('user_id', $user->id)->first();
+        $req_auth = $request->header('Authorization');
+        $user_id = User::getUserByToken($req_auth);
+        if ($user_id) {
+            $address = Address::where('id', $id)->where('user_id', $user_id)->first();
             if ($address) {
                 $address->delete();
             } else {
@@ -252,9 +252,9 @@ class AddressesController extends Controller
                     'status_code' => 200,
                     'message' => \Lang::get('message.noAddress')));
             }
-            $default_address = Address::where('user_id', $user->id)->where('is_default', 1)->first();
+            $default_address = Address::where('user_id', $user_id)->where('is_default', 1)->first();
             if (!$default_address) {
-                $new_default_address = Address::where('user_id', $user->id)->orderBy('created_at', 'desc')->first();
+                $new_default_address = Address::where('user_id', $user_id)->orderBy('created_at', 'desc')->first();
                 if ($new_default_address) {
                     $new_default_address->is_default = 1;
                     $new_default_address->save();

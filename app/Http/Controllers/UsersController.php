@@ -369,9 +369,9 @@ class UsersController extends Controller
         if ($lang == 'ar') {
             $validator->getTranslator()->setLocale('ar');
         }
-        $token = str_replace("Bearer ", "", $request->header('Authorization'));
-        $user = User::where('api_token', '=', $token)->first();
-        if ($user) {
+        $req_auth = $request->header('Authorization');
+        $user_id = User::getUserByToken($req_auth);
+        if ($user_id) {
             $validator = \Validator::make($request->all(), [
                 'email' => 'required|email',
                 'username' => 'required|regex:/^[\s\w-]*$/'
@@ -381,6 +381,7 @@ class UsersController extends Controller
                     'message' => \Lang::get('message.invalid_inputs'),
                     'error_details' => $validator->messages()));
             } else {
+                $user = User::find($user_id);
                 $user->username = $request->input('username');
                 $user->email = $request->input('email');
                 if ($request->hasFile('image')) {
@@ -422,9 +423,10 @@ class UsersController extends Controller
     public function getUserDetails(Request $request)
     {
 //        \Log::info($request->all());
-        $token = str_replace("Bearer ", "", $request->header('Authorization'));
-        $user = User::where('api_token', '=', $token)->first();
-        if ($user) {
+        $req_auth = $request->header('Authorization');
+        $user_id = User::getUserByToken($req_auth);
+        if ($user_id) {
+            $user = User::find($user_id);
             $arr = [
                 'user_id' => $user->id,
                 'username' => $user->username != null ? $user->username : '',
@@ -512,14 +514,12 @@ class UsersController extends Controller
         $user = User::where('id', $user_id)->update(['lang' => $lang]);
         if ($user) {
             return response()->json(array('success' => 1, 'status_code' => 200, 'message' => 'Language changed successfully'));
-
-
         }
     }
 
 
     public function allDevicesPost(Request $request)
-    {
+    {                                       
         $req_auth = $request->header('Authorization');
         $req_lang = $request->header('Accept-Language');
 

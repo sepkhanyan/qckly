@@ -165,10 +165,10 @@ class OrdersController extends Controller
         if ($lang == 'ar') {
             $validator->getTranslator()->setLocale('ar');
         }
-        $token = str_replace("Bearer ", "", $request->header('Authorization'));
-        $user = User::where('api_token', '=', $token)->with('cart.cartCollection')->first();
-        if ($user) {
-            $orders = Order::where('user_id', $user->id)->orderby('created_at', 'desc')->with('cart.address')->paginate(20);
+        $req_auth = $request->header('Authorization');
+        $user_id = User::getUserByToken($req_auth);
+        if ($user_id) {
+            $orders = Order::where('user_id', $user_id)->orderby('created_at', 'desc')->with('cart.address')->paginate(20);
             if (count($orders) > 0) {
                 foreach ($orders as $order) {
                     if ($order->deliveryAddress->is_apartment == 1) {
@@ -364,10 +364,10 @@ class OrdersController extends Controller
         if ($lang == 'ar') {
             $validator->getTranslator()->setLocale('ar');
         }
-        $token = str_replace("Bearer ", "", $request->header('Authorization'));
-        $user = User::where('api_token', '=', $token)->first();
-        if ($user) {
-            $order = Order::where('id', $id)->where('user_id', $user->id)->first();
+        $req_auth = $request->header('Authorization');
+        $user_id = User::getUserByToken($req_auth);
+        if ($user_id) {
+            $order = Order::where('id', $id)->where('user_id', $user_id)->first();
             if ($order) {
                 if ($order->deliveryAddress->is_apartment == 1) {
                     $is_apartment = true;
@@ -559,9 +559,9 @@ class OrdersController extends Controller
         if ($lang == 'ar') {
             $validator->getTranslator()->setLocale('ar');
         }
-        $token = str_replace("Bearer ", "", $request->header('Authorization'));
-        $user = User::where('api_token', '=', $token)->with('cart.cartCollection')->first();
-        if ($user) {
+        $req_auth = $request->header('Authorization');
+        $user_id = User::getUserByToken($req_auth);
+        if ($user_id) {
             $DataRequests = $request->all();
             $validator = \Validator::make($DataRequests, [
                 'cart_id' => 'required|integer',
@@ -577,7 +577,7 @@ class OrdersController extends Controller
                 $cart_id = $DataRequests['cart_id'];
                 $payment_type = $DataRequests['payment_type'];
                 $price = $DataRequests['total_price'];
-                $cart = UserCart::where('user_id', $user->id)
+                $cart = UserCart::where('user_id', $user_id)
                     ->where('id', $cart_id)->first();
                 if ($cart) {
                     if ($cart->completed == 0) {
@@ -588,7 +588,7 @@ class OrdersController extends Controller
                                 'message' => \Lang::get('message.addAddress')));
                         }
                         $order = new Order();
-                        $order->user_id = $user->id;
+                        $order->user_id = $user_id;
                         $order->cart_id = $cart_id;
                         $order->payment_type = $payment_type;
                         if (isset($DataRequests['transaction_id'])) {

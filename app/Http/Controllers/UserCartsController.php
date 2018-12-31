@@ -54,9 +54,9 @@ class UserCartsController extends Controller
         if ($lang == 'ar') {
             $validator->getTranslator()->setLocale('ar');
         }
-        $token = str_replace("Bearer ", "", $request->header('Authorization'));
-        $user = User::where('api_token', '=', $token)->first();
-        if ($user) {
+        $req_auth = $request->header('Authorization');
+        $user_id = User::getUserByToken($req_auth);
+        if ($user_id) {
             $DataRequests = $request->all();
             $validator = \Validator::make($DataRequests, [
                 'collection_category_id' => 'required|integer',
@@ -75,7 +75,7 @@ class UserCartsController extends Controller
                 if (isset($DataRequests['special_instruction'])) {
                     $special_instruction = $DataRequests['special_instruction'];
                 }
-                $cart = UserCart::where('user_id', '=', $user->id)->where('completed', 0)->first();
+                $cart = UserCart::where('user_id', '=', $user_id)->where('completed', 0)->first();
                 if (!$cart) {
                     $validator = \Validator::make($DataRequests, [
                         'delivery_order_area' => 'required|integer',
@@ -99,10 +99,10 @@ class UserCartsController extends Controller
                                 ->where('status', 1)
                                 ->orWhere('type', '=', '24_7');
                         })->first();
-                        if($restaurant){
+                        if ($restaurant) {
                             $cart = new UserCart();
-                            $cart->user_id = $user->id;
-                            $address = Address::where('user_id', $user->id)->where('is_default', 1)->first();
+                            $cart->user_id = $user_id;
+                            $address = Address::where('user_id', $user_id)->where('is_default', 1)->first();
                             if ($address) {
                                 $cart->delivery_address_id = $address->id;
                             }
@@ -110,7 +110,7 @@ class UserCartsController extends Controller
                             $cart->delivery_order_date = Carbon::parse($delivery_date);
                             $cart->delivery_order_time = Carbon::parse($delivery_time);
                             $cart->save();
-                        }else{
+                        } else {
                             return response()->json(array(
                                 'success' => 0,
                                 'status_code' => 200,
@@ -354,11 +354,11 @@ class UserCartsController extends Controller
         if ($lang == 'ar') {
             $validator->getTranslator()->setLocale('ar');
         }
-        $token = str_replace("Bearer ", "", $request->header('Authorization'));
-        $user = User::where('api_token', '=', $token)->first();
-        if ($user) {
+        $req_auth = $request->header('Authorization');
+        $user_id = User::getUserByToken($req_auth);
+        if ($user_id) {
             $cart = UserCart::where('id', $id)
-                ->where('user_id', $user->id)
+                ->where('user_id', $user_id)
                 ->where('completed', 0)
                 ->with(['cartCollection' => function ($query) {
                     $query->orderby('created_at', 'desc');
@@ -522,13 +522,14 @@ class UserCartsController extends Controller
     public function cartCount(Request $request)
     {
 //        \Log::info($request->all());
-        $token = str_replace("Bearer ", "", $request->header('Authorization'));
-        $user = User::where('api_token', '=', $token)->with('cart.cartCollection')->first();
-        if ($user) {
-            $unreadNot = Notification::where('to_device', $user->id)->where('is_read', 0)->get();
-           $unreadCount = count($unreadNot);
-            if ($user->cart->count() > 0) {
-                $cart = $user->cart->where('completed', 0)->first();
+        $req_auth = $request->header('Authorization');
+        $user_id = User::getUserByToken($req_auth);
+        if ($user_id) {
+            $unreadNot = Notification::where('to_device', $user_id)->where('is_read', 0)->get();
+            $unreadCount = count($unreadNot);
+            $cart = UserCart::where('user_id', $user_id)->get();
+            if (count($cart) > 0) {
+                $cart = $cart->where('completed', 0)->first();
                 if ($cart) {
                     $cart_count = $cart->cartCollection->count();
                     $arr = [
@@ -591,18 +592,18 @@ class UserCartsController extends Controller
                 $foodlist_images = [];
                 $requestDay = Carbon::today()->dayOfWeek;
                 $requestTime = Carbon::now()->toTimeString();
-                if($collection->is_available == 1){
+                if ($collection->is_available == 1) {
                     $unavailability = CollectionUnavailabilityHour::where('collection_id', $collection->id)->where('weekday', $requestDay)
                         ->where('start_time', '<=', $requestTime)
                         ->where('end_time', '>=', $requestTime)
                         ->where('status', 1)->first();
 
-                    if($unavailability){
+                    if ($unavailability) {
                         $collectionStatus = 0;
-                    }else{
+                    } else {
                         $collectionStatus = 1;
                     }
-                }elseif($collection->is_available == 0){
+                } elseif ($collection->is_available == 0) {
                     $collectionStatus = 0;
                 }
                 $setup = '';
@@ -745,13 +746,13 @@ class UserCartsController extends Controller
 
                 }
                 $delivery_time = '';
-                if($collection->serviceType->name_en == 'Delivery'){
+                if ($collection->serviceType->name_en == 'Delivery') {
                     $delivery_hours = $collection->delivery_hours / 60;
                     $delivery_minutes = $collection->delivery_hours % 60;
                     if ($delivery_minutes > 0) {
                         $delivery_time = floor($delivery_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($delivery_minutes) . ' ' . \Lang::get('message.minute');
                     } else {
-                        $delivery_time = floor( $delivery_hours) . ' ' . \Lang::get('message.hour');
+                        $delivery_time = floor($delivery_hours) . ' ' . \Lang::get('message.hour');
                     }
 
                 }
@@ -834,12 +835,12 @@ class UserCartsController extends Controller
         if ($lang == 'ar') {
             $validator->getTranslator()->setLocale('ar');
         }
-        $token = str_replace("Bearer ", "", $request->header('Authorization'));
-        $user = User::where('api_token', '=', $token)->with('cart.cartCollection')->first();
-        if ($user) {
+        $req_auth = $request->header('Authorization');
+        $user_id = User::getUserByToken($req_auth);
+        if ($user_id) {
             $DataRequests = $request->all();
             $cart = UserCart::where('id', $id)
-                ->where('user_id', $user->id)->first();
+                ->where('user_id', $user_id)->first();
             if (isset($DataRequests['collection_id'])) {
                 $collection_id = $DataRequests['collection_id'];
                 UserCartCollection::where('cart_id', $cart->id)
@@ -865,7 +866,7 @@ class UserCartsController extends Controller
                     'status_code' => 200,
                     'message' => \Lang::get('message.cartRemove')));
             }
-        }else {
+        } else {
             return response()->json(array(
                 'success' => 0,
                 'status_code' => 200,
@@ -882,12 +883,12 @@ class UserCartsController extends Controller
         if ($lang == 'ar') {
             $validator->getTranslator()->setLocale('ar');
         }
-        $token = str_replace("Bearer ", "", $request->header('Authorization'));
-        $user = User::where('api_token', '=', $token)->with('cart.cartCollection')->first();
-        if ($user) {
-            $address = Address::where('id', $id)->where('user_id', $user->id)->first();
+        $req_auth = $request->header('Authorization');
+        $user_id = User::getUserByToken($req_auth);
+        if ($user_id) {
+            $address = Address::where('id', $id)->where('user_id', $user_id)->first();
             if ($address) {
-                $cart = UserCart::where('user_id', $user->id)->where('completed', 0)->first();
+                $cart = UserCart::where('user_id', $user_id)->where('completed', 0)->first();
                 if ($cart) {
                     $cart->delivery_address_id = $address->id;
                     $cart->save();

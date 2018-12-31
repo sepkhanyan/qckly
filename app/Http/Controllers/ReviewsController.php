@@ -147,9 +147,9 @@ class ReviewsController extends Controller
         if ($lang == 'ar') {
             $validator->getTranslator()->setLocale('ar');
         }
-        $token = str_replace("Bearer ", "", $request->header('Authorization'));
-        $user = User::where('api_token', '=', $token)->with('cart.cartCollection')->first();
-        if ($user) {
+        $req_auth = $request->header('Authorization');
+        $user_id = User::getUserByToken($req_auth);
+        if ($user_id) {
             $DataRequests = $request->all();
             $validator = \Validator::make($DataRequests, [
                 'reviews' => 'required',
@@ -169,7 +169,7 @@ class ReviewsController extends Controller
                         $rating->review_text = $review['review_text'];
                     }
                     $rating->save();
-                    $order = Order::where('id', $review['order_id'])->where('user_id', $user->id)->first();
+                    $order = Order::where('id', $review['order_id'])->where('user_id', $user_id)->first();
                     if ($order) {
                         $order->is_rated = 1;
                         $order->save();
