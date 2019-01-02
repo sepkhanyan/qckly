@@ -39,6 +39,15 @@
                     {{ csrf_field() }}
                     <div class="tab-content">
                         <div id="general" class="tab-pane row wrap-all active">
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                             <div class="form-group{{ $errors->has('manager_name') ? ' has-error' : '' }}">
                                 <label for="input_manager_name" class="col-sm-3 control-label">Name</label>
                                 <div class="col-sm-5">
