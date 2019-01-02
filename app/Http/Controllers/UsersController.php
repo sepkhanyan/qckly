@@ -519,7 +519,7 @@ class UsersController extends Controller
 
 
     public function allDevicesPost(Request $request)
-    {                                       
+    {
         $req_auth = $request->header('Authorization');
         $req_lang = $request->header('Accept-Language');
 

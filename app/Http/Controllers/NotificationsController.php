@@ -224,46 +224,55 @@ class NotificationsController extends Controller
             $notifications = Notification::where('to_device', $user_id)->orderby('id', 'desc')->paginate(20);
             $restaurant_id = '';
             $order_id = '';
-            foreach ($notifications as $notification) {
-                if($notification->notification_type == 2){
-                    $restaurant_id = $notification->restaurant_id;
+            if(count($notifications) > 0){
+                foreach ($notifications as $notification) {
+                    if($notification->notification_type == 2){
+                        $restaurant_id = $notification->restaurant_id;
+                    }
+                    if($notification->notification_type == 3){
+                        $order_id = $notification->order_id;
+                    }
+                    if($notification->is_read == 1){
+                        $is_read = true;
+                    }else{
+                        $is_read = false;
+                    }
+                    $arr [] = [
+                        'notification_id' => $notification->id,
+                        'user_id' => $notification->to_device,
+                        'message' => $notification->message,
+                        'notification_type' => $notification->notification_type,
+                        'is_read' => $is_read,
+                        'order_id' => $order_id,
+                        'restaurant_id' => $restaurant_id,
+                        'notification_date' => date("j M, Y, g:i A", strtotime($notification->created_at))
+                    ];
                 }
-                if($notification->notification_type == 3){
-                    $order_id = $notification->order_id;
-                }
-                if($notification->is_read == 1){
-                    $is_read = true;
-                }else{
-                    $is_read = false;
-                }
-                $arr [] = [
-                    'notification_id' => $notification->id,
-                    'user_id' => $notification->to_device,
-                    'message' => $notification->message,
-                    'notification_type' => $notification->notification_type,
-                    'is_read' => $is_read,
-                    'order_id' => $order_id,
-                    'restaurant_id' => $restaurant_id
+
+                $wholeData = [
+                    "total" => $notifications->total(),
+                    "count" => $notifications->count(),
+                    "per_page" => 20,
+                    "current_page" => $notifications->currentPage(),
+                    "next_page_url" => $notifications->nextPageUrl(),
+                    "prev_page_url" => $notifications->previousPageUrl(),
+                    "from" => $notifications->firstItem(),
+                    "to" => $notifications->lastItem(),
+                    "last_page" => $notifications->lastPage(),
+                    'data' => $arr,
                 ];
+
+                return response()->json(array(
+                    'success' => 1,
+                    'status_code' => 200,
+                    'data' => $wholeData));
+            }else{
+                return response()->json(array(
+                    'success' => 1,
+                    'status_code' => 200,
+                    'data' => [],
+                    'message' => \Lang::get('message.noNotification')));
             }
-
-            $wholeData = [
-                "total" => $notifications->total(),
-                "count" => $notifications->count(),
-                "per_page" => 20,
-                "current_page" => $notifications->currentPage(),
-                "next_page_url" => $notifications->nextPageUrl(),
-                "prev_page_url" => $notifications->previousPageUrl(),
-                "from" => $notifications->firstItem(),
-                "to" => $notifications->lastItem(),
-                "last_page" => $notifications->lastPage(),
-                'data' => $arr,
-            ];
-
-            return response()->json(array(
-                'success' => 1,
-                'status_code' => 200,
-                'data' => $wholeData));
 
         } else {
             return response()->json(array(
