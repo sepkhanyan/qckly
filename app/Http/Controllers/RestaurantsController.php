@@ -1106,6 +1106,7 @@ class RestaurantsController extends Controller
                         'review_count' => $review_count,
 //                        'availability_hours' => $availability_hours,
                         'description' => $restaurant_description,
+                        'status_id' => $restaurant->status,
                         'status' => $status,
                         'category' => $category
                     ];

@@ -296,10 +296,10 @@ class NotificationsController extends Controller
             $notification = Notification::where('id', $notId)->where('to_device', $user_id)->first();
             if($notification->is_read == 0){
                 Notification::where('id', $notId)->update(['is_read' => 1]);
-                return response()->json(array(
-                    'success' => 1,
-                    'status_code' => 200));
             }
+            return response()->json(array(
+                'success' => 1,
+                'status_code' => 200));
         }else{
             return response()->json(array(
                 'success' => 0,

@@ -138,7 +138,6 @@
                             @endif
                         </div>
                         <div id="location" class="tab-pane row wrap-all">
-                            <h4 class="tab-pane-title">Basic</h4>
                             <div class="form-group{{ $errors->has('category') ? ' has-error' : '' }}">
                                 <label for="category" class="col-sm-3 control-label">Category</label>
                                 <div class="col-sm-5">
