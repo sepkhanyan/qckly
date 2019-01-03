@@ -39,15 +39,6 @@
                     {{ csrf_field() }}
                     <div class="tab-content">
                         <div id="general" class="tab-pane row wrap-all active">
-                            @if ($errors->any())
-                                <div class="alert alert-danger">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
                             <div class="form-group{{ $errors->has('manager_name') ? ' has-error' : '' }}">
                                 <label for="input_manager_name" class="col-sm-3 control-label">Name</label>
                                 <div class="col-sm-5">
@@ -117,6 +108,34 @@
                                     @endif
                                 </div>
                             </div>
+                            @if ($errors->any())
+                                <div class="modal fade" id="errorList" role="dialog" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="alert alert-danger">
+                                                    <ul>
+                                                        @foreach ($errors->all() as $error)
+                                                            <li>{{$error}}</li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <script type="text/javascript">
+                                    $(window).on('load',function(){
+                                        $('#errorList').modal('show');
+                                    });
+                                </script>
+                            @endif
                         </div>
                         <div id="location" class="tab-pane row wrap-all">
                             <h4 class="tab-pane-title">Basic</h4>
