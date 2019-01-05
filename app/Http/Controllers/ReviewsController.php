@@ -30,7 +30,7 @@ class ReviewsController extends Controller
             }
 
             if (isset($data['review_search'])) {
-                $reviews = $reviews->where('order_id', 'like', $data['review_search']);
+                $reviews = $reviews->where('order_id', 'like', '%' . $data['review_search'] . '%');
             }
             $selectedRestaurant = Restaurant::find($id);
             $reviews = $reviews->orderby('created_at', 'desc')
@@ -43,7 +43,7 @@ class ReviewsController extends Controller
             }
 
             if (isset($data['review_search'])) {
-                $reviews = $reviews->where('order_id', 'like', $data['review_search']);
+                $reviews = $reviews->where('order_id', 'like', '%' . $data['review_search'] . '%');
             }
             $selectedRestaurant = Restaurant::find($user->restaurant_id);
             $reviews = $reviews->orderby('created_at', 'desc')

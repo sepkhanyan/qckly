@@ -42,7 +42,7 @@ class RestaurantsController extends Controller
         $restaurants = Restaurant::paginate(20);
         $data = $request->all();
         if (isset($data['restaurant_search'])) {
-            $restaurants = Restaurant::where('name_en', 'like', $data['restaurant_search'])->paginate(20);
+            $restaurants = Restaurant::where('name_en', 'like', '%' . $data['restaurant_search'] . '%')->paginate(20);
         }
         if ($user->admin == 2) {
             $restaurants = Restaurant::where('id', $user->restaurant_id)->paginate(20);

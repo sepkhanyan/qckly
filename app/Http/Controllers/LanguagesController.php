@@ -22,7 +22,7 @@ class LanguagesController extends Controller
             $data = $request->all();
 
             if (isset($data['language_search'])) {
-                $languages = Language::where('name', 'like', $data['language_search'])->paginate(20);
+                $languages = Language::where('name', 'like', '%' . $data['language_search'] . '%')->paginate(20);
             }
             return view('languages', [
                 'languages' => $languages,

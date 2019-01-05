@@ -22,7 +22,7 @@ class StatusesController extends Controller
 
             if (isset($data['status_search'])) {
                 $statuses = Status::where('name_en', 'like', $data['status_search'])
-                    ->orWhere('name_ar', 'like', $data['status_search'])->paginate(20);
+                    ->orWhere('name_ar', 'like', '%' . $data['status_search'] . '%')->paginate(20);
             }
             return view('statuses', ['statuses' => $statuses]);
         } else {

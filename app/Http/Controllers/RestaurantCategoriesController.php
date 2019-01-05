@@ -23,8 +23,8 @@ class RestaurantCategoriesController extends Controller
             $categories = RestaurantCategory::paginate(20);
             $data = $request->all();
             if (isset($data['restaurant_category_search'])) {
-                $categories = RestaurantCategory::where('name_en', 'like', $data['restaurant_category_search'])
-                    ->orWhere('name_ar', 'like', $data['restaurant_category_search'])->paginate(20);
+                $categories = RestaurantCategory::where('name_en', 'like', '%' . $data['restaurant_category_search'] . '%')
+                    ->orWhere('name_ar', 'like', '%' . $data['restaurant_category_search'] . '%')->paginate(20);
             }
             return view('restaurant_categories', ['categories' => $categories]);
         } else {

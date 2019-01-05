@@ -20,7 +20,7 @@ class CollectionCategoriesController extends Controller
         $categories = CollectionCategory::all();
         $data = $request->all();
         if (isset($data['collection_category_search'])) {
-            $categories = $categories->where('name_en', 'like', $data['collection_category_search']);
+            $categories = $categories->where('name_en', 'like', '%' . $data['collection_category_search'] . '%');
         }
         return view('collection_categories', [
             'categories' => $categories,

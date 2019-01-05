@@ -24,7 +24,7 @@ class AreasController extends Controller
             $data = $request->all();
 
             if (isset($data['area_search'])) {
-                $areas = Area::where('name_en', 'like', $data['area_search'])->paginate(20);
+                $areas = Area::where('name_en', 'like', '%' . $data['area_search'] . '%' )->paginate(20);
             }
             return view('areas', [
                 'areas' => $areas,
