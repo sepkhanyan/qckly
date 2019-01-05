@@ -71,19 +71,26 @@ $(document).ready(function () {
             return $(this).val();
         }).get();
         console.log(checkValues);
+        if(checkValues.length > 0){
+            var choice = confirm("Are you sure you want to delete?");
 
+            if (choice) {
+                $.ajax({
 
-        $.ajax({
+                    method: "POST",
+                    url: "/language/delete",
+                    data: {id: checkValues, _token: token},
+                    success: function (data) {
 
-            method: "POST",
-            url: "/language/delete",
-            data: {id: checkValues, _token: token},
-            success: function (data) {
+                        window.location.reload();
+                    }
 
-                window.location.reload();
+                });
             }
 
-        });
+        }else{
+            alert("Select language!");
+        }
 
     });
 
@@ -92,19 +99,27 @@ $(document).ready(function () {
             return $(this).val();
         }).get();
         console.log(checkValues);
+        if(checkValues.length > 0){
+            var choice = confirm("Are you sure you want to delete?");
 
+            if (choice) {
+                $.ajax({
 
-        $.ajax({
+                    method: "POST",
+                    url: "/review/delete",
+                    data: {id: checkValues, _token: token},
+                    success: function (data) {
 
-            method: "POST",
-            url: "/review/delete",
-            data: {id: checkValues, _token: token},
-            success: function (data) {
+                        window.location.reload();
+                    }
 
-                window.location.reload();
+                });
             }
 
-        });
+        }else{
+            alert("Select review!");
+        }
+
 
     });
 
@@ -113,19 +128,27 @@ $(document).ready(function () {
             return $(this).val();
         }).get();
         console.log(checkValues);
+        if(checkValues.length > 0){
+            var choice = confirm("Are you sure you want to delete?");
 
+            if (choice) {
+                $.ajax({
 
-        $.ajax({
+                    method: "POST",
+                    url: "/mealtime/delete",
+                    data: {id: checkValues, _token: token},
+                    success: function (data) {
 
-            method: "POST",
-            url: "/mealtime/delete",
-            data: {id: checkValues, _token: token},
-            success: function (data) {
+                        window.location.reload();
+                    }
 
-                window.location.reload();
+                });
             }
 
-        });
+        }else{
+            alert("Select mealtime!");
+        }
+
 
     });
 
@@ -135,18 +158,27 @@ $(document).ready(function () {
         }).get();
         console.log(checkValues);
 
+        if(checkValues.length > 0){
+            var choice = confirm("Are you sure you want to delete?");
 
-        $.ajax({
+            if (choice) {
+                $.ajax({
 
-            method: "POST",
-            url: "/collection/delete",
-            data: {id: checkValues, _token: token},
-            success: function (data) {
+                    method: "POST",
+                    url: "/collection/delete",
+                    data: {id: checkValues, _token: token},
+                    success: function (data) {
 
-                window.location.reload();
+                        window.location.reload();
+                    }
+
+                });
             }
 
-        });
+        }else{
+            alert("Select collection!");
+        }
+
 
     });
 
@@ -157,18 +189,27 @@ $(document).ready(function () {
         }).get();
         console.log(checkValues);
 
+        if(checkValues.length > 0){
+            var choice = confirm("Are you sure you want to delete?");
 
-        $.ajax({
+            if (choice) {
+                $.ajax({
 
-            method: "POST",
-            url: "/collection_category/delete",
-            data: {id: checkValues, _token: token},
-            success: function (data) {
+                    method: "POST",
+                    url: "/collection_category/delete",
+                    data: {id: checkValues, _token: token},
+                    success: function (data) {
 
-                window.location.reload();
+                        window.location.reload();
+                    }
+
+                });
             }
 
-        });
+        }else{
+            alert("Select collection category!");
+        }
+
 
     });
 
@@ -177,19 +218,28 @@ $(document).ready(function () {
             return $(this).val();
         }).get();
         console.log(checkValues);
+        if(checkValues.length > 0){
+            var choice = confirm("Are you sure you want to delete?");
 
+            if (choice) {
+                $.ajax({
 
-        $.ajax({
+                    method: "POST",
+                    url: "/restaurant_category/delete",
+                    data: {id: checkValues, _token: token},
+                    success: function (data) {
 
-            method: "POST",
-            url: "/restaurant_category/delete",
-            data: {id: checkValues, _token: token},
-            success: function (data) {
+                        window.location.reload();
+                    }
 
-                window.location.reload();
+                });
             }
 
-        });
+        }else{
+            alert("Select restaurant category!");
+        }
+
+
 
     });
 
@@ -198,39 +248,56 @@ $(document).ready(function () {
             return $(this).val();
         }).get();
         console.log(checkValues);
+        if(checkValues.length > 0){
+            var choice = confirm("Are you sure you want to delete?");
 
+            if (choice) {
+                $.ajax({
 
-        $.ajax({
+                    method: "POST",
+                    url: "/restaurant/delete",
+                    data: {id: checkValues, _token: token},
+                    success: function (data) {
 
-            method: "POST",
-            url: "/restaurant/delete",
-            data: {id: checkValues, _token: token},
-            success: function (data) {
+                        window.location.reload();
+                    }
 
-                window.location.reload();
+                });
             }
 
-        });
+        }else{
+            alert("Select restaurant!");
+        }
+
+
 
     });
     $('#delete_area').click(function () {
         window.checkValues = $('input[name=delete]:checked').map(function () {
             return $(this).val();
         }).get();
-        console.log(checkValues);
+        console.log(checkValues.length);
+        if(checkValues.length > 0){
+            var choice = confirm("Are you sure you want to delete?");
 
+            if (choice) {
+                $.ajax({
 
-        $.ajax({
+                    method: "POST",
+                    url: "/area/delete",
+                    data: {id: checkValues, _token: token},
+                    success: function (data) {
 
-            method: "POST",
-            url: "/area/delete",
-            data: {id: checkValues, _token: token},
-            success: function (data) {
+                        window.location.reload();
+                    }
 
-                window.location.reload();
+                });
             }
+        }else{
+            alert("Select area!");
+        }
 
-        });
+
 
     });
     $('#delete_menu_category').click(function () {
@@ -238,19 +305,27 @@ $(document).ready(function () {
             return $(this).val();
         }).get();
         console.log(checkValues);
+        if(checkValues.length > 0){
+            var choice = confirm("Are you sure you want to delete?");
 
+            if (choice) {
+                $.ajax({
 
-        $.ajax({
+                    method: "POST",
+                    url: "/menu_category/delete",
+                    data: {id: checkValues, _token: token},
+                    success: function (data) {
 
-            method: "POST",
-            url: "/menu_category/delete",
-            data: {id: checkValues, _token: token},
-            success: function (data) {
+                        window.location.reload();
+                    }
 
-                window.location.reload();
+                });
             }
 
-        });
+        }else{
+            alert("Select menu category!");
+        }
+
 
     });
 
@@ -278,19 +353,28 @@ $(document).ready(function () {
             return $(this).val();
         }).get();
         console.log(checkValues);
+        if(checkValues.length > 0){
+            var choice = confirm("Are you sure you want to delete?");
 
+            if (choice) {
+                $.ajax({
 
-        $.ajax({
+                    method: "POST",
+                    url: "/customer/delete",
+                    data: {id: checkValues, _token: token},
+                    success: function (data) {
 
-            method: "POST",
-            url: "/customer/delete",
-            data: {id: checkValues, _token: token},
-            success: function (data) {
+                        window.location.reload();
+                    }
 
-                window.location.reload();
+                });
             }
 
-        });
+        }else{
+            alert("Select customer!");
+        }
+
+
 
     });
     $('#delete_menu').click(function () {
@@ -299,18 +383,27 @@ $(document).ready(function () {
         }).get();
         console.log(checkValues);
 
+        if(checkValues.length > 0){
+            var choice = confirm("Are you sure you want to delete?");
 
-        $.ajax({
+            if (choice) {
+                $.ajax({
 
-            method: "POST",
-            url: "/menu/delete",
-            data: {id: checkValues, _token: token},
-            success: function (data) {
+                    method: "POST",
+                    url: "/menu/delete",
+                    data: {id: checkValues, _token: token},
+                    success: function (data) {
 
-                window.location.reload();
+                        window.location.reload();
+                    }
+
+                });
             }
 
-        });
+        }else{
+            alert("Select menu item!");
+        }
+
 
     });
 
@@ -319,19 +412,27 @@ $(document).ready(function () {
             return $(this).val();
         }).get();
         console.log(checkValues);
+        if(checkValues.length > 0){
+            var choice = confirm("Are you sure you want to delete?");
 
+            if (choice) {
+                $.ajax({
 
-        $.ajax({
+                    method: "POST",
+                    url: "/status/delete",
+                    data: {id: checkValues, _token: token},
+                    success: function (data) {
 
-            method: "POST",
-            url: "/status/delete",
-            data: {id: checkValues, _token: token},
-            success: function (data) {
+                        window.location.reload();
+                    }
 
-                window.location.reload();
+                });
             }
 
-        });
+        }else{
+            alert("Select status!");
+        }
+
 
     });
 
@@ -340,19 +441,27 @@ $(document).ready(function () {
             return $(this).val();
         }).get();
         console.log(checkValues);
+        if(checkValues.length > 0){
+            var choice = confirm("Are you sure you want to delete?");
 
+            if (choice) {
+                $.ajax({
 
-        $.ajax({
+                    method: "POST",
+                    url: "/order/delete",
+                    data: {id: checkValues, _token: token},
+                    success: function (data) {
 
-            method: "POST",
-            url: "/order/delete",
-            data: {id: checkValues, _token: token},
-            success: function (data) {
+                        window.location.reload();
+                    }
 
-                window.location.reload();
+                });
             }
 
-        });
+        }else{
+            alert("Select order!");
+        }
+
 
     });
 
