@@ -91,13 +91,14 @@ class CollectionCategoriesController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CollectionCategoryRequest $request, $id)
+    public function update(CollectionCategoryRequest $request)
     {
         $user = Auth::user();
         if ($user->admin == 1) {
+            $id = $request->id;
             $category = CollectionCategory::find($id);
-            $category->name_en = $request->input('name_en');
-            $category->name_ar = $request->input('name_ar');
+            $category->name_en = $request->name_en;
+            $category->name_ar = $request->name_en;
             $category->save();
             return redirect('/collection_categories');
         } else {

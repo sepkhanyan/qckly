@@ -33,8 +33,8 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         });
         Route::get('/statuses', 'StatusesController@index');
         Route::group(['prefix' => 'status'], function () {
-            Route::get('store', 'StatusesController@store');
-            Route::post('update/{id}', 'StatusesController@update');
+            Route::post('store', 'StatusesController@store');
+            Route::post('update', 'StatusesController@update');
             Route::post('delete', 'StatusesController@deleteStatus');
         });
         Route::get('/mealtimes', 'MealtimesController@index');
@@ -76,8 +76,8 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         });
         Route::get('/collection_categories', 'CollectionCategoriesController@index');
         Route::group(['prefix' => 'collection_category'], function () {
-            Route::get('store', 'CollectionCategoriesController@store');
-            Route::post('update/{id}', 'CollectionCategoriesController@update');
+            Route::post('store', 'CollectionCategoriesController@store');
+            Route::post('update', 'CollectionCategoriesController@update');
             Route::post('delete', 'CollectionCategoriesController@deleteCategory');
         });
         Route::get('/menus/{id?}', 'MenusController@index');

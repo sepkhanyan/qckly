@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StatusRequest;
 use App\Status;
 use Illuminate\Http\Request;
 use Auth;
@@ -48,14 +49,10 @@ class StatusesController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StatusRequest $request)
     {
         $user = Auth::user();
         if ($user->admin == 1) {
-            $request->validate([
-                'name_en' => 'required|string|max:255',
-                'name_ar' => 'required|string|max:255|',
-            ]);
             $status = new Status();
             $status->name_en = $request->input('name_en');
             $status->name_ar = $request->input('name_ar');
@@ -95,17 +92,14 @@ class StatusesController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StatusRequest $request)
     {
         $user = Auth::user();
         if ($user->admin == 1) {
-            $request->validate([
-                'name_en' => 'required|string|max:255',
-                'name_ar' => 'required|string|max:255|',
-            ]);
+            $id = $request->id;
             $status = Status::find($id);
-            $status->name_en = $request->input('name_en');
-            $status->name_ar = $request->input('name_ar');
+            $status->name_en = $request->name_en;
+            $status->name_ar = $request->name_ar;
             $status->save();
             return redirect('/statuses');
         } else {

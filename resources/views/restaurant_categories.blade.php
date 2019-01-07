@@ -141,7 +141,7 @@
                                 <label class="col-sm-3 control-label" for="category_en">Name En</label>
                                 <div class="col-sm-8">
                                     <input class="form-control" type="text" id="category_en" name="name_en" value="">
-                                    <span  class="help-block">
+                                    <span  class="help-block hidden">
                                         <strong>{{ $errors->first('name_en') }}</strong>
                                     </span>
                                 </div>

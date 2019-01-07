@@ -64,12 +64,13 @@
                                         <tr>
                                             <td class="action">
                                                 <input type="checkbox" value="{{ $status->id }}" name="delete"/>&nbsp;&nbsp;&nbsp;
-                                                <a class="btn btn-edit" data-toggle="modal"
-                                                   data-target="#modalEditStatus"
-                                                   type="button"
-                                                   onclick="myFunction('{{$status->id}}', '{{$status->name_en}}', '{{$status->name_ar}}')">
+                                                <button  class="edit-status-modal btn btn-edit"
+                                                         type="button"
+                                                         data-id ="{{$status->id}}"
+                                                         data-name-en ="{{$status->name_en}}"
+                                                         data-name-ar ="{{$status->name_ar}}">
                                                     <i class="fa fa-pencil"></i>
-                                                </a>&nbsp;&nbsp;
+                                                </button>&nbsp;&nbsp;&nbsp;
                                             </td>
                                             <td>{{$status->name_en}}</td>
                                             <td>{{$status->id}}</td>
@@ -91,9 +92,6 @@
             </div>
         </div>
         <div class="modal fade" id="modalCreateStatus" role="dialog" tabindex="-1">
-            <form role="form" id="create-form" class="form-horizontal" accept-charset="utf-8" method="GET"
-                  action="{{ url('/status/store') }}">
-                {{ csrf_field() }}
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -101,78 +99,70 @@
                             <h4 class="modal-title"> Add Status</h4>
                         </div>
                         <div class="modal-body">
-                            <div class="form-group {{ $errors->has('name_en') ? ' has-error' : '' }}">
-                                <label class="col-sm-3 control-label" for="status-en">Name En</label>
-                                <div class="col-sm-8">
-                                    <input type="text" name="name_en" class="form-control" value="" id="status-en">
-                                    @if ($errors->has('name_en'))
-                                        <span class="help-block">
+                            <div id="en" class="form-group row add{{ $errors->has('name_en') ? ' has-error' : '' }}">
+                                <label class="col-sm-3 control-label" >Name En</label>
+                                <div class="col-sm-7">
+                                    <input type="text" name="name_en" class="form-control" value="" >
+                                    <span   class="help-block hidden">
                                         <strong>{{ $errors->first('name_en') }}</strong>
                                     </span>
-                                    @endif
                                 </div>
                             </div>
                         </div>
                         <div class="modal-body">
-                            <div class="form-group {{ $errors->has('name_ar') ? ' has-error' : '' }}">
-                                <label class="col-sm-3 control-label" for="status-ar">Name Ar</label>
-                                <div class="col-sm-8">
-                                    <input type="text" name="name_ar" class="form-control" value="" id="status-ar">
-                                    @if ($errors->has('name_ar'))
-                                        <span class="help-block">
+                            <div id="ar" class="form-group row add{{ $errors->has('name_ar') ? ' has-error' : '' }}">
+                                <label class="col-sm-3 control-label" >Name Ar</label>
+                                <div class="col-sm-7">
+                                    <input type="text" name="name_ar" class="form-control" value="" >
+                                    <span  class="help-block hidden">
                                         <strong>{{ $errors->first('name_ar') }}</strong>
                                     </span>
-                                    @endif
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Add</button>
+                            <button id="addStatus" type="button" class="btn btn-primary">Add</button>
                         </div>
                     </div>
                 </div>
-            </form>
         </div>
         <div class="modal fade" id="modalEditStatus" role="dialog" tabindex="-1">
-            <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST">
-                {{ csrf_field() }}
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                             <h4 class="modal-title"> Edit Status</h4>
+                            <input type="hidden" name="status_id" class="form-control" value="">
                         </div>
                         <div class="modal-body">
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label" for="status-en">Name En</label>
+                            <div id="editEn" class="form-group row add{{ $errors->has('name_en') ? ' has-error' : '' }}">
+                                <label class="col-sm-3 control-label" >Name En</label>
                                 <div class="col-sm-8">
-                                    <input type="text" name="name_en" class="form-control" value="" id="status-en">
+                                    <input type="text" name="name_en" class="form-control" value="" id="status_en">
+                                    <span  class="help-block hidden">
+                                        <strong>{{ $errors->first('name_en') }}</strong>
+                                    </span>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-body">
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label" for="status-ar">Name Ar</label>
+                            <div id="editAr" class="form-group row add{{ $errors->has('name_ar') ? ' has-error' : '' }}">
+                                <label class="col-sm-3 control-label" >Name Ar</label>
                                 <div class="col-sm-8">
-                                    <input type="text" name="name_ar" class="form-control" value="" id="status-ar">
+                                    <input type="text" name="name_ar" class="form-control" value="" id="status_ar">
+                                    <span  class="help-block hidden">
+                                        <strong>{{ $errors->first('name_ar') }}</strong>
+                                    </span>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Update</button>
+                            <button id="editStatus" type="button" class="btn btn-primary">Update</button>
                         </div>
                     </div>
                 </div>
-            </form>
         </div>
     </div>
-    <script type="text/javascript">
-        function myFunction(id, en, ar) {
-            $('input[name=name_en]').val(en);
-            $('input[name=name_ar]').val(ar);
-            $("#edit-form").attr('action', 'status/update/' + id);
-        }
-    </script>
 @endsection
