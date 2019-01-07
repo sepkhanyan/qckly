@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AreaRequest extends FormRequest
+class MealtimeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -31,6 +31,9 @@ class AreaRequest extends FormRequest
             'name_ar.required' => 'The Name Ar: field is required.',
             'name_ar.string'  => 'The Name Ar: must be a string.',
             'name_ar.max'  => 'The Name Ar: may not be greater than 255 characters.',
+            'start_time.required' => 'The Start Time: field is required.',
+            'end_time.required' => 'The End Time: field is required.',
+            'end_time.after' => 'The End Time: must be a date after Start Time.'
         ];
     }
 
@@ -39,6 +42,8 @@ class AreaRequest extends FormRequest
         return [
             'name_en' => 'required|string|max:255',
             'name_ar' => 'required|string|max:255',
+            'start_time' => 'required',
+            'end_time' => 'required|after:start_time'
         ];
     }
 }

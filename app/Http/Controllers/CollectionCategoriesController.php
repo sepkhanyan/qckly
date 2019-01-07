@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\CollectionCategory;
+use App\Http\Requests\CollectionCategoryRequest;
 use Illuminate\Http\Request;
 use Auth;
 
@@ -46,14 +47,10 @@ class CollectionCategoriesController extends Controller
      */
 
 
-    public function store(Request $request)
+    public function store(CollectionCategoryRequest $request)
     {
         $user = Auth::user();
         if ($user->admin == 1) {
-            $request->validate([
-                'name_en' => 'required|string|max:255',
-                'name_ar' => 'required|string|max:255'
-            ]);
             $category = New CollectionCategory();
             $category->name_en = $request->input('name_en');
             $category->name_ar = $request->input('name_ar');
@@ -94,14 +91,10 @@ class CollectionCategoriesController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CollectionCategoryRequest $request, $id)
     {
         $user = Auth::user();
         if ($user->admin == 1) {
-            $request->validate([
-                'name_en' => 'required|string|max:255',
-                'name_ar' => 'required|string|max:255'
-            ]);
             $category = CollectionCategory::find($id);
             $category->name_en = $request->input('name_en');
             $category->name_ar = $request->input('name_ar');

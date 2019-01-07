@@ -35,5 +35,6 @@ return [
     'isAvailable'         => 'متاح',
     'notAvailable'        => 'غير متاح',
     'orderConfirmation'   => ':restaurant_name قبل طلبك :order_id # وبدأ في تجهيزه',
-    'noNotification'     => 'لايوجد تنبيهات الان'
+    'noNotification'     => 'لايوجد تنبيهات الان',
+    'changeLanguage'      => 'تم تغيير اللغة بنجاح'
 ];

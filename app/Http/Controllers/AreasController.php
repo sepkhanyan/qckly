@@ -53,14 +53,10 @@ class AreasController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AreaRequest $request)
     {
         $user = Auth::user();
         if ($user->admin == 1) {
-            $request->validate([
-                'name_en' => 'required|string|max:255',
-                'name_ar' => 'required|string|max:255|',
-            ]);
             $area = new Area();
             $area->name_en = $request->input('name_en');
             $area->name_ar = $request->input('name_ar');
@@ -91,18 +87,16 @@ class AreasController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(AreaRequest $request)
     {
         $user = Auth::user();
         if ($user->admin == 1) {
-            $request->validate([
-                'name_en' => 'required|string|max:255',
-                'name_ar' => 'required|string|max:255|'
-            ]);
+            $id = $request->id;
             $area = Area::find($id);
-            $area->name_en = $request->input('name_en');
-            $area->name_ar = $request->input('name_ar');
+            $area->name_en = $request->name_en;
+            $area->name_ar = $request->name_ar;
             $area->save();
+
             return redirect('/areas');
         } else {
             return redirect()->back();

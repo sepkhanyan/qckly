@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AreaRequest extends FormRequest
+class CollectionCategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -38,7 +38,7 @@ class AreaRequest extends FormRequest
     {
         return [
             'name_en' => 'required|string|max:255',
-            'name_ar' => 'required|string|max:255',
+            'name_ar' => 'required|string|max:255'
         ];
     }
 }

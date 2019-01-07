@@ -69,11 +69,13 @@
                                     <tr>
                                         <td class="action">
                                             <input type="checkbox" value="{{ $category->id }}" name="delete"/>
-                                            <a class="btn btn-edit" href="#" data-toggle="modal"
-                                               data-target="#modalEditRestaurantCategory" type="button"
-                                               onclick="myFunction('{{$category->id}}', '{{$category->name_en}}', '{{$category->name_ar}}')">
+                                            <button  class="edit-restaurant-category-modal btn btn-edit"
+                                                     type="button"
+                                                     data-id ="{{$category->id}}"
+                                                     data-name-en ="{{$category->name_en}}"
+                                                     data-name-ar ="{{$category->name_ar}}">
                                                 <i class="fa fa-pencil"></i>
-                                            </a>&nbsp;&nbsp;&nbsp;
+                                            </button>&nbsp;&nbsp;&nbsp;&nbsp;
                                         </td>
                                         <td>{{$category->name_en}}</td>
                                         <td>{{$category->id}}</td>
@@ -91,9 +93,6 @@
             </div>
         </div>
         <div class="modal fade" id="modalCreateRestaurantCategory" role="dialog" tabindex="-1">
-            <form role="form" id="create-form" class="form-horizontal" accept-charset="utf-8" method="POST"
-                  action="{{ url('/restaurant_category/store') }}">
-                {{ csrf_field() }}
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -101,69 +100,70 @@
                             <h4 class="modal-title"> Add Category</h4>
                         </div>
                         <div class="modal-body">
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label" for="en">Name En</label>
+                            <div id="en" class="form-group row add{{ $errors->has('name_en') ? ' has-error' : '' }}">
+                                <label class="col-sm-3 control-label" >Name En</label>
                                 <div class="col-sm-8">
-                                    <input class="form-control" type="text" id="en" name="name_en">
+                                    <input class="form-control" type="text"  name="name_en">
+                                    <span   class="help-block hidden">
+                                        <strong>{{ $errors->first('name_en') }}</strong>
+                                    </span>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-body">
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label" for="ar">Name Ar</label>
+                            <div id="ar" class="form-group row add{{ $errors->has('name_ar') ? ' has-error' : '' }}">
+                                <label class="col-sm-3 control-label" >Name Ar</label>
                                 <div class="col-sm-8">
-                                    <input class="form-control" type="text" id="ar" name="name_ar">
+                                    <input class="form-control" type="text"  name="name_ar">
+                                    <span  class="help-block hidden">
+                                        <strong>{{ $errors->first('name_ar') }}</strong>
+                                    </span>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Add</button>
+                            <button id="addRestaurantCategory" type="button" class="btn btn-primary">Add</button>
                         </div>
                     </div>
                 </div>
-            </form>
         </div>
         <div class="modal fade" id="modalEditRestaurantCategory" role="dialog" tabindex="-1">
-            <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST"
-                  action="{{ url('/restaurant_category/update/' . $category->id ) }}">
-                {{ csrf_field() }}
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                             <h4 class="modal-title"> Edit Category</h4>
+                            <input type="hidden" name="restaurant_category_id" class="form-control" value="">
                         </div>
                         <div class="modal-body">
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label" for="en">Name En</label>
+                            <div id="editEn" class="form-group row add{{ $errors->has('name_en') ? ' has-error' : '' }}">
+                                <label class="col-sm-3 control-label" for="category_en">Name En</label>
                                 <div class="col-sm-8">
-                                    <input class="form-control" type="text" id="en" name="name_en" value="">
+                                    <input class="form-control" type="text" id="category_en" name="name_en" value="">
+                                    <span  class="help-block">
+                                        <strong>{{ $errors->first('name_en') }}</strong>
+                                    </span>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-body">
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label" for="ar">Name Ar</label>
+                            <div id="editAr" class="form-group row add{{ $errors->has('name_ar') ? ' has-error' : '' }}">
+                                <label class="col-sm-3 control-label" for="category_ar">Name Ar</label>
                                 <div class="col-sm-8">
-                                    <input class="form-control" type="text" id="ar" name="name_ar" value="">
+                                    <input class="form-control" type="text" id="category_ar" name="name_ar" value="">
+                                    <span  class="help-block hidden">
+                                        <strong>{{ $errors->first('name_ar') }}</strong>
+                                    </span>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Update</button>
+                            <button id="editRestaurantCategory" type="button" class="btn btn-primary">Update</button>
                         </div>
                     </div>
                 </div>
-            </form>
         </div>
     </div>
-    <script type="text/javascript">
-        function myFunction(id, en, ar) {
-            $('input[name=name_en]').val(en);
-            $('input[name=name_ar]').val(ar);
-            $("#edit-form").attr('action', 'restaurant_category/update/' + id);
-        }
-    </script>
 @endsection

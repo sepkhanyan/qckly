@@ -66,11 +66,13 @@
                                         <tr>
                                             <td class="action">
                                                 <input type="checkbox" value="{{ $area->id }}" name="delete"/>&nbsp;&nbsp;&nbsp;
-                                                <a class="btn btn-edit" data-toggle="modal" data-target="#modalEditArea"
+                                                <button  class="edit-area-modal btn btn-edit"
                                                    type="button"
-                                                   onclick="myFunction('{{$area->id}}', '{{$area->name_en}}', '{{$area->name_ar}}')">
+                                                   data-id ="{{$area->id}}"
+                                                   data-name-en ="{{$area->name_en}}"
+                                                   data-name-ar ="{{$area->name_ar}}">
                                                     <i class="fa fa-pencil"></i>
-                                                </a>&nbsp;&nbsp;
+                                                </button>&nbsp;&nbsp;
                                             </td>
                                             <td>{{$area->name_en}}</td>
                                             <td>{{$area->id}}</td>
@@ -93,9 +95,6 @@
         </div>
     </div>
     <div class="modal fade" id="modalCreateArea" role="dialog" tabindex="-1">
-        <form role="form" id="create-form" class="form-horizontal" accept-charset="utf-8" method="GET"
-              action="{{ url('/area/store') }}">
-            {{ csrf_field() }}
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -103,77 +102,70 @@
                         <h4 class="modal-title"> Add Area</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group {{ $errors->has('name_en') ? ' has-error' : '' }}">
+                        <div id="en" class="form-group row add{{ $errors->has('name_en') ? ' has-error' : '' }}">
                             <label class="col-sm-3 control-label" for="area-en">Name En</label>
-                            <div class="col-sm-8">
-                                <input type="text" name="name_en" class="form-control" value="" id="area-en">
-                                @if ($errors->has('name_en'))
-                                    <span class="help-block">
+                            <div class="col-sm-7">
+                                <input type="text" name="name_en" class="form-control" value="" >
+                                <span   class="help-block hidden">
                                         <strong>{{ $errors->first('name_en') }}</strong>
                                     </span>
-                                @endif
                             </div>
                         </div>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group{{ $errors->has('name_ar') ? ' has-error' : '' }}">
+                        <div id="ar" class="form-group row add{{ $errors->has('name_ar') ? ' has-error' : '' }}">
                             <label class="col-sm-3 control-label" for="area-en">Name Ar</label>
-                            <div class="col-sm-8">
-                                <input type="text" name="name_ar" class="form-control" value="" id="area-ar">
-                                @if ($errors->has('name_ar'))
-                                    <span class="help-block">
+                            <div class="col-sm-7">
+                                <input type="text" name="name_ar" class="form-control" value="" >
+                                    <span  class="help-block hidden">
                                         <strong>{{ $errors->first('name_ar') }}</strong>
                                     </span>
-                                @endif
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Add</button>
+                        <button id="addArea" type="button" class="btn btn-primary">Add</button>
                     </div>
                 </div>
             </div>
-        </form>
     </div>
+
     <div class="modal fade" id="modalEditArea" role="dialog" tabindex="-1">
-        <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST">
-            {{ csrf_field() }}
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                         <h4 class="modal-title"> Edit Area</h4>
+                        <input type="hidden" name="area_id" class="form-control" value="">
                     </div>
                     <div class="modal-body">
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label" for="area-en">Name En</label>
+                        <div id="editEn" class="form-group row add{{ $errors->has('name_en') ? ' has-error' : '' }}">
+                            <label class="col-sm-3 control-label" for="area_en">Name En</label>
                             <div class="col-sm-8">
-                                <input type="text" name="name_en" class="form-control" value="" id="area-en">
+                                <input type="text" name="name_en" class="form-control" value="" id="area_en">
+                                <span  class="help-block hidden">
+                                        <strong>{{ $errors->first('name_en') }}</strong>
+                                    </span>
                             </div>
                         </div>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label" for="area-en">Name Ar</label>
+                        <div id="editAr" class="form-group row add{{ $errors->has('name_ar') ? ' has-error' : '' }}">
+                            <label class="col-sm-3 control-label" for="area_ar">Name Ar</label>
                             <div class="col-sm-8">
-                                <input type="text" name="name_ar" class="form-control" value="" id="area-ar">
+                                <input type="text" name="name_ar" class="form-control" value="" id="area_ar">
+                                <span  class="help-block hidden">
+                                        <strong>{{ $errors->first('name_ar') }}</strong>
+                                    </span>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Update</button>
+                        <button id="editArea" type="button" class="btn btn-primary">Update</button>
                     </div>
                 </div>
             </div>
-        </form>
     </div>
-    <script type="text/javascript">
-        function myFunction(id, en, ar) {
-            $('input[name=name_en]').val(en);
-            $('input[name=name_ar]').val(ar);
-            $("#edit-form").attr('action', 'area/update/' + id);
-        }
-    </script>
 @endsection

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MealtimeRequest;
 use App\Mealtime;
 use Illuminate\Http\Request;
 use Auth;
@@ -39,14 +40,10 @@ class MealtimesController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(MealtimeRequest $request)
     {
         $user = Auth::user();
         if ($user->admin == 1) {
-            $request->validate([
-                'name_en' => 'required|string|max:255',
-                'name_ar' => 'required|string|max:255|',
-            ]);
             $mealtime = new Mealtime();
             $mealtime->name_en = $request->input('name_en');
             $mealtime->name_ar = $request->input('name_ar');
@@ -90,19 +87,16 @@ class MealtimesController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(MealtimeRequest $request)
     {
         $user = Auth::user();
         if ($user->admin == 1) {
-            $request->validate([
-                'name_en' => 'required|string|max:255',
-                'name_ar' => 'required|string|max:255|',
-            ]);
+            $id = $request->id;
             $mealtime = Mealtime::find($id);
-            $mealtime->name_en = $request->input('name_en');
-            $mealtime->name_ar = $request->input('name_ar');
-            $mealtime->start_time = $request->input('start_time');
-            $mealtime->end_time = $request->input('end_time');
+            $mealtime->name_en = $request->name_en;
+            $mealtime->name_ar = $request->name_ar;
+            $mealtime->start_time = $request->start_time;
+            $mealtime->end_time = $request->end_time;
             $mealtime->save();
             return redirect('/mealtimes');
         } else {

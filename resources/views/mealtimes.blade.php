@@ -72,11 +72,15 @@
                                             @if($user->admin == 1)
                                                 <td class="action">
                                                     <input type="checkbox" value="{{ $mealtime->id }}" name="delete"/>&nbsp;&nbsp;&nbsp;
-                                                    <a class="btn btn-edit" href="#" data-toggle="modal"
-                                                       data-target="#modalEditMealtime" type="button"
-                                                       onclick="myFunction('{{$mealtime->id}}', '{{$mealtime->name_en}}', '{{$mealtime->name_ar}}', '{{$mealtime->start_time}}', '{{$mealtime->end_time}}' )">
+                                                    <button  class="edit-mealtime-modal btn btn-edit"
+                                                             type="button"
+                                                             data-id ="{{$mealtime->id}}"
+                                                             data-name-en ="{{$mealtime->name_en}}"
+                                                             data-name-ar ="{{$mealtime->name_ar}}"
+                                                             data-start-time ="{{$mealtime->start_time}}"
+                                                             data-end-time ="{{$mealtime->end_time}}">
                                                         <i class="fa fa-pencil"></i>
-                                                    </a>&nbsp;&nbsp;
+                                                    </button>&nbsp;&nbsp;
                                                 </td>
                                             @endif
                                             <td>{{$mealtime->name_en}}</td>
@@ -99,114 +103,127 @@
     </div>
     @if($user->admin == 1)
         <div class="modal fade" id="modalCreateMealtime" role="dialog" tabindex="-1">
-            <form role="form" id="create-form" class="form-horizontal" accept-charset="utf-8" method="GET"
-                  action="{{ url('/mealtime/store') }}">
-                {{ csrf_field() }}
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title"> Add Mealtime</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label" for="mealtime-en">Name En</label>
-                                <div class="col-sm-8">
-                                    <input type="text" name="name_en" class="form-control" value=""
-                                           id="mealtime-en">
-                                </div>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"> Add Mealtime</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="en" class="form-group row add{{ $errors->has('name_en') ? ' has-error' : '' }}">
+                            <label class="col-sm-3 control-label">Name En</label>
+                            <div class="col-sm-8">
+                                <input type="text" name="name_en" class="form-control" value="">
+                                <span class="help-block hidden">
+                                        <strong>{{ $errors->first('name_en') }}</strong>
+                                    </span>
                             </div>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label" for="mealtime-ar">Name Ar</label>
-                                <div class="col-sm-8">
-                                    <input type="text" name="name_ar" class="form-control" value=""
-                                           id="mealtime-ar">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label" for="mealtime-ar">Time</label>
-                                <div class="col-sm-7">
-                                    <div class="control-group control-group-3">
-                                        <div class="input-group">
-                                            <input type="time" name="start_time" class="form-control">
-                                        </div>
-                                        <div class="input-group">
-                                            <input type="time" name="end_time" class="form-control">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Add</button>
                         </div>
                     </div>
+                    <div class="modal-body">
+                        <div id="ar" class="form-group row add{{ $errors->has('name_ar') ? ' has-error' : '' }}">
+                            <label class="col-sm-3 control-label">Name Ar</label>
+                            <div class="col-sm-8">
+                                <input type="text" name="name_ar" class="form-control" value="">
+                                <span class="help-block hidden">
+                                        <strong>{{ $errors->first('name_ar') }}</strong>
+                                    </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div id="start"
+                             class="form-group row add{{ $errors->has('start_time') ? ' has-error' : '' }}">
+                            <label class="col-sm-3 control-label">Start Time</label>
+                            <div class="col-sm-3">
+                                <input type="time" name="start_time" class="form-control">
+                                <span class="help-block hidden">
+                                            <strong>{{ $errors->first('start_time') }}</strong>
+                                        </span>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div id="end" class="form-group row add{{ $errors->has('end_time') ? ' has-error' : '' }}">
+                            <label class="col-sm-3 control-label">End Time</label>
+                            <div class="col-sm-3">
+                                <input type="time" name="end_time" class="form-control">
+                                <span class="help-block hidden">
+                                            <strong>{{ $errors->first('end_time') }}</strong>
+                                        </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button id="addMealtime" type="button" class="btn btn-primary">Add</button>
+                    </div>
                 </div>
-            </form>
+            </div>
         </div>
         <div class="modal fade" id="modalEditMealtime" role="dialog" tabindex="-1">
-            <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST">
-                {{ csrf_field() }}
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title"> Edit Mealtime</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label" for="mealtime-en">Name En</label>
-                                <div class="col-sm-8">
-                                    <input type="text" name="name_en" class="form-control" value=""
-                                           id="mealtime-en">
-                                </div>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"> Edit Mealtime</h4>
+                        <input type="hidden" name="mealtime_id" class="form-control" value="">
+                    </div>
+                    <div class="modal-body">
+                        <div id="editEn" class="form-group row add{{ $errors->has('name_en') ? ' has-error' : '' }}">
+                            <label class="col-sm-3 control-label" >Name En</label>
+                            <div class="col-sm-8">
+                                <input type="text" name="name_en" class="form-control" value=""
+                                       id="mealtime_en">
+                                <span  class="help-block hidden">
+                                        <strong>{{ $errors->first('name_en') }}</strong>
+                                    </span>
                             </div>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label" for="mealtime-ar">Name Ar</label>
-                                <div class="col-sm-8">
-                                    <input type="text" name="name_ar" class="form-control" value=""
-                                           id="mealtime-ar">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label" for="mealtime-ar">Time</label>
-                                <div class="col-sm-7">
-                                    <div class="control-group control-group-3">
-                                        <div class="input-group">
-                                            <input type="time" name="start_time" class="form-control">
-                                        </div>
-                                        <div class="input-group">
-                                            <input type="time" name="end_time" class="form-control">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Update</button>
                         </div>
                     </div>
+                    <div class="modal-body">
+                        <div id="editAr" class="form-group row add{{ $errors->has('name_ar') ? ' has-error' : '' }}">
+                            <label class="col-sm-3 control-label" >Name Ar</label>
+                            <div class="col-sm-8">
+                                <input type="text" name="name_ar" class="form-control" value=""
+                                       id="mealtime_ar">
+                                <span  class="help-block hidden">
+                                        <strong>{{ $errors->first('name_ar') }}</strong>
+                                    </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div id="editStart"
+                             class="form-group row add{{ $errors->has('start_time') ? ' has-error' : '' }}">
+                            <label class="col-sm-3 control-label">Start Time</label>
+                            <div class="col-sm-3">
+                                <input type="time" name="start_time" class="form-control" id="start_time">
+                                <span class="help-block hidden">
+                                            <strong>{{ $errors->first('start_time') }}</strong>
+                                        </span>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div id="editEnd" class="form-group row add{{ $errors->has('end_time') ? ' has-error' : '' }}">
+                            <label class="col-sm-3 control-label">End Time</label>
+                            <div class="col-sm-3">
+                                <input type="time" name="end_time" class="form-control" id="end_time">
+                                <span class="help-block hidden">
+                                            <strong>{{ $errors->first('end_time') }}</strong>
+                                        </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button id="editMealtime" type="button" class="btn btn-primary">Update</button>
+                    </div>
                 </div>
-            </form>
+            </div>
         </div>
     @endif
-    <script type="text/javascript">
-        function myFunction(id, en, ar, start, end) {
-            $('input[name=name_en]').val(en);
-            $('input[name=name_ar]').val(ar);
-            $('input[name=start_time]').val(start);
-            $('input[name=end_time]').val(end);
-            $("#edit-form").attr('action', 'mealtime/update/' + id);
-        }
-    </script>
 @endsection

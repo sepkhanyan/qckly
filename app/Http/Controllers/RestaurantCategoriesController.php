@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RestaurantCategoryRequest;
 use App\User;
 use Illuminate\Http\Request;
 use App\RestaurantCategory;
@@ -48,14 +49,10 @@ class RestaurantCategoriesController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RestaurantCategoryRequest $request)
     {
         $user = Auth::user();
         if ($user->admin == 1) {
-            $request->validate([
-                'name_en' => 'required|string|max:255',
-                'name_ar' => 'required|string|max:255|'
-            ]);
             $category = new RestaurantCategory();
             $category->name_en = $request->input('name_en');
             $category->name_ar = $request->input('name_ar');
@@ -98,17 +95,14 @@ class RestaurantCategoriesController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(RestaurantCategoryRequest $request)
     {
         $user = Auth::user();
         if ($user->admin == 1) {
-            $request->validate([
-                'name_en' => 'required|string|max:255',
-                'name_ar' => 'required|string|max:255|'
-            ]);
+            $id = $request->id;
             $category = RestaurantCategory::find($id);
-            $category->name_en = $request->input('name_en');
-            $category->name_ar = $request->input('name_ar');
+            $category->name_en = $request->name_en;
+            $category->name_ar = $request->name_ar;
             $category->save();
             return redirect('/restaurant_categories');
         } else {
