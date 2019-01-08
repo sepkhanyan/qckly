@@ -107,19 +107,20 @@
                                     @if(count($reviews)>0)
                                         @foreach($reviews as $review)
                                             <tr>
-                                                {{--<td class="action">--}}
-                                                {{--<input type="checkbox" value="{{ $review->id }}" name="delete"/>--}}
-                                                {{--</td>--}}
                                                 <td>{{$review->order->user->username}}</td>
                                                 <td>{{$review->order_id}}</td>
                                                 <td>
                                                     @php($drawn = 5)
-                                                    @php($average_stars = round($review->rate_value * 2) / 2)
+                                                    @php($average_stars = ceil($review->rate_value) - 0.5)
+                                                    @if($average_stars  < $review->rate_value)
+                                                        @php($average_stars = ceil($review->rate_value))
+                                                    @endif
+                                                    {{$average_stars}}
                                                     @for($i = 0; $i < floor($average_stars); $i++)
                                                         @php($drawn --)
                                                         <img src="/stars/full.png" width="17px" height="17px">
                                                     @endfor
-                                                    @if($review->rate_value - floor($average_stars) == 0.5)
+                                                    @if($review->rate_value - floor($average_stars) > 0)
                                                         @php($drawn --)
                                                         <img src="/stars/half.png" width="17px" height="17px">
                                                     @endif

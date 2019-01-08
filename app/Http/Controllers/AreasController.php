@@ -139,14 +139,10 @@ class AreasController extends Controller
         $lang = $request->header('Accept-Language');
         $areas = Area::all();
         foreach ($areas as $area) {
-            if ($lang == 'ar') {
-                $area_name = $area->name_ar;
-            } else {
-                $area_name = $area->name_en;
-            }
             $arr [] = [
                 'area_id' => $area->id,
-                'area' => $area_name,
+                'area_en' => $area->name_en,
+                'area_ar' => $area->name_ar
             ];
         }
         if ($arr) {

@@ -2,6 +2,7 @@ $(document).ready(function () {
 
     var token = $('[name=csrf-token]').attr('content');
 
+
     $("a#select-image").on("click", function () {
 
 
@@ -507,6 +508,7 @@ $(document).ready(function () {
             }
         });
     });
+
 
     $('#delete_language').click(function () {
         window.checkValues = $('input[name=delete]:checked').map(function () {

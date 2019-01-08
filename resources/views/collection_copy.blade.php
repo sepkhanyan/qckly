@@ -85,7 +85,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group{{ $errors->has('image') ? ' has-error' : '' }}">
                                 <label for="input-image" class="col-sm-3 control-label">
                                     Image
                                     <span class="help-block">Select a file to update menu image, otherwise leave blank.</span>
@@ -118,6 +118,11 @@
                                             </p>
                                         </div>
                                     </div>
+                                    @if ($errors->has('image'))
+                                        <span class="help-block">
+                                        <strong>{{ $errors->first('image') }}</strong>
+                                    </span>
+                                    @endif
                                 </div>
                             </div>
                             <div class="form-group">
@@ -342,7 +347,7 @@
                                 </div>
                             @endif
                         </div>
-                        <div id="menus" class="tab-pane row wrap-all">
+                        <div id="menus" class="tab-pane row wrap-all{{ $errors->has('menu_item') ? ' has-error' : '' }}">
                             <div class="form-group">
                                 <label for="input_requirements_ar" class="col-sm-3 control-label">Collection Items</label>
                                 <div class="col-sm-5">
@@ -412,114 +417,104 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="input_requirements_ar" class="col-sm-3 control-label"></label>
-                                <div class="col-sm-5">
-                                    <label class="action">
-                                        <a class="btn btn-primary" type="button"  id="itemsEdit">
-                                            <i class="fa fa-pencil"></i>
-                                        </a>
-                                    </label>
-                                </div>
-                            </div>
-                            <div id="menuItems" style="display: none{{(old('menu_item')) ? 'block' : ''}}">
-                                @if($collection->category_id == 2 || $collection->category_id == 3)
-                                    <div class="form-group">
-                                        <label for="" class="col-sm-3 control-label"></label>
-                                        <div class="col-sm-5">
-                                            <div class="control-group control-group-2">
-                                                <div class="input-group" style="font-size: medium">
-                                                    <b>Menu min quantity</b>
-                                                </div>
-                                                <div class="input-group" style="font-size: medium">
-                                                    <b>Menu max quantity</b>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
-                                @foreach($menu_categories as $menu_category)
-                                    <div class="form-group" id="collectionMenus">
-                                        <label for="input-status" class="col-sm-3 control-label text-right">
-                                                <span class="text-right"
-                                                      style="font-size: large">{{$menu_category->name_en}}</span>
-                                            @if($collection->category_id != 1)
-                                                <input type="hidden" name="menu[{{$menu_category->id}}][id]"
-                                                       value="{{$menu_category->id}}">
-                                            @endif
-                                        </label>
-                                        <div class="col-sm-7">
-                                            <div class="control-group control-group-3">
-                                                @if($collection->category_id == 2 || $collection->category_id == 3)
-                                                    <div class="input-group">
-                                                        <input type="number"
-                                                               name="menu[{{$menu_category->id}}][min_qty]"
-                                                               class="form-control" min="1" value="{{old('menu.' . $menu_category->id . '.min_qty') ?? 1}}">
-                                                    </div>
-                                                    <div class="input-group">
-                                                        <input type="number"
-                                                               name="menu[{{$menu_category->id}}][max_qty]"
-                                                               class="form-control" min="1" value="{{old('menu.' . $menu_category->id . '.max_qty') ?? 1}}">
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @if($collection->category_id == 1)
-                                        @foreach($menu_category->menu as $menu)
-                                            <div class="form-group" id="collectionItems">
-                                                <label for="" class="col-sm-3 control-label"></label>
-                                                <div class="col-xs-3">
-                                                    <div class="checkbox" id="{{$menu->id}}">
-                                                        <label style="font-size: medium">
-                                                            <input id="item{{$menu->id}}" type="checkbox"
-                                                                   name="menu_item[{{$menu->id}}][id]"
-                                                                   value="{{$menu->id}}"
-                                                                   {{ (collect(old('menu_item.' . $menu->id . '.id'))->contains($menu->id)) ? 'checked':'' }} onclick="myFunction('{{$menu->id}}')">{{$menu->name_en}}
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xs-3">
-                                                    <div class="control-group control-group-3">
-                                                        <div class="col-xs-3">
-                                                            <input type="number"
-                                                                   name="menu_item[{{$menu->id}}][qty]" id="qty{{$menu->id}}"
-                                                                   style="display: none{{ (collect(old('menu_item.' . $menu->id . '.id'))->contains($menu->id)) ? 'block':'' }}" {{(!old('menu_item.' . $menu->id . '.id')) ? 'disabled': '' }}
-                                                                   class="form-control" min="1" value="{{old('menu_item.' . $menu->id . '.qty') ?? 1}}">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    @else
-                                        <div class="form-group" id="collectionItems">
-                                            <label for="" class="col-sm-3 control-label"></label>
-                                            <div class="col-xs-3">
-                                                <select id="items" name="menu_item[]"
-                                                        class="form-control" multiple
-                                                        placeholder="Select Items">
-                                                    @foreach($menu_category->menu as $menu)
-                                                        <option value="{{$menu->id}}" {{ (collect(old('menu_item'))->contains($menu->id)) ? 'selected':'' }}>{{$menu->name_en}}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                    @endif
-                                @endforeach
-                                <div class="form-group">
-                                    <label for="" class="col-sm-3 control-label"></label>
-                                    <div class="col-sm-5">
-                                        <label class="action">
-                                            <a class="btn btn-danger" type="button" id="editCancel">
-                                                Cancel
-                                            </a>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
+                            {{--<div id="menuItems" style="display: none{{(old('menu_item')) ? 'block' : ''}}">--}}
+                                {{--@if($collection->category_id == 2 || $collection->category_id == 3)--}}
+                                    {{--<div class="form-group">--}}
+                                        {{--<label for="" class="col-sm-3 control-label"></label>--}}
+                                        {{--<div class="col-sm-5">--}}
+                                            {{--<div class="control-group control-group-2">--}}
+                                                {{--<div class="input-group" style="font-size: medium">--}}
+                                                    {{--<b>Menu min quantity</b>--}}
+                                                {{--</div>--}}
+                                                {{--<div class="input-group" style="font-size: medium">--}}
+                                                    {{--<b>Menu max quantity</b>--}}
+                                                {{--</div>--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
+                                {{--@endif--}}
+                                {{--@foreach($menu_categories as $menu_category)--}}
+                                    {{--<div class="form-group" id="collectionMenus">--}}
+                                        {{--<label for="input-status" class="col-sm-3 control-label text-right">--}}
+                                                {{--<span class="text-right"--}}
+                                                      {{--style="font-size: large">{{$menu_category->name_en}}</span>--}}
+                                            {{--@if($collection->category_id != 1)--}}
+                                                {{--<input type="hidden" name="menu[{{$menu_category->id}}][id]"--}}
+                                                       {{--value="{{$menu_category->id}}">--}}
+                                            {{--@endif--}}
+                                        {{--</label>--}}
+                                        {{--<div class="col-sm-7">--}}
+                                            {{--<div class="control-group control-group-3">--}}
+                                                {{--@if($collection->category_id == 2 || $collection->category_id == 3)--}}
+                                                    {{--<div class="input-group">--}}
+                                                        {{--<input type="number"--}}
+                                                               {{--name="menu[{{$menu_category->id}}][min_qty]"--}}
+                                                               {{--class="form-control" min="1" value="{{old('menu.' . $menu_category->id . '.min_qty') ?? 1}}">--}}
+                                                    {{--</div>--}}
+                                                    {{--<div class="input-group">--}}
+                                                        {{--<input type="number"--}}
+                                                               {{--name="menu[{{$menu_category->id}}][max_qty]"--}}
+                                                               {{--class="form-control" min="1" value="{{old('menu.' . $menu_category->id . '.max_qty') ?? 1}}">--}}
+                                                    {{--</div>--}}
+                                                {{--@endif--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
+                                    {{--@if($collection->category_id == 1)--}}
+                                        {{--@foreach($menu_category->menu as $menu)--}}
+                                            {{--<div class="form-group" id="collectionItems">--}}
+                                                {{--<label for="" class="col-sm-3 control-label"></label>--}}
+                                                {{--<div class="col-xs-3">--}}
+                                                    {{--<div class="checkbox" id="{{$menu->id}}">--}}
+                                                        {{--<label style="font-size: medium">--}}
+                                                            {{--<input id="item{{$menu->id}}" type="checkbox"--}}
+                                                                   {{--name="menu_item[{{$menu->id}}][id]"--}}
+                                                                   {{--value="{{$menu->id}}"--}}
+                                                                   {{--{{ (collect(old('menu_item.' . $menu->id . '.id'))->contains($menu->id)) ? 'checked':'' }} onclick="myFunction('{{$menu->id}}')">{{$menu->name_en}}--}}
+                                                        {{--</label>--}}
+                                                    {{--</div>--}}
+                                                {{--</div>--}}
+                                                {{--<div class="col-xs-3">--}}
+                                                    {{--<div class="control-group control-group-3">--}}
+                                                        {{--<div class="col-xs-3">--}}
+                                                            {{--<input type="number"--}}
+                                                                   {{--name="menu_item[{{$menu->id}}][qty]" id="qty{{$menu->id}}"--}}
+                                                                   {{--style="display: none{{ (collect(old('menu_item.' . $menu->id . '.id'))->contains($menu->id)) ? 'block':'' }}" {{(!old('menu_item.' . $menu->id . '.id')) ? 'disabled': '' }}--}}
+                                                                   {{--class="form-control" min="1" value="{{old('menu_item.' . $menu->id . '.qty') ?? 1}}">--}}
+                                                        {{--</div>--}}
+                                                    {{--</div>--}}
+                                                {{--</div>--}}
+                                            {{--</div>--}}
+                                        {{--@endforeach--}}
+                                    {{--@else--}}
+                                        {{--<div class="form-group" id="collectionItems">--}}
+                                            {{--<label for="" class="col-sm-3 control-label"></label>--}}
+                                            {{--<div class="col-xs-3">--}}
+                                                {{--<select id="items" name="menu_item[]"--}}
+                                                        {{--class="form-control" multiple--}}
+                                                        {{--placeholder="Select Items">--}}
+                                                    {{--@foreach($menu_category->menu as $menu)--}}
+                                                        {{--<option value="{{$menu->id}}" {{ (collect(old('menu_item'))->contains($menu->id)) ? 'selected':'' }}>{{$menu->name_en}}</option>--}}
+                                                    {{--@endforeach--}}
+                                                {{--</select>--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+                                    {{--@endif--}}
+                                {{--@endforeach--}}
+                            {{--</div>--}}
+                            {{--<div class="form-group">--}}
+                                {{--<label for="" class="col-sm-3 control-label"></label>--}}
+                                {{--<div class="col-xs-3">--}}
+                                    {{--@if ($errors->has('menu_item'))--}}
+                                        {{--<span class="help-block">--}}
+                                                    {{--<strong>{{ $errors->first('menu_item') }}</strong>--}}
+                                                {{--</span>--}}
+                                    {{--@endif--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
                         </div>
                         <div id="data" class="tab-pane row wrap-all">
-                            <div id="type" class="form-group">
+                            <div id="type" class="form-group{{ $errors->has('service_type') ? ' has-error' : '' }}">
                                 <label for="" class="col-sm-3 control-label">Service Type</label>
                                 <div class="col-sm-5">
                                     <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
@@ -530,6 +525,11 @@
                                             </label>
                                         @endforeach
                                     </div>
+                                    @if ($errors->has('service_type'))
+                                        <span class="help-block">
+                                                    <strong>{{ $errors->first('service_type') }}</strong>
+                                                </span>
+                                    @endif
                                 </div>
                             </div>
                             <div class="form-group{{ $errors->has('delivery_time') ? ' has-error' : '' }}" id="delivery_hours" style="display: none">

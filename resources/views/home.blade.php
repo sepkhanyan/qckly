@@ -472,12 +472,6 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function () {
-        (function(){
-            setTimeout(function(){
-                location.reload();
-            },7203000);
-        })();
-
         $('.timepicker').timepicker({
             // defaultTime: '11:45 AM'
         });

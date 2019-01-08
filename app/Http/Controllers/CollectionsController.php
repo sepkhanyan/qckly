@@ -85,17 +85,18 @@ class CollectionsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request, $id = null)
+    public function create(Request $request)
     {
-        $request->validate([
-            'collection_category' => 'required|integer',
-        ]);
+        $request->validate(['collection_category' => 'required|integer']);
         $user = Auth::user();
-        $restaurant = Restaurant::where('id', $id)->first();
+        $restaurant_id = $request->input('restaurant_id');
         $categories = CollectionCategory::all();
         if ($user->admin == 2) {
-            $restaurant = Restaurant::where('id', $user->restaurant_id)->first();
+            if($user->restaurant_id != $restaurant_id){
+                return redirect()->back();
+            }
         }
+        $restaurant = Restaurant::find($restaurant_id);
         $categoryRestaurants = CategoryRestaurant::where('restaurant_id', $restaurant->id)->get();
         $menu_categories = MenuCategory::where('restaurant_id', $restaurant->id)->whereHas('menu', function ($query) {
             $query->where('approved', 1);
@@ -128,27 +129,8 @@ class CollectionsController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CollectionRequest $request)
     {
-        $validator = \Validator::make($request->all(), [
-            'service_type' => 'required',
-            'category' => 'required|integer',
-            'name_en' => 'required|string|max:255',
-            'description_en' => 'required|string',
-            'name_ar' => 'required|string|max:255',
-            'description_ar' => 'required|string',
-            'service_provide_en' => 'required|string',
-            'service_provide_ar' => 'required|string',
-            'service_presentation_en' => 'required|string',
-            'service_presentation_ar' => 'required|string',
-            'image' => 'required|image',
-            'menu_item' => 'required',
-        ]);
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
         $restaurant_id = $request->input('restaurant');
         $user = Auth::user();
         if ($user->admin == 2) {
@@ -156,16 +138,6 @@ class CollectionsController extends Controller
         }
         $service_type = $request->input('service_type');
         $service = CategoryRestaurant::where('restaurant_id', $restaurant_id)->where('name_en', $service_type)->first();
-        if ($service_type == 'Delivery') {
-            $validator = \Validator::make($request->all(), [
-                'delivery_time' => 'required|integer|gt:0',
-            ]);
-            if ($validator->fails()) {
-                return redirect()->back()
-                    ->withErrors($validator)
-                    ->withInput();
-            }
-        }
         $category = $request->input('category');
         $collection = New Collection();
         $collection->restaurant_id = $restaurant_id;
@@ -189,32 +161,15 @@ class CollectionsController extends Controller
         $collection->service_presentation_ar = $request->input('service_presentation_ar');
         $collection->is_available = 1;
         if ($category == 1 || $category == 3) {
-            $request->validate([
-                'min_quantity' => 'required|integer|gt:0',
-                'max_quantity' => 'required|integer|gte:min_quantity',
-            ]);
             $collection->max_qty = $request->input('max_quantity');
             $collection->min_qty = $request->input('min_quantity');
         }
         if ($category != 4) {
-            $request->validate([
-                'collection_price' => 'required|numeric',
-                'min_serve_to_person' => 'required|integer|gt:0',
-                'max_serve_to_person' => 'required|integer|gte:min_serve_to_person',
-            ]);
             $collection->price = $request->input('collection_price');
             $collection->min_serve_to_person = $request->input('min_serve_to_person');
             $collection->max_serve_to_person = $request->input('max_serve_to_person');
         }
         if ($category == 2) {
-            $request->validate([
-//                'persons_max_count' => 'required|integer',
-                'setup_time' => 'required|integer|gt:0',
-                'max_time' => 'required|integer|gte:setup_time',
-                'requirements_en' => 'required|string',
-                'requirements_ar' => 'required|string',
-            ]);
-//            $collection->persons_max_count = $request->input('persons_max_count');
             $collection->allow_person_increase = $request->input('allow_person_increase');
             $collection->setup_time = $request->input('setup_time');
             $collection->max_time = $request->input('max_time');
@@ -300,26 +255,8 @@ class CollectionsController extends Controller
         ]);
     }
 
-    public function collectionSave(Request $request, $id)
+    public function collectionSave(CollectionRequest $request, $id)
     {
-        $validator = \Validator::make($request->all(), [
-            'service_type' => 'required',
-            'category' => 'required|integer',
-            'name_en' => 'required|string|max:255',
-            'description_en' => 'required|string',
-            'name_ar' => 'required|string|max:255',
-            'description_ar' => 'required|string',
-            'service_provide_en' => 'required|string',
-            'service_provide_ar' => 'required|string',
-            'service_presentation_en' => 'required|string',
-            'service_presentation_ar' => 'required|string',
-        ]);
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-
         $oldCollection = Collection::find($id);
         $restaurant_id = $request->input('restaurant');
         $user = Auth::user();
@@ -328,16 +265,6 @@ class CollectionsController extends Controller
         }
         $service_type = $request->input('service_type');
         $service = CategoryRestaurant::where('restaurant_id', $restaurant_id)->where('name_en', $service_type)->first();
-        if ($service_type == 'Delivery') {
-            $validator = \Validator::make($request->all(), [
-                'delivery_time' => 'required|integer|gt:0',
-            ]);
-            if ($validator->fails()) {
-                return redirect()->back()
-                    ->withErrors($validator)
-                    ->withInput();
-            }
-        }
         $category = $request->input('category');
         $collection = New Collection();
         $collection->category_id = $category;
@@ -366,31 +293,15 @@ class CollectionsController extends Controller
         $collection->service_presentation_ar = $request->input('service_presentation_ar');
         $collection->is_available = 1;
         if ($oldCollection->category_id == 1 || $oldCollection->category_id == 3) {
-            $request->validate([
-                'min_quantity' => 'required|integer|gt:0',
-                'max_quantity' => 'required|integer|gte:min_quantity',
-            ]);
             $collection->max_qty = $request->input('max_quantity');
             $collection->min_qty = $request->input('min_quantity');
         }
         if ($oldCollection->category_id != 4) {
-            $request->validate([
-                'collection_price' => 'required|numeric',
-                'min_serve_to_person' => 'required|integer|gt:0',
-                'max_serve_to_person' => 'required|integer|gte:min_serve_to_person',
-            ]);
             $collection->price = $request->input('collection_price');
             $collection->min_serve_to_person = $request->input('min_serve_to_person');
             $collection->max_serve_to_person = $request->input('max_serve_to_person');
         }
         if ($oldCollection->category_id == 2) {
-            $request->validate([
-//                'persons_max_count' => 'required|integer',
-                'setup_time' => 'required|integer|gt:0',
-                'max_time' => 'required|integer|gte:setup_time',
-                'requirements_en' => 'required|string',
-                'requirements_ar' => 'required|string',
-            ]);
 //            $collection->persons_max_count = $request->input('persons_max_count');
             $collection->allow_person_increase = $request->input('allow_person_increase');
             $collection->setup_time = $request->input('setup_time');
@@ -499,7 +410,7 @@ class CollectionsController extends Controller
         ]);
     }
 
-    public function updateAvailability(Request $request, $id)
+    public function updateAvailability(CollectionRequest $request, $id)
     {
         $user = Auth::user();
         $collection = Collection::find($id);
@@ -510,42 +421,6 @@ class CollectionsController extends Controller
             }
         }
         if ($request->input('is_available') == 0) {
-            if ($request->input('type') == 'daily') {
-                $validator = \Validator::make($request->all(), [
-                    'daily_days' => 'required|array',
-                    'daily_hours.start' => 'required',
-                    'daily_hours.end' => 'required|after:daily_hours.start',
-                ]);
-                if ($validator->fails()) {
-                    return redirect()->back()
-                        ->withErrors($validator)
-                        ->withInput();
-                }
-            }
-
-            if ($request->input('type') == 'flexible') {
-                $validator = \Validator::make($request->all(), [
-                    'flexible_hours.1.start' => 'required',
-                    'flexible_hours.1.end' => 'required|after:flexible_hours.1.start',
-                    'flexible_hours.2.start' => 'required',
-                    'flexible_hours.2.end' => 'required|after:flexible_hours.2.start',
-                    'flexible_hours.3.start' => 'required',
-                    'flexible_hours.3.end' => 'required|after:flexible_hours.3.start',
-                    'flexible_hours.4.start' => 'required',
-                    'flexible_hours.4.end' => 'required|after:flexible_hours.4.start',
-                    'flexible_hours.5.start' => 'required',
-                    'flexible_hours.5.end' => 'required|after:flexible_hours.5.start',
-                    'flexible_hours.6.start' => 'required',
-                    'flexible_hours.6.end' => 'required|after:flexible_hours.6.start',
-                    'flexible_hours.0.start' => 'required',
-                    'flexible_hours.0.end' => 'required|after:flexible_hours.0.start',
-                ]);
-                if ($validator->fails()) {
-                    return redirect()->back()
-                        ->withErrors($validator)
-                        ->withInput();
-                }
-            }
             CollectionUnavailabilityHour::where('collection_id', $id)->delete();
             if ($request->input('type') == '24_7') {
                 $hour = new CollectionUnavailabilityHour();
@@ -675,24 +550,8 @@ class CollectionsController extends Controller
      */
 
 
-    public function update(Request $request, $id)
+    public function update(CollectionRequest $request, $id)
     {
-        $validator = \Validator::make($request->all(), [
-            'service_type' => 'required',
-            'name_en' => 'required|string|max:255',
-            'description_en' => 'required|string',
-            'name_ar' => 'required|string|max:255',
-            'description_ar' => 'required|string',
-            'service_provide_en' => 'required|string',
-            'service_provide_ar' => 'required|string',
-            'service_presentation_en' => 'required|string',
-            'service_presentation_ar' => 'required|string',
-        ]);
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
         $user = Auth::user();
         $collection = Collection::find($id);
         if ($user->admin == 2) {
@@ -713,16 +572,6 @@ class CollectionsController extends Controller
             $editingCollection->collection_id = $collection->id;
             $service_type = $request->input('service_type');
             $service = CategoryRestaurant::where('restaurant_id', $collection->restaurant_id)->where('name_en', $service_type)->first();
-            if ($service_type == 'Delivery') {
-                $validator = \Validator::make($request->all(), [
-                    'delivery_time' => 'required|integer|gt:0',
-                ]);
-                if ($validator->fails()) {
-                    return redirect()->back()
-                        ->withErrors($validator)
-                        ->withInput();
-                }
-            }
             $editingCollection->service_type_id = $service->id;
             $editingCollection->delivery_hours = $request->input('delivery_time');
             $editingCollection->name_en = $request->input('name_en');
@@ -743,30 +592,15 @@ class CollectionsController extends Controller
             $editingCollection->service_presentation_en = $request->input('service_presentation_en');
             $editingCollection->service_presentation_ar = $request->input('service_presentation_ar');
             if ($collection->category_id == 1 || $collection->category_id == 3) {
-                $request->validate([
-                    'min_quantity' => 'required|integer|gt:0',
-                    'max_quantity' => 'required|integer|gte:min_quantity',
-                ]);
                 $editingCollection->max_qty = $request->input('max_quantity');
                 $editingCollection->min_qty = $request->input('min_quantity');
             }
             if ($collection->category_id != 4) {
-                $request->validate([
-                    'collection_price' => 'required|numeric',
-                    'min_serve_to_person' => 'required|integer|gt:0',
-                    'max_serve_to_person' => 'required|integer|gte:min_serve_to_person',
-                ]);
                 $editingCollection->price = $request->input('collection_price');
                 $editingCollection->min_serve_to_person = $request->input('min_serve_to_person');
                 $editingCollection->max_serve_to_person = $request->input('max_serve_to_person');
             }
             if ($collection->category_id == 2) {
-                $request->validate([
-                    'setup_time' => 'required|integer|gt:0',
-                    'max_time' => 'required|integer|gte:setup_time',
-                    'requirements_en' => 'required|string|max:255',
-                    'requirements_ar' => 'required|string|max:255',
-                ]);
                 $editingCollection->allow_person_increase = $request->input('allow_person_increase');
                 $editingCollection->setup_time = $request->input('setup_time');
                 $editingCollection->max_time = $request->input('max_time');
@@ -811,16 +645,6 @@ class CollectionsController extends Controller
         } elseif ($user->admin == 1) {
             $service_type = $request->input('service_type');
             $service = CategoryRestaurant::where('restaurant_id', $collection->restaurant_id)->where('name_en', $service_type)->first();
-            if ($service_type == 'Delivery') {
-                $validator = \Validator::make($request->all(), [
-                    'delivery_time' => 'required|integer|gt:0',
-                ]);
-                if ($validator->fails()) {
-                    return redirect()->back()
-                        ->withErrors($validator)
-                        ->withInput();
-                }
-            }
             $collection->service_type_id = $service->id;
             $collection->delivery_hours = $request->input('delivery_time');
             $collection->name_en = $request->input('name_en');
@@ -841,31 +665,15 @@ class CollectionsController extends Controller
             $collection->service_presentation_en = $request->input('service_presentation_en');
             $collection->service_presentation_ar = $request->input('service_presentation_ar');
             if ($collection->category_id == 1 || $collection->category_id == 3) {
-                $request->validate([
-                    'min_quantity' => 'integer|gt:0',
-                    'max_quantity' => 'integer|gte:min_quantity',
-                ]);
                 $collection->max_qty = $request->input('max_quantity');
                 $collection->min_qty = $request->input('min_quantity');
             }
             if ($collection->category_id != 4) {
-                $request->validate([
-                    'collection_price' => 'required|numeric',
-                    'min_serve_to_person' => 'integer|gt:0',
-                    'max_serve_to_person' => 'integer|gte:min_serve_to_person',
-                ]);
                 $collection->price = $request->input('collection_price');
                 $collection->min_serve_to_person = $request->input('min_serve_to_person');
                 $collection->max_serve_to_person = $request->input('max_serve_to_person');
             }
             if ($collection->category_id == 2) {
-                $request->validate([
-//                'persons_max_count' => 'required|integer',
-                    'setup_time' => 'integer|gt:0',
-                    'max_time' => 'integer|gte:setup_time',
-                    'requirements_en' => 'string',
-                    'requirements_ar' => 'string',
-                ]);
 //            $collection->persons_max_count = $request->input('persons_max_count');
                 $collection->allow_person_increase = $request->input('allow_person_increase');
                 $collection->setup_time = $request->input('setup_time');
@@ -915,39 +723,14 @@ class CollectionsController extends Controller
         return redirect('/collections/' . $collection->restaurant_id);
     }
 
-    public function editApprove(Request $request, $id)
+    public function editApprove(CollectionRequest $request, $id)
     {
-        $validator = \Validator::make($request->all(), [
-            'name_en' => 'required|string|max:255',
-            'description_en' => 'required|string',
-            'name_ar' => 'required|string|max:255',
-            'description_ar' => 'required|string',
-            'service_provide_en' => 'required|string',
-            'service_provide_ar' => 'required|string',
-            'service_presentation_en' => 'required|string',
-            'service_presentation_ar' => 'required|string',
-        ]);
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
         $user = Auth::user();
         if ($user->admin == 1) {
             $restaurant_id = $request->input('restaurant');
             $collection = Collection::find($id);
             $service_type = $request->input('service_type');
             $service = CategoryRestaurant::where('restaurant_id', $collection->restaurant_id)->where('name_en', $service_type)->first();
-            if ($service_type == 'Delivery') {
-                $validator = \Validator::make($request->all(), [
-                    'delivery_time' => 'required|integer|gt:0',
-                ]);
-                if ($validator->fails()) {
-                    return redirect()->back()
-                        ->withErrors($validator)
-                        ->withInput();
-                }
-            }
             $collection->service_type_id = $service->id;
             $collection->delivery_hours = $request->input('delivery_time');
             $editingCollection = EditingCollection::where('collection_id', $id)->first();
@@ -966,31 +749,15 @@ class CollectionsController extends Controller
             $collection->service_presentation_en = $request->input('service_presentation_en');
             $collection->service_presentation_ar = $request->input('service_presentation_ar');
             if ($collection->category_id == 1 || $collection->category_id == 3) {
-                $request->validate([
-                    'min_quantity' => 'integer|gt:0',
-                    'max_quantity' => 'integer|gte:min_quantity',
-                ]);
                 $collection->max_qty = $request->input('max_quantity');
                 $collection->min_qty = $request->input('min_quantity');
             }
             if ($collection->category_id != 4) {
-                $request->validate([
-                    'collection_price' => 'required|numeric',
-                    'min_serve_to_person' => 'integer',
-                    'max_serve_to_person' => 'integer|gte:min_serve_to_person',
-                ]);
                 $collection->price = $request->input('collection_price');
                 $collection->min_serve_to_person = $request->input('min_serve_to_person');
                 $collection->max_serve_to_person = $request->input('max_serve_to_person');
             }
             if ($collection->category_id == 2) {
-                $request->validate([
-//                'persons_max_count' => 'required|integer',
-                    'setup_time' => 'integer|gt:0',
-                    'max_time' => 'integer|gte:setup_time',
-                    'requirements_en' => 'string|max:255',
-                    'requirements_ar' => 'string|max:255',
-                ]);
                 $collection->allow_person_increase = $request->input('allow_person_increase');
                 $collection->setup_time = $request->input('setup_time');
                 $collection->max_time = $request->input('max_time');

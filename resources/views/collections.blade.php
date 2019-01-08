@@ -197,41 +197,41 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="modalNewCollection" role="dialog" tabindex="-1">
-        @if($selectedRestaurant)
-            <form role="form"  class="form-horizontal" accept-charset="utf-8" method="GET"
-                  @if($user->admin == 1)
-                  action="{{ url('/collection/create/' . $selectedRestaurant->id ) }}"
-                  @else
-                  action="{{ url('/collection/create') }}"
-                    @endif>
+    @if($selectedRestaurant)
+        <div class="modal fade" id="modalNewCollection" role="dialog" tabindex="-1">
+            <form role="form" class="form-horizontal" accept-charset="utf-8" method="GET"
+                  action="{{ url('/collection/create') }}">
                 {{ csrf_field() }}
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                             <h4 class="modal-title"> Select Collection Category</h4>
+                            <input type="hidden" name="restaurant_id" class="form-control"
+                                   value="{{$selectedRestaurant->id}}">
                         </div>
                         <div class="modal-body">
-                            <div class="form-group" style="margin: 5px">
-                                <select name="collection_category" class="form-control">
-                                    <option value="">View all Categories</option>
-                                    @foreach ($categories as $category)
-                                        <option value="{{$category->id}}">{{$category->name_en}}</option>
-                                    @endforeach
-                                </select>&nbsp;
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"></label>
+                                <div class="col-sm-8">
+                                    <select name="collection_category" class="form-control">
+                                        @foreach ($categories as $category)
+                                            <option value="{{$category->id}}">{{$category->name_en}}</option>
+                                        @endforeach
+                                    </select>&nbsp;
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close
                             </button>
-                            <button type="submit" class="btn btn-primary">Next</button>
+                            <button  type="submit" class="btn btn-primary">Next</button>
                         </div>
                     </div>
                 </div>
             </form>
-        @endif
-    </div>
+        </div>
+    @endif
     <script type="text/javascript">
         $(document).ready(function () {
             $('select.form-control').select2();

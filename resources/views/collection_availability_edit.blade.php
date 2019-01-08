@@ -153,12 +153,12 @@
                                         </div>
                                         @if ($errors->has('daily_hours.start'))
                                             <span class="help-block">
-                                                <strong>{{ $errors->first('daily_hours.end') }}</strong>
+                                                <strong>{{ $errors->first('daily_hours.start') }}</strong>
                                             </span>
                                         @endif
                                         @if ($errors->has('daily_hours.end'))
                                             <span class="help-block">
-                                                <strong>Close hour must be after open hour.</strong>
+                                                <strong>{{ $errors->first('daily_hours.end') }}</strong>
                                             </span>
                                         @endif
                                     </div>
@@ -169,10 +169,10 @@
                                         <div class="col-sm-5">
                                             <div class="control-group control-group-2">
                                                 <div class="input-group">
-                                                    <b>Open hour</b>
+                                                    <b>Start Time</b>
                                                 </div>
                                                 <div class="input-group">
-                                                    <b>Close hour</b>
+                                                    <b>End Time</b>
                                                 </div>
                                             </div>
                                         </div>
@@ -260,7 +260,7 @@
                                                 @endif
                                                 @if ($errors->has('flexible_hours.' . $hour->weekday . '.end'))
                                                     <span class="help-block">
-                                                <strong>Close hour must be after open hour.</strong>
+                                                <strong>{{ $errors->first('flexible_hours.' . $hour->weekday . '.end') }}</strong>
                                             </span>
                                                 @endif
                                             </div>
@@ -311,7 +311,7 @@
                                             @endif
                                             @if ($errors->has('flexible_hours.1.end'))
                                                 <span class="help-block">
-                                                <strong>Close hour must be after open hour.</strong>
+                                                <strong>{{ $errors->first('flexible_hours.1.end') }}</strong>
                                             </span>
                                             @endif
                                         </div>
@@ -360,7 +360,7 @@
                                             @endif
                                             @if ($errors->has('flexible_hours.2.end'))
                                                 <span class="help-block">
-                                                <strong>Close hour must be after open hour.</strong>
+                                                <strong>{{ $errors->first('flexible_hours.2.end') }}</strong>
                                             </span>
                                             @endif
                                         </div>
@@ -409,7 +409,7 @@
                                             @endif
                                             @if ($errors->has('flexible_hours.3.end'))
                                                 <span class="help-block">
-                                                <strong>Close hour must be after open hour.</strong>
+                                                <strong>{{ $errors->first('flexible_hours.3.end') }}</strong>
                                             </span>
                                             @endif
                                         </div>
@@ -458,7 +458,7 @@
                                             @endif
                                             @if ($errors->has('flexible_hours.4.end'))
                                                 <span class="help-block">
-                                                <strong>Close hour must be after open hour.</strong>
+                                                <strong>{{ $errors->first('flexible_hours.4.end') }}</strong>
                                             </span>
                                             @endif
                                         </div>
@@ -507,7 +507,7 @@
                                             @endif
                                             @if ($errors->has('flexible_hours.5.end'))
                                                 <span class="help-block">
-                                               <strong>Close hour must be after open hour.</strong>
+                                                <strong>{{ $errors->first('flexible_hours.5.end') }}</strong>
                                             </span>
                                             @endif
                                         </div>
@@ -556,7 +556,7 @@
                                             @endif
                                             @if ($errors->has('flexible_hours.6.end'))
                                                 <span class="help-block">
-                                                <strong>Close hour must be after open hour.</strong>
+                                                <strong>{{ $errors->first('flexible_hours.6.end') }}</strong>
                                             </span>
                                             @endif
                                         </div>
@@ -605,7 +605,7 @@
                                             @endif
                                             @if ($errors->has('flexible_hours.0.end'))
                                                 <span class="help-block">
-                                                <strong>Close hour must be after open hour.</strong>
+                                                <strong>{{ $errors->first('flexible_hours.0.end') }}</strong>
                                             </span>
                                             @endif
                                         </div>

@@ -95,7 +95,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::get('/collections/{id?}', 'CollectionsController@index');
 //        Route::post('collections/collection/copy/{id}', 'CollectionsController@copy');
         Route::group(['prefix' => 'collection'], function () {
-            Route::get('create/{id?}', 'CollectionsController@create');
+            Route::get('create', 'CollectionsController@create');
             Route::post('store', 'CollectionsController@store');
             Route::get('approve/{id}', 'CollectionsController@approve');
             Route::get('reject/{id}', 'CollectionsController@reject');

@@ -1230,9 +1230,12 @@ class RestaurantsController extends Controller
                 }]);
             if (isset($DataRequests['category_id'])) {
                 $category_id = $DataRequests['category_id'];
+                $service_type = CategoryRestaurant::where('category_id', $category_id)->where('restaurant_id', $restaurant_id)->first();
                 $restaurants = $restaurants->whereHas('categoryRestaurant', function ($query) use ($category_id) {
                     $query->where('category_id', $category_id);
-                })->get();
+                })->with(['collection' => function ($query) use($service_type) {
+                    $query->where('service_type_id', $service_type->id);
+                }])->get();
             } else {
                 $restaurants = $restaurants->get();
             }

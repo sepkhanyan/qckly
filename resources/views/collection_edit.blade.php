@@ -84,7 +84,7 @@
                                     @endif
                                 </div>
                             </div>
-                                <div class="form-group">
+                                <div class="form-group{{ $errors->has('image') ? ' has-error' : '' }}">
                                     <label for="input-image" class="col-sm-3 control-label">
                                         Image
                                         <span class="help-block">Select a file to update menu image, otherwise leave blank.</span>
@@ -117,6 +117,11 @@
                                                 </p>
                                             </div>
                                         </div>
+                                        @if ($errors->has('image'))
+                                            <span class="help-block">
+                                        <strong>{{ $errors->first('image') }}</strong>
+                                    </span>
+                                        @endif
                                     </div>
                                 </div>
                             <div class="form-group">
@@ -234,19 +239,6 @@
                                 </div>
                             @endif
                             @if($collection->category_id == 2)
-                                {{--<div class="form-group{{ $errors->has('persons_max_count') ? ' has-error' : '' }}">--}}
-                                {{--<label class="col-sm-3 control-label">Persons max count</label>--}}
-                                {{--<div class="col-sm-5">--}}
-                                {{--<input type="number" min="1" name="persons_max_count" class="form-control"--}}
-                                {{--value="{{$collection->persons_max_count}}">--}}
-                                {{--@if ($errors->has('persons_max_count'))--}}
-                                {{--<span class="help-block">--}}
-                                {{--<strong>{{ $errors->first('persons_max_count') }}</strong>--}}
-                                {{--</span>--}}
-                                {{--@endif--}}
-
-                                {{--</div>--}}
-                                {{--</div>--}}
                                 <div class="form-group">
                                     <label for="is_available" class="col-sm-3 control-label">Allow Person
                                         Increase</label>
@@ -341,7 +333,7 @@
                                 </div>
                             @endif
                         </div>
-                        <div id="menus" class="tab-pane row wrap-all">
+                        <div id="menus" class="tab-pane row wrap-all{{ $errors->has('menu_item') ? ' has-error' : '' }}">
                             <div class="form-group">
                                 <label for="input_requirements_ar" class="col-sm-3 control-label">Collection Items</label>
                                 <div class="col-sm-5">
@@ -516,9 +508,19 @@
                                         </div>
                                     </div>
                             </div>
+                            <div class="form-group">
+                                <label for="" class="col-sm-3 control-label"></label>
+                                <div class="col-xs-3">
+                                    @if ($errors->has('menu_item'))
+                                        <span class="help-block">
+                                                    <strong>{{ $errors->first('menu_item') }}</strong>
+                                                </span>
+                                    @endif
+                                </div>
+                            </div>
                         </div>
                         <div id="data" class="tab-pane row wrap-all">
-                            <div id="type" class="form-group">
+                            <div id="type" class="form-group{{ $errors->has('service_type') ? ' has-error' : '' }}">
                                 <label for="" class="col-sm-3 control-label">Service Type</label>
                                 <div class="col-sm-5">
                                     <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
@@ -536,6 +538,11 @@
                                             @endif
                                         @endforeach
                                     </div>
+                                    @if ($errors->has('service_type'))
+                                        <span class="help-block">
+                                                    <strong>{{ $errors->first('service_type') }}</strong>
+                                                </span>
+                                    @endif
                                 </div>
                             </div>
                             <div class="form-group{{ $errors->has('delivery_time') ? ' has-error' : '' }}" id="delivery_hours" style="display: none">
