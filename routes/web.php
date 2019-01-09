@@ -120,14 +120,14 @@ Route::group(['middleware' => ['web', 'auth']], function () {
 //        Route::post('/review/delete', 'ReviewsController@deleteReview');
         Route::get('/admin/edit/{id}', 'UsersController@editAdmin');
         Route::post('/admin/update/{id}', 'UsersController@updateAdmin');
-        Route::get('/languages', 'LanguagesController@index');
-        Route::group(['prefix' => 'language'], function () {
-            Route::get('create', 'LanguagesController@create');
-            Route::post('store', 'LanguagesController@store');
-            Route::get('edit/{id}', 'LanguagesController@edit');
-            Route::post('update/{id}', 'LanguagesController@update');
-            Route::post('delete', 'LanguagesController@deleteLanguage');
-        });
+//        Route::get('/languages', 'LanguagesController@index');
+//        Route::group(['prefix' => 'language'], function () {
+//            Route::get('create', 'LanguagesController@create');
+//            Route::post('store', 'LanguagesController@store');
+//            Route::get('edit/{id}', 'LanguagesController@edit');
+//            Route::post('update/{id}', 'LanguagesController@update');
+//            Route::post('delete', 'LanguagesController@deleteLanguage');
+//        });
     });
 });
 

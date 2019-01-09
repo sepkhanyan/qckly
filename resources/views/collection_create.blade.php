@@ -20,15 +20,15 @@
             <div class="col-md-12">
                 <div class="row wrap-vertical">
                     <ul id="nav-tabs" class="nav nav-tabs">
-                        <li class="active">
+                        <li id="generalTab" class="active">
                             <a href="#general" data-toggle="tab">
                                 Collection Details
                             </a>
                         </li>
-                        <li>
+                        <li id="menuTab">
                             <a href="#menus" data-toggle="tab">Collection Items</a>
                         </li>
-                        <li>
+                        <li id="dataTab">
                             <a href="#data" data-toggle="tab">Service</a>
                         </li>
                     </ul>
@@ -508,6 +508,35 @@
         </div>
     </div>
     <script type="text/javascript">
+        $(document).ready(function(){
+            var errorGeneral = $("#general .form-group .help-block").length;
+            var errorMenu = $("#menus .form-group .help-block").length;
+            var errorData = $("#data .form-group .help-block").length;
+            if(errorData > 0){
+                $('#dataTab').addClass('active');
+                $('#data').addClass('active');
+                $('#menuTab').removeClass('active');
+                $('#menus').removeClass('active');
+                $('#generalTab').removeClass('active');
+                $('#general').removeClass('active');
+            }
+            if(errorMenu > 0){
+                $('#menuTab').addClass('active');
+                $('#menus').addClass('active');
+                $('#dataTab').removeClass('active');
+                $('#data').removeClass('active');
+                $('#generalTab').removeClass('active');
+                $('#general').removeClass('active');
+            }
+            if(errorGeneral > 0){
+                $('#generalTab').addClass('active');
+                $('#general').addClass('active');
+                $('#dataTab').removeClass('active');
+                $('#data').removeClass('active');
+                $('#menuTab').removeClass('active');
+                $('#menus').removeClass('active');
+            }
+        });
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();

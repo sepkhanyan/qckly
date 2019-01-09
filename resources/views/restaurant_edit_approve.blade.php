@@ -18,13 +18,13 @@
             <div class="col-md-12">
                 <div class="row wrap-vertical">
                     <ul id="nav-tabs" class="nav nav-tabs">
-                        <li class="active">
+                        <li id="generalTab" class="active">
                             <a href="#general" data-toggle="tab">Restaurant</a>
                         </li>
-                        <li>
+                        <li id="dataTab">
                             <a href="#data" data-toggle="tab">Data</a>
                         </li>
-                        <li>
+                        <li id="hoursTab">
                             <a href="#opening-hours" data-toggle="tab">Working Hours</a>
                         </li>
                     </ul>
@@ -154,7 +154,6 @@
                             <div class="form-group">
                                 <label for="input-image" class="col-sm-3 control-label">
                                     Image
-                                    <span class="help-block">Select an image to use as the restaurant logo, this image is displayed in the restaurant list.</span>
                                 </label>
                                 <div class="col-sm-5">
                                     <div class="thumbnail imagebox">

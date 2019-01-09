@@ -57,7 +57,6 @@ class LanguagesController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->input('image'));
         $user = Auth::user();
         if ($user->admin == 1) {
             $request->validate([

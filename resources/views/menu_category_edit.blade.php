@@ -106,7 +106,7 @@
                             {{--</div>--}}
                             {{--</div>--}}
                             {{--</div>--}}
-                            <div class="form-group">
+                            <div class="form-group{{ $errors->has('image') ? ' has-error' : '' }}">
                                 <label for="input-image" class="col-sm-3 control-label">
                                     Image
                                     <span class="help-block">Select a file to update category image, otherwise leave blank.</span>
@@ -137,6 +137,11 @@
                                             </p>
                                         </div>
                                     </div>
+                                    @if ($errors->has('image'))
+                                        <span class="help-block">
+                                        <strong>{{ $errors->first('image') }}</strong>
+                                    </span>
+                                    @endif
                                 </div>
                             </div>
                         </div>

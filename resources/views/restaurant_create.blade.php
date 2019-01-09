@@ -20,16 +20,16 @@
             <div class="col-md-12">
                 <div class="row wrap-vertical">
                     <ul id="nav-tabs" class="nav nav-tabs">
-                        <li class="active">
+                        <li id="generalTab" class="active">
                             <a href="#general" data-toggle="tab">Manager</a>
                         </li>
-                        <li>
+                        <li id="locationTab">
                             <a href="#location" data-toggle="tab">Restaurant</a>
                         </li>
-                        <li>
+                        <li id="dataTab">
                             <a href="#data" data-toggle="tab">Data</a>
                         </li>
-                        <li>
+                        <li id="hoursTab">
                             <a href="#opening-hours" data-toggle="tab">Working Hours</a>
                         </li>
                     </ul>
@@ -108,34 +108,34 @@
                                     @endif
                                 </div>
                             </div>
-                            @if ($errors->any())
-                                <div class="modal fade" id="errorList" role="dialog" tabindex="-1">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="alert alert-danger">
-                                                    <ul>
-                                                        @foreach ($errors->all() as $error)
-                                                            <li>{{$error}}</li>
-                                                        @endforeach
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <script type="text/javascript">
-                                    $(window).on('load',function(){
-                                        $('#errorList').modal('show');
-                                    });
-                                </script>
-                            @endif
+                            {{--@if ($errors->any())--}}
+                                {{--<div class="modal fade" id="errorList" role="dialog" tabindex="-1">--}}
+                                    {{--<div class="modal-dialog">--}}
+                                        {{--<div class="modal-content">--}}
+                                            {{--<div class="modal-header">--}}
+                                                {{--<button type="button" class="close" data-dismiss="modal">&times;</button>--}}
+                                            {{--</div>--}}
+                                            {{--<div class="modal-body">--}}
+                                                {{--<div class="alert alert-danger">--}}
+                                                    {{--<ul>--}}
+                                                        {{--@foreach ($errors->all() as $error)--}}
+                                                            {{--<li>{{$error}}</li>--}}
+                                                        {{--@endforeach--}}
+                                                    {{--</ul>--}}
+                                                {{--</div>--}}
+                                            {{--</div>--}}
+                                            {{--<div class="modal-footer">--}}
+                                                {{--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
+                                {{--<script type="text/javascript">--}}
+                                    {{--// $(window).on('load',function(){--}}
+                                    {{--//     $('#errorList').modal('show');--}}
+                                    {{--// });--}}
+                                {{--</script>--}}
+                            {{--@endif--}}
                         </div>
                         <div id="location" class="tab-pane row wrap-all">
                             <div class="form-group{{ $errors->has('category') ? ' has-error' : '' }}">
@@ -396,7 +396,6 @@
                             <div class="form-group{{ $errors->has('image') ? ' has-error' : '' }}">
                                 <label for="input-image" class="col-sm-3 control-label">
                                     Image
-                                    <span class="help-block">Select an image to use as the restaurant logo, this image is displayed in the restaurant list.</span>
                                 </label>
                                 <div class="col-sm-5">
                                     <div class="thumbnail imagebox">
@@ -901,84 +900,130 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript">
-        // var map;
-        // var markers = [];
-        //
-        // function initMap() {
-        //     var haightAshbury = {lat: 40.7143528, lng: -74.0059731};
-        //
-        //     map = new google.maps.Map(document.getElementById('map'), {
-        //         zoom: 11,
-        //         panControl: true,
-        //         zoomControl: true,
-        //         mapTypeControl: true,
-        //         scaleControl: true,
-        //         streetViewControl: true,
-        //         overviewMapControl: true,
-        //         rotateControl: true,
-        //         center: haightAshbury,
-        //         mapTypeId: 'terrain'
-        //     });
-        //
-        //
-        //     map.addListener('click', function (event) {
-        //         if (markers.length >= 1) {
-        //             deleteMarkers();
-        //         }
-        //
-        //         addMarker(event.latLng);
-        //         document.getElementById('lat').value = event.latLng.lat();
-        //         document.getElementById('long').value = event.latLng.lng();
-        //     });
-        // }
-        //
-        //
-        // function addMarker(location) {
-        //     var marker = new google.maps.Marker({
-        //         position: location,
-        //         map: map
-        //     });
-        //     markers.push(marker);
-        // }
-        //
-        //
-        // function setMapOnAll(map) {
-        //     for (var i = 0; i < markers.length; i++) {
-        //         markers[i].setMap(map);
-        //     }
-        // }
-        //
-        //
-        // function clearMarkers() {
-        //     setMapOnAll(null);
-        // }
-        //
-        //
-        // function deleteMarkers() {
-        //     clearMarkers();
-        //     markers = [];
-        // }
-
-        function readURL(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-
-                reader.onload = function (e) {
-                    $('#thumb')
-                        .attr('src', e.target.result);
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
+<script type="text/javascript">
+    $(document).ready(function(){
+        var errorGeneral = $("#general .form-group .help-block").length;
+        var errorLocation = $("#location .form-group .help-block").length;
+        var errorData = $("#data .form-group .help-block").length;
+        var errorHours = $("#opening-hours .form-group .help-block").length;
+        if(errorHours > 0){
+            $('#hoursTab').addClass('active');
+            $('#opening-hours').addClass('active');
+            $('#dataTab').removeClass('active');
+            $('#data').removeClass('active');
+            $('#locationTab').removeClass('active');
+            $('#location').removeClass('active');
+            $('#generalTab').removeClass('active');
+            $('#general').removeClass('active');
         }
-
-        function removeFile() {
-            $('#thumb').attr('src', '/admin/no_photo.png');
-            $('input[name=image]').val("");
+        if(errorData > 0){
+            $('#dataTab').addClass('active');
+            $('#data').addClass('active');
+            $('#hoursTab').removeClass('active');
+            $('#opening-hours').removeClass('active');
+            $('#locationTab').removeClass('active');
+            $('#location').removeClass('active');
+            $('#generalTab').removeClass('active');
+            $('#general').removeClass('active');
         }
-    </script>
-    <script type="text/javascript">
-        $('#category').select2();
-        $('#area').select2();
-    </script>
+        if(errorLocation > 0){
+            $('#locationTab').addClass('active');
+            $('#location').addClass('active');
+            $('#hoursTab').removeClass('active');
+            $('#opening-hours').removeClass('active');
+            $('#dataTab').removeClass('active');
+            $('#data').removeClass('active');
+            $('#generalTab').removeClass('active');
+            $('#general').removeClass('active');
+        }
+        if(errorGeneral > 0){
+            $('#generalTab').addClass('active');
+            $('#general').addClass('active');
+            $('#hoursTab').removeClass('active');
+            $('#opening-hours').removeClass('active');
+            $('#dataTab').removeClass('active');
+            $('#data').removeClass('active');
+            $('#locationTab').removeClass('active');
+            $('#location').removeClass('active');
+        }
+    });
+// var map;
+// var markers = [];
+//
+// function initMap() {
+//     var haightAshbury = {lat: 40.7143528, lng: -74.0059731};
+//
+//     map = new google.maps.Map(document.getElementById('map'), {
+//         zoom: 11,
+//         panControl: true,
+//         zoomControl: true,
+//         mapTypeControl: true,
+//         scaleControl: true,
+//         streetViewControl: true,
+//         overviewMapControl: true,
+//         rotateControl: true,
+//         center: haightAshbury,
+//         mapTypeId: 'terrain'
+//     });
+//
+//
+//     map.addListener('click', function (event) {
+//         if (markers.length >= 1) {
+//             deleteMarkers();
+//         }
+//
+//         addMarker(event.latLng);
+//         document.getElementById('lat').value = event.latLng.lat();
+//         document.getElementById('long').value = event.latLng.lng();
+//     });
+// }
+//
+//
+// function addMarker(location) {
+//     var marker = new google.maps.Marker({
+//         position: location,
+//         map: map
+//     });
+//     markers.push(marker);
+// }
+//
+//
+// function setMapOnAll(map) {
+//     for (var i = 0; i < markers.length; i++) {
+//         markers[i].setMap(map);
+//     }
+// }
+//
+//
+// function clearMarkers() {
+//     setMapOnAll(null);
+// }
+//
+//
+// function deleteMarkers() {
+//     clearMarkers();
+//     markers = [];
+// }
+
+function readURL(input) {
+if (input.files && input.files[0]) {
+var reader = new FileReader();
+
+reader.onload = function (e) {
+    $('#thumb')
+        .attr('src', e.target.result);
+};
+reader.readAsDataURL(input.files[0]);
+}
+}
+
+function removeFile() {
+$('#thumb').attr('src', '/admin/no_photo.png');
+$('input[name=image]').val("");
+}
+</script>
+<script type="text/javascript">
+$('#category').select2();
+$('#area').select2();
+</script>
 @endsection

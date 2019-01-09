@@ -20,9 +20,15 @@
             <div class="col-md-12">
                 <div class="row wrap-vertical">
                     <ul id="nav-tabs" class="nav nav-tabs">
-                        <li class="active"><a href="#general" data-toggle="tab">Collection Details</a></li>
-                        <li><a href="#menus" data-toggle="tab">Collection Items</a></li>
-                        <li>
+                        <li id="generalTab" class="active">
+                            <a href="#general" data-toggle="tab">
+                                Collection Details
+                            </a>
+                        </li>
+                        <li id="menuTab">
+                            <a href="#menus" data-toggle="tab">Collection Items</a>
+                        </li>
+                        <li id="dataTab">
                             <a href="#data" data-toggle="tab">Service</a>
                         </li>
                     </ul>
@@ -36,6 +42,7 @@
                                 <input type="hidden" name="restaurant" value="{{$collection->restaurant_id}}">
                             @endif
                             <h4 class="tab-pane-title">{{$collection->category->name_en}}</h4>
+                                <input type="hidden" name="category" value="{{$collection->category_id}}">
                             <div class="form-group{{ $errors->has('name_en') ? ' has-error' : '' }}">
                                 <label for="input_name_en" class="col-sm-3 control-label">Name En</label>
                                 <div class="col-sm-5">
@@ -87,7 +94,6 @@
                                 <div class="form-group{{ $errors->has('image') ? ' has-error' : '' }}">
                                     <label for="input-image" class="col-sm-3 control-label">
                                         Image
-                                        <span class="help-block">Select a file to update menu image, otherwise leave blank.</span>
                                     </label>
                                     <div class="col-sm-5">
                                         <div class="thumbnail imagebox">
@@ -278,7 +284,7 @@
                                     <div class="col-sm-5">
                                         <div class="input-group">
                                             <input type="number" name="setup_time" id="input-setup"
-                                                   class="form-control" min="0" value="{{old('setup_time') ?? $collection->setup_time}}"/>
+                                                   class="form-control" min="1" value="{{old('setup_time') ?? $collection->setup_time}}"/>
                                             <span class="input-group-addon">minutes</span>
                                         </div>
                                         @if ($errors->has('setup_time'))
@@ -321,7 +327,7 @@
                                     <div class="col-sm-5">
                                         <div class="input-group">
                                             <input type="number" name="max_time" id="input-max" class="form-control"
-                                                   min="0" value="{{old('max_time') ?? $collection->max_time}}"/>
+                                                   min="1" value="{{old('max_time') ?? $collection->max_time}}"/>
                                             <span class="input-group-addon">minutes</span>
                                         </div>
                                         @if ($errors->has('max_time'))
@@ -552,7 +558,7 @@
                                 <div class="col-sm-5">
                                     <div class="input-group">
                                         <input type="number" name="delivery_time"  class="form-control"
-                                               min="0" value="{{old('delivery_time') ?? $collection->delivery_hours}}"/>
+                                               min="1" value="{{old('delivery_time') ?? $collection->delivery_hours}}"/>
                                         <span class="input-group-addon">minutes</span>
                                     </div>
                                     @if ($errors->has('delivery_time'))
@@ -621,8 +627,36 @@
         </div>
     </div>
     <script type="text/javascript">
-        $(document).ready(function () {
+        $(document).ready(function(){
             $('#collectionItems select').select2();
+
+            var errorGeneral = $("#general .form-group .help-block").length;
+            var errorMenu = $("#menus .form-group .help-block").length;
+            var errorData = $("#data .form-group .help-block").length;
+            if(errorData > 0){
+                $('#dataTab').addClass('active');
+                $('#data').addClass('active');
+                $('#menuTab').removeClass('active');
+                $('#menus').removeClass('active');
+                $('#generalTab').removeClass('active');
+                $('#general').removeClass('active');
+            }
+            if(errorMenu > 0){
+                $('#menuTab').addClass('active');
+                $('#menus').addClass('active');
+                $('#dataTab').removeClass('active');
+                $('#data').removeClass('active');
+                $('#generalTab').removeClass('active');
+                $('#general').removeClass('active');
+            }
+            if(errorGeneral > 0){
+                $('#generalTab').addClass('active');
+                $('#general').addClass('active');
+                $('#dataTab').removeClass('active');
+                $('#data').removeClass('active');
+                $('#menuTab').removeClass('active');
+                $('#menus').removeClass('active');
+            }
         });
         $('#itemsEdit').click(function () {
             $('#menuItems').slideDown('fast');

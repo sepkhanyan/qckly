@@ -20,13 +20,13 @@
             <div class="col-md-12">
                 <div class="row wrap-vertical">
                     <ul id="nav-tabs" class="nav nav-tabs">
-                        <li class="active">
+                        <li id="generalTab" class="active">
                             <a href="#general" data-toggle="tab">Restaurant</a>
                         </li>
-                        <li>
+                        <li id="dataTab">
                             <a href="#data" data-toggle="tab">Data</a>
                         </li>
-                        <li>
+                        <li id="hoursTab">
                             <a href="#opening-hours" data-toggle="tab">Working Hours</a>
                         </li>
                     </ul>
@@ -224,7 +224,6 @@
                             <div class="form-group">
                                 <label for="input-image" class="col-sm-3 control-label">
                                     Image
-                                    <span class="help-block">Select an image to use as the restaurant logo, this image is displayed in the restaurant list.</span>
                                 </label>
                                 <div class="col-sm-5">
                                     <div class="thumbnail imagebox">
@@ -861,6 +860,35 @@
     </div>
     </div>
     <script type="text/javascript">
+        $(document).ready(function(){
+            var errorGeneral = $("#general .form-group .help-block").length;
+            var errorData = $("#data .form-group .help-block").length;
+            var errorHours = $("#opening-hours .form-group .help-block").length;
+            if(errorHours > 0){
+                $('#hoursTab').addClass('active');
+                $('#opening-hours').addClass('active');
+                $('#dataTab').removeClass('active');
+                $('#data').removeClass('active');
+                $('#generalTab').removeClass('active');
+                $('#general').removeClass('active');
+            }
+            if(errorData > 0){
+                $('#dataTab').addClass('active');
+                $('#data').addClass('active');
+                $('#hoursTab').removeClass('active');
+                $('#opening-hours').removeClass('active');
+                $('#generalTab').removeClass('active');
+                $('#general').removeClass('active');
+            }
+            if(errorGeneral > 0){
+                $('#generalTab').addClass('active');
+                $('#general').addClass('active');
+                $('#hoursTab').removeClass('active');
+                $('#opening-hours').removeClass('active');
+                $('#dataTab').removeClass('active');
+                $('#data').removeClass('active');
+            }
+        });
         // var map;
         // var markers = [];
         // var lat = parseFloat(document.getElementById('lat').value);

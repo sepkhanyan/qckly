@@ -312,12 +312,12 @@
                                 <span class="fa arrow"></span>
                             </a>
                             <ul class="nav nav-second-level collapse">
-                                <li>
-                                    <a href="{{url('/languages')}}" class="languages">
-                                        <i class="fa fa-square-o fa-fw"></i>
-                                        Languages
-                                    </a>
-                                </li>
+                                {{--<li>--}}
+                                    {{--<a href="{{url('/languages')}}" class="languages">--}}
+                                        {{--<i class="fa fa-square-o fa-fw"></i>--}}
+                                        {{--Languages--}}
+                                    {{--</a>--}}
+                                {{--</li>--}}
                                 <li>
                                     <a href="{{ url('/statuses') }}" class="statuses">
                                         <i class="fa fa-square-o fa-fw"></i>
@@ -542,7 +542,6 @@
 </script>
 <script type="text/javascript">
     $(document).ready(function () {
-
         if (window.location.hash) {
             var hash = window.location.hash.substring(1); //Puts hash in variable, and removes the # character
             $('html,body').animate({scrollTop: $('#wrapper').offset().top - 45}, 800);

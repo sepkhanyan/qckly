@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MenuCategoryRequest;
 use App\Collection;
 use App\CollectionMenu;
 use App\EditingMenuCategory;
@@ -80,15 +81,8 @@ class MenuCategoriesController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(MenuCategoryRequest $request)
     {
-        $request->validate([
-            'name_en' => 'required|string|max:255',
-            'description_en' => 'required|string',
-            'name_ar' => 'required|string|max:255',
-            'description_ar' => 'required|string',
-            'image' => 'required|image'
-        ]);
         $restaurant_id = $request->input('restaurant');
         $user = Auth::user();
         if ($user->admin == 2) {
@@ -179,14 +173,8 @@ class MenuCategoriesController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(MenuCategoryRequest $request, $id)
     {
-        $request->validate([
-            'name_en' => 'required|string|max:255',
-            'description_en' => 'required|string',
-            'name_ar' => 'required|string|max:255',
-            'description_ar' => 'required|string',
-        ]);
         $user = Auth::user();
         $category = MenuCategory::find($id);
         $restaurant_id = $request->input('restaurant');
@@ -234,14 +222,8 @@ class MenuCategoriesController extends Controller
     }
 
 
-    public function editApprove(Request $request, $id)
+    public function editApprove(MenuCategoryRequest $request, $id)
     {
-        $request->validate([
-            'name_en' => 'required|string|max:255',
-            'description_en' => 'required|string',
-            'name_ar' => 'required|string|max:255',
-            'description_ar' => 'required|string',
-        ]);
         $user = Auth::user();
         if($user->admin ==1){
             $category = MenuCategory::find($id);

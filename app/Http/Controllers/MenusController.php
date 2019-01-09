@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\EditingMenu;
+use App\Http\Requests\MenuRequest;
 use Auth;
 use DB;
 use App\Area;
@@ -103,17 +104,8 @@ class MenusController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(MenuRequest $request)
     {
-        $request->validate([
-            'name_en' => 'required|string|max:255',
-            'description_en' => 'required|string',
-            'name_ar' => 'required|string|max:255',
-            'description_ar' => 'required|string',
-            'price' => 'required|numeric',
-            'category' => 'required|integer',
-            'image' => 'required|image'
-        ]);
         $user = Auth::user();
         $menu = new Menu();
         $restaurant_id = $request->input('restaurant');
@@ -208,22 +200,9 @@ class MenusController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(MenuRequest $request, $id)
     {
-//        dd($request->all());
         $user = Auth::user();
-        $validator = \Validator::make($request->all(), [
-            'name_en' => 'string|max:255',
-            'description_en' => 'string',
-            'name_ar' => 'string|max:255',
-            'description_ar' => 'string',
-            'price' => 'numeric',
-        ]);
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
         $menu = Menu::find($id);
         $restaurant_id = $request->input('restaurant');
         if ($user->admin == 2) {
@@ -301,20 +280,8 @@ class MenusController extends Controller
 
     }
 
-    public function editApprove(Request $request, $id)
+    public function editApprove(MenuRequest $request, $id)
     {
-        $validator = \Validator::make($request->all(), [
-            'name_en' => 'string|max:255',
-            'description_en' => 'string',
-            'name_ar' => 'string|max:255',
-            'description_ar' => 'string',
-            'price' => 'numeric',
-        ]);
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
         $user = Auth::user();
         if($user->admin ==1){
             $restaurant_id = $request->input('restaurant');

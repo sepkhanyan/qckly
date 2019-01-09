@@ -20,9 +20,15 @@
             <div class="col-md-12">
                 <div class="row wrap-vertical">
                     <ul id="nav-tabs" class="nav nav-tabs">
-                        <li class="active"><a href="#general" data-toggle="tab">Collection Details</a></li>
-                        <li><a href="#menus" data-toggle="tab">Collection Items</a></li>
-                        <li>
+                        <li id="generalTab" class="active">
+                            <a href="#general" data-toggle="tab">
+                                Collection Details
+                            </a>
+                        </li>
+                        <li id="menuTab">
+                            <a href="#menus" data-toggle="tab">Collection Items</a>
+                        </li>
+                        <li id="dataTab">
                             <a href="#data" data-toggle="tab">Service</a>
                         </li>
                     </ul>
@@ -88,7 +94,6 @@
                             <div class="form-group{{ $errors->has('image') ? ' has-error' : '' }}">
                                 <label for="input-image" class="col-sm-3 control-label">
                                     Image
-                                    <span class="help-block">Select a file to update menu image, otherwise leave blank.</span>
                                 </label>
                                 <div class="col-sm-5">
                                     <div class="thumbnail imagebox">
@@ -539,7 +544,7 @@
                                 <div class="col-sm-5">
                                     <div class="input-group">
                                         <input type="number" name="delivery_time"  class="form-control"
-                                               min="0" value="{{old('delivery_time') ?? 0}}"/>
+                                               min="1" value="{{old('delivery_time') ?? 1}}"/>
                                         <span class="input-group-addon">minutes</span>
                                     </div>
                                     @if ($errors->has('delivery_time'))
@@ -608,6 +613,37 @@
         </div>
     </div>
     <script type="text/javascript">
+        $(document).ready(function(){
+            $('#collectionItems select').select2();
+
+            var errorGeneral = $("#general .form-group .help-block").length;
+            var errorMenu = $("#menus .form-group .help-block").length;
+            var errorData = $("#data .form-group .help-block").length;
+            if(errorData > 0){
+                $('#dataTab').addClass('active');
+                $('#data').addClass('active');
+                $('#menuTab').removeClass('active');
+                $('#menus').removeClass('active');
+                $('#generalTab').removeClass('active');
+                $('#general').removeClass('active');
+            }
+            if(errorMenu > 0){
+                $('#menuTab').addClass('active');
+                $('#menus').addClass('active');
+                $('#dataTab').removeClass('active');
+                $('#data').removeClass('active');
+                $('#generalTab').removeClass('active');
+                $('#general').removeClass('active');
+            }
+            if(errorGeneral > 0){
+                $('#generalTab').addClass('active');
+                $('#general').addClass('active');
+                $('#dataTab').removeClass('active');
+                $('#data').removeClass('active');
+                $('#menuTab').removeClass('active');
+                $('#menus').removeClass('active');
+            }
+        });
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
