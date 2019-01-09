@@ -557,7 +557,6 @@ class RestaurantsController extends Controller
     {
         $user = Auth::user();
         if ($user->admin == 1) {
-//            dd($request->all());
             $restaurant = Restaurant::find($id);
             $editingRestaurant = EditingRestaurant::where('restaurant_id', $id)->first();
             $restaurant->name_en = $request->input('restaurant_name_en');
@@ -647,7 +646,6 @@ class RestaurantsController extends Controller
         $user = Auth::user();
         if ($user->admin == 1) {
             $editingRestaurants = EditingRestaurant::where('restaurant_id', $id)->get();
-            $restaurant = Restaurant::find($id);
             $restaurant_images = [];
             foreach ($editingRestaurants as $editingRestaurant) {
                 $restaurant_images[] = public_path('images/' . $editingRestaurant->image);
@@ -960,8 +958,12 @@ class RestaurantsController extends Controller
                     foreach ($restaurant->review as $review) {
                         $rate_sum += $review->rate_value;
                     }
-                    if ($review_count) {
-                        $rating_count = $rate_sum / $review_count;
+                    if ($review_count > 0) {
+                        $rate_sum = $rate_sum / $review_count;
+                        $rating_count = ceil($rate_sum) - 0.5;
+                            if($rating_count < $rate_sum){
+                                $rating_count = ceil($rate_sum);
+                            }
                     } else {
                         $rating_count = 0;
                     }

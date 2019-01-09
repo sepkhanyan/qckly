@@ -115,7 +115,6 @@
                                                     @if($average_stars  < $review->rate_value)
                                                         @php($average_stars = ceil($review->rate_value))
                                                     @endif
-                                                    {{$average_stars}}
                                                     @for($i = 0; $i < floor($average_stars); $i++)
                                                         @php($drawn --)
                                                         <img src="/stars/full.png" width="17px" height="17px">
