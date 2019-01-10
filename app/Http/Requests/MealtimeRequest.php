@@ -32,7 +32,9 @@ class MealtimeRequest extends FormRequest
             'name_ar.string'  => 'The Name Ar: must be a string.',
             'name_ar.max'  => 'The Name Ar: may not be greater than 255 characters.',
             'start_time.required' => 'The Start Time: field is required.',
+            'start_time.date_format' => 'The Start Time: does not match the format H:i.',
             'end_time.required' => 'The End Time: field is required.',
+            'end_time.date_format' => 'The End Time: does not match the format H:i.',
             'end_time.after' => 'The End Time: must be a date after Start Time.'
         ];
     }
@@ -42,8 +44,8 @@ class MealtimeRequest extends FormRequest
         return [
             'name_en' => 'required|string|max:255',
             'name_ar' => 'required|string|max:255',
-            'start_time' => 'required',
-            'end_time' => 'required|after:start_time'
+            'start_time' => 'required|date_format:H:i',
+            'end_time' => 'required|date_format:H:i|after:start_time'
         ];
     }
 }

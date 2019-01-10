@@ -63,6 +63,48 @@ class RestaurantRequest extends FormRequest
             'image.required' => 'The Image: field is required.',
             'image.mimes'  =>  'The image are not supported.',
             'image.max' =>  "The image may not be greater than 2 Mb.",
+            'daily_days.required' => 'The Daily Days: field is required.',
+            'daily_days.array' => 'The Daily Days: must be an array.',
+            'daily_hours.open.required' => 'The Open Hour: field is required.',
+            'daily_hours.open.date_format' => 'The Open Hour: does not match the format H:i.',
+            'daily_hours.close.required' => 'The Close Hour: field is required.',
+            'daily_hours.close.date_format' => 'The Close Hour: does not match the format H:i.',
+            'daily_hours.close.after' => 'The Close Hour: must be a date after Start Time.',
+            'flexible_hours.1.open.required' => 'The Open Hour: field is required.',
+            'flexible_hours.1.open.date_format' => 'The Open Hour: does not match the format H:i.',
+            'flexible_hours.1.close.required' => 'The Close Hour: field is required.',
+            'flexible_hours.1.close.date_format' => 'The Close Hour: does not match the format H:i.',
+            'flexible_hours.1.close.after' => 'The Close Hour: must be a date after Start Time.',
+            'flexible_hours.2.open.required' => 'The Open Hour: field is required.',
+            'flexible_hours.2.open.date_format' => 'The Open Hour: does not match the format H:i.',
+            'flexible_hours.2.close.required' => 'The Close Hour: field is required.',
+            'flexible_hours.2.close.date_format' => 'The Close Hour: does not match the format H:i.',
+            'flexible_hours.2.close.after' => 'The Close Hour: must be a date after Start Time.',
+            'flexible_hours.3.open.required' => 'The Open Hour: field is required.',
+            'flexible_hours.3.open.date_format' => 'The Open Hour: does not match the format H:i.',
+            'flexible_hours.3.close.required' => 'The Close Hour: field is required.',
+            'flexible_hours.3.close.date_format' => 'The Close Hour: does not match the format H:i.',
+            'flexible_hours.3.close.after' => 'The Close Hour: must be a date after Start Time.',
+            'flexible_hours.4.open.required' => 'The Open Hour: field is required.',
+            'flexible_hours.4.open.date_format' => 'The Open Hour: does not match the format H:i.',
+            'flexible_hours.4.close.required' => 'The Close Hour: field is required.',
+            'flexible_hours.4.close.date_format' => 'The Close Hour: does not match the format H:i.',
+            'flexible_hours.4.close.after' => 'The Close Hour: must be a date after Start Time.',
+            'flexible_hours.5.open.required' => 'The Open Hour: field is required.',
+            'flexible_hours.5.open.date_format' => 'The Open Hour: does not match the format H:i.',
+            'flexible_hours.5.close.required' => 'The Close Hour: field is required.',
+            'flexible_hours.5.close.date_format' => 'The Close Hour: does not match the format H:i.',
+            'flexible_hours.5.close.after' => 'The Close Hour: must be a date after Start Time.',
+            'flexible_hours.6.open.required' => 'The Open Hour: field is required.',
+            'flexible_hours.6.open.date_format' => 'The Open Hour: does not match the format H:i.',
+            'flexible_hours.6.close.required' => 'The Close Hour: field is required.',
+            'flexible_hours.6.close.date_format' => 'The Close Hour: does not match the format H:i.',
+            'flexible_hours.6.close.after' => 'The Close Hour: must be a date after Start Time.',
+            'flexible_hours.0.open.required' => 'The Open Hour: field is required.',
+            'flexible_hours.0.open.date_format' => 'The Open Hour: does not match the format H:i.',
+            'flexible_hours.0.close.required' => 'The Close Hour: field is required.',
+            'flexible_hours.0.close.date_format' => 'The Close Hour: does not match the format H:i.',
+            'flexible_hours.0.close.after' => 'The Close Hour: must be a date after Start Time.'
         ];
     }
 
@@ -86,24 +128,24 @@ class RestaurantRequest extends FormRequest
         ];
         if ($this->opening_type == 'daily') {
             $rules['daily_days'] = 'required|array';
-            $rules['daily_hours.open'] = 'required';
-            $rules['daily_hours.close'] = 'required|after:daily_hours.open';
+            $rules['daily_hours.open'] = 'required|date_format:H:i';
+            $rules['daily_hours.close'] = 'required|date_format:H:i|after:daily_hours.open';
         }
         if ($this->opening_type == 'daily') {
-            $rules['flexible_hours.1.open'] = 'required';
-            $rules['flexible_hours.1.close'] = 'required|after:flexible_hours.1.open';
-            $rules['flexible_hours.2.open'] = 'required';
-            $rules['flexible_hours.2.close'] = 'required|after:flexible_hours.2.open';
-            $rules['flexible_hours.3.open'] = 'required';
-            $rules['flexible_hours.3.close'] = 'required|after:flexible_hours.3.open';
-            $rules['flexible_hours.4.open'] = 'required';
-            $rules['flexible_hours.4.close'] = 'required|after:flexible_hours.4.open';
-            $rules['flexible_hours.5.open'] = 'required';
-            $rules['flexible_hours.5.close'] = 'required|after:flexible_hours.5.open';
-            $rules['flexible_hours.6.open'] = 'required';
-            $rules['flexible_hours.6.close'] = 'required|after:flexible_hours.6.open';
-            $rules['flexible_hours.0.open'] = 'required';
-            $rules['flexible_hours.0.close'] = 'required|after:flexible_hours.0.open';
+            $rules['flexible_hours.1.open'] = 'required|date_format:H:i';
+            $rules['flexible_hours.1.close'] = 'required|date_format:H:i|after:flexible_hours.1.open';
+            $rules['flexible_hours.2.open'] = 'required|date_format:H:i';
+            $rules['flexible_hours.2.close'] = 'required|date_format:H:i|after:flexible_hours.2.open';
+            $rules['flexible_hours.3.open'] = 'required|date_format:H:i';
+            $rules['flexible_hours.3.close'] = 'required|date_format:H:i|after:flexible_hours.3.open';
+            $rules['flexible_hours.4.open'] = 'required|date_format:H:i';
+            $rules['flexible_hours.4.close'] = 'required|date_format:H:i|after:flexible_hours.4.open';
+            $rules['flexible_hours.5.open'] = 'required|date_format:H:i';
+            $rules['flexible_hours.5.close'] = 'required|date_format:H:i|after:flexible_hours.5.open';
+            $rules['flexible_hours.6.open'] = 'required|date_format:H:i';
+            $rules['flexible_hours.6.close'] = 'required|date_format:H:i|after:flexible_hours.6.open';
+            $rules['flexible_hours.0.open'] = 'required|date_format:H:i';
+            $rules['flexible_hours.0.close'] = 'required|date_format:H:i|after:flexible_hours.0.open';
         }
 
         if ($this->id) {
