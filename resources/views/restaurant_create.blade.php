@@ -251,7 +251,7 @@
                             {{--</div>--}}
                             {{--</div>--}}
                             <div class="form-group{{ $errors->has('area') ? ' has-error' : '' }}">
-                                <label for="input-country" class="col-sm-3 control-label">City</label>
+                                <label                            class="col-sm-3 control-label">City</label>
                                 <div class="col-sm-5">
                                     <select name="area[]" id="area" class="form-control" multiple
                                             placeholder="Select Cities">

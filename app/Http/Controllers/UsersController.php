@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AdminRequest;
 use App\Jobs\GeneralNotification;
 use Illuminate\Http\Request;
 use App\User;
@@ -457,29 +458,8 @@ class UsersController extends Controller
 
     }
 
-    public function updateAdmin(Request $request)
+    public function updateAdmin(AdminRequest $request)
     {
-        if ($request->input('password')) {
-            $validator = \Validator::make($request->all(), [
-                'name' => 'required|string|max:255',
-                'email' => 'required|email|max:255',
-                'username' => 'required|regex:/^[\s\w-]*$/',
-                'password' => 'min:6|confirmed',
-                'image' => 'image'
-            ]);
-        } else {
-            $validator = \Validator::make($request->all(), [
-                'name' => 'required|string|max:255',
-                'email' => 'required|email|max:255',
-                'username' => 'required|regex:/^[\s\w-]*$/',
-                'image' => 'image'
-            ]);
-        }
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
         $admin = Auth::user();
         $admin->first_name = $request->input('name');
         $admin->email = $request->input('email');

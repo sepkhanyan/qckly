@@ -26,8 +26,8 @@ class RestaurantRequest extends FormRequest
     {
         return [
             'manager_name.required' => 'The Name: field is required.',
-            'manager_name.string' => 'The Manager Name: must be a string.',
-            'manager_name.max'  => 'The Manager Name: may not be greater than 255 characters.',
+            'manager_name.string' => 'The Name: must be a string.',
+            'manager_name.max'  => 'The Name: may not be greater than 255 characters.',
             'manager_email.email' => 'The Email: must be a valid email address.',
             'manager_email.required' => 'The Email: field is required.',
             'manager_email.unique'     => 'The Email: has already been exists.',
@@ -115,9 +115,11 @@ class RestaurantRequest extends FormRequest
                 'restaurant_email' => 'required|email|max:255|unique:restaurants,email,' . $this->id,
                 'restaurant_telephone' => 'required|numeric|digits:8|unique:restaurants,telephone,' . $this->id,
                 'description_en' => 'required|string',
-                'description_ar' => 'required|string',
-                'image' => 'required|image|mimes:jpg,png,gif,bmp,jpeg,PNG,JPG,JPEG,GIF,BMP|max:2048'
+                'description_ar' => 'required|string'
             ];
+            if($this->hasFile('image')){
+                $rules['image'] = 'image|mimes:jpg,png,gif,bmp,jpeg,PNG,JPG,JPEG,GIF,BMP|max:2048';
+            }
         }
         return $rules;
 

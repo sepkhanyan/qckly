@@ -63,9 +63,11 @@ class MenuRequest extends FormRequest
                 'description_en' => 'string',
                 'name_ar' => 'string|max:255',
                 'description_ar' => 'string',
-                'price' => 'numeric',
-                'image' => 'image|mimes:jpg,png,gif,bmp,jpeg,PNG,JPG,JPEG,GIF,BMP|max:2048'
+                'price' => 'numeric'
             ];
+            if($this->hasFile('image')){
+                $rules['image'] = 'image|mimes:jpg,png,gif,bmp,jpeg,PNG,JPG,JPEG,GIF,BMP|max:2048';
+            }
         }
         return $rules;
 

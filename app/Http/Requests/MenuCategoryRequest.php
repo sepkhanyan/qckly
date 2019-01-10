@@ -55,9 +55,11 @@ class MenuCategoryRequest extends FormRequest
                 'name_en' => 'required|string|max:255',
                 'description_en' => 'required|string',
                 'name_ar' => 'required|string|max:255',
-                'description_ar' => 'required|string',
-                'image' => 'image|mimes:jpg,png,gif,bmp,jpeg,PNG,JPG,JPEG,GIF,BMP|max:2048'
+                'description_ar' => 'required|string'
             ];
+            if($this->hasFile('image')){
+                $rules['image'] = 'image|mimes:jpg,png,gif,bmp,jpeg,PNG,JPG,JPEG,GIF,BMP|max:2048';
+            }
         }
         return $rules;
 
