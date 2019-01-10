@@ -161,20 +161,19 @@ class ReviewsController extends Controller
             } else {
                 $reviews = $DataRequests['reviews'];
                 foreach ($reviews as $review) {
-                    $rating = new Review();
-                    $rating->order_id = $review['order_id'];
-                    $rating->restaurant_id = $review['restaurant_id'];
-                    $rating->rate_value = $review['rate_value'];
-                    if (isset($review['review_text'])) {
-                        $rating->review_text = $review['review_text'];
-                    }
-                    $rating->save();
-                    $order = Order::where('id', $review['order_id'])->where('user_id', $user_id)->first();
+                    $order = Order::where('id', $review['order_id'])->where('user_id', $user_id)->where('is_rated', 0)->first();
                     if ($order) {
-                        $order->is_rated = 1;
-                        $order->save();
+                        $rating = new Review();
+                        $rating->order_id = $review['order_id'];
+                        $rating->restaurant_id = $review['restaurant_id'];
+                        $rating->rate_value = $review['rate_value'];
+                        if (isset($review['review_text'])) {
+                            $rating->review_text = $review['review_text'];
+                        }
+                        $rating->save();
                     }
                 }
+                Order::where('id', $review['order_id'])->where('user_id', $user_id)->where('is_rated', 0)->update(['is_rated' => 1 ]);
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200));

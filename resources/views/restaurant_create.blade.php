@@ -108,34 +108,6 @@
                                     @endif
                                 </div>
                             </div>
-                            {{--@if ($errors->any())--}}
-                                {{--<div class="modal fade" id="errorList" role="dialog" tabindex="-1">--}}
-                                    {{--<div class="modal-dialog">--}}
-                                        {{--<div class="modal-content">--}}
-                                            {{--<div class="modal-header">--}}
-                                                {{--<button type="button" class="close" data-dismiss="modal">&times;</button>--}}
-                                            {{--</div>--}}
-                                            {{--<div class="modal-body">--}}
-                                                {{--<div class="alert alert-danger">--}}
-                                                    {{--<ul>--}}
-                                                        {{--@foreach ($errors->all() as $error)--}}
-                                                            {{--<li>{{$error}}</li>--}}
-                                                        {{--@endforeach--}}
-                                                    {{--</ul>--}}
-                                                {{--</div>--}}
-                                            {{--</div>--}}
-                                            {{--<div class="modal-footer">--}}
-                                                {{--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>--}}
-                                            {{--</div>--}}
-                                        {{--</div>--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                                {{--<script type="text/javascript">--}}
-                                    {{--// $(window).on('load',function(){--}}
-                                    {{--//     $('#errorList').modal('show');--}}
-                                    {{--// });--}}
-                                {{--</script>--}}
-                            {{--@endif--}}
                         </div>
                         <div id="location" class="tab-pane row wrap-all">
                             <div class="form-group{{ $errors->has('category') ? ' has-error' : '' }}">
