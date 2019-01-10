@@ -841,16 +841,33 @@ class UserCartsController extends Controller
             $DataRequests = $request->all();
             $cart = UserCart::where('id', $id)
                 ->where('user_id', $user_id)->first();
-            if (isset($DataRequests['collection_id'])) {
-                $collection_id = $DataRequests['collection_id'];
-                UserCartCollection::where('cart_id', $cart->id)
-                    ->where('collection_id', $collection_id)->delete();
-                $cart_collections = UserCartCollection::where('cart_id', $cart->id)->get();
-                if (count($cart_collections) > 0) {
-                    return response()->json(array(
-                        'success' => 1,
-                        'status_code' => 200,
-                        'message' => \Lang::get('message.collectionRemove')));
+            if($cart){
+                if (isset($DataRequests['collection_id'])) {
+                    $collection_id = $DataRequests['collection_id'];
+                    $cart_collection =   UserCartCollection::where('cart_id', $cart->id)
+                        ->where('collection_id', $collection_id)->first();
+                    if($cart_collection){
+                        $cart_collection->delete();
+                    }else{
+                        return response()->json(array(
+                            'success' => 0,
+                            'status_code' => 200,
+                            'message' => \Lang::get('message.noCollection')));
+                    }
+                    $cart_collections = UserCartCollection::where('cart_id', $cart->id)->get();
+                    if (count($cart_collections) > 0) {
+                        return response()->json(array(
+                            'success' => 1,
+                            'status_code' => 200,
+                            'message' => \Lang::get('message.collectionRemove')));
+                    } else {
+                        $cart->delete();
+                        return response()->json(array(
+                            'success' => 1,
+                            'status_code' => 200,
+                            'message' => \Lang::get('message.cartRemove')));
+                    }
+
                 } else {
                     $cart->delete();
                     return response()->json(array(
@@ -858,13 +875,11 @@ class UserCartsController extends Controller
                         'status_code' => 200,
                         'message' => \Lang::get('message.cartRemove')));
                 }
-
-            } else {
-                $cart->delete();
+            }else {
                 return response()->json(array(
-                    'success' => 1,
+                    'success' => 0,
                     'status_code' => 200,
-                    'message' => \Lang::get('message.cartRemove')));
+                    'message' => \Lang::get('message.noCart')));
             }
         } else {
             return response()->json(array(
