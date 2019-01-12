@@ -15,13 +15,9 @@
 Auth::routes();
 Route::group(['middleware' => ['web', 'auth']], function () {
     Route::group(['middleware' => 'admin'], function () {
-        Route::get('/', 'RestaurantsController@index')->name('home');
+        Route::get('/', 'RestaurantsController@index');
         Route::get('/customers', 'UsersController@index');
         Route::group(['prefix' => 'customer'], function () {
-//            Route::get('create', 'UsersController@create');
-//            Route::get('store', 'UsersController@store');
-//            Route::get('edit/{id}', 'UsersController@edit');
-//            Route::post('update/{id}', 'UsersController@update');
             Route::post('delete', 'UsersController@deleteCustomer');
         });
         Route::post('general/notification', 'UsersController@generalNotification');

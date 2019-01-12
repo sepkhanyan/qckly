@@ -143,28 +143,6 @@
                                     @endif
                                 </div>
                             </div>
-                            {{--<div class="form-group">--}}
-                            {{--<label for="category" class="col-sm-3 control-label">City</label>--}}
-                            {{--<div class="col-sm-5">--}}
-                            {{--<div class="table-responsive">--}}
-                            {{--<table border="0" class="table table-striped table-border">--}}
-                            {{--<tbody>--}}
-                            {{--@foreach($restaurantAreas as $restaurantArea)--}}
-                            {{--<tr>--}}
-                            {{--<td>{{$restaurantArea->name_en}}</td>--}}
-                            {{--</tr>--}}
-                            {{--@endforeach--}}
-                            {{--</tbody>--}}
-                            {{--<td class="action">--}}
-                            {{--<label class=" btn btn-primary " id="editArea">--}}
-                            {{--<i class="fa fa-pencil"></i>--}}
-                            {{--</label>--}}
-                            {{--</td>--}}
-                            {{--</table>--}}
-                            {{--</div>--}}
-                            {{--</div>--}}
-                            {{--</div>--}}
-                            {{--<div id="editing_area" style="display: none">--}}
                             <div class="form-group">
                                 <label for="category" class="col-sm-3 control-label">City</label>
                                 <div class="col-sm-5">
@@ -186,15 +164,6 @@
                                     @endif
                                 </div>
                             </div>
-                            {{--<div class="form-group" >--}}
-                            {{--<label  class="col-sm-3 control-label text-right"></label>--}}
-                            {{--<div class="col-sm-5">--}}
-                            {{--<label class=" btn btn-danger action" id="editAreaCancel">--}}
-                            {{--Cancel--}}
-                            {{--</label>--}}
-                            {{--</div>--}}
-                            {{--</div>--}}
-                            {{--</div>--}}
                         </div>
                         <div id="data" class="tab-pane row wrap-all">
                             <div class="form-group{{ $errors->has('description_en') ? ' has-error' : '' }}">

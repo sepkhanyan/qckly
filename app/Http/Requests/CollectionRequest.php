@@ -28,7 +28,7 @@ class CollectionRequest extends FormRequest
             'service_type.required' => 'The Service Type: field is required.',
             'delivery_time.required_if'  => 'The Delivery Time: field is required.',
             'delivery_time.integer'  => 'The Delivery Time: must be an integer.',
-            'delivery_time.min'  => 'The Delivery Time: must be at least 1.',
+            'delivery_time.min'  => 'The Delivery Time: must be at least 0.',
             'category.required'  => 'The Category: field is required.',
             'category.integer'  => 'The Category: must be an integer.',
             'name_en.required' => 'The Name En: field is required.',
@@ -129,7 +129,7 @@ class CollectionRequest extends FormRequest
 
         $rules = [
             'service_type' => 'required',
-            'delivery_time' => 'required_if:service_type, Delivery|integer|min:1',
+            'delivery_time' => 'required_if:service_type, Delivery|integer|min:0',
             'category' => 'required|integer',
             'name_en' => 'required|string|max:255',
             'description_en' => 'required|string',
@@ -155,7 +155,7 @@ class CollectionRequest extends FormRequest
         if ($this->id) {
             $rules = [
                 'service_type' => 'required',
-                'delivery_time' => 'required_if:service_type, Delivery|integer|min:1',
+                'delivery_time' => 'required_if:service_type, Delivery|integer|min:0',
                 'category' => 'required|integer',
                 'name_en' => 'required|string|max:255',
                 'description_en' => 'required|string',

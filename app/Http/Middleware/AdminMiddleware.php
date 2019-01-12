@@ -15,11 +15,11 @@ class AdminMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if ($request->admin == 1 || $request->admin == 2) {
-            return redirect('/');
+        if ($request->user()->admin == 1 || $request->user()->admin == 2) {
+            return $next($request);
+        } else {
+            return response()->json(['message' => 'Not authorized']);
         }
-
-        return $next($request);
 
     }
 }
