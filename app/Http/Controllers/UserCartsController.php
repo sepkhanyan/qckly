@@ -6,6 +6,7 @@ use App\Address;
 use App\MenuCategory;
 use App\Notification;
 use App\Restaurant;
+use App\RestaurantArea;
 use App\UserCart;
 use App\UserCartItem;
 use App\UserCartCollection;
@@ -75,12 +76,19 @@ class UserCartsController extends Controller
                 if (isset($DataRequests['special_instruction'])) {
                     $special_instruction = $DataRequests['special_instruction'];
                 }
+                $collection = Collection::where('id', $collection_id)->first();
+                if (!$collection) {
+                    return response()->json(array(
+                        'success' => 0,
+                        'status_code' => 200,
+                        'message' => \Lang::get('message.noCollection')));
+                }
                 $cart = UserCart::where('user_id', '=', $user_id)->where('completed', 0)->first();
                 if (!$cart) {
                     $validator = \Validator::make($DataRequests, [
                         'delivery_order_area' => 'required|integer',
-                        'delivery_order_date' => 'required',
-                        'delivery_order_time' => 'required',
+                        'delivery_order_date' => 'date|date_format:d-m-Y|required',
+                        'delivery_order_time' => 'date_format:h:i A|required',
                     ]);
                     if ($validator->fails()) {
                         return response()->json(array('success' => 0, 'status_code' => 400,
@@ -91,7 +99,6 @@ class UserCartsController extends Controller
                         $delivery_date = $DataRequests['delivery_order_date'];
                         $delivery_time = $DataRequests['delivery_order_time'];
                         $day = Carbon::parse($delivery_date)->dayOfWeek;
-                        $collection = Collection::where('id', $collection_id)->first();
                         $restaurant = Restaurant::where('id', $collection->restaurant_id)->whereHas('workingHour', function ($query) use ($day, $delivery_time) {
                             $query->where('weekday', $day)
                                 ->where('opening_time', '<=', Carbon::parse($delivery_time))
@@ -99,23 +106,30 @@ class UserCartsController extends Controller
                                 ->where('status', 1)
                                 ->orWhere('type', '=', '24_7');
                         })->first();
-                        if ($restaurant) {
-                            $cart = new UserCart();
-                            $cart->user_id = $user_id;
-                            $address = Address::where('user_id', $user_id)->where('is_default', 1)->first();
-                            if ($address) {
-                                $cart->delivery_address_id = $address->id;
-                            }
-                            $cart->delivery_order_area = $delivery_area;
-                            $cart->delivery_order_date = Carbon::parse($delivery_date);
-                            $cart->delivery_order_time = Carbon::parse($delivery_time);
-                            $cart->save();
-                        } else {
+                        if (!$restaurant) {
                             return response()->json(array(
                                 'success' => 0,
                                 'status_code' => 200,
                                 'message' => \Lang::get('message.availabilityChanged')));
                         }
+                        $area = RestaurantArea::where('area_id', $delivery_area)->where('restaurant_id', $collection->restaurant_id)->first();
+                        if (!$area) {
+                            return response()->json(array(
+                                'success' => 0,
+                                'status_code' => 200,
+                                'message' => \Lang::get('message.areaRemoved')));
+                        }
+                        $cart = new UserCart();
+                        $cart->user_id = $user_id;
+                        $address = Address::where('user_id', $user_id)->where('is_default', 1)->first();
+                        if ($address) {
+                            $cart->delivery_address_id = $address->id;
+                        }
+                        $cart->delivery_order_area = $delivery_area;
+                        $cart->delivery_order_date = Carbon::parse($delivery_date);
+                        $cart->delivery_order_time = Carbon::parse($delivery_time);
+                        $cart->save();
+
                     }
                 }
                 if ($collection_type == 1) {
@@ -841,14 +855,14 @@ class UserCartsController extends Controller
             $DataRequests = $request->all();
             $cart = UserCart::where('id', $id)
                 ->where('user_id', $user_id)->first();
-            if($cart){
+            if ($cart) {
                 if (isset($DataRequests['collection_id'])) {
                     $collection_id = $DataRequests['collection_id'];
-                    $cart_collection =   UserCartCollection::where('cart_id', $cart->id)
+                    $cart_collection = UserCartCollection::where('cart_id', $cart->id)
                         ->where('collection_id', $collection_id)->first();
-                    if($cart_collection){
+                    if ($cart_collection) {
                         $cart_collection->delete();
-                    }else{
+                    } else {
                         return response()->json(array(
                             'success' => 0,
                             'status_code' => 200,
@@ -875,7 +889,7 @@ class UserCartsController extends Controller
                         'status_code' => 200,
                         'message' => \Lang::get('message.cartRemove')));
                 }
-            }else {
+            } else {
                 return response()->json(array(
                     'success' => 0,
                     'status_code' => 200,

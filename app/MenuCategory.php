@@ -60,6 +60,11 @@ class MenuCategory extends Model
         return $this->hasOne('App\EditingMenuCategory', 'category_id');
     }
 
+    public function orderCollectionMenu()
+    {
+        return $this->hasMany('App\OrderCollectionMenu', 'menu_id');
+    }
+
     public function scopeName($query, $val)
     {
         if (!empty($val)) {

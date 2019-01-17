@@ -39,6 +39,10 @@ class Restaurant extends Model
     {
         return $this->hasMany('App\Collection', 'restaurant_id');
     }
+    public function orderCollection()
+    {
+        return $this->hasMany('App\OrderCollection', 'restaurant_id');
+    }
 
 
     public function cartCollection()

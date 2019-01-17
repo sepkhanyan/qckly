@@ -136,7 +136,7 @@
                              class="form-group row add{{ $errors->has('start_time') ? ' has-error' : '' }}">
                             <label class="col-sm-3 control-label">Start Time</label>
                             <div class="col-sm-3">
-                                <input type="time" name="start_time" class="form-control">
+                                <input type="time" name="start_time" class="form-control" >
                                 <span class="help-block hidden">
                                             <strong>{{ $errors->first('start_time') }}</strong>
                                         </span>

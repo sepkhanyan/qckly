@@ -20,5 +20,10 @@ class CollectionCategory extends Model
         return $this->hasMany('App\Collection', 'category_id');
     }
 
+    public function orderCollection()
+    {
+        return $this->hasMany('App\OrderCollection', 'collection_category_id');
+    }
+
 
 }

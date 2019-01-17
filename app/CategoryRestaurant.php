@@ -36,6 +36,11 @@ class CategoryRestaurant extends Model
         return $this->hasOne('App\Collection', 'service_type_id');
     }
 
+    public function orderCollection()
+    {
+        return $this->hasOne('App\OrderCollection', 'service_type_id');
+    }
+
     public function editingCollection()
     {
         return $this->hasOne('App\EditingCollection', 'service_type_id');

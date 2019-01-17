@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\DeliveryAddress;
+use App\OrderCollection;
+use App\OrderCollectionItem;
+use App\OrderCollectionMenu;
 use App\OrderRestaurant;
 use App\UserCartCollection;
 use Illuminate\Http\Request;
@@ -197,94 +200,182 @@ class OrdersController extends Controller
                     ];
                     $total = 0;
                     $collections = [];
-                    foreach ($order->cart->cartCollection as $cart_collection) {
+                    foreach($order->orderCollection as $orderCollection){
                         $menu = [];
-                        $categories = MenuCategory::whereHas('cartItem', function ($query) use ($cart_collection) {
-                            $query->where('cart_collection_id', $cart_collection->id);
-                        })->with(['cartItem' => function ($x) use ($cart_collection) {
-                            $x->where('cart_collection_id', $cart_collection->id);
-                        }])->get();
-                        foreach ($categories as $category) {
+                        $orderCollectionMenus = OrderCollectionMenu::where('order_id', $order->id)->where('order_collection_id', $orderCollection->collection_id)->get();
+                        foreach ($orderCollectionMenus as $orderCollectionMenu){
                             $items = [];
-                            foreach ($category->cartItem as $cartItem) {
+                            $orderCollectionItems = OrderCollectionItem::where('order_id', $order->id)->where('order_collection_id', $orderCollection->collection_id)->where('order_collection_menu_id', $orderCollectionMenu->menu_id)->get();
+                            foreach ($orderCollectionItems as $orderCollectionItem){
                                 if ($lang == 'ar') {
-                                    $item_name = $cartItem->menu->name_ar;
+                                    $item_name = $orderCollectionItem->item_ar;
                                 } else {
-                                    $item_name = $cartItem->menu->name_en;
+                                    $item_name = $orderCollectionItem->item_en;
                                 }
+
                                 $items [] = [
-                                    'item_id' => $cartItem->item_id,
+                                    'item_id' => $orderCollectionItem->item_id,
                                     'item_name' => $item_name,
-                                    'item_price' => $cartItem->menu->price,
-                                    'item_quantity' => $cartItem->quantity,
+                                    'item_price' => $orderCollectionItem->item_price,
+                                    'item_quantity' => $orderCollectionItem->quantity,
                                     'item_price_unit' => \Lang::get('message.priceUnit')
                                 ];
                             }
+
                             if ($lang == 'ar') {
-                                $menu_name = $category->name_ar;
+                                $menu_name = $orderCollectionMenu->menu_ar;
                             } else {
-                                $menu_name = $category->name_en;
+                                $menu_name = $orderCollectionMenu->menu_en;
                             }
                             $menu [] = [
-                                'menu_id' => $category->id,
+                                'menu_id' => $orderCollectionMenu->menu_id,
                                 'menu_name' => $menu_name,
                                 'items' => $items
                             ];
                         }
-                        if ($cart_collection->collection->price == null) {
+
+                        if ($orderCollection->collection_price == null) {
                             $collection_price = '';
                         } else {
-                            $collection_price = $cart_collection->collection->price;
+                            $collection_price = $orderCollection->collection_price;
                         }
-                        if ($cart_collection->persons_count == null) {
+                        if ($orderCollection->persons_count == null) {
                             $persons_count = -1;
                         } else {
-                            $persons_count = $cart_collection->persons_count;
+                            $persons_count = $orderCollection->persons_count;
                         }
-                        if ($cart_collection->quantity == null) {
+                        if ($orderCollection->quantity == null) {
                             $quantity = '';
                         } else {
-                            $quantity = $cart_collection->quantity;
+                            $quantity = $orderCollection->quantity;
                         }
-                        if ($cart_collection->female_caterer == 1) {
+                        if ($orderCollection->female_caterer == 1) {
                             $female_caterer = true;
                         } else {
                             $female_caterer = false;
                         }
 
                         if ($lang == 'ar') {
-                            $restaurant_name = $cart_collection->collection->restaurant->name_ar;
-                            $collection_type = $cart_collection->collection->category->name_ar;
-                            $collection_name = $cart_collection->collection->name_ar;
-                            $service_type = $cart_collection->collection->serviceType->name_ar;
+                            $restaurant_name = $orderCollection->restaurant_ar;
+                            $collection_type = $orderCollection->collection_category_ar;
+                            $collection_name = $orderCollection->collection_ar;
+                            $service_type = $orderCollection->service_type_ar;
                         } else {
-                            $restaurant_name = $cart_collection->collection->restaurant->name_en;
-                            $collection_type = $cart_collection->collection->category->name_en;
-                            $collection_name = $cart_collection->collection->name_en;
-                            $service_type = $cart_collection->collection->serviceType->name_en;
+                            $restaurant_name = $orderCollection->restaurant_en;
+                            $collection_type = $orderCollection->collection_category_en;
+                            $collection_name = $orderCollection->collection_en;
+                            $service_type = $orderCollection->service_type_en;
                         }
 
                         $collections [] = [
-                            'restaurant_id' => $cart_collection->collection->restaurant->id,
+                            'restaurant_id' => $orderCollection->restaurant_id,
                             'restaurant_name' => $restaurant_name,
-                            'collection_id' => $cart_collection->collection_id,
-                            'collection_category_id' => $cart_collection->collection->category_id,
+                            'collection_id' => $orderCollection->collection_id,
+                            'collection_category_id' => $orderCollection->collection_category_id,
                             'collection_category' => $collection_type,
                             'collection_name' => $collection_name,
                             'collection_price' => $collection_price,
                             'collection_price_unit' => \Lang::get('message.priceUnit'),
                             'female_caterer' => $female_caterer,
-                            'special_instruction' => $cart_collection->special_instruction,
-                            'service_type_id' => $cart_collection->collection->service_type_id,
+                            'special_instruction' => $orderCollection->special_instruction,
+                            'service_type_id' => $orderCollection->service_type_id,
                             'service_type' => $service_type,
                             'menu_items' => $menu,
                             'quantity' => $quantity,
                             'persons_count' => $persons_count,
-                            'subtotal' => $cart_collection->price,
+                            'subtotal' => $orderCollection->subtotal,
                             'subtotal_unit' => \Lang::get('message.priceUnit'),
                         ];
-                        $total += $cart_collection->price;
+                        $total += $orderCollection->subtotal;
                     }
+//                    foreach ($order->cart->cartCollection as $cart_collection) {
+//                        $menu = [];
+//                        $categories = MenuCategory::whereHas('cartItem', function ($query) use ($cart_collection) {
+//                            $query->where('cart_collection_id', $cart_collection->id);
+//                        })->with(['cartItem' => function ($x) use ($cart_collection) {
+//                            $x->where('cart_collection_id', $cart_collection->id);
+//                        }])->get();
+//                        foreach ($categories as $category) {
+//                            $items = [];
+//                            foreach ($category->cartItem as $cartItem) {
+//                                if ($lang == 'ar') {
+//                                    $item_name = $cartItem->menu->name_ar;
+//                                } else {
+//                                    $item_name = $cartItem->menu->name_en;
+//                                }
+//                                $items [] = [
+//                                    'item_id' => $cartItem->item_id,
+//                                    'item_name' => $item_name,
+//                                    'item_price' => $cartItem->menu->price,
+//                                    'item_quantity' => $cartItem->quantity,
+//                                    'item_price_unit' => \Lang::get('message.priceUnit')
+//                                ];
+//                            }
+//                            if ($lang == 'ar') {
+//                                $menu_name = $category->name_ar;
+//                            } else {
+//                                $menu_name = $category->name_en;
+//                            }
+//                            $menu [] = [
+//                                'menu_id' => $category->id,
+//                                'menu_name' => $menu_name,
+//                                'items' => $items
+//                            ];
+//                        }
+//                        if ($cart_collection->collection->price == null) {
+//                            $collection_price = '';
+//                        } else {
+//                            $collection_price = $cart_collection->collection->price;
+//                        }
+//                        if ($cart_collection->persons_count == null) {
+//                            $persons_count = -1;
+//                        } else {
+//                            $persons_count = $cart_collection->persons_count;
+//                        }
+//                        if ($cart_collection->quantity == null) {
+//                            $quantity = '';
+//                        } else {
+//                            $quantity = $cart_collection->quantity;
+//                        }
+//                        if ($cart_collection->female_caterer == 1) {
+//                            $female_caterer = true;
+//                        } else {
+//                            $female_caterer = false;
+//                        }
+//
+//                        if ($lang == 'ar') {
+//                            $restaurant_name = $cart_collection->collection->restaurant->name_ar;
+//                            $collection_type = $cart_collection->collection->category->name_ar;
+//                            $collection_name = $cart_collection->collection->name_ar;
+//                            $service_type = $cart_collection->collection->serviceType->name_ar;
+//                        } else {
+//                            $restaurant_name = $cart_collection->collection->restaurant->name_en;
+//                            $collection_type = $cart_collection->collection->category->name_en;
+//                            $collection_name = $cart_collection->collection->name_en;
+//                            $service_type = $cart_collection->collection->serviceType->name_en;
+//                        }
+//
+//                        $collections [] = [
+//                            'restaurant_id' => $cart_collection->collection->restaurant->id,
+//                            'restaurant_name' => $restaurant_name,
+//                            'collection_id' => $cart_collection->collection_id,
+//                            'collection_category_id' => $cart_collection->collection->category_id,
+//                            'collection_category' => $collection_type,
+//                            'collection_name' => $collection_name,
+//                            'collection_price' => $collection_price,
+//                            'collection_price_unit' => \Lang::get('message.priceUnit'),
+//                            'female_caterer' => $female_caterer,
+//                            'special_instruction' => $cart_collection->special_instruction,
+//                            'service_type_id' => $cart_collection->collection->service_type_id,
+//                            'service_type' => $service_type,
+//                            'menu_items' => $menu,
+//                            'quantity' => $quantity,
+//                            'persons_count' => $persons_count,
+//                            'subtotal' => $cart_collection->price,
+//                            'subtotal_unit' => \Lang::get('message.priceUnit'),
+//                        ];
+//                        $total += $cart_collection->price;
+//                    }
 
                     $cart = [
                         'cart_id' => $order->cart->id,
@@ -395,94 +486,184 @@ class OrdersController extends Controller
                 ];
                 $total = 0;
                 $collections = [];
-                foreach ($order->cart->cartCollection as $cart_collection) {
+
+                foreach($order->orderCollection as $orderCollection){
                     $menu = [];
-                    $categories = MenuCategory::whereHas('cartItem', function ($query) use ($cart_collection) {
-                        $query->where('cart_collection_id', $cart_collection->id);
-                    })->with(['cartItem' => function ($x) use ($cart_collection) {
-                        $x->where('cart_collection_id', $cart_collection->id);
-                    }])->get();
-                    foreach ($categories as $category) {
+                    $orderCollectionMenus = OrderCollectionMenu::where('order_id', $order->id)->where('order_collection_id', $orderCollection->collection_id)->get();
+                    foreach ($orderCollectionMenus as $orderCollectionMenu){
                         $items = [];
-                        foreach ($category->cartItem as $cartItem) {
+                        $orderCollectionItems = OrderCollectionItem::where('order_id', $order->id)->where('order_collection_id', $orderCollection->collection_id)->where('order_collection_menu_id', $orderCollectionMenu->menu_id)->get();
+                        foreach ($orderCollectionItems as $orderCollectionItem){
                             if ($lang == 'ar') {
-                                $item_name = $cartItem->menu->name_ar;
+                                $item_name = $orderCollectionItem->item_ar;
                             } else {
-                                $item_name = $cartItem->menu->name_en;
+                                $item_name = $orderCollectionItem->item_en;
                             }
+
                             $items [] = [
-                                'item_id' => $cartItem->item_id,
+                                'item_id' => $orderCollectionItem->item_id,
                                 'item_name' => $item_name,
-                                'item_price' => $cartItem->menu->price,
-                                'item_quantity' => $cartItem->quantity,
+                                'item_price' => $orderCollectionItem->item_price,
+                                'item_quantity' => $orderCollectionItem->quantity,
                                 'item_price_unit' => \Lang::get('message.priceUnit')
                             ];
                         }
+
                         if ($lang == 'ar') {
-                            $menu_name = $category->name_ar;
+                            $menu_name = $orderCollectionMenu->menu_ar;
                         } else {
-                            $menu_name = $category->name_en;
+                            $menu_name = $orderCollectionMenu->menu_en;
                         }
                         $menu [] = [
-                            'menu_id' => $category->id,
+                            'menu_id' => $orderCollectionMenu->menu_id,
                             'menu_name' => $menu_name,
                             'items' => $items
                         ];
                     }
-                    if ($cart_collection->collection->price == null) {
+
+                    if ($orderCollection->collection_price == null) {
                         $collection_price = '';
                     } else {
-                        $collection_price = $cart_collection->collection->price;
+                        $collection_price = $orderCollection->collection_price;
                     }
-                    if ($cart_collection->persons_count == null) {
+                    if ($orderCollection->persons_count == null) {
                         $persons_count = -1;
                     } else {
-                        $persons_count = $cart_collection->persons_count;
+                        $persons_count = $orderCollection->persons_count;
                     }
-                    if ($cart_collection->quantity == null) {
+                    if ($orderCollection->quantity == null) {
                         $quantity = '';
                     } else {
-                        $quantity = $cart_collection->quantity;
+                        $quantity = $orderCollection->quantity;
                     }
-                    if ($cart_collection->female_caterer == 1) {
+                    if ($orderCollection->female_caterer == 1) {
                         $female_caterer = true;
                     } else {
                         $female_caterer = false;
                     }
 
                     if ($lang == 'ar') {
-                        $restaurant_name = $cart_collection->collection->restaurant->name_ar;
-                        $collection_type = $cart_collection->collection->category->name_ar;
-                        $collection_name = $cart_collection->collection->name_ar;
-                        $service_type = $cart_collection->collection->serviceType->name_ar;
+                        $restaurant_name = $orderCollection->restaurant_ar;
+                        $collection_type = $orderCollection->collection_category_ar;
+                        $collection_name = $orderCollection->collection_ar;
+                        $service_type = $orderCollection->service_type_ar;
                     } else {
-                        $restaurant_name = $cart_collection->collection->restaurant->name_en;
-                        $collection_type = $cart_collection->collection->category->name_en;
-                        $collection_name = $cart_collection->collection->name_en;
-                        $service_type = $cart_collection->collection->serviceType->name_en;
+                        $restaurant_name = $orderCollection->restaurant_en;
+                        $collection_type = $orderCollection->collection_category_en;
+                        $collection_name = $orderCollection->collection_en;
+                        $service_type = $orderCollection->service_type_en;
                     }
 
                     $collections [] = [
-                        'restaurant_id' => $cart_collection->collection->restaurant->id,
+                        'restaurant_id' => $orderCollection->restaurant_id,
                         'restaurant_name' => $restaurant_name,
-                        'collection_id' => $cart_collection->collection_id,
-                        'collection_type_id' => $cart_collection->collection->category_id,
-                        'collection_type' => $collection_type,
+                        'collection_id' => $orderCollection->collection_id,
+                        'collection_category_id' => $orderCollection->collection_category_id,
+                        'collection_category' => $collection_type,
                         'collection_name' => $collection_name,
                         'collection_price' => $collection_price,
                         'collection_price_unit' => \Lang::get('message.priceUnit'),
                         'female_caterer' => $female_caterer,
-                        'special_instruction' => $cart_collection->special_instruction,
-                        'service_type_id' => $cart_collection->collection->service_type_id,
+                        'special_instruction' => $orderCollection->special_instruction,
+                        'service_type_id' => $orderCollection->service_type_id,
                         'service_type' => $service_type,
                         'menu_items' => $menu,
                         'quantity' => $quantity,
                         'persons_count' => $persons_count,
-                        'subtotal' => $cart_collection->price,
+                        'subtotal' => $orderCollection->subtotal,
                         'subtotal_unit' => \Lang::get('message.priceUnit'),
                     ];
-                    $total += $cart_collection->price;
+                    $total += $orderCollection->subtotal;
                 }
+
+//                foreach ($order->cart->cartCollection as $cart_collection) {
+//                    $menu = [];
+//                    $categories = MenuCategory::whereHas('cartItem', function ($query) use ($cart_collection) {
+//                        $query->where('cart_collection_id', $cart_collection->id);
+//                    })->with(['cartItem' => function ($x) use ($cart_collection) {
+//                        $x->where('cart_collection_id', $cart_collection->id);
+//                    }])->get();
+//                    foreach ($categories as $category) {
+//                        $items = [];
+//                        foreach ($category->cartItem as $cartItem) {
+//                            if ($lang == 'ar') {
+//                                $item_name = $cartItem->menu->name_ar;
+//                            } else {
+//                                $item_name = $cartItem->menu->name_en;
+//                            }
+//                            $items [] = [
+//                                'item_id' => $cartItem->item_id,
+//                                'item_name' => $item_name,
+//                                'item_price' => $cartItem->menu->price,
+//                                'item_quantity' => $cartItem->quantity,
+//                                'item_price_unit' => \Lang::get('message.priceUnit')
+//                            ];
+//                        }
+//                        if ($lang == 'ar') {
+//                            $menu_name = $category->name_ar;
+//                        } else {
+//                            $menu_name = $category->name_en;
+//                        }
+//                        $menu [] = [
+//                            'menu_id' => $category->id,
+//                            'menu_name' => $menu_name,
+//                            'items' => $items
+//                        ];
+//                    }
+//                    if ($cart_collection->collection->price == null) {
+//                        $collection_price = '';
+//                    } else {
+//                        $collection_price = $cart_collection->collection->price;
+//                    }
+//                    if ($cart_collection->persons_count == null) {
+//                        $persons_count = -1;
+//                    } else {
+//                        $persons_count = $cart_collection->persons_count;
+//                    }
+//                    if ($cart_collection->quantity == null) {
+//                        $quantity = '';
+//                    } else {
+//                        $quantity = $cart_collection->quantity;
+//                    }
+//                    if ($cart_collection->female_caterer == 1) {
+//                        $female_caterer = true;
+//                    } else {
+//                        $female_caterer = false;
+//                    }
+//
+//                    if ($lang == 'ar') {
+//                        $restaurant_name = $cart_collection->collection->restaurant->name_ar;
+//                        $collection_type = $cart_collection->collection->category->name_ar;
+//                        $collection_name = $cart_collection->collection->name_ar;
+//                        $service_type = $cart_collection->collection->serviceType->name_ar;
+//                    } else {
+//                        $restaurant_name = $cart_collection->collection->restaurant->name_en;
+//                        $collection_type = $cart_collection->collection->category->name_en;
+//                        $collection_name = $cart_collection->collection->name_en;
+//                        $service_type = $cart_collection->collection->serviceType->name_en;
+//                    }
+//
+//                    $collections [] = [
+//                        'restaurant_id' => $cart_collection->collection->restaurant->id,
+//                        'restaurant_name' => $restaurant_name,
+//                        'collection_id' => $cart_collection->collection_id,
+//                        'collection_type_id' => $cart_collection->collection->category_id,
+//                        'collection_type' => $collection_type,
+//                        'collection_name' => $collection_name,
+//                        'collection_price' => $collection_price,
+//                        'collection_price_unit' => \Lang::get('message.priceUnit'),
+//                        'female_caterer' => $female_caterer,
+//                        'special_instruction' => $cart_collection->special_instruction,
+//                        'service_type_id' => $cart_collection->collection->service_type_id,
+//                        'service_type' => $service_type,
+//                        'menu_items' => $menu,
+//                        'quantity' => $quantity,
+//                        'persons_count' => $persons_count,
+//                        'subtotal' => $cart_collection->price,
+//                        'subtotal_unit' => \Lang::get('message.priceUnit'),
+//                    ];
+//                    $total += $cart_collection->price;
+//                }
 
                 $cart = [
                     'cart_id' => $order->cart->id,
@@ -598,29 +779,85 @@ class OrdersController extends Controller
                         $order->total_price = $price;
                         $order->status_id = 1;
                         $order->save();
-                        $restaurantOrders = $DataRequests['orders'];
-                        foreach ($restaurantOrders as $restaurantOrder) {
-                            $orderRestaurant = new OrderRestaurant();
-                            $orderRestaurant->restaurant_id = $restaurantOrder['restaurant_id'];
-                            $orderRestaurant->order_id = $order->id;
-                            $orderRestaurant->total_price = $restaurantOrder['restaurant_total'];
-                            $orderRestaurant->save();
+                        if($order){
+                            $restaurantOrders = $DataRequests['orders'];
+                            foreach ($restaurantOrders as $restaurantOrder) {
+                                $orderRestaurant = new OrderRestaurant();
+                                $orderRestaurant->restaurant_id = $restaurantOrder['restaurant_id'];
+                                $orderRestaurant->order_id = $order->id;
+                                $orderRestaurant->total_price = $restaurantOrder['restaurant_total'];
+                                $orderRestaurant->save();
+                            }
+                            UserCart::where('id', $cart_id)->update(['completed' => 1]);
+                            $delivery_address = new DeliveryAddress();
+                            $delivery_address->order_id = $order->id;
+                            $delivery_address->address_id = $cart->delivery_address_id;
+                            $delivery_address->name = $cart->address->name;
+                            $delivery_address->mobile_number = $cart->address->mobile_number;
+                            $delivery_address->location = $cart->address->location;
+                            $delivery_address->street_number = $cart->address->street_number;
+                            $delivery_address->building_number = $cart->address->building_number;
+                            $delivery_address->zone = $cart->address->zone;
+                            $delivery_address->is_apartment = $cart->address->is_apartment;
+                            $delivery_address->latitude = $cart->address->latitude;
+                            $delivery_address->longitude = $cart->address->longitude;
+                            $delivery_address->apartment_number = $cart->address->apartment_number;
+                            $delivery_address->save();
+
+                            foreach ($order->cart->cartCollection as $cartCollection){
+                                $orderCollection = new OrderCollection();
+                                $orderCollection->order_id = $order->id;
+                                $orderCollection->restaurant_id = $cartCollection->collection->restaurant->id;
+                                $orderCollection->restaurant_en = $cartCollection->collection->restaurant->name_en;
+                                $orderCollection->restaurant_ar = $cartCollection->collection->restaurant->name_ar;
+                                $orderCollection->collection_id = $cartCollection->collection->id;
+                                $orderCollection->collection_en = $cartCollection->collection->name_en;
+                                $orderCollection->collection_ar = $cartCollection->collection->name_ar;
+                                $orderCollection->collection_category_id = $cartCollection->collection->category->id;
+                                $orderCollection->collection_category_en = $cartCollection->collection->category->name_en;
+                                $orderCollection->collection_category_ar = $cartCollection->collection->category->name_ar;
+                                $orderCollection->collection_price = $cartCollection->collection->price;
+                                $orderCollection->subtotal = $cartCollection->price;
+                                $orderCollection->female_caterer = $cartCollection->female_caterer;
+                                $orderCollection->special_instruction = $cartCollection->special_instruction;
+                                $orderCollection->service_type_id = $cartCollection->collection->service_type_id;
+                                $orderCollection->service_type_en = $cartCollection->collection->serviceType->name_en;
+                                $orderCollection->service_type_ar = $cartCollection->collection->serviceType->name_ar;
+                                $orderCollection->quantity = $cartCollection->quantity;
+                                $orderCollection->persons_count = $cartCollection->persons_count;
+                                $orderCollection->save();
+
+                                $categories = MenuCategory::whereHas('cartItem', function ($query) use ($cartCollection) {
+                                    $query->where('cart_collection_id', $cartCollection->id);
+                                })->with(['cartItem' => function ($x) use ($cartCollection) {
+                                    $x->where('cart_collection_id', $cartCollection->id);
+                                }])->get();
+
+                                foreach ($categories as $category){
+                                    $orderCollectionMenu = new OrderCollectionMenu();
+                                    $orderCollectionMenu->order_id = $order->id;
+                                    $orderCollectionMenu->order_collection_id = $cartCollection->collection_id;
+                                    $orderCollectionMenu->menu_id = $category->id;
+                                    $orderCollectionMenu->menu_en = $category->name_en;
+                                    $orderCollectionMenu->menu_ar = $category->name_ar;
+                                    $orderCollectionMenu->save();
+
+                                    foreach ($category->cartItem as $cartItem){
+                                        $orderCollectionItem = new OrderCollectionItem();
+                                        $orderCollectionItem->order_id = $order->id;
+                                        $orderCollectionItem->order_collection_id = $cartCollection->collection_id;
+                                        $orderCollectionItem->order_collection_menu_id = $category->id;
+                                        $orderCollectionItem->item_id = $cartItem->item_id;
+                                        $orderCollectionItem->item_en = $cartItem->menu->name_en;
+                                        $orderCollectionItem->item_ar = $cartItem->menu->name_ar;
+                                        $orderCollectionItem->item_price = $cartItem->menu->price;
+                                        $orderCollectionItem->quantity = $cartItem->quantity;
+                                        $orderCollectionItem->save();
+                                    }
+                                }
+                            }
                         }
-                        UserCart::where('id', $cart_id)->update(['completed' => 1]);
-                        $delivery_address = new DeliveryAddress();
-                        $delivery_address->order_id = $order->id;
-                        $delivery_address->address_id = $cart->delivery_address_id;
-                        $delivery_address->name = $cart->address->name;
-                        $delivery_address->mobile_number = $cart->address->mobile_number;
-                        $delivery_address->location = $cart->address->location;
-                        $delivery_address->street_number = $cart->address->street_number;
-                        $delivery_address->building_number = $cart->address->building_number;
-                        $delivery_address->zone = $cart->address->zone;
-                        $delivery_address->is_apartment = $cart->address->is_apartment;
-                        $delivery_address->latitude = $cart->address->latitude;
-                        $delivery_address->longitude = $cart->address->longitude;
-                        $delivery_address->apartment_number = $cart->address->apartment_number;
-                        $delivery_address->save();
+
                     } else {
                         return response()->json(array(
                             'success' => 0,

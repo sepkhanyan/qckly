@@ -53,6 +53,11 @@ class Menu extends Model
         return $this->hasMany('App\UserCartItem', 'item_id');
     }
 
+    public function orderCollectionItem()
+    {
+        return $this->hasMany('App\OrderCollectionItem', 'item_id');
+    }
+
     public function scopeName($query, $val)
     {
         if (!empty($val)) {

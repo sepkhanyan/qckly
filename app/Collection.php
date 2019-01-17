@@ -72,6 +72,11 @@ class Collection extends Model
         return $this->hasOne('App\EditingCollection', 'collection_id');
     }
 
+    public function orderCollection()
+    {
+        return $this->hasOne('App\OrderCollection', 'collection_id');
+    }
+
     public function collectionMenu()
     {
         return $this->hasMany('App\CollectionMenu', 'collection_id');

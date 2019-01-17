@@ -870,8 +870,8 @@ class RestaurantsController extends Controller
         $DataRequests = $request->all();
         $validator = \Validator::make($DataRequests, [
             'area_id' => 'required|integer',
-            'working_day' => 'required',
-            'working_time' => 'required',
+            'working_day' => 'date|date_format:d-m-Y|required',
+            'working_time' => 'date_format:h:i A|required',
         ]);
         if ($validator->fails()) {
             return response()->json(array('success' => 0, 'status_code' => 400,

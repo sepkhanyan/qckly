@@ -13,8 +13,8 @@
     <!-- Styles -->
     <style>
         html, body {
-            background-color: #fff;
-            color: #636b6f;
+            background-color: #c5d2e0;
+            color: #ffffff;
             font-family: 'Nunito', sans-serif;
             font-weight: 100;
             height: 100vh;
@@ -48,8 +48,13 @@
 <body>
 <div class="flex-center position-ref full-height">
     <div class="content">
+        <div align="center">
+            <img class="logo-image" alt="Qckly" title="Qckly"
+                 src="{{url('/') . '/admin/qckly_logo.png'}}" width="550px" height="200px"/>
+        </div>
         <div class="title">
-            Sorry, the page you are looking for could not be found.                </div>
+            Sorry, you do not have the required permission.
+        </div>
     </div>
 </div>
 

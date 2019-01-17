@@ -36,5 +36,6 @@ return [
     'notAvailable'        => 'Not Available',
     'orderConfirmation'   => ':restaurant_name accepted your order# :order_id and started working on it.',
     'noNotification'      => 'No notification found at the moment.',
-    'changeLanguage'      => 'Language changed successfully.'
+    'changeLanguage'      => 'Language changed successfully.',
+    'areaRemoved'         => 'Your selected area has been deleted.'
 ];

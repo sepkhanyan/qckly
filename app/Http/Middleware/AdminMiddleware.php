@@ -18,7 +18,7 @@ class AdminMiddleware
         if ($request->user()->admin == 1 || $request->user()->admin == 2) {
             return $next($request);
         } else {
-            return response()->json(['message' => 'Not authorized']);
+            return response()->view('errors.403');
         }
 
     }

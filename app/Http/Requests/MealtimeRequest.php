@@ -48,4 +48,5 @@ class MealtimeRequest extends FormRequest
             'end_time' => 'required|date_format:H:i|after:start_time'
         ];
     }
+
 }
