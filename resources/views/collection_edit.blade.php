@@ -502,6 +502,20 @@
                                                             </label>
                                                         </div>
                                                     </div>
+                                                    @if($collection->category_id != 4)
+                                                        <div class="col-xs-2">
+                                                            <select name="menu_item[{{$menu->id}}][is_mandatory]"
+                                                                    id="option{{$menu->id}}" class="form-control"
+                                                                    style="display: none{{ (collect(old('menu_item.' . $menu->id . '.id'))->contains($menu->id)) ? 'block':'' }}" {{(!old('menu_item.' . $menu->id . '.id')) ? 'disabled': '' }}>
+                                                                <option value="1" {{(old('menu_item.' . $menu->id . '.is_mandatory') == 1 ) ? 'selected':''}}>
+                                                                    Mandatory
+                                                                </option>
+                                                                <option value="0" {{(old('menu_item.' . $menu->id . '.is_mandatory') == 0 ) ? 'selected':''}}>
+                                                                    Optional
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    @endif
                                                 </div>
                                             @endforeach
                                     @endif
@@ -697,9 +711,13 @@
             if (item.checked == true) {
                 $('#qty' + id).slideDown('fast');
                 $('#qty' + id).removeAttr('disabled');
+                $('#option' + id).slideDown('fast');
+                $('#option' + id).removeAttr('disabled');
             } else {
                 $('#qty' + id).slideUp('fast');
                 $('#qty' + id).attr('disabled', true);
+                $('#option' + id).slideUp('fast');
+                $('#option' + id).attr('disabled', true);
             }
         }
     </script>

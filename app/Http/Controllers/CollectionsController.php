@@ -193,6 +193,9 @@ class CollectionsController extends Controller
             foreach ($request['menu_item'] as $menu_item) {
                 $collection_item = new CollectionItem();
                 $collection_item->item_id = $menu_item['id'];
+                if ($collection->category_id != 4) {
+                    $collection_item->is_mandatory = $menu_item['is_mandatory'];
+                }
                 $item = Menu::where('id', $menu_item['id'])->first();
                 $category = MenuCategory::where('id', $item->category_id)->first();
                 $collection_item->collection_menu_id = $category->id;
@@ -328,6 +331,7 @@ class CollectionsController extends Controller
                     $collection_item->collection_menu_id = $menu_item->collection_menu_id;
                     $collection_item->collection_id = $collection->id;
                     $collection_item->quantity = 1;
+                    $collection_item->is_mandatory = $menu_item->is_mandatory;
                     $collection_item->save();
                 }
                 $menus = CollectionMenu::where('collection_id', $id)->get();
@@ -621,6 +625,9 @@ class CollectionsController extends Controller
                     foreach ($request['menu_item'] as $menu_item) {
                         $editingCollectionItem = new EditingCollectionItem();
                         $editingCollectionItem->item_id = $menu_item['id'];
+                        if ($collection->category_id != 4) {
+                            $editingCollectionItem->is_mandatory = $menu_item['is_mandatory'];
+                        }
                         $item = Menu::where('id', $menu_item['id'])->first();
                         $category = MenuCategory::where('id', $item->category_id)->first();
                         $editingCollectionItem->collection_menu_id = $category->id;
@@ -698,6 +705,9 @@ class CollectionsController extends Controller
                     foreach ($request['menu_item'] as $menu_item) {
                         $collection_item = new CollectionItem();
                         $collection_item->item_id = $menu_item['id'];
+                        if ($collection->category_id != 4) {
+                            $collection_item->is_mandatory = $menu_item['is_mandatory'];
+                        }
                         $item = Menu::where('id', $menu_item['id'])->first();
                         $category = MenuCategory::where('id', $item->category_id)->first();
                         $collection_item->collection_menu_id = $category->id;
@@ -781,6 +791,7 @@ class CollectionsController extends Controller
                     foreach ($menu_items as $menu_item) {
                         $collection_item = new CollectionItem();
                         $collection_item->item_id = $menu_item->item_id;
+                        $collection_item->is_mandatory = $menu_item->is_mandatory;
                         $collection_item->collection_menu_id = $menu_item->collection_menu_id;
                         $collection_item->collection_id = $collection->id;
                         $collection_item->quantity = 1;

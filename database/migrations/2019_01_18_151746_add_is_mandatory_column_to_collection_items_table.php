@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddIsMandatoryColumnToCollectionMenusTable extends Migration
+class AddIsMandatoryColumnToCollectionItemsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class AddIsMandatoryColumnToCollectionMenusTable extends Migration
      */
     public function up()
     {
-        Schema::table('collection_menus', function (Blueprint $table) {
-            $table->tinyInteger('is_mandatory')->default(0)->after('max_qty');
-
+        Schema::table('collection_items', function (Blueprint $table) {
+            $table->tinyInteger('is_mandatory')->default(0)->after('quantity');
         });
     }
 
@@ -26,9 +25,8 @@ class AddIsMandatoryColumnToCollectionMenusTable extends Migration
      */
     public function down()
     {
-        Schema::table('collection_menus', function (Blueprint $table) {
+        Schema::table('collection_items', function (Blueprint $table) {
             $table->dropColumn('is_mandatory');
-
         });
     }
 }
