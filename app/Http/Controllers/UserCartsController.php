@@ -664,7 +664,8 @@ class UserCartsController extends Controller
                             'item_qty' => $collection_item->quantity,
                             'item_price' => $collection_item->menu->price,
                             'item_price_unit' => \Lang::get('message.priceUnit'),
-                            'item_availability' => $status
+                            'item_availability' => $status,
+                            'is_mandatory' => $collection_item->is_mandatory
 
                         ];
                     }
@@ -740,7 +741,8 @@ class UserCartsController extends Controller
                                 'item_image' => url('/') . '/images/' . $collection_item->menu->image,
                                 'item_price' => $collection_item->menu->price,
                                 'item_price_unit' => \Lang::get('message.priceUnit'),
-                                'item_availability' => $status
+                                'item_availability' => $status,
+                                'is_mandatory' => $collection_item->is_mandatory
 
                             ];
                         }

@@ -489,18 +489,35 @@
                                             </div>
                                         @endforeach
                                     @else
-                                        <div class="form-group" id="collectionItems">
-                                            <label for="" class="col-sm-3 control-label"></label>
-                                            <div class="col-xs-3">
-                                                <select id="items" name="menu_item[]"
-                                                        class="form-control" multiple
-                                                        placeholder="Select Items">
-                                                    @foreach($menu_category->menu as $menu)
-                                                        <option value="{{$menu->id}}" {{ (collect(old('menu_item'))->contains($menu->id)) ? 'selected':'' }}>{{$menu->name_en}}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
+                                            @foreach($menu_category->menu as $menu)
+                                                <div class="form-group">
+                                                    <label for="" class="col-sm-3 control-label"></label>
+                                                    <div class="col-xs-2">
+                                                        <div class="checkbox" id="{{$menu->id}}">
+                                                            <label style="font-size: medium">
+                                                                <input id="item{{$menu->id}}" type="checkbox"
+                                                                       name="menu_item[{{$menu->id}}][id]"
+                                                                       value="{{$menu->id}}"
+                                                                       {{ (collect(old('menu_item.' . $menu->id . '.id'))->contains($menu->id)) ? 'checked':'' }} onclick="myFunction('{{$menu->id}}')">{{$menu->name_en}}
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    @if($collection->category_id != 4)
+                                                        <div class="col-xs-2">
+                                                            <select name="menu_item[{{$menu->id}}][is_mandatory]"
+                                                                    id="option{{$menu->id}}" class="form-control"
+                                                                    style="display: none{{ (collect(old('menu_item.' . $menu->id . '.id'))->contains($menu->id)) ? 'block':'' }}" {{(!old('menu_item.' . $menu->id . '.id')) ? 'disabled': '' }}>
+                                                                <option value="1" {{(old('menu_item.' . $menu->id . '.is_mandatory') == 1 ) ? 'selected':''}}>
+                                                                    Mandatory
+                                                                </option>
+                                                                <option value="0" {{(old('menu_item.' . $menu->id . '.is_mandatory') == 0 ) ? 'selected':''}}>
+                                                                    Optional
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            @endforeach
                                     @endif
                                 @endforeach
                                     <div class="form-group">
@@ -694,9 +711,13 @@
             if (item.checked == true) {
                 $('#qty' + id).slideDown('fast');
                 $('#qty' + id).removeAttr('disabled');
+                $('#option' + id).slideDown('fast');
+                $('#option' + id).removeAttr('disabled');
             } else {
                 $('#qty' + id).slideUp('fast');
                 $('#qty' + id).attr('disabled', true);
+                $('#option' + id).slideUp('fast');
+                $('#option' + id).attr('disabled', true);
             }
         }
     </script>

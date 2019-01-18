@@ -33,7 +33,8 @@
                         </li>
                     </ul>
                 </div>
-                <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST" enctype="multipart/form-data"
+                <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST"
+                      enctype="multipart/form-data"
                       action="{{ url('/collection/store') }}">
                     {{ csrf_field() }}
                     <div class="tab-content">
@@ -304,7 +305,8 @@
                                 </div>
                             @endif
                         </div>
-                        <div id="menus" class="tab-pane row wrap-all{{ $errors->has('menu_item') ? ' has-error' : '' }}">
+                        <div id="menus"
+                             class="tab-pane row wrap-all{{ $errors->has('menu_item') ? ' has-error' : '' }}">
                             @if($collection_category->id == 2 || $collection_category->id == 3)
                                 <div class="form-group">
                                     <label for="" class="col-sm-3 control-label"></label>
@@ -379,24 +381,35 @@
                                         </div>
                                     @endforeach
                                 @else
-                                    <div class="form-group">
-                                        <label for="" class="col-sm-3 control-label"></label>
-                                        <div class="col-xs-3">
-                                            <select id="items{{$menu_category->id}}" name="menu_item[]"
-                                                    class="form-control" multiple
-                                                    placeholder="Select Items">
-                                                @foreach($menu_category->menu as $menu)
-                                                    <option value="{{$menu->id}}" {{ (collect(old('menu_item'))->contains($menu->id)) ? 'selected':'' }}>{{$menu->name_en}}</option>
-                                                @endforeach
-                                            </select>
+                                    @foreach($menu_category->menu as $menu)
+                                        <div class="form-group">
+                                            <label for="" class="col-sm-3 control-label"></label>
+                                            <div class="col-xs-2">
+                                                <div class="checkbox" id="{{$menu->id}}">
+                                                    <label style="font-size: medium">
+                                                        <input id="item{{$menu->id}}" type="checkbox"
+                                                               name="menu_item[{{$menu->id}}][id]"
+                                                               value="{{$menu->id}}"
+                                                               {{ (collect(old('menu_item.' . $menu->id . '.id'))->contains($menu->id)) ? 'checked':'' }} onclick="myFunction('{{$menu->id}}')">{{$menu->name_en}}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            @if($collection_category->id != 4)
+                                                <div class="col-xs-2">
+                                                    <select name="menu_item[{{$menu->id}}][is_mandatory]"
+                                                            id="option{{$menu->id}}" class="form-control"
+                                                            style="display: none{{ (collect(old('menu_item.' . $menu->id . '.id'))->contains($menu->id)) ? 'block':'' }}" {{(!old('menu_item.' . $menu->id . '.id')) ? 'disabled': '' }}>
+                                                        <option value="1" {{(old('menu_item.' . $menu->id . '.is_mandatory') == 1 ) ? 'selected':''}}>
+                                                            Mandatory
+                                                        </option>
+                                                        <option value="0" {{(old('menu_item.' . $menu->id . '.is_mandatory') == 0 ) ? 'selected':''}}>
+                                                            Optional
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            @endif
                                         </div>
-                                    </div>
-                                    <script type="text/javascript">
-                                        $(document).ready(function () {
-                                            var id = '<?php echo $menu_category->id; ?>';
-                                            $('#items' + id).select2();
-                                        });
-                                    </script>
+                                    @endforeach
                                 @endif
                             @endforeach
                             <div class="form-group">
@@ -416,8 +429,9 @@
                                 <div class="col-sm-5">
                                     <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
                                         @foreach ($categoryRestaurants as $categoryRestaurant)
-                                            <label  class="btn btn-success{{(old('service_type') == $categoryRestaurant->name_en) ? ' active' : ''}}" >
-                                                <input type="radio" name="service_type" value="{{$categoryRestaurant->name_en}}" {{(old('service_type') == $categoryRestaurant->name_en) ? 'checked' : ''}}>
+                                            <label class="btn btn-success{{(old('service_type') == $categoryRestaurant->name_en) ? ' active' : ''}}">
+                                                <input type="radio" name="service_type"
+                                                       value="{{$categoryRestaurant->name_en}}" {{(old('service_type') == $categoryRestaurant->name_en) ? 'checked' : ''}}>
                                                 {{$categoryRestaurant->name_en}}
                                             </label>
                                         @endforeach
@@ -429,13 +443,14 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="form-group{{ $errors->has('delivery_time') ? ' has-error' : '' }}" id="delivery_hours" style="display: none">
+                            <div class="form-group{{ $errors->has('delivery_time') ? ' has-error' : '' }}"
+                                 id="delivery_hours" style="display: none">
                                 <label for="input-max" class="col-sm-3 control-label">
                                     Delivery Time
                                 </label>
                                 <div class="col-sm-5">
                                     <div class="input-group">
-                                        <input type="number" name="delivery_time"  class="form-control"
+                                        <input type="number" name="delivery_time" class="form-control"
                                                min="1" value="{{old('delivery_time') ?? 1}}"/>
                                         <span class="input-group-addon">minutes</span>
                                     </div>
@@ -508,11 +523,11 @@
         </div>
     </div>
     <script type="text/javascript">
-        $(document).ready(function(){
+        $(document).ready(function () {
             var errorGeneral = $("#general .form-group .help-block").length;
             var errorMenu = $("#menus .form-group .help-block").length;
             var errorData = $("#data .form-group .help-block").length;
-            if(errorData > 0){
+            if (errorData > 0) {
                 $('#dataTab').addClass('active');
                 $('#data').addClass('active');
                 $('#menuTab').removeClass('active');
@@ -520,7 +535,7 @@
                 $('#generalTab').removeClass('active');
                 $('#general').removeClass('active');
             }
-            if(errorMenu > 0){
+            if (errorMenu > 0) {
                 $('#menuTab').addClass('active');
                 $('#menus').addClass('active');
                 $('#dataTab').removeClass('active');
@@ -528,7 +543,7 @@
                 $('#generalTab').removeClass('active');
                 $('#general').removeClass('active');
             }
-            if(errorGeneral > 0){
+            if (errorGeneral > 0) {
                 $('#generalTab').addClass('active');
                 $('#general').addClass('active');
                 $('#dataTab').removeClass('active');
@@ -537,6 +552,7 @@
                 $('#menus').removeClass('active');
             }
         });
+
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
@@ -560,9 +576,13 @@
             if (item.checked == true) {
                 $('#qty' + id).slideDown('fast');
                 $('#qty' + id).removeAttr('disabled');
+                $('#option' + id).slideDown('fast');
+                $('#option' + id).removeAttr('disabled');
             } else {
                 $('#qty' + id).slideUp('fast');
                 $('#qty' + id).attr('disabled', true);
+                $('#option' + id).slideUp('fast');
+                $('#option' + id).attr('disabled', true);
             }
         }
     </script>
