@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddIsMandatoryColumnToEditingCollectionItemsTable extends Migration
+class AddIsMandatoryColumnToEditingCollectionMenusTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class AddIsMandatoryColumnToEditingCollectionItemsTable extends Migration
      */
     public function up()
     {
-        Schema::table('editing_collection_items', function (Blueprint $table) {
-            $table->tinyInteger('is_mandatory')->default(0)->after('item_id');
+        Schema::table('editing_collection_menus', function (Blueprint $table) {
+            $table->tinyInteger('is_mandatory')->default(0)->after('max_qty');
+
         });
     }
 
@@ -25,7 +26,7 @@ class AddIsMandatoryColumnToEditingCollectionItemsTable extends Migration
      */
     public function down()
     {
-        Schema::table('editing_collection_items', function (Blueprint $table) {
+        Schema::table('editing_collection_menus', function (Blueprint $table) {
             $table->dropColumn('is_mandatory');
 
         });
