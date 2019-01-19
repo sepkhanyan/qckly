@@ -152,7 +152,7 @@
                                                             $unavailability = $collection->unavailabilityHour->where('collection_id', $collection->id)->where('weekday', $requestDay)
                                                          ->where('start_time', '<=', $requestTime)
                                                          ->where('end_time', '>=', $requestTime)
-                                                         ->where('status', 1)->first();
+                                                         ->where('status', 0)->first();
                                                         @endphp
                                                         <a href="{{ url('/collection/availability/edit/' . $collection->id )}}"
                                                            class="{{($unavailability) ? 'btn btn-danger' : 'btn btn-success'}}">

@@ -610,7 +610,7 @@ class UserCartsController extends Controller
                     $unavailability = CollectionUnavailabilityHour::where('collection_id', $collection->id)->where('weekday', $requestDay)
                         ->where('start_time', '<=', $requestTime)
                         ->where('end_time', '>=', $requestTime)
-                        ->where('status', 1)->first();
+                        ->where('status', 0)->first();
 
                     if ($unavailability) {
                         $collectionStatus = 0;

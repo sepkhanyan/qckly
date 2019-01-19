@@ -429,7 +429,7 @@ class CollectionsController extends Controller
             if ($request->input('type') == '24_7') {
                 $hour = new CollectionUnavailabilityHour();
                 $hour->type = $request->input('type');
-                $hour->status = 1;
+                $hour->status = 0;
                 $hour->collection_id = $collection->id;
                 $hour->save();
                 Collection::where('id', $collection->id)->update(['is_available' => 0]);
@@ -443,7 +443,7 @@ class CollectionsController extends Controller
                         $hour->weekday = $day;
                         $hour->collection_id = $collection->id;
                         $hour->type = $request->input('type');
-                        $hour->status = 1;
+                        $hour->status = 0;
                         $hour->start_time = Carbon::parse($daily['start']);
                         $hour->end_time = Carbon::parse($daily['end']);
                         $hour->save();
