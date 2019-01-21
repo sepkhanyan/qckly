@@ -120,10 +120,8 @@ class OrdersController extends Controller
         $user = Auth::user();
         if ($user->admin == 2) {
             $statuses = Status::where('id', '!=', 1)->get();
-            $order = Order::with(['cart' => function ($query) use ($user) {
-                $query->with(['cartCollection' => function ($q) use ($user) {
-                    $q->where('restaurant_id', $user->restaurant_id);
-                }]);
+            $order = Order::with(['orderCollection' => function ($query) use ($user) {
+                $query->where('restaurant_id', $user->restaurant_id);
             }])->where('id', $id)->first();
             $restaurantOrder = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $user->restaurant_id)->first();
             if (!$restaurantOrder) {
@@ -883,8 +881,13 @@ class OrdersController extends Controller
                                         $orderCollectionItem->item_id = $cartItem->item_id;
                                         $orderCollectionItem->item_en = $cartItem->menu->name_en;
                                         $orderCollectionItem->item_ar = $cartItem->menu->name_ar;
-                                        $orderCollectionItem->item_price = $cartItem->menu->price;
+                                        if($cartItem->is_mandatory == 1){
+                                            $orderCollectionItem->item_price = 0;
+                                        }else{
+                                            $orderCollectionItem->item_price = $cartItem->menu->price;
+                                        }
                                         $orderCollectionItem->quantity = $cartItem->quantity;
+                                        $orderCollectionItem->is_mandatory = $cartItem->is_mandatory;
                                         $orderCollectionItem->save();
                                     }
                                 }

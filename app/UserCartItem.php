@@ -14,7 +14,8 @@ class UserCartItem extends Model
         'item_id',
         'price',
         'quantity',
-        'menu_id'
+        'menu_id',
+        'is_mandatory'
     ];
 
 

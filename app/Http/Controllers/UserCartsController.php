@@ -216,6 +216,7 @@ class UserCartsController extends Controller
                                 $cart_item->menu_id = $menu['menu_id'];
                                 $cart_item->item_id = $menu['item_id'];
                                 $cart_item->quantity = $menu['item_quantity'];
+                                $cart_item->is_mandatory = $menu['is_mandatory'];
                                 $cart_item->save();
                             }
                         } else {
@@ -232,6 +233,7 @@ class UserCartsController extends Controller
                                 $cart_item->menu_id = $menu['menu_id'];
                                 $cart_item->item_id = $menu['item_id'];
                                 $cart_item->quantity = $menu['item_quantity'];
+                                $cart_item->is_mandatory = $menu['is_mandatory'];
                                 $cart_item->save();
                             }
                         }
@@ -269,6 +271,7 @@ class UserCartsController extends Controller
                                 $cart_item->menu_id = $menu['menu_id'];
                                 $cart_item->item_id = $menu['item_id'];
                                 $cart_item->quantity = $menu['item_quantity'];
+                                $cart_item->is_mandatory = $menu['is_mandatory'];
                                 $cart_item->save();
                             }
                         } else {
@@ -284,6 +287,7 @@ class UserCartsController extends Controller
                                 $cart_item->menu_id = $menu['menu_id'];
                                 $cart_item->item_id = $menu['item_id'];
                                 $cart_item->quantity = $menu['item_quantity'];
+                                $cart_item->is_mandatory = $menu['is_mandatory'];
                                 $cart_item->save();
                             }
                         }

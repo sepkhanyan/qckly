@@ -17,7 +17,8 @@ class OrderCollectionItem extends Model
         'item_en',
         'item_ar',
         'item_price',
-        'quantity'
+        'quantity',
+        'is_mandatory'
     ];
 
     public function orderCollectionMenu()

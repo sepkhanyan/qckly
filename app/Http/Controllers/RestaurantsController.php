@@ -42,7 +42,8 @@ class RestaurantsController extends Controller
         $restaurants = Restaurant::paginate(20);
         $data = $request->all();
         if (isset($data['restaurant_search'])) {
-            $restaurants = Restaurant::where('name_en', 'like', '%' . $data['restaurant_search'] . '%')->paginate(20);
+            $restaurants = Restaurant::where('name_en', 'like', '%' . $data['restaurant_search'] . '%')
+                ->orWhere('description_en', 'like', $data['restaurant_search'])->paginate(20);
         }
         if ($user->admin == 2) {
             $restaurants = Restaurant::where('id', $user->restaurant_id)->paginate(20);
@@ -183,27 +184,26 @@ class RestaurantsController extends Controller
     public function activate($id)
     {
         $user = Auth::user();
-        if($user->admin == 1){
+        if ($user->admin == 1) {
             $restaurant = Restaurant::find($id);
             $collections = Collection::where('restaurant_id', $id)->get();
-            if(count($collections) > 0){
-                if($restaurant->active == 0){
+            if (count($collections) > 0) {
+                if ($restaurant->active == 0) {
                     $restaurant->active = 1;
                     $restaurant->save();
                 }
             }
-        }else{
+        } else {
             return redirect()->back();
         }
         return redirect()->back();
     }
 
 
-
-    public function notification(Request $request,$id)
+    public function notification(Request $request, $id)
     {
         $user = Auth::user();
-        if($user->admin == 1){
+        if ($user->admin == 1) {
             $validator = \Validator::make($request->all(), [
                 'lang' => 'required',
                 'message' => 'required|string'
@@ -214,18 +214,19 @@ class RestaurantsController extends Controller
                     ->withInput();
             }
             $restaurant = Restaurant::find($id);
-                if($restaurant->active == 1){
-                    $lang = $request->input('lang');
-                    $from = $user->id;
-                    $msg = $request->input('message');
-                    $usersId = User::where('group_id', 0)->where('lang', $lang)->get();
-                    $this->dispatch(new NewRestaurant($usersId, $from, $restaurant->id, $msg));
-                }
-        }else{
+            if ($restaurant->active == 1) {
+                $lang = $request->input('lang');
+                $from = $user->id;
+                $msg = $request->input('message');
+                $usersId = User::where('group_id', 0)->where('lang', $lang)->get();
+                $this->dispatch(new NewRestaurant($usersId, $from, $restaurant->id, $msg));
+            }
+        } else {
             return redirect()->back();
         }
         return redirect()->back();
     }
+
     /**
      * Display the specified resource.
      *
@@ -886,9 +887,9 @@ class RestaurantsController extends Controller
                     if ($review_count > 0) {
                         $rate_sum = $rate_sum / $review_count;
                         $rating_count = ceil($rate_sum) - 0.5;
-                            if($rating_count < $rate_sum){
-                                $rating_count = ceil($rate_sum);
-                            }
+                        if ($rating_count < $rate_sum) {
+                            $rating_count = ceil($rate_sum);
+                        }
                     } else {
                         $rating_count = 0;
                     }
@@ -948,7 +949,7 @@ class RestaurantsController extends Controller
         }
         $restaurants = Restaurant::where('id', $id)->with(['menu' => function ($query) {
             $query->where('approved', 1);
-        }])->where('active',1)->get();
+        }])->where('active', 1)->get();
         if (count($restaurants) > 0) {
             foreach ($restaurants as $restaurant) {
                 if (count($restaurant->menu) > 0) {
@@ -1020,7 +1021,7 @@ class RestaurantsController extends Controller
         } else {
             $restaurant_id = $DataRequests['restaurant_id'];
 
-            $restaurants = Restaurant::where('id', $restaurant_id)->where('active',1)
+            $restaurants = Restaurant::where('id', $restaurant_id)->where('active', 1)
                 ->with(['collection' => function ($query) {
                     $query->where('approved', 1);
                 }]);
@@ -1029,7 +1030,7 @@ class RestaurantsController extends Controller
                 $service_type = CategoryRestaurant::where('category_id', $category_id)->where('restaurant_id', $restaurant_id)->first();
                 $restaurants = $restaurants->whereHas('categoryRestaurant', function ($query) use ($category_id) {
                     $query->where('category_id', $category_id);
-                })->with(['collection' => function ($query) use($service_type) {
+                })->with(['collection' => function ($query) use ($service_type) {
                     $query->where('service_type_id', $service_type->id);
                 }])->get();
             } else {
@@ -1141,24 +1142,24 @@ class RestaurantsController extends Controller
 
                                             $setup_hours = $collection->setup_time / 60;
                                             $setup_minutes = $collection->setup_time % 60;
-                                            if($setup_hours >= 1){
+                                            if ($setup_hours >= 1) {
                                                 if ($setup_minutes > 0) {
                                                     $setup = floor($setup_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($setup_minutes) . ' ' . \Lang::get('message.minute');
                                                 } else {
                                                     $setup = floor($setup_hours) . ' ' . \Lang::get('message.hour');
                                                 }
-                                            }else{
+                                            } else {
                                                 $setup = floor($setup_minutes) . ' ' . \Lang::get('message.minute');
                                             }
                                             $max_hours = $collection->max_time / 60;
                                             $max_minutes = $collection->max_time % 60;
-                                            if($max_hours >= 1){
+                                            if ($max_hours >= 1) {
                                                 if ($max_minutes > 0) {
                                                     $max = floor($max_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($max_minutes) . ' ' . \Lang::get('message.minute');
                                                 } else {
                                                     $max = floor($max_hours) . ' ' . \Lang::get('message.hour');
                                                 }
-                                            }else{
+                                            } else {
                                                 $max = floor($max_minutes) . ' ' . \Lang::get('message.minute');
                                             }
                                             if ($lang == 'ar') {
@@ -1168,7 +1169,6 @@ class RestaurantsController extends Controller
                                             }
 
                                         }
-
 
 
                                         if ($collection_item->menu->status == 1) {
@@ -1216,18 +1216,18 @@ class RestaurantsController extends Controller
 
                             }
                             $delivery_time = '';
-                            if($collection->serviceType->name_en == 'Delivery'){
+                            if ($collection->serviceType->name_en == 'Delivery') {
                                 $delivery_hours = $collection->delivery_hours / 60;
                                 $delivery_minutes = $collection->delivery_hours % 60;
-                               if($delivery_hours >= 1){
-                                   if ($delivery_minutes > 0) {
-                                       $delivery_time = floor($delivery_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($delivery_minutes) . ' ' . \Lang::get('message.minute');
-                                   } else {
-                                       $delivery_time = floor($delivery_hours) . ' ' . \Lang::get('message.hour');
-                                   }
-                               }else{
-                                   $delivery_time = floor($delivery_minutes) . ' ' . \Lang::get('message.minute');
-                               }
+                                if ($delivery_hours >= 1) {
+                                    if ($delivery_minutes > 0) {
+                                        $delivery_time = floor($delivery_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($delivery_minutes) . ' ' . \Lang::get('message.minute');
+                                    } else {
+                                        $delivery_time = floor($delivery_hours) . ' ' . \Lang::get('message.hour');
+                                    }
+                                } else {
+                                    $delivery_time = floor($delivery_minutes) . ' ' . \Lang::get('message.minute');
+                                }
 
                             }
 
@@ -1252,18 +1252,18 @@ class RestaurantsController extends Controller
 
                             $requestDay = Carbon::today()->dayOfWeek;
                             $requestTime = Carbon::now()->toTimeString();
-                            if($collection->is_available == 1){
+                            if ($collection->is_available == 1) {
                                 $unavailability = CollectionUnavailabilityHour::where('collection_id', $collection->id)->where('weekday', $requestDay)
                                     ->where('start_time', '<=', $requestTime)
                                     ->where('end_time', '>=', $requestTime)
                                     ->where('status', 0)->first();
 
-                                if($unavailability){
+                                if ($unavailability) {
                                     $collectionStatus = 0;
-                                }else{
+                                } else {
                                     $collectionStatus = 1;
                                 }
-                            }elseif($collection->is_available == 0){
+                            } elseif ($collection->is_available == 0) {
                                 $collectionStatus = 0;
                             }
 
@@ -1288,7 +1288,7 @@ class RestaurantsController extends Controller
                                 'persons_max_count' => $max_persons,
                                 'service_type_id' => $collection->service_type_id,
                                 'service_type' => $service_type,
-                                'delivery_hours' =>  $delivery_time,
+                                'delivery_hours' => $delivery_time,
                                 'service_provide' => $service_provide,
                                 'service_presentation' => $service_presentation,
                                 'food_list' => $foodlist,
@@ -1338,7 +1338,7 @@ class RestaurantsController extends Controller
                     if ($review_count > 0) {
                         $rate_sum = $rate_sum / $review_count;
                         $rating_count = ceil($rate_sum) - 0.5;
-                        if($rating_count < $rate_sum){
+                        if ($rating_count < $rate_sum) {
                             $rating_count = ceil($rate_sum);
                         }
                     } else {
