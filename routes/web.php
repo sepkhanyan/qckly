@@ -49,6 +49,8 @@ Route::group(['middleware' => ['web', 'auth']], function () {
             Route::post('update/{id}', 'RestaurantsController@update');
             Route::post('edit_approve/{id}', 'RestaurantsController@editApprove');
             Route::get('edit_reject/{id}', 'RestaurantsController@editReject');
+            Route::get('availability/edit/{id}', 'RestaurantsController@editAvailability');
+            Route::post('availability/update/{id}', 'RestaurantsController@updateAvailability');
             Route::post('delete', 'RestaurantsController@deleteRestaurant');
             Route::post('status/update/{id}', 'RestaurantsController@changeStatus');
         });

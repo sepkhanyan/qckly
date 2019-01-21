@@ -99,18 +99,24 @@ class UserCartsController extends Controller
                         $delivery_date = $DataRequests['delivery_order_date'];
                         $delivery_time = $DataRequests['delivery_order_time'];
                         $day = Carbon::parse($delivery_date)->dayOfWeek;
-                        $restaurant = Restaurant::where('id', $collection->restaurant_id)->whereHas('workingHour', function ($query) use ($day, $delivery_time) {
+                        $restaurant = Restaurant::where('id', $collection->restaurant_id)->first();
+                        if ($lang == 'ar') {
+                            $restaurant_name = $restaurant->name_ar;
+                        }else{
+                            $restaurant_name = $restaurant->name_en;
+                        }
+                        $restaurantAvailability = Restaurant::where('id', $collection->restaurant_id)->whereHas('workingHour', function ($query) use ($day, $delivery_time) {
                             $query->where('weekday', $day)
                                 ->where('opening_time', '<=', Carbon::parse($delivery_time))
                                 ->where('closing_time', '>=', Carbon::parse($delivery_time))
                                 ->where('status', 1)
                                 ->orWhere('type', '=', '24_7');
                         })->first();
-                        if (!$restaurant) {
+                        if (!$restaurantAvailability) {
                             return response()->json(array(
                                 'success' => 0,
                                 'status_code' => 200,
-                                'message' => \Lang::get('message.availabilityChanged')));
+                                'message' => \Lang::get('message.availabilityChanged', ['restaurant_name' => $restaurant_name])));
                         }
                         $area = RestaurantArea::where('area_id', $delivery_area)->where('restaurant_id', $collection->restaurant_id)->first();
                         if (!$area) {

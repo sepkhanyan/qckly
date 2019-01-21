@@ -31,7 +31,7 @@ return [
     'orderComplete'       => 'Cart already ordered.',
     'emptyCart'           => 'Cart is empty.',
     'noCart'              => 'No Cart.',
-    'availabilityChanged' => 'This restaurant availability hours has been changed. Please order at it\'s availability hours or order from some other restaurant.',
+    'availabilityChanged' => ':restaurant_name availability hours has been changed. Please order at it\'s availability hours or order from some other restaurant.',
     'isAvailable'         => 'Is Available',
     'notAvailable'        => 'Not Available',
     'orderConfirmation'   => ':restaurant_name accepted your order# :order_id and started working on it.',

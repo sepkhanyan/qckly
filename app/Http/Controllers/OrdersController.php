@@ -7,7 +7,9 @@ use App\OrderCollection;
 use App\OrderCollectionItem;
 use App\OrderCollectionMenu;
 use App\OrderRestaurant;
+use App\RestaurantArea;
 use App\UserCartCollection;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Order;
 use App\UserCart;
@@ -780,8 +782,39 @@ class OrdersController extends Controller
                         $order->status_id = 1;
                         $order->save();
                         if($order){
+                            $day = Carbon::parse($cart->delivery_order_date)->dayOfWeek;
+                            $delivery_time = $cart->delivery_order_time;
+                            $deliveryArea = $cart->delivery_order_area;
                             $restaurantOrders = $DataRequests['orders'];
                             foreach ($restaurantOrders as $restaurantOrder) {
+                                $restaurant = Restaurant::where('id', $restaurantOrder['restaurant_id'])->first();
+                                if ($lang == 'ar') {
+                                    $restaurant_name = $restaurant->name_ar;
+                                }else{
+                                    $restaurant_name = $restaurant->name_en;
+                                }
+                                $restaurantAvailability = Restaurant::where('id', $restaurantOrder['restaurant_id'])->whereHas('workingHour', function ($query) use ($day, $delivery_time) {
+                                    $query->where('weekday', $day)
+                                        ->where('opening_time', '<=', $delivery_time)
+                                        ->where('closing_time', '>=', $delivery_time)
+                                        ->where('status', 1)
+                                        ->orWhere('type', '=', '24_7');
+                                })->first();
+                                if (!$restaurantAvailability) {
+                                    $order->delete();
+                                    return response()->json(array(
+                                        'success' => 0,
+                                        'status_code' => 200,
+                                        'message' => \Lang::get('message.availabilityChanged', ['restaurant_name' => $restaurant_name])));
+                                }
+                                $area = RestaurantArea::where('area_id', $deliveryArea)->where('restaurant_id',  $restaurant->id)->first();
+                                if (!$area) {
+                                    $order->delete();
+                                    return response()->json(array(
+                                        'success' => 0,
+                                        'status_code' => 200,
+                                        'message' => \Lang::get('message.areaRemoved')));
+                                }
                                 $orderRestaurant = new OrderRestaurant();
                                 $orderRestaurant->restaurant_id = $restaurantOrder['restaurant_id'];
                                 $orderRestaurant->order_id = $order->id;
