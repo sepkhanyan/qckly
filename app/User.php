@@ -82,13 +82,15 @@ class User extends Authenticatable
         return $query;
     }
 
-    public static function getUserByToken($req_auth){
-       $acual_token = str_replace("Bearer ","" ,$req_auth);
-       $ud = \DB::table('users')->where('api_token', '=',$acual_token)->first();
+    public static function getUserByToken($req_auth)
+    {
+        $acual_token = str_replace("Bearer ", "", $req_auth);
+        $ud = static::where('api_token', '=', $acual_token)->first();
 
-       if($ud){
+        if (!is_null($ud)) {
            return $ud->id;
-       }
-       return false;
+        }
+
+        return false;
     }
 }
