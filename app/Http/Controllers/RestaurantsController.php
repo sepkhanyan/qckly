@@ -811,13 +811,13 @@ class RestaurantsController extends Controller
             $restaurants = Restaurant::where('active', 1)->
             whereHas('restaurantArea', function ($q) use ($id) {
                 $q->where('area_id', $id);
-            })->whereHas('workingHour', function ($query) use ($working_day, $working_time) {
+            })/*->whereHas('workingHour', function ($query) use ($working_day, $working_time) {
                 $query->where('weekday', $working_day)
                     ->where('opening_time', '<=', $working_time)
                     ->where('closing_time', '>=', $working_time)
                     ->where('status', 1)
                     ->orWhere('type', '=', '24_7');
-            })->with(['menu' => function ($query) {
+            })*/->with(['menu' => function ($query) {
                 $query->where('approved', 1);
             }]);
 
@@ -832,22 +832,32 @@ class RestaurantsController extends Controller
 
             if (count($restaurants) > 0) {
                 foreach ($restaurants as $restaurant) {
-                    foreach ($restaurant->workingHour as $workingHour) {
-                        $opening = $workingHour->opening_time;
-                        $closing = $workingHour->closing_time;
-                        $working_type = $workingHour->type;
-                        if ($working_type == '24_7') {
-                            $availability_hours = '24_7';
-                        } else {
-                            $availability_hours = date("g:i A", strtotime($opening)) . ' - ' . date("g:i A", strtotime($closing));
-                        }
-                    }
+                    $working_day = Carbon::parse($DataRequests['working_day'])->dayOfWeek;
+                    $working_time = $DataRequests['working_time'];
+                    $working_time = Carbon::parse($working_time);
 
-                    if ($restaurant->status == 1) {
-                        $status = \Lang::get('message.open');
-                    } else {
-                        $status = \Lang::get('message.busy');
-                    }
+                    $restaurantAvailability = Restaurant::where('id', $restaurant->id)->whereHas('workingHour', function ($query) use ($working_day, $working_time) {
+                        $query->where('weekday', $working_day)
+                            ->where('opening_time', '<=', $working_time)
+                            ->where('closing_time', '>=', $working_time)
+                            ->where('status', 1)
+                            ->orWhere('type', '=', '24_7');
+                    })->first();
+
+                        if ($restaurantAvailability) {
+                            if ($restaurant->status == 1) {
+                                $status_id = 1;
+                                $status = \Lang::get('message.open');
+                            } else {
+                                $status_id = 2;
+                                $status = \Lang::get('message.busy');
+                            }
+                        } else {
+                            $status_id = 3;
+                            $status = \Lang::get('message.notAvailable');
+                        }
+
+
 
                     $famous = null;
                     $famous = [];
@@ -903,10 +913,14 @@ class RestaurantsController extends Controller
                         'review_count' => $review_count,
 //                        'availability_hours' => $availability_hours,
                         'description' => $restaurant_description,
-                        'status_id' => $restaurant->status,
+                        'status_id' => $status_id,
                         'status' => $status,
                         'category' => $category
                     ];
+
+                    usort($arr, function ($arr1, $arr2) {
+                        return $arr1['status_id'] <=> $arr2['status_id'];
+                    });
 
                 }
 
@@ -1013,6 +1027,8 @@ class RestaurantsController extends Controller
         $DataRequests = $request->all();
         $validator = \Validator::make($DataRequests, [
             'restaurant_id' => 'required|integer',
+            'working_day' => 'date|date_format:d-m-Y|required',
+            'working_time' => 'date_format:h:i A|required',
         ]);
         if ($validator->fails()) {
             return response()->json(array('success' => 0, 'status_code' => 400,
@@ -1020,26 +1036,25 @@ class RestaurantsController extends Controller
                 'error_details' => $validator->messages()));
         } else {
             $restaurant_id = $DataRequests['restaurant_id'];
-
-            $restaurants = Restaurant::where('id', $restaurant_id)->where('active', 1)
+            $restaurant = Restaurant::where('id', $restaurant_id)->where('active', 1)
                 ->with(['collection' => function ($query) {
                     $query->where('approved', 1);
                 }]);
             if (isset($DataRequests['category_id'])) {
                 $category_id = $DataRequests['category_id'];
                 $service_type = CategoryRestaurant::where('category_id', $category_id)->where('restaurant_id', $restaurant_id)->first();
-                $restaurants = $restaurants->whereHas('categoryRestaurant', function ($query) use ($category_id) {
+                $restaurant = $restaurant->whereHas('categoryRestaurant', function ($query) use ($category_id) {
                     $query->where('category_id', $category_id);
                 })->with(['collection' => function ($query) use ($service_type) {
                     $query->where('service_type_id', $service_type->id);
-                }])->get();
+                }])->first();
             } else {
-                $restaurants = $restaurants->get();
+                $restaurant = $restaurant->first();
             }
 
-            if (count($restaurants) > 0) {
+            if ($restaurant) {
                 $restaurant_details = [];
-                foreach ($restaurants as $restaurant) {
+//                foreach ($restaurants as $restaurant) {
                     $menu_collection = [];
                     if (count($restaurant->collection) > 0) {
                         foreach ($restaurant->collection as $collection) {
@@ -1250,12 +1265,13 @@ class RestaurantsController extends Controller
                             }
 
 
-                            $requestDay = Carbon::today()->dayOfWeek;
-                            $requestTime = Carbon::now()->toTimeString();
+                            $working_day = Carbon::parse($DataRequests['working_day'])->dayOfWeek;
+                            $working_time = $DataRequests['working_time'];
+                            $working_time = Carbon::parse($working_time);
                             if ($collection->is_available == 1) {
-                                $unavailability = CollectionUnavailabilityHour::where('collection_id', $collection->id)->where('weekday', $requestDay)
-                                    ->where('start_time', '<=', $requestTime)
-                                    ->where('end_time', '>=', $requestTime)
+                                $unavailability = CollectionUnavailabilityHour::where('collection_id', $collection->id)->where('weekday', $working_day)
+                                    ->where('start_time', '<=', $working_time)
+                                    ->where('end_time', '>=', $working_time)
                                     ->where('status', 0)->first();
 
                                 if ($unavailability) {
@@ -1385,7 +1401,7 @@ class RestaurantsController extends Controller
                         'restaurant' => $restaurant_details,
                         'collections' => $menu_collection
                     ];
-                }
+//                }
 
 
                 return response()->json(array(

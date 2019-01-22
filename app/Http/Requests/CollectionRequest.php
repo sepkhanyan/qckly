@@ -189,6 +189,7 @@ class CollectionRequest extends FormRequest
                 ];
             }
             if($this->type == 'flexible'){
+                
                 $rules = [
                     'flexible_hours.1.start' => 'required|date_format:g:i A',
                     'flexible_hours.1.end' => 'required|date_format:g:i A|after:flexible_hours.1.start',
@@ -204,6 +205,13 @@ class CollectionRequest extends FormRequest
                     'flexible_hours.6.end' => 'required|date_format:g:i A|after:flexible_hours.6.start',
                     'flexible_hours.0.start' => 'required|date_format:g:i A',
                     'flexible_hours.0.end' => 'required|date_format:g:i A|after:flexible_hours.0.start'
+                ];
+            }
+
+            if ($this->type == '24_7') {
+
+                $rules = [
+                    'type' => 'required|string'
                 ];
             }
         }

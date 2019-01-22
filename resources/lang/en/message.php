@@ -37,5 +37,6 @@ return [
     'orderConfirmation'   => ':restaurant_name accepted your order# :order_id and started working on it.',
     'noNotification'      => 'No notification found at the moment.',
     'changeLanguage'      => 'Language changed successfully.',
-    'areaRemoved'         => 'Your selected area has been deleted.'
+    'areaRemoved'         => 'Your selected area has been deleted.',
+    'collectionAvailabilityChanged' => ':collection_name collection availability hours has been changed. Please order at it\'s availability hours or order from some other collection.',
 ];

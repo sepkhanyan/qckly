@@ -31,11 +31,13 @@ return [
     'orderComplete'       => 'تم طلب السلة',
     'emptyCart'           => 'السلة فارغة',
     'noCart'              => 'لا يوجد سلة',
-    'availabilityChanged' => 'ساعات تواجد هذا المطعم تغيرت، يرجى الطلب خلال ساعات تواجده، او الطلب من مطعم آخر',
+    'availabilityChanged' => 'ساعات عمل :restaurant_name تغيرت، يرجى الطلب أثناء ساعات عملهم أو الطلب من مطعم آخر',
     'isAvailable'         => 'متاح',
     'notAvailable'        => 'غير متاح',
-    'orderConfirmation'   => ':restaurant_name قبل طلبك :order_id # وبدأ في تجهيزه',
+    'orderConfirmation'   => 'restaurant_name: قبل طلبك order_id: # وبدأ في تجهيزه',
     'noNotification'     => 'لايوجد تنبيهات الان',
     'changeLanguage'      => 'تم تغيير اللغة بنجاح',
-    'areaRemoved'         => 'تم حذف المنطقة المحددة'
+    'areaRemoved'         => 'تم حذف المنطقة المحددة',
+    'collectionAvailabilityChanged' => 'ساعات عمل :collection_name تغيرت، يرجى الطلب أثناء ساعات عملهم أو طلب مجموعة أخرى',
+
 ];

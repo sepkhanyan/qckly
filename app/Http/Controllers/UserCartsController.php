@@ -102,7 +102,7 @@ class UserCartsController extends Controller
                         $restaurant = Restaurant::where('id', $collection->restaurant_id)->first();
                         if ($lang == 'ar') {
                             $restaurant_name = $restaurant->name_ar;
-                        }else{
+                        } else {
                             $restaurant_name = $restaurant->name_en;
                         }
                         $restaurantAvailability = Restaurant::where('id', $collection->restaurant_id)->whereHas('workingHour', function ($query) use ($day, $delivery_time) {
@@ -597,6 +597,8 @@ class UserCartsController extends Controller
         $validator = \Validator::make($DataRequests, [
             'collection_category_id' => 'required|integer',
             'collection_id' => 'required|integer',
+            'working_day' => 'date|date_format:d-m-Y|required',
+            'working_time' => 'date_format:h:i A|required',
         ]);
         if ($validator->fails()) {
             return response()->json(array('success' => 0, 'status_code' => 400,
@@ -614,238 +616,249 @@ class UserCartsController extends Controller
                 }
                 $foodlist = [];
                 $foodlist_images = [];
-                $requestDay = Carbon::today()->dayOfWeek;
-                $requestTime = Carbon::now()->toTimeString();
+                $working_day = Carbon::parse($DataRequests['working_day'])->dayOfWeek;
+                $working_time = $DataRequests['working_time'];
+                $working_time = Carbon::parse($working_time);
+                if ($lang == 'ar') {
+                    $collection_name = $collection->name_ar;
+                } else {
+                    $collection_name = $collection->name_en;
+                }
                 if ($collection->is_available == 1) {
-                    $unavailability = CollectionUnavailabilityHour::where('collection_id', $collection->id)->where('weekday', $requestDay)
-                        ->where('start_time', '<=', $requestTime)
-                        ->where('end_time', '>=', $requestTime)
+                    $unavailability = CollectionUnavailabilityHour::where('collection_id', $collection->id)->where('weekday', $working_day)
+                        ->where('start_time', '<=', $working_time)
+                        ->where('end_time', '>=', $working_time)
                         ->where('status', 0)->first();
 
                     if ($unavailability) {
-                        $collectionStatus = 0;
+                        return response()->json(array(
+                            'success' => 0,
+                            'status_code' => 200,
+                            'message' => \Lang::get('message.collectionAvailabilityChanged', ['collection_name' => $collection_name])));
                     } else {
-                        $collectionStatus = 1;
+                        $setup = '';
+                        $max = '';
+                        $requirement = '';
+                        $max_persons = -1;
+                        $min_serve = -1;
+                        $max_serve = -1;
+                        $collection_price = 0;
+                        $collection_min = -1;
+                        $collection_max = -1;
+                        $person_increase = false;
+                        if ($collection_type != 4) {
+                            $min_serve = $collection->min_serve_to_person;
+                            $max_serve = $collection->max_serve_to_person;
+                            $collection_price = $collection->price;
+                        }
+                        if ($collection_type != 2 && $collection_type != 4) {
+                            $collection_min = $collection->min_qty;
+                            $collection_max = $collection->max_qty;
+                        }
+                        if ($collection_type == 1) {
+                            $items = [];
+                            $menu = [];
+                            foreach ($collection->collectionItem as $collection_item) {
+                                if ($lang == 'ar') {
+                                    $foodlist [] = $collection_item->menu->name_ar;
+                                    $item_name = $collection_item->menu->name_ar;
+                                } else {
+                                    $foodlist [] = $collection_item->menu->name_en;
+                                    $item_name = $collection_item->menu->name_en;
+                                }
+                                $image = url('/') . '/images/' . $collection_item->menu->image;
+                                array_push($foodlist_images, $image);
+                                if ($collection_item->menu->status == 1) {
+                                    $status = true;
+                                } else {
+                                    $status = false;
+                                }
+
+                                $items  [] = [
+                                    'item_id' => $collection_item->item_id,
+                                    'item_name' => $item_name,
+                                    'item_qty' => $collection_item->quantity,
+                                    'item_price' => $collection_item->menu->price,
+                                    'item_price_unit' => \Lang::get('message.priceUnit'),
+                                    'item_availability' => $status
+
+                                ];
+                            }
+                            $menu [] = [
+                                'menu_name' => \Lang::get('message.combo'),
+                                'items' => $items,
+                            ];
+                        } else {
+                            $menu_min_qty = -1;
+                            $menu_max_qty = -1;
+                            $menu = [];
+                            $collectionMenus = CollectionMenu::where('collection_id', $collection->id)->with(['collectionItem' => function ($query) use ($collection) {
+                                $query->where('collection_id', $collection->id);
+                            }])->whereHas('collectionItem', function ($q) use ($collection) {
+                                $q->where('collection_id', $collection->id);
+                            })->get();
+                            foreach ($collectionMenus as $collectionMenu) {
+                                $items = [];
+                                if ($collection->category_id != 4 && $collection->category_id != 1) {
+                                    $menu_min_qty = $collectionMenu->min_qty;
+                                    $menu_max_qty = $collectionMenu->max_qty;
+                                }
+                                foreach ($collectionMenu->collectionItem as $collection_item) {
+                                    if ($lang == 'ar') {
+                                        $foodlist [] = $collection_item->menu->name_ar;
+                                        $item_name = $collection_item->menu->name_ar;
+                                        $menu_name = $collectionMenu->category->name_ar;
+                                    } else {
+                                        $foodlist [] = $collection_item->menu->name_en;
+                                        $item_name = $collection_item->menu->name_en;
+                                        $menu_name = $collectionMenu->category->name_en;
+                                    }
+                                    $image = url('/') . '/images/' . $collection_item->menu->image;
+                                    array_push($foodlist_images, $image);
+                                    if ($collection->category_id == 2) {
+                                        if ($collection->allow_person_increase == 1) {
+                                            $person_increase = true;
+                                        } else {
+                                            $person_increase = false;
+                                        }
+                                        $max_persons = $collection->persons_max_count;
+
+                                        $setup_hours = $collection->setup_time / 60;
+                                        $setup_minutes = $collection->setup_time % 60;
+                                        if ($setup_minutes > 0) {
+                                            $setup = floor($setup_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($setup_minutes) . ' ' . \Lang::get('message.minute');
+                                        } else {
+                                            $setup = floor($setup_hours) . ' ' . \Lang::get('message.hour');
+                                        }
+                                        $max_hours = $collection->max_time / 60;
+                                        $max_minutes = $collection->max_time % 60;
+                                        if ($max_minutes > 0) {
+                                            $max = floor($max_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($max_minutes) . ' ' . \Lang::get('message.minute');
+                                        } else {
+                                            $max = floor($max_hours) . ' ' . \Lang::get('message.hour');
+                                        }
+                                        if ($lang == 'ar') {
+                                            $requirement = $collection->requirements_ar;
+                                        } else {
+                                            $requirement = $collection->requirements_en;
+                                        }
+                                    }
+
+
+                                    if ($collection_item->menu->status == 1) {
+                                        $status = true;
+                                    } else {
+                                        $status = false;
+                                    }
+
+                                    if ($collection_item->is_mandatory == 1) {
+                                        $item_price = 0;
+                                    } else {
+                                        $item_price = $collection_item->menu->price;
+                                    }
+                                    $items [] = [
+                                        'item_id' => $collection_item->menu->id,
+                                        'item_name' => $item_name,
+                                        'item_image' => url('/') . '/images/' . $collection_item->menu->image,
+                                        'item_price' => $item_price,
+                                        'item_price_unit' => \Lang::get('message.priceUnit'),
+                                        'item_availability' => $status,
+                                        'is_mandatory' => $collection_item->is_mandatory
+
+                                    ];
+                                }
+
+                                usort($items, function ($item1, $item2) {
+                                    return $item2['item_availability'] <=> $item1['item_availability'];
+                                });
+                                $menu [] = [
+                                    'menu_id' => $collectionMenu->category->id,
+                                    'menu_name' => $menu_name,
+                                    'menu_min_qty' => $menu_min_qty,
+                                    'menu_max_qty' => $menu_max_qty,
+                                    'items' => $items,
+                                ];
+
+                            }
+
+                        }
+                        $delivery_time = '';
+                        if ($collection->serviceType->name_en == 'Delivery') {
+                            $delivery_hours = $collection->delivery_hours / 60;
+                            $delivery_minutes = $collection->delivery_hours % 60;
+                            if ($delivery_minutes > 0) {
+                                $delivery_time = floor($delivery_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($delivery_minutes) . ' ' . \Lang::get('message.minute');
+                            } else {
+                                $delivery_time = floor($delivery_hours) . ' ' . \Lang::get('message.hour');
+                            }
+
+                        }
+
+                        if ($lang == 'ar') {
+                            $restaurant_name = $collection->restaurant->name_ar;
+                            $collection_name = $collection->name_ar;
+                            $collection_description = $collection->description_ar;
+                            $collection_type = $collection->category->name_ar;
+                            $mealtime = $collection->mealtime->name_ar;
+                            $service_provide = $collection->service_provide_ar;
+                            $service_presentation = $collection->service_presentation_ar;
+                            $service_type = $collection->serviceType->name_ar;
+                        } else {
+                            $restaurant_name = $collection->restaurant->name_en;
+                            $collection_name = $collection->name_en;
+                            $collection_description = $collection->description_en;
+                            $collection_type = $collection->category->name_en;
+                            $mealtime = $collection->mealtime->name_en;
+                            $service_provide = $collection->service_provide_en;
+                            $service_presentation = $collection->service_presentation_en;
+                            $service_type = $collection->serviceType->name_en;
+                        }
+
+                        $menu_collection [] = [
+                            'restaurant_id' => $collection->restaurant->id,
+                            'restaurant_name' => $restaurant_name,
+                            'collection_id' => $collection->id,
+                            'collection_name' => $collection_name,
+                            'collection_description' => $collection_description,
+                            'collection_category_id' => $collection->category_id,
+                            'collection_category' => $collection_type,
+                            'female_caterer_available' => $female_caterer_available,
+                            'mealtime_id' => $collection->mealtime_id,
+                            'mealtime' => $mealtime,
+                            'collection_min_qty' => $collection_min,
+                            'collection_max_qty' => $collection_max,
+                            'collection_price' => $collection_price,
+                            'collection_price_unit' => \Lang::get('message.priceUnit'),
+                            'collection_status' => 1,
+                            'min_serve_to_person' => $min_serve,
+                            'max_serve_to_person' => $max_serve,
+                            'allow_person_increase' => $person_increase,
+                            'persons_max_count' => $max_persons,
+                            'service_type_id' => $collection->service_type_id,
+                            'service_type' => $service_type,
+                            'delivery_hours' => $delivery_time,
+                            'service_provide' => $service_provide,
+                            'service_presentation' => $service_presentation,
+                            'food_list' => $foodlist,
+                            'special_instruction' => '',
+                            'food_item_image' => url('/') . '/images/' . $collection_item->menu->image,
+                            'food_list_images' => $foodlist_images,
+                            'setup_time' => $setup,
+                            'requirement' => $requirement,
+                            'max_time' => $max,
+                            'menu_items' => $menu
+                        ];
+                        return response()->json(array(
+                            'success' => 1,
+                            'status_code' => 200,
+                            'data' => $menu_collection));
                     }
                 } elseif ($collection->is_available == 0) {
-                    $collectionStatus = 0;
+                    return response()->json(array(
+                        'success' => 0,
+                        'status_code' => 200,
+                        'message' => \Lang::get('message.collectionAvailabilityChanged', ['collection_name' => $collection_name])));
                 }
-                $setup = '';
-                $max = '';
-                $requirement = '';
-                $max_persons = -1;
-                $min_serve = -1;
-                $max_serve = -1;
-                $collection_price = 0;
-                $collection_min = -1;
-                $collection_max = -1;
-                $person_increase = false;
-                if ($collection_type != 4) {
-                    $min_serve = $collection->min_serve_to_person;
-                    $max_serve = $collection->max_serve_to_person;
-                    $collection_price = $collection->price;
-                }
-                if ($collection_type != 2 && $collection_type != 4) {
-                    $collection_min = $collection->min_qty;
-                    $collection_max = $collection->max_qty;
-                }
-                if ($collection_type == 1) {
-                    $items = [];
-                    $menu = [];
-                    foreach ($collection->collectionItem as $collection_item) {
-                        if ($lang == 'ar') {
-                            $foodlist [] = $collection_item->menu->name_ar;
-                            $item_name = $collection_item->menu->name_ar;
-                        } else {
-                            $foodlist [] = $collection_item->menu->name_en;
-                            $item_name = $collection_item->menu->name_en;
-                        }
-                        $image = url('/') . '/images/' . $collection_item->menu->image;
-                        array_push($foodlist_images, $image);
-                        if ($collection_item->menu->status == 1) {
-                            $status = true;
-                        } else {
-                            $status = false;
-                        }
-
-                        $items  [] = [
-                            'item_id' => $collection_item->item_id,
-                            'item_name' => $item_name,
-                            'item_qty' => $collection_item->quantity,
-                            'item_price' => $collection_item->menu->price,
-                            'item_price_unit' => \Lang::get('message.priceUnit'),
-                            'item_availability' => $status
-
-                        ];
-                    }
-                    $menu [] = [
-                        'menu_name' => \Lang::get('message.combo'),
-                        'items' => $items,
-                    ];
-                } else {
-                    $menu_min_qty = -1;
-                    $menu_max_qty = -1;
-                    $menu = [];
-                    $collectionMenus = CollectionMenu::where('collection_id', $collection->id)->with(['collectionItem' => function ($query) use ($collection) {
-                        $query->where('collection_id', $collection->id);
-                    }])->whereHas('collectionItem', function ($q) use ($collection) {
-                        $q->where('collection_id', $collection->id);
-                    })->get();
-                    foreach ($collectionMenus as $collectionMenu) {
-                        $items = [];
-                        if ($collection->category_id != 4 && $collection->category_id != 1) {
-                            $menu_min_qty = $collectionMenu->min_qty;
-                            $menu_max_qty = $collectionMenu->max_qty;
-                        }
-                        foreach ($collectionMenu->collectionItem as $collection_item) {
-                            if ($lang == 'ar') {
-                                $foodlist [] = $collection_item->menu->name_ar;
-                                $item_name = $collection_item->menu->name_ar;
-                                $menu_name = $collectionMenu->category->name_ar;
-                            } else {
-                                $foodlist [] = $collection_item->menu->name_en;
-                                $item_name = $collection_item->menu->name_en;
-                                $menu_name = $collectionMenu->category->name_en;
-                            }
-                            $image = url('/') . '/images/' . $collection_item->menu->image;
-                            array_push($foodlist_images, $image);
-                            if ($collection->category_id == 2) {
-                                if ($collection->allow_person_increase == 1) {
-                                    $person_increase = true;
-                                } else {
-                                    $person_increase = false;
-                                }
-                                $max_persons = $collection->persons_max_count;
-
-                                $setup_hours = $collection->setup_time / 60;
-                                $setup_minutes = $collection->setup_time % 60;
-                                if ($setup_minutes > 0) {
-                                    $setup = floor($setup_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($setup_minutes) . ' ' . \Lang::get('message.minute');
-                                } else {
-                                    $setup = floor($setup_hours) . ' ' . \Lang::get('message.hour');
-                                }
-                                $max_hours = $collection->max_time / 60;
-                                $max_minutes = $collection->max_time % 60;
-                                if ($max_minutes > 0) {
-                                    $max = floor($max_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($max_minutes) . ' ' . \Lang::get('message.minute');
-                                } else {
-                                    $max = floor($max_hours) . ' ' . \Lang::get('message.hour');
-                                }
-                                if ($lang == 'ar') {
-                                    $requirement = $collection->requirements_ar;
-                                } else {
-                                    $requirement = $collection->requirements_en;
-                                }
-                            }
-
-
-                            if ($collection_item->menu->status == 1) {
-                                $status = true;
-                            } else {
-                                $status = false;
-                            }
-
-                            if ($collection_item->is_mandatory == 1) {
-                                $item_price = 0;
-                            } else {
-                                $item_price = $collection_item->menu->price;
-                            }
-                            $items [] = [
-                                'item_id' => $collection_item->menu->id,
-                                'item_name' => $item_name,
-                                'item_image' => url('/') . '/images/' . $collection_item->menu->image,
-                                'item_price' => $item_price,
-                                'item_price_unit' => \Lang::get('message.priceUnit'),
-                                'item_availability' => $status,
-                                'is_mandatory' => $collection_item->is_mandatory
-
-                            ];
-                        }
-
-                        usort($items, function ($item1, $item2) {
-                            return $item2['item_availability'] <=> $item1['item_availability'];
-                        });
-                        $menu [] = [
-                            'menu_id' => $collectionMenu->category->id,
-                            'menu_name' => $menu_name,
-                            'menu_min_qty' => $menu_min_qty,
-                            'menu_max_qty' => $menu_max_qty,
-                            'items' => $items,
-                        ];
-
-                    }
-
-                }
-                $delivery_time = '';
-                if ($collection->serviceType->name_en == 'Delivery') {
-                    $delivery_hours = $collection->delivery_hours / 60;
-                    $delivery_minutes = $collection->delivery_hours % 60;
-                    if ($delivery_minutes > 0) {
-                        $delivery_time = floor($delivery_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($delivery_minutes) . ' ' . \Lang::get('message.minute');
-                    } else {
-                        $delivery_time = floor($delivery_hours) . ' ' . \Lang::get('message.hour');
-                    }
-
-                }
-
-                if ($lang == 'ar') {
-                    $restaurant_name = $collection->restaurant->name_ar;
-                    $collection_name = $collection->name_ar;
-                    $collection_description = $collection->description_ar;
-                    $collection_type = $collection->category->name_ar;
-                    $mealtime = $collection->mealtime->name_ar;
-                    $service_provide = $collection->service_provide_ar;
-                    $service_presentation = $collection->service_presentation_ar;
-                    $service_type = $collection->serviceType->name_ar;
-                } else {
-                    $restaurant_name = $collection->restaurant->name_en;
-                    $collection_name = $collection->name_en;
-                    $collection_description = $collection->description_en;
-                    $collection_type = $collection->category->name_en;
-                    $mealtime = $collection->mealtime->name_en;
-                    $service_provide = $collection->service_provide_en;
-                    $service_presentation = $collection->service_presentation_en;
-                    $service_type = $collection->serviceType->name_en;
-                }
-
-                $menu_collection [] = [
-                    'restaurant_id' => $collection->restaurant->id,
-                    'restaurant_name' => $restaurant_name,
-                    'collection_id' => $collection->id,
-                    'collection_name' => $collection_name,
-                    'collection_description' => $collection_description,
-                    'collection_category_id' => $collection->category_id,
-                    'collection_category' => $collection_type,
-                    'female_caterer_available' => $female_caterer_available,
-                    'mealtime_id' => $collection->mealtime_id,
-                    'mealtime' => $mealtime,
-                    'collection_min_qty' => $collection_min,
-                    'collection_max_qty' => $collection_max,
-                    'collection_price' => $collection_price,
-                    'collection_price_unit' => \Lang::get('message.priceUnit'),
-                    'collection_status' => $collectionStatus,
-                    'min_serve_to_person' => $min_serve,
-                    'max_serve_to_person' => $max_serve,
-                    'allow_person_increase' => $person_increase,
-                    'persons_max_count' => $max_persons,
-                    'service_type_id' => $collection->service_type_id,
-                    'service_type' => $service_type,
-                    'delivery_hours' => $delivery_time,
-                    'service_provide' => $service_provide,
-                    'service_presentation' => $service_presentation,
-                    'food_list' => $foodlist,
-                    'special_instruction' => '',
-                    'food_item_image' => url('/') . '/images/' . $collection_item->menu->image,
-                    'food_list_images' => $foodlist_images,
-                    'setup_time' => $setup,
-                    'requirement' => $requirement,
-                    'max_time' => $max,
-                    'menu_items' => $menu
-                ];
-                return response()->json(array(
-                    'success' => 1,
-                    'status_code' => 200,
-                    'data' => $menu_collection));
             } else {
                 return response()->json(array(
                     'success' => 0,

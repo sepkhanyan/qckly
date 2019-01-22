@@ -222,32 +222,22 @@
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                                         </div>
-                                                        <div class="btn-group btn-group-switch" data-toggle="buttons">
+                                                        <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
                                                             @if(old('flexible_hours'))
-                                                                <label class="btn btn-success{{ (old('flexible_hours.' . $hour->weekday . '.status') == '1') ? ' active' : '' }}">
-                                                                    <input type="radio"
-                                                                           name="flexible_hours[{{$hour->weekday}}][status]"
-                                                                           value="1" {{ (old('flexible_hours.' . $hour->weekday . '.status') == '1') ? 'checked' : '' }} >
-                                                                    Open
-                                                                </label>
                                                                 <label class="btn btn-danger{{ (old('flexible_hours.' . $hour->weekday . '.status') == '0') ? ' active' : '' }}">
-                                                                    <input type="radio"
+                                                                    <input type="hidden" name="flexible_hours[{{$hour->weekday}}][status]" value="1" />
+                                                                    <input type="checkbox"
                                                                            name="flexible_hours[{{$hour->weekday}}][status]"
                                                                            value="0" {{ (old('flexible_hours.' . $hour->weekday . '.status') == '0') ? 'checked' : '' }}>
-                                                                    Closed
+                                                                    Busy
                                                                 </label>
                                                             @else
-                                                                <label class="btn btn-success{{$hour->status == 1 ? ' active' : ''}}">
-                                                                    <input type="radio"
-                                                                           name="flexible_hours[{{$hour->weekday}}][status]"
-                                                                           value="1" {{$hour->status == 1 ? 'checked' : ''}}>
-                                                                    Open
-                                                                </label>
                                                                 <label class="btn btn-danger{{$hour->status == 0 ? ' active' : ''}} ">
-                                                                    <input type="radio"
+                                                                    <input type="hidden" name="flexible_hours[{{$hour->weekday}}][status]" value="1" />
+                                                                    <input type="checkbox"
                                                                            name="flexible_hours[{{$hour->weekday}}][status]"
                                                                            value="0" {{$hour->status == 0 ? 'checked' : ''}}>
-                                                                    Closed
+                                                                    Busy
                                                                 </label>
                                                             @endif
                                                         </div>
@@ -289,17 +279,12 @@
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                                     </div>
-                                                    <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                                        <label class="btn btn-success active{{ (old('flexible_hours.1.status') == '0') ? 'btn btn-success' : '' }}">
-                                                            <input type="radio" name="flexible_hours[1][status]"
-                                                                   value="1"
-                                                                   {{ (old('flexible_hours.1.status') == '1') ? 'checked' : '' }} checked="checked">
-                                                            Open
-                                                        </label>
+                                                    <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
                                                         <label class="btn btn-danger{{ (old('flexible_hours.1.status') == '0') ? ' active' : '' }}">
-                                                            <input type="radio" name="flexible_hours[1][status]"
+                                                            <input type="hidden" name="flexible_hours[1][status]" value="1" />
+                                                            <input type="checkbox" name="flexible_hours[1][status]"
                                                                    value="0" {{ (old('flexible_hours.1.status') == '0') ? 'checked' : '' }}>
-                                                            Closed
+                                                          Busy
                                                         </label>
                                                     </div>
                                                 </div>
@@ -338,17 +323,12 @@
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                                     </div>
-                                                    <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                                        <label class="btn btn-success active{{ (old('flexible_hours.2.status') == '0') ? 'btn btn-success' : '' }}">
-                                                            <input type="radio" name="flexible_hours[2][status]"
-                                                                   value="1"
-                                                                   {{ (old('flexible_hours.2.status') == '1') ? 'checked' : '' }} checked="checked">
-                                                            Open
-                                                        </label>
+                                                    <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
                                                         <label class="btn btn-danger{{ (old('flexible_hours.2.status') == '0') ? ' active' : '' }}">
-                                                            <input type="radio" name="flexible_hours[2][status]"
+                                                            <input type="hidden" name="flexible_hours[2][status]" value="1" />
+                                                            <input type="checkbox" name="flexible_hours[2][status]"
                                                                    value="0" {{ (old('flexible_hours.2.status') == '0') ? 'checked' : '' }}>
-                                                            Closed
+                                                            Busy
                                                         </label>
                                                     </div>
                                                 </div>
@@ -387,17 +367,12 @@
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                                     </div>
-                                                    <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                                        <label class="btn btn-success active{{ (old('flexible_hours.3.status') == '0') ? 'btn btn-success' : '' }}">
-                                                            <input type="radio" name="flexible_hours[3][status]"
-                                                                   value="1"
-                                                                   {{ (old('flexible_hours.3.status') == '1') ? 'checked' : '' }} checked="checked">
-                                                            Open
-                                                        </label>
+                                                    <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
                                                         <label class="btn btn-danger{{ (old('flexible_hours.3.status') == '0') ? ' active' : '' }}">
-                                                            <input type="radio" name="flexible_hours[3][status]"
+                                                            <input type="hidden" name="flexible_hours[3][status]" value="1" />
+                                                            <input type="checkbox" name="flexible_hours[3][status]"
                                                                    value="0" {{ (old('flexible_hours.3.status') == '0') ? 'checked' : '' }}>
-                                                            Closed
+                                                            Busy
                                                         </label>
                                                     </div>
                                                 </div>
@@ -436,17 +411,12 @@
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                                     </div>
-                                                    <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                                        <label class="btn btn-success active{{ (old('flexible_hours.4.status') == '0') ? 'btn btn-success' : '' }}">
-                                                            <input type="radio" name="flexible_hours[4][status]"
-                                                                   value="1"
-                                                                   {{ (old('flexible_hours.4.status') == '1') ? 'checked' : '' }} checked="checked">
-                                                            Open
-                                                        </label>
+                                                    <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
                                                         <label class="btn btn-danger{{ (old('flexible_hours.4.status') == '0') ? ' active' : '' }}">
-                                                            <input type="radio" name="flexible_hours[4][status]"
+                                                            <input type="hidden" name="flexible_hours[4][status]" value="1" />
+                                                            <input type="checkbox" name="flexible_hours[4][status]"
                                                                    value="0" {{ (old('flexible_hours.4.status') == '0') ? 'checked' : '' }}>
-                                                            Closed
+                                                           Busy
                                                         </label>
                                                     </div>
                                                 </div>
@@ -485,17 +455,12 @@
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                                     </div>
-                                                    <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                                        <label class="btn btn-success active{{ (old('flexible_hours.5.status') == '0') ? 'btn btn-success' : '' }}">
-                                                            <input type="radio" name="flexible_hours[5][status]"
-                                                                   value="1"
-                                                                   {{ (old('flexible_hours.5.status') == '1') ? 'checked' : '' }} checked="checked">
-                                                            Open
-                                                        </label>
+                                                    <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
                                                         <label class="btn btn-danger{{ (old('flexible_hours.5.status') == '0') ? ' active' : '' }}">
-                                                            <input type="radio" name="flexible_hours[5][status]"
+                                                            <input type="hidden" name="flexible_hours[5][status]" value="1" />
+                                                            <input type="checkbox" name="flexible_hours[5][status]"
                                                                    value="0" {{ (old('flexible_hours.5.status') == '0') ? 'checked' : '' }}>
-                                                            Closed
+                                                          Busy
                                                         </label>
                                                     </div>
                                                 </div>
@@ -534,17 +499,12 @@
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                                     </div>
-                                                    <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                                        <label class="btn btn-success active{{ (old('flexible_hours.6.status') == '0') ? 'btn btn-success' : '' }}">
-                                                            <input type="radio" name="flexible_hours[6][status]"
-                                                                   value="1"
-                                                                   {{ (old('flexible_hours.6.status') == '1') ? 'checked' : '' }} checked="checked">
-                                                            Open
-                                                        </label>
+                                                    <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
                                                         <label class="btn btn-danger{{ (old('flexible_hours.6.status') == '0') ? ' active' : '' }}">
-                                                            <input type="radio" name="flexible_hours[6][status]"
+                                                            <input type="hidden" name="flexible_hours[6][status]" value="1" />
+                                                            <input type="checkbox" name="flexible_hours[6][status]"
                                                                    value="0" {{ (old('flexible_hours.6.status') == '0') ? 'checked' : '' }}>
-                                                            Closed
+                                                          Busy
                                                         </label>
                                                     </div>
                                                 </div>
@@ -583,17 +543,12 @@
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                                     </div>
-                                                    <div class="btn-group btn-group-switch" data-toggle="buttons">
-                                                        <label class="btn btn-success active{{ (old('flexible_hours.0.status') == '0') ? 'btn btn-success' : '' }}">
-                                                            <input type="radio" name="flexible_hours[0][status]"
-                                                                   value="1"
-                                                                   {{ (old('flexible_hours.0.status') == '1') ? 'checked' : '' }} checked="checked">
-                                                            Open
-                                                        </label>
+                                                    <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
                                                         <label class="btn btn-danger{{ (old('flexible_hours.0.status') == '0') ? ' active' : '' }}">
-                                                            <input type="radio" name="flexible_hours[0][status]"
+                                                            <input type="hidden" name="flexible_hours[0][status]" value="1" />
+                                                            <input type="checkbox" name="flexible_hours[0][status]"
                                                                    value="0" {{ (old('flexible_hours.0.status') == '0') ? 'checked' : '' }}>
-                                                            Closed
+                                                            Busy
                                                         </label>
                                                     </div>
                                                 </div>

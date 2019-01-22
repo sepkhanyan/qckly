@@ -109,7 +109,7 @@
                                                 style="font-size: 20px; cursor: pointer">
                                                 @if($restaurant->status == 1)
                                                     <a class="btn btn-success">{{\Lang::get('message.open')}}</a>
-                                                @elseif($restaurant->status == 0)
+                                                @elseif($restaurant->status == 2)
                                                     <a class="btn btn-danger">{{\Lang::get('message.busy')}}</a>
                                                 @endif
                                             </td>
@@ -167,7 +167,7 @@
                                 Open
                             </label>
                             <label id="busy">
-                                <input type="radio" name="status" value="0" id="input_busy">
+                                <input type="radio" name="status" value="2" id="input_busy">
                                 Busy
                             </label>
                         </div>
