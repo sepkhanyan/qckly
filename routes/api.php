@@ -50,3 +50,9 @@ Route::get('/logout', 'UsersController@logout');
 Route::get('/changeLanguage', 'UsersController@changeLanguage');
 Route::get('/getNotifications', 'NotificationsController@getNotifications');
 Route::get('/isRead', 'NotificationsController@isRead');
+
+
+
+
+Route::get('/test-sms', 'OrdersController@testAPI');
+Route::get('/test-email', 'OrdersController@testEMAIL');
