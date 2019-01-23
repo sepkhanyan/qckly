@@ -3,8 +3,6 @@
     <div id="page-wrapper" style="min-height: 261px; height: 100%;">
         <div class="page-header clearfix">
             <div class="page-action">
-                <a class="btn btn-primary" onclick="$('#edit-form').submit();"><i class="fa fa-save"></i> Save</a>
-                <a class="btn btn-default" onclick="saveClose();"><i class="fa fa-save"></i> Save &amp; Close</a>
                 <a class="btn btn-default" href="{{ redirect()->back()->getTargetUrl() }}"><i
                             class="fa fa-angle-double-left"></i></a></div>
         </div>
@@ -17,9 +15,6 @@
                                 <span class="badge">{{$order->orderCollection->count()}}</span></a></li>
                     </ul>
                 </div>
-                <form role="form" id="edit-form" class="form-horizontal" accept-charset="utf-8" method="POST"
-                      action="{{url('/order/update/' . $order->id)}}">
-                    {{ csrf_field() }}
                     <div class="tab-content">
                         <div id="general" class="tab-pane row wrap-all active">
                             <div class="row">
@@ -115,27 +110,6 @@
                                     </div>
                                 </div>
                             </div>
-                            @if($restaurantOrder->status_id != 3 && $restaurantOrder->status_id != 1)
-                                <div class="row">
-                                    <div class="col-xs-12">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading"><h3 class="panel-title">Status</h3></div>
-                                            <div class="panel-body">
-                                                <div class="col-xs-12 col-sm-3">
-                                                    <label for="input-name" class="control-label">Order Status</label>
-                                                    <div class="">
-                                                        <select name="status" id="status" class="form-control">
-                                                            @foreach ($statuses as $status)
-                                                                    <option value="{{$status->id}}" {{$restaurantOrder->status_id == $status->id ? 'selected' : ''}}>{{$status->name_en}}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
                         </div>
                         <div id="menus" class="tab-pane row wrap-all">
                             <div class="panel panel-default panel-table">
@@ -219,7 +193,6 @@
                             </div>
                         </div>
                     </div>
-                </form>
             </div>
         </div>
     </div>

@@ -5,17 +5,12 @@
             <div class="page-action">
                 <div class="form-inline">
                     <div class="row">
-                        @if($selectedRestaurant)
-                            {{--<a class="btn btn-danger " id="delete_order">--}}
-                            {{--<i class="fa fa-trash-o"></i>--}}
-                            {{--Delete--}}
-                            {{--</a>--}}
-                        @endif
                         @if($user->admin == 1)
                             <div class="form-group col-md-4">
                                 <select name="restaurant_name" id="restaurant" class="form-control" tabindex="-1"
                                         title="" onchange="top.location.href = this.options[this.selectedIndex].value">
                                     @if($selectedRestaurant)
+                                        <option value="{{url('/orders/')}}">All</option>
                                         @foreach($restaurants as $restaurant)
                                                 <option value="{{url('/orders/' . $restaurant->id)}}"{{($restaurant->id == $selectedRestaurant->id) ? 'selected' : ''}}>{{$restaurant->name_en}}</option>
                                         @endforeach
@@ -105,7 +100,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @if($selectedRestaurant)
+                                {{--@if($selectedRestaurant)--}}
                                     @if(count($orders) > 0)
                                         @foreach($orders as $order)
                                             <tr class="{{($order->status_id == 1) ? 'info' : ''}}">
@@ -115,7 +110,7 @@
                                                         {{--name="delete"/>--}}
                                                         <a class="btn btn-edit" title=""
                                                            href="{{ url('/order/edit/' . $order->order_id )}}">
-                                                            <i class="fa fa-pencil"></i>
+                                                            <i class="fa fa-eye"></i>
                                                         </a>&nbsp;&nbsp;
                                                     </td>
                                                 @endif
@@ -146,7 +141,7 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    {{date("g:i A", strtotime($order->updated_at)) . ', ' . date("j M Y", strtotime($order->updated_at))}}
+                                                    {{date("g:i A", strtotime($order->order->updated_at)) . ', ' . date("j M Y", strtotime($order->order->updated_at))}}
                                                 </td>
                                                 @if($user->admin == 2)
                                                     <td>
@@ -158,6 +153,12 @@
                                                                 Confirm
                                                             </a>&nbsp;&nbsp;
                                                         @endif
+                                                        @if($order->status_id == 2)
+                                                            <a class="btn btn-primary" title=""
+                                                               href="{{url('/order/update/' . $order->id)}}">
+                                                               Complete
+                                                            </a>&nbsp;&nbsp;
+                                                        @endif
                                                     </td>
                                                 @endif
                                             </tr>
@@ -167,7 +168,7 @@
                                             <td colspan="7" class="center">There are no orders right now.</td>
                                         </tr>
                                     @endif
-                                @endif
+                                {{--@endif--}}
                                 </tbody>
                             </table>
                         </div>

@@ -36,7 +36,7 @@ class OrderRestaurant extends Model
     public function scopeName($query, $val)
     {
         if (!empty($val)) {
-            return $query->where('id', 'like', '%' . $val . '%')
+            return $query->where('order_id', 'like', '%' . $val . '%')
                 ->orWhere('total_price', 'like', '%' . $val . '%');
         }
 
