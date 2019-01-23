@@ -105,13 +105,11 @@ class UserCartsController extends Controller
                         } else {
                             $restaurant_name = $restaurant->name_en;
                         }
-                        $restaurantAvailability = Restaurant::where('id', $collection->restaurant_id)->whereHas('workingHour', function ($query) use ($day, $delivery_time) {
-                            $query->where('weekday', $day)
-                                ->where('opening_time', '<=', Carbon::parse($delivery_time))
-                                ->where('closing_time', '>=', Carbon::parse($delivery_time))
-                                ->where('status', 1)
-                                ->orWhere('type', '=', '24_7');
-                        })->first();
+                       
+                        $restaurantAvailability =  WorkingHour::where('restaurant_id', $restaurant->id)->where('weekday', $day)
+                            ->where('opening_time', '<=', Carbon::parse($delivery_time))
+                            ->where('closing_time', '>=', Carbon::parse($delivery_time))
+                            ->where('status', 1)->first();
                         if (!$restaurantAvailability) {
                             return response()->json(array(
                                 'success' => 0,
@@ -423,12 +421,13 @@ class UserCartsController extends Controller
                     foreach ($cart->cartCollection as $cart_collection) {
                         $menu = [];
                         $categories = MenuCategory::whereHas('cartItem', function ($query) use ($cart_collection) {
-                            $query->where('cart_collection_id', $cart_collection->id);
+                            $query->where('cart_collection_id', $cart_collection->id)->where('is_mandatory', 0);
                         })->with(['cartItem' => function ($x) use ($cart_collection) {
-                            $x->where('cart_collection_id', $cart_collection->id);
+                            $x->where('cart_collection_id', $cart_collection->id)->where('is_mandatory', 0);
                         }])->get();
                         foreach ($categories as $category) {
                             $items = [];
+
                             foreach ($category->cartItem as $cartItem) {
                                 if ($lang == 'ar') {
                                     $item_name = $cartItem->menu->name_ar;

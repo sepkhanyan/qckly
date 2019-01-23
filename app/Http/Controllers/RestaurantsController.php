@@ -142,37 +142,17 @@ class RestaurantsController extends Controller
                 $restaurantArea->save();
             }
 
-            if ($request->input('opening_type') == '24_7') {
+            foreach ($request->input('flexible_hours') as $flexible) {
                 $working = new WorkingHour();
-                $working->type = $request->input('opening_type');
-                $working->status = 1;
                 $working->restaurant_id = $restaurant->id;
+                $working->type = $request->input('opening_type');
+                $working->weekday = $flexible['day'];
+                $working->opening_time = Carbon::parse($flexible['open']);
+                $working->closing_time = Carbon::parse($flexible['close']);
+                $working->status = $flexible['status'];
                 $working->save();
-            } elseif ($request->input('opening_type') == 'daily') {
-                $days = $request->input('daily_days');
-                foreach ($days as $day) {
-                    $working = new WorkingHour();
-                    $working->type = $request->input('opening_type');
-                    $working->weekday = $day;
-                    $working->status = 1;
-                    $working->restaurant_id = $restaurant->id;
-                    $daily = $request->input('daily_hours');
-                    $working->opening_time = Carbon::parse($daily['open']);
-                    $working->closing_time = Carbon::parse($daily['close']);
-                    $working->save();
-                }
-            } elseif ($request->input('opening_type') == 'flexible') {
-                foreach ($request->input('flexible_hours') as $flexible) {
-                    $working = new WorkingHour();
-                    $working->restaurant_id = $restaurant->id;
-                    $working->type = $request->input('opening_type');
-                    $working->weekday = $flexible['day'];
-                    $working->opening_time = Carbon::parse($flexible['open']);
-                    $working->closing_time = Carbon::parse($flexible['close']);
-                    $working->status = $flexible['status'];
-                    $working->save();
-                }
             }
+
             if ($restaurant) {
                 return redirect('/restaurants');
             }
@@ -433,20 +413,11 @@ class RestaurantsController extends Controller
                 return redirect()->back();
             }
         }
-        $working = WorkingHour::where('restaurant_id', $restaurant->id)->first();
         $working_hours = WorkingHour::where('restaurant_id', $restaurant->id)->get();
-        $week = [];
-        if (count($working_hours) > 0) {
-            foreach ($working_hours as $key => $value) {
-                $week[$value->weekday] = [];
-            }
-        }
         return view('restaurant_availability_edit', [
             'restaurant' => $restaurant,
             'user' => $user,
-            'working_hours' => $working_hours,
-            'working' => $working,
-            'week' => collect($week)
+            'working_hours' => $working_hours
         ]);
     }
 
@@ -461,38 +432,19 @@ class RestaurantsController extends Controller
         }
         $opening_type = $request->input('opening_type');
         if ($opening_type) {
-            WorkingHour::where('restaurant_id', $restaurant->id)->delete();
-            if ($opening_type == '24_7') {
-                $working = new WorkingHour();
-                $working->type = $request->input('opening_type');
-                $working->status = 1;
-                $working->restaurant_id = $restaurant->id;
-                $working->save();
-            } elseif ($opening_type == 'daily') {
-                $days = $request->input('daily_days');
-                if ($days) {
-                    foreach ($days as $day) {
-                        $working = new WorkingHour();
-                        $working->type = $request->input('opening_type');
-                        $working->weekday = $day;
-                        $working->status = 1;
-                        $working->restaurant_id = $restaurant->id;
-                        $daily = $request->input('daily_hours');
-                        $working->opening_time = Carbon::parse($daily['open']);
-                        $working->closing_time = Carbon::parse($daily['close']);
-                        $working->save();
-                    }
-                }
-            } elseif ($opening_type == 'flexible') {
+            if ($opening_type == 'flexible') {
                 foreach ($request->input('flexible_hours') as $flexible) {
-                    $working = new WorkingHour();
-                    $working->restaurant_id = $restaurant->id;
-                    $working->type = $request->input('opening_type');
-                    $working->weekday = $flexible['day'];
-                    $working->opening_time = Carbon::parse($flexible['open']);
-                    $working->closing_time = Carbon::parse($flexible['close']);
-                    $working->status = $flexible['status'];
-                    $working->save();
+                    $working = WorkingHour::updateOrCreate(
+                        [
+                            'restaurant_id' => $restaurant->id,
+                            'type' => $request->input('opening_type'),
+                            'weekday' => $flexible['day']
+                        ],
+                        [
+                            'opening_time' => Carbon::parse($flexible['open']),
+                            'closing_time' => Carbon::parse($flexible['close']),
+                            'status' => $flexible['status']
+                        ]);
                 }
             }
         }
@@ -817,7 +769,8 @@ class RestaurantsController extends Controller
                     ->where('closing_time', '>=', $working_time)
                     ->where('status', 1)
                     ->orWhere('type', '=', '24_7');
-            })*/->with(['menu' => function ($query) {
+            })*/
+            ->with(['menu' => function ($query) {
                 $query->where('approved', 1);
             }]);
 
@@ -836,27 +789,23 @@ class RestaurantsController extends Controller
                     $working_time = $DataRequests['working_time'];
                     $working_time = Carbon::parse($working_time);
 
-                    $restaurantAvailability = Restaurant::where('id', $restaurant->id)->whereHas('workingHour', function ($query) use ($working_day, $working_time) {
-                        $query->where('weekday', $working_day)
+                    $restaurantAvailability =  WorkingHour::where('restaurant_id', $restaurant->id)->where('weekday', $working_day)
                             ->where('opening_time', '<=', $working_time)
                             ->where('closing_time', '>=', $working_time)
-                            ->where('status', 1)
-                            ->orWhere('type', '=', '24_7');
-                    })->first();
+                            ->where('status', 1)->first();
 
-                        if ($restaurantAvailability) {
-                            if ($restaurant->status == 1) {
-                                $status_id = 1;
-                                $status = \Lang::get('message.open');
-                            } else {
-                                $status_id = 2;
-                                $status = \Lang::get('message.busy');
-                            }
+                    if ($restaurantAvailability) {
+                        if ($restaurant->status == 1) {
+                            $status_id = 1;
+                            $status = \Lang::get('message.open');
                         } else {
-                            $status_id = 3;
-                            $status = \Lang::get('message.notAvailable');
+                            $status_id = 2;
+                            $status = \Lang::get('message.busy');
                         }
-
+                    } else {
+                        $status_id = 3;
+                        $status = \Lang::get('message.notAvailable');
+                    }
 
 
                     $famous = null;
@@ -1055,173 +1004,173 @@ class RestaurantsController extends Controller
             if ($restaurant) {
                 $restaurant_details = [];
 //                foreach ($restaurants as $restaurant) {
-                    $menu_collection = [];
-                    if (count($restaurant->collection) > 0) {
-                        foreach ($restaurant->collection as $collection) {
-                            if ($collection->female_caterer_available == 1) {
-                                $female_caterer_available = true;
-                            } else {
-                                $female_caterer_available = false;
-                            }
-                            $foodlist = [];
-                            $foodlist_images = [];
-                            $setup = '';
-                            $max = '';
-                            $requirement = '';
-                            $max_persons = -1;
-                            $min_serve = -1;
-                            $max_serve = -1;
-                            $collection_max = -1;
-                            $collection_min = -1;
-                            $person_increase = false;
-                            $collection_price = 0;
-                            if ($collection->category_id != 4) {
-                                $min_serve = $collection->min_serve_to_person;
-                                $max_serve = $collection->max_serve_to_person;
-                                $collection_price = $collection->price;
-                            }
-                            if ($collection->category_id != 2 && $collection->category_id != 4) {
-                                $collection_min = $collection->min_qty;
-                                $collection_max = $collection->max_qty;
-                            }
+                $menu_collection = [];
+                if (count($restaurant->collection) > 0) {
+                    foreach ($restaurant->collection as $collection) {
+                        if ($collection->female_caterer_available == 1) {
+                            $female_caterer_available = true;
+                        } else {
+                            $female_caterer_available = false;
+                        }
+                        $foodlist = [];
+                        $foodlist_images = [];
+                        $setup = '';
+                        $max = '';
+                        $requirement = '';
+                        $max_persons = -1;
+                        $min_serve = -1;
+                        $max_serve = -1;
+                        $collection_max = -1;
+                        $collection_min = -1;
+                        $person_increase = false;
+                        $collection_price = 0;
+                        if ($collection->category_id != 4) {
+                            $min_serve = $collection->min_serve_to_person;
+                            $max_serve = $collection->max_serve_to_person;
+                            $collection_price = $collection->price;
+                        }
+                        if ($collection->category_id != 2 && $collection->category_id != 4) {
+                            $collection_min = $collection->min_qty;
+                            $collection_max = $collection->max_qty;
+                        }
 
-                            if ($collection->category_id == 1) {
+                        if ($collection->category_id == 1) {
+                            $items = [];
+                            $menu = [];
+                            foreach ($collection->collectionItem as $collection_item) {
+                                if ($lang == 'ar') {
+                                    $foodlist [] = $collection_item->menu->name_ar;
+                                    $item_name = $collection_item->menu->name_ar;
+                                } else {
+                                    $foodlist [] = $collection_item->menu->name_en;
+                                    $item_name = $collection_item->menu->name_en;
+                                }
+
+                                $image = url('/') . '/images/' . $collection_item->menu->image;
+                                array_push($foodlist_images, $image);
+                                if ($collection_item->menu->status == 1) {
+                                    $status = true;
+                                } else {
+                                    $status = false;
+                                }
+
+                                $items  [] = [
+                                    'item_id' => $collection_item->item_id,
+                                    'item_name' => $item_name,
+                                    'item_image' => url('/') . '/images/' . $collection_item->menu->image,
+                                    'item_qty' => $collection_item->quantity,
+                                    'item_price' => $collection_item->menu->price,
+                                    'item_price_unit' => \Lang::get('message.priceUnit'),
+                                    'item_availability' => $status
+
+                                ];
+                            }
+                            $menu [] = [
+                                'menu_name' => \Lang::get('message.combo'),
+                                'items' => $items,
+                            ];
+                        } else {
+                            $menu_min_qty = -1;
+                            $menu_max_qty = -1;
+                            $menu = [];
+                            $collectionMenus = CollectionMenu::where('collection_id', $collection->id)->with(['collectionItem' => function ($query) use ($collection) {
+                                $query->where('collection_id', $collection->id);
+                            }])->whereHas('collectionItem', function ($q) use ($collection) {
+                                $q->where('collection_id', $collection->id);
+                            })->get();
+                            foreach ($collectionMenus as $collectionMenu) {
                                 $items = [];
-                                $menu = [];
-                                foreach ($collection->collectionItem as $collection_item) {
+                                if ($collection->category_id != 4 && $collection->category_id != 1) {
+                                    $menu_min_qty = $collectionMenu->min_qty;
+                                    $menu_max_qty = $collectionMenu->max_qty;
+                                }
+                                foreach ($collectionMenu->collectionItem as $collection_item) {
                                     if ($lang == 'ar') {
                                         $foodlist [] = $collection_item->menu->name_ar;
                                         $item_name = $collection_item->menu->name_ar;
+                                        $menu_name = $collectionMenu->category->name_ar;
                                     } else {
                                         $foodlist [] = $collection_item->menu->name_en;
                                         $item_name = $collection_item->menu->name_en;
+                                        $menu_name = $collectionMenu->category->name_en;
                                     }
-
                                     $image = url('/') . '/images/' . $collection_item->menu->image;
                                     array_push($foodlist_images, $image);
+                                    if ($collection->category_id == 2) {
+                                        if ($collection->allow_person_increase == 1) {
+                                            $person_increase = true;
+                                        } else {
+                                            $person_increase = false;
+                                        }
+                                        $max_persons = $collection->persons_max_count;
+
+                                        $setup_hours = $collection->setup_time / 60;
+                                        $setup_minutes = $collection->setup_time % 60;
+                                        if ($setup_hours >= 1) {
+                                            if ($setup_minutes > 0) {
+                                                $setup = floor($setup_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($setup_minutes) . ' ' . \Lang::get('message.minute');
+                                            } else {
+                                                $setup = floor($setup_hours) . ' ' . \Lang::get('message.hour');
+                                            }
+                                        } else {
+                                            $setup = floor($setup_minutes) . ' ' . \Lang::get('message.minute');
+                                        }
+                                        $max_hours = $collection->max_time / 60;
+                                        $max_minutes = $collection->max_time % 60;
+                                        if ($max_hours >= 1) {
+                                            if ($max_minutes > 0) {
+                                                $max = floor($max_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($max_minutes) . ' ' . \Lang::get('message.minute');
+                                            } else {
+                                                $max = floor($max_hours) . ' ' . \Lang::get('message.hour');
+                                            }
+                                        } else {
+                                            $max = floor($max_minutes) . ' ' . \Lang::get('message.minute');
+                                        }
+                                        if ($lang == 'ar') {
+                                            $requirement = $collection->requirements_ar;
+                                        } else {
+                                            $requirement = $collection->requirements_en;
+                                        }
+
+                                    }
+
+
                                     if ($collection_item->menu->status == 1) {
                                         $status = true;
                                     } else {
                                         $status = false;
                                     }
 
-                                    $items  [] = [
-                                        'item_id' => $collection_item->item_id,
+                                    if ($collection_item->is_mandatory == 1) {
+                                        $item_price = 0;
+                                    } else {
+                                        $item_price = $collection_item->menu->price;
+                                    }
+
+                                    $items [] = [
+                                        'item_id' => $collection_item->menu->id,
                                         'item_name' => $item_name,
                                         'item_image' => url('/') . '/images/' . $collection_item->menu->image,
-                                        'item_qty' => $collection_item->quantity,
-                                        'item_price' => $collection_item->menu->price,
+                                        'item_price' => $item_price,
                                         'item_price_unit' => \Lang::get('message.priceUnit'),
-                                        'item_availability' => $status
+                                        'item_availability' => $status,
+                                        'is_mandatory' => $collection_item->is_mandatory
 
                                     ];
                                 }
+
+                                usort($items, function ($item1, $item2) {
+                                    return $item2['item_availability'] <=> $item1['item_availability'];
+                                });
                                 $menu [] = [
-                                    'menu_name' => \Lang::get('message.combo'),
+                                    'menu_id' => $collectionMenu->category->id,
+                                    'menu_name' => $menu_name,
+                                    'menu_min_qty' => $menu_min_qty,
+                                    'menu_max_qty' => $menu_max_qty,
                                     'items' => $items,
                                 ];
-                            } else {
-                                $menu_min_qty = -1;
-                                $menu_max_qty = -1;
-                                $menu = [];
-                                $collectionMenus = CollectionMenu::where('collection_id', $collection->id)->with(['collectionItem' => function ($query) use ($collection) {
-                                    $query->where('collection_id', $collection->id);
-                                }])->whereHas('collectionItem', function ($q) use ($collection) {
-                                    $q->where('collection_id', $collection->id);
-                                })->get();
-                                foreach ($collectionMenus as $collectionMenu) {
-                                    $items = [];
-                                    if ($collection->category_id != 4 && $collection->category_id != 1) {
-                                        $menu_min_qty = $collectionMenu->min_qty;
-                                        $menu_max_qty = $collectionMenu->max_qty;
-                                    }
-                                    foreach ($collectionMenu->collectionItem as $collection_item) {
-                                        if ($lang == 'ar') {
-                                            $foodlist [] = $collection_item->menu->name_ar;
-                                            $item_name = $collection_item->menu->name_ar;
-                                            $menu_name = $collectionMenu->category->name_ar;
-                                        } else {
-                                            $foodlist [] = $collection_item->menu->name_en;
-                                            $item_name = $collection_item->menu->name_en;
-                                            $menu_name = $collectionMenu->category->name_en;
-                                        }
-                                        $image = url('/') . '/images/' . $collection_item->menu->image;
-                                        array_push($foodlist_images, $image);
-                                        if ($collection->category_id == 2) {
-                                            if ($collection->allow_person_increase == 1) {
-                                                $person_increase = true;
-                                            } else {
-                                                $person_increase = false;
-                                            }
-                                            $max_persons = $collection->persons_max_count;
 
-                                            $setup_hours = $collection->setup_time / 60;
-                                            $setup_minutes = $collection->setup_time % 60;
-                                            if ($setup_hours >= 1) {
-                                                if ($setup_minutes > 0) {
-                                                    $setup = floor($setup_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($setup_minutes) . ' ' . \Lang::get('message.minute');
-                                                } else {
-                                                    $setup = floor($setup_hours) . ' ' . \Lang::get('message.hour');
-                                                }
-                                            } else {
-                                                $setup = floor($setup_minutes) . ' ' . \Lang::get('message.minute');
-                                            }
-                                            $max_hours = $collection->max_time / 60;
-                                            $max_minutes = $collection->max_time % 60;
-                                            if ($max_hours >= 1) {
-                                                if ($max_minutes > 0) {
-                                                    $max = floor($max_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($max_minutes) . ' ' . \Lang::get('message.minute');
-                                                } else {
-                                                    $max = floor($max_hours) . ' ' . \Lang::get('message.hour');
-                                                }
-                                            } else {
-                                                $max = floor($max_minutes) . ' ' . \Lang::get('message.minute');
-                                            }
-                                            if ($lang == 'ar') {
-                                                $requirement = $collection->requirements_ar;
-                                            } else {
-                                                $requirement = $collection->requirements_en;
-                                            }
-
-                                        }
-
-
-                                        if ($collection_item->menu->status == 1) {
-                                            $status = true;
-                                        } else {
-                                            $status = false;
-                                        }
-
-                                        if ($collection_item->is_mandatory == 1) {
-                                            $item_price = 0;
-                                        } else {
-                                            $item_price = $collection_item->menu->price;
-                                        }
-
-                                        $items [] = [
-                                            'item_id' => $collection_item->menu->id,
-                                            'item_name' => $item_name,
-                                            'item_image' => url('/') . '/images/' . $collection_item->menu->image,
-                                            'item_price' => $item_price,
-                                            'item_price_unit' => \Lang::get('message.priceUnit'),
-                                            'item_availability' => $status,
-                                            'is_mandatory' => $collection_item->is_mandatory
-
-                                        ];
-                                    }
-
-                                    usort($items, function ($item1, $item2) {
-                                        return $item2['item_availability'] <=> $item1['item_availability'];
-                                    });
-                                    $menu [] = [
-                                        'menu_id' => $collectionMenu->category->id,
-                                        'menu_name' => $menu_name,
-                                        'menu_min_qty' => $menu_min_qty,
-                                        'menu_max_qty' => $menu_max_qty,
-                                        'items' => $items,
-                                    ];
-
-                                }
+                            }
 //                                $categories = MenuCategory::with(['menu' => function ($query) use ($collection, $restaurant_id){
 //                                    $query->where('restaurant_id', $restaurant_id)
 //                                        ->whereHas('collectionItem', function ($x) use ($collection){
@@ -1229,178 +1178,192 @@ class RestaurantsController extends Controller
 //                                    });
 //                                }])->get();
 
-                            }
-                            $delivery_time = '';
-                            if ($collection->serviceType->name_en == 'Delivery') {
-                                $delivery_hours = $collection->delivery_hours / 60;
-                                $delivery_minutes = $collection->delivery_hours % 60;
-                                if ($delivery_hours >= 1) {
-                                    if ($delivery_minutes > 0) {
-                                        $delivery_time = floor($delivery_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($delivery_minutes) . ' ' . \Lang::get('message.minute');
-                                    } else {
-                                        $delivery_time = floor($delivery_hours) . ' ' . \Lang::get('message.hour');
-                                    }
-                                } else {
-                                    $delivery_time = floor($delivery_minutes) . ' ' . \Lang::get('message.minute');
-                                }
-
-                            }
-
-                            if ($lang == 'ar') {
-                                $collection_name = $collection->name_ar;
-                                $collection_description = $collection->description_ar;
-                                $collection_type = $collection->category->name_ar;
-                                $mealtime = $collection->mealtime->name_ar;
-                                $service_provide = $collection->service_provide_ar;
-                                $service_presentation = $collection->service_presentation_ar;
-                                $service_type = $collection->serviceType->name_ar;
-                            } else {
-                                $collection_name = $collection->name_en;
-                                $collection_description = $collection->description_en;
-                                $collection_type = $collection->category->name_en;
-                                $mealtime = $collection->mealtime->name_en;
-                                $service_provide = $collection->service_provide_en;
-                                $service_presentation = $collection->service_presentation_en;
-                                $service_type = $collection->serviceType->name_en;
-                            }
-
-
-                            $working_day = Carbon::parse($DataRequests['working_day'])->dayOfWeek;
-                            $working_time = $DataRequests['working_time'];
-                            $working_time = Carbon::parse($working_time);
-                            if ($collection->is_available == 1) {
-                                $unavailability = CollectionUnavailabilityHour::where('collection_id', $collection->id)->where('weekday', $working_day)
-                                    ->where('start_time', '<=', $working_time)
-                                    ->where('end_time', '>=', $working_time)
-                                    ->where('status', 0)->first();
-
-                                if ($unavailability) {
-                                    $collectionStatus = 0;
-                                } else {
-                                    $collectionStatus = 1;
-                                }
-                            } elseif ($collection->is_available == 0) {
-                                $collectionStatus = 0;
-                            }
-
-                            $menu_collection [] = [
-                                'collection_id' => $collection->id,
-                                'collection_name' => $collection_name,
-                                'collection_image' => url('/') . '/images/' . $collection->image,
-                                'collection_description' => $collection_description,
-                                'collection_category_id' => $collection->category_id,
-                                'collection_category' => $collection_type,
-                                'female_caterer_available' => $female_caterer_available,
-                                'mealtime_id' => $collection->mealtime_id,
-                                'mealtime' => $mealtime,
-                                'collection_min_qty' => $collection_min,
-                                'collection_max_qty' => $collection_max,
-                                'collection_price' => $collection_price,
-                                'collection_price_unit' => \Lang::get('message.priceUnit'),
-                                'collection_status' => $collectionStatus,
-                                'min_serve_to_person' => $min_serve,
-                                'max_serve_to_person' => $max_serve,
-                                'allow_person_increase' => $person_increase,
-                                'persons_max_count' => $max_persons,
-                                'service_type_id' => $collection->service_type_id,
-                                'service_type' => $service_type,
-                                'delivery_hours' => $delivery_time,
-                                'service_provide' => $service_provide,
-                                'service_presentation' => $service_presentation,
-                                'food_list' => $foodlist,
-                                'special_instruction' => '',
-                                'food_item_image' => url('/') . '/images/' . $collection_item->menu->image,
-                                'food_list_images' => $foodlist_images,
-                                'setup_time' => $setup,
-                                'requirement' => $requirement,
-                                'max_time' => $max,
-                                'menu_items' => $menu
-                            ];
                         }
-//                        usort($menu_collection, function ($menu1, $menu2) {
-//                            return $menu2['is_available'] <=> $menu1['is_available'];
-//                        });
+                        $delivery_time = '';
+                        if ($collection->serviceType->name_en == 'Delivery') {
+                            $delivery_hours = $collection->delivery_hours / 60;
+                            $delivery_minutes = $collection->delivery_hours % 60;
+                            if ($delivery_hours >= 1) {
+                                if ($delivery_minutes > 0) {
+                                    $delivery_time = floor($delivery_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($delivery_minutes) . ' ' . \Lang::get('message.minute');
+                                } else {
+                                    $delivery_time = floor($delivery_hours) . ' ' . \Lang::get('message.hour');
+                                }
+                            } else {
+                                $delivery_time = floor($delivery_minutes) . ' ' . \Lang::get('message.minute');
+                            }
 
-                    } /*else {
-                        return response()->json(array(
-                            'success' => 0,
-                            'status_code' => 200,
-                            'message' => \Lang::get('message.noCollection')));
-                    }*/
+                        }
+
+                        if ($lang == 'ar') {
+                            $collection_name = $collection->name_ar;
+                            $collection_description = $collection->description_ar;
+                            $collection_type = $collection->category->name_ar;
+                            $mealtime = $collection->mealtime->name_ar;
+                            $service_provide = $collection->service_provide_ar;
+                            $service_presentation = $collection->service_presentation_ar;
+                            $service_type = $collection->serviceType->name_ar;
+                        } else {
+                            $collection_name = $collection->name_en;
+                            $collection_description = $collection->description_en;
+                            $collection_type = $collection->category->name_en;
+                            $mealtime = $collection->mealtime->name_en;
+                            $service_provide = $collection->service_provide_en;
+                            $service_presentation = $collection->service_presentation_en;
+                            $service_type = $collection->serviceType->name_en;
+                        }
 
 
+                        $working_day = Carbon::parse($DataRequests['working_day'])->dayOfWeek;
+                        $working_time = $DataRequests['working_time'];
+                        $working_time = Carbon::parse($working_time);
+                        if ($collection->is_available == 1) {
+                           if($collection->unavailabilityHour->isEmpty()){
+                               $collectionStatus = 1;
+                           }else{
+                               $collectionAvailability = $collection->unavailabilityHour->where('weekday', $working_day)
+                                   ->where('start_time', '<=', $working_time)
+                                   ->where('end_time', '>=', $working_time)
+                                   ->where('status', 1)->first();
+
+                               if (!$collectionAvailability) {
+                                   $collectionStatus = 0;
+                               } else {
+                                   $collectionStatus = 1;
+                               }
+                           }
+                        }elseif ($collection->is_available == 0) {
+                            $collectionStatus = 0;
+                        }
+
+                        $menu_collection [] = [
+                            'collection_id' => $collection->id,
+                            'collection_name' => $collection_name,
+                            'collection_image' => url('/') . '/images/' . $collection->image,
+                            'collection_description' => $collection_description,
+                            'collection_category_id' => $collection->category_id,
+                            'collection_category' => $collection_type,
+                            'female_caterer_available' => $female_caterer_available,
+                            'mealtime_id' => $collection->mealtime_id,
+                            'mealtime' => $mealtime,
+                            'collection_min_qty' => $collection_min,
+                            'collection_max_qty' => $collection_max,
+                            'collection_price' => $collection_price,
+                            'collection_price_unit' => \Lang::get('message.priceUnit'),
+                            'collection_status' => $collectionStatus,
+                            'min_serve_to_person' => $min_serve,
+                            'max_serve_to_person' => $max_serve,
+                            'allow_person_increase' => $person_increase,
+                            'persons_max_count' => $max_persons,
+                            'service_type_id' => $collection->service_type_id,
+                            'service_type' => $service_type,
+                            'delivery_hours' => $delivery_time,
+                            'service_provide' => $service_provide,
+                            'service_presentation' => $service_presentation,
+                            'food_list' => $foodlist,
+                            'special_instruction' => '',
+                            'food_item_image' => url('/') . '/images/' . $collection_item->menu->image,
+                            'food_list_images' => $foodlist_images,
+                            'setup_time' => $setup,
+                            'requirement' => $requirement,
+                            'max_time' => $max,
+                            'menu_items' => $menu
+                        ];
+                    }
+
+
+                }
+
+
+                $working_day = Carbon::parse($DataRequests['working_day'])->dayOfWeek;
+                $working_time = $DataRequests['working_time'];
+                $working_time = Carbon::parse($working_time);
+
+                $restaurantAvailability =  WorkingHour::where('restaurant_id', $restaurant->id)->where('weekday', $working_day)
+                    ->where('opening_time', '<=', $working_time)
+                    ->where('closing_time', '>=', $working_time)
+                    ->where('status', 1)->first();
+
+                if ($restaurantAvailability) {
                     if ($restaurant->status == 1) {
+                        $status_id = 1;
                         $status = \Lang::get('message.open');
                     } else {
+                        $status_id = 2;
                         $status = \Lang::get('message.busy');
                     }
+                } else {
+                    $status_id = 3;
+                    $status = \Lang::get('message.notAvailable');
+                }
 
-                    $famous = null;
-                    $famous = [];
-                    foreach ($restaurant->menu as $menu) {
+                $famous = null;
+                $famous = [];
+                foreach ($restaurant->menu as $menu) {
 
-                        if ($menu->famous == 1) {
-                            $image = url('/') . '/images/' . $menu->image;
-                            array_push($famous, $image);
-                        }
+                    if ($menu->famous == 1) {
+                        $image = url('/') . '/images/' . $menu->image;
+                        array_push($famous, $image);
                     }
+                }
 
 
-                    $rate_sum = 0;
-                    $review_count = $restaurant->review->count();
-                    foreach ($restaurant->review as $review) {
-                        $rate_sum += $review->rate_value;
+                $rate_sum = 0;
+                $review_count = $restaurant->review->count();
+                foreach ($restaurant->review as $review) {
+                    $rate_sum += $review->rate_value;
+                }
+                if ($review_count > 0) {
+                    $rate_sum = $rate_sum / $review_count;
+                    $rating_count = ceil($rate_sum) - 0.5;
+                    if ($rating_count < $rate_sum) {
+                        $rating_count = ceil($rate_sum);
                     }
-                    if ($review_count > 0) {
-                        $rate_sum = $rate_sum / $review_count;
-                        $rating_count = ceil($rate_sum) - 0.5;
-                        if ($rating_count < $rate_sum) {
-                            $rating_count = ceil($rate_sum);
-                        }
-                    } else {
-                        $rating_count = 0;
-                    }
+                } else {
+                    $rating_count = 0;
+                }
 
-                    $category = [];
-                    foreach ($restaurant->categoryRestaurant as $categoryRestaurant) {
-                        $id = $categoryRestaurant->category_id;
-                        if ($lang == 'ar') {
-                            $name = $categoryRestaurant->name_ar;
-
-                        } else {
-                            $name = $categoryRestaurant->name_en;
-                        }
-
-                        $category [] = [
-                            'category_id' => $id,
-                            'category_name' => $name
-                        ];
-
-                    }
+                $category = [];
+                foreach ($restaurant->categoryRestaurant as $categoryRestaurant) {
+                    $id = $categoryRestaurant->category_id;
                     if ($lang == 'ar') {
-                        $restaurant_name = $restaurant->name_ar;
-                        $restaurant_description = $restaurant->description_ar;
+                        $name = $categoryRestaurant->name_ar;
 
                     } else {
-                        $restaurant_name = $restaurant->name_en;
-                        $restaurant_description = $restaurant->description_en;
+                        $name = $categoryRestaurant->name_en;
                     }
-                    $restaurant_details [] = [
-                        'restaurant_id' => $restaurant->id,
-                        'restaurant_name' => $restaurant_name,
-                        'restaurant_image' => url('/') . '/images/' . $restaurant->image,
-                        'famous_images' => $famous,
-                        'ratings_count' => $rating_count,
-                        'review_count' => $review_count,
-                        'description' => $restaurant_description,
-                        'status' => $status,
-                        'category' => $category
+
+                    $category [] = [
+                        'category_id' => $id,
+                        'category_name' => $name
                     ];
 
-                    $arr = [
-                        'restaurant' => $restaurant_details,
-                        'collections' => $menu_collection
-                    ];
+                }
+                if ($lang == 'ar') {
+                    $restaurant_name = $restaurant->name_ar;
+                    $restaurant_description = $restaurant->description_ar;
+
+                } else {
+                    $restaurant_name = $restaurant->name_en;
+                    $restaurant_description = $restaurant->description_en;
+                }
+                $restaurant_details [] = [
+                    'restaurant_id' => $restaurant->id,
+                    'restaurant_name' => $restaurant_name,
+                    'restaurant_image' => url('/') . '/images/' . $restaurant->image,
+                    'famous_images' => $famous,
+                    'ratings_count' => $rating_count,
+                    'review_count' => $review_count,
+                    'description' => $restaurant_description,
+                    'status_id' => $status_id,
+                    'status' => $status,
+                    'category' => $category
+                ];
+
+                $arr = [
+                    'restaurant' => $restaurant_details,
+                    'collections' => $menu_collection
+                ];
 //                }
 
 

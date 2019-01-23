@@ -443,7 +443,7 @@ class CollectionsController extends Controller
                         $hour->weekday = $day;
                         $hour->collection_id = $collection->id;
                         $hour->type = $request->input('type');
-                        $hour->status = 0;
+                        $hour->status = 1;
                         $hour->start_time = Carbon::parse($daily['start']);
                         $hour->end_time = Carbon::parse($daily['end']);
                         $hour->save();
@@ -532,8 +532,15 @@ class CollectionsController extends Controller
         $categories = CollectionCategory::all();
         $mealtimes = Mealtime::all();
         $categoryRestaurants = CategoryRestaurant::where('restaurant_id', $restaurant->id)->get();
+        $item = [];
+        if (count($collection->collectionItem) > 0) {
+            foreach ($collection->collectionItem as $collectionItem) {
+                $item[$collectionItem->item_id] = [];
+            }
+        }
         return view('collection_edit', [
             'collection' => $collection,
+            'item' => collect($item),
             'categories' => $categories,
             'menu_categories' => $menu_categories,
             'mealtimes' => $mealtimes,

@@ -395,6 +395,14 @@
                                                                         #{{$collectionItem->item_id}}
                                                                         <span style="font-size: medium">/ {{$collectionItem->menu->name_en}}
                                                                             -</span>
+                                                                        @if($collection->category_id != 1)
+                                                                            /
+                                                                            @if($collectionItem->is_mandatory == 1)
+                                                                                Mandatory
+                                                                            @else
+                                                                                <span style="font-style: oblique">{{$collectionItem->menu->price . ' ' . \Lang::get('message.priceUnit')}}</span>
+                                                                            @endif
+                                                                        @endif
 
                                                                     </div>
 

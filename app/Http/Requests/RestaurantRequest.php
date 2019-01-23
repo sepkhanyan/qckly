@@ -165,15 +165,7 @@ class RestaurantRequest extends FormRequest
             }
 
             if ($this->has('opening_type')) {
-                if ($this->opening_type == 'daily') {
-                    $rules = [
-                        'daily_days' => 'required|array',
-                        'daily_hours.open' => 'required|date_format:g:i A',
-                        'daily_hours.close' => 'required|date_format:g:i A|after:daily_hours.open'
-                    ];
-                }
                 if ($this->opening_type == 'flexible') {
-
                     $rules = [
                         'flexible_hours.1.open' => 'required|date_format:g:i A',
                         'flexible_hours.1.close' => 'required|date_format:g:i A|after:flexible_hours.1.open',
@@ -191,12 +183,7 @@ class RestaurantRequest extends FormRequest
                         'flexible_hours.0.close' => 'required|date_format:g:i A|after:flexible_hours.0.open',
                     ];
                 }
-                if ($this->opening_type == '24_7') {
 
-                    $rules = [
-                        'opening_type' => 'required|string'
-                    ];
-                }
             }
         }
 
