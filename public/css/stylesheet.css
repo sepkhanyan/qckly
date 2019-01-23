@@ -26,11 +26,7 @@ body {
     display: none;
 }
 
-.body-login .panel-login {
-    margin: 30% 0;
-    background-color: transparent;
-    border: 0;
-}
+
 
 .body-login .panel-login .panel-body {
     background-color: #fff;

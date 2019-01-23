@@ -179,40 +179,48 @@ class CollectionRequest extends FormRequest
             if($this->hasFile('image')){
                 $rules['image'] = 'image|mimes:jpg,png,gif,bmp,jpeg,PNG,JPG,JPEG,GIF,BMP|max:2048';
             }
-        }
-        if($this->has('is_available') && $this->is_available == 0){
-            if($this->type == 'daily'){
-                $rules = [
-                    'daily_days' => 'required|array',
-                    'daily_hours.start' => 'required|date_format:g:i A',
-                    'daily_hours.end' => 'required|date_format:g:i A|after:daily_hours.start'
-                ];
-            }
-            if($this->type == 'flexible'){
-                
-                $rules = [
-                    'flexible_hours.1.start' => 'required|date_format:g:i A',
-                    'flexible_hours.1.end' => 'required|date_format:g:i A|after:flexible_hours.1.start',
-                    'flexible_hours.2.start' => 'required|date_format:g:i A',
-                    'flexible_hours.2.end' => 'required|date_format:g:i A|after:flexible_hours.2.start',
-                    'flexible_hours.3.start' => 'required|date_format:g:i A',
-                    'flexible_hours.3.end' => 'required|date_format:g:i A|after:flexible_hours.3.start',
-                    'flexible_hours.4.start' => 'required|date_format:g:i A',
-                    'flexible_hours.4.end' => 'required|date_format:g:i A|after:flexible_hours.4.start',
-                    'flexible_hours.5.start' => 'required|date_format:g:i A',
-                    'flexible_hours.5.end' => 'required|date_format:g:i A|after:flexible_hours.5.start',
-                    'flexible_hours.6.start' => 'required|date_format:g:i A',
-                    'flexible_hours.6.end' => 'required|date_format:g:i A|after:flexible_hours.6.start',
-                    'flexible_hours.0.start' => 'required|date_format:g:i A',
-                    'flexible_hours.0.end' => 'required|date_format:g:i A|after:flexible_hours.0.start'
-                ];
-            }
 
-            if ($this->type == '24_7') {
+            if($this->has('is_available')){
+                if($this->is_available == 1){
+                    $rules = [
+                        'is_available' => 'required|integer'
+                    ];
+                }
+                if($this->is_available == 0){
+                    if($this->type == 'daily'){
+                        $rules = [
+                            'daily_days' => 'required|array',
+                            'daily_hours.start' => 'required|date_format:g:i A',
+                            'daily_hours.end' => 'required|date_format:g:i A|after:daily_hours.start'
+                        ];
+                    }
+                    if($this->type == 'flexible'){
 
-                $rules = [
-                    'type' => 'required|string'
-                ];
+                        $rules = [
+                            'flexible_hours.1.start' => 'required|date_format:g:i A',
+                            'flexible_hours.1.end' => 'required|date_format:g:i A|after:flexible_hours.1.start',
+                            'flexible_hours.2.start' => 'required|date_format:g:i A',
+                            'flexible_hours.2.end' => 'required|date_format:g:i A|after:flexible_hours.2.start',
+                            'flexible_hours.3.start' => 'required|date_format:g:i A',
+                            'flexible_hours.3.end' => 'required|date_format:g:i A|after:flexible_hours.3.start',
+                            'flexible_hours.4.start' => 'required|date_format:g:i A',
+                            'flexible_hours.4.end' => 'required|date_format:g:i A|after:flexible_hours.4.start',
+                            'flexible_hours.5.start' => 'required|date_format:g:i A',
+                            'flexible_hours.5.end' => 'required|date_format:g:i A|after:flexible_hours.5.start',
+                            'flexible_hours.6.start' => 'required|date_format:g:i A',
+                            'flexible_hours.6.end' => 'required|date_format:g:i A|after:flexible_hours.6.start',
+                            'flexible_hours.0.start' => 'required|date_format:g:i A',
+                            'flexible_hours.0.end' => 'required|date_format:g:i A|after:flexible_hours.0.start'
+                        ];
+                    }
+
+                    if ($this->type == '24_7') {
+
+                        $rules = [
+                            'type' => 'required|string'
+                        ];
+                    }
+                }
             }
         }
 
