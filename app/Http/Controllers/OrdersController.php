@@ -802,8 +802,7 @@ class OrdersController extends Controller
 									$query->where('weekday', $day)
 										->where('opening_time', '<=', $delivery_time)
 										->where('closing_time', '>=', $delivery_time)
-										->where('status', '1')
-										->orWhere('type', '=', '24_7');
+										->where('status', '1');
 								})
 							->get();
 
@@ -814,7 +813,7 @@ class OrdersController extends Controller
 								return response()->json([
 									'success' => 0,
 									'status_code' => 200,
-									'message' => \Lang::get('message.availabilityChanged', [ 'restaurant_name' => $lang == 'ar' ? $restaurant->name_ar : $restaurant->name_en ])
+									'message' => \Lang::get('message.availabilityChanged', [ 'restaurant_name' => 'Restaurant' ])
 								]);
 							}
 
