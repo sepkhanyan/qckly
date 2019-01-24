@@ -38,6 +38,9 @@ class CollectionsController extends Controller
         $collections = [];
         $selectedRestaurant = [];
         $categoryRestaurants = [];
+        $day = Carbon::today()->dayOfWeek;
+        $time = Carbon::now()->toTimeString();
+
         if ($id) {
             $collections = Collection::where('restaurant_id', $id)
                 ->with(['category', 'collectionItem.menu']);
@@ -73,7 +76,9 @@ class CollectionsController extends Controller
             'restaurants' => $restaurants,
             'selectedRestaurant' => $selectedRestaurant,
             'user' => $user,
-            'categoryRestaurants' => $categoryRestaurants
+            'categoryRestaurants' => $categoryRestaurants,
+            'time' => $time,
+            'day' => $day
         ]);
     }
 

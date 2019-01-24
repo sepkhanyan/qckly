@@ -120,13 +120,37 @@
 
                                                     <a class="btn btn-edit" title=""
                                                        href="{{ url('/collection/copy/' . $collection->id )}}">
-                                                        Copy Collection
-                                                        <i class="fa fa-copy"></i>
+                                                        Copy
                                                     </a>&nbsp;
-                                                    <a class="btn btn-edit" title=""
-                                                       href="{{ url('/collection/availability/edit/' . $collection->id )}}">
-                                                        <i class="fa fa-clock-o"></i>
-                                                    </a>&nbsp;
+
+                                                    @if($collection->is_available == 1)
+                                                        @if($collection->unavailabilityHour->isEmpty())
+                                                            <a href="{{ url('/collection/availability/edit/' . $collection->id )}}"
+                                                               class="btn btn-success">
+                                                                Is Available
+                                                                <i class="fa fa-clock-o"></i>
+                                                            </a>
+                                                        @else
+                                                            @php
+                                                                $collectionAvailability = $collection->unavailabilityHour->where('collection_id', $collection->id)->where('weekday', $day)
+                                                            ->where('start_time', '<=', $time)
+                                                            ->where('end_time', '>=', $time)
+                                                            ->where('status', 1)->first();
+                                                            @endphp
+                                                            <a href="{{ url('/collection/availability/edit/' . $collection->id )}}"
+                                                               class="{{($collectionAvailability) ? 'btn btn-success' : 'btn btn-danger'}}">
+                                                                {{($collectionAvailability) ? 'Is Available' : 'Not Available'}}
+                                                                <i class="fa fa-clock-o"></i>
+                                                            </a>
+                                                        @endif
+
+                                                    @elseif($collection->is_available == 0)
+                                                        <a href="{{ url('/collection/availability/edit/' . $collection->id )}}"
+                                                           class="btn btn-danger">
+                                                            Not Available
+                                                            <i class="fa fa-clock-o"></i>
+                                                        </a>
+                                                    @endif
 
                                                     @if($user->admin == 1)
                                                         @if($collection->approved == 0)
@@ -207,7 +231,7 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close
                             </button>
-                            <button  type="submit" class="btn btn-primary">Next</button>
+                            <button type="submit" class="btn btn-primary">Next</button>
                         </div>
                     </div>
                 </div>
