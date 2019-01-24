@@ -10,14 +10,16 @@
                                 <select name="restaurant_name" id="restaurant" class="form-control" tabindex="-1"
                                         title="" onchange="top.location.href = this.options[this.selectedIndex].value">
                                     @if($selectedRestaurant)
-                                        <option value="{{url('/orders/')}}">All</option>
+                                        <option value="{{ url('/orders/') }}">All</option>
                                         @foreach($restaurants as $restaurant)
-                                                <option value="{{url('/orders/' . $restaurant->id)}}"{{($restaurant->id == $selectedRestaurant->id) ? 'selected' : ''}}>{{$restaurant->name_en}}</option>
+                                            <option value="{{ url('/orders/' . $restaurant->id) }}"{{ ($restaurant->id == $selectedRestaurant->id) ? 'selected' : '' }}>
+                                                {{ $restaurant->name_en }}
+                                            </option>
                                         @endforeach
                                     @else
                                         <option value>Select Restaurant</option>
                                         @foreach($restaurants as $restaurant)
-                                            <option value="{{url('/orders/' . $restaurant->id)}}">{{$restaurant->name_en}}</option>
+                                            <option value="{{ url('/orders/' . $restaurant->id) }}">{{ $restaurant->name_en }}</option>
                                         @endforeach
                                     @endif
                                 </select>
@@ -40,14 +42,13 @@
                     </div>
                     <div class="panel-body panel-filter" style="display: none;">
                         <form role="form" id="filter-form" accept-charset="utf-8" method="GET"
-                              action="{{url('/orders/' . $id )}}">
+                              action="{{ url('/orders/' . $id) }}">
                             <div class="filter-bar">
                                 <div class="form-inline">
                                     <div class="row">
                                         <div class="col-md-3 pull-right text-right">
                                             <div class="form-group">
-                                                <input type="text" name="order_search" class="form-control input-sm"
-                                                       value="" placeholder="Search order_id or price."/>&nbsp;&nbsp;&nbsp;
+                                                <input type="text" name="order_search" class="form-control input-sm" value="" placeholder="Search order_id or price."/>&nbsp;&nbsp;&nbsp;
                                             </div>
                                             <a class="btn btn-grey" onclick="filterList();" title="Search">
                                                 <i class="fa fa-search"></i>
@@ -58,14 +59,14 @@
                                                 <select name="order_status" class="form-control input-sm">
                                                     <option value="">View all status</option>
                                                     @foreach ($statuses as $status)
-                                                        <option value="{{$status->id}}">{{$status->name_en}}</option>
+                                                        <option value="{{ $status->id }}">{{ $status->name_en }}</option>
                                                     @endforeach
                                                 </select>&nbsp;
                                             </div>
                                             <a class="btn btn-grey" onclick="filterList();" title="Filter">
                                                 <i class="fa fa-filter"></i>
                                             </a>&nbsp;
-                                            <a class="btn btn-grey" href="{{url('/orders/' . $id )}}" title="Clear">
+                                            <a class="btn btn-grey" href="{{ url('/orders/' . $id) }}" title="Clear">
                                                 <i class="fa fa-times"></i>
                                             </a>
                                         </div>
@@ -78,70 +79,73 @@
                         <div class="table-responsive">
                             <table border="0" class="table table-striped table-border">
                                 <thead>
-                                <tr>
-                                    @if($user->admin == 2)
-                                        <th class="action action-three">
-                                            {{--<input type="checkbox"--}}
-                                            {{--onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">--}}
-                                        </th>
-                                    @endif
-                                    <th>Order ID</th>
-                                    <th>Customer Name</th>
-                                    <th>Payment</th>
-                                    <th>Total</th>
-                                    <th>Status</th>
-                                    <th>Time - Date</th>
-                                    @if($user->admin == 2)
-                                        <th class="action action-three">
-                                            {{--<input type="checkbox"--}}
-                                            {{--onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">--}}
-                                        </th>
-                                    @endif
-                                </tr>
+                                    <tr>
+                                        @if($user->admin == 2)
+                                            <th class="action action-three">
+                                                {{--<input type="checkbox"--}}
+                                                {{--onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">--}}
+                                            </th>
+                                        @endif
+                                        <th>Order ID</th>
+                                        <th>Customer Name</th>
+                                        <th>Payment</th>
+                                        <th>Total</th>
+                                        <th>Status</th>
+                                        <th>Time - Date</th>
+                                        @if($user->admin == 2)
+                                            <th class="action action-three">
+                                                {{--<input type="checkbox"--}}
+                                                {{--onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">--}}
+                                            </th>
+                                        @endif
+                                    </tr>
                                 </thead>
                                 <tbody>
                                 {{--@if($selectedRestaurant)--}}
                                     @if(count($orders) > 0)
                                         @foreach($orders as $order)
-                                            <tr class="{{($order->status_id == 1) ? 'info' : ''}}">
+                                            <tr class="{{ ($order->status_id == 1) ? 'info' : '' }}">
                                                 @if($user->admin == 2)
                                                     <td class="action">
                                                         {{--<input type="checkbox" value="{{ $order->order_id }}"--}}
                                                         {{--name="delete"/>--}}
                                                         <a class="btn btn-edit" title=""
-                                                           href="{{ url('/order/edit/' . $order->order_id )}}">
+                                                           href="{{ url('/order/edit/' . $order->order_id) }}">
                                                             <i class="fa fa-eye"></i>
                                                         </a>&nbsp;&nbsp;
                                                     </td>
                                                 @endif
-                                                <td>#{{$order->order_id}}</td>
-                                                <td>{{$order->order->user->username}}</td>
+                                                <td>#{{ $order->order_id }}</td>
+                                                <td>{{ $order->order->user->username }}</td>
                                                 <td>
                                                     @if($order->order->payment_type == 1)
-                                                        {{\Lang::get('message.cash')}}
+                                                        {{ \Lang::get('message.cash') }}
                                                     @elseif($order->payment_type == 2)
-                                                        {{\Lang::get('message.credit')}}
+                                                        {{ \Lang::get('message.credit') }}
                                                     @else
-                                                        {{\Lang::get('message.debit')}}
+                                                        {{ \Lang::get('message.debit') }}
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    {{$order->total_price . \Lang::get('message.priceUnit')}}
+                                                    {{ $order->total_price . \Lang::get('message.priceUnit') }}
                                                 </td>
                                                 <td>
                                                     @if($order->status_id == 1)
-                                                        <span class="label label-default"
-                                                              style="background-color: #686663;">{{$order->status->name_en}}</span>
+                                                        <span class="label label-default" style="background-color: #686663;">
+                                                            {{ $order->status->name_en }}
+                                                        </span>
                                                     @elseif($order->status_id == 2)
-                                                        <span class="label label-default"
-                                                              style="background-color: #00c0ef;">{{$order->status->name_en}}</span>
+                                                        <span class="label label-default" style="background-color: #00c0ef;">
+                                                            {{ $order->status->name_en }}
+                                                        </span>
                                                     @elseif($order->status_id == 3)
-                                                        <span class="label label-default"
-                                                              style="background-color: #00a65a;">{{$order->status->name_en}}</span>
+                                                        <span class="label label-default" style="background-color: #00a65a;">
+                                                            {{ $order->status->name_en }}
+                                                        </span>
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    {{date("g:i A", strtotime($order->order->updated_at)) . ', ' . date("j M Y", strtotime($order->order->updated_at))}}
+                                                    {{ date("g:i A", strtotime($order->order->updated_at)) . ', ' . date("j M Y", strtotime($order->order->updated_at)) }}
                                                 </td>
                                                 @if($user->admin == 2)
                                                     <td>

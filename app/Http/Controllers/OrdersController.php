@@ -40,24 +40,31 @@ class OrdersController extends Controller
         $user = Auth::user();
         $restaurants = Restaurant::all();
         $statuses = Status::all();
+        // dd($statuses);
         $selectedRestaurant = [];
         $data = $request->all();
-        $orders = OrderRestaurant::query();
+        
+        $orders = OrderRestaurant::with('order.user', 'status');
+
         if ($id) {
-            $orders = OrderRestaurant::where('restaurant_id', $id);
+            $orders->where('restaurant_id', $id);
             $selectedRestaurant = Restaurant::find($id);
         }
+
         if ($user->admin == 2) {
-            $orders = OrderRestaurant::where('restaurant_id', $user->restaurant_id);
-        }
-        if (isset($data['order_status'])) {
-            $orders = $orders->where('status_id', $data['order_status']);
+            $orders->where('restaurant_id', $user->restaurant_id);
         }
 
-        if (isset($data['order_search'])) {
-            $orders = $orders->name($data['order_search']);
+        if (isset($data['order_status'])) {
+            $orders->where('status_id', $data['order_status']);
         }
+
+        // if (isset($data['order_search'])) {
+        //     $orders->priceAndOrderId($data['order_search']);
+        // }
+
         $orders = $orders->orderby('id', 'desc')->paginate(20);
+
         return view('orders', [
             'id' => $id,
             'statuses' => $statuses,
@@ -849,7 +856,9 @@ class OrdersController extends Controller
                             $orderRestaurantData[] = [
                                 'restaurant_id' => $res['id'],
                                 'order_id' => $order->id,
-                                'total_price' => $res['total_price']
+                                'total_price' => $res['total_price'],
+                                'created_at' => Carbon::now(),
+                                'updated_at' => Carbon::now(),
                             ];
                         }
 
