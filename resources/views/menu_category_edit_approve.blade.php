@@ -73,7 +73,7 @@
                                 <label for="input_description_ar" class="col-sm-3 control-label">Description Ar</label>
                                 <div class="col-sm-5">
                                     <textarea name="description_ar" id="input_description_ar" class="form-control"
-                                              rows="7">{{old('description_en') ?? $editingMenuCategory->description_en }}</textarea>
+                                              rows="7">{{old('description_en') ?? $editingMenuCategory->description_ar }}</textarea>
                                 </div>
                                 @if ($category->description_ar != $editingMenuCategory->description_ar)
                                     <span class="help-block">
