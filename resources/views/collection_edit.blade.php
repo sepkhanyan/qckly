@@ -557,13 +557,13 @@
                                     <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
                                         @foreach ($categoryRestaurants as $categoryRestaurant)
                                             @if(old('service_type'))
-                                                <label  class="btn btn-success {{(old('service_type') == $categoryRestaurant->name_en) ? ' active' : ''}}" >
-                                                    <input type="radio" name="service_type" value="{{$categoryRestaurant->name_en}}" {{(old('service_type') == $categoryRestaurant->name_en) ? 'checked' : ''}}>
+                                                <label  class="btn btn-success {{(old('service_type') == $categoryRestaurant->id) ? ' active' : ''}}" >
+                                                    <input type="radio" name="service_type" value="{{$categoryRestaurant->id}}" {{(old('service_type') == $categoryRestaurant->id) ? 'checked' : ''}}>
                                                     {{$categoryRestaurant->name_en}}
                                                 </label>
                                                 @else
-                                            <label  class="btn btn-success {{($collection->serviceType->name_en == $categoryRestaurant->name_en) ? ' active' : ''}}" >
-                                                <input type="radio" name="service_type" value="{{$categoryRestaurant->name_en}}" {{($collection->serviceType->name_en == $categoryRestaurant->name_en) ? 'checked' : ''}}>
+                                            <label  class="btn btn-success {{($collection->service_type_id == $categoryRestaurant->id) ? ' active' : ''}}" >
+                                                <input type="radio" name="service_type" value="{{$categoryRestaurant->id}}" {{($collection->service_type_id  == $categoryRestaurant->id) ? 'checked' : ''}}>
                                                 {{$categoryRestaurant->name_en}}
                                             </label>
                                             @endif
@@ -576,19 +576,19 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="form-group{{ $errors->has('delivery_time') ? ' has-error' : '' }}" id="delivery_hours" style="display: none">
+                            <div class="form-group{{ $errors->has('notice_period') ? ' has-error' : '' }}" >
                                 <label for="input-max" class="col-sm-3 control-label">
-                                    Delivery Time
+                                    Notice Period
                                 </label>
                                 <div class="col-sm-5">
                                     <div class="input-group">
-                                        <input type="number" name="delivery_time"  class="form-control"
-                                               min="1" value="{{old('delivery_time') ?? $collection->delivery_hours}}"/>
+                                        <input type="number" name="notice_period"  class="form-control"
+                                               min="1" value="{{old('notice_period') ?? $collection->delivery_hours}}"/>
                                         <span class="input-group-addon">minutes</span>
                                     </div>
-                                    @if ($errors->has('delivery_time'))
+                                    @if ($errors->has('notice_period'))
                                         <span class="help-block">
-                                                    <strong>{{ $errors->first('delivery_time') }}</strong>
+                                                    <strong>{{ $errors->first('notice_period') }}</strong>
                                                 </span>
                                     @endif
                                 </div>

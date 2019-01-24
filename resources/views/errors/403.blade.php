@@ -50,7 +50,7 @@
     <div class="content">
         <div align="center">
             <img class="logo-image" alt="Qckly" title="Qckly"
-                 src="{{url('/') . '/admin/qckly_logo.png'}}" width="550px" height="200px"/>
+                 src="{{url('/') . '/admin/qckly_logo_1.png'}}" width="550px" height="200px"/>
         </div>
         <div class="title">
             Sorry, you do not have the required permission.

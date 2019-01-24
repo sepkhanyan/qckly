@@ -130,8 +130,7 @@
                                                             </a>
                                                         @else
                                                             @php
-                                                                $collectionAvailability = $collection->unavailabilityHour->where('collection_id', $collection->id)
-                                                                    ->where('weekday', $day)
+                                                                $collectionAvailability = $collection->unavailabilityHour->where('weekday', $day)
                                                                     ->where('start_time', '<=', $time)
                                                                     ->where('end_time', '>=', $time)
                                                                     ->where('status', 1)

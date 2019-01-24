@@ -144,13 +144,12 @@ class CollectionsController extends Controller
         if ($user->admin == 2) {
             $restaurant_id = $user->restaurant_id;
         }
-        $service_type = $request->input('service_type');
-        $service = CategoryRestaurant::where('restaurant_id', $restaurant_id)->where('name_en', $service_type)->first();
+
         $category = $request->input('category');
         $collection = New Collection();
         $collection->restaurant_id = $restaurant_id;
-        $collection->service_type_id = $service->id;
-        $collection->delivery_hours = $request->input('delivery_time');
+        $collection->service_type_id = $request->input('service_type');
+        $collection->delivery_hours = $request->input('notice_period');
         $collection->category_id = $category;
         $collection->name_en = $request->input('name_en');
         $collection->name_ar = $request->input('name_ar');
@@ -274,14 +273,13 @@ class CollectionsController extends Controller
         if ($user->admin == 2) {
             $restaurant_id = $user->restaurant_id;
         }
-        $service_type = $request->input('service_type');
-        $service = CategoryRestaurant::where('restaurant_id', $restaurant_id)->where('name_en', $service_type)->first();
+
         $category = $request->input('category');
         $collection = New Collection();
         $collection->category_id = $category;
         $collection->restaurant_id = $restaurant_id;
-        $collection->service_type_id = $service->id;
-        $collection->delivery_hours = $request->input('delivery_time');
+        $collection->service_type_id = $request->input('service_type');
+        $collection->delivery_hours = $request->input('notice_period');
         $collection->category_id = $category;
         $collection->name_en = $request->input('name_en');
         $collection->name_ar = $request->input('name_ar');
@@ -589,10 +587,8 @@ class CollectionsController extends Controller
             }
             $editingCollection = new EditingCollection();
             $editingCollection->collection_id = $collection->id;
-            $service_type = $request->input('service_type');
-            $service = CategoryRestaurant::where('restaurant_id', $collection->restaurant_id)->where('name_en', $service_type)->first();
-            $editingCollection->service_type_id = $service->id;
-            $editingCollection->delivery_hours = $request->input('delivery_time');
+            $editingCollection->service_type_id = $request->input('service_type');
+            $editingCollection->delivery_hours = $request->input('notice_period');
             $editingCollection->name_en = $request->input('name_en');
             $editingCollection->name_ar = $request->input('name_ar');
             $editingCollection->description_en = $request->input('description_en');
@@ -665,10 +661,8 @@ class CollectionsController extends Controller
                 }
             }
         } elseif ($user->admin == 1) {
-            $service_type = $request->input('service_type');
-            $service = CategoryRestaurant::where('restaurant_id', $collection->restaurant_id)->where('name_en', $service_type)->first();
-            $collection->service_type_id = $service->id;
-            $collection->delivery_hours = $request->input('delivery_time');
+            $collection->service_type_id = $request->input('service_type');
+            $collection->delivery_hours = $request->input('notice_period');
             $collection->name_en = $request->input('name_en');
             $collection->name_ar = $request->input('name_ar');
             $collection->description_en = $request->input('description_en');
@@ -754,10 +748,8 @@ class CollectionsController extends Controller
         if ($user->admin == 1) {
             $restaurant_id = $request->input('restaurant');
             $collection = Collection::find($id);
-            $service_type = $request->input('service_type');
-            $service = CategoryRestaurant::where('restaurant_id', $collection->restaurant_id)->where('name_en', $service_type)->first();
-            $collection->service_type_id = $service->id;
-            $collection->delivery_hours = $request->input('delivery_time');
+            $collection->service_type_id = $request->input('service_type');
+            $collection->delivery_hours = $request->input('notice_period');
             $editingCollection = EditingCollection::where('collection_id', $id)->first();
             $collection->restaurant_id = $restaurant_id;
             $collection->name_en = $request->input('name_en');

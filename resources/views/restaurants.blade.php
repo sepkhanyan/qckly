@@ -121,7 +121,7 @@
                                                 @if($user->admin == 1)
                                                     @if($restaurant->active == 0)
                                                             <a class="btn btn-edit"
-                                                               href="{{ url('/restaurant/activate/' . $restaurant->id )}}" {{($restaurant->collection->count() ==  0) ? 'disabled' : ''}}>
+                                                               href="{{ url('/restaurant/activate/' . $restaurant->id )}}" {{($restaurant->collection->where('approved', 1)->count() ==  0) ? 'disabled' : ''}}>
                                                               Activate
                                                             </a>
                                                     @endif
