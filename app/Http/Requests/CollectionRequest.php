@@ -126,7 +126,6 @@ class CollectionRequest extends FormRequest
 
     public function rules()
     {
-
         $rules = [
             'service_type' => 'required',
             'delivery_time' => 'required_if:service_type, Delivery|integer|min:0',

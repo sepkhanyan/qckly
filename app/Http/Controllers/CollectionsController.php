@@ -65,8 +65,7 @@ class CollectionsController extends Controller
             $categoryRestaurants = CategoryRestaurant::where('restaurant_id', $selectedRestaurant->id)->whereDoesntHave('collection')->get();
             $collections = $collections->orderby('approved', 'asc')->paginate(20);
         }
-        $requestDay = Carbon::today()->dayOfWeek;
-        $requestTime = Carbon::now()->toTimeString();
+
         return view('collections', [
             'id' => $id,
             'categories' => $categories,
@@ -74,8 +73,6 @@ class CollectionsController extends Controller
             'restaurants' => $restaurants,
             'selectedRestaurant' => $selectedRestaurant,
             'user' => $user,
-            'requestDay' => $requestDay,
-            'requestTime' => $requestTime,
             'categoryRestaurants' => $categoryRestaurants
         ]);
     }

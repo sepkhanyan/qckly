@@ -430,8 +430,8 @@
                                     <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
                                         @foreach ($categoryRestaurants as $categoryRestaurant)
                                             <label class="btn btn-success{{(old('service_type') == $categoryRestaurant->name_en) ? ' active' : ''}}">
-                                                <input type="radio" name="service_type"
-                                                       value="{{$categoryRestaurant->name_en}}" {{(old('service_type') == $categoryRestaurant->name_en) ? 'checked' : ''}}>
+                                                <input type="checkbox" name="service_type[]"
+                                                       value="{{$categoryRestaurant->name_en}}" {{(old('service_type') == $categoryRestaurant->name_en) ? 'checked' : ''}} multiple>
                                                 {{$categoryRestaurant->name_en}}
                                             </label>
                                         @endforeach
