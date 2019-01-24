@@ -787,8 +787,7 @@ class RestaurantsController extends Controller
                 foreach ($restaurants as $restaurant) {
                     $working_day = Carbon::parse($DataRequests['working_day'])->dayOfWeek;
                     $working_time = $DataRequests['working_time'];
-                    $working_time = Carbon::parse($working_time);
-
+                    $working_time=  date("H:i:s", strtotime($working_time));
                     $restaurantAvailability =  WorkingHour::where('restaurant_id', $restaurant->id)->where('weekday', $working_day)
                             ->where('opening_time', '<=', $working_time)
                             ->where('closing_time', '>=', $working_time)
@@ -1216,7 +1215,7 @@ class RestaurantsController extends Controller
 
                         $working_day = Carbon::parse($DataRequests['working_day'])->dayOfWeek;
                         $working_time = $DataRequests['working_time'];
-                        $working_time = Carbon::parse($working_time);
+                        $working_time=  date("H:i:s", strtotime($working_time));
                         if ($collection->is_available == 1) {
                            if($collection->unavailabilityHour->isEmpty()){
                                $collectionStatus = 1;
@@ -1225,7 +1224,6 @@ class RestaurantsController extends Controller
                                    ->where('start_time', '<=', $working_time)
                                    ->where('end_time', '>=', $working_time)
                                    ->where('status', 1)->first();
-
                                if (!$collectionAvailability) {
                                    $collectionStatus = 0;
                                } else {
@@ -1277,7 +1275,7 @@ class RestaurantsController extends Controller
 
                 $working_day = Carbon::parse($DataRequests['working_day'])->dayOfWeek;
                 $working_time = $DataRequests['working_time'];
-                $working_time = Carbon::parse($working_time);
+                $working_time=  date("H:i:s", strtotime($working_time));
 
                 $restaurantAvailability =  WorkingHour::where('restaurant_id', $restaurant->id)->where('weekday', $working_day)
                     ->where('opening_time', '<=', $working_time)

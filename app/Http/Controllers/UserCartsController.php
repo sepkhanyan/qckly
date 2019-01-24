@@ -98,6 +98,7 @@ class UserCartsController extends Controller
                         $delivery_area = $DataRequests['delivery_order_area'];
                         $delivery_date = $DataRequests['delivery_order_date'];
                         $delivery_time = $DataRequests['delivery_order_time'];
+                        $delivery_time =  date("H:i:s", strtotime($delivery_time));
                         $day = Carbon::parse($delivery_date)->dayOfWeek;
                         $restaurant = Restaurant::where('id', $collection->restaurant_id)->first();
                         if ($lang == 'ar') {
@@ -107,8 +108,8 @@ class UserCartsController extends Controller
                         }
                        
                         $restaurantAvailability =  WorkingHour::where('restaurant_id', $restaurant->id)->where('weekday', $day)
-                            ->where('opening_time', '<=', Carbon::parse($delivery_time))
-                            ->where('closing_time', '>=', Carbon::parse($delivery_time))
+                            ->where('opening_time', '<=', $delivery_time)
+                            ->where('closing_time', '>=', $delivery_time)
                             ->where('status', 1)->first();
                         if (!$restaurantAvailability) {
                             return response()->json(array(
@@ -617,7 +618,7 @@ class UserCartsController extends Controller
                 $foodlist_images = [];
                 $working_day = Carbon::parse($DataRequests['working_day'])->dayOfWeek;
                 $working_time = $DataRequests['working_time'];
-                $working_time = Carbon::parse($working_time);
+                $working_time=  date("H:i:s", strtotime($working_time));
                 if ($lang == 'ar') {
                     $collection_name = $collection->name_ar;
                 } else {
