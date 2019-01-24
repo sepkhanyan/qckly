@@ -153,7 +153,7 @@
                 </div>
                 <div class="navbar-logo col-xs-7">
                     <img class="logo-text" alt="Qckly" title="Qckly"
-                         src="{{url('/') . '/admin/qckly_logo.png'}}"/>
+                         src="{{url('/') . '/admin/qckly_logo_1.png'}}"/>
                 </div>
             </div>
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
