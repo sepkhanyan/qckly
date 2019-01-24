@@ -78,9 +78,9 @@ class CollectionsController extends Controller
         return view('collections', [
             'id' => $id,
             'categories' => $categories,
-            'collections' => $collections,
+            'collections' => isset($collections) ? $collections : collect(),
             'restaurants' => isset($restaurants) ? $restaurants : "",
-            'selectedRestaurant' => $selectedRestaurant,
+            'selectedRestaurant' => isset($selectedRestaurant) ? $selectedRestaurant : "",
             'user' => $user,
             // 'categoryRestaurants' => $categoryRestaurants,
             'time' => $time,
