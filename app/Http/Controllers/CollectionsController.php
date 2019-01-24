@@ -33,39 +33,45 @@ class CollectionsController extends Controller
     {
         $user = Auth::user();
         $categories = CollectionCategory::all();
-        $restaurants = Restaurant::all();
         $data = $request->all();
-        $collections = [];
-        $selectedRestaurant = [];
-        $categoryRestaurants = [];
         $day = Carbon::today()->dayOfWeek;
         $time = Carbon::now()->toTimeString();
 
-        if ($id) {
-            $collections = Collection::where('restaurant_id', $id)
-                ->with(['category', 'collectionItem.menu']);
+        if ($user->admin == 1) {
+
+            $restaurants = Restaurant::all();
+
+            if ($id) {
+
+                $collections = Collection::where('restaurant_id', $id)->with([ 'category', 'serviceType', 'editingCollection', 'unavailabilityHour', 'mealtime' ]);
+
+                if (isset($data['collection_type'])) {
+                    $collections = $collections->where('category_id', $data['collection_type']);
+                }
+
+                if (isset($data['collection_search'])) {
+                    $collections = $collections->name($data['collection_search']);
+                }
+
+                $selectedRestaurant = Restaurant::find($id);
+                // $categoryRestaurants = CategoryRestaurant::where('restaurant_id', $selectedRestaurant->id)->whereDoesntHave('collection')->get();
+                $collections = $collections->orderby('approved', 'asc')->paginate(20);
+            }
+
+        } elseif ($user->admin == 2) {
+
+            $collections = Collection::where('restaurant_id', $user->restaurant_id)->with([ 'category', 'serviceType', 'editingCollection', 'unavailabilityHour', 'mealtime' ]);
+
             if (isset($data['collection_type'])) {
                 $collections = $collections->where('category_id', $data['collection_type']);
-
             }
+
             if (isset($data['collection_search'])) {
                 $collections = $collections->name($data['collection_search']);
             }
-            $selectedRestaurant = Restaurant::find($id);
-            $categoryRestaurants = CategoryRestaurant::where('restaurant_id', $selectedRestaurant->id)->whereDoesntHave('collection')->get();
-            $collections = $collections->orderby('approved', 'asc')->paginate(20);
-        }
-        if ($user->admin == 2) {
-            $collections = Collection::where('restaurant_id', $user->restaurant_id);
-            if (isset($data['collection_type'])) {
-                $collections = $collections->where('category_id', $data['collection_type']);
 
-            }
-            if (isset($data['collection_search'])) {
-                $collections = $collections->name($data['collection_search']);
-            }
             $selectedRestaurant = Restaurant::find($user->restaurant_id);
-            $categoryRestaurants = CategoryRestaurant::where('restaurant_id', $selectedRestaurant->id)->whereDoesntHave('collection')->get();
+            // $categoryRestaurants = CategoryRestaurant::where('restaurant_id', $selectedRestaurant->id)->whereDoesntHave('collection')->get();
             $collections = $collections->orderby('approved', 'asc')->paginate(20);
         }
 
@@ -73,10 +79,10 @@ class CollectionsController extends Controller
             'id' => $id,
             'categories' => $categories,
             'collections' => $collections,
-            'restaurants' => $restaurants,
+            'restaurants' => isset($restaurants) ? $restaurants : "",
             'selectedRestaurant' => $selectedRestaurant,
             'user' => $user,
-            'categoryRestaurants' => $categoryRestaurants,
+            // 'categoryRestaurants' => $categoryRestaurants,
             'time' => $time,
             'day' => $day
         ]);

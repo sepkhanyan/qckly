@@ -110,42 +110,41 @@
                                 @if($selectedRestaurant)
                                     @if(count($collections) > 0)
                                         @foreach($collections as $collection)
-                                            <tr class="{{($collection->editingCollection || $collection->approved == 0) ? 'info' : ''}}">
+                                            <tr class="{{ ($collection->editingCollection || $collection->approved == 0) ? 'info' : '' }}">
                                                 <td class="action">
                                                     <input type="checkbox" value="{{$collection->id}}" name="delete"/>
-                                                    <a class="btn btn-edit" title=""
-                                                       href="{{ url('/collection/edit/' . $collection->id )}}">
+
+                                                    <a class="btn btn-edit" title="" href="{{ url('/collection/edit/' . $collection->id) }}">
                                                         <i class="fa fa-pencil"></i>
                                                     </a>&nbsp;&nbsp;
 
-                                                    <a class="btn btn-edit" title=""
-                                                       href="{{ url('/collection/copy/' . $collection->id )}}">
+                                                    <a class="btn btn-edit" title="" href="{{ url('/collection/copy/' . $collection->id) }}">
                                                         Copy
                                                     </a>&nbsp;
 
                                                     @if($collection->is_available == 1)
                                                         @if($collection->unavailabilityHour->isEmpty())
-                                                            <a href="{{ url('/collection/availability/edit/' . $collection->id )}}"
-                                                               class="btn btn-success">
+                                                            <a href="{{ url('/collection/availability/edit/' . $collection->id) }}" class="btn btn-success">
                                                                 Is Available
                                                                 <i class="fa fa-clock-o"></i>
                                                             </a>
                                                         @else
                                                             @php
-                                                                $collectionAvailability = $collection->unavailabilityHour->where('collection_id', $collection->id)->where('weekday', $day)
-                                                            ->where('start_time', '<=', $time)
-                                                            ->where('end_time', '>=', $time)
-                                                            ->where('status', 1)->first();
+                                                                $collectionAvailability = $collection->unavailabilityHour->where('collection_id', $collection->id)
+                                                                    ->where('weekday', $day)
+                                                                    ->where('start_time', '<=', $time)
+                                                                    ->where('end_time', '>=', $time)
+                                                                    ->where('status', 1)
+                                                                    ->first();
                                                             @endphp
-                                                            <a href="{{ url('/collection/availability/edit/' . $collection->id )}}"
-                                                               class="{{($collectionAvailability) ? 'btn btn-success' : 'btn btn-danger'}}">
-                                                                {{($collectionAvailability) ? 'Is Available' : 'Not Available'}}
+                                                            <a href="{{ url('/collection/availability/edit/' . $collection->id) }}" class="{{ ($collectionAvailability) ? 'btn btn-success' : 'btn btn-danger' }}">
+                                                                {{ ($collectionAvailability) ? 'Is Available' : 'Not Available' }}
                                                                 <i class="fa fa-clock-o"></i>
                                                             </a>
                                                         @endif
 
                                                     @elseif($collection->is_available == 0)
-                                                        <a href="{{ url('/collection/availability/edit/' . $collection->id )}}"
+                                                        <a href="{{ url('/collection/availability/edit/' . $collection->id) }}"
                                                            class="btn btn-danger">
                                                             Not Available
                                                             <i class="fa fa-clock-o"></i>
@@ -155,25 +154,25 @@
                                                     @if($user->admin == 1)
                                                         @if($collection->approved == 0)
                                                             <a class="btn btn-edit" title=""
-                                                               href="{{ url('collection/approve/' . $collection->id )}}">
+                                                               href="{{ url('collection/approve/' . $collection->id) }}">
                                                                 <i class="fa fa-check"></i>
                                                                 Approve
                                                             </a>&nbsp;&nbsp;
                                                             <a class="btn btn-danger" title=""
-                                                               href="{{ url('collection/reject/' . $collection->id )}}">
+                                                               href="{{ url('collection/reject/' . $collection->id) }}">
                                                                 <i class="fa fa-ban"></i>
                                                                 Reject
                                                             </a>&nbsp;
                                                         @endif
                                                     @endif
                                                 </td>
-                                                <td>{{$collection->name_en}}</td>
-                                                <td>{{$collection->description_en}}</td>
-                                                <td>{{$collection->category->name_en}}</td>
-                                                <td>{{$collection->serviceType->name_en}}</td>
-                                                <td>{{$collection->price}}</td>
-                                                <td>{{$collection->mealtime->name_en}}</td>
-                                                <td>{{$collection->id}}</td>
+                                                <td>{{ $collection->name_en }}</td>
+                                                <td>{{ $collection->description_en }}</td>
+                                                <td>{{ $collection->category->name_en }}</td>
+                                                <td>{{ $collection->serviceType->name_en }}</td>
+                                                <td>{{ $collection->price }}</td>
+                                                <td>{{ $collection->mealtime->name_en }}</td>
+                                                <td>{{ $collection->id }}</td>
                                                 <td>
                                                     @if($collection->approved == 0)
                                                         <span class="label label-default">Pending Approval</span>
