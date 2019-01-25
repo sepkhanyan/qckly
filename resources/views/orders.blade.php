@@ -7,9 +7,16 @@
                     <div class="row">
                         @if($user->admin == 1)
                             <div class="form-group col-md-4">
-                                <select name="restaurant_name" id="restaurant" class="form-control" tabindex="-1"
-                                        title="" onchange="top.location.href = this.options[this.selectedIndex].value">
-                                    @if($selectedRestaurant)
+                                <select name="restaurant_name" id="restaurant" class="form-control" tabindex="-1" title="" onchange="top.location.href = this.options[this.selectedIndex].value">
+
+                                    <option value="{{ url('/orders/') }}">All</option>
+                                    @foreach($restaurants as $restaurant)
+                                        <option value="{{ url('/orders/' . $restaurant->id) }}"{{ $restaurant->id == $id ? 'selected' : '' }}>
+                                            {{ $restaurant->name_en }}
+                                        </option>
+                                    @endforeach
+
+                                    {{-- @if($selectedRestaurant)
                                         <option value="{{ url('/orders/') }}">All</option>
                                         @foreach($restaurants as $restaurant)
                                             <option value="{{ url('/orders/' . $restaurant->id) }}"{{ ($restaurant->id == $selectedRestaurant->id) ? 'selected' : '' }}>
@@ -21,7 +28,7 @@
                                         @foreach($restaurants as $restaurant)
                                             <option value="{{ url('/orders/' . $restaurant->id) }}">{{ $restaurant->name_en }}</option>
                                         @endforeach
-                                    @endif
+                                    @endif --}}
                                 </select>
                             </div>
                         @endif
@@ -41,8 +48,7 @@
                         </div>
                     </div>
                     <div class="panel-body panel-filter" style="display: none;">
-                        <form role="form" id="filter-form" accept-charset="utf-8" method="GET"
-                              action="{{ url('/orders/' . $id) }}">
+                        <form role="form" id="filter-form" accept-charset="utf-8" method="GET" action="{{ url('/orders/' . $id) }}">
                             <div class="filter-bar">
                                 <div class="form-inline">
                                     <div class="row">

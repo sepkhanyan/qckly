@@ -38,20 +38,21 @@ class OrdersController extends Controller
     public function index(Request $request, $id = null)
     {
         $user = Auth::user();
-        $restaurants = Restaurant::all();
         $statuses = Status::all();
-        // dd($statuses);
-        $selectedRestaurant = [];
         $data = $request->all();
         
         $orders = OrderRestaurant::with('order.user', 'status');
 
-        if ($id) {
-            $orders->where('restaurant_id', $id);
-            $selectedRestaurant = Restaurant::find($id);
-        }
+        if ($user->admin == 1) {
 
-        if ($user->admin == 2) {
+            $restaurants = Restaurant::all();
+
+            if ($id) {
+                $orders->where('restaurant_id', $id);
+                // $selectedRestaurant = Restaurant::find($id);
+            }
+        } elseif ($user->admin == 2) {
+
             $orders->where('restaurant_id', $user->restaurant_id);
         }
 
@@ -59,18 +60,18 @@ class OrdersController extends Controller
             $orders->where('status_id', $data['order_status']);
         }
 
-        // if (isset($data['order_search'])) {
-        //     $orders->priceAndOrderId($data['order_search']);
-        // }
+        if (isset($data['order_search'])) {
+            $orders->priceAndOrderId($data['order_search']);
+        }
 
-        $orders = $orders->orderby('id', 'desc')->paginate(20);
+        $orders = $orders->orderBy('id', 'DESC')->paginate(20);
 
         return view('orders', [
             'id' => $id,
             'statuses' => $statuses,
             'orders' => $orders,
-            'restaurants' => $restaurants,
-            'selectedRestaurant' => $selectedRestaurant,
+            'restaurants' => isset($restaurants) ? $restaurants : "",
+            // 'selectedRestaurant' => isset($selectedRestaurant) ? $selectedRestaurant : "",
             'user' => $user
         ]);
     }
