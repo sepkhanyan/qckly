@@ -20,7 +20,8 @@ class Address extends Model
         'is_apartment',
         'apartment_number',
         'latitude',
-        'longitude'
+        'longitude',
+        'deleted'
     ];
 
 

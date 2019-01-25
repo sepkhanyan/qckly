@@ -26,7 +26,8 @@ class Restaurant extends Model
 //        'longitude',
         'status',
         'image',
-        'active'
+        'active',
+        'deleted'
     ];
 
 

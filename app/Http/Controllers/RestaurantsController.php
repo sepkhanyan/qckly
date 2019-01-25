@@ -39,15 +39,16 @@ class RestaurantsController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        $restaurants = Restaurant::with([ 'editingRestaurant','collection'])->paginate(20);
+        $restaurants = Restaurant::where('deleted', 0)->with([ 'editingRestaurant','collection']);
         $data = $request->all();
         if (isset($data['restaurant_search'])) {
-            $restaurants = Restaurant::where('name_en', 'like', '%' . $data['restaurant_search'] . '%')
-                ->orWhere('description_en', 'like', $data['restaurant_search'])->paginate(20);
+            $restaurants = $restaurants->where('name_en', 'like', '%' . $data['restaurant_search'] . '%')
+                ->orWhere('description_en', 'like', $data['restaurant_search']);
         }
         if ($user->admin == 2) {
-            $restaurants = Restaurant::where('id', $user->restaurant_id)->with([ 'editingRestaurant', 'collection'])->paginate(20);
+            $restaurants = Restaurant::where('id', $user->restaurant_id)->with([ 'editingRestaurant', 'collection']);
         }
+        $restaurants = $restaurants->paginate(20);
         return view('restaurants', [
             'restaurants' => $restaurants,
             'user' => $user
@@ -168,7 +169,7 @@ class RestaurantsController extends Controller
             $restaurant = Restaurant::find($id);
             $collections = Collection::where('restaurant_id', $id)->get();
             if (count($collections) > 0) {
-                if ($restaurant->active == 0) {
+                if ($restaurant->active == 0 && $restaurant->deleted == 0) {
                     $restaurant->active = 1;
                     $restaurant->save();
                 }
@@ -547,33 +548,8 @@ class RestaurantsController extends Controller
         $user = Auth::user();
         if ($user->admin == 1) {
             $id = $request->get('id');
-            $restaurants = Restaurant::whereIn('id', $id)->get();
-            $restaurant_images = [];
-            $user_images = [];
-            foreach ($restaurants as $restaurant) {
-                $menu_category_images = [];
-                if (count($restaurant->menuCategory) > 0) {
-                    foreach ($restaurant->menuCategory as $menuCategory) {
-                        $menu_category_images[] = public_path('images/' . $menuCategory->image);
-                    }
-                    File::delete($menu_category_images);
-                }
-                if (count($restaurant->menu) > 0) {
-                    $menu_images = [];
-                    foreach ($restaurant->menu as $menu) {
-                        $menu_images[] = public_path('images/' . $menu->image);
-                    }
-                    File::delete($menu_images);
-                }
-//                $user_images = [];
-                if ($restaurant->user->image) {
-                    $user_images[] = public_path('images/' . $restaurant->user->image);
-                    File::delete($user_images);
-                }
-                $restaurant_images[] = public_path('images/' . $restaurant->image);
-            }
-            File::delete($restaurant_images);
-            Restaurant::whereIn('id', $id)->delete();
+            Restaurant::whereIn('id', $id)->update(['deleted' => 1, 'active' => 0]);
+            User::whereIn('restaurant_id', $id)->delete();
             return redirect('/restaurants');
         } else {
             return redirect()->back();
@@ -591,7 +567,7 @@ class RestaurantsController extends Controller
         }
         $restaurants = Restaurant::with(['menu' => function ($query) {
             $query->where('approved', 1);
-        }], 'categoryRestaurant')->where('active', 1)->paginate(20);
+        }], 'categoryRestaurant')->where('active', 1)->where('deleted', 0)->paginate(20);
         if (count($restaurants) > 0) {
             foreach ($restaurants as $restaurant) {
                 $famous = null;
@@ -674,7 +650,7 @@ class RestaurantsController extends Controller
                 $query->where('category_id', $id);
             })->with(['menu' => function ($query) {
                 $query->where('approved', 1);
-            }], 'categoryRestaurant')->where('active', 1)->paginate(20);
+            }], 'categoryRestaurant')->where('active', 1)->where('deleted', 0)->paginate(20);
 
             if (count($restaurants) > 0) {
                 foreach ($restaurants as $restaurant) {
@@ -757,7 +733,7 @@ class RestaurantsController extends Controller
                 'error_details' => $validator->messages()));
         } else {
             $id = $DataRequests['area_id'];
-            $restaurants = Restaurant::where('active', 1)->
+            $restaurants = Restaurant::where('deleted', 0)->where('active', 1)->
             whereHas('restaurantArea', function ($q) use ($id) {
                 $q->where('area_id', $id);
             })
@@ -932,7 +908,7 @@ class RestaurantsController extends Controller
         }
         $restaurants = Restaurant::where('id', $id)->with(['menu' => function ($query) {
             $query->where('approved', 1);
-        }])->where('active', 1)->get();
+        }])->where('active', 1)->where('deleted', 0)->get();
         if (count($restaurants) > 0) {
             foreach ($restaurants as $restaurant) {
                 if (count($restaurant->menu) > 0) {
@@ -1005,7 +981,7 @@ class RestaurantsController extends Controller
                 'error_details' => $validator->messages()));
         } else {
             $restaurant_id = $DataRequests['restaurant_id'];
-            $restaurant = Restaurant::where('id', $restaurant_id)->where('active', 1)
+            $restaurant = Restaurant::where('id', $restaurant_id)->where('active', 1)->where('deleted', 0)
                 ->with(['collection' => function ($query) {
                     $query->where('approved', 1);
                 }], 'collection.collectionItem', 'collection.collectionMenu.collectionItem');

@@ -45,7 +45,7 @@ class OrdersController extends Controller
 
         if ($user->admin == 1) {
 
-            $restaurants = Restaurant::all();
+            $restaurants = Restaurant::where('deleted', 0)->get();
 
             if ($id) {
                 $orders->where('restaurant_id', $id);

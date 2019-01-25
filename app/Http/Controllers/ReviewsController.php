@@ -19,7 +19,7 @@ class ReviewsController extends Controller
     public function index(Request $request, $id = null)
     {
         $user = Auth::user();
-        $restaurants = Restaurant::all();
+        $restaurants = Restaurant::where('deleted', 0)->get();
         $selectedRestaurant = [];
         $data = $request->all();
         $reviews = [];

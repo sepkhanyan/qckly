@@ -130,7 +130,7 @@ class AddressesController extends Controller
         $req_auth = $request->header('Authorization');
         $user_id = User::getUserByToken($req_auth);
         if ($user_id) {
-            $addresses = Address::where('user_id', $user_id)->orderby('created_at', 'desc')->get();
+            $addresses = Address::where('user_id', $user_id)->where('deleted', 0)->orderby('id', 'desc')->paginate(20);
             if (count($addresses) > 0) {
                 foreach ($addresses as $address) {
                     if ($address->is_apartment == 1) {
@@ -158,10 +158,24 @@ class AddressesController extends Controller
                         'longitude' => $address->longitude,
                     ];
                 }
+                $wholeData = [
+                    "total" => $addresses->total(),
+                    "count" => $addresses->count(),
+                    "per_page" => 20,
+                    "current_page" => $addresses->currentPage(),
+                    "next_page_url" => $addresses->nextPageUrl(),
+                    "prev_page_url" => $addresses->previousPageUrl(),
+                    "from" => $addresses->firstItem(),
+                    "to" => $addresses->lastItem(),
+                    "last_page" => $addresses->lastPage(),
+                    'data' => $arr,
+                ];
                 return response()->json(array(
                     'success' => 1,
                     'status_code' => 200,
-                    'data' => $arr));
+                    'Accept-Language' => $lang,
+                    'data' => $wholeData));
+
             } else {
                 return response()->json(array(
                     'success' => 0,
@@ -207,7 +221,7 @@ class AddressesController extends Controller
         $req_auth = $request->header('Authorization');
         $user_id = User::getUserByToken($req_auth);
         if ($user_id) {
-            $address = Address::where('id', $id)->where('user_id', $user_id)->first();
+            $address = Address::where('id', $id)->where('user_id', $user_id)->where('deleted', 0)->first();
             if ($address) {
                 Address::where('user_id', $user_id)->where('is_default', 1)->update(['is_default' => 0]);
                 $address->is_default = 1;
@@ -247,22 +261,22 @@ class AddressesController extends Controller
         $req_auth = $request->header('Authorization');
         $user_id = User::getUserByToken($req_auth);
         if ($user_id) {
-            $address = Address::where('id', $id)->where('user_id', $user_id)->first();
+            $address = Address::where('id', $id)->where('user_id', $user_id)->where('deleted', 0)->first();
             if ($address) {
-                $address->delete();
+                Address::where('id', $id)->where('user_id', $user_id)->where('deleted', 0)->update(['deleted' => 1, 'is_default' => 0]);
             } else {
                 return response()->json(array(
                     'success' => 0,
                     'status_code' => 200,
                     'message' => \Lang::get('message.noAddress')));
             }
-            $default_address = Address::where('user_id', $user_id)->where('is_default', 1)->first();
+            $default_address = Address::where('user_id', $user_id)->where('is_default', 1)->where('deleted', 0)->first();
             if (!$default_address) {
-                $new_default_address = Address::where('user_id', $user_id)->orderBy('created_at', 'desc')->first();
-                if ($new_default_address) {
-                    $new_default_address->is_default = 1;
-                    $new_default_address->save();
-                }
+               $newDefaultAddress =  Address::where('user_id', $user_id)->where('deleted', 0)->orderBy('id', 'desc')->first();
+               if($newDefaultAddress){
+                   $newDefaultAddress->is_default = 1;
+                   $newDefaultAddress->save();
+               }
             }
             return response()->json(array(
                 'success' => 1,
