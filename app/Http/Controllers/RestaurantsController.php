@@ -566,7 +566,7 @@ class RestaurantsController extends Controller
             $validator->getTranslator()->setLocale('ar');
         }
         $restaurants = Restaurant::with(['menu' => function ($query) {
-            $query->where('approved', 1);
+            $query->where('approved', 1)->where('deleted', 0);
         }], 'categoryRestaurant')->where('active', 1)->where('deleted', 0)->paginate(20);
         if (count($restaurants) > 0) {
             foreach ($restaurants as $restaurant) {
@@ -649,7 +649,7 @@ class RestaurantsController extends Controller
             $restaurants = Restaurant::whereHas('categoryRestaurant', function ($query) use ($id) {
                 $query->where('category_id', $id);
             })->with(['menu' => function ($query) {
-                $query->where('approved', 1);
+                $query->where('approved', 1)->where('deleted', 0);
             }], 'categoryRestaurant')->where('active', 1)->where('deleted', 0)->paginate(20);
 
             if (count($restaurants) > 0) {
@@ -738,8 +738,10 @@ class RestaurantsController extends Controller
                 $q->where('area_id', $id);
             })
             ->with(['menu' => function ($query) {
-                $query->where('approved', 1);
-            }], 'workingHour', 'categoryRestaurant', 'review', 'collection');
+                $query->where('approved', 1)->where('deleted', 0);
+            }], ['collection' => function ($query) {
+                $query->where('approved', 1)->where('deleted', 0);
+            }], 'workingHour', 'categoryRestaurant', 'review');
 
             if (isset($DataRequests['category_id'])) {
                 $category = $DataRequests['category_id'];
@@ -907,7 +909,7 @@ class RestaurantsController extends Controller
             $validator->getTranslator()->setLocale('ar');
         }
         $restaurants = Restaurant::where('id', $id)->with(['menu' => function ($query) {
-            $query->where('approved', 1);
+            $query->where('approved', 1)->where('deleted', 0);
         }])->where('active', 1)->where('deleted', 0)->get();
         if (count($restaurants) > 0) {
             foreach ($restaurants as $restaurant) {
@@ -983,7 +985,9 @@ class RestaurantsController extends Controller
             $restaurant_id = $DataRequests['restaurant_id'];
             $restaurant = Restaurant::where('id', $restaurant_id)->where('active', 1)->where('deleted', 0)
                 ->with(['collection' => function ($query) {
-                    $query->where('approved', 1);
+                    $query->where('approved', 1)->where('deleted', 0);
+                }], ['menu' => function ($query) {
+                    $query->where('approved', 1)->where('deleted', 0);
                 }], 'collection.collectionItem', 'collection.collectionMenu.collectionItem');
             if (isset($DataRequests['category_id'])) {
                 $category_id = $DataRequests['category_id'];
@@ -991,7 +995,7 @@ class RestaurantsController extends Controller
                 $restaurant = $restaurant->whereHas('categoryRestaurant', function ($query) use ($category_id) {
                     $query->where('category_id', $category_id);
                 })->with(['collection' => function ($query) use ($service_type) {
-                    $query->where('service_type_id', $service_type->id);
+                    $query->where('service_type_id', $service_type->id)->where('approved', 1)->where('deleted', 0);
                 }])->first();
             } else {
                 $restaurant = $restaurant->first();

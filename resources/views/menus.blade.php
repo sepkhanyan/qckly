@@ -23,23 +23,22 @@
                                 Delete
                             </a>
                         @endif
-                        @if($user->admin == 1)
-                            <div class="form-group col-md-4">
-                                <select name="restaurant_name" id="restaurant" class="form-control" tabindex="-1"
-                                        title="" onchange="top.location.href = this.options[this.selectedIndex].value">
-                                    @if($selectedRestaurant)
+                            @if($user->admin == 1)
+                                <div class="form-group col-md-4">
+                                    <select name="restaurant_name" id="input-name" class="form-control" tabindex="-1"
+                                            title="" onchange="top.location.href = this.options[this.selectedIndex].value">
+                                        @if (!$id)
+                                            <option value>Select Restaurant</option>
+                                        @endif
+
                                         @foreach($restaurants as $restaurant)
-                                                <option value="{{url('/menus/' . $restaurant->id)}}"{{($restaurant->id == $selectedRestaurant->id) ? 'selected' : ''}}>{{$restaurant->name_en}}</option>
+                                            <option value="{{url('/menus/' . $restaurant->id)}}" {{ $restaurant->id == $id ? 'selected' : '' }} >
+                                                {{ $restaurant->name_en }}
+                                            </option>
                                         @endforeach
-                                    @else
-                                        <option value>Select Restaurant</option>
-                                        @foreach($restaurants as $restaurant)
-                                            <option value="{{url('/menus/' . $restaurant->id)}}">{{$restaurant->name_en}}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                            </div>
-                        @endif
+                                    </select>
+                                </div>
+                            @endif
                     </div>
                 </div>
             </div>

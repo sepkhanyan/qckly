@@ -27,16 +27,15 @@
                             <div class="form-group col-md-4">
                                 <select name="restaurant_name" id="input-name" class="form-control" tabindex="-1"
                                         title="" onchange="top.location.href = this.options[this.selectedIndex].value">
-                                    @if($selectedRestaurant)
-                                        @foreach($restaurants as $restaurant)
-                                            <option value="{{url('/menu_categories/' . $restaurant->id)}}"{{($restaurant->id == $selectedRestaurant->id) ? 'selected' : ''}}>{{$restaurant->name_en}}</option>
-                                        @endforeach
-                                    @else
+                                    @if (!$id)
                                         <option value>Select Restaurant</option>
-                                        @foreach($restaurants as $restaurant)
-                                            <option value="{{url('/menu_categories/' . $restaurant->id)}}">{{$restaurant->name_en}}</option>
-                                        @endforeach
                                     @endif
+
+                                    @foreach($restaurants as $restaurant)
+                                        <option value="{{url('/menu_categories/' . $restaurant->id)}}" {{ $restaurant->id == $id ? 'selected' : '' }} >
+                                            {{ $restaurant->name_en }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
                         @endif
@@ -100,7 +99,7 @@
                                 @if($selectedRestaurant)
                                     @if(count($categories) > 0)
                                         @foreach($categories as $category)
-                                            <tr  class="{{($category->editingMenuCategory || $category->approved == 0) ? 'info' : ''}}">
+                                            <tr class="{{($category->editingMenuCategory || $category->approved == 0) ? 'info' : ''}}">
                                                 <td class="action">
                                                     <input type="checkbox" value="{{ $category->id }}" name="delete"/>
                                                     <a class="btn btn-edit" title=""
@@ -131,9 +130,9 @@
                                                     @elseif($category->approved == 2)
                                                         <span class="label label-danger">Rejected</span>
                                                     @endif
-                                                        @if($category->editingMenuCategory)
-                                                            <span class="label label-default">Pending Edit Approval</span>
-                                                        @endif
+                                                    @if($category->editingMenuCategory)
+                                                        <span class="label label-default">Pending Edit Approval</span>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach

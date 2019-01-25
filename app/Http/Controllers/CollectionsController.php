@@ -43,7 +43,7 @@ class CollectionsController extends Controller
 
             if ($id) {
 
-                $collections = Collection::where('restaurant_id', $id)->with([ 'category', 'serviceType', 'editingCollection', 'unavailabilityHour', 'mealtime' ]);
+                $collections = Collection::where('restaurant_id', $id)->where('deleted', 0)->with([ 'category', 'serviceType', 'editingCollection', 'unavailabilityHour', 'mealtime' ]);
 
                 if (isset($data['collection_type'])) {
                     $collections->where('category_id', $data['collection_type']);
@@ -60,7 +60,7 @@ class CollectionsController extends Controller
 
         } elseif ($user->admin == 2) {
 
-            $collections = Collection::where('restaurant_id', $user->restaurant_id)->with([ 'category', 'serviceType', 'editingCollection', 'unavailabilityHour', 'mealtime' ]);
+            $collections = Collection::where('restaurant_id', $user->restaurant_id)->where('deleted', 0)->with([ 'category', 'serviceType', 'editingCollection', 'unavailabilityHour', 'mealtime' ]);
 
             if (isset($data['collection_type'])) {
                 $collections->where('category_id', $data['collection_type']);
@@ -71,7 +71,6 @@ class CollectionsController extends Controller
             }
 
             $selectedRestaurant = Restaurant::find($user->restaurant_id);
-            // $categoryRestaurants = CategoryRestaurant::where('restaurant_id', $selectedRestaurant->id)->whereDoesntHave('collection')->get();
             $collections = $collections->orderBy('approved', 'ASC')->paginate(20);
         }
 
@@ -82,7 +81,6 @@ class CollectionsController extends Controller
             'restaurants' => isset($restaurants) ? $restaurants : "",
             'selectedRestaurant' => isset($selectedRestaurant) ? $selectedRestaurant : "",
             'user' => $user,
-            // 'categoryRestaurants' => $categoryRestaurants,
             'time' => $time,
             'day' => $day
         ]);
@@ -106,15 +104,15 @@ class CollectionsController extends Controller
         }
         $restaurant = Restaurant::find($restaurant_id);
         $categoryRestaurants = CategoryRestaurant::where('restaurant_id', $restaurant->id)->get();
-        $menu_categories = MenuCategory::where('restaurant_id', $restaurant->id)->whereHas('menu', function ($query) {
-            $query->where('approved', 1);
+        $menu_categories = MenuCategory::where('restaurant_id', $restaurant->id)->where('deleted', 0)->where('approved', 1)->whereHas('menu', function ($query) {
+            $query->where('approved', 1)->where('deleted', 0);
         })->with(['menu' => function ($q) {
-            $q->where('approved', 1);
+            $q->where('approved', 1)->where('deleted', 0);
         }])->get();
         $mealtimes = Mealtime::all();
         $category_id = $request->input('collection_category');
         $collection_category = CollectionCategory::where('id', $category_id)->first();
-        $menu_items = Menu::where('restaurant_id', $restaurant->id)->where('approved', 1)->get();
+        $menu_items = Menu::where('restaurant_id', $restaurant->id)->where('approved', 1)->where('deleted', 0)->get();
         if (count($menu_items) > 0) {
             return view('collection_create', [
                 'restaurant' => $restaurant,
@@ -242,10 +240,10 @@ class CollectionsController extends Controller
         }])->whereHas('collectionItem', function ($q) use ($collection) {
             $q->where('collection_id', $collection->id);
         })->get();
-        $menu_categories = MenuCategory::where('restaurant_id', $restaurant->id)->whereHas('menu', function ($query) {
-            $query->where('approved', 1);
+        $menu_categories = MenuCategory::where('restaurant_id', $restaurant->id)->where('approved', 1)->where('deleted', 0)->whereHas('menu', function ($query) {
+            $query->where('approved', 1)->where('deleted', 0);
         })->with(['menu' => function ($q) {
-            $q->where('approved', 1);
+            $q->where('approved', 1)->where('deleted', 0);
         }])->get();
         $menu_items = CollectionItem::where('collection_id', $collection->id)->get();
         $categories = CollectionCategory::all();
@@ -500,10 +498,10 @@ class CollectionsController extends Controller
             }])->whereHas('editingCollectionItem', function ($q) use ($editingCollection) {
                 $q->where('editing_collection_id', $editingCollection->id);
             })->get();
-            $menu_categories = MenuCategory::where('restaurant_id', $restaurant->id)->whereHas('menu', function ($query) {
-                $query->where('approved', 1);
+            $menu_categories = MenuCategory::where('restaurant_id', $restaurant->id)->where('approved', 1)->where('deleted', 0)->whereHas('menu', function ($query) {
+                $query->where('approved', 1)->where('deleted', 0);
             })->with(['menu' => function ($q) {
-                $q->where('approved', 1);
+                $q->where('approved', 1)->where('deleted', 0);
             }])->get();
             $menu_items = CollectionItem::where('collection_id', $collection->id)->get();
             $editingMenuItems = EditingCollectionItem::where('editing_collection_id', $editingCollection->id)->get();
@@ -529,10 +527,10 @@ class CollectionsController extends Controller
         }])->whereHas('collectionItem', function ($q) use ($collection) {
             $q->where('collection_id', $collection->id);
         })->get();
-        $menu_categories = MenuCategory::where('restaurant_id', $restaurant->id)->whereHas('menu', function ($query) {
-            $query->where('approved', 1);
+        $menu_categories = MenuCategory::where('restaurant_id', $restaurant->id)->where('approved', 1)->where('deleted', 0)->whereHas('menu', function ($query) {
+            $query->where('approved', 1)->where('deleted', 0);
         })->with(['menu' => function ($q) {
-            $q->where('approved', 1);
+            $q->where('approved', 1)->where('deleted', 0);
         }])->get();
         $menu_items = CollectionItem::where('collection_id', $collection->id)->get();
         $categories = CollectionCategory::all();
@@ -856,15 +854,17 @@ class CollectionsController extends Controller
         if ($user->admin == 2) {
             $subCollection = Collection::whereIn('id', $id)->where('restaurant_id', $user->restaurant_id)->first();
             if ($subCollection) {
-                Collection::whereIn('id', $id)->delete();
+                Collection::whereIn('id', $id)->update(['deleted' => 1]);
             } else {
                 return redirect()->back();
             }
         } else {
-            Collection::whereIn('id', $id)->delete();
+            Collection::whereIn('id', $id)->update(['deleted' => 1]);
         }
 
-        Restaurant::whereDoesntHave('collection')->update(['active' => 0]);
+        Restaurant::whereDoesntHave('collection', function ($query){
+            $query->where('deleted', 0);
+        })->update(['active' => 0]);
 
         return redirect('/collections');
     }

@@ -19,7 +19,8 @@ class Menu extends Model
         'category_id',
         'status',
         'famous',
-        'approved'
+        'approved',
+        'deleted'
     ];
 
 

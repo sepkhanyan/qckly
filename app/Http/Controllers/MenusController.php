@@ -27,49 +27,60 @@ class MenusController extends Controller
     public function index($id = null, Request $request)
     {
         $user = Auth::user();
-        $restaurants = Restaurant::where('deleted', 0)->get();
-        $selectedRestaurant = [];
         $data = $request->all();
-        $menus = [];
-        $categories = [];
-        if ($id) {
-            $menus = Menu::where('restaurant_id', $id);
+
+        if ($user->admin == 1) {
+
+            $restaurants = Restaurant::where('deleted', 0)->get();
+
+            if ($id) {
+
+                $menus = Menu::where('restaurant_id', $id)->where('deleted', 0)->with('editingMenu');
+
+                if (isset($data['menu_status'])) {
+                    $menus = $menus->where('status', $data['menu_status']);
+                }
+
+                if (isset($data['menu_category'])) {
+                    $menus = $menus->where('category_id', $data['menu_category']);
+
+                }
+
+                if (isset($data['menu_search'])) {
+                    $menus = $menus->name($data['menu_search']);
+                }
+
+                $selectedRestaurant = Restaurant::find($id);
+                $menus = $menus->orderby('approved', 'asc')->orderby('category_id', 'asc')->paginate(20);
+                $categories = MenuCategory::where('restaurant_id', $selectedRestaurant->id)->where('deleted', 0)->where('approved', 1)->get();
+            }
+
+        }elseif ($user->admin == 2) {
+
+            $menus = Menu::where('restaurant_id', $user->restaurant_id)->where('deleted', 0)->with('editingMenu');
+
             if (isset($data['menu_status'])) {
                 $menus = $menus->where('status', $data['menu_status']);
             }
+
             if (isset($data['menu_category'])) {
                 $menus = $menus->where('category_id', $data['menu_category']);
-
             }
+
             if (isset($data['menu_search'])) {
                 $menus = $menus->name($data['menu_search']);
             }
-            $selectedRestaurant = Restaurant::find($id);
-            $menus = $menus->orderby('approved', 'asc')->orderby('category_id', 'asc')->paginate(20);
-            $categories = MenuCategory::where('restaurant_id', $selectedRestaurant->id)->get();
-        }
-        if ($user->admin == 2) {
-            $menus = Menu::where('restaurant_id', $user->restaurant_id);
-            if (isset($data['menu_status'])) {
-                $menus = $menus->where('status', $data['menu_status']);
-            }
-            if (isset($data['menu_category'])) {
-                $menus = $menus->where('category_id', $data['menu_category']);
 
-            }
-            if (isset($data['menu_search'])) {
-                $menus = $menus->name($data['menu_search']);
-            }
             $selectedRestaurant = Restaurant::find($user->restaurant_id);
             $menus = $menus->orderby('approved', 'asc')->orderby('category_id', 'asc')->paginate(20);
-            $categories = MenuCategory::where('restaurant_id', $user->restaurant_id)->get();
+            $categories = MenuCategory::where('restaurant_id', $user->restaurant_id)->where('deleted', 0)->where('approved', 1)->get();
         }
         return view('menus', [
             'id' => $id,
-            'menus' => $menus,
-            'restaurants' => $restaurants,
-            'categories' => $categories,
-            'selectedRestaurant' => $selectedRestaurant,
+            'menus' => isset($menus) ? $menus : collect(),
+            'restaurants' => isset($restaurants) ? $restaurants : "",
+            'selectedRestaurant' => isset($selectedRestaurant) ? $selectedRestaurant : "",
+            'categories' => isset($categories) ? $categories : collect(),
             'user' => $user
         ]);
     }
@@ -86,7 +97,7 @@ class MenusController extends Controller
         if ($user->admin == 2) {
             $restaurant = Restaurant::where('id', $user->restaurant_id)->first();
         }
-        $categories = MenuCategory::where('restaurant_id', $restaurant->id)->where('approved', 1)->get();
+        $categories = MenuCategory::where('restaurant_id', $restaurant->id)->where('approved', 1)->where('deleted', 0)->get();
         if (count($categories) > 0) {
             return view('menu_create', [
                 'restaurant' => $restaurant,
@@ -337,26 +348,15 @@ class MenusController extends Controller
     {
         $id = $request->get('id');
         $user = Auth::user();
-        $menus = Menu::whereIn('id', $id)->get();
         $menu = Menu::where('id', $id)->first();
         if ($user->admin == 2) {
             if($menu->restaurant_id == $user->restaurant_id){
-                $menu_images = [];
-                foreach($menus as $menu){
-                    $menu_images[] = public_path('images/' . $menu->image);
-                }
-                File::delete($menu_images);
-                Menu::whereIn('id', $id)->delete();
+                Menu::whereIn('id', $id)->update(['deleted' => 1]);
             }else{
                 return redirect()->back();
             }
         } else {
-            $menu_images = [];
-            foreach($menus as $menu){
-                $menu_images[] = public_path('images/' . $menu->image);
-            }
-            File::delete($menu_images);
-            Menu::whereIn('id', $id)->delete();
+            Menu::whereIn('id', $id)->update(['deleted' => 1]);
         }
         return redirect()->back();
     }

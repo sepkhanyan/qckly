@@ -76,7 +76,7 @@ class UserCartsController extends Controller
                 if (isset($DataRequests['special_instruction'])) {
                     $special_instruction = $DataRequests['special_instruction'];
                 }
-                $collection = Collection::where('id', $collection_id)->first();
+                $collection = Collection::where('id', $collection_id)->where('deleted', 0)->first();
                 if (!$collection) {
                     return response()->json(array(
                         'success' => 0,
@@ -100,14 +100,14 @@ class UserCartsController extends Controller
                         $delivery_time = $DataRequests['delivery_order_time'];
                         $delivery_time =  date("H:i:s", strtotime($delivery_time));
                         $day = Carbon::parse($delivery_date)->dayOfWeek;
-                        $restaurant = Restaurant::where('id', $collection->restaurant_id)->first();
+                        $restaurant = Restaurant::where('id', $collection->restaurant_id)->with('workingHour')->first();
                         if ($lang == 'ar') {
                             $restaurant_name = $restaurant->name_ar;
                         } else {
                             $restaurant_name = $restaurant->name_en;
                         }
                        
-                        $restaurantAvailability =  WorkingHour::where('restaurant_id', $restaurant->id)->where('weekday', $day)
+                        $restaurantAvailability =  $restaurant->workingHour->where('weekday', $day)
                             ->where('opening_time', '<=', $delivery_time)
                             ->where('closing_time', '>=', $delivery_time)
                             ->where('status', 1)->first();
@@ -385,7 +385,7 @@ class UserCartsController extends Controller
                 ->where('completed', 0)
                 ->with(['cartCollection' => function ($query) {
                     $query->orderby('created_at', 'desc');
-                }])->first();
+                }], 'cartCollection.cartItem', 'address')->first();
             if ($cart) {
                 $address = (object)array();
                 $address_id = -1;
@@ -421,7 +421,7 @@ class UserCartsController extends Controller
                     $total = 0;
                     foreach ($cart->cartCollection as $cart_collection) {
                         $menu = [];
-                        $categories = MenuCategory::whereHas('cartItem', function ($query) use ($cart_collection) {
+                        $categories = MenuCategory::where('deleted', 0)->whereHas('cartItem', function ($query) use ($cart_collection) {
                             $query->where('cart_collection_id', $cart_collection->id)->where('is_mandatory', 0);
                         })->with(['cartItem' => function ($x) use ($cart_collection) {
                             $x->where('cart_collection_id', $cart_collection->id)->where('is_mandatory', 0);
@@ -551,7 +551,7 @@ class UserCartsController extends Controller
         if ($user_id) {
             $unreadNot = Notification::where('to_device', $user_id)->where('is_read', 0)->get();
             $unreadCount = count($unreadNot);
-            $cart = UserCart::where('user_id', $user_id)->get();
+            $cart = UserCart::where('user_id', $user_id)->with('cartCollection')->get();
             if (count($cart) > 0) {
                 $cart = $cart->where('completed', 0)->first();
                 if ($cart) {

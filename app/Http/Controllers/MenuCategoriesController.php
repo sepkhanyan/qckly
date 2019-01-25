@@ -24,34 +24,41 @@ class MenuCategoriesController extends Controller
     public function index(Request $request, $id = null)
     {
         $user = Auth::user();
-        $restaurants = Restaurant::where('deleted', 0)->get();
-        $selectedRestaurant = [];
         $data = $request->all();
-        $categories = [];
-        $editingCategories = EditingMenuCategory::all();
-        if ($id) {
-            $categories = MenuCategory::where('restaurant_id', $id);
-            if (isset($data['category_search'])) {
-                $categories = $categories->name($data['category_search']);
+
+        if ($user->admin == 1) {
+
+            $restaurants = Restaurant::where('deleted', 0)->get();
+
+            if ($id) {
+
+                $categories = MenuCategory::where('restaurant_id', $id)->where('deleted', 0)->with('editingMenuCategory');
+                if (isset($data['category_search'])) {
+                    $categories = $categories->name($data['category_search']);
+                }
+                $selectedRestaurant = Restaurant::find($id);
+                $categories = $categories->orderby('approved', 'asc')->paginate(20);
             }
-            $selectedRestaurant = Restaurant::find($id);
-            $categories = $categories->orderby('approved', 'asc')->paginate(20);
+
         }
-        if ($user->admin == 2) {
-            $categories = MenuCategory::where('restaurant_id', $user->restaurant_id);
+
+        elseif($user->admin == 2) {
+
+            $categories = MenuCategory::where('restaurant_id', $user->restaurant_id)->where('deleted', 0)->with('editingMenuCategory');
+
             if (isset($data['category_search'])) {
                 $categories = $categories->name($data['category_search']);
             }
+
             $selectedRestaurant = Restaurant::find($user->restaurant_id);
             $categories = $categories->orderby('approved', 'asc')->paginate(20);
 
         }
         return view('menu_categories', [
             'id' => $id,
-            'restaurants' => $restaurants,
-            'categories' => $categories,
-            'selectedRestaurant' => $selectedRestaurant,
-            'editingCategories' => $editingCategories,
+            'categories' => isset($categories) ? $categories : collect(),
+            'restaurants' => isset($restaurants) ? $restaurants : "",
+            'selectedRestaurant' => isset($selectedRestaurant) ? $selectedRestaurant : "",
             'user' => $user
         ]);
     }
@@ -276,40 +283,15 @@ class MenuCategoriesController extends Controller
     {
         $user = Auth::user();
         $id = $request->get('id');
-        $menuCategories = MenuCategory::whereIn('id', $id)->get();
         $menuCategory = MenuCategory::where('id', $id)->first();
         if ($user->admin == 2) {
             if($menuCategory->restaurant_id == $user->restaurant_id){
-                $category_images = [];
-                foreach ($menuCategories as $category){
-                    if(count($category->menu) > 0){
-                        $menu_images = [];
-                        foreach($category->menu as $menu){
-                            $menu_images[] = public_path('images/' . $menu->image);
-                        }
-                        File::delete($menu_images);
-                    }
-                    $category_images[] = public_path('images/' . $category->image);
-                }
-                File::delete($category_images);
-                MenuCategory::whereIn('id', $id)->delete();
+                MenuCategory::whereIn('id', $id)->update(['deleted' => 1]);
             }else{
                 return redirect()->back();
             }
         }elseif($user->admin == 1){
-            $category_images = [];
-            foreach ($menuCategories as $category){
-                if(count($category->menu) > 0){
-                    $menu_images = [];
-                    foreach($category->menu as $menu){
-                        $menu_images[] = public_path('images/' . $menu->image);
-                    }
-                    File::delete($menu_images);
-                }
-                $category_images[] = public_path('images/' . $category->image);
-            }
-            File::delete($category_images);
-            MenuCategory::whereIn('id', $id)->delete();
+            MenuCategory::whereIn('id', $id)->update(['deleted' => 1]);
         }
         return redirect('/menu_categories');
 

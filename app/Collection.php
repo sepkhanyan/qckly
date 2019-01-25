@@ -37,7 +37,8 @@ class Collection extends Model
         'min_serve_to_person',
         'max_serve_to_person',
         'approved',
-        'image'
+        'image',
+        'deleted'
     ];
 
 

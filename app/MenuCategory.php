@@ -15,7 +15,8 @@ class MenuCategory extends Model
         'description_en',
         'description_ar',
         'image',
-        'approved'
+        'approved',
+        'deleted'
     ];
 
 
