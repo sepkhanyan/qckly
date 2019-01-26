@@ -41,10 +41,10 @@ class MenuCategory extends Model
         return $this->hasOne('App\CollectionMenu', 'menu_id');
     }
 
-    public function collectionItem()
-    {
-        return $this->hasMany('App\CollectionItem', 'collection_menu_id');
-    }
+//    public function collectionItem()
+//    {
+//        return $this->hasMany('App\CollectionItem', 'collection_menu_id');
+//    }
 
     public function editingCollectionMenu()
     {

@@ -54,7 +54,6 @@ class CollectionsController extends Controller
                 }
 
                 $selectedRestaurant = Restaurant::find($id);
-                // $categoryRestaurants = CategoryRestaurant::where('restaurant_id', $selectedRestaurant->id)->whereDoesntHave('collection')->get();
                 $collections = $collections->orderBy('approved', 'ASC')->paginate(20);
             }
 

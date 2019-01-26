@@ -30,11 +30,11 @@ class CollectionItem extends Model
 
     public function collectionMenu()
     {
-        return $this->belongsTo('App\CollectionMenu', 'collection_menu_id', 'menu_id');
+        return $this->belongsTo('App\CollectionMenu', 'collection_menu_id');
     }
 
-    public function category()
-    {
-        return $this->belongsTo('App\MenuCategory', 'collection_menu_id');
-    }
+//    public function category()
+//    {
+//        return $this->belongsTo('App\MenuCategory', 'collection_menu_id');
+//    }
 }

@@ -30,6 +30,6 @@ class CollectionMenu extends Model
 
     public function collectionItem()
     {
-        return $this->hasMany('App\CollectionItem', 'collection_menu_id', 'menu_id');
+        return $this->hasMany('App\CollectionItem', 'collection_menu_id');
     }
 }
