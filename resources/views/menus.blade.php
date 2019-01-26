@@ -25,7 +25,7 @@
                         @endif
                             @if($user->admin == 1)
                                 <div class="form-group col-md-4">
-                                    <select name="restaurant_name" id="input-name" class="form-control" tabindex="-1"
+                                    <select name="restaurant_name" id="restaurant" class="form-control" tabindex="-1"
                                             title="" onchange="top.location.href = this.options[this.selectedIndex].value">
                                         @if (!$id)
                                             <option value>Select Restaurant</option>

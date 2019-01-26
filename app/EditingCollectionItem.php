@@ -29,11 +29,7 @@ class EditingCollectionItem extends Model
 
     public function editingCollectionMenu()
     {
-        return $this->belongsTo('App\EditingCollectionMenu', 'collection_menu_id', 'menu_id');
+        return $this->belongsTo('App\EditingCollectionMenu', 'collection_menu_id');
     }
 
-    public function category()
-    {
-        return $this->belongsTo('App\MenuCategory', 'collection_menu_id');
-    }
 }

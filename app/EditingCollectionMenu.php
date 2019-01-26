@@ -30,6 +30,6 @@ class EditingCollectionMenu extends Model
 
     public function editingCollectionItem()
     {
-        return $this->hasMany('App\EditingCollectionItem', 'collection_menu_id', 'menu_id');
+        return $this->hasMany('App\EditingCollectionItem', 'collection_menu_id');
     }
 }

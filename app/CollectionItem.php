@@ -33,8 +33,5 @@ class CollectionItem extends Model
         return $this->belongsTo('App\CollectionMenu', 'collection_menu_id');
     }
 
-//    public function category()
-//    {
-//        return $this->belongsTo('App\MenuCategory', 'collection_menu_id');
-//    }
+
 }

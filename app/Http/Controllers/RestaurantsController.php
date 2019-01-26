@@ -988,7 +988,7 @@ class RestaurantsController extends Controller
                     $query->where('approved', 1)->where('deleted', 0);
                 }], ['menu' => function ($query) {
                     $query->where('approved', 1)->where('deleted', 0);
-                }], 'collection.collectionItem', 'collection.collectionMenu.collectionItem');
+                }], ['collection.collectionItem', 'collection.collectionMenu.collectionItem']);
             if (isset($DataRequests['category_id'])) {
                 $category_id = $DataRequests['category_id'];
                 $service_type = CategoryRestaurant::where('category_id', $category_id)->where('restaurant_id', $restaurant_id)->first();
@@ -1073,12 +1073,8 @@ class RestaurantsController extends Controller
                             $menu_min_qty = -1;
                             $menu_max_qty = -1;
                             $menu = [];
-                            $collectionMenus = CollectionMenu::where('collection_id', $collection->id)->with(['collectionItem' => function ($query) use ($collection) {
-                                $query->where('collection_id', $collection->id);
-                            }])->whereHas('collectionItem', function ($q) use ($collection) {
-                                $q->where('collection_id', $collection->id);
-                            })->get();
-                            foreach ($collectionMenus as $collectionMenu) {
+
+                            foreach ($collection->collectionMenu as $collectionMenu) {
                                 $items = [];
                                 if ($collection->category_id != 4 && $collection->category_id != 1) {
                                     $menu_min_qty = $collectionMenu->min_qty;

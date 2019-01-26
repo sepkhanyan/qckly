@@ -185,7 +185,7 @@ class CollectionsController extends Controller
         }
         $collection->save();
         if ($collection->category_id == 1) {
-            foreach ($request['menu_item'] as $menu_item) {
+            foreach ($request['menu'] as $menu_item) {
                 $collection_item = new CollectionItem();
                 $collection_item->item_id = $menu_item['id'];
                 $collection_item->quantity = $menu_item['qty'];
@@ -194,29 +194,31 @@ class CollectionsController extends Controller
             }
         } else {
 
-            foreach ($request['menu_item'] as $menu_item) {
-                $collection_item = new CollectionItem();
-                $collection_item->item_id = $menu_item['id'];
-                if ($collection->category_id != 4) {
-                    $collection_item->is_mandatory = $menu_item['is_mandatory'];
-                }
-                $item = Menu::where('id', $menu_item['id'])->first();
-                $category = MenuCategory::where('id', $item->category_id)->first();
-                $collection_item->collection_menu_id = $category->id;
-                $collection_item->collection_id = $collection->id;
-                $collection_item->quantity = 1;
-                $collection_item->save();
-            }
             $menus = $request->input('menu');
             foreach ($menus as $menu) {
-                $collection_menu = new CollectionMenu();
-                $collection_menu->collection_id = $collection->id;
-                $collection_menu->menu_id = $menu['id'];
-                if ($collection->category_id != 4) {
-                    $collection_menu->min_qty = $menu['min_qty'];
-                    $collection_menu->max_qty = $menu['max_qty'];
+
+                if( array_key_exists('item', $menu)){
+                    $collection_menu = new CollectionMenu();
+                    $collection_menu->collection_id = $collection->id;
+                    $collection_menu->menu_id = $menu['menu_id'];
+                    if ($collection->category_id != 4) {
+                        $collection_menu->min_qty = $menu['min_qty'];
+                        $collection_menu->max_qty = $menu['max_qty'];
+                    }
+                    $collection_menu->save();
+
+                    foreach ($menu['item'] as $menu_item) {
+                        $collection_item = new CollectionItem();
+                        $collection_item->item_id = $menu_item['item_id'];
+                        if ($collection->category_id != 4) {
+                            $collection_item->is_mandatory = $menu_item['is_mandatory'];
+                        }
+                        $collection_item->collection_menu_id = $collection_menu->id;
+                        $collection_item->collection_id = $collection->id;
+                        $collection_item->quantity = 1;
+                        $collection_item->save();
+                    }
                 }
-                $collection_menu->save();
             }
         }
         return redirect('/collections/' . $restaurant_id);
@@ -620,9 +622,9 @@ class CollectionsController extends Controller
                 $editingCollection->requirements_ar = $request->input('requirements_ar');
             }
             $editingCollection->save();
-            if ($request->has('menu_item')) {
+            if ($request->has('menu')) {
                 if ($collection->category_id == 1) {
-                    foreach ($request['menu_item'] as $menu_item) {
+                    foreach ($request['menu'] as $menu_item) {
                         $editingCollectionItem = new EditingCollectionItem();
                         $editingCollectionItem->item_id = $menu_item['id'];
                         $editingCollectionItem->quantity = $menu_item['qty'];
@@ -630,30 +632,34 @@ class CollectionsController extends Controller
                         $editingCollectionItem->save();
                     }
                 } else {
-                    foreach ($request['menu_item'] as $menu_item) {
-                        $editingCollectionItem = new EditingCollectionItem();
-                        $editingCollectionItem->item_id = $menu_item['id'];
-                        if ($collection->category_id != 4) {
-                            $editingCollectionItem->is_mandatory = $menu_item['is_mandatory'];
-                        }
-                        $item = Menu::where('id', $menu_item['id'])->first();
-                        $category = MenuCategory::where('id', $item->category_id)->first();
-                        $editingCollectionItem->collection_menu_id = $category->id;
-                        $editingCollectionItem->editing_collection_id = $editingCollection->id;
-                        $editingCollectionItem->quantity = 1;
-                        $editingCollectionItem->save();
-                    }
+
                     $menus = $request->input('menu');
                     foreach ($menus as $menu) {
-                        $editingCollectionMenu = new EditingCollectionMenu();
-                        $editingCollectionMenu->editing_collection_id = $editingCollection->id;
-                        $editingCollectionMenu->menu_id = $menu['id'];
-                        if ($collection->category_id != 4) {
-                            $editingCollectionMenu->min_qty = $menu['min_qty'];
-                            $editingCollectionMenu->max_qty = $menu['max_qty'];
+
+                        if( array_key_exists('item', $menu)){
+                            $editingCollectionMenu = new EditingCollectionMenu();
+                            $editingCollectionMenu->editing_collection_id = $editingCollection->id;
+                            $editingCollectionMenu->menu_id = $menu['menu_id'];
+                            if ($collection->category_id != 4) {
+                                $editingCollectionMenu->min_qty = $menu['min_qty'];
+                                $editingCollectionMenu->max_qty = $menu['max_qty'];
+                            }
+                            $editingCollectionMenu->save();
+
+                            foreach ($menu['item'] as $menu_item) {
+                                $editingCollectionItem = new EditingCollectionItem();
+                                $editingCollectionItem->item_id = $menu_item['item_id'];
+                                if ($collection->category_id != 4) {
+                                    $editingCollectionItem->is_mandatory = $menu_item['is_mandatory'];
+                                }
+                                $editingCollectionItem->collection_menu_id = $editingCollectionMenu->id;
+                                $editingCollectionItem->editing_collection_id = $editingCollection->id;
+                                $editingCollectionItem->quantity = 1;
+                                $editingCollectionItem->save();
+                            }
                         }
-                        $editingCollectionMenu->save();
                     }
+
 
                 }
             }
@@ -697,10 +703,11 @@ class CollectionsController extends Controller
             $collection->approved = 1;
             $collection->save();
 
-            if ($request->has('menu_item')) {
+            if ($request->has('menu')) {
                 CollectionItem::where('collection_id', $collection->id)->delete();
+                CollectionMenu::where('collection_id', $collection->id)->delete();
                 if ($collection->category_id == 1) {
-                    foreach ($request['menu_item'] as $menu_item) {
+                    foreach ($request['menu'] as $menu_item) {
                         $collection_item = new CollectionItem();
                         $collection_item->item_id = $menu_item['id'];
                         $collection_item->quantity = $menu_item['qty'];
@@ -708,30 +715,31 @@ class CollectionsController extends Controller
                         $collection_item->save();
                     }
                 } else {
-                    foreach ($request['menu_item'] as $menu_item) {
-                        $collection_item = new CollectionItem();
-                        $collection_item->item_id = $menu_item['id'];
-                        if ($collection->category_id != 4) {
-                            $collection_item->is_mandatory = $menu_item['is_mandatory'];
-                        }
-                        $item = Menu::where('id', $menu_item['id'])->first();
-                        $category = MenuCategory::where('id', $item->category_id)->first();
-                        $collection_item->collection_menu_id = $category->id;
-                        $collection_item->collection_id = $collection->id;
-                        $collection_item->quantity = 1;
-                        $collection_item->save();
-                    }
-                    CollectionMenu::where('collection_id', $collection->id)->delete();
                     $menus = $request->input('menu');
                     foreach ($menus as $menu) {
-                        $collection_menu = new CollectionMenu();
-                        $collection_menu->collection_id = $collection->id;
-                        $collection_menu->menu_id = $menu['id'];
-                        if ($collection->category_id != 4) {
-                            $collection_menu->min_qty = $menu['min_qty'];
-                            $collection_menu->max_qty = $menu['max_qty'];
+
+                        if( array_key_exists('item', $menu)){
+                            $collection_menu = new CollectionMenu();
+                            $collection_menu->collection_id = $collection->id;
+                            $collection_menu->menu_id = $menu['menu_id'];
+                            if ($collection->category_id != 4) {
+                                $collection_menu->min_qty = $menu['min_qty'];
+                                $collection_menu->max_qty = $menu['max_qty'];
+                            }
+                            $collection_menu->save();
+
+                            foreach ($menu['item'] as $menu_item) {
+                                $collection_item = new CollectionItem();
+                                $collection_item->item_id = $menu_item['item_id'];
+                                if ($collection->category_id != 4) {
+                                    $collection_item->is_mandatory = $menu_item['is_mandatory'];
+                                }
+                                $collection_item->collection_menu_id = $collection_menu->id;
+                                $collection_item->collection_id = $collection->id;
+                                $collection_item->quantity = 1;
+                                $collection_item->save();
+                            }
                         }
-                        $collection_menu->save();
                     }
                 }
             }

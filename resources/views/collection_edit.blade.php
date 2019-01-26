@@ -449,7 +449,7 @@
                                                 <span class="text-right"
                                                       style="font-size: large">{{$menu_category->name_en}}</span>
                                             @if($collection->category_id != 1)
-                                                <input type="hidden" name="menu[{{$menu_category->id}}][id]"
+                                                <input type="hidden" name="menu[{{$menu_category->id}}][menu_id]"
                                                        value="{{$menu_category->id}}">
                                             @endif
                                         </label>
@@ -459,12 +459,14 @@
                                                     <div class="input-group">
                                                         <input type="number"
                                                                name="menu[{{$menu_category->id}}][min_qty]"
-                                                               class="form-control" min="1" value="{{old('menu.' . $menu_category->id . '.min_qty') ?? 1}}">
+                                                               class="form-control" min="1"
+                                                               value="{{old('menu.' . $menu_category->id . '.min_qty') ?? 1}}">
                                                     </div>
                                                     <div class="input-group">
                                                         <input type="number"
                                                                name="menu[{{$menu_category->id}}][max_qty]"
-                                                               class="form-control" min="1" value="{{old('menu.' . $menu_category->id . '.max_qty') ?? 1}}">
+                                                               class="form-control" min="1"
+                                                               value="{{old('menu.' . $menu_category->id . '.max_qty') ?? 1}}">
                                                     </div>
                                                 @endif
                                             </div>
@@ -478,9 +480,9 @@
                                                     <div class="checkbox" id="{{$menu->id}}">
                                                         <label style="font-size: medium">
                                                             <input id="item{{$menu->id}}" type="checkbox"
-                                                                   name="menu_item[{{$menu->id}}][id]"
+                                                                   name="menu[{{$menu->id}}][id]"
                                                                    value="{{$menu->id}}"
-                                                                   {{ (collect(old('menu_item.' . $menu->id . '.id'))->contains($menu->id)) ? 'checked':'' }} onclick="myFunction('{{$menu->id}}')">{{$menu->name_en}}
+                                                                   {{ (collect(old('menu.' . $menu->id . '.id'))->contains($menu->id)) ? 'checked':'' }} onclick="myFunction('{{$menu->id}}')">{{$menu->name_en}}
                                                         </label>
                                                     </div>
                                                 </div>
@@ -488,9 +490,9 @@
                                                     <div class="control-group control-group-3">
                                                         <div class="col-xs-3">
                                                             <input type="number"
-                                                                   name="menu_item[{{$menu->id}}][qty]" id="qty{{$menu->id}}"
-                                                                   style="display: none{{ (collect(old('menu_item.' . $menu->id . '.id'))->contains($menu->id)) ? 'block':'' }}" {{(!old('menu_item.' . $menu->id . '.id')) ? 'disabled': '' }}
-                                                                   class="form-control" min="1" value="{{old('menu_item.' . $menu->id . '.qty') ?? 1}}">
+                                                                   name="menu[{{$menu->id}}][qty]" id="qty{{$menu->id}}"
+                                                                   style="display: none{{ (collect(old('menu_item.' . $menu->id . '.id'))->contains($menu->id)) ? 'block':'' }}" {{(!old('menu.' . $menu->id . '.id')) ? 'disabled': '' }}
+                                                                   class="form-control" min="1" value="{{old('menu.' . $menu->id . '.qty') ?? 1}}">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -503,22 +505,22 @@
                                                     <div class="col-xs-2">
                                                         <div class="checkbox" id="{{$menu->id}}">
                                                             <label style="font-size: medium">
-                                                                <input id="item{{$menu->id}}" type="checkbox"
-                                                                       name="menu_item[{{$menu->id}}][id]"
+                                                                <input multiple id="item{{$menu->id}}" type="checkbox"
+                                                                       name="menu[{{$menu_category->id}}][item][{{$menu->id}}][item_id]"
                                                                        value="{{$menu->id}}"
-                                                                       {{ (collect(old('menu_item.' . $menu->id . '.id'))->contains($menu->id)) ? 'checked':'' }} onclick="myFunction('{{$menu->id}}')">{{$menu->name_en}}
+                                                                       {{ (collect(old('menu.' . $menu_category->id . '.item.' . $menu->id . '.item_id'))->contains($menu->id)) ? 'checked':'' }} onclick="myFunction('{{$menu->id}}')">{{$menu->name_en}}
                                                             </label>
                                                         </div>
                                                     </div>
                                                     @if($collection->category_id != 4)
                                                         <div class="col-xs-2">
-                                                            <select name="menu_item[{{$menu->id}}][is_mandatory]"
+                                                            <select name="menu[{{$menu_category->id}}][item][{{$menu->id}}][is_mandatory]"
                                                                     id="option{{$menu->id}}" class="form-control"
-                                                                    style="display: none{{ (collect(old('menu_item.' . $menu->id . '.id'))->contains($menu->id)) ? 'block':'' }}" {{(!old('menu_item.' . $menu->id . '.id')) ? 'disabled': '' }}>
-                                                                <option value="1" {{(old('menu_item.' . $menu->id . '.is_mandatory') == 1 ) ? 'selected':''}}>
+                                                                    style="display: none{{ (collect(old('menu.' . $menu_category->id . '.item.' . $menu->id . '.item_id'))->contains($menu->id)) ? 'block':'' }}" {{(!old('menu.' . $menu_category->id . '.item.' . $menu->id . '.item_id')) ? 'disabled': '' }}>
+                                                                <option value="1" {{(old('menu.' . $menu_category->id . '.item.' . $menu->id . '.is_mandatory') == 1 ) ? 'selected':''}}>
                                                                     Mandatory
                                                                 </option>
-                                                                <option value="0" {{(old('menu_item.' . $menu->id . '.is_mandatory') == 0 ) ? 'selected':''}}>
+                                                                <option value="0" {{(old('menu.' . $menu_category->id . '.item.' . $menu->id . '.is_mandatory') == 0 ) ? 'selected':''}}>
                                                                     Optional
                                                                 </option>
                                                             </select>
@@ -542,9 +544,9 @@
                             <div class="form-group">
                                 <label for="" class="col-sm-3 control-label"></label>
                                 <div class="col-xs-3">
-                                    @if ($errors->has('menu_item'))
+                                    @if ($errors->has('menu'))
                                         <span class="help-block">
-                                                    <strong>{{ $errors->first('menu_item') }}</strong>
+                                                    <strong>{{ $errors->first('menu') }}</strong>
                                                 </span>
                                     @endif
                                 </div>

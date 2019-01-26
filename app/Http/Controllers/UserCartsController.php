@@ -607,7 +607,7 @@ class UserCartsController extends Controller
         } else {
             $collection_type = $DataRequests['collection_category_id'];
             $collection_id = $DataRequests['collection_id'];
-            $collection = Collection::where('id', $collection_id)->with('collectionItem.menu')->first();
+            $collection = Collection::where('id', $collection_id)->with(['collectionItem', 'collectionMenu.collectionItem'])->first();
             if ($collection) {
                 if ($collection->female_caterer_available == 1) {
                     $female_caterer_available = true;
@@ -692,12 +692,8 @@ class UserCartsController extends Controller
                             $menu_min_qty = -1;
                             $menu_max_qty = -1;
                             $menu = [];
-                            $collectionMenus = CollectionMenu::where('collection_id', $collection->id)->with(['collectionItem' => function ($query) use ($collection) {
-                                $query->where('collection_id', $collection->id);
-                            }])->whereHas('collectionItem', function ($q) use ($collection) {
-                                $q->where('collection_id', $collection->id);
-                            })->get();
-                            foreach ($collectionMenus as $collectionMenu) {
+
+                            foreach ($collection->collectionMenu as $collectionMenu) {
                                 $items = [];
                                 if ($collection->category_id != 4 && $collection->category_id != 1) {
                                     $menu_min_qty = $collectionMenu->min_qty;
