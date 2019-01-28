@@ -11,9 +11,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-use App\SendSMS\sendSMS;
-
-class SendEmailAfterCompleteOrder implements ShouldQueue
+class SendEmailAndSMSAfterCompleteOrder implements ShouldQueue
 {
 	use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -41,7 +39,12 @@ class SendEmailAfterCompleteOrder implements ShouldQueue
 
 		foreach ($users as $user) {
 
-			$email = $user->email;
+			// $email = $user->email;
+			$email = 'mabdulfattah@ebdaadt.com';
+			// $email = 'sky933108@gmail.com';
+
+			// $user_phone = $user->mobile_number;
+			$user_phone = '30666303';
 
 			Mail::send('welcome', [],
 				function ($m) use ($email) {
@@ -53,6 +56,10 @@ class SendEmailAfterCompleteOrder implements ShouldQueue
 					$m->to($email, $email)->subject($subject);
 				}
 			);
+
+			$url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=You%20have%20new%20order&destination=974$user_phone&source=97772&mask=Qckly";
+			// space for sms content %20
+			$ret = file($url);
 		}
 	}
 }

@@ -24,8 +24,8 @@ use Carbon\Carbon;
 use App\Events\NewMessage;
 use Illuminate\Http\Request;
 
-use App\Jobs\SendEmailAfterCompleteOrder;
-use App\Jobs\SaveHistoryForCompleteOrderApi;
+// use App\Jobs\SaveHistoryForCompleteOrderApi;
+use App\Jobs\SendEmailAndSMSAfterCompleteOrder;
 
 class OrdersController extends Controller
 {
@@ -788,7 +788,6 @@ class OrdersController extends Controller
                             ]);
                         }
 
-                        // if ($order) {
                         $day = Carbon::parse($cart->delivery_order_date)->dayOfWeek;
                         $delivery_time = $cart->delivery_order_time;
                         $deliveryArea = $cart->delivery_order_area;
@@ -796,14 +795,11 @@ class OrdersController extends Controller
 
                         $restaurantIDs = array_column($restaurantOrders, 'restaurant_id');
 
-                        $restaurants = Restaurant::with('user')->whereIn('id', $restaurantIDs)
-                            ->whereHas('workingHour', function ($query) use ($day, $delivery_time) {
-                                $query->where('weekday', $day)
-                                    ->where('opening_time', '<=', $delivery_time)
-                                    ->where('closing_time', '>=', $delivery_time)
-                                    ->where('status', '1');
+                        $restaurants = Restaurant::whereHas('workingHour', function ($query) use ($day, $delivery_time) {
+                                $query->where([ ['weekday', $day], ['opening_time', '<=', $delivery_time], ['closing_time', '>=', $delivery_time], ['status', '1'] ]);
                             })
-                            ->get();
+                        ->whereIn('id', $restaurantIDs)
+                        ->get();
 
                         $areas = RestaurantArea::where('area_id', $deliveryArea)->whereIn('restaurant_id', $restaurantIDs)->get();
 
@@ -812,7 +808,7 @@ class OrdersController extends Controller
                             return response()->json([
                                 'success' => 0,
                                 'status_code' => 200,
-                                'message' => \Lang::get('message.availabilityChanged', ['restaurant_name' => 'Restaurant'])
+                                'message' => \Lang::get('message.availabilityChanged', [ 'restaurant_name' => 'Restaurant' ])
                             ]);
                         }
 
@@ -826,6 +822,7 @@ class OrdersController extends Controller
                         }
 
                         foreach ($restaurantOrders as $restaurantOrder) {
+
                             foreach ($restaurants as $restaurant) {
 
                                 if ($restaurant->id == $restaurantOrder['restaurant_id']) {
@@ -865,133 +862,11 @@ class OrdersController extends Controller
 
                         OrderRestaurant::insert($orderRestaurantData);
 
-                        // foreach ($restaurantOrders as $restaurantOrder) {
+                        $cart->update([ 'completed' => 1 ]);
 
-                        // $restaurant = Restaurant::where('id', $restaurantOrder['restaurant_id'])->first();
+                        // SaveHistoryForCompleteOrderApi::dispatch($user_id, $cart_id, $order->id);
 
-                        // if ($lang == 'ar') {
-                        // 	$restaurant_name = $restaurant->name_ar;
-                        // } else {
-                        // 	$restaurant_name = $restaurant->name_en;
-                        // }
-
-                        // $restaurantAvailability = Restaurant::where('id', $restaurant->id)->whereHas('workingHour', function ($query) use ($day, $delivery_time) {
-                        //     $query->where('weekday', $day)
-                        //         ->where('opening_time', '<=', $delivery_time)
-                        //         ->where('closing_time', '>=', $delivery_time)
-                        //         ->where('status', '1')
-                        //         ->orWhere('type', '=', '24_7');
-                        // })->first();
-
-                        // if (!$restaurantAvailability) {
-
-                        //     $order->delete();
-                        //     return response()->json([
-                        //         'success' => 0,
-                        //         'status_code' => 200,
-                        //         'message' => \Lang::get('message.availabilityChanged', ['restaurant_name' => $restaurant_name])
-                        //     ]);
-                        // }
-
-                        // $area = RestaurantArea::where('area_id', $deliveryArea)->where('restaurant_id',  $restaurant->id)->first();
-
-                        // if (!$area) {
-
-                        //     $order->delete();
-                        //     return response()->json([
-                        //         'success' => 0,
-                        //         'status_code' => 200,
-                        //         'message' => \Lang::get('message.areaRemoved')
-                        //     ]);
-                        // }
-
-                        // $orderRestaurant = new OrderRestaurant();
-                        // $orderRestaurant->restaurant_id = $restaurant->id;
-                        // $orderRestaurant->order_id = $order->id;
-                        // $orderRestaurant->total_price = restaurantOrder['restaurant_total'];
-                        // $orderRestaurant->save();
-                        // }
-
-                        $cart->update(['completed' => 1]);
-
-                        SaveHistoryForCompleteOrderApi::dispatch($user_id, $cart_id, $order->id);
-
-                        // SendEmailAfterCompleteOrder::dispatch($restaurants);
-                        // $this->sendSMS($restaurants);
-
-                        // $delivery_address = new DeliveryAddress();
-                        // $delivery_address->order_id = $order->id;
-                        // $delivery_address->address_id = $cart->delivery_address_id;
-                        // $delivery_address->name = $cart->address->name;
-                        // $delivery_address->mobile_number = $cart->address->mobile_number;
-                        // $delivery_address->location = $cart->address->location;
-                        // $delivery_address->street_number = $cart->address->street_number;
-                        // $delivery_address->building_number = $cart->address->building_number;
-                        // $delivery_address->zone = $cart->address->zone;
-                        // $delivery_address->is_apartment = $cart->address->is_apartment;
-                        // $delivery_address->latitude = $cart->address->latitude;
-                        // $delivery_address->longitude = $cart->address->longitude;
-                        // $delivery_address->apartment_number = $cart->address->apartment_number;
-                        // $delivery_address->save();
-
-                        // foreach ($order->cart->cartCollection as $cartCollection) {
-                        // 	$orderCollection = new OrderCollection();
-                        // 	$orderCollection->order_id = $order->id;
-                        // 	$orderCollection->restaurant_id = $cartCollection->collection->restaurant->id;
-                        // 	$orderCollection->restaurant_en = $cartCollection->collection->restaurant->name_en;
-                        // 	$orderCollection->restaurant_ar = $cartCollection->collection->restaurant->name_ar;
-                        // 	$orderCollection->collection_id = $cartCollection->collection->id;
-                        // 	$orderCollection->collection_en = $cartCollection->collection->name_en;
-                        // 	$orderCollection->collection_ar = $cartCollection->collection->name_ar;
-                        // 	$orderCollection->collection_category_id = $cartCollection->collection->category->id;
-                        // 	$orderCollection->collection_category_en = $cartCollection->collection->category->name_en;
-                        // 	$orderCollection->collection_category_ar = $cartCollection->collection->category->name_ar;
-                        // 	$orderCollection->collection_price = $cartCollection->collection->price;
-                        // 	$orderCollection->subtotal = $cartCollection->price;
-                        // 	$orderCollection->female_caterer = $cartCollection->female_caterer;
-                        // 	$orderCollection->special_instruction = $cartCollection->special_instruction;
-                        // 	$orderCollection->service_type_id = $cartCollection->collection->service_type_id;
-                        // 	$orderCollection->service_type_en = $cartCollection->collection->serviceType->name_en;
-                        // 	$orderCollection->service_type_ar = $cartCollection->collection->serviceType->name_ar;
-                        // 	$orderCollection->quantity = $cartCollection->quantity;
-                        // 	$orderCollection->persons_count = $cartCollection->persons_count;
-                        // 	$orderCollection->save();
-
-                        // 	$categories = MenuCategory::whereHas('cartItem', function ($query) use ($cartCollection) {
-                        // 		$query->where('cart_collection_id', $cartCollection->id);
-                        // 	})->with(['cartItem' => function ($x) use ($cartCollection) {
-                        // 		$x->where('cart_collection_id', $cartCollection->id);
-                        // 	}])->get();
-
-                        // 	foreach ($categories as $category){
-                        // 		$orderCollectionMenu = new OrderCollectionMenu();
-                        // 		$orderCollectionMenu->order_id = $order->id;
-                        // 		$orderCollectionMenu->order_collection_id = $cartCollection->collection_id;
-                        // 		$orderCollectionMenu->menu_id = $category->id;
-                        // 		$orderCollectionMenu->menu_en = $category->name_en;
-                        // 		$orderCollectionMenu->menu_ar = $category->name_ar;
-                        // 		$orderCollectionMenu->save();
-
-                        // 		foreach ($category->cartItem as $cartItem){
-                        // 			$orderCollectionItem = new OrderCollectionItem();
-                        // 			$orderCollectionItem->order_id = $order->id;
-                        // 			$orderCollectionItem->order_collection_id = $cartCollection->collection_id;
-                        // 			$orderCollectionItem->order_collection_menu_id = $category->id;
-                        // 			$orderCollectionItem->item_id = $cartItem->item_id;
-                        // 			$orderCollectionItem->item_en = $cartItem->menu->name_en;
-                        // 			$orderCollectionItem->item_ar = $cartItem->menu->name_ar;
-                        // 			if($cartItem->is_mandatory == 1){
-                        // 				$orderCollectionItem->item_price = 0;
-                        // 			}else{
-                        // 				$orderCollectionItem->item_price = $cartItem->menu->price;
-                        // 			}
-                        // 			$orderCollectionItem->quantity = $cartItem->quantity;
-                        // 			$orderCollectionItem->is_mandatory = $cartItem->is_mandatory;
-                        // 			$orderCollectionItem->save();
-                        // 		}
-                        // 	}
-                        // }
-                        // }
+                        // SendEmailAndSMSAfterCompleteOrder::dispatch($restaurants);
 
                     } else {
                         return response()->json([
@@ -1050,7 +925,8 @@ class OrdersController extends Controller
 
         foreach ($restaurants as $restaurant) {
 
-            $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=Your%20Mzad%20Qatar%20code%20is%20:%20$randkey&destination=974$user_phone&source=97772&mask=Mzad%20Qatar";
+            $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content= &destination=974$user_phone&source=97772&mask=Qckly";
+            // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=Your%20Mzad%20Qatar%20code%20is%20:%20$randkey&destination=974$user_phone&source=97772&mask=Mzad%20Qatar";
             $ret = file($url);
         }
     }
