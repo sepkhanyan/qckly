@@ -823,17 +823,17 @@ class RestaurantsController extends Controller
 
 
                     $notice = $restaurant->collection->min('delivery_hours');
-                    $notice_hours = $notice / 60;
-                    $notice_minutes = $notice % 60;
-                    if ($notice_hours >= 1) {
-                        if ($notice_minutes > 0) {
-                            $notice_period = floor($notice_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($notice_minutes) . ' ' . \Lang::get('message.minute');
-                        } else {
-                            $notice_period = floor($notice_hours) . ' ' . \Lang::get('message.hour');
-                        }
-                    } else {
-                        $notice_period = floor($notice_minutes) . ' ' . \Lang::get('message.minute');
-                    }
+//                    $notice_hours = $notice / 60;
+//                    $notice_minutes = $notice % 60;
+//                    if ($notice_hours >= 1) {
+//                        if ($notice_minutes > 0) {
+//                            $notice_period = floor($notice_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($notice_minutes) . ' ' . \Lang::get('message.minute');
+//                        } else {
+//                            $notice_period = floor($notice_hours) . ' ' . \Lang::get('message.hour');
+//                        }
+//                    } else {
+//                        $notice_period = floor($notice_minutes) . ' ' . \Lang::get('message.minute');
+//                    }
 
                     $availability_hours = [];
 
@@ -861,7 +861,7 @@ class RestaurantsController extends Controller
                         'status' => $status,
                         'availability_status_id' => $availability_status_id ,
                         'availability' => $availability_hours,
-                        'notice_period' => $notice_period,
+                        'notice_period' => $notice,
                         'category' => $category
                     ];
 
@@ -988,7 +988,7 @@ class RestaurantsController extends Controller
                     $query->where('approved', 1)->where('deleted', 0);
                 }], ['menu' => function ($query) {
                     $query->where('approved', 1)->where('deleted', 0);
-                }], ['collection.collectionItem', 'collection.collectionMenu.collectionItem']);
+                }], ['workingHour', 'collection.collectionItem', 'collection.collectionMenu.category' ,'collection.collectionMenu.collectionItem.menu', 'collection.category', 'collection.serviceType', 'collection.mealtime', 'collection.unavailabilityHour']);
             if (isset($DataRequests['category_id'])) {
                 $category_id = $DataRequests['category_id'];
                 $service_type = CategoryRestaurant::where('category_id', $category_id)->where('restaurant_id', $restaurant_id)->first();
@@ -1167,26 +1167,20 @@ class RestaurantsController extends Controller
                                 ];
 
                             }
-//                                $categories = MenuCategory::with(['menu' => function ($query) use ($collection, $restaurant_id){
-//                                    $query->where('restaurant_id', $restaurant_id)
-//                                        ->whereHas('collectionItem', function ($x) use ($collection){
-//                                        $x->where('collection_id', $collection->id);
-//                                    });
-//                                }])->get();
 
                         }
 
-                            $notice_hours = $collection->delivery_hours / 60;
-                            $notice_minutes = $collection->delivery_hours % 60;
-                            if ($notice_hours >= 1) {
-                                if ($notice_minutes > 0) {
-                                    $notice_period = floor($notice_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($notice_minutes) . ' ' . \Lang::get('message.minute');
-                                } else {
-                                    $notice_period = floor($notice_hours) . ' ' . \Lang::get('message.hour');
-                                }
-                            } else {
-                                $notice_period = floor($notice_minutes) . ' ' . \Lang::get('message.minute');
-                            }
+//                            $notice_hours = $collection->delivery_hours / 60;
+//                            $notice_minutes = $collection->delivery_hours % 60;
+//                            if ($notice_hours >= 1) {
+//                                if ($notice_minutes > 0) {
+//                                    $notice_period = floor($notice_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($notice_minutes) . ' ' . \Lang::get('message.minute');
+//                                } else {
+//                                    $notice_period = floor($notice_hours) . ' ' . \Lang::get('message.hour');
+//                                }
+//                            } else {
+//                                $notice_period = floor($notice_minutes) . ' ' . \Lang::get('message.minute');
+//                            }
 
 
 
@@ -1251,7 +1245,7 @@ class RestaurantsController extends Controller
                             'persons_max_count' => $max_persons,
                             'service_type_id' => $collection->service_type_id,
                             'service_type' => $service_type,
-                            'notice_period' => $notice_period,
+                            'notice_period' => $collection->delivery_hours,
                             'service_provide' => $service_provide,
                             'service_presentation' => $service_presentation,
                             'food_list' => $foodlist,
@@ -1273,7 +1267,7 @@ class RestaurantsController extends Controller
                 $working_time = $DataRequests['working_time'];
                 $working_time=  date("H:i:s", strtotime($working_time));
 
-                $restaurantAvailability =  WorkingHour::where('restaurant_id', $restaurant->id)->where('weekday', $working_day)
+                $restaurantAvailability =  $restaurant->workingHour->where('weekday', $working_day)
                     ->where('opening_time', '<=', $working_time)
                     ->where('closing_time', '>=', $working_time)
                     ->where('status', 1)->first();
@@ -1343,17 +1337,17 @@ class RestaurantsController extends Controller
                 }
 
                 $resNotice = $restaurant->collection->min('delivery_hours');
-                $resNoticeHours = $resNotice / 60;
-                $resNoticeMinutes = $resNotice % 60;
-                if ($resNoticeHours >= 1) {
-                    if ($resNoticeMinutes > 0) {
-                        $resNoticePeriod = floor($resNoticeHours) . ' ' . \Lang::get('message.hour') . ' ' . ($resNoticeMinutes) . ' ' . \Lang::get('message.minute');
-                    } else {
-                        $resNoticePeriod = floor($resNoticeHours) . ' ' . \Lang::get('message.hour');
-                    }
-                } else {
-                    $resNoticePeriod = floor($resNoticeMinutes) . ' ' . \Lang::get('message.minute');
-                }
+//                $resNoticeHours = $resNotice / 60;
+//                $resNoticeMinutes = $resNotice % 60;
+//                if ($resNoticeHours >= 1) {
+//                    if ($resNoticeMinutes > 0) {
+//                        $resNoticePeriod = floor($resNoticeHours) . ' ' . \Lang::get('message.hour') . ' ' . ($resNoticeMinutes) . ' ' . \Lang::get('message.minute');
+//                    } else {
+//                        $resNoticePeriod = floor($resNoticeHours) . ' ' . \Lang::get('message.hour');
+//                    }
+//                } else {
+//                    $resNoticePeriod = floor($resNoticeMinutes) . ' ' . \Lang::get('message.minute');
+//                }
 
                 $availability_hours = [];
 
@@ -1382,7 +1376,7 @@ class RestaurantsController extends Controller
                     'status' => $status,
                     'availability_status_id' => $availability_status_id ,
                     'availability' => $availability_hours,
-                    'notice_period' => $resNoticePeriod,
+                    'notice_period' => $resNotice,
                     'category' => $category
                 ];
 
