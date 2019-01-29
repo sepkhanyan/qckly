@@ -90,6 +90,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
             Route::get('edit_reject/{id}', 'MenusController@editReject');
             Route::post('delete', 'MenusController@deleteMenu');
         });
+        Route::get('/collections/get-edited-fields', 'CollectionsController@getEditedFields');
         Route::get('/collections/{id?}', 'CollectionsController@index');
 //        Route::post('collections/collection/copy/{id}', 'CollectionsController@copy');
         Route::group(['prefix' => 'collection'], function () {

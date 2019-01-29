@@ -1,5 +1,8 @@
 @extends('home', ['title' => 'Collections'])
 @section('content')
+
+    {{-- <script type="text/javascript" src="{{ url('') }}/js/collections.js"></script> --}}
+
     <div id="page-wrapper">
         <div class="page-header clearfix">
             <div class="page-action">
@@ -176,13 +179,20 @@
                                                     <td>{{ $collection->price }}</td>
                                                     <td>{{ $collection->mealtime->name_en }}</td>
                                                     <td>{{ $collection->id }}</td>
-                                                    <td>
+                                                    <td class="text-center">
                                                         @if($collection->approved == 0)
                                                             <span class="label label-default">Pending Approval</span>
                                                         @elseif($collection->approved == 2)
                                                             <span class="label label-danger">Rejected</span>
                                                         @endif
                                                         @if($collection->editingCollection)
+
+                                                            {{-- @if ($user->admin == 1)
+                                                                <button type="button" class="btn btn-info" id="view_edited" data-id="{{ $collection->editingCollection->id }}" data-toggle="modal"
+                                                                        data-target="#edited_collection">
+                                                                    View edited fields
+                                                                </button><br>
+                                                            @endif --}}
                                                             <span class="label label-default">Pending Edit Approval</span>
                                                         @endif
                                                     </td>
@@ -240,6 +250,30 @@
             </form>
         </div>
     @endif
+
+    <!-- view edited fileds modal -->
+        <div class="modal fade" id="edited_collection">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">View edited fields</h4>
+                    </div>
+
+                    <div class="modal-body" id="show_fields">
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-dismiss="modal" id="approve" style="margin-top: 10px;">Approve</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="reject" style="margin-top: 10px;">Reject</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-top: 10px;">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- /view edited fileds modal -->
+
     <script type="text/javascript">
         $(document).ready(function () {
             $('select.form-control').select2();
