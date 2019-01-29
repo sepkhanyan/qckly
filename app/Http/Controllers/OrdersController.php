@@ -172,7 +172,7 @@ class OrdersController extends Controller
             }
             $userId = $order->user_id;
             $from = $user->id;
-            $msg = \Lang::get('message.orderCompleteStatus', ['restaurant_name' => $restaurant_name, 'order_id' => $order->id]);
+            $msg = \Lang::get('message.orderCompleteStatus', ['restaurant_name' => $restaurant_name]);
             $order_id = $order->id;
             $NotificationType = 4;
             $notification = new NotificationsController();

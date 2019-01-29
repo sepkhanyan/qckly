@@ -165,7 +165,7 @@
                                                         @endif
                                                         @if($order->status_id == 2)
                                                             <a class="btn btn-primary" title=""
-                                                               href="{{url('/order/update/' . $order->id)}}">
+                                                               href="{{url('/order/update/' . $order->order_id)}}">
                                                                Complete
                                                             </a>&nbsp;&nbsp;
                                                         @endif
