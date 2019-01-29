@@ -107,7 +107,7 @@
                                         <th>Collection Name</th>
                                         <th>Description</th>
                                         <th>Collection Category</th>
-                                        <th>Service Type</th>
+                                        {{--<th>Service Type</th>--}}
                                         <th>Price</th>
                                         <th>Mealtime</th>
                                         <th>ID</th>
@@ -125,10 +125,6 @@
                                                         <a class="btn btn-edit" title="" href="{{ url('/collection/edit/' . $collection->id) }}">
                                                             <i class="fa fa-pencil"></i>
                                                         </a>&nbsp;&nbsp;
-
-                                                        <a class="btn btn-edit" title="" href="{{ url('/collection/copy/' . $collection->id) }}">
-                                                            Copy
-                                                        </a>&nbsp;
 
                                                         @if($collection->is_available == 1)
                                                             @if($collection->unavailabilityHour->isEmpty())
@@ -176,7 +172,7 @@
                                                     <td>{{ $collection->name_en }}</td>
                                                     <td>{{ $collection->description_en }}</td>
                                                     <td>{{ $collection->category->name_en }}</td>
-                                                    <td>{{ $collection->serviceType->name_en }}</td>
+                                                    {{--<td>{{ $collection->serviceType->name_en }}</td>--}}
                                                     <td>{{ $collection->price }}</td>
                                                     <td>{{ $collection->mealtime->name_en }}</td>
                                                     <td>{{ $collection->id }}</td>

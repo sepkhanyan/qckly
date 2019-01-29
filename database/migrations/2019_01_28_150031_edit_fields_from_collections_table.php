@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class RenameMealtimeColumnFromCollectionsTable extends Migration
+class EditFieldsFromCollectionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,8 @@ class RenameMealtimeColumnFromCollectionsTable extends Migration
     public function up()
     {
         Schema::table('collections', function (Blueprint $table) {
-            $table->renameColumn('mealtime', 'mealtime_id');
+            $table->dropColumn('service_type_id');
+            $table->renameColumn('delivery_hours', 'notice_period');
         });
     }
 
@@ -26,7 +27,8 @@ class RenameMealtimeColumnFromCollectionsTable extends Migration
     public function down()
     {
         Schema::table('collections', function (Blueprint $table) {
-            $table->renameColumn('mealtime_id', 'mealtime');
+            $table->renameColumn('notice_period', 'delivery_hours');
+            $table->integer('service_type_id');
         });
     }
 }

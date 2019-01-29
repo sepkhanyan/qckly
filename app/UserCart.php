@@ -15,7 +15,7 @@ class UserCart extends Model
         'delivery_order_date',
         'delivery_order_time',
         'delivery_address_id',
-        'completed'
+        'completed',
     ];
 
 
@@ -46,4 +46,5 @@ class UserCart extends Model
     {
         return $this->belongsTo('App\Area', 'delivery_order_area');
     }
+
 }

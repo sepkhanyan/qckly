@@ -152,6 +152,7 @@ class CollectionRequest extends FormRequest
         ];
 
         if ($this->id) {
+
             $rules = [
                 'service_type' => 'required',
                 'notice_period' => 'required|integer|min:0',

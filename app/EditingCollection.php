@@ -38,10 +38,7 @@ class EditingCollection extends Model
         'max_serve_to_person',
     ];
 
-    public function serviceType()
-    {
-        return $this->belongsTo('App\CategoryRestaurant', 'service_type_id');
-    }
+
 
     public function mealtime()
     {
@@ -61,5 +58,10 @@ class EditingCollection extends Model
     public function editingCollectionItem()
     {
         return $this->hasMany('App\EditingCollectionItem', 'editing_collection_id');
+    }
+
+    public function serviceType()
+    {
+        return $this->hasMany('App\CollectionServiceType', 'editing_collection_id');
     }
 }

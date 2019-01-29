@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddDeletedColumnToCollectionsTable extends Migration
+class AddServiceTypeIdColumnToUserCartCollectionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddDeletedColumnToCollectionsTable extends Migration
      */
     public function up()
     {
-        Schema::table('collections', function (Blueprint $table) {
-            $table->tinyInteger('deleted')->default(0);
+        Schema::table('user_cart_collections', function (Blueprint $table) {
+            $table->integer('service_type_id')->after('female_caterer');
         });
     }
 
@@ -25,8 +25,8 @@ class AddDeletedColumnToCollectionsTable extends Migration
      */
     public function down()
     {
-        Schema::table('collections', function (Blueprint $table) {
-            $table->dropColumn('deleted');
+        Schema::table('user_cart_collections', function (Blueprint $table) {
+            $table->dropColumn('service_type_id');
         });
     }
 }

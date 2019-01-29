@@ -495,21 +495,17 @@
                             <div id="type" class="form-group">
                                 <label for="" class="col-sm-3 control-label">Service Type</label>
                                 <div class="col-sm-5">
-                                    <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
-                                        @foreach ($categoryRestaurants as $categoryRestaurant)
-                                            @if(old('service_type'))
-                                                <label  class="btn btn-success {{(old('service_type') == $categoryRestaurant->id) ? ' active' : ''}}" >
-                                                    <input type="radio" name="service_type" value="{{$categoryRestaurant->id}}" {{(old('service_type') == $categoryRestaurant->id) ? 'checked' : ''}}>
-                                                    {{$categoryRestaurant->name_en}}
-                                                </label>
-                                            @else
-                                                <label  class="btn btn-success {{($editingCollection->service_type_id == $categoryRestaurant->id) ? ' active' : ''}}" >
-                                                    <input type="radio" name="service_type" value="{{$categoryRestaurant->id}}" {{($editingCollection->service_type_id == $categoryRestaurant->id) ? 'checked' : ''}}>
-                                                    {{$categoryRestaurant->name_en}}
-                                                </label>
-                                            @endif
+                                    <select name="service_type[]" id="service" class="form-control"
+                                            placeholder="Select Service" multiple>
+                                        @foreach($categoryRestaurants as $categoryRestaurant)
+                                            <option value="{{$categoryRestaurant->category_id}}" @if(old('service_type')) {{ (collect(old('service_type'))->contains($categoryRestaurant->category_id)) ? 'selected':'' }} @else {{ $service->has($categoryRestaurant->category_id) ? 'selected' : '' }} @endif>{{$categoryRestaurant->name_en}}</option>
                                         @endforeach
-                                    </div>
+                                    </select>
+                                    @if ($errors->has('service_type'))
+                                        <span class="help-block">
+                                                    <strong>{{ $errors->first('service_type') }}</strong>
+                                                </span>
+                                    @endif
                                 </div>
                                 @if ($collection->service_type_id != $editingCollection->service_type_id)
                                     <span class="help-block">

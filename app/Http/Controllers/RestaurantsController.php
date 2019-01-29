@@ -39,14 +39,14 @@ class RestaurantsController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        $restaurants = Restaurant::where('deleted', 0)->with([ 'editingRestaurant','collection']);
+        $restaurants = Restaurant::where('deleted', 0)->with(['editingRestaurant', 'collection']);
         $data = $request->all();
         if (isset($data['restaurant_search'])) {
             $restaurants = $restaurants->where('name_en', 'like', '%' . $data['restaurant_search'] . '%')
                 ->orWhere('description_en', 'like', $data['restaurant_search']);
         }
         if ($user->admin == 2) {
-            $restaurants = Restaurant::where('id', $user->restaurant_id)->with([ 'editingRestaurant', 'collection']);
+            $restaurants = Restaurant::where('id', $user->restaurant_id)->with(['editingRestaurant', 'collection']);
         }
         $restaurants = $restaurants->paginate(20);
         return view('restaurants', [
@@ -737,11 +737,11 @@ class RestaurantsController extends Controller
             whereHas('restaurantArea', function ($q) use ($id) {
                 $q->where('area_id', $id);
             })
-            ->with(['menu' => function ($query) {
-                $query->where('approved', 1)->where('deleted', 0);
-            }], ['collection' => function ($query) {
-                $query->where('approved', 1)->where('deleted', 0);
-            }], 'workingHour', 'categoryRestaurant', 'review');
+                ->with(['menu' => function ($query) {
+                    $query->where('approved', 1)->where('deleted', 0);
+                }], ['collection' => function ($query) {
+                    $query->where('approved', 1)->where('deleted', 0);
+                }], 'workingHour', 'categoryRestaurant', 'review');
 
             if (isset($DataRequests['category_id'])) {
                 $category = $DataRequests['category_id'];
@@ -756,11 +756,11 @@ class RestaurantsController extends Controller
                 foreach ($restaurants as $restaurant) {
                     $working_day = Carbon::parse($DataRequests['working_day'])->dayOfWeek;
                     $working_time = $DataRequests['working_time'];
-                    $working_time=  date("H:i:s", strtotime($working_time));
-                    $restaurantAvailability =  $restaurant->workingHour->where('weekday', $working_day)
-                            ->where('opening_time', '<=', $working_time)
-                            ->where('closing_time', '>=', $working_time)
-                            ->where('status', 1)->first();
+                    $working_time = date("H:i:s", strtotime($working_time));
+                    $restaurantAvailability = $restaurant->workingHour->where('weekday', $working_day)
+                        ->where('opening_time', '<=', $working_time)
+                        ->where('closing_time', '>=', $working_time)
+                        ->where('status', 1)->first();
 
                     if ($restaurantAvailability) {
                         if ($restaurant->status == 1) {
@@ -822,7 +822,7 @@ class RestaurantsController extends Controller
                     }
 
 
-                    $notice = $restaurant->collection->min('delivery_hours');
+                    $notice = $restaurant->collection->min('notice_period');
 //                    $notice_hours = $notice / 60;
 //                    $notice_minutes = $notice % 60;
 //                    if ($notice_hours >= 1) {
@@ -837,7 +837,7 @@ class RestaurantsController extends Controller
 
                     $availability_hours = [];
 
-                    foreach ($restaurant->workingHour as $workingHour){
+                    foreach ($restaurant->workingHour as $workingHour) {
                         $availability_hours [] = [
                             'day' => $workingHour->weekday,
                             'open_hour' => $workingHour->opening_time,
@@ -846,7 +846,7 @@ class RestaurantsController extends Controller
                     }
 
                     $working = $restaurant->workingHour->first();
-                    if($working->type == 'flexible'){
+                    if ($working->type == 'flexible') {
                         $availability_status_id = 3;
                     }
                     $arr [] = [
@@ -859,7 +859,7 @@ class RestaurantsController extends Controller
                         'description' => $restaurant_description,
                         'status_id' => $status_id,
                         'status' => $status,
-                        'availability_status_id' => $availability_status_id ,
+                        'availability_status_id' => $availability_status_id,
                         'availability' => $availability_hours,
                         'notice_period' => $notice,
                         'category' => $category
@@ -985,20 +985,33 @@ class RestaurantsController extends Controller
             $restaurant_id = $DataRequests['restaurant_id'];
             $restaurant = Restaurant::where('id', $restaurant_id)->where('active', 1)->where('deleted', 0)
                 ->with(['collection' => function ($query) {
-                    $query->where('approved', 1)->where('deleted', 0);
+                    $query->where('approved', 1)->where('deleted', 0)->with(['serviceType' => function ($x) {
+                        $x->where('deleted', 0);
+                    }]);
                 }], ['menu' => function ($query) {
                     $query->where('approved', 1)->where('deleted', 0);
-                }], ['workingHour', 'collection.collectionItem', 'collection.collectionMenu.category' ,'collection.collectionMenu.collectionItem.menu', 'collection.category', 'collection.serviceType', 'collection.mealtime', 'collection.unavailabilityHour']);
+                }], [
+                    'workingHour',
+                    'collection.collectionItem',
+                    'collection.collectionMenu.category',
+                    'collection.collectionMenu.collectionItem.menu',
+                    'collection.category',
+                    'collection.mealtime',
+                    'collection.unavailabilityHour'
+                ])->first();
+
+            $resNotice = $restaurant->collection->min('notice_period');
+
             if (isset($DataRequests['category_id'])) {
                 $category_id = $DataRequests['category_id'];
-                $service_type = CategoryRestaurant::where('category_id', $category_id)->where('restaurant_id', $restaurant_id)->first();
+//                $service_type = CategoryRestaurant::where('category_id', $category_id)->where('restaurant_id', $restaurant_id)->first();
                 $restaurant = $restaurant->whereHas('categoryRestaurant', function ($query) use ($category_id) {
                     $query->where('category_id', $category_id);
-                })->with(['collection' => function ($query) use ($service_type) {
-                    $query->where('service_type_id', $service_type->id)->where('approved', 1)->where('deleted', 0);
+                })->with(['collection' => function ($query) use ($category_id) {
+                    $query->whereHas('serviceType', function ($q) use ($category_id) {
+                        $q->where('service_type_id', $category_id)->where('deleted', 0);
+                    })->where('approved', 1)->where('deleted', 0);
                 }])->first();
-            } else {
-                $restaurant = $restaurant->first();
             }
 
             if ($restaurant) {
@@ -1183,7 +1196,6 @@ class RestaurantsController extends Controller
 //                            }
 
 
-
                         if ($lang == 'ar') {
                             $collection_name = $collection->name_ar;
                             $collection_description = $collection->description_ar;
@@ -1191,7 +1203,7 @@ class RestaurantsController extends Controller
                             $mealtime = $collection->mealtime->name_ar;
                             $service_provide = $collection->service_provide_ar;
                             $service_presentation = $collection->service_presentation_ar;
-                            $service_type = $collection->serviceType->name_ar;
+//                            $service_type = $collection->serviceType->name_ar;
                         } else {
                             $collection_name = $collection->name_en;
                             $collection_description = $collection->description_en;
@@ -1199,28 +1211,45 @@ class RestaurantsController extends Controller
                             $mealtime = $collection->mealtime->name_en;
                             $service_provide = $collection->service_provide_en;
                             $service_presentation = $collection->service_presentation_en;
-                            $service_type = $collection->serviceType->name_en;
+//                            $service_type = $collection->serviceType->name_en;
+                        }
+
+                        $service = [];
+                        foreach ($collection->serviceType as $serviceType) {
+                            $id = $serviceType->id;
+                            if ($lang == 'ar') {
+                                $name = $serviceType->name_ar;
+
+                            } else {
+                                $name = $serviceType->name_en;
+                            }
+
+                            $service [] = [
+                                'service_type_id' => $id,
+                                'service_type' => $name
+                            ];
+
                         }
 
 
                         $working_day = Carbon::parse($DataRequests['working_day'])->dayOfWeek;
                         $working_time = $DataRequests['working_time'];
-                        $working_time=  date("H:i:s", strtotime($working_time));
+                        $working_time = date("H:i:s", strtotime($working_time));
                         if ($collection->is_available == 1) {
-                           if($collection->unavailabilityHour->isEmpty()){
-                               $collectionStatus = 1;
-                           }else{
-                               $collectionAvailability = $collection->unavailabilityHour->where('weekday', $working_day)
-                                   ->where('start_time', '<=', $working_time)
-                                   ->where('end_time', '>=', $working_time)
-                                   ->where('status', 1)->first();
-                               if (!$collectionAvailability) {
-                                   $collectionStatus = 0;
-                               } else {
-                                   $collectionStatus = 1;
-                               }
-                           }
-                        }elseif ($collection->is_available == 0) {
+                            if ($collection->unavailabilityHour->isEmpty()) {
+                                $collectionStatus = 1;
+                            } else {
+                                $collectionAvailability = $collection->unavailabilityHour->where('weekday', $working_day)
+                                    ->where('start_time', '<=', $working_time)
+                                    ->where('end_time', '>=', $working_time)
+                                    ->where('status', 1)->first();
+                                if (!$collectionAvailability) {
+                                    $collectionStatus = 0;
+                                } else {
+                                    $collectionStatus = 1;
+                                }
+                            }
+                        } elseif ($collection->is_available == 0) {
                             $collectionStatus = 0;
                         }
 
@@ -1243,9 +1272,8 @@ class RestaurantsController extends Controller
                             'max_serve_to_person' => $max_serve,
                             'allow_person_increase' => $person_increase,
                             'persons_max_count' => $max_persons,
-                            'service_type_id' => $collection->service_type_id,
-                            'service_type' => $service_type,
-                            'notice_period' => $collection->delivery_hours,
+                            'service_type' => $service,
+                            'notice_period' => $collection->notice_period,
                             'service_provide' => $service_provide,
                             'service_presentation' => $service_presentation,
                             'food_list' => $foodlist,
@@ -1265,9 +1293,9 @@ class RestaurantsController extends Controller
 
                 $working_day = Carbon::parse($DataRequests['working_day'])->dayOfWeek;
                 $working_time = $DataRequests['working_time'];
-                $working_time=  date("H:i:s", strtotime($working_time));
+                $working_time = date("H:i:s", strtotime($working_time));
 
-                $restaurantAvailability =  $restaurant->workingHour->where('weekday', $working_day)
+                $restaurantAvailability = $restaurant->workingHour->where('weekday', $working_day)
                     ->where('opening_time', '<=', $working_time)
                     ->where('closing_time', '>=', $working_time)
                     ->where('status', 1)->first();
@@ -1336,7 +1364,6 @@ class RestaurantsController extends Controller
                     $restaurant_description = $restaurant->description_en;
                 }
 
-                $resNotice = $restaurant->collection->min('delivery_hours');
 //                $resNoticeHours = $resNotice / 60;
 //                $resNoticeMinutes = $resNotice % 60;
 //                if ($resNoticeHours >= 1) {
@@ -1351,7 +1378,7 @@ class RestaurantsController extends Controller
 
                 $availability_hours = [];
 
-                foreach ($restaurant->workingHour as $workingHour){
+                foreach ($restaurant->workingHour as $workingHour) {
                     $availability_hours [] = [
                         'day' => $workingHour->weekday,
                         'open_hour' => $workingHour->opening_time,
@@ -1360,7 +1387,7 @@ class RestaurantsController extends Controller
                 }
 
                 $working = $restaurant->workingHour->first();
-                if($working->type == 'flexible'){
+                if ($working->type == 'flexible') {
                     $availability_status_id = 3;
                 }
 
@@ -1374,7 +1401,7 @@ class RestaurantsController extends Controller
                     'description' => $restaurant_description,
                     'status_id' => $status_id,
                     'status' => $status,
-                    'availability_status_id' => $availability_status_id ,
+                    'availability_status_id' => $availability_status_id,
                     'availability' => $availability_hours,
                     'notice_period' => $resNotice,
                     'category' => $category

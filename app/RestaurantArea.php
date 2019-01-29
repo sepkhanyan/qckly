@@ -12,7 +12,7 @@ class RestaurantArea extends Model
         'restaurant_id',
         'area_id',
         'name_en',
-        'name_ar',
+        'name_ar'
     ];
 
 

@@ -13,7 +13,7 @@ class CategoryRestaurant extends Model
         'category_id',
         'restaurant_id',
         'name_ar',
-        'name_en',
+        'name_en'
     ];
 
     public function restaurant()

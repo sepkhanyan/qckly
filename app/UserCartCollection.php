@@ -17,7 +17,8 @@ class UserCartCollection extends Model
         'quantity',
         'persons_count',
         'female_caterer',
-        'special_instruction'
+        'special_instruction',
+        'service_type_id'
     ];
 
 
@@ -46,6 +47,6 @@ class UserCartCollection extends Model
 
     public function serviceType()
     {
-        return $this->belongsTo('App\CategoryRestaurant', 'service_type_id');
+        return $this->belongsTo('App\CollectionServiceType', 'service_type_id', 'service_type_id');
     }
 }

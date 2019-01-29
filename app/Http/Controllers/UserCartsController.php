@@ -63,6 +63,7 @@ class UserCartsController extends Controller
                 'collection_category_id' => 'required|integer',
                 'collection_id' => 'required|integer',
                 'female_caterer' => 'required|integer',
+                'service_type_id'     => 'required|integer'
             ]);
             if ($validator->fails()) {
                 return response()->json(array('success' => 0, 'status_code' => 400,
@@ -72,6 +73,7 @@ class UserCartsController extends Controller
                 $collection_type = $DataRequests['collection_category_id'];
                 $collection_id = $DataRequests['collection_id'];
                 $female_caterer = $DataRequests['female_caterer'];
+                $service = $DataRequests['service_type_id'];
                 $special_instruction = '';
                 if (isset($DataRequests['special_instruction'])) {
                     $special_instruction = $DataRequests['special_instruction'];
@@ -161,6 +163,7 @@ class UserCartsController extends Controller
                             $cart_collection->quantity = $collection_quantity;
                             $cart_collection->female_caterer = $female_caterer;
                             $cart_collection->special_instruction = $special_instruction;
+                            $cart_collection->service_type_id = $service;
                             $cart_collection->save();
                             $collection_items = CollectionItem::where('collection_id', $collection_id)->with('menu')->get();
                             foreach ($collection_items as $collection_item) {
@@ -176,6 +179,7 @@ class UserCartsController extends Controller
                             $cart_collection->quantity = $collection_quantity;
                             $cart_collection->female_caterer = $female_caterer;
                             $cart_collection->special_instruction = $special_instruction;
+                            $cart_collection->service_type_id = $service;
                             $cart_collection->save();
                         }
 
@@ -208,6 +212,7 @@ class UserCartsController extends Controller
                             $cart_collection->quantity = 1;
                             $cart_collection->female_caterer = $female_caterer;
                             $cart_collection->special_instruction = $special_instruction;
+                            $cart_collection->service_type_id = $service;
                             $cart_collection->save();
                             foreach ($menus as $menu) {
                                 $cart_item = new UserCartItem();
@@ -224,6 +229,7 @@ class UserCartsController extends Controller
                             $cart_collection->quantity = 1;
                             $cart_collection->female_caterer = $female_caterer;
                             $cart_collection->special_instruction = $special_instruction;
+                            $cart_collection->service_type_id = $service;
                             $cart_collection->save();
                             UserCartItem::where('cart_collection_id', $cart_collection->id)->delete();
                             foreach ($menus as $menu) {
@@ -263,6 +269,7 @@ class UserCartsController extends Controller
                             $cart_collection->quantity = $collection_quantity;
                             $cart_collection->female_caterer = $female_caterer;
                             $cart_collection->special_instruction = $special_instruction;
+                            $cart_collection->service_type_id = $service;
                             $cart_collection->save();
                             foreach ($menus as $menu) {
                                 $cart_item = new UserCartItem();
@@ -278,6 +285,7 @@ class UserCartsController extends Controller
                             $cart_collection->quantity = $collection_quantity;
                             $cart_collection->female_caterer = $female_caterer;
                             $cart_collection->special_instruction = $special_instruction;
+                            $cart_collection->service_type_id = $service;
                             $cart_collection->save();
                             UserCartItem::where('cart_collection_id', $cart_collection->id)->delete();
                             foreach ($menus as $menu) {
@@ -315,6 +323,7 @@ class UserCartsController extends Controller
                             $cart_collection->quantity = 1;
                             $cart_collection->female_caterer = $female_caterer;
                             $cart_collection->special_instruction = $special_instruction;
+                            $cart_collection->service_type_id = $service;
                             $cart_collection->save();
                             foreach ($menus as $menu) {
                                 $cart_item = new UserCartItem();
@@ -330,6 +339,7 @@ class UserCartsController extends Controller
                             $cart_collection->quantity = 1;
                             $cart_collection->female_caterer = $female_caterer;
                             $cart_collection->special_instruction = $special_instruction;
+                            $cart_collection->service_type_id = $service;
                             $cart_collection->save();
                             UserCartItem::where('cart_collection_id', $cart_collection->id)->delete();
                             foreach ($menus as $menu) {
@@ -387,7 +397,7 @@ class UserCartsController extends Controller
                     $query->orderby('id', 'desc')->with(['cartItem' => function ($q){
                         $q->where('is_mandatory', 0);
                     }]);
-                }], 'cartCollection.collection.restaurant', 'cartCollection.collection.category', 'cartCollection.collection.serviceType', 'cartCollection.cartItem.category', 'cartCollection.cartItem.menu', 'address')->first();
+                }], 'cartCollection.collection.restaurant', 'cartCollection.collection.category', 'cartCollection.serviceType', 'cartCollection.cartItem.category', 'cartCollection.cartItem.menu', 'address')->first();
             if ($cart) {
                 $address = (object)array();
                 $address_id = -1;
@@ -507,12 +517,12 @@ class UserCartsController extends Controller
                             $restaurant_name = $cartCollection->collection->restaurant->name_ar;
                             $collection_type = $cartCollection->collection->category->name_ar;
                             $collection_name = $cartCollection->collection->name_ar;
-                            $service_type = $cartCollection->collection->serviceType->name_ar;
+                            $service_type = $cartCollection->serviceType->name_ar;
                         } else {
                             $restaurant_name = $cartCollection->collection->restaurant->name_en;
                             $collection_type = $cartCollection->collection->category->name_en;
                             $collection_name = $cartCollection->collection->name_en;
-                            $service_type = $cartCollection->collection->serviceType->name_en;
+                            $service_type = $cartCollection->serviceType->name_en;
                         }
 
                         $collections [] = [
@@ -526,7 +536,7 @@ class UserCartsController extends Controller
                             'collection_price_unit' => \Lang::get('message.priceUnit'),
                             'female_caterer' => $female_caterer,
                             'special_instruction' => $cartCollection->special_instruction,
-                            'service_type_id' => $cartCollection->collection->service_type_id,
+                            'service_type_id' => $cartCollection->service_type_id,
                             'service_type' => $service_type,
                             'menu_items' => $menu,
                             'quantity' => $quantity,
@@ -633,7 +643,9 @@ class UserCartsController extends Controller
         } else {
             $collection_type = $DataRequests['collection_category_id'];
             $collection_id = $DataRequests['collection_id'];
-            $collection = Collection::where('id', $collection_id)->with(['collectionItem', 'collectionMenu.category','collectionMenu.collectionItem.menu', 'serviceType', 'unavailabilityHour', 'mealtime'])->first();
+            $collection = Collection::where('id', $collection_id)->with(['collectionItem', 'collectionMenu.category','collectionMenu.collectionItem.menu', 'unavailabilityHour', 'mealtime', 'serviceType' => function ($x) {
+                $x->where('deleted', 0);
+            }])->first();
             if ($collection) {
                 if ($collection->female_caterer_available == 1) {
                     $female_caterer_available = true;
@@ -814,7 +826,6 @@ class UserCartsController extends Controller
                             $mealtime = $collection->mealtime->name_ar;
                             $service_provide = $collection->service_provide_ar;
                             $service_presentation = $collection->service_presentation_ar;
-                            $service_type = $collection->serviceType->name_ar;
                         } else {
                             $restaurant_name = $collection->restaurant->name_en;
                             $collection_name = $collection->name_en;
@@ -823,7 +834,23 @@ class UserCartsController extends Controller
                             $mealtime = $collection->mealtime->name_en;
                             $service_provide = $collection->service_provide_en;
                             $service_presentation = $collection->service_presentation_en;
-                            $service_type = $collection->serviceType->name_en;
+                        }
+
+                        $service = [];
+                        foreach ($collection->serviceType as $serviceType) {
+                            $id = $serviceType->service_type_id;
+                            if ($lang == 'ar') {
+                                $name = $serviceType->name_ar;
+
+                            } else {
+                                $name = $serviceType->name_en;
+                            }
+
+                            $service [] = [
+                                'service_type_id' => $id,
+                                'service_type' => $name
+                            ];
+
                         }
 
                         $menu_collection [] = [
@@ -846,9 +873,8 @@ class UserCartsController extends Controller
                             'max_serve_to_person' => $max_serve,
                             'allow_person_increase' => $person_increase,
                             'persons_max_count' => $max_persons,
-                            'service_type_id' => $collection->service_type_id,
-                            'service_type' => $service_type,
-                            'notice_period' => $collection->delivery_hours,
+                            'service_type' => $service,
+                            'notice_period' => $collection->notice_period,
                             'service_provide' => $service_provide,
                             'service_presentation' => $service_presentation,
                             'food_list' => $foodlist,

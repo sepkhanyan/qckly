@@ -100,8 +100,6 @@ Route::group(['middleware' => ['web', 'auth']], function () {
             Route::get('availability/edit/{id}', 'CollectionsController@editAvailability');
             Route::post('availability/update/{id}', 'CollectionsController@updateAvailability');
             Route::get('edit/{id}', 'CollectionsController@edit');
-            Route::get('copy/{id}', 'CollectionsController@collectionCopy');
-            Route::post('save/{id}', 'CollectionsController@collectionSave');
             Route::post('update/{id}', 'CollectionsController@update');
             Route::post('edit_approve/{id}', 'CollectionsController@editApprove');
             Route::get('edit_reject/{id}', 'CollectionsController@editReject');

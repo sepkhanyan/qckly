@@ -37,8 +37,8 @@ class AreaRequest extends FormRequest
     public function rules()
     {
         return [
-            'name_en' => 'required|string|max:255|unique:users,name_en',
-            'name_ar' => 'required|string|max:255|unique:users,name_ar',
+            'name_en' => 'required|string|max:255|unique:areas,name_en',
+            'name_ar' => 'required|string|max:255|unique:areas,name_ar',
         ];
     }
 }

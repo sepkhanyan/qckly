@@ -11,7 +11,8 @@ class RestaurantCategory extends Model
 
     protected $fillable = [
         'name_en',
-        'name_ar'
+        'name_ar',
+        'deleted'
     ];
 
     public function categoryRestaurant()

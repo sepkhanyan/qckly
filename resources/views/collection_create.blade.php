@@ -427,21 +427,38 @@
                             <div id="type" class="form-group{{ $errors->has('service_type') ? ' has-error' : '' }}">
                                 <label for="" class="col-sm-3 control-label">Service Type</label>
                                 <div class="col-sm-5">
-                                    <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
-                                        @foreach ($categoryRestaurants as $categoryRestaurant)
-                                            <label class="btn btn-success{{(old('service_type') == $categoryRestaurant->id) ? ' active' : ''}}">
-                                                <input type="radio" name="service_type"
-                                                       value="{{$categoryRestaurant->id}}" {{(old('service_type') == $categoryRestaurant->id) ? 'checked' : ''}} >
-                                                {{$categoryRestaurant->name_en}}
-                                            </label>
+                                    <select name="service_type[]" id="service"  class="form-control"
+                                            placeholder="Select Service" multiple>
+                                        @foreach($categoryRestaurants as $categoryRestaurant)
+                                            <option value="{{$categoryRestaurant->category_id}}"  {{ (collect(old('service_type'))->contains($categoryRestaurant->category_id)) ? 'selected':'' }}>{{$categoryRestaurant->name_en}}</option>
                                         @endforeach
-                                    </div>
+                                    </select>
                                     @if ($errors->has('service_type'))
                                         <span class="help-block">
                                                     <strong>{{ $errors->first('service_type') }}</strong>
                                                 </span>
                                     @endif
                                 </div>
+                                {{--<div class="col-sm-5">--}}
+                                    {{--<div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">--}}
+                                        {{--@foreach ($categoryRestaurants as $categoryRestaurant)--}}
+                                            {{--<label class="btn btn-success{{(old('service_type') == $categoryRestaurant->category_id) ? ' active' : ''}}">--}}
+                                                {{--<input type="checkbox" name="service_type[{{$categoryRestaurant->category_id}}][en]"--}}
+                                                       {{--value="{{$categoryRestaurant->name_en}}"  >--}}
+                                                {{--<input type="checkbox" name="service_type[{{$categoryRestaurant->category_id}}][ar]"--}}
+                                                       {{--value="{{$categoryRestaurant->name_ar}}"  >--}}
+                                                {{--<input type="checkbox" name="service_type[{{$categoryRestaurant->category_id}}][id]"--}}
+                                                       {{--value="{{$categoryRestaurant->category_id}}" multiple>--}}
+                                                {{--{{$categoryRestaurant->name_en}}--}}
+                                            {{--</label>--}}
+                                        {{--@endforeach--}}
+                                    {{--</div>--}}
+                                    {{--@if ($errors->has('service_type'))--}}
+                                        {{--<span class="help-block">--}}
+                                                    {{--<strong>{{ $errors->first('service_type') }}</strong>--}}
+                                                {{--</span>--}}
+                                    {{--@endif--}}
+                                {{--</div>--}}
                             </div>
                             <div class="form-group{{ $errors->has('notice_period') ? ' has-error' : '' }}">
                                 <label for="input-max" class="col-sm-3 control-label">
@@ -523,6 +540,7 @@
     </div>
     <script type="text/javascript">
         $(document).ready(function () {
+            $('#service').select2();
             var errorGeneral = $("#general .form-group .help-block").length;
             var errorMenu = $("#menus .form-group .help-block").length;
             var errorData = $("#data .form-group .help-block").length;

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class RenameSubcategoryIdColumnFromCollectionsTable extends Migration
+class AddDeletedColumnToCollectionServiceTypeTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class RenameSubcategoryIdColumnFromCollectionsTable extends Migration
      */
     public function up()
     {
-        Schema::table('collections', function (Blueprint $table) {
-            $table->renameColumn('subcategory_id', 'category_id');
+        Schema::table('collection_service_type', function (Blueprint $table) {
+            $table->tinyInteger('deleted')->default(0);
         });
     }
 
@@ -25,8 +25,8 @@ class RenameSubcategoryIdColumnFromCollectionsTable extends Migration
      */
     public function down()
     {
-        Schema::table('collections', function (Blueprint $table) {
-            $table->renameColumn('category_id', 'subcategory_id');
+        Schema::table('collection_service_type', function (Blueprint $table) {
+            $table->dropColumn('deleted');
         });
     }
 }

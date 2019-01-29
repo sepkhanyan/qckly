@@ -37,8 +37,8 @@ class RestaurantCategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'name_en' => 'required|string|max:255',
-            'name_ar' => 'required|string|max:255',
+            'name_en' => 'required|string|max:255|unique:restaurant_categories,name_en',
+            'name_ar' => 'required|string|max:255|unique:restaurant_categories,name_ar',
         ];
     }
 }

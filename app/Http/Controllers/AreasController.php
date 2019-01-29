@@ -20,12 +20,15 @@ class AreasController extends Controller
     {
         $user = Auth::user();
         if ($user->admin == 1) {
-            $areas = Area::paginate(20);
+            $areas = Area::query();
             $data = $request->all();
 
             if (isset($data['area_search'])) {
-                $areas = Area::where('name_en', 'like', '%' . $data['area_search'] . '%' )->paginate(20);
+                $areas = $areas->where('name_en', 'like', '%' . $data['area_search'] . '%' );
             }
+
+            $areas = $areas->paginate(20);
+
             return view('areas', [
                 'areas' => $areas,
                 'user' => $user

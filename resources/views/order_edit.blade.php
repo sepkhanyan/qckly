@@ -12,7 +12,7 @@
                     <ul id="nav-tabs" class="nav nav-tabs">
                         <li class="active"><a href="#general" data-toggle="tab">Order</a></li>
                         <li><a href="#menus" data-toggle="tab">Collections
-                                <span class="badge">{{$order->orderCollection->count()}}</span></a></li>
+                                <span class="badge">{{$order->cart->cartCollection->count()}}</span></a></li>
                     </ul>
                 </div>
                     <div class="tab-content">
@@ -90,22 +90,22 @@
                                         <div class="panel-heading"><h3 class="panel-title">Delivery Address</h3></div>
                                         <div class="panel-body">
                                             <b>Name:</b>
-                                            {{$order->deliveryAddress->name}}
+                                            {{$order->cart->address->name}}
                                             <br>
                                             <b>Mobile Number:</b>
-                                            {{$order->deliveryAddress->mobile_number}}
+                                            {{$order->cart->address->mobile_number}}
                                             <br>
                                             <b>Location:</b>
-                                            {{$order->deliveryAddress->location}}
+                                            {{$order->cart->address->location}}
                                             <br>
                                             <b>Street Number:</b>
-                                            {{$order->deliveryAddress->street_number}}
+                                            {{$order->cart->address->street_number}}
                                             <br>
                                             <b>Building Number:</b>
-                                            {{$order->deliveryAddress->building_number}}
+                                            {{$order->cart->address->building_number}}
                                             <br>
                                             <b>Apartment Number:</b>
-                                            {{$order->deliveryAddress->apartment_number}}
+                                            {{$order->cart->address->apartment_number}}
                                         </div>
                                     </div>
                                 </div>
@@ -129,51 +129,51 @@
                                         </thead>
                                         <tbody>
                                         @php($price = 0)
-                                        @foreach($order->orderCollection as $orderCollection)
+                                        @foreach($order->cart->cartCollection as $cartCollection)
                                             <tr>
                                                 <td style="width: 100px; font-style: oblique; font-size: 15px">
-                                                    @if($orderCollection->collection_category_id == 2)
-                                                        <b>For {{$orderCollection->persons_count}} persons</b>
+                                                    @if($cartCollection->collection->category_id == 2)
+                                                        <b>For {{$cartCollection->persons_count}} persons</b>
                                                     @else
-                                                        <b>{{$orderCollection->quantity}}x</b>
+                                                        <b>{{$cartCollection->quantity}}x</b>
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    <h4><b>{{$orderCollection->collection_en}}</b></h4>
-                                                    @foreach($orderCollection->orderCollectionItem as $orderCollectionItem)
+                                                    <h4><b>{{$cartCollection->collection->name_en}}</b></h4>
+                                                    @foreach($cartCollection->cartItem as $cartItem)
                                                         <div>
-                                                            <span style="font-style: oblique">{{$orderCollectionItem->quantity}}
+                                                            <span style="font-style: oblique">{{$cartItem->quantity}}
                                                                 x</span>
-                                                            {{$orderCollectionItem->item_en}}
-                                                            @if($orderCollection->collection_category_id != 1)
+                                                            {{$cartItem->menu->name_en}}
+                                                            @if($cartCollection->collection->category_id != 1)
                                                                 /
-                                                                @if($orderCollectionItem->is_mandatory == 1)
+                                                                @if($cartItem->is_mandatory == 1)
                                                                     Mandatory
                                                                 @else
-                                                                    <span style="font-style: oblique">{{$orderCollectionItem->item_price . ' ' . \Lang::get('message.priceUnit')}}</span>
+                                                                    <span style="font-style: oblique">{{$cartItem->item_price . ' ' . \Lang::get('message.priceUnit')}}</span>
                                                                 @endif
                                                             @endif
                                                         </div>
                                                     @endforeach
                                                 </td>
-                                                <td>{{$orderCollection->collection_category_en}}</td>
+                                                <td>{{$cartCollection->collection->category->name_en}}</td>
                                                 <td>
-                                                    @if($orderCollection->female_caterer == 1)
+                                                    @if($cartCollection->female_caterer == 1)
                                                         Yes
                                                     @else
                                                         No
                                                     @endif
                                                 </td>
-                                                <td>{{$orderCollection->special_instruction}}</td>
-                                                <td>{{$orderCollection->service_type_en}}</td>
+                                                <td>{{$cartCollection->special_instruction}}</td>
+                                                <td>{{$cartCollection->serviceType->name_en}}</td>
                                                 <td class="text-left">
-                                                    @if($orderCollection->collection_category_id != 4)
-                                                        {{$orderCollection->collection_price}} {{\Lang::get('message.priceUnit')}}
+                                                    @if($cartCollection->collection->category_id != 4)
+                                                        {{$cartCollection->collection->price}} {{\Lang::get('message.priceUnit')}}
                                                     @endif
                                                 </td>
-                                                <td class="text-right">{{$orderCollection->subtotal}} {{\Lang::get('message.priceUnit')}}</td>
+                                                <td class="text-right">{{$cartCollection->price}} {{\Lang::get('message.priceUnit')}}</td>
                                             </tr>
-                                            @php($price += $orderCollection->subtotal)
+                                            @php($price += $cartCollection->price)
                                         @endforeach
                                         <tr>
                                             <td class="no-line"></td>

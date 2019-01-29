@@ -21,12 +21,14 @@ class RestaurantCategoriesController extends Controller
     {
         $user = Auth::user();
         if ($user->admin == 1) {
-            $categories = RestaurantCategory::paginate(20);
+            $categories = RestaurantCategory::query();
             $data = $request->all();
             if (isset($data['restaurant_category_search'])) {
-                $categories = RestaurantCategory::where('name_en', 'like', '%' . $data['restaurant_category_search'] . '%')
-                    ->orWhere('name_ar', 'like', '%' . $data['restaurant_category_search'] . '%')->paginate(20);
+                $categories = $categories->where('name_en', 'like', '%' . $data['restaurant_category_search'] . '%')
+                    ->orWhere('name_ar', 'like', '%' . $data['restaurant_category_search'] . '%');
             }
+            $categories = $categories->paginate(20);
+
             return view('restaurant_categories', ['categories' => $categories]);
         } else {
             return redirect()->back();
