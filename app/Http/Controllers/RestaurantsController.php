@@ -752,11 +752,10 @@ class RestaurantsController extends Controller
                     $query->where('approved', 1)->where('deleted', 0)->whereHas('serviceType', function ($x) use($category) {
                         $x->where('deleted', 0)->where('service_type_id', $category);
                     });
-                }])->paginate(20);
-            } else {
-                $restaurants = $restaurants->paginate(20);
+                }]);
             }
-            
+
+            $restaurants = $restaurants->paginate(20);
 
             if (count($restaurants) > 0) {
                 foreach ($restaurants as $restaurant) {
@@ -1005,9 +1004,10 @@ class RestaurantsController extends Controller
                     'collection.category',
                     'collection.mealtime',
                     'collection.unavailabilityHour'
-                ])->first();
+                ]);
 
-            $resNotice = $restaurant->collection->min('notice_period');
+
+
 
             if (isset($DataRequests['category_id'])) {
                 $category_id = $DataRequests['category_id'];
@@ -1016,12 +1016,17 @@ class RestaurantsController extends Controller
                     $query->whereHas('serviceType', function ($q) use ($category_id) {
                         $q->where('service_type_id', $category_id)->where('deleted', 0);
                     })->where('approved', 1)->where('deleted', 0);
-                }])->first();
+                }]);
 
-                $resNotice = $restaurant->collection->min('notice_period');
+
             }
 
+            $restaurant = $restaurant->first();
+
             if ($restaurant) {
+
+                $resNotice = $restaurant->collection->min('notice_period');
+
                 $restaurant_details = [];
 //                foreach ($restaurants as $restaurant) {
                 $menu_collection = [];
