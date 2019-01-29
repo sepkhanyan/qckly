@@ -29,7 +29,7 @@ class AreasController extends Controller
 
             $areas = $areas->paginate(20);
 
-            return view('areas', [
+            return view('areas.areas', [
                 'areas' => $areas,
                 'user' => $user
             ]);

@@ -24,7 +24,7 @@ class LanguagesController extends Controller
             if (isset($data['language_search'])) {
                 $languages = Language::where('name', 'like', '%' . $data['language_search'] . '%')->paginate(20);
             }
-            return view('languages', [
+            return view('languages.languages', [
                 'languages' => $languages,
                 'user' => $user
                 ]);
@@ -42,7 +42,7 @@ class LanguagesController extends Controller
     {
         $user = Auth::user();
         if ($user->admin == 1) {
-            return view('language_create');
+            return view('languages.language_create');
         } else {
             return redirect()->back();
         }
@@ -103,7 +103,7 @@ class LanguagesController extends Controller
         $user = Auth::user();
         if ($user->admin == 1) {
             $language = Language::find($id);
-            return view('language_edit', ['language' => $language]);
+            return view('languages.language_edit', ['language' => $language]);
         } else {
             return redirect()->back();
         }

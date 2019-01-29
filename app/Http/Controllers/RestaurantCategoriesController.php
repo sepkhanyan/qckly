@@ -29,7 +29,7 @@ class RestaurantCategoriesController extends Controller
             }
             $categories = $categories->paginate(20);
 
-            return view('restaurant_categories', ['categories' => $categories]);
+            return view('restaurants.restaurant_categories', ['categories' => $categories]);
         } else {
             return redirect()->back();
         }

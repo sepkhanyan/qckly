@@ -66,7 +66,7 @@ class OrdersController extends Controller
 
         $orders = $orders->orderBy('id', 'DESC')->paginate(20);
 
-        return view('orders', [
+        return view('orders.orders', [
             'id' => $id,
             'statuses' => $statuses,
             'orders' => $orders,
@@ -132,7 +132,7 @@ class OrdersController extends Controller
             if (!$restaurantOrder) {
                 return redirect()->back();
             }
-            return view('order_edit', [
+            return view('orders.order_edit', [
                 'order' => $order,
                 'restaurantOrder' => $restaurantOrder,
             ]);
@@ -174,7 +174,7 @@ class OrdersController extends Controller
             $from = $user->id;
             $msg = \Lang::get('message.orderCompleteStatus', ['restaurant_name' => $restaurant_name, 'order_id' => $order->id]);
             $order_id = $order->id;
-            $NotificationType = 3;
+            $NotificationType = 4;
             $notification = new NotificationsController();
             $notification->sendNot($userId, $from, $msg, $order_id, $NotificationType);
 

@@ -37,7 +37,7 @@ class UsersController extends Controller
         } else {
             return redirect()->back();
         }
-        return view('customers', [
+        return view('customers.customers', [
             'customers' => $customers,
             'user' => $user
         ]);

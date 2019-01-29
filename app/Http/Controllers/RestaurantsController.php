@@ -49,7 +49,7 @@ class RestaurantsController extends Controller
             $restaurants = Restaurant::where('id', $user->restaurant_id)->with(['editingRestaurant', 'collection']);
         }
         $restaurants = $restaurants->paginate(20);
-        return view('restaurants', [
+        return view('restaurants.restaurants', [
             'restaurants' => $restaurants,
             'user' => $user
         ]);
@@ -66,7 +66,7 @@ class RestaurantsController extends Controller
         if ($user->admin == 1) {
             $areas = Area::all();
             $categories = RestaurantCategory::all();
-            return view('restaurant_create', [
+            return view('restaurants.restaurant_create', [
                 'areas' => $areas,
                 'categories' => $categories,
             ]);
@@ -249,7 +249,7 @@ class RestaurantsController extends Controller
             $editingCategories = $editingCategoryRestaurants->pluck('category_id')->toArray();
             $categories = $categoryRestaurants->pluck('category_id')->toArray();
             $categoryFullDiff = array_merge(array_diff($editingCategories, $categories), array_diff($categories, $editingCategories));
-            return view('restaurant_edit_approve', [
+            return view('restaurants.restaurant_edit_approve', [
                 'user' => $user,
                 'restaurant' => $restaurant,
                 'editingRestaurant' => $editingRestaurant,
@@ -272,7 +272,7 @@ class RestaurantsController extends Controller
         $categories = RestaurantCategory::whereDoesntHave('categoryRestaurant', function ($query) use ($id) {
             $query->where('restaurant_id', $id);
         })->get();
-        return view('restaurant_edit', [
+        return view('restaurants.restaurant_edit', [
             'user' => $user,
             'restaurant' => $restaurant,
             'areas' => $areas,
@@ -415,7 +415,7 @@ class RestaurantsController extends Controller
             }
         }
         $working_hours = WorkingHour::where('restaurant_id', $restaurant->id)->get();
-        return view('restaurant_availability_edit', [
+        return view('restaurants.restaurant_availability_edit', [
             'restaurant' => $restaurant,
             'user' => $user,
             'working_hours' => $working_hours
@@ -748,17 +748,15 @@ class RestaurantsController extends Controller
                 $category = $DataRequests['category_id'];
                 $restaurants = $restaurants->whereHas('categoryRestaurant', function ($query) use ($category) {
                     $query->where('category_id', $category);
-                })->with(['collection' => function ($query) {
-                    $query->where('approved', 1)->where('deleted', 0)->with(['serviceType' => function ($x) {
-                        $x->where('deleted', 0);
-                    }]);
+                })->with(['collection' => function ($query) use($category) {
+                    $query->where('approved', 1)->where('deleted', 0)->whereHas('serviceType', function ($x) use($category) {
+                        $x->where('deleted', 0)->where('service_type_id', $category);
+                    });
                 }])->paginate(20);
             } else {
                 $restaurants = $restaurants->paginate(20);
             }
-
-
-
+            
 
             if (count($restaurants) > 0) {
                 foreach ($restaurants as $restaurant) {

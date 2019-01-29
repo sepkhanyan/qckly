@@ -75,7 +75,7 @@ class MenusController extends Controller
             $menus = $menus->orderby('approved', 'asc')->orderby('category_id', 'asc')->paginate(20);
             $categories = MenuCategory::where('restaurant_id', $user->restaurant_id)->where('deleted', 0)->where('approved', 1)->get();
         }
-        return view('menus', [
+        return view('menus.menus', [
             'id' => $id,
             'menus' => isset($menus) ? $menus : collect(),
             'restaurants' => isset($restaurants) ? $restaurants : "",
@@ -99,7 +99,7 @@ class MenusController extends Controller
         }
         $categories = MenuCategory::where('restaurant_id', $restaurant->id)->where('approved', 1)->where('deleted', 0)->get();
         if (count($categories) > 0) {
-            return view('menu_create', [
+            return view('menus.menu_create', [
                 'restaurant' => $restaurant,
                 'categories' => $categories,
                 'user' => $user
@@ -192,13 +192,13 @@ class MenusController extends Controller
         }
         if($user->admin == 1 && $menu->editingMenu !== null){
             $editingMenu = $menu->editingMenu;
-            return view('menu_edit_approve', [
+            return view('menus.menu_edit_approve', [
                 'menu' => $menu,
                 'editingMenu' => $editingMenu,
                 'user' => $user
             ]);
         }
-        return view('menu_edit', [
+        return view('menus.menu_edit', [
             'menu' => $menu,
             'user' => $user
         ]);

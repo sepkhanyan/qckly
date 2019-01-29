@@ -54,7 +54,7 @@ class MenuCategoriesController extends Controller
             $categories = $categories->orderby('approved', 'asc')->paginate(20);
 
         }
-        return view('menu_categories', [
+        return view('menus.menu_categories', [
             'id' => $id,
             'categories' => isset($categories) ? $categories : collect(),
             'restaurants' => isset($restaurants) ? $restaurants : "",
@@ -75,7 +75,7 @@ class MenuCategoriesController extends Controller
         if ($user->admin == 2) {
             $restaurant = Restaurant::where('id', $user->restaurant_id)->first();
         }
-        return view('menu_category_create', [
+        return view('menus.menu_category_create', [
             'restaurant' => $restaurant,
             'user' => $user
             ]);
@@ -167,7 +167,7 @@ class MenuCategoriesController extends Controller
                 'user' => $user
             ]);
         }
-        return view('menu_category_edit', [
+        return view('menus.menu_category_edit', [
             'category' => $category,
             'user' => $user
             ]);
