@@ -480,7 +480,7 @@ class OrdersController extends Controller
                     ];
                     $total += $cartCollection->price;
                 }
-                
+
 
                 $cart = [
                     'cart_id' => $order->cart->id,

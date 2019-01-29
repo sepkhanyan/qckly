@@ -743,14 +743,22 @@ class RestaurantsController extends Controller
                     $query->where('approved', 1)->where('deleted', 0);
                 }], 'workingHour', 'categoryRestaurant', 'review');
 
+
             if (isset($DataRequests['category_id'])) {
                 $category = $DataRequests['category_id'];
                 $restaurants = $restaurants->whereHas('categoryRestaurant', function ($query) use ($category) {
                     $query->where('category_id', $category);
-                })->paginate(20);
+                })->with(['collection' => function ($query) {
+                    $query->where('approved', 1)->where('deleted', 0)->with(['serviceType' => function ($x) {
+                        $x->where('deleted', 0);
+                    }]);
+                }])->paginate(20);
             } else {
                 $restaurants = $restaurants->paginate(20);
             }
+
+
+
 
             if (count($restaurants) > 0) {
                 foreach ($restaurants as $restaurant) {
@@ -822,7 +830,6 @@ class RestaurantsController extends Controller
                     }
 
 
-                    $notice = $restaurant->collection->min('notice_period');
 //                    $notice_hours = $notice / 60;
 //                    $notice_minutes = $notice % 60;
 //                    if ($notice_hours >= 1) {
@@ -849,6 +856,8 @@ class RestaurantsController extends Controller
                     if ($working->type == 'flexible') {
                         $availability_status_id = 3;
                     }
+                    $notice = $restaurant->collection->min('notice_period');
+
                     $arr [] = [
                         'restaurant_id' => $restaurant->id,
                         'restaurant_name' => $restaurant_name,
@@ -1004,14 +1013,14 @@ class RestaurantsController extends Controller
 
             if (isset($DataRequests['category_id'])) {
                 $category_id = $DataRequests['category_id'];
-//                $service_type = CategoryRestaurant::where('category_id', $category_id)->where('restaurant_id', $restaurant_id)->first();
-                $restaurant = $restaurant->whereHas('categoryRestaurant', function ($query) use ($category_id) {
-                    $query->where('category_id', $category_id);
-                })->with(['collection' => function ($query) use ($category_id) {
+
+                $restaurant = $restaurant->with(['collection' => function ($query) use ($category_id) {
                     $query->whereHas('serviceType', function ($q) use ($category_id) {
                         $q->where('service_type_id', $category_id)->where('deleted', 0);
                     })->where('approved', 1)->where('deleted', 0);
                 }])->first();
+
+                $resNotice = $restaurant->collection->min('notice_period');
             }
 
             if ($restaurant) {
@@ -1216,7 +1225,7 @@ class RestaurantsController extends Controller
 
                         $service = [];
                         foreach ($collection->serviceType as $serviceType) {
-                            $id = $serviceType->id;
+                            $id = $serviceType->service_type_id;
                             if ($lang == 'ar') {
                                 $name = $serviceType->name_ar;
 
