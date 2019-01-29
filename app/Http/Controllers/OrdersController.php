@@ -145,6 +145,7 @@ class OrdersController extends Controller
     {
         $user = Auth::user();
         if ($user->admin == 2) {
+            $restaurant = Restaurant::where('id', $user->restaurant_id)->first();
             $restaurantOrder = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $user->restaurant_id)->where('status_id', 2)->first();
             if (!$restaurantOrder) {
                 return redirect('/orders');
@@ -157,6 +158,25 @@ class OrdersController extends Controller
                 $order->status_id = 3;
                 $order->save();
             }
+            $client = User::where('id', $order->user_id)->first();
+            if (!$client->lang) {
+                \App::setLocale("en");
+                $restaurant_name = $restaurant->name_en;
+            } else {
+                \App::setLocale($client->lang);
+                if ($client->lang == 'ar') {
+                    $restaurant_name = $restaurant->name_ar;
+                } else {
+                    $restaurant_name = $restaurant->name_en;
+                }
+            }
+            $userId = $order->user_id;
+            $from = $user->id;
+            $msg = \Lang::get('message.orderComplete', ['restaurant_name' => $restaurant_name, 'order_id' => $order->id]);
+            $order_id = $order->id;
+            $NotificationType = 3;
+            $notification = new NotificationsController();
+            $notification->sendNot($userId, $from, $msg, $order_id, $NotificationType);
 
         } else {
             return redirect()->back();
