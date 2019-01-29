@@ -35,6 +35,7 @@ return [
     'isAvailable'         => 'متاح',
     'notAvailable'        => 'غير متاح',
     'orderConfirmation'   => 'restaurant_name: قبل طلبك order_id: # وبدأ في تجهيزه',
+    'orderCompleteStatus' => 'نتمنى أن تكون قد استمعت بخدمات :restaurant_name ،  يرجى اعلامنا المزيد عن تجربتك وتقييم الخدمة',
     'noNotification'     => 'لايوجد تنبيهات الان',
     'changeLanguage'      => 'تم تغيير اللغة بنجاح',
     'areaRemoved'         => 'تم حذف المنطقة المحددة',

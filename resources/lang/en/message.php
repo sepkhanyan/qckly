@@ -35,8 +35,10 @@ return [
     'isAvailable'         => 'Is Available',
     'notAvailable'        => 'Not Available',
     'orderConfirmation'   => ':restaurant_name accepted your order# :order_id and started working on it.',
+    'orderCompleteStatus' => 'We hope you enjoyed :restaurant name services, Please tell us more about your experience and rate the service.',
     'noNotification'      => 'No notification found at the moment.',
     'changeLanguage'      => 'Language changed successfully.',
     'areaRemoved'         => 'Your selected area has been deleted.',
     'collectionAvailabilityChanged' => ':collection_name collection availability hours has been changed. Please order at it\'s availability hours or order from some other collection.',
+
 ];
