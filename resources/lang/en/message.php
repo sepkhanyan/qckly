@@ -35,7 +35,7 @@ return [
     'isAvailable'         => 'Is Available',
     'notAvailable'        => 'Not Available',
     'orderConfirmation'   => ':restaurant_name accepted your order# :order_id and started working on it.',
-    'orderCompleteStatus' => 'We hope you enjoyed :restaurant name services, Please tell us more about your experience and rate the service.',
+    'orderCompleteStatus' => 'We hope you enjoyed :restaurant_name services for order# :order_id, Please tell us more about your experience and rate the service.',
     'noNotification'      => 'No notification found at the moment.',
     'changeLanguage'      => 'Language changed successfully.',
     'areaRemoved'         => 'Your selected area has been deleted.',
