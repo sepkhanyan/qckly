@@ -39,20 +39,22 @@ class RestaurantsController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        $restaurants = Restaurant::where('deleted', 0)->with(['editingRestaurant', 'collection']);
         $data = $request->all();
+
+        $restaurants = Restaurant::where('deleted', 0)->with([ 'editingRestaurant', 'collection' ]);
+
         if (isset($data['restaurant_search'])) {
             $restaurants = $restaurants->where('name_en', 'like', '%' . $data['restaurant_search'] . '%')
                 ->orWhere('description_en', 'like', $data['restaurant_search']);
         }
+
         if ($user->admin == 2) {
-            $restaurants = Restaurant::where('id', $user->restaurant_id)->with(['editingRestaurant', 'collection']);
+            $restaurants = Restaurant::where('id', $user->restaurant_id)->with([ 'editingRestaurant', 'collection' ]);
         }
+
         $restaurants = $restaurants->paginate(20);
-        return view('restaurants.restaurants', [
-            'restaurants' => $restaurants,
-            'user' => $user
-        ]);
+
+        return view('restaurants.restaurants', [ 'restaurants' => $restaurants, 'user' => $user ]);
     }
 
     /**
@@ -63,13 +65,13 @@ class RestaurantsController extends Controller
     public function create()
     {
         $user = Auth::user();
+
         if ($user->admin == 1) {
+        
             $areas = Area::all();
             $categories = RestaurantCategory::all();
-            return view('restaurants.restaurant_create', [
-                'areas' => $areas,
-                'categories' => $categories,
-            ]);
+        
+            return view('restaurants.restaurant_create', [ 'areas' => $areas, 'categories' => $categories, ]);
         } else {
             return redirect()->back();
         }
@@ -84,30 +86,34 @@ class RestaurantsController extends Controller
     public function store(RestaurantRequest $request)
     {
         $user = Auth::user();
+
         if ($user->admin == 1) {
-            $restaurant = new Restaurant();
+
+            $restaurant = new Restaurant;
+
             $image = $request->file('image');
             $name = 'restaurant_' . time() . '.' . $image->getClientOriginalExtension();
             $path = public_path('/images');
             $image->move($path, $name);
+
             $restaurant->image = $name;
             $restaurant->name_en = $request->input('restaurant_name_en');
             $restaurant->name_ar = $request->input('restaurant_name_ar');
             $restaurant->email = $request->input('restaurant_email');
             $restaurant->telephone = $request->input('restaurant_telephone');
-//            $restaurant->address_en = $request->input('address_en');
-//            $restaurant->address_ar = $request->input('address_ar');
-//            $restaurant->city_en = $request->input('city_en');
-//            $restaurant->city_ar = $request->input('city_ar');
-//            $restaurant->state_en = $request->input('state_en');
-//            $restaurant->state_ar = $request->input('state_ar');
-//            $restaurant->postcode = $request->input('postcode');
-//            $restaurant->area_id = $request->input('country');
-//            $restaurant->latitude = $request->input('latitude');
-//            $restaurant->longitude = $request->input('longitude');
             $restaurant->description_en = $request->input('description_en');
             $restaurant->description_ar = $request->input('description_ar');
-//            $restaurant->status = $request->input('status');
+            // $restaurant->address_en = $request->input('address_en');
+            // $restaurant->address_ar = $request->input('address_ar');
+            // $restaurant->city_en = $request->input('city_en');
+            // $restaurant->city_ar = $request->input('city_ar');
+            // $restaurant->state_en = $request->input('state_en');
+            // $restaurant->state_ar = $request->input('state_ar');
+            // $restaurant->postcode = $request->input('postcode');
+            // $restaurant->area_id = $request->input('country');
+            // $restaurant->latitude = $request->input('latitude');
+            // $restaurant->longitude = $request->input('longitude');
+            // $restaurant->status = $request->input('status');
             $restaurant->save();
 
             $manager = new User();
@@ -122,6 +128,7 @@ class RestaurantsController extends Controller
             $manager->save();
 
             $categories = $request->input('category');
+
             foreach ($categories as $category) {
                 $restaurantCategory = RestaurantCategory::where('id', $category)->first();
                 $categoryRestaurant = new CategoryRestaurant();
@@ -133,6 +140,7 @@ class RestaurantsController extends Controller
             }
 
             $areas = $request->input('area');
+
             foreach ($areas as $areaId) {
                 $area = Area::where('id', $areaId)->first();
                 $restaurantArea = new RestaurantArea();
@@ -230,6 +238,7 @@ class RestaurantsController extends Controller
         $user = Auth::user();
 
         $restaurant = Restaurant::find($id);
+
         if ($user->admin == 2) {
             if ($user->restaurant_id == $id) {
                 $restaurant = Restaurant::find($id);
@@ -237,7 +246,9 @@ class RestaurantsController extends Controller
                 return redirect()->back();
             }
         }
+
         if ($user->admin == 1 && $restaurant->editingRestaurant !== null) {
+
             $editingRestaurant = $restaurant->editingRestaurant;
             $restaurantAreas = RestaurantArea::where('restaurant_id', $id)->get();
             $editingRestaurantAreas = EditingRestaurantArea::where('editing_restaurant_id', $editingRestaurant->id)->get();
@@ -249,6 +260,7 @@ class RestaurantsController extends Controller
             $editingCategories = $editingCategoryRestaurants->pluck('category_id')->toArray();
             $categories = $categoryRestaurants->pluck('category_id')->toArray();
             $categoryFullDiff = array_merge(array_diff($editingCategories, $categories), array_diff($categories, $editingCategories));
+
             return view('restaurants.restaurant_edit_approve', [
                 'user' => $user,
                 'restaurant' => $restaurant,
@@ -265,13 +277,17 @@ class RestaurantsController extends Controller
         }
 
         $restaurantAreas = RestaurantArea::where('restaurant_id', $id)->get();
+
         $areas = Area::whereDoesntHave('restaurantArea', function ($query) use ($id) {
             $query->where('restaurant_id', $id);
         })->get();
+
         $category_restaurants = CategoryRestaurant::where('restaurant_id', $id)->get();
+
         $categories = RestaurantCategory::whereDoesntHave('categoryRestaurant', function ($query) use ($id) {
             $query->where('restaurant_id', $id);
         })->get();
+
         return view('restaurants.restaurant_edit', [
             'user' => $user,
             'restaurant' => $restaurant,
@@ -280,7 +296,6 @@ class RestaurantsController extends Controller
             'categories' => $categories,
             'category_restaurants' => $category_restaurants
         ]);
-
     }
 
     /**
@@ -294,51 +309,72 @@ class RestaurantsController extends Controller
     {
         $user = Auth::user();
         $restaurant = Restaurant::find($id);
+
         if ($user->admin == 2) {
+
             if ($user->restaurant_id == $id) {
-                $restaurant = Restaurant::find($id);
+
                 $oldEditingRestaurant = EditingRestaurant::where('restaurant_id', $id)->first();
+
                 if ($oldEditingRestaurant) {
+
                     if ($oldEditingRestaurant->image) {
                         File::delete(public_path('images/' . $oldEditingRestaurant->image));
                     }
+
                     EditingRestaurant::where('restaurant_id', $id)->delete();
                 }
-                $restaurant = new EditingRestaurant();
-                $restaurant->name_en = $request->input('restaurant_name_en');
-                $restaurant->name_ar = $request->input('restaurant_name_ar');
-                $restaurant->email = $request->input('restaurant_email');
-                $restaurant->telephone = $request->input('restaurant_telephone');
-                $restaurant->description_en = $request->input('description_en');
-                $restaurant->description_ar = $request->input('description_ar');
-                $restaurant->restaurant_id = $id;
+
+                $restaurant = new EditingRestaurant;
+
+                $editingData = [
+                    'name_en' => $request->input('restaurant_name_en'),
+                    'name_ar' => $request->input('restaurant_name_ar'),
+                    'email' => $request->input('restaurant_email'),
+                    'telephone' => $request->input('restaurant_telephone'),
+                    'description_en' => $request->input('description_en'),
+                    'description_ar' => $request->input('description_ar'),
+                    'restaurant_id' => $id
+                ];
+
                 if ($request->hasFile('image')) {
+
                     $image = $request->file('image');
                     $name = 'restaurant_' . time() . '.' . $image->getClientOriginalExtension();
                     $path = public_path('/images');
                     $image->move($path, $name);
-                    $restaurant->image = $name;
+
+                    $editingData['image'] = $name;
                 }
+
+                $restaurant->forceFill($editingData);
                 $restaurant->save();
+
                 $categories = $request->input('category');
-                if ($categories) {
-                    foreach ($categories as $category) {
-                        $restaurantCategory = RestaurantCategory::where('id', $category)->first();
-                        $categoryRestaurant = new  EditingCategoryRestaurant();
+                $restaurantCategories = RestaurantCategory::whereIn('id', $categories)->get();
+
+                if ($restaurantCategories->isNotEmpty()) {
+
+                    foreach ($restaurantCategories as $category) {
+
+                        $categoryRestaurant = new  EditingCategoryRestaurant;
                         $categoryRestaurant->editing_restaurant_id = $restaurant->id;
-                        $categoryRestaurant->category_id = $category;
-                        $categoryRestaurant->name_en = $restaurantCategory->name_en;
-                        $categoryRestaurant->name_ar = $restaurantCategory->name_ar;
+                        $categoryRestaurant->category_id = $category->id;
+                        $categoryRestaurant->name_en = $category->name_en;
+                        $categoryRestaurant->name_ar = $category->name_ar;
                         $categoryRestaurant->save();
                     }
                 }
+
                 $areas = $request->input('area');
-                if ($areas) {
-                    foreach ($areas as $areaId) {
-                        $area = Area::where('id', $areaId)->first();
+                $areas = Area::whereIn('id', $areas)->get();
+
+                if ($areas->isNotEmpty()) {
+                    foreach ($areas as $area) {
+
                         $restaurantArea = new EditingRestaurantArea();
                         $restaurantArea->editing_restaurant_id = $restaurant->id;
-                        $restaurantArea->area_id = $areaId;
+                        $restaurantArea->area_id = $area->id;
                         $restaurantArea->name_en = $area->name_en;
                         $restaurantArea->name_ar = $area->name_ar;
                         $restaurantArea->save();
@@ -348,58 +384,62 @@ class RestaurantsController extends Controller
                 return redirect()->back();
             }
         } elseif ($user->admin == 1) {
-            $restaurant->name_en = $request->input('restaurant_name_en');
-            $restaurant->name_ar = $request->input('restaurant_name_ar');
-            $restaurant->email = $request->input('restaurant_email');
-            $restaurant->telephone = $request->input('restaurant_telephone');
-//        $restaurant->address_en = $request->input('address_en');
-//        $restaurant->address_ar = $request->input('address_ar');
-//        $restaurant->city_en = $request->input('city_en');
-//        $restaurant->city_ar = $request->input('city_ar');
-//        $restaurant->state_en = $request->input('state_en');
-//        $restaurant->state_ar = $request->input('state_ar');
-//        $restaurant->postcode = $request->input('postcode');
-//        $restaurant->area_id = $request->input('country');
-//        $restaurant->latitude = $request->input('latitude');
-//        $restaurant->longitude = $request->input('longitude');
-            $restaurant->description_en = $request->input('description_en');
-            $restaurant->description_ar = $request->input('description_ar');
-//        $restaurant->status = $request->input('status');
+
+            $data = [
+                'name_en' => $request->input('restaurant_name_en'),
+                'name_ar' => $request->input('restaurant_name_ar'),
+                'email' => $request->input('restaurant_email'),
+                'telephone' => $request->input('restaurant_telephone'),
+                'description_en' => $request->input('description_en'),
+                'description_ar' =>$request->input('description_ar') 
+            ];
+
             if ($request->hasFile('image')) {
+
                 if ($restaurant->image) {
                     File::delete(public_path('images/' . $restaurant->image));
                 }
+
                 $image = $request->file('image');
                 $name = 'restaurant_' . time() . '.' . $image->getClientOriginalExtension();
                 $path = public_path('/images');
                 $image->move($path, $name);
-                $restaurant->image = $name;
+
+                $data['image'] = $name;
             }
-            $restaurant->save();
+
+            $restaurant->update($data);
+
             $categories = $request->input('category');
-            if ($categories) {
+            $restaurantCategories = RestaurantCategory::whereIn('id', $categories)->get();
+
+            if ($restaurantCategories->isNotEmpty()) {
+
                 CategoryRestaurant::where('restaurant_id', $restaurant->id)->whereNotIn('category_id', $categories)->delete();
-//                CategoryRestaurant::where('restaurant_id', $id)->delete();
-                foreach ($categories as $category) {
-                    $restaurantCategory = RestaurantCategory::where('id', $category)->first();
+                // CategoryRestaurant::where('restaurant_id', $id)->delete();
+
+                foreach ($restaurantCategories as $category) {
                     $categoryRestaurant = CategoryRestaurant::firstOrCreate(
-                        ['category_id' => $category, 'restaurant_id' => $restaurant->id],
-                        ['name_en' => $restaurantCategory->name_en, 'name_ar' => $restaurantCategory->name_ar]
-                    );
-                }
-            }
-            $areas = $request->input('area');
-            if ($areas) {
-                RestaurantArea::where('restaurant_id', $restaurant->id)->whereNotIn('area_id', $areas)->delete();
-                foreach ($areas as $areaId) {
-                    $area = Area::where('id', $areaId)->first();
-                    $restaurantArea = RestaurantArea::firstOrCreate(
-                        ['area_id' => $areaId, 'restaurant_id' => $restaurant->id],
-                        ['name_en' => $area->name_en, 'name_ar' => $area->name_ar]
+                        ['category_id' => $category->id, 'restaurant_id' => $restaurant->id],
+                        ['name_en' => $category->name_en, 'name_ar' => $category->name_ar]
                     );
                 }
             }
 
+            $areas = $request->input('area');
+            $areas = Area::whereIn('id', $areas)->get();
+
+            if ($areas->isNotEmpty()) {
+
+                RestaurantArea::where('restaurant_id', $restaurant->id)->whereNotIn('area_id', $areas)->delete();
+
+                foreach ($areas as $area) {
+                    $restaurantArea = RestaurantArea::firstOrCreate(
+                        ['area_id' => $area->id, 'restaurant_id' => $restaurant->id],
+                        ['name_en' => $area->name_en, 'name_ar' => $area->name_ar]
+                    );
+                }
+            }
         }
 
         return redirect('/restaurants');
@@ -409,12 +449,15 @@ class RestaurantsController extends Controller
     {
         $user = Auth::user();
         $restaurant = Restaurant::find($id);
+
         if ($user->admin == 2) {
             if ($user->restaurant_id != $id) {
                 return redirect()->back();
             }
         }
+
         $working_hours = WorkingHour::where('restaurant_id', $restaurant->id)->get();
+
         return view('restaurants.restaurant_availability_edit', [
             'restaurant' => $restaurant,
             'user' => $user,
