@@ -888,7 +888,8 @@ class RestaurantsController extends Controller
                         $availability_hours [] = [
                             'day' => $workingHour->weekday,
                             'open_hour' => $workingHour->opening_time,
-                            'close_hour' => $workingHour->closing_time
+                            'close_hour' => $workingHour->closing_time,
+                            'day_status' => $workingHour->status
                         ];
                     }
 
@@ -1308,6 +1309,49 @@ class RestaurantsController extends Controller
                             $collectionStatus = 0;
                         }
 
+
+                        if ($collection->unavailabilityHour->isEmpty()) {
+
+                            $availability_status_id = -1;
+                            $availability_hours = [];
+
+                        }else{
+
+                            $availability = $collection->unavailabilityHour->first();
+
+                            $availability_hours = [];
+                            if ($availability->type == 'flexible') {
+                                $availability_status_id = 3;
+
+
+                                foreach ($collection->unavailabilityHour as $unavailabilityHour) {
+                                    $availability_hours [] = [
+                                        'day' => $unavailabilityHour->weekday,
+                                        'open_hour' => $unavailabilityHour->start_time,
+                                        'close_hour' => $unavailabilityHour->end_time,
+                                        'day_status' => $unavailabilityHour->status
+                                    ];
+                                }
+                            }elseif($availability->type == 'daily'){
+                                $availability_status_id = 2;
+
+                                foreach ($collection->unavailabilityHour as $unavailabilityHour) {
+                                    $availability_hours [] = [
+                                        'day' => $unavailabilityHour->weekday,
+                                        'open_hour' => $unavailabilityHour->start_time,
+                                        'close_hour' => $unavailabilityHour->end_time
+                                    ];
+                                }
+                            }else{
+                                $availability_status_id = 1;
+                                $availability_hours = [];
+                            }
+
+                        }
+
+
+
+
                         $menu_collection [] = [
                             'collection_id' => $collection->id,
                             'collection_name' => $collection_name,
@@ -1323,6 +1367,8 @@ class RestaurantsController extends Controller
                             'collection_price' => $collection_price,
                             'collection_price_unit' => \Lang::get('message.priceUnit'),
                             'collection_status' => $collectionStatus,
+                            'availability_status_id' => $availability_status_id,
+                            'availability' => $availability_hours,
                             'min_serve_to_person' => $min_serve,
                             'max_serve_to_person' => $max_serve,
                             'allow_person_increase' => $person_increase,
@@ -1437,7 +1483,8 @@ class RestaurantsController extends Controller
                     $availability_hours [] = [
                         'day' => $workingHour->weekday,
                         'open_hour' => $workingHour->opening_time,
-                        'close_hour' => $workingHour->closing_time
+                        'close_hour' => $workingHour->closing_time,
+                        'day_status' => $workingHour->status
                     ];
                 }
 
