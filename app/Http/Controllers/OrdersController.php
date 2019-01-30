@@ -41,7 +41,7 @@ class OrdersController extends Controller
         $statuses = Status::all();
         $data = $request->all();
         
-        $orders = OrderRestaurant::with('order.user', 'status');
+        $orders = OrderRestaurant::with('order.user', 'status', 'restaurant', 'order.cart.area');
 
         if ($user->admin == 1) {
 
@@ -125,7 +125,7 @@ class OrdersController extends Controller
     {
         $user = Auth::user();
         if ($user->admin == 2) {
-            $order = Order::with(['user', 'status', 'cart.address' , 'cart.cartCollection.serviceType', 'cart.cartCollection' => function ($query) use ($user) {
+            $order = Order::with(['user', 'status', 'cart.address' , 'cart.cartCollection.collection.serviceType', 'cart.cartCollection' => function ($query) use ($user) {
                 $query->where('restaurant_id', $user->restaurant_id);
             }])->where('id', $id)->first();
             $restaurantOrder = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $user->restaurant_id)->first();
@@ -195,7 +195,7 @@ class OrdersController extends Controller
         $req_auth = $request->header('Authorization');
         $user_id = User::getUserByToken($req_auth);
         if ($user_id) {
-            $orders = Order::where('user_id', $user_id)->orderby('id', 'desc')->with(['cart.address', 'cart.cartCollection.cartItem.menu', 'status', 'cart.cartCollection.cartItem.category', 'cart.cartCollection.collection.category'])->paginate(20);
+            $orders = Order::where('user_id', $user_id)->orderby('id', 'desc')->with(['cart.address', 'cart.cartCollection.cartItem.menu', 'status', 'cart.cartCollection.collection.serviceType' ,'cart.cartCollection.cartItem.category', 'cart.cartCollection.collection.category'])->paginate(20);
             if (count($orders) > 0) {
                 foreach ($orders as $order) {
                     if ($order->cart->address->is_apartment == 1) {
@@ -278,12 +278,12 @@ class OrdersController extends Controller
                             $restaurant_name = $cartCollection->collection->restaurant->name_ar;
                             $collection_type = $cartCollection->collection->category->name_ar;
                             $collection_name = $cartCollection->collection->name_ar;
-                            $service_type = $cartCollection->serviceType->name_ar;
+                            $service_type = $cartCollection->collection->serviceType->name_ar;
                         } else {
                             $restaurant_name = $cartCollection->collection->restaurant->name_en;
                             $collection_type = $cartCollection->collection->category->name_en;
                             $collection_name = $cartCollection->collection->name_en;
-                            $service_type = $cartCollection->serviceType->name_en;
+                            $service_type = $cartCollection->collection->serviceType->name_en;
                         }
 
                         $collections [] = [
@@ -297,7 +297,7 @@ class OrdersController extends Controller
                             'collection_price_unit' => \Lang::get('message.priceUnit'),
                             'female_caterer' => $female_caterer,
                             'special_instruction' => $cartCollection->special_instruction,
-                            'service_type_id' => $cartCollection->service_type_id,
+                            'service_type_id' => $cartCollection->collection->serviceType->service_type_id,
                             'service_type' => $service_type,
                             'menu_items' => $menu,
                             'quantity' => $quantity,
@@ -389,7 +389,7 @@ class OrdersController extends Controller
         $req_auth = $request->header('Authorization');
         $user_id = User::getUserByToken($req_auth);
         if ($user_id) {
-            $order = Order::where('id', $id)->where('user_id', $user_id)->first();
+            $order = Order::where('id', $id)->where('user_id', $user_id)->with([ 'status','cart.address', 'cart.cartCollection.collection.serviceType', 'cart.cartCollection.cartItem.menu', 'cart.cartCollection.cartItem.category', 'cart.cartCollection.collection.category'])->first();
             if ($order) {
                 if ($order->cart->address->is_apartment == 1) {
                     $is_apartment = true;
@@ -471,12 +471,12 @@ class OrdersController extends Controller
                         $restaurant_name = $cartCollection->collection->restaurant->name_ar;
                         $collection_type = $cartCollection->collection->category->name_ar;
                         $collection_name = $cartCollection->collection->name_ar;
-                        $service_type = $cartCollection->serviceType->name_ar;
+                        $service_type = $cartCollection->collection->serviceType->name_ar;
                     } else {
                         $restaurant_name = $cartCollection->collection->restaurant->name_en;
                         $collection_type = $cartCollection->collection->category->name_en;
                         $collection_name = $cartCollection->collection->name_en;
-                        $service_type = $cartCollection->serviceType->name_en;
+                        $service_type = $cartCollection->collection->serviceType->name_en;
                     }
 
                     $collections [] = [
@@ -490,7 +490,7 @@ class OrdersController extends Controller
                         'collection_price_unit' => \Lang::get('message.priceUnit'),
                         'female_caterer' => $female_caterer,
                         'special_instruction' => $cartCollection->special_instruction,
-                        'service_type_id' => $cartCollection->service_type_id,
+                        'service_type_id' => $cartCollection->collection->serviceType->service_type_id,
                         'service_type' => $service_type,
                         'menu_items' => $menu,
                         'quantity' => $quantity,

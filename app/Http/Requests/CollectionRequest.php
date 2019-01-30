@@ -154,7 +154,7 @@ class CollectionRequest extends FormRequest
         if ($this->id) {
 
             $rules = [
-                'service_type' => 'required',
+//                'service_type' => 'required',
                 'notice_period' => 'required|integer|min:0',
                 'category' => 'required|integer',
                 'name_en' => 'required|string|max:255',

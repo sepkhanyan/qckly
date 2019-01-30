@@ -427,10 +427,9 @@
                             <div id="type" class="form-group{{ $errors->has('service_type') ? ' has-error' : '' }}">
                                 <label for="" class="col-sm-3 control-label">Service Type</label>
                                 <div class="col-sm-5">
-                                    <select name="service_type[]" id="service"  class="form-control"
-                                            placeholder="Select Service" multiple>
+                                    <select name="service_type" id="service"  class="form-control">
                                         @foreach($categoryRestaurants as $categoryRestaurant)
-                                            <option value="{{$categoryRestaurant->category_id}}"  {{ (collect(old('service_type'))->contains($categoryRestaurant->category_id)) ? 'selected':'' }}>{{$categoryRestaurant->name_en}}</option>
+                                            <option value="{{$categoryRestaurant->category_id}}"  {{ (old('service_type') == $categoryRestaurant->category_id) ? 'selected':'' }}>{{$categoryRestaurant->name_en}}</option>
                                         @endforeach
                                     </select>
                                     @if ($errors->has('service_type'))

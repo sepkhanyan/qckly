@@ -23,7 +23,7 @@ class CollectionCategoriesController extends Controller
         if (isset($data['collection_category_search'])) {
             $categories = $categories->where('name_en', 'like', '%' . $data['collection_category_search'] . '%');
         }
-        return view('collection_categories', [
+        return view('collections.collection_categories', [
             'categories' => $categories,
             'user' => $user
             ]);

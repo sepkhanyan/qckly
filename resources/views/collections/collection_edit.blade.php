@@ -566,46 +566,7 @@
                             </div>
                         </div>
                         <div id="data" class="tab-pane row wrap-all">
-                            <div id="type" class="form-group{{ $errors->has('service_type') ? ' has-error' : '' }}">
-                                <label for="" class="col-sm-3 control-label">Service Type</label>
-
-                                <div class="col-sm-5">
-                                    <select name="service_type[]" id="service" class="form-control"
-                                            placeholder="Select Service" multiple>
-                                        @foreach($categoryRestaurants as $categoryRestaurant)
-                                            <option value="{{$categoryRestaurant->category_id}}" @if(old('service_type')) {{ (collect(old('service_type'))->contains($categoryRestaurant->category_id)) ? 'selected':'' }} @else {{ $service->has($categoryRestaurant->category_id) ? 'selected' : '' }} @endif>{{$categoryRestaurant->name_en}}</option>
-                                        @endforeach
-                                    </select>
-                                    @if ($errors->has('service_type'))
-                                        <span class="help-block">
-                                                    <strong>{{ $errors->first('service_type') }}</strong>
-                                                </span>
-                                    @endif
-                                </div>
-
-                                {{--<div class="col-sm-5">--}}
-                                {{--<div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">--}}
-                                {{--@foreach ($categoryRestaurants as $categoryRestaurant)--}}
-                                {{--@if(old('service_type'))--}}
-                                {{--<label  class="btn btn-success {{(old('service_type') == $categoryRestaurant->id) ? ' active' : ''}}" >--}}
-                                {{--<input type="radio" name="service_type" value="{{$categoryRestaurant->id}}" {{(old('service_type') == $categoryRestaurant->id) ? 'checked' : ''}}>--}}
-                                {{--{{$categoryRestaurant->name_en}}--}}
-                                {{--</label>--}}
-                                {{--@else--}}
-                                {{--<label  class="btn btn-success {{($collection->service_type_id == $categoryRestaurant->id) ? ' active' : ''}}" >--}}
-                                {{--<input type="radio" name="service_type" value="{{$categoryRestaurant->id}}" {{($collection->service_type_id  == $categoryRestaurant->id) ? 'checked' : ''}}>--}}
-                                {{--{{$categoryRestaurant->name_en}}--}}
-                                {{--</label>--}}
-                                {{--@endif--}}
-                                {{--@endforeach--}}
-                                {{--</div>--}}
-                                {{--@if ($errors->has('service_type'))--}}
-                                {{--<span class="help-block">--}}
-                                {{--<strong>{{ $errors->first('service_type') }}</strong>--}}
-                                {{--</span>--}}
-                                {{--@endif--}}
-                                {{--</div>--}}
-                            </div>
+                            <h4 class="tab-pane-title">{{$collection->serviceType->name_en}}</h4>
                             <div class="form-group{{ $errors->has('notice_period') ? ' has-error' : '' }}">
                                 <label for="input-max" class="col-sm-3 control-label">
                                     Notice Period

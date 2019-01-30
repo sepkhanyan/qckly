@@ -21,8 +21,8 @@ class CollectionServiceType extends Model
         return $this->belongsTo('App\Collection', 'collection_id');
     }
 
-    public function  cartCollection()
-    {
-        return $this->hasOne('App\UserCartCollection', 'service_type_id', 'service_type_id');
-    }
+//    public function  cartCollection()
+//    {
+//        return $this->hasOne('App\UserCartCollection', 'collection_id', 'collection_id');
+//    }
 }

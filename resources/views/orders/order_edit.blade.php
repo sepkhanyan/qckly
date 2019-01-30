@@ -165,7 +165,7 @@
                                                     @endif
                                                 </td>
                                                 <td>{{$cartCollection->special_instruction}}</td>
-                                                <td>{{$cartCollection->serviceType->name_en}}</td>
+                                                <td>{{$cartCollection->collection->serviceType->name_en}}</td>
                                                 <td class="text-left">
                                                     @if($cartCollection->collection->category_id != 4)
                                                         {{$cartCollection->collection->price}} {{\Lang::get('message.priceUnit')}}

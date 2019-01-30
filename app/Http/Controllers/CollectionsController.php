@@ -118,7 +118,7 @@ class CollectionsController extends Controller
         $collection_category = CollectionCategory::where('id', $category_id)->first();
         $menu_items = Menu::where('restaurant_id', $restaurant->id)->where('approved', 1)->where('deleted', 0)->get();
         if (count($menu_items) > 0) {
-            return view('collection_create', [
+            return view('collections.collection_create', [
                 'restaurant' => $restaurant,
                 'categories' => $categories,
                 'categoryRestaurants' => $categoryRestaurants,
@@ -197,9 +197,8 @@ class CollectionsController extends Controller
 
         $collection->save();
 
-        $services = $request->input('service_type');
+        $service = $request->input('service_type');
 
-        foreach ($services as $service) {
             $categoryRestaurant = CategoryRestaurant::where('category_id', $service)->first();
             $serviceType = new CollectionServiceType();
             $serviceType->collection_id = $collection->id;
@@ -207,7 +206,7 @@ class CollectionsController extends Controller
             $serviceType->name_en = $categoryRestaurant->name_en;
             $serviceType->name_ar = $categoryRestaurant->name_ar;
             $serviceType->save();
-        }
+
 
         if ($collection->category_id == 1) {
             foreach ($request['menu'] as $menu_item) {
@@ -412,20 +411,20 @@ class CollectionsController extends Controller
             $mealtimes = Mealtime::all();
             $categoryRestaurants = CategoryRestaurant::where('restaurant_id', $restaurant->id)->get();
 
-            $serviceTypes = $editingCollection->serviceType->where('deleted', 0);
-
-            $service = [];
-            if (count($serviceTypes) > 0) {
-                foreach ($serviceTypes as $serviceType) {
-                    $service[$serviceType->service_type_id] = [];
-                }
-            }
+//            $serviceTypes = $editingCollection->serviceType->where('deleted', 0);
+//
+//            $service = [];
+//            if (count($serviceTypes) > 0) {
+//                foreach ($serviceTypes as $serviceType) {
+//                    $service[$serviceType->service_type_id] = [];
+//                }
+//            }
 
             return view('collections.collection_edit_approve', [
                 'collection' => $collection,
                 'editingCollection' => $editingCollection,
                 'categories' => $categories,
-                'service' => collect($service),
+//                'service' => collect($service),
                 'menu_categories' => $menu_categories,
                 'mealtimes' => $mealtimes,
                 'collection_menus' => $collection_menus,
@@ -452,14 +451,14 @@ class CollectionsController extends Controller
         $mealtimes = Mealtime::all();
         $categoryRestaurants = CategoryRestaurant::where('restaurant_id', $restaurant->id)->get();
 
-        $serviceTypes = $collection->serviceType->where('deleted', 0);
-
-        $service = [];
-        if (count($serviceTypes) > 0) {
-            foreach ($serviceTypes as $serviceType) {
-                $service[$serviceType->service_type_id] = [];
-            }
-        }
+//        $serviceTypes = $collection->serviceType->where('deleted', 0);
+//
+//        $service = [];
+//        if (count($serviceTypes) > 0) {
+//            foreach ($serviceTypes as $serviceType) {
+//                $service[$serviceType->service_type_id] = [];
+//            }
+//        }
 
         $items = [];
         if (count($menu_items) > 0) {
@@ -470,7 +469,7 @@ class CollectionsController extends Controller
 
         return view('collections.collection_edit', [
             'collection' => $collection,
-            'service' => collect($service),
+//            'service' => collect($service),
             'items' => collect($items),
             'categories' => $categories,
             'menu_categories' => $menu_categories,
@@ -546,18 +545,18 @@ class CollectionsController extends Controller
             $editingCollection->save();
 
 
-            $services = $request->input('service_type');
-
-            foreach($services as $service){
-                $categoryRestaurant = CategoryRestaurant::where('category_id', $service)->first();
-                $serviceType = new EditingCollectionServiceType();
-                $serviceType->editing_collection_id = $editingCollection->id;
-                $serviceType->service_type_id = $service;
-                $serviceType->name_en = $categoryRestaurant->name_en;
-                $serviceType->name_ar = $categoryRestaurant->name_ar;
-                $serviceType->save();
-
-            }
+//            $services = $request->input('service_type');
+//
+//            foreach($services as $service){
+//                $categoryRestaurant = CategoryRestaurant::where('category_id', $service)->first();
+//                $serviceType = new EditingCollectionServiceType();
+//                $serviceType->editing_collection_id = $editingCollection->id;
+//                $serviceType->service_type_id = $service;
+//                $serviceType->name_en = $categoryRestaurant->name_en;
+//                $serviceType->name_ar = $categoryRestaurant->name_ar;
+//                $serviceType->save();
+//
+//            }
 
             if ($request->has('menu')) {
                 if ($collection->category_id == 1) {
@@ -640,17 +639,17 @@ class CollectionsController extends Controller
             $collection->approved = 1;
             $collection->save();
 
-            $serviceTypes = $request->input('service_type');
-            if ($serviceTypes) {
-                CollectionServiceType::where('collection_id', $collection->id)->whereNotIn('service_type_id', $serviceTypes)->update(['deleted' => 1]);
-                foreach ($serviceTypes as $serviceType) {
-                    $service = CategoryRestaurant::where('category_id', $serviceType)->first();
-                    $collectionService = CollectionServiceType::updateOrCreate(
-                        ['service_type_id' => $serviceType, 'collection_id' => $collection->id],
-                        ['name_en' => $service->name_en, 'name_ar' => $service->name_ar, 'deleted' => 0]
-                    );
-                }
-            }
+//            $serviceTypes = $request->input('service_type');
+//            if ($serviceTypes) {
+//                CollectionServiceType::where('collection_id', $collection->id)->whereNotIn('service_type_id', $serviceTypes)->update(['deleted' => 1]);
+//                foreach ($serviceTypes as $serviceType) {
+//                    $service = CategoryRestaurant::where('category_id', $serviceType)->first();
+//                    $collectionService = CollectionServiceType::updateOrCreate(
+//                        ['service_type_id' => $serviceType, 'collection_id' => $collection->id],
+//                        ['name_en' => $service->name_en, 'name_ar' => $service->name_ar, 'deleted' => 0]
+//                    );
+//                }
+//            }
 
             if ($request->has('menu')) {
                 CollectionItem::where('collection_id', $collection->id)->delete();
@@ -698,7 +697,6 @@ class CollectionsController extends Controller
 
     public function editApprove(CollectionRequest $request, $id)
     {
-        dd(12312312);
         $user = Auth::user();
         if ($user->admin == 1) {
             $restaurant_id = $request->input('restaurant');
@@ -738,17 +736,17 @@ class CollectionsController extends Controller
             $collection->approved = 1;
             $collection->save();
 
-            $serviceTypes = $request->input('service_type');
-            if ($serviceTypes) {
-                CollectionServiceType::where('collection_id', $collection->id)->whereNotIn('service_type_id', $serviceTypes)->update(['deleted' => 1]);
-                foreach ($serviceTypes as $serviceType) {
-                    $service = CategoryRestaurant::where('category_id', $serviceType)->first();
-                    $collectionService = CollectionServiceType::updateOrCreate(
-                        ['service_type_id' => $serviceType, 'collection_id' => $collection->id],
-                        ['name_en' => $service->name_en, 'name_ar' => $service->name_ar, 'deleted' => 0]
-                    );
-                }
-            }
+//            $serviceTypes = $request->input('service_type');
+//            if ($serviceTypes) {
+//                CollectionServiceType::where('collection_id', $collection->id)->whereNotIn('service_type_id', $serviceTypes)->update(['deleted' => 1]);
+//                foreach ($serviceTypes as $serviceType) {
+//                    $service = CategoryRestaurant::where('category_id', $serviceType)->first();
+//                    $collectionService = CollectionServiceType::updateOrCreate(
+//                        ['service_type_id' => $serviceType, 'collection_id' => $collection->id],
+//                        ['name_en' => $service->name_en, 'name_ar' => $service->name_ar, 'deleted' => 0]
+//                    );
+//                }
+//            }
 
             $menu_items = EditingCollectionItem::where('editing_collection_id', $editingCollection->id)->get();
             if (count($menu_items) > 0) {

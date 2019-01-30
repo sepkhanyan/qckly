@@ -1258,7 +1258,7 @@ class RestaurantsController extends Controller
                             $mealtime = $collection->mealtime->name_ar;
                             $service_provide = $collection->service_provide_ar;
                             $service_presentation = $collection->service_presentation_ar;
-//                            $service_type = $collection->serviceType->name_ar;
+                            $service_type = $collection->serviceType->name_ar;
                         } else {
                             $collection_name = $collection->name_en;
                             $collection_description = $collection->description_en;
@@ -1266,25 +1266,25 @@ class RestaurantsController extends Controller
                             $mealtime = $collection->mealtime->name_en;
                             $service_provide = $collection->service_provide_en;
                             $service_presentation = $collection->service_presentation_en;
-//                            $service_type = $collection->serviceType->name_en;
+                            $service_type = $collection->serviceType->name_en;
                         }
 
                         $service = [];
-                        foreach ($collection->serviceType as $serviceType) {
-                            $id = $serviceType->service_type_id;
-                            if ($lang == 'ar') {
-                                $name = $serviceType->name_ar;
+//                        foreach ($collection->serviceType as $serviceType) {
 
-                            } else {
-                                $name = $serviceType->name_en;
-                            }
+//                            if ($lang == 'ar') {
+//                                $name = $collection->serviceType->name_ar;
+//
+//                            } else {
+//                                $name = $collection->serviceType->name_en;
+//                            }
 
                             $service [] = [
-                                'service_type_id' => $id,
-                                'service_type' => $name
+                                'service_type_id' => $collection->serviceType->service_type_id,
+                                'service_type' => $service_type
                             ];
 
-                        }
+//                        }
 
 
                         $working_day = Carbon::parse($DataRequests['working_day'])->dayOfWeek;

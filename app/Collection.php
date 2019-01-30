@@ -69,7 +69,7 @@ class Collection extends Model
 
     public function serviceType()
     {
-        return $this->hasMany('App\CollectionServiceType', 'collection_id');
+        return $this->hasOne('App\CollectionServiceType', 'collection_id');
     }
 
     public function editingCollection()

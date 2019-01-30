@@ -517,12 +517,12 @@ class UserCartsController extends Controller
                             $restaurant_name = $cartCollection->collection->restaurant->name_ar;
                             $collection_type = $cartCollection->collection->category->name_ar;
                             $collection_name = $cartCollection->collection->name_ar;
-                            $service_type = $cartCollection->serviceType->name_ar;
+                            $service_type = $cartCollection->collection->serviceType->name_ar;
                         } else {
                             $restaurant_name = $cartCollection->collection->restaurant->name_en;
                             $collection_type = $cartCollection->collection->category->name_en;
                             $collection_name = $cartCollection->collection->name_en;
-                            $service_type = $cartCollection->serviceType->name_en;
+                            $service_type = $cartCollection->collection->serviceType->name_en;
                         }
 
                         $collections [] = [
@@ -536,7 +536,7 @@ class UserCartsController extends Controller
                             'collection_price_unit' => \Lang::get('message.priceUnit'),
                             'female_caterer' => $female_caterer,
                             'special_instruction' => $cartCollection->special_instruction,
-                            'service_type_id' => $cartCollection->service_type_id,
+                            'service_type_id' => $cartCollection->collection->serviceType->service_type_id,
                             'service_type' => $service_type,
                             'menu_items' => $menu,
                             'quantity' => $quantity,
@@ -826,6 +826,7 @@ class UserCartsController extends Controller
                             $mealtime = $collection->mealtime->name_ar;
                             $service_provide = $collection->service_provide_ar;
                             $service_presentation = $collection->service_presentation_ar;
+                            $service_type = $collection->serviceType->name_ar;
                         } else {
                             $restaurant_name = $collection->restaurant->name_en;
                             $collection_name = $collection->name_en;
@@ -834,24 +835,25 @@ class UserCartsController extends Controller
                             $mealtime = $collection->mealtime->name_en;
                             $service_provide = $collection->service_provide_en;
                             $service_presentation = $collection->service_presentation_en;
+                            $service_type = $collection->serviceType->name_en;
                         }
 
                         $service = [];
-                        foreach ($collection->serviceType as $serviceType) {
-                            $id = $serviceType->service_type_id;
-                            if ($lang == 'ar') {
-                                $name = $serviceType->name_ar;
+//                        foreach ($collection->serviceType as $serviceType) {
 
-                            } else {
-                                $name = $serviceType->name_en;
-                            }
+//                            if ($lang == 'ar') {
+//                                $name = $collection->serviceType->name_ar;
+//
+//                            } else {
+//                                $name = $collection->serviceType->name_en;
+//                            }
 
-                            $service [] = [
-                                'service_type_id' => $id,
-                                'service_type' => $name
-                            ];
+                        $service [] = [
+                            'service_type_id' => $collection->serviceType->service_type_id,
+                            'service_type' => $service_type
+                        ];
 
-                        }
+//                        }
 
                         $menu_collection [] = [
                             'restaurant_id' => $collection->restaurant->id,
