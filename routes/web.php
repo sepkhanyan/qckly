@@ -20,6 +20,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::group(['prefix' => 'customer'], function () {
             Route::post('delete', 'UsersController@deleteCustomer');
         });
+
         Route::post('general/notification', 'UsersController@generalNotification');
         Route::get('/areas', 'AreasController@index');
         Route::group(['prefix' => 'area'], function () {
@@ -27,18 +28,21 @@ Route::group(['middleware' => ['web', 'auth']], function () {
             Route::post('update', 'AreasController@update');
             Route::post('delete', 'AreasController@deleteArea');
         });
+
         Route::get('/statuses', 'StatusesController@index');
         Route::group(['prefix' => 'status'], function () {
             Route::post('store', 'StatusesController@store');
             Route::post('update', 'StatusesController@update');
             Route::post('delete', 'StatusesController@deleteStatus');
         });
+
         Route::get('/mealtimes', 'MealtimesController@index');
         Route::group(['prefix' => 'mealtime'], function () {
             Route::post('store', 'MealtimesController@store');
             Route::post('update', 'MealtimesController@update');
             Route::post('delete', 'MealtimesController@deleteMealtime');
         });
+
         Route::get('/restaurants', 'RestaurantsController@index');
         Route::group(['prefix' => 'restaurant'], function () {
             Route::get('create', 'RestaurantsController@create');
@@ -54,12 +58,15 @@ Route::group(['middleware' => ['web', 'auth']], function () {
             Route::post('delete', 'RestaurantsController@deleteRestaurant');
             Route::post('status/update/{id}', 'RestaurantsController@changeStatus');
         });
+
+
         Route::get('/restaurant_categories', 'RestaurantCategoriesController@index');
         Route::group(['prefix' => 'restaurant_category'], function () {
             Route::post('store', 'RestaurantCategoriesController@store');
             Route::post('update', 'RestaurantCategoriesController@update');
             Route::post('delete', 'RestaurantCategoriesController@deleteRestaurantCategory');
         });
+
         Route::get('/menu_categories/{id?}', 'MenuCategoriesController@index');
         Route::group(['prefix' => 'menu_category'], function () {
             Route::get('create/{id?}', 'MenuCategoriesController@create');
@@ -72,12 +79,14 @@ Route::group(['middleware' => ['web', 'auth']], function () {
             Route::get('edit_reject/{id}', 'MenuCategoriesController@editReject');
             Route::post('delete', 'MenuCategoriesController@deleteCategory');
         });
+
         Route::get('/collection_categories', 'CollectionCategoriesController@index');
         Route::group(['prefix' => 'collection_category'], function () {
             Route::post('store', 'CollectionCategoriesController@store');
             Route::post('update', 'CollectionCategoriesController@update');
             Route::post('delete', 'CollectionCategoriesController@deleteCategory');
         });
+
         Route::get('/menus/{id?}', 'MenusController@index');
         Route::group(['prefix' => 'menu'], function () {
             Route::get('create/{id?}', 'MenusController@create');
@@ -90,6 +99,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
             Route::get('edit_reject/{id}', 'MenusController@editReject');
             Route::post('delete', 'MenusController@deleteMenu');
         });
+
         Route::get('/collections/get-edited-fields', 'CollectionsController@getEditedFields');
         Route::get('/collections/{id?}', 'CollectionsController@index');
 //        Route::post('collections/collection/copy/{id}', 'CollectionsController@copy');
@@ -106,6 +116,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
             Route::get('edit_reject/{id}', 'CollectionsController@editReject');
             Route::post('delete', 'CollectionsController@deleteCollection');
         });
+
         Route::get('/orders/{id?}', 'OrdersController@index');
         Route::group(['prefix' => 'order'], function () {
             Route::get('edit/{id}', 'OrdersController@edit');
@@ -113,8 +124,10 @@ Route::group(['middleware' => ['web', 'auth']], function () {
             Route::get('update/{id}', 'OrdersController@update');
 //            Route::post('delete', 'OrdersController@deleteOrder');
         });
+
         Route::get('/reviews/{id?}', 'ReviewsController@index');
 //        Route::post('/review/delete', 'ReviewsController@deleteReview');
+
         Route::get('/admin/edit/{id}', 'UsersController@editAdmin');
         Route::post('/admin/update/{id}', 'UsersController@updateAdmin');
 //        Route::get('/languages', 'LanguagesController@index');

@@ -63,13 +63,12 @@
                                     <select name="category[]" id="category" class="form-control"
                                             placeholder="Select Categories"
                                             multiple>
-                                        @foreach($category_restaurants as $category_restaurant)
-                                            <option
-                                                    value="{{$category_restaurant->category_id}}"
-                                                    @if(old('category')) {{ (collect(old('category'))->contains($category_restaurant->category_id)) ? 'selected':'' }} @else selected @endif>{{$category_restaurant->name_en}}</option>
-                                        @endforeach
-                                        @foreach($categories as $category)
-                                            <option value="{{$category->id}}"{{ (collect(old('category'))->contains($category->id)) ? 'selected':'' }}>{{$category->name_en}}</option>
+                                        @foreach($restaurantCategories as $restaurantCategory)
+                                            <option value="{{$restaurantCategory->id}}"
+                                            @if(old('category')) {{ (collect(old('category'))->contains($restaurantCategory->id)) ? 'selected':'' }}
+                                                    @else {{ $category->has($restaurantCategory->id) ? 'selected' : '' }}
+                                                    @endif>
+                                                {{$restaurantCategory->name_en}}</option>
                                         @endforeach
                                     </select>
                                     @if ($errors->has('category'))
@@ -145,13 +144,13 @@
                                 <div class="col-sm-5">
                                     <select name="area[]" id="area" class="form-control" multiple
                                             placeholder="Select Cities">
-                                        @foreach($restaurantAreas as $restaurantArea)
-                                            <option
-                                                    value="{{$restaurantArea->area_id}}"
-                                                    @if(old('area')) {{ (collect(old('area'))->contains($restaurantArea->area_id)) ? 'selected':'' }} @else selected @endif>{{$restaurantArea->name_en}}</option>
-                                        @endforeach
                                         @foreach($areas as $area)
-                                            <option value="{{$area->id}}"{{ (collect(old('area'))->contains($area->id)) ? 'selected':'' }}>{{$area->name_en}}</option>
+                                            <option value="{{$area->id}}" @if(old('area'))
+                                                {{ (collect(old('area'))->contains($area->id)) ? 'selected':'' }}
+                                                    @else
+                                                {{ $selectedArea->has($area->id) ? 'selected' : '' }}
+                                                    @endif
+                                            >{{$area->name_en}}</option>
                                         @endforeach
                                     </select>
                                     @if ($errors->has('area'))
@@ -222,21 +221,21 @@
                             </div>
                         </div>
                     </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
-    </div>
     <script type="text/javascript">
-        $(document).ready(function(){
+        $(document).ready(function () {
             var errorGeneral = $("#general .form-group .help-block").length;
             var errorData = $("#data .form-group .help-block").length;
-            if(errorData > 0){
+            if (errorData > 0) {
                 $('#dataTab').addClass('active');
                 $('#data').addClass('active');
                 $('#generalTab').removeClass('active');
                 $('#general').removeClass('active');
             }
-            if(errorGeneral > 0){
+            if (errorGeneral > 0) {
                 $('#generalTab').addClass('active');
                 $('#general').addClass('active');
                 $('#dataTab').removeClass('active');

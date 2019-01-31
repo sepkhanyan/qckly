@@ -116,6 +116,14 @@
                                             <td>{{$restaurant->id}}</td>
                                             <td>
                                                 @if($restaurant->editingRestaurant)
+                                                    @if ($user->admin == 1)
+                                                        <button type="button" class="btn btn-info" id="view_edited"
+                                                                data-id="{{ $restaurant->editingRestaurant->id }}"
+                                                                data-toggle="modal"
+                                                                data-target="#edited_restaurant">
+                                                            View edited fields
+                                                        </button><br>
+                                                    @endif
                                                     <span class="label label-default">Pending Edit Approval</span>
                                                 @endif
                                                 @if($user->admin == 1)

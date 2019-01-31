@@ -33,6 +33,7 @@
                     <div class="tab-content">
                         <div id="general" class="tab-pane row wrap-all active">
                             <h4 class="tab-pane-title">Basic</h4>
+                            @if (count($editingCategoryRestaurants ) > 0)
                             <div class="form-group">
                                 <label for="category" class="col-sm-3 control-label">Category</label>
                                 <div class="col-sm-5">
@@ -42,16 +43,12 @@
                                         @foreach($editingCategoryRestaurants as $editingCategoryRestaurant)
                                             <option
                                                     value="{{$editingCategoryRestaurant->category_id}}"
-                                                    @if(old('category')) {{ (collect(old('category'))->contains($editingCategoryRestaurant->category_id)) ? 'selected':'' }} @else selected @endif>{{$editingCategoryRestaurant->name_en}}</option>
+                                                    selected >{{$editingCategoryRestaurant->name_en}}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                                @if (count($categoryFullDiff) > 0)
-                                    <span class="help-block">
-                                            <strong class="text-danger">Edited</strong>
-                                        </span>
-                                @endif
                             </div>
+                            @endif
                             <div class="form-group{{ $errors->has('restaurant_name_en') ? ' has-error' : '' }}">
                                 <label for="input_restaurant_name_en" class="col-sm-3 control-label">Name En</label>
                                 <div class="col-sm-5">
@@ -104,6 +101,7 @@
                                     </span>
                                 @endif
                             </div>
+                            @if (count($editingRestaurantAreas) > 0)
                             <div class="form-group{{ $errors->has('area') ? ' has-error' : '' }}">
                                 <label for="input-country" class="col-sm-3 control-label">City</label>
                                 <div class="col-sm-5">
@@ -116,12 +114,11 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                @if (count($areaFullDiff) > 0)
                                     <span class="help-block">
                                             <strong class="text-danger">Edited</strong>
                                         </span>
-                                @endif
                             </div>
+                            @endif
                         </div>
                         <div id="data" class="tab-pane row wrap-all">
                             <div class="form-group{{ $errors->has('description_en') ? ' has-error' : '' }}">

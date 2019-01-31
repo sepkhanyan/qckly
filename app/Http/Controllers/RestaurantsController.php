@@ -41,7 +41,7 @@ class RestaurantsController extends Controller
         $user = Auth::user();
         $data = $request->all();
 
-        $restaurants = Restaurant::where('deleted', 0)->with([ 'editingRestaurant', 'collection' ]);
+        $restaurants = Restaurant::where('deleted', 0)->with(['editingRestaurant', 'collection']);
 
         if (isset($data['restaurant_search'])) {
             $restaurants = $restaurants->where('name_en', 'like', '%' . $data['restaurant_search'] . '%')
@@ -49,12 +49,12 @@ class RestaurantsController extends Controller
         }
 
         if ($user->admin == 2) {
-            $restaurants = Restaurant::where('id', $user->restaurant_id)->with([ 'editingRestaurant', 'collection' ]);
+            $restaurants = Restaurant::where('id', $user->restaurant_id)->with(['editingRestaurant', 'collection']);
         }
 
         $restaurants = $restaurants->paginate(20);
 
-        return view('restaurants.restaurants', [ 'restaurants' => $restaurants, 'user' => $user ]);
+        return view('restaurants.restaurants', ['restaurants' => $restaurants, 'user' => $user]);
     }
 
     /**
@@ -67,11 +67,11 @@ class RestaurantsController extends Controller
         $user = Auth::user();
 
         if ($user->admin == 1) {
-        
+
             $areas = Area::all();
             $categories = RestaurantCategory::all();
-        
-            return view('restaurants.restaurant_create', [ 'areas' => $areas, 'categories' => $categories, ]);
+
+            return view('restaurants.restaurant_create', ['areas' => $areas, 'categories' => $categories,]);
         } else {
             return redirect()->back();
         }
@@ -222,10 +222,7 @@ class RestaurantsController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -252,49 +249,59 @@ class RestaurantsController extends Controller
             $editingRestaurant = $restaurant->editingRestaurant;
             $restaurantAreas = RestaurantArea::where('restaurant_id', $id)->get();
             $editingRestaurantAreas = EditingRestaurantArea::where('editing_restaurant_id', $editingRestaurant->id)->get();
-            $editingAreas = $editingRestaurantAreas->pluck('area_id')->toArray();
-            $areas = $restaurantAreas->pluck('area_id')->toArray();
-            $areaFullDiff = array_merge(array_diff($editingAreas, $areas), array_diff($areas, $editingAreas));
+//            $editingAreas = $editingRestaurantAreas->pluck('area_id')->toArray();
+//            $areas = $restaurantAreas->pluck('area_id')->toArray();
+//            $areaFullDiff = array_merge(array_diff($editingAreas, $areas), array_diff($areas, $editingAreas));
             $categoryRestaurants = CategoryRestaurant::where('restaurant_id', $id)->get();
             $editingCategoryRestaurants = EditingCategoryRestaurant::where('editing_restaurant_id', $editingRestaurant->id)->get();
-            $editingCategories = $editingCategoryRestaurants->pluck('category_id')->toArray();
-            $categories = $categoryRestaurants->pluck('category_id')->toArray();
-            $categoryFullDiff = array_merge(array_diff($editingCategories, $categories), array_diff($categories, $editingCategories));
+//            $editingCategories = $editingCategoryRestaurants->pluck('category_id')->toArray();
+//            $categories = $categoryRestaurants->pluck('category_id')->toArray();
+//            $categoryFullDiff = array_merge(array_diff($editingCategories, $categories), array_diff($categories, $editingCategories));
 
             return view('restaurants.restaurant_edit_approve', [
                 'user' => $user,
                 'restaurant' => $restaurant,
                 'editingRestaurant' => $editingRestaurant,
-                'areas' => $areas,
+//                'areas' => $areas,
                 'restaurantAreas' => $restaurantAreas,
                 'editingRestaurantAreas' => $editingRestaurantAreas,
-                'areaFullDiff' => $areaFullDiff,
-                'categories' => $categories,
+//                'areaFullDiff' => $areaFullDiff,
+//                'categories' => $categories,
                 'categoryRestaurants' => $categoryRestaurants,
                 'editingCategoryRestaurants' => $editingCategoryRestaurants,
-                'categoryFullDiff' => $categoryFullDiff
+//                'categoryFullDiff' => $categoryFullDiff
             ]);
         }
 
         $restaurantAreas = RestaurantArea::where('restaurant_id', $id)->get();
 
-        $areas = Area::whereDoesntHave('restaurantArea', function ($query) use ($id) {
-            $query->where('restaurant_id', $id);
-        })->get();
+        $areas = Area::all();
 
-        $category_restaurants = CategoryRestaurant::where('restaurant_id', $id)->get();
+        $selectedArea = [];
+        if (count($restaurantAreas) > 0) {
+            foreach ($restaurantAreas as $restaurantArea) {
+                $selectedArea[$restaurantArea->area_id] = [];
+            }
+        }
 
-        $categories = RestaurantCategory::whereDoesntHave('categoryRestaurant', function ($query) use ($id) {
-            $query->where('restaurant_id', $id);
-        })->get();
+        $categoryRestaurants = CategoryRestaurant::where('restaurant_id', $id)->get();
+
+        $restaurantCategories = RestaurantCategory::all();
+
+        $category = [];
+        if (count($categoryRestaurants) > 0) {
+            foreach ($categoryRestaurants as $categoryRestaurant) {
+                $category[$categoryRestaurant->category_id] = [];
+            }
+        }
 
         return view('restaurants.restaurant_edit', [
             'user' => $user,
             'restaurant' => $restaurant,
             'areas' => $areas,
-            'restaurantAreas' => $restaurantAreas,
-            'categories' => $categories,
-            'category_restaurants' => $category_restaurants
+            'selectedArea' => collect($selectedArea),
+            'restaurantCategories' => $restaurantCategories,
+            'category' => collect($category)
         ]);
     }
 
@@ -351,35 +358,59 @@ class RestaurantsController extends Controller
                 $restaurant->save();
 
                 $categories = $request->input('category');
-                $restaurantCategories = RestaurantCategory::whereIn('id', $categories)->get();
 
-                if ($restaurantCategories->isNotEmpty()) {
+                if ($categories) {
 
-                    foreach ($restaurantCategories as $category) {
+                    $restaurantCategories = RestaurantCategory::whereIn('id', $categories)->get();
 
-                        $categoryRestaurant = new  EditingCategoryRestaurant;
-                        $categoryRestaurant->editing_restaurant_id = $restaurant->id;
-                        $categoryRestaurant->category_id = $category->id;
-                        $categoryRestaurant->name_en = $category->name_en;
-                        $categoryRestaurant->name_ar = $category->name_ar;
-                        $categoryRestaurant->save();
+                    if ($restaurantCategories->isNotEmpty()) {
+
+                        $categoryRestaurantIds = CategoryRestaurant::where('restaurant_id', $id)->pluck('category_id')->toArray();
+
+                        $categoryFullDiff = array_merge(array_diff($categoryRestaurantIds, $categories), array_diff($categories, $categoryRestaurantIds));
+
+                        if (count($categoryFullDiff) > 0) {
+
+                            foreach ($restaurantCategories as $category) {
+
+                                $categoryRestaurant = new  EditingCategoryRestaurant;
+                                $categoryRestaurant->editing_restaurant_id = $restaurant->id;
+                                $categoryRestaurant->category_id = $category->id;
+                                $categoryRestaurant->name_en = $category->name_en;
+                                $categoryRestaurant->name_ar = $category->name_ar;
+                                $categoryRestaurant->save();
+                            }
+                        }
+
                     }
                 }
 
-                $areas = $request->input('area');
-                $areas = Area::whereIn('id', $areas)->get();
+                $restaurantAreas = $request->input('area');
+                if ($restaurantAreas) {
 
-                if ($areas->isNotEmpty()) {
-                    foreach ($areas as $area) {
+                    $areas = Area::whereIn('id', $restaurantAreas)->get();
 
-                        $restaurantArea = new EditingRestaurantArea();
-                        $restaurantArea->editing_restaurant_id = $restaurant->id;
-                        $restaurantArea->area_id = $area->id;
-                        $restaurantArea->name_en = $area->name_en;
-                        $restaurantArea->name_ar = $area->name_ar;
-                        $restaurantArea->save();
+                    if ($areas->isNotEmpty()) {
+
+                        $restaurantAreasIds = RestaurantArea::where('restaurant_id', $id)->pluck('area_id')->toArray();
+
+                        $areaFullDiff = array_merge(array_diff($restaurantAreasIds, $restaurantAreas), array_diff($restaurantAreas, $restaurantAreasIds));
+
+                        if (count($areaFullDiff) > 0) {
+
+                            foreach ($areas as $area) {
+
+                                $restaurantArea = new EditingRestaurantArea();
+                                $restaurantArea->editing_restaurant_id = $restaurant->id;
+                                $restaurantArea->area_id = $area->id;
+                                $restaurantArea->name_en = $area->name_en;
+                                $restaurantArea->name_ar = $area->name_ar;
+                                $restaurantArea->save();
+                            }
+                        }
                     }
                 }
+
             } else {
                 return redirect()->back();
             }
@@ -391,7 +422,7 @@ class RestaurantsController extends Controller
                 'email' => $request->input('restaurant_email'),
                 'telephone' => $request->input('restaurant_telephone'),
                 'description_en' => $request->input('description_en'),
-                'description_ar' =>$request->input('description_ar') 
+                'description_ar' => $request->input('description_ar')
             ];
 
             if ($request->hasFile('image')) {
@@ -411,35 +442,40 @@ class RestaurantsController extends Controller
             $restaurant->update($data);
 
             $categories = $request->input('category');
-            $restaurantCategories = RestaurantCategory::whereIn('id', $categories)->get();
+            if ($categories) {
+                $restaurantCategories = RestaurantCategory::whereIn('id', $categories)->get();
 
-            if ($restaurantCategories->isNotEmpty()) {
+                if ($restaurantCategories->isNotEmpty()) {
 
-                CategoryRestaurant::where('restaurant_id', $restaurant->id)->whereNotIn('category_id', $categories)->delete();
-                // CategoryRestaurant::where('restaurant_id', $id)->delete();
+                    CategoryRestaurant::where('restaurant_id', $restaurant->id)->whereNotIn('category_id', $categories)->delete();
 
-                foreach ($restaurantCategories as $category) {
-                    $categoryRestaurant = CategoryRestaurant::firstOrCreate(
-                        ['category_id' => $category->id, 'restaurant_id' => $restaurant->id],
-                        ['name_en' => $category->name_en, 'name_ar' => $category->name_ar]
-                    );
+                    foreach ($restaurantCategories as $category) {
+                        $categoryRestaurant = CategoryRestaurant::firstOrCreate(
+                            ['category_id' => $category->id, 'restaurant_id' => $restaurant->id],
+                            ['name_en' => $category->name_en, 'name_ar' => $category->name_ar]
+                        );
+                    }
                 }
             }
 
-            $areas = $request->input('area');
-            $areas = Area::whereIn('id', $areas)->get();
 
-            if ($areas->isNotEmpty()) {
+            $restaurantAreas = $request->input('area');
+            if ($restaurantAreas) {
+                $areas = Area::whereIn('id', $restaurantAreas)->get();
 
-                RestaurantArea::where('restaurant_id', $restaurant->id)->whereNotIn('area_id', $areas)->delete();
+                if ($areas->isNotEmpty()) {
 
-                foreach ($areas as $area) {
-                    $restaurantArea = RestaurantArea::firstOrCreate(
-                        ['area_id' => $area->id, 'restaurant_id' => $restaurant->id],
-                        ['name_en' => $area->name_en, 'name_ar' => $area->name_ar]
-                    );
+                    RestaurantArea::where('restaurant_id', $restaurant->id)->whereNotIn('area_id', $restaurantAreas)->delete();
+
+                    foreach ($areas as $area) {
+                        $restaurantArea = RestaurantArea::firstOrCreate(
+                            ['area_id' => $area->id, 'restaurant_id' => $restaurant->id],
+                            ['name_en' => $area->name_en, 'name_ar' => $area->name_ar]
+                        );
+                    }
                 }
             }
+
         }
 
         return redirect('/restaurants');
@@ -535,30 +571,48 @@ class RestaurantsController extends Controller
 
             $categories = $request->input('category');
             if ($categories) {
-                CategoryRestaurant::where('restaurant_id', $restaurant->id)->whereNotIn('category_id', $categories)->delete();
-//                CategoryRestaurant::where('restaurant_id', $id)->delete();
-                foreach ($categories as $category) {
-                    $restaurantCategory = RestaurantCategory::where('id', $category)->first();
-                    $categoryRestaurant = CategoryRestaurant::firstOrCreate(
-                        ['category_id' => $category, 'restaurant_id' => $restaurant->id],
-                        ['name_en' => $restaurantCategory->name_en, 'name_ar' => $restaurantCategory->name_ar]
-                    );
+
+                $restaurantCategories = RestaurantCategory::whereIn('id', $categories)->get();
+
+                if ($restaurantCategories->isNotEmpty()) {
+
+                    CategoryRestaurant::where('restaurant_id', $restaurant->id)->whereNotIn('area_id', $categories)->delete();
+
+                    foreach ($restaurantCategories as $category) {
+
+                        $categoryRestaurant = CategoryRestaurant::firstOrCreate(
+                            ['category_id' => $category->id, 'restaurant_id' => $restaurant->id],
+                            ['name_en' => $category->name_en, 'name_ar' => $category->name_ar]
+                        );
+                    }
                 }
             }
-            $areas = $request->input('area');
-            if ($areas) {
-                RestaurantArea::where('restaurant_id', $restaurant->id)->whereNotIn('area_id', $areas)->delete();
-                foreach ($areas as $areaId) {
-                    $area = Area::where('id', $areaId)->first();
-                    $restaurantArea = RestaurantArea::firstOrCreate(
-                        ['area_id' => $areaId, 'restaurant_id' => $restaurant->id],
-                        ['name_en' => $area->name_en, 'name_ar' => $area->name_ar]
-                    );
+
+            $restaurantAreas = $request->input('area');
+            if ($restaurantAreas) {
+
+                $areas = Area::whereIn('id', $restaurantAreas)->get();
+
+                if ($areas->isNotEmpty()) {
+
+                    RestaurantArea::where('restaurant_id', $restaurant->id)->whereNotIn('area_id', $restaurantAreas)->delete();
+
+                    foreach ($areas as $area) {
+
+                        $restaurantArea = RestaurantArea::firstOrCreate(
+                            ['area_id' => $area->id, 'restaurant_id' => $restaurant->id],
+                            ['name_en' => $area->name_en, 'name_ar' => $area->name_ar]
+                        );
+                    }
                 }
             }
+
             EditingRestaurant::where('restaurant_id', $restaurant->id)->delete();
+
             return redirect('/restaurants');
+
         } else {
+
             return redirect()->back();
         }
     }
@@ -791,8 +845,8 @@ class RestaurantsController extends Controller
                 $category = $DataRequests['category_id'];
                 $restaurants = $restaurants->whereHas('categoryRestaurant', function ($query) use ($category) {
                     $query->where('category_id', $category);
-                })->with(['collection' => function ($query) use($category) {
-                    $query->where('approved', 1)->where('deleted', 0)->whereHas('serviceType', function ($x) use($category) {
+                })->with(['collection' => function ($query) use ($category) {
+                    $query->where('approved', 1)->where('deleted', 0)->whereHas('serviceType', function ($x) use ($category) {
                         $x->where('deleted', 0)->where('service_type_id', $category);
                     });
                 }]);
@@ -1051,8 +1105,6 @@ class RestaurantsController extends Controller
                 ]);
 
 
-
-
             if (isset($DataRequests['category_id'])) {
                 $category_id = $DataRequests['category_id'];
 
@@ -1280,10 +1332,10 @@ class RestaurantsController extends Controller
 //                                $name = $collection->serviceType->name_en;
 //                            }
 
-                            $service [] = [
-                                'service_type_id' => $collection->serviceType->service_type_id,
-                                'service_type' => $service_type
-                            ];
+                        $service [] = [
+                            'service_type_id' => $collection->serviceType->service_type_id,
+                            'service_type' => $service_type
+                        ];
 
 //                        }
 
@@ -1315,7 +1367,7 @@ class RestaurantsController extends Controller
                             $availability_status_id = -1;
                             $availability_hours = [];
 
-                        }else{
+                        } else {
 
                             $availability = $collection->unavailabilityHour->first();
 
@@ -1332,7 +1384,7 @@ class RestaurantsController extends Controller
                                         'day_status' => $unavailabilityHour->status
                                     ];
                                 }
-                            }elseif($availability->type == 'daily'){
+                            } elseif ($availability->type == 'daily') {
                                 $availability_status_id = 2;
 
                                 foreach ($collection->unavailabilityHour as $unavailabilityHour) {
@@ -1342,14 +1394,12 @@ class RestaurantsController extends Controller
                                         'close_hour' => $unavailabilityHour->end_time
                                     ];
                                 }
-                            }else{
+                            } else {
                                 $availability_status_id = 1;
                                 $availability_hours = [];
                             }
 
                         }
-
-
 
 
                         $menu_collection [] = [
