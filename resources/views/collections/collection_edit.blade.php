@@ -488,7 +488,12 @@
                                                             <input id="item{{$menu->id}}" type="checkbox"
                                                                    name="menu[{{$menu->id}}][id]"
                                                                    value="{{$menu->id}}"
-                                                                   {{ (collect(old('menu.' . $menu->id . '.id'))->contains($menu->id)) ? 'checked':'' }} onclick="myFunction('{{$menu->id}}')">{{$menu->name_en}}
+                                                                   @if(old('menu'))
+                                                                   {{ (collect(old('menu.' . $menu->id . '.id'))->contains($menu->id)) ? 'checked':'' }}
+                                                                   @else
+                                                                   {{ $items->has($menu->id) ? 'checked' : '' }}
+                                                                           @endif
+                                                                   onclick="myFunction('{{$menu->id}}')">{{$menu->name_en}}
                                                         </label>
                                                     </div>
                                                 </div>
@@ -497,8 +502,8 @@
                                                         <div class="col-xs-3">
                                                             <input type="number"
                                                                    name="menu[{{$menu->id}}][qty]" id="qty{{$menu->id}}"
-                                                                   style="display: none{{ (collect(old('menu_item.' . $menu->id . '.id'))->contains($menu->id)) ? 'block':'' }}"
-                                                                   {{(!old('menu.' . $menu->id . '.id')) ? 'disabled': '' }}
+                                                                   style="display: none  @if(old('menu')) {{ (collect(old('menu_item.' . $menu->id . '.id'))->contains($menu->id)) ? 'block':'' }} @else   {{ $items->has($menu->id) ? 'block' : '' }} @endif"
+                                                                   @if(old('menu')) {{(!old('menu.' . $menu->id . '.id')) ? 'disabled': '' }} @else {{ $items->has($menu->id) ? '' : 'disabled' }}  @endif
                                                                    class="form-control" min="1"
                                                                    value="{{old('menu.' . $menu->id . '.qty') ?? 1}}">
                                                         </div>
@@ -529,7 +534,10 @@
                                                     <div class="col-xs-2">
                                                         <select name="menu[{{$menu_category->id}}][item][{{$menu->id}}][is_mandatory]"
                                                                 id="option{{$menu->id}}" class="form-control"
-                                                                style="display: none{{ (collect(old('menu.' . $menu_category->id . '.item.' . $menu->id . '.item_id'))->contains($menu->id)) ? 'block':'' }}" {{(!old('menu.' . $menu_category->id . '.item.' . $menu->id . '.item_id')) ? 'disabled': '' }}>
+                                                                style="display: none @if(old('menu')) {{ (collect(old('menu.' . $menu_category->id . '.item.' . $menu->id . '.item_id'))->contains($menu->id)) ? 'block':'' }} @else
+                                                                {{ $items->has($menu->id) ? 'block' : '' }}
+                                                                @endif" @if(old('menu')) {{(!old('menu.' . $menu_category->id . '.item.' . $menu->id . '.item_id')) ? 'disabled': '' }} @else {{ $items->has($menu->id) ? '' : 'disabled' }} @endif
+                                                            >
                                                             <option value="1" {{(old('menu.' . $menu_category->id . '.item.' . $menu->id . '.is_mandatory') == 1 ) ? 'selected':''}}>
                                                                 Mandatory
                                                             </option>
