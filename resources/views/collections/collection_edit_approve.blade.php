@@ -492,27 +492,6 @@
                             </div>
                         </div>
                         <div id="data" class="tab-pane row wrap-all">
-                            <div id="type" class="form-group">
-                                <label for="" class="col-sm-3 control-label">Service Type</label>
-                                <div class="col-sm-5">
-                                    <select name="service_type[]" id="service" class="form-control"
-                                            placeholder="Select Service" multiple>
-                                        @foreach($categoryRestaurants as $categoryRestaurant)
-                                            <option value="{{$categoryRestaurant->category_id}}" @if(old('service_type')) {{ (collect(old('service_type'))->contains($categoryRestaurant->category_id)) ? 'selected':'' }} @else {{ $service->has($categoryRestaurant->category_id) ? 'selected' : '' }} @endif>{{$categoryRestaurant->name_en}}</option>
-                                        @endforeach
-                                    </select>
-                                    @if ($errors->has('service_type'))
-                                        <span class="help-block">
-                                                    <strong>{{ $errors->first('service_type') }}</strong>
-                                                </span>
-                                    @endif
-                                </div>
-                                @if ($collection->service_type_id != $editingCollection->service_type_id)
-                                    <span class="help-block">
-                                        <strong class="text-danger">Edited</strong>
-                                    </span>
-                                @endif
-                            </div>
                             <div class="form-group{{ $errors->has('notice_period') ? ' has-error' : '' }}">
                                 <label for="input-max" class="col-sm-3 control-label">
                                     Notice Period
