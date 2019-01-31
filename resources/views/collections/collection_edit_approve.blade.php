@@ -492,6 +492,7 @@
                             </div>
                         </div>
                         <div id="data" class="tab-pane row wrap-all">
+                            <h4 class="tab-pane-title">{{$collection->serviceType->name_en}}</h4>
                             <div class="form-group{{ $errors->has('notice_period') ? ' has-error' : '' }}">
                                 <label for="input-max" class="col-sm-3 control-label">
                                     Notice Period
@@ -499,10 +500,10 @@
                                 <div class="col-sm-5">
                                     <div class="input-group">
                                         <input type="number" name="notice_period"  class="form-control"
-                                               min="0" value="{{old('notice_period') ?? $editingCollection->delivery_hours}}"/>
+                                               min="0" value="{{old('notice_period') ?? $editingCollection->notice_period}}"/>
                                         <span class="input-group-addon">minutes</span>
                                     </div>
-                                    @if ($collection->delivery_hours != $editingCollection->delivery_hours)
+                                    @if ($collection->notice_period != $editingCollection->notice_period)
                                         <span class="help-block">
                                         <strong class="text-danger">Edited</strong>
                                     </span>
