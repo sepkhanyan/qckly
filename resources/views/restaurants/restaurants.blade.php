@@ -86,12 +86,12 @@
                                                     <input type="checkbox" value="{{ $restaurant->id }}" name="delete"/>
                                                     &nbsp;&nbsp;&nbsp;
                                                 @endif
-                                                <a class="btn btn-edit" title=""
-                                                   href="{{ url('/restaurant/edit/' . $restaurant->id) }}">
+
+                                                <a class="btn btn-edit" title="" href="{{ url('/restaurant/edit/' . $restaurant->id) }}">
                                                     <i class="fa fa-pencil"></i>
                                                 </a>&nbsp;&nbsp;
-                                                <a class="btn btn-edit" title=""
-                                                   href="{{ url('/restaurant/availability/edit/' . $restaurant->id )}}">
+
+                                                <a class="btn btn-edit" title="" href="{{ url('/restaurant/availability/edit/' . $restaurant->id )}}">
                                                     <i class="fa fa-clock-o"></i>
                                                 </a>&nbsp;
                                             </td>

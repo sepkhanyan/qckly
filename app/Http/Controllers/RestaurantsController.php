@@ -244,34 +244,34 @@ class RestaurantsController extends Controller
             }
         }
 
-        if ($user->admin == 1 && $restaurant->editingRestaurant !== null) {
+        // if ($user->admin == 1 && $restaurant->editingRestaurant !== null) {
 
-            $editingRestaurant = $restaurant->editingRestaurant;
-            $restaurantAreas = RestaurantArea::where('restaurant_id', $id)->get();
-            $editingRestaurantAreas = EditingRestaurantArea::where('editing_restaurant_id', $editingRestaurant->id)->get();
-            // $editingAreas = $editingRestaurantAreas->pluck('area_id')->toArray();
-            // $areas = $restaurantAreas->pluck('area_id')->toArray();
-            // $areaFullDiff = array_merge(array_diff($editingAreas, $areas), array_diff($areas, $editingAreas));
-            $categoryRestaurants = CategoryRestaurant::where('restaurant_id', $id)->get();
-            $editingCategoryRestaurants = EditingCategoryRestaurant::where('editing_restaurant_id', $editingRestaurant->id)->get();
-            // $editingCategories = $editingCategoryRestaurants->pluck('category_id')->toArray();
-            // $categories = $categoryRestaurants->pluck('category_id')->toArray();
-            // $categoryFullDiff = array_merge(array_diff($editingCategories, $categories), array_diff($categories, $editingCategories));
+        //     $editingRestaurant = $restaurant->editingRestaurant;
+        //     $restaurantAreas = RestaurantArea::where('restaurant_id', $id)->get();
+        //     $editingRestaurantAreas = EditingRestaurantArea::where('editing_restaurant_id', $editingRestaurant->id)->get();
+        //     // $editingAreas = $editingRestaurantAreas->pluck('area_id')->toArray();
+        //     // $areas = $restaurantAreas->pluck('area_id')->toArray();
+        //     // $areaFullDiff = array_merge(array_diff($editingAreas, $areas), array_diff($areas, $editingAreas));
+        //     $categoryRestaurants = CategoryRestaurant::where('restaurant_id', $id)->get();
+        //     $editingCategoryRestaurants = EditingCategoryRestaurant::where('editing_restaurant_id', $editingRestaurant->id)->get();
+        //     // $editingCategories = $editingCategoryRestaurants->pluck('category_id')->toArray();
+        //     // $categories = $categoryRestaurants->pluck('category_id')->toArray();
+        //     // $categoryFullDiff = array_merge(array_diff($editingCategories, $categories), array_diff($categories, $editingCategories));
 
-            return view('restaurants.restaurant_edit_approve', [
-                'user' => $user,
-                'restaurant' => $restaurant,
-                'editingRestaurant' => $editingRestaurant,
-                // 'areas' => $areas,
-                'restaurantAreas' => $restaurantAreas,
-                'editingRestaurantAreas' => $editingRestaurantAreas,
-                // 'areaFullDiff' => $areaFullDiff,
-                // 'categories' => $categories,
-                'categoryRestaurants' => $categoryRestaurants,
-                'editingCategoryRestaurants' => $editingCategoryRestaurants,
-                // 'categoryFullDiff' => $categoryFullDiff
-            ]);
-        }
+        //     return view('restaurants.restaurant_edit_approve', [
+        //         'user' => $user,
+        //         'restaurant' => $restaurant,
+        //         'editingRestaurant' => $editingRestaurant,
+        //         // 'areas' => $areas,
+        //         'restaurantAreas' => $restaurantAreas,
+        //         'editingRestaurantAreas' => $editingRestaurantAreas,
+        //         // 'areaFullDiff' => $areaFullDiff,
+        //         // 'categories' => $categories,
+        //         'categoryRestaurants' => $categoryRestaurants,
+        //         'editingCategoryRestaurants' => $editingCategoryRestaurants,
+        //         // 'categoryFullDiff' => $categoryFullDiff
+        //     ]);
+        // }
 
         $restaurantAreas = RestaurantArea::where('restaurant_id', $id)->get();
 
