@@ -610,7 +610,14 @@ class RestaurantsController extends Controller
 
             EditingRestaurant::where('restaurant_id', $restaurant->id)->delete();
 
-            return response()->json([ 'success' => true ]);
+            $updatedRestaurant = [
+                'image' => '<img src=/images/' . $restaurant->image . ' width="30px" height="30px">',
+                'name' => $restaurant->name_en,
+                'description' => $restaurant->description_en,
+                'telephone' => $restaurant->telephone
+            ];
+
+            return response()->json($updatedRestaurant);
 
         } else {
 
@@ -621,14 +628,19 @@ class RestaurantsController extends Controller
     public function editReject($id)
     {
         $user = Auth::user();
+
         if ($user->admin == 1) {
+
             $editingRestaurants = EditingRestaurant::where('restaurant_id', $id)->get();
             $restaurant_images = [];
+
             foreach ($editingRestaurants as $editingRestaurant) {
                 $restaurant_images[] = public_path('images/' . $editingRestaurant->image);
             }
+
             File::delete($restaurant_images);
             EditingRestaurant::where('restaurant_id', $id)->delete();
+
             return redirect('/restaurants');
         } else {
             return redirect()->back();

@@ -80,32 +80,36 @@
                                 <tbody>
                                 @if(count($restaurants) > 0)
                                     @foreach($restaurants as $restaurant)
-                                        <tr class="{{($restaurant->editingRestaurant) ? 'info' : ''}}">
+                                        <tr class="{{ ($restaurant->editingRestaurant) ? 'info' : '' }}" id="mainTr{{ $restaurant->id }}">
                                             <td class="action">
                                                 @if($user->admin == 1)
                                                     <input type="checkbox" value="{{ $restaurant->id }}" name="delete"/>
                                                     &nbsp;&nbsp;&nbsp;
                                                 @endif
                                                 <a class="btn btn-edit" title=""
-                                                   href="{{ url('/restaurant/edit/' . $restaurant->id )}}">
+                                                   href="{{ url('/restaurant/edit/' . $restaurant->id) }}">
                                                     <i class="fa fa-pencil"></i>
                                                 </a>&nbsp;&nbsp;
-                                                    <a class="btn btn-edit" title=""
-                                                       href="{{ url('/restaurant/availability/edit/' . $restaurant->id )}}">
-                                                        <i class="fa fa-clock-o"></i>
-                                                    </a>&nbsp;
+                                                <a class="btn btn-edit" title=""
+                                                   href="{{ url('/restaurant/availability/edit/' . $restaurant->id )}}">
+                                                    <i class="fa fa-clock-o"></i>
+                                                </a>&nbsp;
                                             </td>
-                                            <td>
-                                                <img src="/images/{{$restaurant->image}}" width="30px" height="30px">
+                                            <td id="image{{ $restaurant->id }}">
+                                                <img src="/images/{{ $restaurant->image }}" width="30px" height="30px">
                                             </td>
-                                            <td>
-                                                {{$restaurant->name_en}}
+                                            <td id="name{{ $restaurant->id }}">
+                                                {{ $restaurant->name_en }}
                                             </td>
-                                            <td>{{$restaurant->description_en}}</td>
+                                            <td id="description{{ $restaurant->id }}">
+                                                {{ $restaurant->description_en }}
+                                            </td>
                                             {{--<td>{{$restaurant->area->name_en}}</td>--}}
-                                            <td>{{$restaurant->telephone}}</td>
+                                            <td id="telephone{{ $restaurant->id }}">
+                                                {{ $restaurant->telephone }}
+                                            </td>
                                             <td data-toggle="modal" data-target="#changeStatus"
-                                                onclick="myFunction('{{$restaurant->id}}','{{$restaurant->status}}')"
+                                                onclick="myFunction('{{ $restaurant->id }}','{{ $restaurant->status }}')"
                                                 style="font-size: 20px; cursor: pointer">
                                                 @if($restaurant->status == 1)
                                                     <a class="btn btn-success">{{\Lang::get('message.open')}}</a>
@@ -113,29 +117,31 @@
                                                     <a class="btn btn-danger">{{\Lang::get('message.busy')}}</a>
                                                 @endif
                                             </td>
-                                            <td>{{$restaurant->id}}</td>
+                                            <td>{{ $restaurant->id }}</td>
                                             <td class="text-center">
-                                                @if($restaurant->editingRestaurant)
-                                                    @if ($user->admin == 1)
-                                                        <button type="button" class="btn btn-info" id="view_edited"
-                                                                data-id="{{ $restaurant->id }}"
-                                                                data-toggle="modal"
-                                                                data-target="#edited_restaurant">
-                                                            View edited fields
-                                                        </button><br>
+                                                <div id="statusAndBtn{{ $restaurant->id }}">
+                                                    @if($restaurant->editingRestaurant)
+                                                        @if ($user->admin == 1)
+                                                            <button type="button" class="btn btn-info" id="view_edited"
+                                                                    data-id="{{ $restaurant->id }}"
+                                                                    data-toggle="modal"
+                                                                    data-target="#edited_restaurant">
+                                                                View edited fields
+                                                            </button><br>
+                                                        @endif
+                                                        <span class="label label-default">Pending Edit Approval</span><br><br>
                                                     @endif
-                                                    <span class="label label-default">Pending Edit Approval</span><br><br>
-                                                @endif
+                                                </div>
                                                 @if($user->admin == 1)
                                                     @if($restaurant->active == 0)
                                                         <a class="btn btn-edit"
-                                                           href="{{ url('/restaurant/activate/' . $restaurant->id )}}" {{($restaurant->collection->where('approved', 1)->count() ==  0) ? 'disabled' : ''}}>
+                                                           href="{{ url('/restaurant/activate/' . $restaurant->id) }}" {{ ($restaurant->collection->where('approved', 1)->count() ==  0) ? 'disabled' : '' }}>
                                                             Activate
                                                         </a>
                                                     @endif
                                                     @if($restaurant->active == 1)
                                                         <a class="btn btn-edit" data-toggle="modal" data-target="#modalSendRestaurantNotification"
-                                                           onclick="sendNotification('{{$restaurant->id}}')">
+                                                           onclick="sendNotification('{{ $restaurant->id }}')">
                                                             Send Notification
                                                         </a>
                                                     @endif

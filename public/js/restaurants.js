@@ -149,9 +149,9 @@ $(document).ready(function () {
                 }
             })
         })
-    // view edited fields in modal
+    // end view edited fields in modal
 
-    // super admin approve edited restaurant
+    // approve edited restaurant
         $('body').on('submit', '#editForm', function(e) {
             e.preventDefault()
             var formData = new FormData(this)
@@ -165,8 +165,25 @@ $(document).ready(function () {
                 processData: false,
                 success: function(result) {
                     $('#edited_restaurant').modal('hide')
+                    $('#statusAndBtn' + restaurantId).remove()
+                    $('#mainTr' + restaurantId).removeClass('info')
+
+                    $.each(result, function(index, value) {
+                        $('#' + index + restaurantId).html(value)
+                    })
                 }
             })
         })
-    // end super admin approve edited restaurant
+    // end approve edited restaurant
+
+    // reject edited restaurant
+        $('body').on('click', '#reject', function() {
+            var restaurantId = $(this).attr('data-id')
+
+            $.ajax({
+                url: 'restaurant/edit_reject/' + restaurantId,
+                method: 'GET'
+            })
+        })
+    // end reject edited restaurant
 });

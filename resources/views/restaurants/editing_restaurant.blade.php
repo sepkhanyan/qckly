@@ -135,7 +135,7 @@
                                     <div class="form-group">
                                         <label class="control-label col-lg-3">Name En </label>
                                         <div class="col-lg-5">
-                                            <input type="text" name="restaurant_name_en" class="form-control" value="{{ $newFields['name_en'] }}" readonly>
+                                            <input type="text" name="name_en" class="form-control" value="{{ $newFields['name_en'] }}" readonly>
                                         </div>
                                     </div>
                                 @endif
@@ -144,7 +144,7 @@
                                     <div class="form-group">
                                         <label class="control-label col-lg-3">Name Ar </label>
                                         <div class="col-lg-5">
-                                            <input type="text" name="restaurant_name_ar" class="form-control" value="{{ $newFields['name_ar'] }}" readonly>
+                                            <input type="text" name="name_ar" class="form-control" value="{{ $newFields['name_ar'] }}" readonly>
                                         </div>
                                     </div>
                                 @endif
@@ -171,7 +171,7 @@
                                     <div class="form-group">
                                         <label class="control-label col-lg-3">Email </label>
                                         <div class="col-lg-5">
-                                            <input type="text" name="restaurant_email" class="form-control" value="{{ $newFields['email'] }}" readonly>
+                                            <input type="text" name="email" class="form-control" value="{{ $newFields['email'] }}" readonly>
                                         </div>
                                     </div>
                                 @endif
@@ -180,7 +180,7 @@
                                     <div class="form-group">
                                         <label class="control-label col-lg-3">Telephone </label>
                                         <div class="col-lg-5">
-                                            <input type="text" name="restaurant_telephone" class="form-control" value="{{ $newFields['telephone'] }}" readonly>
+                                            <input type="text" name="telephone" class="form-control" value="{{ $newFields['telephone'] }}" readonly>
                                         </div>
                                     </div>
                                 @endif
@@ -256,7 +256,7 @@
 
                                 <div class="text-right">
                                     <button type="submit" class="btn btn-success" style="margin-top: 10px;">Approve</button>
-                                    <button type="button" class="btn btn-danger" style="margin-top: 10px;">Reject</button>
+                                    <button type="button" class="btn btn-danger" id="reject" data-id="{{ $restaurant->id }}" style="margin-top: 10px;">Reject</button>
                                 </div>
                             </fieldset>
                         </form>
