@@ -14,7 +14,8 @@ class CollectionItem extends Model
         'collection_menu_id',
         'item_id',
         'quantity',
-        'is_mandatory'
+        'is_mandatory',
+        'status'
     ];
 
 

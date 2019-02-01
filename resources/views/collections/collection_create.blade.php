@@ -243,6 +243,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endif
                                 <div class="form-group{{ $errors->has('setup_time') ? ' has-error' : '' }}">
                                     <label for="input-setup" class="col-sm-3 control-label">
                                         Setup Time
@@ -303,133 +304,234 @@
                                         @endif
                                     </div>
                                 </div>
-                            @endif
                         </div>
                         <div id="menus"
                              class="tab-pane row wrap-all{{ $errors->has('menu_item') ? ' has-error' : '' }}">
                             @if($collection_category->id == 2 || $collection_category->id == 3)
                                 <div class="form-group">
                                     <label for="" class="col-sm-3 control-label"></label>
-                                    <div class="col-sm-5">
+                                    <div class="col-xs-4">
                                         <div class="control-group control-group-2">
-                                            <div class="input-group" style="font-size: medium">
-                                                <b>Menu min quantity</b>
+                                            <div class="input-group">
+                                                <b>Min quantity</b>
                                             </div>
-                                            <div class="input-group" style="font-size: medium">
-                                                <b>Menu max quantity</b>
+                                            <div class="input-group">
+                                                <b>Max quantity</b>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             @endif
-                            @foreach($menu_categories as $menu_category)
+                            @foreach($menuCategories as $menuCategory)
                                 <div class="form-group">
-                                    <label for="input-status" class="col-sm-3 control-label text-right">
-                                                <span class="text-right"
-                                                      style="font-size: large">{{$menu_category->name_en}}</span>
-                                        @if($collection_category->id != 1)
-                                            <input type="hidden" name="menu[{{$menu_category->id}}][menu_id]"
-                                                   value="{{$menu_category->id}}">
-                                        @endif
+                                    <label for="" class="col-sm-3 control-label text-right">
+                                         <span class="text-right">
+                                       <big>{{$menuCategory->name_en}}</big>
+                                             <input type="hidden" value="{{$menuCategory->id}}"
+                                                    name="menu[{{$menuCategory->id}}][id]">
+                                    </span>
                                     </label>
-                                    <div class="col-sm-7">
+                                    <div class="col-sm-5" style="display: none{{($collection_category->id != 1) ? 'block': ''}}">
                                         <div class="control-group control-group-3">
-                                            @if($collection_category->id == 2 || $collection_category->id == 3)
-                                                <div class="input-group">
-                                                    <input type="number"
-                                                           name="menu[{{$menu_category->id}}][min_qty]"
-                                                           class="form-control" min="1"
-                                                           value="{{old('menu.' . $menu_category->id . '.min_qty') ?? 1}}">
-                                                </div>
-                                                <div class="input-group">
-                                                    <input type="number"
-                                                           name="menu[{{$menu_category->id}}][max_qty]"
-                                                           class="form-control" min="1"
-                                                           value="{{old('menu.' . $menu_category->id . '.max_qty') ?? 1}}">
-                                                </div>
-                                            @endif
+                                            <div class="input-group">
+                                                <input type="number" min="1"
+                                                       name="menu[{{$menuCategory->id}}][min_qty]"
+                                                       class="form-control"
+                                                       value="{{ old('menu.' . $menuCategory->id . '.min_qty') ?? 1 }}"/>
+
+                                            </div>
+                                            <div class="input-group">
+                                                <input type="number" min="1"
+                                                       name="menu[{{$menuCategory->id}}][max_qty]"
+                                                       class="form-control"
+                                                       value="{{ old('menu.' . $menuCategory->id . '.max_qty') ?? 1 }}"/>
+
+                                            </div>
+                                            <div class="btn-group btn-group-toggle btn-group-3"
+                                                 data-toggle="buttons">
+                                                <label class="btn btn-success {{(old('menu.' . $menuCategory->id . '.status') == '1') ? ' active' : '' }}">
+                                                    <input type="hidden" value="0"
+                                                           name="menu[{{$menuCategory->id}}][status]">
+                                                    <input type="checkbox" id="menu{{$menuCategory->id}}"
+                                                           name="menu[{{$menuCategory->id}}][status]"
+                                                           value="1"
+                                                           {{ (old('menu.' . $menuCategory->id . '.status') == '1') ? 'checked' : '' }} onchange="checkMenu('{{$menuCategory->id}}')">
+                                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                @if($collection_category->id == 1)
-                                    @foreach($menu_category->menu as $menu)
-                                        <div class="form-group">
-                                            <label for="" class="col-sm-3 control-label"></label>
-                                            <div class="col-xs-3">
-                                                <div class="checkbox" id="{{$menu->id}}">
-                                                    <label style="font-size: medium">
-                                                        <input id="item{{$menu->id}}" type="checkbox"
-                                                               name="menu[{{$menu->id}}][id]"
-                                                               value="{{$menu->id}}"
-                                                               {{ (collect(old('menu.' . $menu->id . '.id'))->contains($menu->id)) ? 'checked':'' }} onclick="myFunction('{{$menu->id}}')">{{$menu->name_en}}
+                                @foreach($menuCategory->menu as $menu)
+                                    <div class="form-group chooseItem{{$menuCategory->id}}"  style="display: none{{($collection_category->id == 1) ? 'block':''}}{{ (old('menu.' . $menuCategory->id . '.status') == '1') ? 'block' : '' }}">
+                                        <label for="" class="col-xs-4 control-label text-right">
+                                         <span class="text-right">
+                                          {{$menu->name_en}}
+                                             <input type="hidden" value="{{$menu->id}}"
+                                                    name="menu[{{$menuCategory->id}}][item][{{$menu->id}}][id]">
+                                         </span>
+                                        </label>
+                                        <div class="col-sm-4">
+                                            <div class="control-group control-group-3">
+                                                <div class="btn-group btn-group-toggle btn-group-4"
+                                                     data-toggle="buttons">
+                                                    <label class="btn btn-success {{(old('menu.' . $menuCategory->id . '.item.' . $menu->id . '.status') == '1') ? ' active' : '' }} activeLabel{{$menuCategory->id}}">
+                                                        <input type="hidden" value="0"
+                                                               name="menu[{{$menuCategory->id}}][item][{{$menu->id}}][status]">
+                                                        <input type="checkbox"
+                                                               name="menu[{{$menuCategory->id}}][item][{{$menu->id}}][status]"
+                                                               value="1" {{ (old('menu.' . $menuCategory->id . '.item.' . $menu->id . '.status') == '1') ? 'checked' : '' }} class="checkedItem{{$menuCategory->id}}" id="item{{$menu->id}}" onchange="checkItem('{{$menu->id}}')">
+                                                        <i class="fa fa-check" aria-hidden="true"></i>
                                                     </label>
                                                 </div>
-                                            </div>
-                                            <div class="col-xs-5">
-                                                <div class="control-group control-group-3">
-                                                    <div class="col-xs-3">
-                                                        <input type="number"
-                                                               name="menu[{{$menu->id}}][qty]"
-                                                               id="qty{{$menu->id}}"
-                                                               style="display: none{{ (collect(old('menu_item.' . $menu->id . '.id'))->contains($menu->id)) ? 'block':'' }}"
-                                                               {{(!old('menu.' . $menu->id . '.id')) ? 'disabled': '' }}
-                                                               class="form-control" min="1"
-                                                               value="{{old('menu.' . $menu->id . '.qty') ?? 1}}">
+                                                @if($collection_category->id == 1)
+                                                    <div class="input-group" >
+                                                        <input style="display: none{{ (old('menu.' . $menuCategory->id . '.item.' . $menu->id . '.status') == '1') ? 'block' : '' }}" type="number"
+                                                               name="menu[{{$menuCategory->id}}][item][{{$menu->id}}][qty]"
+                                                               class="form-control  option{{$menu->id}}"
+                                                               value="{{ old('menu.' . $menuCategory->id . '.item.' . $menu->id . '.qty') ?? 1 }}"/>
                                                     </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                @else
-                                    @foreach($menu_category->menu as $menu)
-                                        <div class="form-group">
-                                            <label for="" class="col-sm-3 control-label"></label>
-                                            <div class="col-xs-2">
-                                                <div class="checkbox" id="{{$menu->id}}">
-                                                    <label style="font-size: medium">
-                                                        <input multiple id="item{{$menu->id}}" type="checkbox"
-                                                               name="menu[{{$menu_category->id}}][item][{{$menu->id}}][item_id]"
-                                                               value="{{$menu->id}}"
-                                                               {{ (collect(old('menu.' . $menu_category->id . '.item.' . $menu->id . '.item_id'))->contains($menu->id)) ? 'checked':'' }} onclick="myFunction('{{$menu->id}}')">{{$menu->name_en}}
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            @if($collection_category->id != 4)
-                                                <div class="col-xs-2">
-                                                    <select name="menu[{{$menu_category->id}}][item][{{$menu->id}}][is_mandatory]"
-                                                            id="option{{$menu->id}}" class="form-control"
-                                                            style="display: none{{ (collect(old('menu.' . $menu_category->id . '.item.' . $menu->id . '.item_id'))->contains($menu->id)) ? 'block':'' }}" {{(!old('menu.' . $menu_category->id . '.item.' . $menu->id . '.item_id')) ? 'disabled': '' }}>
-                                                        <option value="1" {{(old('menu.' . $menu_category->id . '.item.' . $menu->id . '.is_mandatory') == 1 ) ? 'selected':''}}>
-                                                            Mandatory
-                                                        </option>
-                                                        <option value="0" {{(old('menu.' . $menu_category->id . '.item.' . $menu->id . '.is_mandatory') == 0 ) ? 'selected':''}}>
+                                                @elseif($collection_category->id == 2 || $collection_category->id == 3)
+                                                    <div class="btn-group btn-group-toggle btn-group-2 option{{$menu->id}} checkedOption{{$menuCategory->id}}" style="display: none{{ (old('menu.' . $menuCategory->id . '.item.' . $menu->id . '.status') == '1') ? 'block' : '' }}"
+                                                         data-toggle="buttons">
+                                                        <label class="btn btn-success {{(old('menu.' . $menuCategory->id . '.item.' . $menu->id . '.is_mandatory') == '0') ? ' active' : '' }} activeLabel{{$menuCategory->id}}">
+                                                            <input type="hidden" value="1"
+                                                                   name="menu[{{$menuCategory->id}}][item][{{$menu->id}}][is_mandatory]">
+                                                            <input type="checkbox"
+                                                                   name="menu[{{$menuCategory->id}}][item][{{$menu->id}}][is_mandatory]"
+                                                                   value="0" {{ (old('menu.' . $menuCategory->id . '.item.' . $menu->id . '.is_mandatory') == '0') ? 'checked' : '' }}  class="checkedItem{{$menuCategory->id}}">
                                                             Optional
-                                                        </option>
-                                                    </select>
-                                                </div>
-                                            @endif
+                                                        </label>
+                                                    </div>
+                                                @endif
+                                            </div>
                                         </div>
-                                    @endforeach
-                                @endif
+                                    </div>
+                                @endforeach
                             @endforeach
-                            <div class="form-group">
-                                <label for="" class="col-sm-3 control-label"></label>
-                                <div class="col-xs-3">
-                                    @if ($errors->has('menu'))
-                                        <span class="help-block">
-                                                    <strong>{{ $errors->first('menu') }}</strong>
-                                                </span>
-                                    @endif
-                                </div>
-                            </div>
+                            {{--@if($collection_category->id == 2 || $collection_category->id == 3)--}}
+                            {{--<div class="form-group">--}}
+                            {{--<label for="" class="col-sm-3 control-label"></label>--}}
+                            {{--<div class="col-sm-5">--}}
+                            {{--<div class="control-group control-group-2">--}}
+                            {{--<div class="input-group" style="font-size: medium">--}}
+                            {{--<b>Menu min quantity</b>--}}
+                            {{--</div>--}}
+                            {{--<div class="input-group" style="font-size: medium">--}}
+                            {{--<b>Menu max quantity</b>--}}
+                            {{--</div>--}}
+                            {{--</div>--}}
+                            {{--</div>--}}
+                            {{--</div>--}}
+                            {{--@endif--}}
+                            {{--@foreach($menu_categories as $menu_category)--}}
+                            {{--<div class="form-group">--}}
+                            {{--<label for="input-status" class="col-sm-3 control-label text-right">--}}
+                            {{--<span class="text-right"--}}
+                            {{--style="font-size: large">{{$menu_category->name_en}}</span>--}}
+                            {{--@if($collection_category->id != 1)--}}
+                            {{--<input type="hidden" name="menu[{{$menu_category->id}}][menu_id]"--}}
+                            {{--value="{{$menu_category->id}}">--}}
+                            {{--@endif--}}
+                            {{--</label>--}}
+                            {{--<div class="col-sm-7">--}}
+                            {{--<div class="control-group control-group-3">--}}
+                            {{--@if($collection_category->id == 2 || $collection_category->id == 3)--}}
+                            {{--<div class="input-group">--}}
+                            {{--<input type="number"--}}
+                            {{--name="menu[{{$menu_category->id}}][min_qty]"--}}
+                            {{--class="form-control" min="1"--}}
+                            {{--value="{{old('menu.' . $menu_category->id . '.min_qty') ?? 1}}">--}}
+                            {{--</div>--}}
+                            {{--<div class="input-group">--}}
+                            {{--<input type="number"--}}
+                            {{--name="menu[{{$menu_category->id}}][max_qty]"--}}
+                            {{--class="form-control" min="1"--}}
+                            {{--value="{{old('menu.' . $menu_category->id . '.max_qty') ?? 1}}">--}}
+                            {{--</div>--}}
+                            {{--@endif--}}
+                            {{--</div>--}}
+                            {{--</div>--}}
+                            {{--</div>--}}
+                            {{--@if($collection_category->id == 1)--}}
+                            {{--@foreach($menu_category->menu as $menu)--}}
+                            {{--<div class="form-group">--}}
+                            {{--<label for="" class="col-sm-3 control-label"></label>--}}
+                            {{--<div class="col-xs-3">--}}
+                            {{--<div class="checkbox" id="{{$menu->id}}">--}}
+                            {{--<label style="font-size: medium">--}}
+                            {{--<input id="item{{$menu->id}}" type="checkbox"--}}
+                            {{--name="menu[{{$menu->id}}][id]"--}}
+                            {{--value="{{$menu->id}}"--}}
+                            {{--{{ (collect(old('menu.' . $menu->id . '.id'))->contains($menu->id)) ? 'checked':'' }} onclick="myFunction('{{$menu->id}}')">{{$menu->name_en}}--}}
+                            {{--</label>--}}
+                            {{--</div>--}}
+                            {{--</div>--}}
+                            {{--<div class="col-xs-5">--}}
+                            {{--<div class="control-group control-group-3">--}}
+                            {{--<div class="col-xs-3">--}}
+                            {{--<input type="number"--}}
+                            {{--name="menu[{{$menu->id}}][qty]"--}}
+                            {{--id="qty{{$menu->id}}"--}}
+                            {{--style="display: none{{ (collect(old('menu_item.' . $menu->id . '.id'))->contains($menu->id)) ? 'block':'' }}"--}}
+                            {{--{{(!old('menu.' . $menu->id . '.id')) ? 'disabled': '' }}--}}
+                            {{--class="form-control" min="1"--}}
+                            {{--value="{{old('menu.' . $menu->id . '.qty') ?? 1}}">--}}
+                            {{--</div>--}}
+                            {{--</div>--}}
+                            {{--</div>--}}
+                            {{--</div>--}}
+                            {{--@endforeach--}}
+                            {{--@else--}}
+                            {{--@foreach($menu_category->menu as $menu)--}}
+                            {{--<div class="form-group">--}}
+                            {{--<label for="" class="col-sm-3 control-label"></label>--}}
+                            {{--<div class="col-xs-2">--}}
+                            {{--<div class="checkbox" id="{{$menu->id}}">--}}
+                            {{--<label style="font-size: medium">--}}
+                            {{--<input multiple id="item{{$menu->id}}" type="checkbox"--}}
+                            {{--name="menu[{{$menu_category->id}}][item][{{$menu->id}}][item_id]"--}}
+                            {{--value="{{$menu->id}}"--}}
+                            {{--{{ (collect(old('menu.' . $menu_category->id . '.item.' . $menu->id . '.item_id'))->contains($menu->id)) ? 'checked':'' }} onclick="myFunction('{{$menu->id}}')">{{$menu->name_en}}--}}
+                            {{--</label>--}}
+                            {{--</div>--}}
+                            {{--</div>--}}
+                            {{--@if($collection_category->id != 4)--}}
+                            {{--<div class="col-xs-2">--}}
+                            {{--<select name="menu[{{$menu_category->id}}][item][{{$menu->id}}][is_mandatory]"--}}
+                            {{--id="option{{$menu->id}}" class="form-control"--}}
+                            {{--style="display: none{{ (collect(old('menu.' . $menu_category->id . '.item.' . $menu->id . '.item_id'))->contains($menu->id)) ? 'block':'' }}" {{(!old('menu.' . $menu_category->id . '.item.' . $menu->id . '.item_id')) ? 'disabled': '' }}>--}}
+                            {{--<option value="1" {{(old('menu.' . $menu_category->id . '.item.' . $menu->id . '.is_mandatory') == 1 ) ? 'selected':''}}>--}}
+                            {{--Mandatory--}}
+                            {{--</option>--}}
+                            {{--<option value="0" {{(old('menu.' . $menu_category->id . '.item.' . $menu->id . '.is_mandatory') == 0 ) ? 'selected':''}}>--}}
+                            {{--Optional--}}
+                            {{--</option>--}}
+                            {{--</select>--}}
+                            {{--</div>--}}
+                            {{--@endif--}}
+                            {{--</div>--}}
+                            {{--@endforeach--}}
+                            {{--@endif--}}
+                            {{--@endforeach--}}
+                            {{--<div class="form-group">--}}
+                            {{--<label for="" class="col-sm-3 control-label"></label>--}}
+                            {{--<div class="col-xs-3">--}}
+                            {{--@if ($errors->has('menu'))--}}
+                            {{--<span class="help-block">--}}
+                            {{--<strong>{{ $errors->first('menu') }}</strong>--}}
+                            {{--</span>--}}
+                            {{--@endif--}}
+                            {{--</div>--}}
+                            {{--</div>--}}
                         </div>
                         <div id="data" class="tab-pane row wrap-all">
                             <div id="type" class="form-group{{ $errors->has('service_type') ? ' has-error' : '' }}">
                                 <label for="" class="col-sm-3 control-label">Service Type</label>
                                 <div class="col-sm-5">
-                                    <select name="service_type" id="service"  class="form-control">
+                                    <select name="service_type" id="service" class="form-control">
                                         @foreach($categoryRestaurants as $categoryRestaurant)
-                                            <option value="{{$categoryRestaurant->category_id}}"  {{ (old('service_type') == $categoryRestaurant->category_id) ? 'selected':'' }}>{{$categoryRestaurant->name_en}}</option>
+                                            <option value="{{$categoryRestaurant->category_id}}" {{ (old('service_type') == $categoryRestaurant->category_id) ? 'selected':'' }}>{{$categoryRestaurant->name_en}}</option>
                                         @endforeach
                                     </select>
                                     @if ($errors->has('service_type'))
@@ -438,26 +540,6 @@
                                                 </span>
                                     @endif
                                 </div>
-                                {{--<div class="col-sm-5">--}}
-                                    {{--<div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">--}}
-                                        {{--@foreach ($categoryRestaurants as $categoryRestaurant)--}}
-                                            {{--<label class="btn btn-success{{(old('service_type') == $categoryRestaurant->category_id) ? ' active' : ''}}">--}}
-                                                {{--<input type="checkbox" name="service_type[{{$categoryRestaurant->category_id}}][en]"--}}
-                                                       {{--value="{{$categoryRestaurant->name_en}}"  >--}}
-                                                {{--<input type="checkbox" name="service_type[{{$categoryRestaurant->category_id}}][ar]"--}}
-                                                       {{--value="{{$categoryRestaurant->name_ar}}"  >--}}
-                                                {{--<input type="checkbox" name="service_type[{{$categoryRestaurant->category_id}}][id]"--}}
-                                                       {{--value="{{$categoryRestaurant->category_id}}" multiple>--}}
-                                                {{--{{$categoryRestaurant->name_en}}--}}
-                                            {{--</label>--}}
-                                        {{--@endforeach--}}
-                                    {{--</div>--}}
-                                    {{--@if ($errors->has('service_type'))--}}
-                                        {{--<span class="help-block">--}}
-                                                    {{--<strong>{{ $errors->first('service_type') }}</strong>--}}
-                                                {{--</span>--}}
-                                    {{--@endif--}}
-                                {{--</div>--}}
                             </div>
                             <div class="form-group{{ $errors->has('notice_period') ? ' has-error' : '' }}">
                                 <label for="input-max" class="col-sm-3 control-label">
@@ -586,19 +668,26 @@
         }
     </script>
     <script>
-        function myFunction(id) {
-            console.log(id);
-            var item = document.getElementById("item" + id);
-            if (item.checked == true) {
-                $('#qty' + id).slideDown('fast');
-                $('#qty' + id).removeAttr('disabled');
-                $('#option' + id).slideDown('fast');
-                $('#option' + id).removeAttr('disabled');
+        function checkMenu(menuId) {
+
+            var menu = document.getElementById("menu" + menuId);
+            if (menu.checked == true) {
+                $('.chooseItem' + menuId).slideDown('fast');
             } else {
-                $('#qty' + id).slideUp('fast');
-                $('#qty' + id).attr('disabled', true);
-                $('#option' + id).slideUp('fast');
-                $('#option' + id).attr('disabled', true);
+                $('.chooseItem' + menuId).slideUp('fast');
+                $('.checkedItem' + menuId).prop('checked', false);
+                $('.activeLabel' + menuId).removeClass('active');
+                $('.checkedOption' + menuId).slideUp('fast');
+            }
+        }
+
+        function checkItem(itemId) {
+
+            var item = document.getElementById("item" + itemId);
+            if (item.checked == true) {
+                $('.option' + itemId).slideDown('fast');
+            } else {
+                $('.option' + itemId).slideUp('fast');
             }
         }
     </script>

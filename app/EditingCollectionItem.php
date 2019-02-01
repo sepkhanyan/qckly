@@ -14,6 +14,8 @@ class EditingCollectionItem extends Model
         'collection_menu_id',
         'item_id',
         'quantity',
+        'is_mandatory',
+        'status'
     ];
 
 

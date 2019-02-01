@@ -56,21 +56,25 @@
                                     <label for="" class="col-sm-3 control-label">Type</label>
                                     <div class="col-sm-5">
                                         <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
-                                                    <label @if(old('type'))class="btn btn-success{{ (old('type') == '24_7') ? ' active' : '' }}" @elseif($unavailability !== null) class="btn btn-success{{($unavailability->type == '24_7') ? ' active' : ''}}" @else class="btn btn-success active" @endif>
-                                                        <input type="radio" name="type" value="24_7"
-                                                               @if(old('type')){{ (old('type') == '24_7') ? 'checked' : '' }} @elseif($unavailability !== null) {{($unavailability->type == '24_7') ? 'checked' : ''}} @else checked="checked" @endif>
-                                                        24/7
-                                                    </label>
-                                                    <label @if(old('type'))class="btn btn-success{{ (old('type') == 'daily') ? ' active' : '' }}" @else class="btn btn-success{{($unavailability !== null && $unavailability->type == 'daily') ? ' active' : ''}}"@endif>
-                                                        <input type="radio" name="type"
-                                                               value="daily" @if(old('type')) {{ (old('type') == 'daily') ? 'checked' : '' }} @else {{($unavailability !== null && $unavailability->type == 'daily') ? 'checked' : ''}}@endif>
-                                                        Daily
-                                                    </label>
-                                                    <label @if(old('type'))class="btn btn-success{{ (old('type') == 'flexible') ? ' active' : '' }}" @else class="btn btn-success{{($unavailability !== null && $unavailability->type == 'flexible') ? ' active' : ''}}"@endif>
-                                                        <input type="radio" name="type"
-                                                               value="flexible" @if(old('type')) {{ (old('type') == 'flexible') ? 'checked' : '' }} @else {{($unavailability !== null && $unavailability->type == 'flexible') ? 'checked' : ''}}@endif>
-                                                        Flexible
-                                                    </label>
+                                            <label @if(old('type'))class="btn btn-success{{ (old('type') == '24_7') ? ' active' : '' }}"
+                                                   @elseif($unavailability !== null) class="btn btn-success{{($unavailability->type == '24_7') ? ' active' : ''}}"
+                                                   @else class="btn btn-success active" @endif>
+                                                <input type="radio" name="type" value="24_7"
+                                                       @if(old('type')){{ (old('type') == '24_7') ? 'checked' : '' }} @elseif($unavailability !== null) {{($unavailability->type == '24_7') ? 'checked' : ''}} @else checked="checked" @endif>
+                                                24/7
+                                            </label>
+                                            <label @if(old('type'))class="btn btn-success{{ (old('type') == 'daily') ? ' active' : '' }}"
+                                                   @else class="btn btn-success{{($unavailability !== null && $unavailability->type == 'daily') ? ' active' : ''}}"@endif>
+                                                <input type="radio" name="type"
+                                                       value="daily" @if(old('type')) {{ (old('type') == 'daily') ? 'checked' : '' }} @else {{($unavailability !== null && $unavailability->type == 'daily') ? 'checked' : ''}}@endif>
+                                                Daily
+                                            </label>
+                                            <label @if(old('type'))class="btn btn-success{{ (old('type') == 'flexible') ? ' active' : '' }}"
+                                                   @else class="btn btn-success{{($unavailability !== null && $unavailability->type == 'flexible') ? ' active' : ''}}"@endif>
+                                                <input type="radio" name="type"
+                                                       value="flexible" @if(old('type')) {{ (old('type') == 'flexible') ? 'checked' : '' }} @else {{($unavailability !== null && $unavailability->type == 'flexible') ? 'checked' : ''}}@endif>
+                                                Flexible
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
@@ -222,10 +226,13 @@
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                                         </div>
-                                                        <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
+                                                        <div class="btn-group btn-group-toggle btn-group-3"
+                                                             data-toggle="buttons">
                                                             @if(old('flexible_hours'))
                                                                 <label class="btn btn-danger{{ (old('flexible_hours.' . $hour->weekday . '.status') == '0') ? ' active' : '' }}">
-                                                                    <input type="hidden" name="flexible_hours[{{$hour->weekday}}][status]" value="1" />
+                                                                    <input type="hidden"
+                                                                           name="flexible_hours[{{$hour->weekday}}][status]"
+                                                                           value="1"/>
                                                                     <input type="checkbox"
                                                                            name="flexible_hours[{{$hour->weekday}}][status]"
                                                                            value="0" {{ (old('flexible_hours.' . $hour->weekday . '.status') == '0') ? 'checked' : '' }}>
@@ -233,7 +240,9 @@
                                                                 </label>
                                                             @else
                                                                 <label class="btn btn-danger{{$hour->status == 0 ? ' active' : ''}} ">
-                                                                    <input type="hidden" name="flexible_hours[{{$hour->weekday}}][status]" value="1" />
+                                                                    <input type="hidden"
+                                                                           name="flexible_hours[{{$hour->weekday}}][status]"
+                                                                           value="1"/>
                                                                     <input type="checkbox"
                                                                            name="flexible_hours[{{$hour->weekday}}][status]"
                                                                            value="0" {{$hour->status == 0 ? 'checked' : ''}}>
@@ -279,12 +288,14 @@
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                                     </div>
-                                                    <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
+                                                    <div class="btn-group btn-group-toggle btn-group-3"
+                                                         data-toggle="buttons">
                                                         <label class="btn btn-danger{{ (old('flexible_hours.1.status') == '0') ? ' active' : '' }}">
-                                                            <input type="hidden" name="flexible_hours[1][status]" value="1" />
+                                                            <input type="hidden" name="flexible_hours[1][status]"
+                                                                   value="1"/>
                                                             <input type="checkbox" name="flexible_hours[1][status]"
                                                                    value="0" {{ (old('flexible_hours.1.status') == '0') ? 'checked' : '' }}>
-                                                          Busy
+                                                            Busy
                                                         </label>
                                                     </div>
                                                 </div>
@@ -323,9 +334,11 @@
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                                     </div>
-                                                    <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
+                                                    <div class="btn-group btn-group-toggle btn-group-3"
+                                                         data-toggle="buttons">
                                                         <label class="btn btn-danger{{ (old('flexible_hours.2.status') == '0') ? ' active' : '' }}">
-                                                            <input type="hidden" name="flexible_hours[2][status]" value="1" />
+                                                            <input type="hidden" name="flexible_hours[2][status]"
+                                                                   value="1"/>
                                                             <input type="checkbox" name="flexible_hours[2][status]"
                                                                    value="0" {{ (old('flexible_hours.2.status') == '0') ? 'checked' : '' }}>
                                                             Busy
@@ -367,9 +380,11 @@
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                                     </div>
-                                                    <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
+                                                    <div class="btn-group btn-group-toggle btn-group-3"
+                                                         data-toggle="buttons">
                                                         <label class="btn btn-danger{{ (old('flexible_hours.3.status') == '0') ? ' active' : '' }}">
-                                                            <input type="hidden" name="flexible_hours[3][status]" value="1" />
+                                                            <input type="hidden" name="flexible_hours[3][status]"
+                                                                   value="1"/>
                                                             <input type="checkbox" name="flexible_hours[3][status]"
                                                                    value="0" {{ (old('flexible_hours.3.status') == '0') ? 'checked' : '' }}>
                                                             Busy
@@ -411,12 +426,14 @@
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                                     </div>
-                                                    <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
+                                                    <div class="btn-group btn-group-toggle btn-group-3"
+                                                         data-toggle="buttons">
                                                         <label class="btn btn-danger{{ (old('flexible_hours.4.status') == '0') ? ' active' : '' }}">
-                                                            <input type="hidden" name="flexible_hours[4][status]" value="1" />
+                                                            <input type="hidden" name="flexible_hours[4][status]"
+                                                                   value="1"/>
                                                             <input type="checkbox" name="flexible_hours[4][status]"
                                                                    value="0" {{ (old('flexible_hours.4.status') == '0') ? 'checked' : '' }}>
-                                                           Busy
+                                                            Busy
                                                         </label>
                                                     </div>
                                                 </div>
@@ -455,12 +472,14 @@
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                                     </div>
-                                                    <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
+                                                    <div class="btn-group btn-group-toggle btn-group-3"
+                                                         data-toggle="buttons">
                                                         <label class="btn btn-danger{{ (old('flexible_hours.5.status') == '0') ? ' active' : '' }}">
-                                                            <input type="hidden" name="flexible_hours[5][status]" value="1" />
+                                                            <input type="hidden" name="flexible_hours[5][status]"
+                                                                   value="1"/>
                                                             <input type="checkbox" name="flexible_hours[5][status]"
                                                                    value="0" {{ (old('flexible_hours.5.status') == '0') ? 'checked' : '' }}>
-                                                          Busy
+                                                            Busy
                                                         </label>
                                                     </div>
                                                 </div>
@@ -499,12 +518,14 @@
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                                     </div>
-                                                    <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
+                                                    <div class="btn-group btn-group-toggle btn-group-3"
+                                                         data-toggle="buttons">
                                                         <label class="btn btn-danger{{ (old('flexible_hours.6.status') == '0') ? ' active' : '' }}">
-                                                            <input type="hidden" name="flexible_hours[6][status]" value="1" />
+                                                            <input type="hidden" name="flexible_hours[6][status]"
+                                                                   value="1"/>
                                                             <input type="checkbox" name="flexible_hours[6][status]"
                                                                    value="0" {{ (old('flexible_hours.6.status') == '0') ? 'checked' : '' }}>
-                                                          Busy
+                                                            Busy
                                                         </label>
                                                     </div>
                                                 </div>
@@ -543,9 +564,11 @@
                                                 <i class="fa fa-clock-o"></i>
                                             </span>
                                                     </div>
-                                                    <div class="btn-group btn-group-toggle btn-group-3" data-toggle="buttons">
+                                                    <div class="btn-group btn-group-toggle btn-group-3"
+                                                         data-toggle="buttons">
                                                         <label class="btn btn-danger{{ (old('flexible_hours.0.status') == '0') ? ' active' : '' }}">
-                                                            <input type="hidden" name="flexible_hours[0][status]" value="1" />
+                                                            <input type="hidden" name="flexible_hours[0][status]"
+                                                                   value="1"/>
                                                             <input type="checkbox" name="flexible_hours[0][status]"
                                                                    value="0" {{ (old('flexible_hours.0.status') == '0') ? 'checked' : '' }}>
                                                             Busy

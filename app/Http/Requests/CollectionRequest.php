@@ -144,10 +144,10 @@ class CollectionRequest extends FormRequest
             'max_quantity' => 'required_if:category, 1,3|integer|gte:min_quantity',
             'min_serve_to_person' => 'required_unless:category,4|integer|min:1',
             'max_serve_to_person' => 'required_unless:category,4|integer|gte:min_serve_to_person',
-            'setup_time' => 'required_if:category,2|integer|min:1',
-            'max_time' => 'required_if:category,2|integer|gte:setup_time',
-            'requirements_en' => 'required_if:category,2|string',
-            'requirements_ar' => 'required_if:category,2|string',
+//            'setup_time' => 'required_if:category,2|integer|min:1',
+//            'max_time' => 'required_if:category,2|integer|gte:setup_time',
+//            'requirements_en' => 'required_if:category,2|string',
+//            'requirements_ar' => 'required_if:category,2|string',
             'image' => 'required|image|mimes:jpg,png,gif,bmp,jpeg,PNG,JPG,JPEG,GIF,BMP|max:2048'
         ];
 
@@ -165,16 +165,16 @@ class CollectionRequest extends FormRequest
                 'service_provide_ar' => 'required|string',
                 'service_presentation_en' => 'required|string',
                 'service_presentation_ar' => 'required|string',
-                'menu' => 'array',
+//                'menu' => 'array',
                 'collection_price' => 'required_unless:category,4|numeric ',
                 'min_quantity' => 'required_if:category, 1,3|integer|min:1',
                 'max_quantity' => 'required_if:category, 1,3|integer|gte:min_quantity',
                 'min_serve_to_person' => 'required_unless:category,4|integer|min:1',
                 'max_serve_to_person' => 'required_unless:category,4|integer|gte:min_serve_to_person',
-                'setup_time' => 'required_if:category,2|integer|min:1',
-                'max_time' => 'required_if:category,2|integer|gte:setup_time',
-                'requirements_en' => 'required_if:category,2|string',
-                'requirements_ar' => 'required_if:category,2|string'
+//                'setup_time' => 'required_if:category,2|integer|min:1',
+//                'max_time' => 'required_if:category,2|integer|gte:setup_time',
+//                'requirements_en' => 'required_if:category,2|string',
+//                'requirements_ar' => 'required_if:category,2|string'
             ];
             if($this->hasFile('image')){
                 $rules['image'] = 'image|mimes:jpg,png,gif,bmp,jpeg,PNG,JPG,JPEG,GIF,BMP|max:2048';
