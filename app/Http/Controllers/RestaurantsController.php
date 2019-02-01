@@ -1173,35 +1173,39 @@ class RestaurantsController extends Controller
                 'error_details' => $validator->messages()));
         } else {
             $restaurant_id = $DataRequests['restaurant_id'];
-            $restaurant = Restaurant::where('id', $restaurant_id)->where('active', 1)->where('deleted', 0)
-                ->with(['collection' => function ($query) {
-                    $query->where('approved', 1)->where('deleted', 0)->with(['serviceType' => function ($x) {
-                        $x->where('deleted', 0);
-                    }]);
-                }], ['menu' => function ($query) {
-                    $query->where('approved', 1)->where('deleted', 0);
-                }], [
-                    'workingHour',
-                    'collection.collectionItem',
-                    'collection.collectionMenu.category',
-                    'collection.collectionMenu.collectionItem.menu',
-                    'collection.category',
-                    'collection.mealtime',
-                    'collection.unavailabilityHour'
-                ]);
+            $restaurant = Restaurant::where('id', $restaurant_id)->where('active', 1)->where('deleted', 0)->with(['approvedCollection', 'workingHour', 'menu']);
+//            dd($restaurant);
+//            $restaurant = Restaurant::where('id', $restaurant_id)->where('active', 1)->where('deleted', 0)
+//                ->with(['collection' => function ($query) {
+//                    $query->where('approved', 1)->where('deleted', 0)->with(['collectionMenu' => function ($x) {
+//                        $x->where('status', 1)->with(['collectionItem' => function ($q) {
+//                            $q->where('status',1);
+//                        }]);
+//                    }])->with(['collectionItem' => function ($q) {
+//                        $q->where('status',1);
+//                    }]);
+//                }], ['menu' => function ($query) {
+//                    $query->where('approved', 1)->where('deleted', 0);
+//                }], [
+//
+//                    'collection.unavailabilityHour',
+//                    'collection.category',
+//                    'collection.mealtime',
+//                    'collection.serviceType'
+//                ]);
 
-
-            if (isset($DataRequests['category_id'])) {
-                $category_id = $DataRequests['category_id'];
-
-                $restaurant = $restaurant->with(['collection' => function ($query) use ($category_id) {
-                    $query->whereHas('serviceType', function ($q) use ($category_id) {
-                        $q->where('service_type_id', $category_id)->where('deleted', 0);
-                    })->where('approved', 1)->where('deleted', 0);
-                }]);
-
-
-            }
+//
+//            if (isset($DataRequests['category_id'])) {
+//                $category_id = $DataRequests['category_id'];
+//
+//                $restaurant = $restaurant->with(['collection' => function ($query) use ($category_id) {
+//                    $query->whereHas('serviceType', function ($q) use ($category_id) {
+//                        $q->where('service_type_id', $category_id);
+//                    });
+//                }]);
+//
+//
+//            }
 
             $restaurant = $restaurant->first();
 
@@ -1212,8 +1216,8 @@ class RestaurantsController extends Controller
                 $restaurant_details = [];
 //                foreach ($restaurants as $restaurant) {
                 $menu_collection = [];
-                if (count($restaurant->collection) > 0) {
-                    foreach ($restaurant->collection as $collection) {
+                if (count($restaurant->approvedCollection) > 0) {
+                    foreach ($restaurant->approvedCollection as $collection) {
                         if ($collection->female_caterer_available == 1) {
                             $female_caterer_available = true;
                         } else {
@@ -1244,7 +1248,7 @@ class RestaurantsController extends Controller
                         if ($collection->category_id == 1) {
                             $items = [];
                             $menu = [];
-                            foreach ($collection->collectionItem as $collection_item) {
+                            foreach ($collection->approvedCollectionItem as $collection_item) {
                                 if ($lang == 'ar') {
                                     $foodlist [] = $collection_item->menu->name_ar;
                                     $item_name = $collection_item->menu->name_ar;
@@ -1281,13 +1285,13 @@ class RestaurantsController extends Controller
                             $menu_max_qty = -1;
                             $menu = [];
 
-                            foreach ($collection->collectionMenu as $collectionMenu) {
+                            foreach ($collection->approvedCollectionMenu as $collectionMenu) {
                                 $items = [];
                                 if ($collection->category_id != 4 && $collection->category_id != 1) {
                                     $menu_min_qty = $collectionMenu->min_qty;
                                     $menu_max_qty = $collectionMenu->max_qty;
                                 }
-                                foreach ($collectionMenu->collectionItem as $collection_item) {
+                                foreach ($collectionMenu->approvedCollectionItem as $collection_item) {
                                     if ($lang == 'ar') {
                                         $foodlist [] = $collection_item->menu->name_ar;
                                         $item_name = $collection_item->menu->name_ar;

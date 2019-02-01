@@ -87,6 +87,16 @@ class Collection extends Model
         return $this->hasMany('App\CollectionMenu', 'collection_id');
     }
 
+    public function approvedCollectionMenu()
+    {
+        return $this->hasMany('App\CollectionMenu', 'collection_id')->where('status', 1)->with('approvedCollectionItem');
+    }
+
+    public function approvedCollectionItem()
+    {
+        return $this->hasMany('App\CollectionItem', 'collection_id')->where('status', 1);
+    }
+
     public function collectionItem()
     {
         return $this->hasMany('App\CollectionItem', 'collection_id');

@@ -643,7 +643,7 @@ class UserCartsController extends Controller
         } else {
             $collection_type = $DataRequests['collection_category_id'];
             $collection_id = $DataRequests['collection_id'];
-            $collection = Collection::where('id', $collection_id)->with(['collectionItem', 'collectionMenu.category','collectionMenu.collectionItem.menu', 'unavailabilityHour', 'mealtime', 'serviceType' => function ($x) {
+            $collection = Collection::where('id', $collection_id)->with(['approvedCollectionMenu.approvedCollectionItem', 'approvedCollectionItem','approvedCollectionMenu.category','approvedCollectionMenu.approvedCollectionItem.menu', 'unavailabilityHour', 'mealtime', 'serviceType' => function ($x) {
                 $x->where('deleted', 0);
             }])->first();
             if ($collection) {

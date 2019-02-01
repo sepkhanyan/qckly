@@ -40,6 +40,19 @@ class Restaurant extends Model
     {
         return $this->hasMany('App\Collection', 'restaurant_id');
     }
+
+    public function approvedCollection()
+    {
+        return $this->hasMany('App\Collection', 'restaurant_id')->where('approved', 1)->where('deleted', 0)->with([
+            'approvedCollectionMenu',
+            'approvedCollectionItem',
+            'unavailabilityHour',
+            'category',
+            'mealtime',
+            'serviceType'
+        ]);
+    }
+
     public function orderCollection()
     {
         return $this->hasMany('App\OrderCollection', 'restaurant_id');
@@ -78,7 +91,7 @@ class Restaurant extends Model
 
     public function menu()
     {
-        return $this->hasMany('App\Menu', 'restaurant_id');
+        return $this->hasMany('App\Menu', 'restaurant_id')->where('approved', 1)->where('deleted', 0);
     }
 
     public function categoryRestaurant()
