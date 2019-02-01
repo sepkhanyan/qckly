@@ -34,20 +34,23 @@
                         <div id="general" class="tab-pane row wrap-all active">
                             <h4 class="tab-pane-title">Basic</h4>
                             @if (count($editingCategoryRestaurants ) > 0)
-                            <div class="form-group">
-                                <label for="category" class="col-sm-3 control-label">Category</label>
-                                <div class="col-sm-5">
-                                    <select name="category[]" id="category" class="form-control"
-                                            placeholder="Select Categories"
-                                            multiple>
-                                        @foreach($editingCategoryRestaurants as $editingCategoryRestaurant)
-                                            <option
-                                                    value="{{$editingCategoryRestaurant->category_id}}"
-                                                    selected >{{$editingCategoryRestaurant->name_en}}</option>
-                                        @endforeach
-                                    </select>
+                                <div class="form-group">
+                                    <label for="category" class="col-sm-3 control-label">Category</label>
+                                    <div class="col-sm-5">
+                                        <select name="category[]" id="category" class="form-control"
+                                                placeholder="Select Categories"
+                                                multiple>
+                                            @foreach($editingCategoryRestaurants as $editingCategoryRestaurant)
+                                                <option
+                                                        value="{{$editingCategoryRestaurant->category_id}}"
+                                                        selected >{{$editingCategoryRestaurant->name_en}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <span class="help-block">
+                                        <strong class="text-danger">Edited</strong>
+                                    </span>
                                 </div>
-                            </div>
                             @endif
                             <div class="form-group{{ $errors->has('restaurant_name_en') ? ' has-error' : '' }}">
                                 <label for="input_restaurant_name_en" class="col-sm-3 control-label">Name En</label>

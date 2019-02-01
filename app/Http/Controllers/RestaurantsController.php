@@ -249,27 +249,27 @@ class RestaurantsController extends Controller
             $editingRestaurant = $restaurant->editingRestaurant;
             $restaurantAreas = RestaurantArea::where('restaurant_id', $id)->get();
             $editingRestaurantAreas = EditingRestaurantArea::where('editing_restaurant_id', $editingRestaurant->id)->get();
-//            $editingAreas = $editingRestaurantAreas->pluck('area_id')->toArray();
-//            $areas = $restaurantAreas->pluck('area_id')->toArray();
-//            $areaFullDiff = array_merge(array_diff($editingAreas, $areas), array_diff($areas, $editingAreas));
+            // $editingAreas = $editingRestaurantAreas->pluck('area_id')->toArray();
+            // $areas = $restaurantAreas->pluck('area_id')->toArray();
+            // $areaFullDiff = array_merge(array_diff($editingAreas, $areas), array_diff($areas, $editingAreas));
             $categoryRestaurants = CategoryRestaurant::where('restaurant_id', $id)->get();
             $editingCategoryRestaurants = EditingCategoryRestaurant::where('editing_restaurant_id', $editingRestaurant->id)->get();
-//            $editingCategories = $editingCategoryRestaurants->pluck('category_id')->toArray();
-//            $categories = $categoryRestaurants->pluck('category_id')->toArray();
-//            $categoryFullDiff = array_merge(array_diff($editingCategories, $categories), array_diff($categories, $editingCategories));
+            // $editingCategories = $editingCategoryRestaurants->pluck('category_id')->toArray();
+            // $categories = $categoryRestaurants->pluck('category_id')->toArray();
+            // $categoryFullDiff = array_merge(array_diff($editingCategories, $categories), array_diff($categories, $editingCategories));
 
             return view('restaurants.restaurant_edit_approve', [
                 'user' => $user,
                 'restaurant' => $restaurant,
                 'editingRestaurant' => $editingRestaurant,
-//                'areas' => $areas,
+                // 'areas' => $areas,
                 'restaurantAreas' => $restaurantAreas,
                 'editingRestaurantAreas' => $editingRestaurantAreas,
-//                'areaFullDiff' => $areaFullDiff,
-//                'categories' => $categories,
+                // 'areaFullDiff' => $areaFullDiff,
+                // 'categories' => $categories,
                 'categoryRestaurants' => $categoryRestaurants,
                 'editingCategoryRestaurants' => $editingCategoryRestaurants,
-//                'categoryFullDiff' => $categoryFullDiff
+                // 'categoryFullDiff' => $categoryFullDiff
             ]);
         }
 
@@ -381,7 +381,6 @@ class RestaurantsController extends Controller
                                 $categoryRestaurant->save();
                             }
                         }
-
                     }
                 }
 
@@ -475,7 +474,6 @@ class RestaurantsController extends Controller
                     }
                 }
             }
-
         }
 
         return redirect('/restaurants');
@@ -549,25 +547,28 @@ class RestaurantsController extends Controller
 
     }
 
-    public function editApprove(RestaurantRequest $request, $id)
+    public function editApprove(Request $request, $id)
     {
         $user = Auth::user();
+
         if ($user->admin == 1) {
+
+            $data = $request->except('_token', 'category', 'area');
+
             $restaurant = Restaurant::find($id);
+
             $editingRestaurant = EditingRestaurant::where('restaurant_id', $id)->first();
-            $restaurant->name_en = $request->input('restaurant_name_en');
-            $restaurant->name_ar = $request->input('restaurant_name_ar');
-            $restaurant->email = $request->input('restaurant_email');
-            $restaurant->telephone = $request->input('restaurant_telephone');
-            $restaurant->description_en = $request->input('description_en');
-            $restaurant->description_ar = $request->input('description_ar');
+
             if ($editingRestaurant->image) {
+
                 if ($restaurant->image) {
                     File::delete(public_path('images/' . $restaurant->image));
                 }
-                $restaurant->image = $editingRestaurant->image;
+
+                $data['image'] = $editingRestaurant->image;
             }
-            $restaurant->save();
+
+            $restaurant->update($data);
 
             $categories = $request->input('category');
             if ($categories) {
@@ -576,7 +577,7 @@ class RestaurantsController extends Controller
 
                 if ($restaurantCategories->isNotEmpty()) {
 
-                    CategoryRestaurant::where('restaurant_id', $restaurant->id)->whereNotIn('area_id', $categories)->delete();
+                    CategoryRestaurant::where('restaurant_id', $restaurant->id)->whereNotIn('category_id', $categories)->delete();
 
                     foreach ($restaurantCategories as $category) {
 
@@ -609,7 +610,7 @@ class RestaurantsController extends Controller
 
             EditingRestaurant::where('restaurant_id', $restaurant->id)->delete();
 
-            return redirect('/restaurants');
+            return response()->json([ 'success' => true ]);
 
         } else {
 
@@ -653,6 +654,79 @@ class RestaurantsController extends Controller
         }
     }
 
+    public function getEditedFields(Request $request)
+    {
+        $id = $request->id;
+        $user = Auth::user();
+        $restaurant = Restaurant::with('restaurantArea', 'categoryRestaurant')->find($id);
+
+        if ($user->admin == 1 && !is_null($restaurant)) {
+
+            $oldRestaurant = $restaurant->toArray();
+            $oldRestaurant = array_except($oldRestaurant, [
+                'id',
+                'address_en',
+                'address_ar',
+                'city_en', 'city_ar',
+                'state_en',
+                'state_ar',
+                'postcode',
+                'latitude',
+                'longitude',
+                'category_id',
+                'status',
+                'active',
+                'created_at',
+                'updated_at',
+                'deleted',
+                'restaurant_area',
+                'category_restaurant'
+            ]);
+
+            $editedRestaurant = EditingRestaurant::with('editingRestaurantArea', 'editingCategoryRestaurant')->where('restaurant_id', $restaurant->id)->first();
+
+            $newRestaurant = $editedRestaurant->toArray();
+            $newRestaurant = array_except($newRestaurant, [ 'id', 'restaurant_id', 'created_at', 'updated_at', 'editing_restaurant_area', 'editing_category_restaurant' ]);
+
+            if (is_null($newRestaurant['image'])) {
+
+                unset($newRestaurant['image']);
+                unset($oldRestaurant['image']);
+            }
+
+            $oldFields = array_merge(array_diff($newRestaurant, $oldRestaurant), array_diff($oldRestaurant, $newRestaurant));
+            $newFields = array_merge(array_diff($oldRestaurant, $newRestaurant), array_diff($newRestaurant, $oldRestaurant));
+
+            if ($editedRestaurant->editingRestaurantArea->isNotEmpty()) {
+
+                $oldAreas = $restaurant->restaurantArea;
+                $newAreas = $editedRestaurant->editingRestaurantArea;
+            }
+
+            if ($editedRestaurant->editingCategoryRestaurant->isNotEmpty()) {
+
+                $oldCategories = $restaurant->categoryRestaurant;
+                $newCategories = $editedRestaurant->editingCategoryRestaurant;
+            }
+
+            $data = [
+                'restaurant' => $restaurant,
+                'oldFields' => $oldFields,
+                'newFields' => $newFields,
+                'oldAreas' => isset($oldAreas) ? $oldAreas : "",
+                'newAreas' => isset($newAreas) ? $newAreas : "",
+                'oldCategories' => isset($oldCategories) ? $oldCategories : "",
+                'newCategories' => isset($newCategories) ? $newCategories : ""
+            ];
+
+            $html = view('restaurants.editing_restaurant', $data)->render();
+            return response()->json([ 'success' => true, 'html' => $html ]);
+
+        } else {
+
+            return response()->json([ 'success' => false ]);
+        }
+    }
 
     public function getRestaurants(Request $request)
     {

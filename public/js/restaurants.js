@@ -82,7 +82,6 @@ $(document).ready(function () {
         });
     });
 
-
     $('#delete_restaurant_category').click(function () {
         window.checkValues = $('input[name=delete]:checked').map(function () {
             return $(this).val();
@@ -108,9 +107,6 @@ $(document).ready(function () {
         }else{
             alert("Select restaurant category!");
         }
-
-
-
     });
 
     $('#delete_restaurant').click(function () {
@@ -138,23 +134,39 @@ $(document).ready(function () {
         }else{
             alert("Select restaurant!");
         }
-
-
-
     });
 
-    $('body').on('click', '#view_edited', function() {
-        var editedRestaurantID = $(this).attr('data-id')
-        console.log(editedRestaurantID)
+    // view edited fields in modal
+        $('body').on('click', '#view_edited', function() {
+            var editedRestaurantID = $(this).attr('data-id')
 
-        $.ajax({
-            url: 'get-edited-fields',
-            method: 'GET',
-            data: { id: editedRestaurantID },
-            success: function (result) {
-                $('#show_fields').html(result.html)
-            }
+            $.ajax({
+                url: 'restaurant/get-restaurant-edited-fields',
+                method: 'GET',
+                data: { id: editedRestaurantID },
+                success: function (result) {
+                    $('#show_fields').html(result.html)
+                }
+            })
         })
-    })
+    // view edited fields in modal
 
+    // super admin approve edited restaurant
+        $('body').on('submit', '#editForm', function(e) {
+            e.preventDefault()
+            var formData = new FormData(this)
+            var restaurantId = $(this).attr('data-id')
+
+            $.ajax({
+                url: 'restaurant/edit_approve/' + restaurantId,
+                method: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(result) {
+                    $('#edited_restaurant').modal('hide')
+                }
+            })
+        })
+    // end super admin approve edited restaurant
 });

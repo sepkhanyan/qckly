@@ -114,31 +114,31 @@
                                                 @endif
                                             </td>
                                             <td>{{$restaurant->id}}</td>
-                                            <td>
+                                            <td class="text-center">
                                                 @if($restaurant->editingRestaurant)
                                                     @if ($user->admin == 1)
                                                         <button type="button" class="btn btn-info" id="view_edited"
-                                                                data-id="{{ $restaurant->editingRestaurant->id }}"
+                                                                data-id="{{ $restaurant->id }}"
                                                                 data-toggle="modal"
                                                                 data-target="#edited_restaurant">
                                                             View edited fields
                                                         </button><br>
                                                     @endif
-                                                    <span class="label label-default">Pending Edit Approval</span>
+                                                    <span class="label label-default">Pending Edit Approval</span><br><br>
                                                 @endif
                                                 @if($user->admin == 1)
                                                     @if($restaurant->active == 0)
-                                                            <a class="btn btn-edit"
-                                                               href="{{ url('/restaurant/activate/' . $restaurant->id )}}" {{($restaurant->collection->where('approved', 1)->count() ==  0) ? 'disabled' : ''}}>
-                                                              Activate
-                                                            </a>
+                                                        <a class="btn btn-edit"
+                                                           href="{{ url('/restaurant/activate/' . $restaurant->id )}}" {{($restaurant->collection->where('approved', 1)->count() ==  0) ? 'disabled' : ''}}>
+                                                            Activate
+                                                        </a>
                                                     @endif
-                                                        @if($restaurant->active == 1)
-                                                            <a class="btn btn-edit" data-toggle="modal" data-target="#modalSendRestaurantNotification"
-                                                               onclick="sendNotification('{{$restaurant->id}}')">
-                                                                Send Notification
-                                                            </a>
-                                                        @endif
+                                                    @if($restaurant->active == 1)
+                                                        <a class="btn btn-edit" data-toggle="modal" data-target="#modalSendRestaurantNotification"
+                                                           onclick="sendNotification('{{$restaurant->id}}')">
+                                                            Send Notification
+                                                        </a>
+                                                    @endif
                                                 @endif
                                             </td>
                                         </tr>
@@ -232,6 +232,28 @@
             </div>
         </form>
     </div>
+
+    <!-- view edited fileds modal -->
+        <div class="modal fade" id="edited_restaurant">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">View edited fields</h4>
+                    </div>
+
+                    <div class="modal-body" id="show_fields">
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-top: 10px;">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- /view edited fileds modal -->
+
     <script type="text/javascript">
         function sendNotification(restaurantId) {
             $("#notification-form").attr('action', '/restaurant/notification/' + restaurantId);

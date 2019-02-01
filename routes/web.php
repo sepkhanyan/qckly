@@ -51,6 +51,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
             Route::post('notification/{id}', 'RestaurantsController@notification');
             Route::get('edit/{id}', 'RestaurantsController@edit');
             Route::post('update/{id}', 'RestaurantsController@update');
+            Route::get('/get-restaurant-edited-fields', 'RestaurantsController@getEditedFields');
             Route::post('edit_approve/{id}', 'RestaurantsController@editApprove');
             Route::get('edit_reject/{id}', 'RestaurantsController@editReject');
             Route::get('availability/edit/{id}', 'RestaurantsController@editAvailability');
@@ -100,7 +101,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
             Route::post('delete', 'MenusController@deleteMenu');
         });
 
-        Route::get('/collections/get-edited-fields', 'CollectionsController@getEditedFields');
+        // Route::get('/collections/get-edited-fields', 'CollectionsController@getEditedFields');
         Route::get('/collections/{id?}', 'CollectionsController@index');
 //        Route::post('collections/collection/copy/{id}', 'CollectionsController@copy');
         Route::group(['prefix' => 'collection'], function () {
