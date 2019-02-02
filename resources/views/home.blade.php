@@ -31,7 +31,7 @@
     <script src="{{ asset('js/datepicker/bootstrap-timepicker.js') }}"></script>
     <script src="{{ asset('js/js.cookie.js')}}"></script>
     <script src="{{ asset('js/qckly.js') }}"></script>
-    <script src="{{ asset('js/restaurants.js') }}"></script>
+    {{-- <script src="{{ asset('js/restaurants.js') }}"></script> --}}
     <script src="{{ asset('js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('js/metisMenu.min.js') }}"></script>
     <script src="{{ asset('js/select2.js') }}"></script>

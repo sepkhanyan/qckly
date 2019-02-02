@@ -182,7 +182,12 @@ $(document).ready(function () {
 
             $.ajax({
                 url: 'restaurant/edit_reject/' + restaurantId,
-                method: 'GET'
+                method: 'GET',
+                success: function(result) {
+                    $('#edited_restaurant').modal('hide')
+                    $('#statusAndBtn' + restaurantId).remove()
+                    $('#mainTr' + restaurantId).removeClass('info')
+                }
             })
         })
     // end reject edited restaurant

@@ -1,7 +1,7 @@
 @extends('home', ['title' => 'Collections'])
 @section('content')
 
-    {{-- <script type="text/javascript" src="{{ url('') }}/js/collections.js"></script> --}}
+    <script src="{{ asset('js/collections.js') }}"></script>
 
     <div id="page-wrapper">
         <div class="page-header clearfix">
@@ -121,9 +121,9 @@
                                     @if($selectedRestaurant)
                                         @if(count($collections) > 0)
                                             @foreach($collections as $collection)
-                                                <tr class="{{ ($collection->editingCollection || $collection->approved == 0) ? 'info' : '' }}">
+                                                <tr class="{{ ($collection->editingCollection || $collection->approved == 0) ? 'info' : '' }}" id="mainTr{{ $collection->id }}">
                                                     <td class="action">
-                                                        <input type="checkbox" value="{{$collection->id}}" name="delete"/>
+                                                        <input type="checkbox" value="{{ $collection->id }}" name="delete"/>
 
                                                         <a class="btn btn-edit" title="" href="{{ url('/collection/edit/' . $collection->id) }}">
                                                             <i class="fa fa-pencil"></i>
@@ -172,13 +172,26 @@
                                                             @endif
                                                         @endif
                                                     </td>
-                                                    <td>{{ $collection->name_en }}</td>
-                                                    <td>{{ $collection->description_en }}</td>
-                                                    <td>{{ $collection->category->name_en }}</td>
-                                                    <td>{{ $collection->serviceType->name_en }}</td>
-                                                    <td>{{ $collection->price }}</td>
-                                                    <td>{{ $collection->mealtime->name_en }}</td>
-                                                    <td>{{ $collection->id }}</td>
+                                                    <td id="name{{ $collection->id }}">
+                                                        {{ $collection->name_en }}
+                                                    </td>
+                                                    <td id="description{{ $collection->id }}">
+                                                        {{ $collection->description_en }}
+                                                    </td>
+                                                    <td id="categoryName{{ $collection->id }}">
+                                                        {{ $collection->category->name_en }}
+                                                    </td>
+                                                    <td id="serviceTypeName{{ $collection->id }}">
+                                                        {{ $collection->serviceType->name_en }}
+                                                    </td>
+                                                    <td id="price{{ $collection->id }}">
+                                                        {{ $collection->price }}
+                                                    </td>
+                                                    <td id="mealtimeName{{ $collection->id }}">
+                                                        {{ $collection->mealtime->name_en }}
+                                                    </td>
+                                                    <td>{{ $collection->id }}
+                                                    </td>
                                                     <td class="text-center">
                                                         @if($collection->approved == 0)
                                                             <span class="label label-default">Pending Approval</span>
@@ -186,14 +199,17 @@
                                                             <span class="label label-danger">Rejected</span>
                                                         @endif
                                                         @if($collection->editingCollection)
-
-                                                            {{-- @if ($user->admin == 1)
-                                                                <button type="button" class="btn btn-info" id="view_edited" data-id="{{ $collection->editingCollection->id }}" data-toggle="modal"
-                                                                        data-target="#edited_collection">
-                                                                    View edited fields
-                                                                </button><br>
-                                                            @endif --}}
-                                                            <span class="label label-default">Pending Edit Approval</span>
+                                                            <div id="statusAndBtn{{ $collection->id }}">
+                                                                @if ($user->admin == 1)
+                                                                    <button type="button" class="btn btn-info" id="view_edited"
+                                                                            data-id="{{ $collection->id }}"
+                                                                            data-toggle="modal"
+                                                                            data-target="#edited_collection">
+                                                                        View edited fields
+                                                                    </button><br>
+                                                                @endif
+                                                                <span class="label label-default">Pending Edit Approval</span>
+                                                            </div>
                                                         @endif
                                                     </td>
                                                 </tr>
@@ -265,8 +281,6 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success" data-dismiss="modal" id="approve" style="margin-top: 10px;">Approve</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="reject" style="margin-top: 10px;">Reject</button>
                         <button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-top: 10px;">Close</button>
                     </div>
                 </div>

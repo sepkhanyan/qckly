@@ -641,7 +641,7 @@ class RestaurantsController extends Controller
             File::delete($restaurant_images);
             EditingRestaurant::where('restaurant_id', $id)->delete();
 
-            return redirect('/restaurants');
+            return response()->json([ 'success' => true ]);
         } else {
             return redirect()->back();
         }

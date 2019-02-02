@@ -1,5 +1,8 @@
 @extends('home', ['title' => 'Restaurants'])
 @section('content')
+
+    <script src="{{ asset('js/restaurants.js') }}"></script>
+
     <div id="page-wrapper">
         <div class="page-header">
             <div class="page-action">
