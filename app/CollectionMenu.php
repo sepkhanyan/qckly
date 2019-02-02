@@ -34,6 +34,10 @@ class CollectionMenu extends Model
         return $this->hasMany('App\CollectionItem', 'collection_menu_id');
     }
 
+    public function menu()
+    {
+        return $this->hasMany('App\Menu', 'category_id', 'menu_id')->whereDoesntHave('collectionItem');
+    }
 
     public function approvedCollectionItem()
     {

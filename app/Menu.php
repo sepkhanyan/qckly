@@ -34,6 +34,11 @@ class Menu extends Model
         return $this->belongsTo('App\MenuCategory', 'category_id');
     }
 
+    public function collectionMenu()
+    {
+        return $this->hasMany('App\CollectionMenu', 'category_id', 'menu_id');
+    }
+
     public function restaurant()
     {
         return $this->belongsTo('App\Restaurant', 'restaurant_id');

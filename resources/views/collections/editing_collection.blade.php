@@ -224,7 +224,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach($collection->collectionItem as $collectionItem)
+                                                @foreach($collection->approvedCollectionItem as $collectionItem)
                                                     <tr>
                                                         <td>
                                                             {{$collectionItem->quantity}}x
@@ -239,11 +239,11 @@
                                                 <tr>
                                                     <th>Menu</th>
                                                     <th>Menu Min/Max Quantity</th>
-                                                    <th>Items(Id/Name - Price)</th>
+                                                    <th>Item(Name - Price)</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach($collection->collectionMenu as $menu)
+                                                @foreach($collection->approvedCollectionMenu as $menu)
                                                     <tr>
                                                         <td>
                                                             <h3>{{ $menu->category->name_en }}</h3>
@@ -254,7 +254,7 @@
                                                             @endif
                                                         </td>
                                                         <td>
-                                                            @foreach($menu->collectionItem->sortBy('collection_menu_id') as $collectionItem)
+                                                            @foreach($menu->approvedCollectionItem->sortBy('collection_menu_id') as $collectionItem)
                                                                 <div>
                                                                     <span style="font-size: medium">{{ $collectionItem->menu->name_en }} </span>
                                                                     @if($collection->category_id != 1)
