@@ -375,54 +375,54 @@ class CollectionsController extends Controller
 
         }
 
-        if ($user->admin == 1 && $collection->editingCollection !== null) {
-            $editingCollection = $collection->editingCollection;
-            $restaurant = Restaurant::where('id', $collection->restaurant_id)->first();
-            $collection_menus = CollectionMenu::where('collection_id', $collection->id)->with(['collectionItem' => function ($query) use ($collection) {
-                $query->where('collection_id', $collection->id);
-            }])->whereHas('collectionItem', function ($q) use ($collection) {
-                $q->where('collection_id', $collection->id);
-            })->get();
-            $editingCollectionMenus = EditingCollectionMenu::where('editing_collection_id', $editingCollection->id)->with(['editingCollectionItem' => function ($query) use ($editingCollection) {
-                $query->where('editing_collection_id', $editingCollection->id);
-            }])->whereHas('editingCollectionItem', function ($q) use ($editingCollection) {
-                $q->where('editing_collection_id', $editingCollection->id);
-            })->get();
-            $menu_categories = MenuCategory::where('restaurant_id', $restaurant->id)->where('approved', 1)->where('deleted', 0)->whereHas('menu', function ($query) {
-                $query->where('approved', 1)->where('deleted', 0);
-            })->with(['menu' => function ($q) {
-                $q->where('approved', 1)->where('deleted', 0);
-            }])->get();
-            $menu_items = CollectionItem::where('collection_id', $collection->id)->get();
-            $editingMenuItems = EditingCollectionItem::where('editing_collection_id', $editingCollection->id)->get();
-            $categories = CollectionCategory::all();
-            $mealtimes = Mealtime::all();
-            $categoryRestaurants = CategoryRestaurant::where('restaurant_id', $restaurant->id)->get();
+        // if ($user->admin == 1 && $collection->editingCollection !== null) {
+        //     $editingCollection = $collection->editingCollection;
+        //     $restaurant = Restaurant::where('id', $collection->restaurant_id)->first();
+        //     $collection_menus = CollectionMenu::where('collection_id', $collection->id)->with(['collectionItem' => function ($query) use ($collection) {
+        //         $query->where('collection_id', $collection->id);
+        //     }])->whereHas('collectionItem', function ($q) use ($collection) {
+        //         $q->where('collection_id', $collection->id);
+        //     })->get();
+        //     $editingCollectionMenus = EditingCollectionMenu::where('editing_collection_id', $editingCollection->id)->with(['editingCollectionItem' => function ($query) use ($editingCollection) {
+        //         $query->where('editing_collection_id', $editingCollection->id);
+        //     }])->whereHas('editingCollectionItem', function ($q) use ($editingCollection) {
+        //         $q->where('editing_collection_id', $editingCollection->id);
+        //     })->get();
+        //     $menu_categories = MenuCategory::where('restaurant_id', $restaurant->id)->where('approved', 1)->where('deleted', 0)->whereHas('menu', function ($query) {
+        //         $query->where('approved', 1)->where('deleted', 0);
+        //     })->with(['menu' => function ($q) {
+        //         $q->where('approved', 1)->where('deleted', 0);
+        //     }])->get();
+        //     $menu_items = CollectionItem::where('collection_id', $collection->id)->get();
+        //     $editingMenuItems = EditingCollectionItem::where('editing_collection_id', $editingCollection->id)->get();
+        //     $categories = CollectionCategory::all();
+        //     $mealtimes = Mealtime::all();
+        //     $categoryRestaurants = CategoryRestaurant::where('restaurant_id', $restaurant->id)->get();
 
-            // $serviceTypes = $editingCollection->serviceType->where('deleted', 0);
+        //     // $serviceTypes = $editingCollection->serviceType->where('deleted', 0);
 
-            // $service = [];
-            // if (count($serviceTypes) > 0) {
-            //     foreach ($serviceTypes as $serviceType) {
-            //         $service[$serviceType->service_type_id] = [];
-            //     }
-            // }
+        //     // $service = [];
+        //     // if (count($serviceTypes) > 0) {
+        //     //     foreach ($serviceTypes as $serviceType) {
+        //     //         $service[$serviceType->service_type_id] = [];
+        //     //     }
+        //     // }
 
-            return view('collections.collection_edit_approve', [
-                'collection' => $collection,
-                'editingCollection' => $editingCollection,
-                'categories' => $categories,
-                // 'service' => collect($service),
-                'menu_categories' => $menu_categories,
-                'mealtimes' => $mealtimes,
-                'collection_menus' => $collection_menus,
-                'editingCollectionMenus' => $editingCollectionMenus,
-                'menu_items' => $menu_items,
-                'editingMenuItems' => $editingMenuItems,
-                'categoryRestaurants' => $categoryRestaurants,
-                'user' => $user
-            ]);
-        }
+        //     return view('collections.collection_edit_approve', [
+        //         'collection' => $collection,
+        //         'editingCollection' => $editingCollection,
+        //         'categories' => $categories,
+        //         // 'service' => collect($service),
+        //         'menu_categories' => $menu_categories,
+        //         'mealtimes' => $mealtimes,
+        //         'collection_menus' => $collection_menus,
+        //         'editingCollectionMenus' => $editingCollectionMenus,
+        //         'menu_items' => $menu_items,
+        //         'editingMenuItems' => $editingMenuItems,
+        //         'categoryRestaurants' => $categoryRestaurants,
+        //         'user' => $user
+        //     ]);
+        // }
 
         $mealtimes = Mealtime::all();
         $categoryRestaurants = CategoryRestaurant::where('restaurant_id', $restaurant->id)->get();
