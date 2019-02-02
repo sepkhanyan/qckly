@@ -55,7 +55,7 @@ class MenusController extends Controller
                 $categories = MenuCategory::where('restaurant_id', $selectedRestaurant->id)->where('deleted', 0)->where('approved', 1)->get();
             }
 
-        }elseif ($user->admin == 2) {
+        } elseif ($user->admin == 2) {
 
             $menus = Menu::where('restaurant_id', $user->restaurant_id)->where('deleted', 0)->with('editingMenu');
 
@@ -137,7 +137,7 @@ class MenusController extends Controller
         $menu->price = $request->input('price');
         $menu->status = $request->input('status');
         $menu->famous = $request->input('famous');
-        if($user->admin == 1){
+        if ($user->admin == 1) {
             $menu->approved = 1;
         }
         $menu->save();
@@ -155,10 +155,10 @@ class MenusController extends Controller
     public function approve($id)
     {
         $user = Auth::user();
-        if($user->admin ==1){
+        if ($user->admin == 1) {
             Menu::where('id', $id)->update(['approved' => 1]);
             return redirect()->back();
-        }else{
+        } else {
             return redirect()->back();
         }
     }
@@ -166,10 +166,10 @@ class MenusController extends Controller
     public function reject($id)
     {
         $user = Auth::user();
-        if($user->admin ==1){
+        if ($user->admin == 1) {
             Menu::where('id', $id)->update(['approved' => 2]);
             return redirect()->back();
-        }else{
+        } else {
             return redirect()->back();
         }
     }
@@ -190,7 +190,7 @@ class MenusController extends Controller
                 return redirect()->back();
             }
         }
-        if($user->admin == 1 && $menu->editingMenu !== null){
+        if ($user->admin == 1 && $menu->editingMenu !== null) {
             $editingMenu = $menu->editingMenu;
             return view('menus.menu_edit_approve', [
                 'menu' => $menu,
@@ -221,9 +221,9 @@ class MenusController extends Controller
             $menu = Menu::where('id', $id)->where('restaurant_id', $user->restaurant_id)->first();
             if (!$menu) {
                 return redirect()->back();
-            }else{
+            } else {
                 $oldEditingMenu = EditingMenu::where('menu_id', $id)->first();
-                if($oldEditingMenu){
+                if ($oldEditingMenu) {
                     if ($oldEditingMenu->image) {
                         File::delete(public_path('images/' . $oldEditingMenu->image));
                     }
@@ -247,7 +247,7 @@ class MenusController extends Controller
                 }
                 $editingMenu->save();
             }
-        }elseif ($user->admin == 1){
+        } elseif ($user->admin == 1) {
             $menu->name_en = $request->input('name_en');
             $menu->description_en = $request->input('description_en');
             $menu->name_ar = $request->input('name_ar');
@@ -278,14 +278,14 @@ class MenusController extends Controller
         $status = $request->input('status');
         $user = Auth::user();
         if ($user->admin == 2) {
-            $menu  = Menu::where('id', $id)->where('restaurant_id', $user->restaurant_id)->first();
+            $menu = Menu::where('id', $id)->where('restaurant_id', $user->restaurant_id)->first();
             if ($menu) {
                 Menu::where('id', $id)->update(['status' => $status]);
             } else {
                 return redirect()->back();
             }
         } else {
-           Menu::where('id', $id)->update(['status' => $status]);
+            Menu::where('id', $id)->update(['status' => $status]);
         }
         return redirect()->back();
 
@@ -294,7 +294,7 @@ class MenusController extends Controller
     public function editApprove(MenuRequest $request, $id)
     {
         $user = Auth::user();
-        if($user->admin ==1){
+        if ($user->admin == 1) {
             $restaurant_id = $request->input('restaurant');
             $menu = Menu::find($id);
             $editingMenu = EditingMenu::where('menu_id', $id)->first();
@@ -315,7 +315,7 @@ class MenusController extends Controller
             $menu->save();
             EditingMenu::where('menu_id', $menu->id)->delete();
             return redirect('/menus/' . $restaurant_id);
-        }else{
+        } else {
             return redirect()->back();
         }
     }
@@ -323,17 +323,17 @@ class MenusController extends Controller
     public function editReject($id)
     {
         $user = Auth::user();
-        if($user->admin ==1){
+        if ($user->admin == 1) {
             $editingMenus = EditingMenu::where('menu_id', $id)->get();
             $menu = Menu::find($id);
             $menu_images = [];
-            foreach ($editingMenus as $editingMenu){
+            foreach ($editingMenus as $editingMenu) {
                 $menu_images[] = public_path('images/' . $editingMenu->image);
             }
             File::delete($menu_images);
             EditingMenu::where('menu_id', $id)->delete();
             return redirect('/menus/' . $menu->restaurant_id);
-        }else{
+        } else {
             return redirect()->back();
         }
     }
@@ -350,9 +350,9 @@ class MenusController extends Controller
         $user = Auth::user();
         $menu = Menu::where('id', $id)->first();
         if ($user->admin == 2) {
-            if($menu->restaurant_id == $user->restaurant_id){
+            if ($menu->restaurant_id == $user->restaurant_id) {
                 Menu::whereIn('id', $id)->update(['deleted' => 1]);
-            }else{
+            } else {
                 return redirect()->back();
             }
         } else {

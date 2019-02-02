@@ -643,9 +643,7 @@ class UserCartsController extends Controller
         } else {
             $collection_type = $DataRequests['collection_category_id'];
             $collection_id = $DataRequests['collection_id'];
-            $collection = Collection::where('id', $collection_id)->with(['approvedCollectionMenu.approvedCollectionItem', 'approvedCollectionItem','approvedCollectionMenu.category','approvedCollectionMenu.approvedCollectionItem.menu', 'unavailabilityHour', 'mealtime', 'serviceType' => function ($x) {
-                $x->where('deleted', 0);
-            }])->first();
+            $collection = Collection::where('id', $collection_id)->where('category_id', $collection_type)->with(['approvedCollectionMenu.approvedCollectionItem', 'approvedCollectionItem','approvedCollectionMenu.category','approvedCollectionMenu.approvedCollectionItem.menu', 'unavailabilityHour', 'mealtime', 'serviceType'])->first();
             if ($collection) {
                 if ($collection->female_caterer_available == 1) {
                     $female_caterer_available = true;
@@ -696,7 +694,7 @@ class UserCartsController extends Controller
                         if ($collection_type == 1) {
                             $items = [];
                             $menu = [];
-                            foreach ($collection->collectionItem as $collection_item) {
+                            foreach ($collection->approvedCollectionItem as $collection_item) {
                                 if ($lang == 'ar') {
                                     $foodlist [] = $collection_item->menu->name_ar;
                                     $item_name = $collection_item->menu->name_ar;
@@ -731,13 +729,13 @@ class UserCartsController extends Controller
                             $menu_max_qty = -1;
                             $menu = [];
 
-                            foreach ($collection->collectionMenu as $collectionMenu) {
+                            foreach ($collection->approvedCollectionMenu as $collectionMenu) {
                                 $items = [];
                                 if ($collection->category_id != 4 && $collection->category_id != 1) {
                                     $menu_min_qty = $collectionMenu->min_qty;
                                     $menu_max_qty = $collectionMenu->max_qty;
                                 }
-                                foreach ($collectionMenu->collectionItem as $collection_item) {
+                                foreach ($collectionMenu->approvedCollectionItem as $collection_item) {
                                     if ($lang == 'ar') {
                                         $foodlist [] = $collection_item->menu->name_ar;
                                         $item_name = $collection_item->menu->name_ar;

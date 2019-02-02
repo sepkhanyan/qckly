@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+
 class Restaurant extends Model
 {
     protected $table = 'restaurants';
@@ -51,6 +52,11 @@ class Restaurant extends Model
             'mealtime',
             'serviceType'
         ]);
+    }
+
+    public function approvedMenu()
+    {
+        return $this->hasMany('App\Menu', 'restaurant_id')->where('approved', 1)->where('deleted', 0);
     }
 
     public function orderCollection()

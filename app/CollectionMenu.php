@@ -34,10 +34,6 @@ class CollectionMenu extends Model
         return $this->hasMany('App\CollectionItem', 'collection_menu_id');
     }
 
-    public function approvedCollection()
-    {
-        return $this->belongsTo('App\Collection', 'collection_id');
-    }
 
     public function approvedCollectionItem()
     {

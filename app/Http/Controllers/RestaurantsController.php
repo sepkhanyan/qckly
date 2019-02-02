@@ -698,7 +698,7 @@ class RestaurantsController extends Controller
             $editedRestaurant = EditingRestaurant::with('editingRestaurantArea', 'editingCategoryRestaurant')->where('restaurant_id', $restaurant->id)->first();
 
             $newRestaurant = $editedRestaurant->toArray();
-            $newRestaurant = array_except($newRestaurant, [ 'id', 'restaurant_id', 'created_at', 'updated_at', 'editing_restaurant_area', 'editing_category_restaurant' ]);
+            $newRestaurant = array_except($newRestaurant, ['id', 'restaurant_id', 'created_at', 'updated_at', 'editing_restaurant_area', 'editing_category_restaurant']);
 
             if (is_null($newRestaurant['image'])) {
 
@@ -732,11 +732,11 @@ class RestaurantsController extends Controller
             ];
 
             $html = view('restaurants.editing_restaurant', $data)->render();
-            return response()->json([ 'success' => true, 'html' => $html ]);
+            return response()->json(['success' => true, 'html' => $html]);
 
         } else {
 
-            return response()->json([ 'success' => false ]);
+            return response()->json(['success' => false]);
         }
     }
 
@@ -916,29 +916,27 @@ class RestaurantsController extends Controller
                 'error_details' => $validator->messages()));
         } else {
             $id = $DataRequests['area_id'];
-            $restaurants = Restaurant::where('deleted', 0)->where('active', 1)->
-            whereHas('restaurantArea', function ($q) use ($id) {
-                $q->where('area_id', $id);
-            })
-                ->with(['menu' => function ($query) {
-                    $query->where('approved', 1)->where('deleted', 0);
-                }], ['collection' => function ($query) {
-                    $query->where('approved', 1)->where('deleted', 0);
-                }], 'workingHour', 'categoryRestaurant', 'review');
 
 
             if (isset($DataRequests['category_id'])) {
                 $category = $DataRequests['category_id'];
-                $restaurants = $restaurants->whereHas('categoryRestaurant', function ($query) use ($category) {
-                    $query->where('category_id', $category);
-                })->with(['collection' => function ($query) use ($category) {
-                    $query->where('approved', 1)->where('deleted', 0)->whereHas('serviceType', function ($x) use ($category) {
-                        $x->where('deleted', 0)->where('service_type_id', $category);
+
+                $restaurants = Restaurant::where('deleted', 0)->where('active', 1)->
+                whereHas('restaurantArea', function ($q) use ($id) {
+                    $q->where('area_id', $id);
+                })->with(['workingHour', 'categoryRestaurant', 'review', 'approvedMenu', 'approvedCollection' => function ($query) use ($category) {
+                    $query->whereHas('serviceType', function ($x) use ($category) {
+                        $x->where('service_type_id', $category);
                     });
-                }]);
+                }] )->paginate(20);
+
+            }else{
+                $restaurants = Restaurant::where('deleted', 0)->where('active', 1)->
+                whereHas('restaurantArea', function ($query) use ($id) {
+                    $query->where('area_id', $id);
+                })->with(['workingHour', 'categoryRestaurant', 'review', 'approvedMenu', 'approvedCollection'] )->paginate(20);
             }
 
-            $restaurants = $restaurants->paginate(20);
 
             if (count($restaurants) > 0) {
                 foreach ($restaurants as $restaurant) {
@@ -966,7 +964,7 @@ class RestaurantsController extends Controller
 
                     $famous = null;
                     $famous = [];
-                    foreach ($restaurant->menu as $menu) {
+                    foreach ($restaurant->approvedMenu as $menu) {
 
                         if ($menu->famous == 1) {
                             $image = url('/') . '/images/' . $menu->image;
@@ -1037,7 +1035,7 @@ class RestaurantsController extends Controller
                     if ($working->type == 'flexible') {
                         $availability_status_id = 3;
                     }
-                    $notice = $restaurant->collection->min('notice_period');
+                    $notice = $restaurant->approvedCollection->min('notice_period');
 
                     $arr [] = [
                         'restaurant_id' => $restaurant->id,
@@ -1173,41 +1171,18 @@ class RestaurantsController extends Controller
                 'error_details' => $validator->messages()));
         } else {
             $restaurant_id = $DataRequests['restaurant_id'];
-            $restaurant = Restaurant::where('id', $restaurant_id)->where('active', 1)->where('deleted', 0)->with(['approvedCollection', 'workingHour', 'menu']);
-//            dd($restaurant);
-//            $restaurant = Restaurant::where('id', $restaurant_id)->where('active', 1)->where('deleted', 0)
-//                ->with(['collection' => function ($query) {
-//                    $query->where('approved', 1)->where('deleted', 0)->with(['collectionMenu' => function ($x) {
-//                        $x->where('status', 1)->with(['collectionItem' => function ($q) {
-//                            $q->where('status',1);
-//                        }]);
-//                    }])->with(['collectionItem' => function ($q) {
-//                        $q->where('status',1);
-//                    }]);
-//                }], ['menu' => function ($query) {
-//                    $query->where('approved', 1)->where('deleted', 0);
-//                }], [
-//
-//                    'collection.unavailabilityHour',
-//                    'collection.category',
-//                    'collection.mealtime',
-//                    'collection.serviceType'
-//                ]);
 
-//
-//            if (isset($DataRequests['category_id'])) {
-//                $category_id = $DataRequests['category_id'];
-//
-//                $restaurant = $restaurant->with(['collection' => function ($query) use ($category_id) {
-//                    $query->whereHas('serviceType', function ($q) use ($category_id) {
-//                        $q->where('service_type_id', $category_id);
-//                    });
-//                }]);
-//
-//
-//            }
+            if (isset($DataRequests['category_id'])) {
+                $category_id = $DataRequests['category_id'];
 
-            $restaurant = $restaurant->first();
+                $restaurant = Restaurant::where('id', $restaurant_id)->where('active', 1)->where('deleted', 0)->with(['workingHour', 'menu', 'approvedCollection' => function ($query) use ($category_id) {
+                    $query->whereHas('serviceType', function ($q) use ($category_id) {
+                        $q->where('service_type_id', $category_id);
+                    });
+                }])->first();
+            } else {
+                $restaurant = Restaurant::where('id', $restaurant_id)->where('active', 1)->where('deleted', 0)->with(['approvedCollection', 'workingHour', 'menu'])->first();
+            }
 
             if ($restaurant) {
 
