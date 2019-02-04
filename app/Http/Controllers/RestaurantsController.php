@@ -1200,9 +1200,9 @@ class RestaurantsController extends Controller
                         }
                         $foodlist = [];
                         $foodlist_images = [];
-//                        $setup = '';
-//                        $max = '';
-//                        $requirement = '';
+                        $setup = '';
+                        $max = '';
+                        $requirement = '';
                         $max_persons = -1;
                         $min_serve = -1;
                         $max_serve = -1;

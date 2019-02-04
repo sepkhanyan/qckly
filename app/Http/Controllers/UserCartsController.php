@@ -672,9 +672,9 @@ class UserCartsController extends Controller
                             'status_code' => 200,
                             'message' => \Lang::get('message.collectionAvailabilityChanged', ['collection_name' => $collection_name])));
                     } else {
-//                        $setup = '';
-//                        $max = '';
-//                        $requirement = '';
+                        $setup = '';
+                        $max = '';
+                        $requirement = '';
                         $max_persons = -1;
                         $min_serve = -1;
                         $max_serve = -1;
