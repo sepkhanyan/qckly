@@ -24,7 +24,6 @@ use Carbon\Carbon;
 use App\Events\NewMessage;
 use Illuminate\Http\Request;
 
-// use App\Jobs\SaveHistoryForCompleteOrderApi;
 use App\Jobs\SendEmailAndSMSAfterCompleteOrder;
 
 class OrdersController extends Controller
@@ -699,8 +698,6 @@ class OrdersController extends Controller
                         OrderRestaurant::insert($orderRestaurantData);
 
                         $cart->update([ 'completed' => 1 ]);
-
-                        // SaveHistoryForCompleteOrderApi::dispatch($user_id, $cart_id, $order->id);
 
                         // SendEmailAndSMSAfterCompleteOrder::dispatch($restaurants);
 

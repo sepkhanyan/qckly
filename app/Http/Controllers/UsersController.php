@@ -157,93 +157,104 @@ class UsersController extends Controller
 
     public function login(Request $request)
     {
-//        \Log::info($request->all());
+        // \Log::info($request->all());
         $lang = $request->header('Accept-Language');
+
         $validator = \Validator::make($request->all(), []);
+
         if ($lang == 'ar') {
             $validator->getTranslator()->setLocale('ar');
         }
+
         $validator = \Validator::make($request->all(), [
             'country_code' => 'required',
             'mobile_number' => 'required|numeric|digits:8',
         ]);
+
         if ($validator->fails()) {
-            return response()->json(array('success' => 0, 'status_code' => 400,
+
+            return response()->json([
+                'success' => 0,
+                'status_code' => 400,
                 'message' => 'Invalid inputs',
-                'error_details' => $validator->messages()));
+                'error_details' => $validator->messages()
+            ]);
+
         } else {
+
             $mobile = $request->input('mobile_number');
             $country_code = $request->input('country_code');
-//            if ($mobile == '76524342' || $mobile == '41052196' || $mobile == '11004527' || $mobile == '98765432' || $mobile == '16262777'||$mobile == '63112689' ) {
-//                return response()->json(['success' => 0,
-//                    'status_code' => 200,
-//                    'message' => \Lang::get('message.otpSent')
-//                ]);
-//            }
-            $client = User::where('mobile_number', $mobile)
-                ->where('group_id', 0)
-                ->first();
-            $standardNumSets = array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
-            $devanagariNumSets = array("٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩");
+
+            $standardNumSets = [ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" ];
+            $devanagariNumSets = [ "٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩" ];
+
             $mobile = str_replace($devanagariNumSets, $standardNumSets, $mobile);
-            // $randomSmsValue = $this->AccessSms($mobile);
-            // $device_id = $request->get('userMacAddress');
-            // $device = $this->getSmsCount($device_id);
-            if ($client) {
-//                $random_val = rand(1500, 5000);
+            $client = User::where('mobile_number', $mobile)->where('group_id', 0)->first();
+
+            $activation_code = rand(1000, 9999);
+
+            if (!is_null($client)) {
+
                 $date = Carbon::now()->format('Y-m-d');
-                $random_val = 1234;
-                $client->otp = $random_val;
-//                $client->sms_sended_date = Carbon::now()->format('Y-m-d');
+                $client->otp = $activation_code;
                 $client->save();
-                // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=Your%20Syaanh%20code%20is%20:%20$random_val&destination=00974$mobile&source=97772&mask=Syaanh";
-//                file($url);
-                return response()->json(['success' => 1,
+
+                // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=Your%20Qckly%20code%20is%20:%20$activation_code&destination=974$mobile&source=97772&mask=Qckly";
+
+                // file($url);
+
+                return response()->json([
+                    'success' => 1,
                     'status_code' => 200,
                     'message' => \Lang::get('message.otpSent'),
-                    'otp' => $random_val
+                    'otp' => $activation_code
                 ]);
             } else {
+
                 $validator = \Validator::make($request->all(), [
                     'country_code' => 'required',
                     'mobile_number' => 'required|numeric|digits:8'
                 ]);
+
                 if ($validator->fails()) {
-                    return response()->json(array('success' => 0, 'status_code' => 400,
+
+                    return response()->json([
+                        'success' => 0,
+                        'status_code' => 400,
                         'message' => 'Invalid inputs',
-                        'error_details' => $validator->messages()));
+                        'error_details' => $validator->messages()
+                    ]);
+
                 } else {
-//                    try{
+
                     $mobile = $request->input('mobile_number');
                     $country_code = $request->input('country_code');
-//                        $random_val = rand(1500, 5000);
-                    $random_val = 1234;
                     $date = Carbon::now();
+
                     $u_id = User::create(
                         [
                             'country_code' => $country_code,
                             'mobile_number' => $mobile,
-                            'otp' => $random_val,
+                            'otp' => $activation_code,
                             'lang' => $lang,
                             'username' => '',
                         ]
                     );
+
                     $date = Carbon::now()->format('Y-m-d');
-                    // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=Your%20Syaanh%20code%20is%20:%20$random_val&destination=00974$mobile&source=97772&mask=Syaanh";
-//                        file($url);
-//                    }catch(\Exception $e){
-//
-//                        return response()->json(['success' => 0,
-//                            'status_code' => 200,
-//                            'message' => \Lang::get('message.otpSent'),]);
-//
-//                    }
-                    /// here will send code
+
                     if ($u_id) {
-                        return response()->json(['success' => 1,
+
+                        // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=Your%20Qckly%20code%20is%20:%20$activation_code&destination=974$mobile&source=97772&mask=Qckly";
+
+                        // file($url);
+
+                        return response()->json([
+                            'success' => 1,
                             'status_code' => 200,
                             'message' => \Lang::get('message.otpSent'),
-                            'otp' => $random_val]);
+                            'otp' => $activation_code
+                        ]);
                     }
                 }
             }
@@ -283,7 +294,7 @@ class UsersController extends Controller
                     $token = md5(uniqid($user, true));
                 }
 
-//                if ($smsCode->group_id == 0) {
+               // if ($smsCode->group_id == 0) {
                 $update = User::where('otp', $otp)
                     ->where('mobile_number', $mobile)
                     ->first();
@@ -304,13 +315,13 @@ class UsersController extends Controller
                             'mobile_number' => $update->mobile_number
                         ],
                         'api_token' => 'Bearer ' . $token));
-//                } else {
-//                    return response()->json([
-//                        'success' => 1,
-//                        'status_code' => 400,
-//                        'message' => \Lang::get('message.errorSms')
-//                    ]);
-//                }
+               // } else {
+               //     return response()->json([
+               //         'success' => 1,
+               //         'status_code' => 400,
+               //         'message' => \Lang::get('message.errorSms')
+               //     ]);
+               // }
             } else {
                 return response()->json([
                     'success' => 0,
@@ -323,40 +334,54 @@ class UsersController extends Controller
 
     public function resendOtp(Request $request)
     {
-//        \Log::info($request->all());
+        // \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
+
         if ($lang == 'ar') {
             $validator->getTranslator()->setLocale('ar');
         }
+
         $validator = \Validator::make($request->all(), [
             'country_code' => 'required',
             'mobile_number' => 'required|numeric|digits:8',
         ]);
+
         if ($validator->fails()) {
-            return response()->json(array('success' => 0, 'status_code' => 400,
+
+            return response()->json([
+                'success' => 0,
+                'status_code' => 400,
                 'message' => \Lang::get('message.invalid_inputs'),
-                'error_details' => $validator->messages()));
+                'error_details' => $validator->messages()
+            ]);
+
         } else {
+
             $country_code = $request->input('country_code');
             $mobile = $request->input('mobile_number');
-            $client = User::where('mobile_number', $mobile)
-                ->where('group_id', 0)
-                ->first();
-            $standardNumSets = array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
-            $devanagariNumSets = array("٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩");
+
+            $standardNumSets = [ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" ];
+            $devanagariNumSets = [ "٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩" ];
             $mobile = str_replace($devanagariNumSets, $standardNumSets, $mobile);
+
+            $client = User::where('mobile_number', $mobile)->where('group_id', 0)->first();
+
             if ($client) {
-                $random_val = rand(1500, 5000);
+
+                $activation_code = rand(1000, 9999);
                 $date = Carbon::now()->format('Y-m-d');
-                $client->otp = $random_val;
+                $client->otp = $activation_code;
                 $client->save();
-                // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=Your%20Syaanh%20code%20is%20:%20$random_val&destination=00974$mobile&source=97772&mask=Syaanh";
-//                file($url);
-                return response()->json(['success' => 1,
+
+                // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=Your%20Qckly%20code%20is%20:%20$activation_code&destination=974$mobile&source=97772&mask=Qckly";
+                // file($url);
+
+                return response()->json([
+                    'success' => 1,
                     'status_code' => 200,
                     'message' => \Lang::get('message.otpResent'),
-                    'otp' => $random_val
+                    'otp' => $activation_code
                 ]);
             }
         }
@@ -364,27 +389,39 @@ class UsersController extends Controller
 
     public function completeProfile(Request $request)
     {
-//        \Log::info($request->all());
+        // \Log::info($request->all());
         $lang = $request->header('Accept-Language');
         $validator = \Validator::make($request->all(), []);
+
         if ($lang == 'ar') {
             $validator->getTranslator()->setLocale('ar');
         }
+
         $req_auth = $request->header('Authorization');
         $user_id = User::getUserByToken($req_auth);
+
         if ($user_id) {
+
             $validator = \Validator::make($request->all(), [
                 'email' => 'required|email',
                 'username' => 'required|regex:/^[\s\w-]*$/'
             ]);
+
             if ($validator->fails()) {
-                return response()->json(array('success' => 0, 'status_code' => 400,
+
+                return response()->json([
+                    'success' => 0,
+                    'status_code' => 400,
                     'message' => \Lang::get('message.invalid_inputs'),
-                    'error_details' => $validator->messages()));
+                    'error_details' => $validator->messages()
+                ]);
+
             } else {
+
                 $user = User::find($user_id);
                 $user->username = $request->input('username');
                 $user->email = $request->input('email');
+
                 if ($request->hasFile('image')) {
                     if (isset($user->image)) {
                         File::delete(public_path('images/' . $user->image));
@@ -395,29 +432,33 @@ class UsersController extends Controller
                     $image->move($destinationPath, $name);
                     $user->image = $name;
                 }
+                
                 $user->save();
-                return response()->json(array(
+                
+                return response()->json([
                     'success' => 1,
-                    'status_code' => 200));
+                    'status_code' => 200
+                ]);
 
-//            $base64_str = $request->get('image');
-//            if( $base64_str ){
-//                $image = base64_decode($base64_str);
-//                $image_name = uniqid ().'-image.png';
-//                $path = public_path() . '/images/' . $image_name;
-//                file_put_contents($path, $image);
-//
-//            }else{
-//                $image_name= '';
-//            }
+                // $base64_str = $request->get('image');
+                // if ($base64_str) {
 
+                //     $image = base64_decode($base64_str);
+                //     $image_name = uniqid() . '-image.png';
+                //     $path = public_path() . '/images/' . $image_name;
+                //     file_put_contents($path, $image);
+                // } else {
 
+                //     $image_name = '';
+                // }
             }
         } else {
-            return response()->json(array(
+
+            return response()->json([
                 'success' => 0,
                 'status_code' => 200,
-                'message' => \Lang::get('message.loginError')));
+                'message' => \Lang::get('message.loginError')
+            ]);
         }
     }
 
