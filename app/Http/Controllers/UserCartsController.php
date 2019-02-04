@@ -675,6 +675,50 @@ class UserCartsController extends Controller
                         $setup = '';
                         $max = '';
                         $requirement = '';
+
+                        if($collection->setup_time > 0 ){
+
+                            $setup_hours = $collection->setup_time / 60;
+                            $setup_minutes = $collection->setup_time % 60;
+                            if ($setup_hours >= 1) {
+                                if ($setup_minutes > 0) {
+                                    $setup = floor($setup_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($setup_minutes) . ' ' . \Lang::get('message.minute');
+                                } else {
+                                    $setup = floor($setup_hours) . ' ' . \Lang::get('message.hour');
+                                }
+                            } else {
+                                $setup = floor($setup_minutes) . ' ' . \Lang::get('message.minute');
+                            }
+                        }else{
+                            $setup = 0;
+                        }
+
+                        if($collection->max_time > 0 ){
+
+                            $max_hours = $collection->max_time / 60;
+                            $max_minutes = $collection->max_time % 60;
+                            if ($max_hours >= 1) {
+                                if ($max_minutes > 0) {
+                                    $max = floor($max_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($max_minutes) . ' ' . \Lang::get('message.minute');
+                                } else {
+                                    $max = floor($max_hours) . ' ' . \Lang::get('message.hour');
+                                }
+                            } else {
+                                $max = floor($max_minutes) . ' ' . \Lang::get('message.minute');
+                            }
+                        }else{
+                            $max = 0;
+                        }
+
+                        if($collection->requirements_en != null && $collection->requirements_ar != null){
+
+                            if ($lang == 'ar') {
+                                $requirement = $collection->requirements_ar;
+                            } else {
+                                $requirement = $collection->requirements_en;
+                            }
+                        }
+
                         $max_persons = -1;
                         $min_serve = -1;
                         $max_serve = -1;
@@ -757,25 +801,6 @@ class UserCartsController extends Controller
 
                                     }
 
-                                    $setup_hours = $collection->setup_time / 60;
-                                    $setup_minutes = $collection->setup_time % 60;
-                                    if ($setup_minutes > 0) {
-                                        $setup = floor($setup_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($setup_minutes) . ' ' . \Lang::get('message.minute');
-                                    } else {
-                                        $setup = floor($setup_hours) . ' ' . \Lang::get('message.hour');
-                                    }
-                                    $max_hours = $collection->max_time / 60;
-                                    $max_minutes = $collection->max_time % 60;
-                                    if ($max_minutes > 0) {
-                                        $max = floor($max_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($max_minutes) . ' ' . \Lang::get('message.minute');
-                                    } else {
-                                        $max = floor($max_hours) . ' ' . \Lang::get('message.hour');
-                                    }
-                                    if ($lang == 'ar') {
-                                        $requirement = $collection->requirements_ar;
-                                    } else {
-                                        $requirement = $collection->requirements_en;
-                                    }
 
                                     if ($collection_item->menu->status == 1) {
                                         $status = true;
