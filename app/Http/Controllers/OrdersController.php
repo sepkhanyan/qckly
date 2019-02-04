@@ -163,18 +163,18 @@ class OrdersController extends Controller
                 $client = User::where('id', $order->user_id)->first();
                 if (!$client->lang) {
                     \App::setLocale("en");
-                    $restaurant_name = $restaurant->name_en;
+//                    $restaurant_name = $restaurant->name_en;
                 } else {
                     \App::setLocale($client->lang);
-                    if ($client->lang == 'ar') {
-                        $restaurant_name = $restaurant->name_ar;
-                    } else {
-                        $restaurant_name = $restaurant->name_en;
-                    }
+//                    if ($client->lang == 'ar') {
+//                        $restaurant_name = $restaurant->name_ar;
+//                    } else {
+//                        $restaurant_name = $restaurant->name_en;
+//                    }
                 }
                 $userId = $order->user_id;
                 $from = $user->id;
-                $msg = \Lang::get('message.orderCompleteStatus', ['restaurant_name' => $restaurant_name, 'order_id' => $order->id]);
+                $msg = \Lang::get('message.orderCompleteStatus', ['order_id' => $order->id]);
                 $order_id = $order->id;
                 $NotificationType = 4;
                 $notification = new NotificationsController();
