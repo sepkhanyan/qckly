@@ -30,6 +30,11 @@ class MenuCategory extends Model
         return $this->hasMany('App\Menu', 'category_id');
     }
 
+    public function approvedMenu()
+    {
+        return $this->hasMany('App\Menu', 'category_id')->where('approved',1);
+    }
+
 
     public function cartItem()
     {

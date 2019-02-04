@@ -360,8 +360,8 @@ class CollectionsController extends Controller
     public function edit($id)
     {
         $user = Auth::user();
-        $collection = Collection::with(['collectionMenu.collectionItem', 'collectionItem', 'collectionMenu.category', 'collectionMenu.menu'])->find($id);
-
+        $collection = Collection::with(['collectionMenu.collectionItem', 'collectionItem', 'collectionMenu', 'category'])->find($id);
+//        dd($collection->collectionMenu);
         if ($user->admin == 2) {
             if ($user->restaurant_id != $collection->restaurant_id) {
                 return redirect()->back();
@@ -373,8 +373,6 @@ class CollectionsController extends Controller
         $createdCollection = Collection::with(['approvedCollectionMenu.approvedCollectionItem','approvedCollectionItem.menu', 'category' ])->find($id);
 
         $restaurant = Restaurant::where('id', $collection->restaurant_id)->first();
-
-        $menuItems = Menu::where('restaurant_id', $restaurant->id)->doesntHave('collectionItem')->get();
 
 
 
@@ -433,7 +431,6 @@ class CollectionsController extends Controller
         return view('collections.collection_edit', [
             'collection' => $collection,
             'createdCollection' => $createdCollection,
-            'menuItems' => $menuItems,
             'mealtimes' => $mealtimes,
             'categoryRestaurants' => $categoryRestaurants,
             'user' => $user

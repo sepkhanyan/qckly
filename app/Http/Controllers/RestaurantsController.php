@@ -1200,9 +1200,9 @@ class RestaurantsController extends Controller
                         }
                         $foodlist = [];
                         $foodlist_images = [];
-                        $setup = '';
-                        $max = '';
-                        $requirement = '';
+//                        $setup = '';
+//                        $max = '';
+//                        $requirement = '';
                         $max_persons = -1;
                         $min_serve = -1;
                         $max_serve = -1;
@@ -1286,34 +1286,35 @@ class RestaurantsController extends Controller
                                         }
                                         $max_persons = $collection->persons_max_count;
 
-                                        $setup_hours = $collection->setup_time / 60;
-                                        $setup_minutes = $collection->setup_time % 60;
-                                        if ($setup_hours >= 1) {
-                                            if ($setup_minutes > 0) {
-                                                $setup = floor($setup_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($setup_minutes) . ' ' . \Lang::get('message.minute');
-                                            } else {
-                                                $setup = floor($setup_hours) . ' ' . \Lang::get('message.hour');
-                                            }
-                                        } else {
-                                            $setup = floor($setup_minutes) . ' ' . \Lang::get('message.minute');
-                                        }
-                                        $max_hours = $collection->max_time / 60;
-                                        $max_minutes = $collection->max_time % 60;
-                                        if ($max_hours >= 1) {
-                                            if ($max_minutes > 0) {
-                                                $max = floor($max_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($max_minutes) . ' ' . \Lang::get('message.minute');
-                                            } else {
-                                                $max = floor($max_hours) . ' ' . \Lang::get('message.hour');
-                                            }
-                                        } else {
-                                            $max = floor($max_minutes) . ' ' . \Lang::get('message.minute');
-                                        }
-                                        if ($lang == 'ar') {
-                                            $requirement = $collection->requirements_ar;
-                                        } else {
-                                            $requirement = $collection->requirements_en;
-                                        }
 
+                                    }
+
+                                    $setup_hours = $collection->setup_time / 60;
+                                    $setup_minutes = $collection->setup_time % 60;
+                                    if ($setup_hours >= 1) {
+                                        if ($setup_minutes > 0) {
+                                            $setup = floor($setup_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($setup_minutes) . ' ' . \Lang::get('message.minute');
+                                        } else {
+                                            $setup = floor($setup_hours) . ' ' . \Lang::get('message.hour');
+                                        }
+                                    } else {
+                                        $setup = floor($setup_minutes) . ' ' . \Lang::get('message.minute');
+                                    }
+                                    $max_hours = $collection->max_time / 60;
+                                    $max_minutes = $collection->max_time % 60;
+                                    if ($max_hours >= 1) {
+                                        if ($max_minutes > 0) {
+                                            $max = floor($max_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($max_minutes) . ' ' . \Lang::get('message.minute');
+                                        } else {
+                                            $max = floor($max_hours) . ' ' . \Lang::get('message.hour');
+                                        }
+                                    } else {
+                                        $max = floor($max_minutes) . ' ' . \Lang::get('message.minute');
+                                    }
+                                    if ($lang == 'ar') {
+                                        $requirement = $collection->requirements_ar;
+                                    } else {
+                                        $requirement = $collection->requirements_en;
                                     }
 
 

@@ -498,7 +498,7 @@
                                                     name="menu[{{$collectionMenu->menu_id}}][item][{{$collectionItem->item_id}}][id]">
                                          </span>
                                             </label>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-6">
                                                 <div class="control-group control-group-3">
                                                     <div class="btn-group btn-group-toggle btn-group-4"
                                                          data-toggle="buttons">
@@ -535,52 +535,6 @@
                                             </div>
                                         </div>
                                     @endforeach
-                                        @foreach($collectionMenu->menu as $menu)
-                                            <div class="form-group chooseItem{{$collectionMenu->menu_id}}"  style="display: block{{($collection->category_id == 1) ? 'block':''}}{{ (old('menu.' . $collectionMenu->menu_id . '.status') == '1') ? 'block' : '' }}">
-                                                <label for="" class="col-xs-4 control-label text-right">
-                                         <span class="text-right">
-                                          {{$menu->name_en}}
-                                             <input type="hidden" value="{{$menu->id}}"
-                                                    name="menu[{{$collectionMenu->menu_id}}][item][{{$menu->id}}][id]">
-                                         </span>
-                                                </label>
-                                                <div class="col-sm-4">
-                                                    <div class="control-group control-group-3">
-                                                        <div class="btn-group btn-group-toggle btn-group-4"
-                                                             data-toggle="buttons">
-                                                            <label class="btn btn-success {{(old('menu.' . $collectionMenu->menu_id . '.item.' . $menu->id . '.status') == '1') ? ' active' : '' }} activeLabel{{$collectionMenu->menu_id}}">
-                                                                <input type="hidden" value="0"
-                                                                       name="menu[{{$collectionMenu->menu_id}}][item][{{$menu->id}}][status]">
-                                                                <input type="checkbox"
-                                                                       name="menu[{{$collectionMenu->menu_id}}][item][{{$menu->id}}][status]"
-                                                                       value="1" {{ (old('menu.' . $collectionMenu->menu_id . '.item.' . $menu->id . '.status') == '1') ? 'checked' : '' }} class="checkedItem{{$collectionMenu->menu_id}}" id="item{{$menu->id}}" onchange="checkItem('{{$menu->id}}')">
-                                                                <i class="fa fa-check" aria-hidden="true"></i>
-                                                            </label>
-                                                        </div>
-                                                        @if($collection->category_id == 1)
-                                                            <div class="input-group" >
-                                                                <input style="display: none{{ (old('menu.' . $menuCategory->id . '.item.' . $menu->id . '.status') == '1') ? 'block' : '' }}" type="number"
-                                                                       name="menu[{{$collectionMenu->menu_id}}][item][{{$menu->id}}][qty]"
-                                                                       class="form-control  option{{$menu->id}}"
-                                                                       value="{{ old('menu.' . $collectionMenu->menu_id . '.item.' . $menu->id . '.qty') ?? 1 }}"/>
-                                                            </div>
-                                                        @elseif($collection->category_id == 2 || $collection->category_id == 3)
-                                                            <div class="btn-group btn-group-toggle btn-group-2 option{{$menu->id}} checkedOption{{$collectionMenu->menu_id}}" style="display: none{{ (old('menu.' . $collectionMenu->menu_id . '.item.' . $menu->id . '.status') == '1') ? 'block' : '' }}"
-                                                                 data-toggle="buttons">
-                                                                <label class="btn btn-success {{(old('menu.' . $collectionMenu->menu_id . '.item.' . $menu->id . '.is_mandatory') == '0') ? ' active' : '' }} activeLabel{{$collectionMenu->menu_id}}">
-                                                                    <input type="hidden" value="1"
-                                                                           name="menu[{{$collectionMenu->menu_id}}][item][{{$menu->id}}][is_mandatory]">
-                                                                    <input type="checkbox"
-                                                                           name="menu[{{$collectionMenu->menu_id}}][item][{{$menu->id}}][is_mandatory]"
-                                                                           value="0" {{ (old('menu.' . $collectionMenu->menu_id . '.item.' . $menu->id . '.is_mandatory') == '0') ? 'checked' : '' }}  class="checkedItem{{$collectionMenu->menu_id}}">
-                                                                    Optional
-                                                                </label>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endforeach
                                 @endforeach
                                     <div class="form-group">
                                         <label for="" class="col-sm-3 control-label"></label>

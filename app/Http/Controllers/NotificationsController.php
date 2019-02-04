@@ -229,7 +229,7 @@ class NotificationsController extends Controller
                     if($notification->notification_type == 2){
                         $restaurant_id = $notification->restaurant_id;
                     }
-                    if($notification->notification_type == 3){
+                    if($notification->notification_type == 3 || $notification->notification_type == 4){
                         $order_id = $notification->order_id;
                     }
                     if($notification->is_read == 1){

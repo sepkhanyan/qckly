@@ -84,7 +84,7 @@ class Collection extends Model
 
     public function collectionMenu()
     {
-        return $this->hasMany('App\CollectionMenu', 'collection_id');
+        return $this->hasMany('App\CollectionMenu', 'collection_id')->whereHas('approvedCategory');
     }
 
     public function approvedCollectionMenu()

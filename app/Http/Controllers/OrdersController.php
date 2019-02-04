@@ -153,30 +153,35 @@ class OrdersController extends Controller
             $restaurantOrder->status_id = 3;
             $restaurantOrder->save();
             $restaurantOrders = OrderRestaurant::where('order_id', $id)->where('status_id', '!=', 3)->get();
-            if (count($restaurantOrders) <= 0) {
+
+            if($restaurantOrders->isEmpty()){
+
                 $order = Order::where('id', $id)->first();
                 $order->status_id = 3;
                 $order->save();
-            }
-            $client = User::where('id', $order->user_id)->first();
-            if (!$client->lang) {
-                \App::setLocale("en");
-                $restaurant_name = $restaurant->name_en;
-            } else {
-                \App::setLocale($client->lang);
-                if ($client->lang == 'ar') {
-                    $restaurant_name = $restaurant->name_ar;
-                } else {
+
+                $client = User::where('id', $order->user_id)->first();
+                if (!$client->lang) {
+                    \App::setLocale("en");
                     $restaurant_name = $restaurant->name_en;
+                } else {
+                    \App::setLocale($client->lang);
+                    if ($client->lang == 'ar') {
+                        $restaurant_name = $restaurant->name_ar;
+                    } else {
+                        $restaurant_name = $restaurant->name_en;
+                    }
                 }
+                $userId = $order->user_id;
+                $from = $user->id;
+                $msg = \Lang::get('message.orderCompleteStatus', ['restaurant_name' => $restaurant_name, 'order_id' => $order->id]);
+                $order_id = $order->id;
+                $NotificationType = 4;
+                $notification = new NotificationsController();
+                $notification->sendNot($userId, $from, $msg, $order_id, $NotificationType);
+
             }
-            $userId = $order->user_id;
-            $from = $user->id;
-            $msg = \Lang::get('message.orderCompleteStatus', ['restaurant_name' => $restaurant_name, 'order_id' => $order->id]);
-            $order_id = $order->id;
-            $NotificationType = 4;
-            $notification = new NotificationsController();
-            $notification->sendNot($userId, $from, $msg, $order_id, $NotificationType);
+
 
         } else {
             return redirect()->back();

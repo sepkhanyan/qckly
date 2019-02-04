@@ -142,6 +142,26 @@ class MenusController extends Controller
         }
         $menu->save();
         if ($menu) {
+
+            $collections = Collection::where('restaurant_id', $restaurant_id)->get();
+
+            if(count($collections) > 0 ){
+//                $collectionMenus = CollectionMenu::where('menu_id', $menu->category_id)->get();
+                foreach($collections as $collection){
+
+                    $collection_menu = CollectionMenu::firstOrCreate(
+                        ['collection_id' => $collection->id, 'menu_id' => $menu->category_id],
+                        ['min_qty' => 1, 'max_qty' => 1]
+                    );
+
+
+                    $collection_item = CollectionItem::firstOrCreate(
+                        ['collection_id' => $collection->id, 'item_id' => $menu->id],
+                        ['collection_menu_id' => $collection_menu->id, 'quantity' => 1, 'is_mandatory' => 1 ]
+                    );
+
+                }
+            }
             return redirect('/menus/' . $restaurant_id);
         }
     }

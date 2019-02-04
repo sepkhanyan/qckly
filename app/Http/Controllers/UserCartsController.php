@@ -78,7 +78,7 @@ class UserCartsController extends Controller
                 if (isset($DataRequests['special_instruction'])) {
                     $special_instruction = $DataRequests['special_instruction'];
                 }
-                $collection = Collection::where('id', $collection_id)->where('deleted', 0)->first();
+                $collection = Collection::where('id', $collection_id)->where('deleted', 0)->with('approvedCollectionItem.menu')->first();
                 if (!$collection) {
                     return response()->json(array(
                         'success' => 0,
@@ -151,7 +151,7 @@ class UserCartsController extends Controller
                     } else {
                         $collection_price = $DataRequests['collection_price'];
                         $collection_quantity = $DataRequests['collection_quantity'];
-                        $collection = Collection::where('id', $collection_id)->first();
+
                         $cart_collection = UserCartCollection::where('cart_id', $cart->id)
                             ->where('collection_id', $collection_id)->first();
                         if (!$cart_collection) {
@@ -165,8 +165,8 @@ class UserCartsController extends Controller
                             $cart_collection->special_instruction = $special_instruction;
                             $cart_collection->service_type_id = $service;
                             $cart_collection->save();
-                            $collection_items = CollectionItem::where('collection_id', $collection_id)->with('menu')->get();
-                            foreach ($collection_items as $collection_item) {
+//                            $collection_items = CollectionItem::where('collection_id', $collection_id)->with('menu')->get();
+                            foreach ($collection->approvedCollectionItem as $collection_item) {
                                 $cart_item = new UserCartItem();
                                 $cart_item->menu_id = $collection_item->menu->category_id;
                                 $cart_item->item_id = $collection_item->menu->id;
@@ -672,9 +672,9 @@ class UserCartsController extends Controller
                             'status_code' => 200,
                             'message' => \Lang::get('message.collectionAvailabilityChanged', ['collection_name' => $collection_name])));
                     } else {
-                        $setup = '';
-                        $max = '';
-                        $requirement = '';
+//                        $setup = '';
+//                        $max = '';
+//                        $requirement = '';
                         $max_persons = -1;
                         $min_serve = -1;
                         $max_serve = -1;
@@ -755,27 +755,27 @@ class UserCartsController extends Controller
                                         }
                                         $max_persons = $collection->persons_max_count;
 
-                                        $setup_hours = $collection->setup_time / 60;
-                                        $setup_minutes = $collection->setup_time % 60;
-                                        if ($setup_minutes > 0) {
-                                            $setup = floor($setup_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($setup_minutes) . ' ' . \Lang::get('message.minute');
-                                        } else {
-                                            $setup = floor($setup_hours) . ' ' . \Lang::get('message.hour');
-                                        }
-                                        $max_hours = $collection->max_time / 60;
-                                        $max_minutes = $collection->max_time % 60;
-                                        if ($max_minutes > 0) {
-                                            $max = floor($max_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($max_minutes) . ' ' . \Lang::get('message.minute');
-                                        } else {
-                                            $max = floor($max_hours) . ' ' . \Lang::get('message.hour');
-                                        }
-                                        if ($lang == 'ar') {
-                                            $requirement = $collection->requirements_ar;
-                                        } else {
-                                            $requirement = $collection->requirements_en;
-                                        }
                                     }
 
+                                    $setup_hours = $collection->setup_time / 60;
+                                    $setup_minutes = $collection->setup_time % 60;
+                                    if ($setup_minutes > 0) {
+                                        $setup = floor($setup_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($setup_minutes) . ' ' . \Lang::get('message.minute');
+                                    } else {
+                                        $setup = floor($setup_hours) . ' ' . \Lang::get('message.hour');
+                                    }
+                                    $max_hours = $collection->max_time / 60;
+                                    $max_minutes = $collection->max_time % 60;
+                                    if ($max_minutes > 0) {
+                                        $max = floor($max_hours) . ' ' . \Lang::get('message.hour') . ' ' . ($max_minutes) . ' ' . \Lang::get('message.minute');
+                                    } else {
+                                        $max = floor($max_hours) . ' ' . \Lang::get('message.hour');
+                                    }
+                                    if ($lang == 'ar') {
+                                        $requirement = $collection->requirements_ar;
+                                    } else {
+                                        $requirement = $collection->requirements_en;
+                                    }
 
                                     if ($collection_item->menu->status == 1) {
                                         $status = true;

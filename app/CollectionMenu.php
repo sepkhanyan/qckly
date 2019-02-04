@@ -29,6 +29,11 @@ class CollectionMenu extends Model
         return $this->belongsTo('App\MenuCategory', 'menu_id');
     }
 
+    public function approvedCategory()
+    {
+        return $this->belongsTo('App\MenuCategory', 'menu_id')->where('approved', 1)->whereHas('approvedMenu');
+    }
+
     public function collectionItem()
     {
         return $this->hasMany('App\CollectionItem', 'collection_menu_id');

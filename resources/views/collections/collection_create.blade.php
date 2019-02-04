@@ -371,7 +371,7 @@
                                                     name="menu[{{$menuCategory->id}}][item][{{$menu->id}}][id]">
                                          </span>
                                         </label>
-                                        <div class="col-sm-4">
+                                        <div class="col-sm-5">
                                             <div class="control-group control-group-3">
                                                 <div class="btn-group btn-group-toggle btn-group-4"
                                                      data-toggle="buttons">

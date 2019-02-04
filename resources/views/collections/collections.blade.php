@@ -107,6 +107,7 @@
                                             <input type="checkbox"
                                                    onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">
                                         </th>
+                                        <th>Availability</th>
                                         <th>Collection Name</th>
                                         <th>Description</th>
                                         <th>Collection Category</th>
@@ -128,6 +129,24 @@
                                                         <a class="btn btn-edit" title="" href="{{ url('/collection/edit/' . $collection->id) }}">
                                                             <i class="fa fa-pencil"></i>
                                                         </a>&nbsp;&nbsp;
+
+                                                        @if($user->admin == 1)
+                                                            @if($collection->approved == 0)
+                                                                <a class="btn btn-edit" title=""
+                                                                   href="{{ url('collection/approve/' . $collection->id) }}">
+                                                                    <i class="fa fa-check"></i>
+                                                                    Approve
+                                                                </a>&nbsp;&nbsp;
+                                                                <a class="btn btn-danger" title=""
+                                                                   href="{{ url('collection/reject/' . $collection->id) }}">
+                                                                    <i class="fa fa-ban"></i>
+                                                                    Reject
+                                                                </a>&nbsp;
+                                                            @endif
+                                                        @endif
+
+                                                    </td>
+                                                    <td class="action">
 
                                                         @if($collection->is_available == 1)
                                                             @if($collection->unavailabilityHour->isEmpty())
@@ -155,21 +174,6 @@
                                                                 Not Available
                                                                 <i class="fa fa-clock-o"></i>
                                                             </a>
-                                                        @endif
-
-                                                        @if($user->admin == 1)
-                                                            @if($collection->approved == 0)
-                                                                <a class="btn btn-edit" title=""
-                                                                   href="{{ url('collection/approve/' . $collection->id) }}">
-                                                                    <i class="fa fa-check"></i>
-                                                                    Approve
-                                                                </a>&nbsp;&nbsp;
-                                                                <a class="btn btn-danger" title=""
-                                                                   href="{{ url('collection/reject/' . $collection->id) }}">
-                                                                    <i class="fa fa-ban"></i>
-                                                                    Reject
-                                                                </a>&nbsp;
-                                                            @endif
                                                         @endif
                                                     </td>
                                                     <td id="name{{ $collection->id }}">
