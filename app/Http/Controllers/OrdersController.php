@@ -80,17 +80,17 @@ class OrdersController extends Controller
 
         $user = Auth::user();
         if ($user->admin == 2) {
+            $order = Order::where('id', $id)->first();
             $restaurant = Restaurant::where('id', $user->restaurant_id)->first();
-            $restaurantOrder = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $user->restaurant_id)->where('status_id', 1)->first();
-            if (!$restaurantOrder) {
+            $providerOrder = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $user->restaurant_id)->where('status_id', 1)->first();
+            if (!$providerOrder) {
                 return redirect()->back();
             }
 
-            $restaurantOrder->status_id = 2;
-            $restaurantOrder->save();
-            $restaurantOrders = OrderRestaurant::where('order_id', $id)->where('status_id', '!=', 2)->get();
-            $order = Order::where('id', $id)->first();
-            if (count($restaurantOrders) <= 0) {
+            $providerOrder->status_id = 2;
+            $providerOrder->save();
+            $restaurantOrders = OrderRestaurant::where('order_id', $id)->where('status_id', 1)->get();
+            if ($restaurantOrders->isEmpty()) {
                 $order->status_id = 2;
                 $order->save();
             }
@@ -144,18 +144,18 @@ class OrdersController extends Controller
     {
         $user = Auth::user();
         if ($user->admin == 2) {
+            $order = Order::where('id', $id)->first();
             $restaurant = Restaurant::where('id', $user->restaurant_id)->first();
-            $restaurantOrder = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $user->restaurant_id)->where('status_id', 2)->first();
-            if (!$restaurantOrder) {
+            $providerOrder = OrderRestaurant::where('order_id', $id)->where('restaurant_id', $user->restaurant_id)->where('status_id', 2)->first();
+            if (!$providerOrder) {
                 return redirect('/orders');
             }
-            $restaurantOrder->status_id = 3;
-            $restaurantOrder->save();
-            $restaurantOrders = OrderRestaurant::where('order_id', $id)->where('status_id', '!=', 3)->get();
+            $providerOrder->status_id = 3;
+            $providerOrder->save();
+            $restaurantOrders = OrderRestaurant::where('order_id', $id)->where('status_id', 2)->get();
 
             if($restaurantOrders->isEmpty()){
 
-                $order = Order::where('id', $id)->first();
                 $order->status_id = 3;
                 $order->save();
 
