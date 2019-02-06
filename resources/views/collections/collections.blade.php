@@ -109,9 +109,9 @@
                                         </th>
                                         <th>Extra Images</th>
                                         <th>Availability</th>
-                                        <th>Collection Name</th>
+                                        <th>Name</th>
                                         <th>Description</th>
-                                        <th>Collection Category</th>
+                                        <th>Category</th>
                                         <th>Service Type</th>
                                         <th>Price</th>
                                         <th>Mealtime</th>

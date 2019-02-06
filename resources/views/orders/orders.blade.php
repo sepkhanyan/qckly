@@ -96,8 +96,8 @@
                                         </th>
                                     @endif
                                     <th>Order ID</th>
-                                    <th>Customer Name</th>
-                                    <th>Restaurant Name</th>
+                                    <th>Customer</th>
+                                    <th>Restaurant</th>
                                     <th>Payment</th>
                                     <th>Total</th>
                                     <th>Status</th>
@@ -175,7 +175,7 @@
                                                     @endif
                                                     @if($order->status_id == 2)
                                                         <a class="btn btn-primary" title=""
-                                                           href="{{url('/order/update/' . $order->order_id)}}">
+                                                           href="{{url('/order/complete/' . $order->order_id)}}">
                                                             Complete
                                                         </a>&nbsp;&nbsp;
                                                     @endif

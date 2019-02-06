@@ -140,7 +140,7 @@ class OrdersController extends Controller
         }
     }
 
-    public function update($id)
+    public function orderComplete($id)
     {
         $user = Auth::user();
         if ($user->admin == 2) {
@@ -152,10 +152,8 @@ class OrdersController extends Controller
             }
             $providerOrder->status_id = 3;
             $providerOrder->save();
-            $restaurantOrders = OrderRestaurant::where('order_id', $id)->where('status_id', 2)->get();
-
+            $restaurantOrders = OrderRestaurant::where('order_id', $id)->where('status_id', '<' , 3)->get();
             if($restaurantOrders->isEmpty()){
-
                 $order->status_id = 3;
                 $order->save();
 

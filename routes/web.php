@@ -125,7 +125,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         Route::group(['prefix' => 'order'], function () {
             Route::get('edit/{id}', 'OrdersController@edit');
             Route::get('confirmation/{id}', 'OrdersController@orderConfirmation');
-            Route::get('update/{id}', 'OrdersController@update');
+            Route::get('complete/{id}', 'OrdersController@orderComplete');
 //            Route::post('delete', 'OrdersController@deleteOrder');
         });
 
