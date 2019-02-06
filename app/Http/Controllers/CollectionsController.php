@@ -811,7 +811,13 @@ class CollectionsController extends Controller
 
     public function imagesUpload(Request $request, $id)
     {
-        $request->validate(['image' => 'required']);
+        $request->validate(
+            [
+                'image' => 'required',
+            ],
+            [
+                'image.required' => 'Select an image.'
+            ]);
 
         $collection = Collection::find($id);
 
@@ -845,7 +851,7 @@ class CollectionsController extends Controller
 
         $collection = Collection::find($collectionImage->collection_id);
 
-        File::delete(public_path('images/' .  $collectionImage->image));
+        File::delete(public_path('images/' . $collectionImage->image));
 
         $collectionImage->delete();
 
