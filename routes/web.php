@@ -113,6 +113,9 @@ Route::group(['middleware' => ['web', 'auth']], function () {
             Route::get('edit/{id}', 'CollectionsController@edit');
             Route::post('update/{id}', 'CollectionsController@update');
             Route::get('get-collection-edited-fields/{id}', 'CollectionsController@getEditedFields');
+            Route::get('getExtraImages/{id}', 'CollectionsController@getExtraImages');
+            Route::post('images_upload/{id}', 'CollectionsController@imagesUpload');
+            Route::get('image_delete/{id}', 'CollectionsController@imageDelete');
             Route::post('edit_approve/{id}', 'CollectionsController@editApprove');
             Route::get('edit_reject/{id}', 'CollectionsController@editReject');
             Route::post('delete', 'CollectionsController@deleteCollection');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\CollectionImage;
 use Auth;
 
 use App\User;
@@ -370,10 +371,9 @@ class CollectionsController extends Controller
         }
 
 
-        $createdCollection = Collection::with(['approvedCollectionMenu.approvedCollectionItem','approvedCollectionItem.menu', 'category' ])->find($id);
+        $createdCollection = Collection::with(['approvedCollectionMenu.approvedCollectionItem', 'approvedCollectionItem.menu', 'category'])->find($id);
 
         $restaurant = Restaurant::where('id', $collection->restaurant_id)->first();
-
 
 
         // if ($user->admin == 1 && $collection->editingCollection !== null) {
@@ -791,5 +791,73 @@ class CollectionsController extends Controller
             $html = view('collections.editing_collection', $data)->render();
             return response()->json(['success' => true, 'html' => $html]);
         }
+    }
+
+
+    public function getExtraImages($id)
+    {
+        $collection = Collection::find($id);
+        $collectionImages = CollectionImage::where('collection_id', $id)->get();
+
+        $data = [
+            'collection' => $collection,
+            'collectionImages' => $collectionImages
+        ];
+
+        $html = view('collections.extra_images', $data)->render();
+        return response()->json(['success' => true, 'html' => $html]);
+
+    }
+
+    public function imagesUpload(Request $request, $id)
+    {
+        $request->validate(['image' => 'required']);
+
+        $collection = Collection::find($id);
+
+        $data = $request->except('_token');
+
+        foreach ($data['image'] as $image) {
+            $name = 'collection_' . rand(1000000, 9999999) . '.' . $image->getClientOriginalExtension();
+            $path = public_path('/images');
+            $image->move($path, $name);
+            $collectionImage = new CollectionImage();
+            $collectionImage->collection_id = $collection->id;
+            $collectionImage->image = $name;
+            $collectionImage->save();
+        }
+
+        $collectionImages = CollectionImage::where('collection_id', $id)->get();
+
+        $data = [
+            'collection' => $collection,
+            'collectionImages' => $collectionImages
+        ];
+
+        $html = view('collections.extra_images', $data)->render();
+        return response()->json(['success' => true, 'html' => $html]);
+
+    }
+
+    public function imageDelete($id)
+    {
+        $collectionImage = CollectionImage::find($id);
+
+        $collection = Collection::find($collectionImage->collection_id);
+
+        File::delete(public_path('images/' .  $collectionImage->image));
+
+        $collectionImage->delete();
+
+        $collectionImages = CollectionImage::where('collection_id', $collection->id)->get();
+
+        $data = [
+            'collection' => $collection,
+            'collectionImages' => $collectionImages
+        ];
+
+        $html = view('collections.extra_images', $data)->render();
+        return response()->json(['success' => true, 'html' => $html]);
+
     }
 }

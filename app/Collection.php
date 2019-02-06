@@ -112,7 +112,7 @@ class Collection extends Model
         return $this->hasMany('App\UserCartCollection', 'collection_id');
     }
 
-    public function image()
+    public function collectionImage()
     {
         return $this->hasMany('App\CollectionImage', 'collection_id');
     }

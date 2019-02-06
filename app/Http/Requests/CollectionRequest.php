@@ -126,6 +126,7 @@ class CollectionRequest extends FormRequest
 
     public function rules()
     {
+        dd($this->image);
         $rules = [
             'service_type' => 'required',
             'notice_period' => 'required|integer|min:0',

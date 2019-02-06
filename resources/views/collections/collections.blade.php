@@ -107,6 +107,7 @@
                                             <input type="checkbox"
                                                    onclick="$('input[name*=\'delete\']').prop('checked', this.checked);">
                                         </th>
+                                        <th>Extra Images</th>
                                         <th>Availability</th>
                                         <th>Collection Name</th>
                                         <th>Description</th>
@@ -145,6 +146,14 @@
                                                             @endif
                                                         @endif
 
+                                                    </td>
+                                                    <td class="action">
+                                                        <a  class="btn btn-edit" id="add_images"
+                                                            data-id="{{ $collection->id }}"
+                                                            data-toggle="modal"
+                                                            data-target="#extra_images">
+                                                            <i class="fa fa-image"></i>
+                                                        </a>
                                                     </td>
                                                     <td class="action">
 
@@ -290,6 +299,28 @@
                 </div>
             </div>
         </div>
+    <!-- /view edited fileds modal -->
+
+
+    <!-- view edited fileds modal -->
+    <div class="modal fade" id="extra_images">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Add Extra Images</h4>
+                </div>
+
+                <div class="modal-body" id="show_images">
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" style="margin-top: 10px;">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- /view edited fileds modal -->
 
     <script type="text/javascript">
