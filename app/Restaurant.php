@@ -47,6 +47,7 @@ class Restaurant extends Model
         return $this->hasMany('App\Collection', 'restaurant_id')->where('approved', 1)->where('deleted', 0)->with([
             'approvedCollectionMenu',
             'approvedCollectionItem',
+            'collectionImage',
             'unavailabilityHour',
             'category',
             'mealtime',

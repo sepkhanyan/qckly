@@ -643,7 +643,7 @@ class UserCartsController extends Controller
         } else {
             $collection_type = $DataRequests['collection_category_id'];
             $collection_id = $DataRequests['collection_id'];
-            $collection = Collection::where('id', $collection_id)->where('category_id', $collection_type)->with(['approvedCollectionMenu.approvedCollectionItem', 'approvedCollectionItem','approvedCollectionMenu.category','approvedCollectionMenu.approvedCollectionItem.menu', 'unavailabilityHour', 'mealtime', 'serviceType'])->first();
+            $collection = Collection::where('id', $collection_id)->where('category_id', $collection_type)->with(['approvedCollectionMenu.approvedCollectionItem', 'approvedCollectionItem','approvedCollectionMenu.category','approvedCollectionMenu.approvedCollectionItem.menu', 'unavailabilityHour', 'mealtime', 'serviceType', 'collectionImage'])->first();
             if ($collection) {
                 if ($collection->female_caterer_available == 1) {
                     $female_caterer_available = true;
@@ -840,6 +840,16 @@ class UserCartsController extends Controller
 
                         }
 
+                        $extra_images = [];
+
+                        if($collection->collectionImage->isNotEmpty()){
+                            foreach ($collection->collectionImage as $collectionImage){
+
+                                $extra = url('/') . '/images/' . $collectionImage->image;
+                                array_push($extra_images, $extra);
+                            }
+                        }
+
 
                         if ($lang == 'ar') {
                             $restaurant_name = $collection->restaurant->name_ar;
@@ -883,6 +893,8 @@ class UserCartsController extends Controller
                             'restaurant_name' => $restaurant_name,
                             'collection_id' => $collection->id,
                             'collection_name' => $collection_name,
+                            'collection_image' => url('/') . '/images/' . $collection->image,
+                            'extra_images' => $extra_images,
                             'collection_description' => $collection_description,
                             'collection_category_id' => $collection->category_id,
                             'collection_category' => $collection_type,

@@ -1247,7 +1247,15 @@ class RestaurantsController extends Controller
                             }
                         }
 
+                        $extra_images = [];
 
+                        if($collection->collectionImage->isNotEmpty()){
+                            foreach ($collection->collectionImage as $collectionImage){
+
+                                $extra = url('/') . '/images/' . $collectionImage->image;
+                                array_push($extra_images, $extra);
+                            }
+                        }
 
                         $max_persons = -1;
                         $min_serve = -1;
@@ -1490,6 +1498,7 @@ class RestaurantsController extends Controller
                             'collection_id' => $collection->id,
                             'collection_name' => $collection_name,
                             'collection_image' => url('/') . '/images/' . $collection->image,
+                            'extra_images' => $extra_images,
                             'collection_description' => $collection_description,
                             'collection_category_id' => $collection->category_id,
                             'collection_category' => $collection_type,
