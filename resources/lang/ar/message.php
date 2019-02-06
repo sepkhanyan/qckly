@@ -34,11 +34,11 @@ return [
     'availabilityChanged' => 'ساعات عمل :restaurant_name تغيرت، يرجى الطلب أثناء ساعات عملهم أو الطلب من مطعم آخر',
     'isAvailable'         => 'متاح',
     'notAvailable'        => 'غير متاح',
-    'orderConfirmation'   => 'restaurant_name: قبل طلبك order_id: # وبدأ في تجهيزه',
-    'orderCompleteStatus' =>  'نتمنى أن تكون قد أعجبتك الخدمة لطلب # :order_id، يرجى اعلامنا المزيد عن تجربتك وتقييم الخدمة',
+    'orderConfirmation'   => ':restaurant_name قبل طلبك :order_id # وبدأ في تجهيزه',
+    'orderCompleteStatus' =>  'نتمنى أن تكون قد أعجبتك الخدمة لطلب #  order_id: ، يرجى اعلامنا المزيد عن تجربتك وتقييم الخدمة',
     'noNotification'     => 'لايوجد تنبيهات الان',
     'changeLanguage'      => 'تم تغيير اللغة بنجاح',
     'areaRemoved'         => 'تم حذف المنطقة المحددة',
-    'collectionAvailabilityChanged' => 'ساعات عمل :collection_name تغيرت، يرجى الطلب أثناء ساعات عملهم أو طلب مجموعة أخرى',
+    'collectionAvailabilityChanged' => 'ساعات عمل collection_name: تغيرت، يرجى الطلب أثناء ساعات عملهم أو طلب مجموعة أخرى',
 
 ];
