@@ -54,7 +54,11 @@ class RestaurantsController extends Controller
 
         $restaurants = $restaurants->paginate(20);
 
-        return view('restaurants.restaurants', ['restaurants' => $restaurants, 'user' => $user]);
+
+        return view('restaurants.restaurants', [
+            'restaurants' => $restaurants,
+            'user' => $user
+        ]);
     }
 
     /**
@@ -332,7 +336,7 @@ class RestaurantsController extends Controller
                     EditingRestaurant::where('restaurant_id', $id)->delete();
                 }
 
-                $restaurant = new EditingRestaurant;
+                $editingRestaurant = new EditingRestaurant;
 
                 $editingData = [
                     'name_en' => $request->input('restaurant_name_en'),
@@ -354,8 +358,8 @@ class RestaurantsController extends Controller
                     $editingData['image'] = $name;
                 }
 
-                $restaurant->forceFill($editingData);
-                $restaurant->save();
+                $editingRestaurant->forceFill($editingData);
+                $editingRestaurant->save();
 
                 $categories = $request->input('category');
 
@@ -374,7 +378,7 @@ class RestaurantsController extends Controller
                             foreach ($restaurantCategories as $category) {
 
                                 $categoryRestaurant = new  EditingCategoryRestaurant;
-                                $categoryRestaurant->editing_restaurant_id = $restaurant->id;
+                                $categoryRestaurant->editing_restaurant_id = $editingRestaurant->id;
                                 $categoryRestaurant->category_id = $category->id;
                                 $categoryRestaurant->name_en = $category->name_en;
                                 $categoryRestaurant->name_ar = $category->name_ar;
@@ -400,7 +404,7 @@ class RestaurantsController extends Controller
                             foreach ($areas as $area) {
 
                                 $restaurantArea = new EditingRestaurantArea();
-                                $restaurantArea->editing_restaurant_id = $restaurant->id;
+                                $restaurantArea->editing_restaurant_id = $editingRestaurant->id;
                                 $restaurantArea->area_id = $area->id;
                                 $restaurantArea->name_en = $area->name_en;
                                 $restaurantArea->name_ar = $area->name_ar;
@@ -409,6 +413,23 @@ class RestaurantsController extends Controller
                         }
                     }
                 }
+
+                $restaurant = Restaurant::find($user->restaurant_id);
+
+                $superadmin = User::where('admin', 1)->where('group_id', 1)->first();
+
+                $mobile = $superadmin->mobile_number;
+
+                $provider = $restaurant->name_en;
+
+
+                $content = $provider .  ' has changed  data.';
+
+
+                // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=$content&destination=974$mobile&source=97772&mask=Qckly";
+
+                // file($url);
+
 
             } else {
                 return redirect()->back();
@@ -610,6 +631,16 @@ class RestaurantsController extends Controller
 
             EditingRestaurant::where('restaurant_id', $restaurant->id)->delete();
 
+            $provider = User::where('admin', 2)->where('group_id', 2)->where('restaurant_id', $restaurant->id)->first();
+
+            $mobile = $provider->mobile_number;
+
+            $content = 'Your changes have been approved.';
+
+            // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=$content&destination=974$mobile&source=97772&mask=Qckly";
+
+            // file($url);
+
             $updatedRestaurant = [
                 'image' => '<img src=/images/' . $restaurant->image . ' width="30px" height="30px">',
                 'name' => $restaurant->name_en,
@@ -631,6 +662,7 @@ class RestaurantsController extends Controller
 
         if ($user->admin == 1) {
 
+            $restaurant = Restaurant::find($id);
             $editingRestaurants = EditingRestaurant::where('restaurant_id', $id)->get();
             $restaurant_images = [];
 
@@ -640,6 +672,16 @@ class RestaurantsController extends Controller
 
             File::delete($restaurant_images);
             EditingRestaurant::where('restaurant_id', $id)->delete();
+
+            $provider = User::where('admin', 2)->where('group_id', 2)->where('restaurant_id', $restaurant->id)->first();
+
+            $mobile = $provider->mobile_number;
+
+            $content = 'Your changes have been rejected.';
+
+            // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=$content&destination=974$mobile&source=97772&mask=Qckly";
+
+            // file($url);
 
             return response()->json([ 'success' => true ]);
         } else {

@@ -199,45 +199,67 @@ class CollectionsController extends Controller
 
         $collection->save();
 
-        $service = $request->input('service_type');
+        if($collection){
 
-        $categoryRestaurant = CategoryRestaurant::where('category_id', $service)->first();
-        $serviceType = new CollectionServiceType();
-        $serviceType->collection_id = $collection->id;
-        $serviceType->service_type_id = $service;
-        $serviceType->name_en = $categoryRestaurant->name_en;
-        $serviceType->name_ar = $categoryRestaurant->name_ar;
-        $serviceType->save();
 
-        $menus = $request->input('menu');
-        foreach ($menus as $menu) {
+            $service = $request->input('service_type');
 
-            $collection_menu = new CollectionMenu();
-            $collection_menu->collection_id = $collection->id;
-            $collection_menu->menu_id = $menu['id'];
-            $collection_menu->min_qty = $menu['min_qty'];
-            $collection_menu->max_qty = $menu['max_qty'];
-            $collection_menu->status = $menu['status'];
-            $collection_menu->save();
+            $categoryRestaurant = CategoryRestaurant::where('category_id', $service)->first();
+            $serviceType = new CollectionServiceType();
+            $serviceType->collection_id = $collection->id;
+            $serviceType->service_type_id = $service;
+            $serviceType->name_en = $categoryRestaurant->name_en;
+            $serviceType->name_ar = $categoryRestaurant->name_ar;
+            $serviceType->save();
 
-            foreach ($menu['item'] as $menu_item) {
-                $collection_item = new CollectionItem();
-                $collection_item->item_id = $menu_item['id'];
+            $menus = $request->input('menu');
+            foreach ($menus as $menu) {
 
-                if ($collection->category_id == 2 || $collection->category_id == 3) {
-                    $collection_item->is_mandatory = $menu_item['is_mandatory'];
+                $collection_menu = new CollectionMenu();
+                $collection_menu->collection_id = $collection->id;
+                $collection_menu->menu_id = $menu['id'];
+                $collection_menu->min_qty = $menu['min_qty'];
+                $collection_menu->max_qty = $menu['max_qty'];
+                $collection_menu->status = $menu['status'];
+                $collection_menu->save();
+
+                foreach ($menu['item'] as $menu_item) {
+                    $collection_item = new CollectionItem();
+                    $collection_item->item_id = $menu_item['id'];
+
+                    if ($collection->category_id == 2 || $collection->category_id == 3) {
+                        $collection_item->is_mandatory = $menu_item['is_mandatory'];
+                    }
+
+                    $collection_item->collection_menu_id = $collection_menu->id;
+
+                    $collection_item->collection_id = $collection->id;
+                    if ($collection->category_id == 1) {
+                        $collection_item->quantity = $menu_item['qty'];
+                    }
+                    $collection_item->status = $menu_item['status'];
+                    $collection_item->save();
                 }
+            }
 
-                $collection_item->collection_menu_id = $collection_menu->id;
+            if($user->admin == 2){
 
-                $collection_item->collection_id = $collection->id;
-                if ($collection->category_id == 1) {
-                    $collection_item->quantity = $menu_item['qty'];
-                }
-                $collection_item->status = $menu_item['status'];
-                $collection_item->save();
+                $restaurant = Restaurant::find($user->restaurant_id);
+
+                $superadmin = User::where('admin', 1)->where('group_id', 1)->first();
+
+                $mobile = $superadmin->mobile_number;
+
+                $provider = $restaurant->name_en;
+
+                $content = $provider . ' has added a new collection.';
+
+                // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content= $content&destination=974$mobile&source=97772&mask=Qckly";
+
+                // file($url);
             }
         }
+
 
         return redirect('/collections/' . $restaurant_id);
     }
@@ -252,7 +274,21 @@ class CollectionsController extends Controller
     {
         $user = Auth::user();
         if ($user->admin == 1) {
+
             Collection::where('id', $id)->update(['approved' => 1]);
+
+            $collection= Collection::find($id);
+
+            $provider = User::where('admin', 2)->where('group_id', 2)->where('restaurant_id', $collection->restaurant_id)->first();
+
+            $mobile = $provider->mobile_number;
+
+            $content = 'Your added collection is approved.';
+
+            // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=$content&destination=974$mobile&source=97772&mask=Qckly";
+
+            // file($url);
+
             return redirect()->back();
         } else {
             return redirect()->back();
@@ -263,7 +299,20 @@ class CollectionsController extends Controller
     {
         $user = Auth::user();
         if ($user->admin == 1) {
+
             Collection::where('id', $id)->update(['approved' => 2]);
+            $collection= Collection::find($id);
+
+            $provider = User::where('admin', 2)->where('group_id', 2)->where('restaurant_id', $collection->restaurant_id)->first();
+
+            $mobile = $provider->mobile_number;
+
+            $content = 'Your added collection is rejected.';
+
+            // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=$content&destination=974$mobile&source=97772&mask=Qckly";
+
+            // file($url);
+
             return redirect()->back();
         } else {
             return redirect()->back();
@@ -532,6 +581,24 @@ class CollectionsController extends Controller
                     }
                 }
             }
+
+            $restaurant = Restaurant::find($user->restaurant_id);
+
+            $superadmin = User::where('admin', 1)->where('group_id', 1)->first();
+
+            $mobile = $superadmin->mobile_number;
+
+            $provider = $restaurant->name_en;
+
+            $editingProduct = $collection->name_en;
+
+            $content = $provider . ' changed '. $editingProduct . ' data.';
+
+
+            // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=$content&destination=974$mobile&source=97772&mask=Qckly";
+
+            // file($url);
+
         } elseif ($user->admin == 1) {
 
             $collection->notice_period = $request->input('notice_period');
@@ -614,6 +681,7 @@ class CollectionsController extends Controller
             $data = $request->except('_token');
 
             $collection = Collection::find($id);
+            $editingProduct = $collection->name_en;
 
             $editingCollection = EditingCollection::where('collection_id', $id)->first();
             if ($editingCollection->image) {
@@ -645,6 +713,18 @@ class CollectionsController extends Controller
 
             EditingCollection::where('collection_id', $id)->delete();
 
+            $provider = User::where('admin', 2)->where('group_id', 2)->where('restaurant_id', $collection->restaurant_id)->first();
+
+            $mobile = $provider->mobile_number;
+
+            $content = 'Your changes for ' . $editingProduct . ' have been approved.';
+
+            // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=$content&destination=974$mobile&source=97772&mask=Qckly";
+
+            // file($url);
+
+
+
             $updatedCollection = [
                 'name' => $collection->name_en,
                 'description' => $collection->description_en,
@@ -666,8 +746,10 @@ class CollectionsController extends Controller
 
         if ($user->admin == 1) {
 
-            $editingCollections = EditingCollection::where('collection_id', $id)->get();
             $collection = Collection::find($id);
+            $editingProduct = $collection->name_en;
+
+            $editingCollections = EditingCollection::where('collection_id', $id)->get();
             $collection_images = [];
 
             foreach ($editingCollections as $editingCollection) {
@@ -676,6 +758,16 @@ class CollectionsController extends Controller
 
             File::delete($collection_images);
             EditingCollection::where('collection_id', $id)->delete();
+
+            $provider = User::where('admin', 2)->where('group_id', 2)->where('restaurant_id', $collection->restaurant_id)->first();
+
+            $mobile = $provider->mobile_number;
+
+            $content = 'Your changes for ' . $editingProduct . ' have been rejected.';
+
+            // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=$content&destination=974$mobile&source=97772&mask=Qckly";
+
+            // file($url);
 
             return response()->json(['success' => true]);
         } else {

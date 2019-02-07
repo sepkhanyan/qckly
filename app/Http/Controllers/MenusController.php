@@ -162,6 +162,24 @@ class MenusController extends Controller
 
                 }
             }
+
+            if($user->admin == 2){
+
+                $restaurant = Restaurant::find($user->restaurant_id);
+
+                $superadmin = User::where('admin', 1)->where('group_id', 1)->first();
+
+                $mobile = $superadmin->mobile_number;
+
+                $provider = $restaurant->name_en;
+
+                $content = $provider . ' has added a new menu item.';
+
+                // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content= $content&destination=974$mobile&source=97772&mask=Qckly";
+
+                // file($url);
+            }
+
             return redirect('/menus/' . $restaurant_id);
         }
     }
@@ -176,7 +194,22 @@ class MenusController extends Controller
     {
         $user = Auth::user();
         if ($user->admin == 1) {
+
             Menu::where('id', $id)->update(['approved' => 1]);
+
+
+            $menu= Menu::find($id);
+
+            $provider = User::where('admin', 2)->where('group_id', 2)->where('restaurant_id', $menu->restaurant_id)->first();
+
+            $mobile = $provider->mobile_number;
+
+            $content = 'Your added menu item is approved.';
+
+            // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=$content&destination=974$mobile&source=97772&mask=Qckly";
+
+            // file($url);
+
             return redirect()->back();
         } else {
             return redirect()->back();
@@ -187,7 +220,22 @@ class MenusController extends Controller
     {
         $user = Auth::user();
         if ($user->admin == 1) {
+
             Menu::where('id', $id)->update(['approved' => 2]);
+
+
+            $menu= Menu::find($id);
+
+            $provider = User::where('admin', 2)->where('group_id', 2)->where('restaurant_id', $menu->restaurant_id)->first();
+
+            $mobile = $provider->mobile_number;
+
+            $content = 'Your added menu item is rejected.';
+
+            // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=$content&destination=974$mobile&source=97772&mask=Qckly";
+
+            // file($url);
+
             return redirect()->back();
         } else {
             return redirect()->back();
@@ -241,7 +289,8 @@ class MenusController extends Controller
             $menu = Menu::where('id', $id)->where('restaurant_id', $user->restaurant_id)->first();
             if (!$menu) {
                 return redirect()->back();
-            } else {
+            }
+
                 $oldEditingMenu = EditingMenu::where('menu_id', $id)->first();
                 if ($oldEditingMenu) {
                     if ($oldEditingMenu->image) {
@@ -249,6 +298,7 @@ class MenusController extends Controller
                     }
                     EditingMenu::where('menu_id', $id)->delete();
                 }
+
                 $editingMenu = new EditingMenu();
                 $editingMenu->menu_id = $id;
                 $editingMenu->name_en = $request->input('name_en');
@@ -258,6 +308,7 @@ class MenusController extends Controller
                 $editingMenu->price = $request->input('price');
                 $editingMenu->famous = $request->input('famous');
                 $editingMenu->status = $request->input('status');
+
                 if ($request->hasFile('image')) {
                     $image = $request->file('image');
                     $name = 'menu_' . time() . '.' . $image->getClientOriginalExtension();
@@ -265,8 +316,26 @@ class MenusController extends Controller
                     $image->move($path, $name);
                     $editingMenu->image = $name;
                 }
+
                 $editingMenu->save();
-            }
+
+            $restaurant = Restaurant::find($user->restaurant_id);
+
+            $superadmin = User::where('admin', 1)->where('group_id', 1)->first();
+
+            $mobile = $superadmin->mobile_number;
+
+            $provider = $restaurant->name_en;
+
+            $editingProduct = $menu->name_en;
+
+            $content = $provider . ' changed '. $editingProduct . ' data.';
+
+
+            // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=$content&destination=974$mobile&source=97772&mask=Qckly";
+
+            // file($url);
+
         } elseif ($user->admin == 1) {
             $menu->name_en = $request->input('name_en');
             $menu->description_en = $request->input('description_en');
@@ -315,9 +384,13 @@ class MenusController extends Controller
     {
         $user = Auth::user();
         if ($user->admin == 1) {
+
             $restaurant_id = $request->input('restaurant');
             $menu = Menu::find($id);
+            $editingProduct = $menu->name_en;
+
             $editingMenu = EditingMenu::where('menu_id', $id)->first();
+
             $menu->name_en = $request->input('name_en');
             $menu->description_en = $request->input('description_en');
             $menu->name_ar = $request->input('name_ar');
@@ -325,15 +398,29 @@ class MenusController extends Controller
             $menu->price = $request->input('price');
             $menu->famous = $request->input('famous');
             $menu->status = $request->input('status');
+
             if ($editingMenu->image) {
                 if ($menu->image) {
                     File::delete(public_path('images/' . $menu->image));
                 }
                 $menu->image = $editingMenu->image;
             }
+
             $menu->approved = 1;
             $menu->save();
+
             EditingMenu::where('menu_id', $menu->id)->delete();
+
+            $provider = User::where('admin', 2)->where('group_id', 2)->where('restaurant_id', $menu->restaurant_id)->first();
+
+            $mobile = $provider->mobile_number;
+
+            $content = 'Your changes for ' . $editingProduct . ' have been approved.';
+
+            // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=$content&destination=974$mobile&source=97772&mask=Qckly";
+
+            // file($url);
+
             return redirect('/menus/' . $restaurant_id);
         } else {
             return redirect()->back();
@@ -344,14 +431,29 @@ class MenusController extends Controller
     {
         $user = Auth::user();
         if ($user->admin == 1) {
+
             $editingMenus = EditingMenu::where('menu_id', $id)->get();
             $menu = Menu::find($id);
+            $editingProduct = $menu->name_en;
+
             $menu_images = [];
             foreach ($editingMenus as $editingMenu) {
                 $menu_images[] = public_path('images/' . $editingMenu->image);
             }
+
             File::delete($menu_images);
             EditingMenu::where('menu_id', $id)->delete();
+
+            $provider = User::where('admin', 2)->where('group_id', 2)->where('restaurant_id', $menu->restaurant_id)->first();
+
+            $mobile = $provider->mobile_number;
+
+            $content = 'Your changes for ' . $editingProduct . ' have been rejected.';
+
+            // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=$content&destination=974$mobile&source=97772&mask=Qckly";
+
+            // file($url);
+
             return redirect('/menus/' . $menu->restaurant_id);
         } else {
             return redirect()->back();

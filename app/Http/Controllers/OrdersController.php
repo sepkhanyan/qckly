@@ -70,7 +70,6 @@ class OrdersController extends Controller
             'statuses' => $statuses,
             'orders' => $orders,
             'restaurants' => isset($restaurants) ? $restaurants : "",
-            // 'selectedRestaurant' => isset($selectedRestaurant) ? $selectedRestaurant : "",
             'user' => $user
         ]);
     }

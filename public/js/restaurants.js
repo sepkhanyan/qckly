@@ -164,9 +164,9 @@ $(document).ready(function () {
                 contentType: false,
                 processData: false,
                 success: function(result) {
-                    $('#edited_restaurant').modal('hide')
-                    $('#statusAndBtn' + restaurantId).remove()
-                    $('#mainTr' + restaurantId).removeClass('info')
+                    $('#edited_restaurant').modal('hide');
+                    $('#statusAndBtn' + restaurantId).remove();
+                    $('#mainTr' + restaurantId).removeClass('info');
 
                     $.each(result, function(index, value) {
                         $('#' + index + restaurantId).html(value)
@@ -178,15 +178,15 @@ $(document).ready(function () {
 
     // reject edited restaurant
         $('body').on('click', '#reject', function() {
-            var restaurantId = $(this).attr('data-id')
+            var restaurantId = $(this).attr('data-id');
 
             $.ajax({
                 url: 'restaurant/edit_reject/' + restaurantId,
                 method: 'GET',
                 success: function(result) {
-                    $('#edited_restaurant').modal('hide')
-                    $('#statusAndBtn' + restaurantId).remove()
-                    $('#mainTr' + restaurantId).removeClass('info')
+                    $('#edited_restaurant').modal('hide');
+                    $('#statusAndBtn' + restaurantId).remove();
+                    $('#mainTr' + restaurantId).removeClass('info');
                 }
             })
         })
