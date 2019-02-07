@@ -12,7 +12,7 @@ class Collection extends Model
     protected $fillable = [
         'restaurant_id',
         'category_id',
-        'delivery_hours',
+        'notice_period',
         'is_available',
         'price',
         'name_en',
