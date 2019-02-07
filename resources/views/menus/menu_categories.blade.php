@@ -1,5 +1,8 @@
 @extends('home', ['title' => 'Menu Categories'])
 @section('content')
+
+    <script src="{{ asset('js/menus.js') }}"></script>
+
     <div id="page-wrapper">
         <div class="page-header">
             <div class="page-action">

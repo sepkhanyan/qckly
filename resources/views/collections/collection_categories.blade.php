@@ -1,5 +1,8 @@
 @extends('home', ['title' => 'Collection Categories'])
 @section('content')
+
+    <script src="{{ asset('js/collections.js') }}"></script>
+
     <div id="page-wrapper">
         @if($user->admin == 1)
             <div class="page-header">

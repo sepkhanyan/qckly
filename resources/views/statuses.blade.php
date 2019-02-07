@@ -1,5 +1,9 @@
 @extends('home', ['title' => 'Statuses'])
 @section('content')
+
+
+    <script src="{{ asset('js/statuses.js') }}"></script>
+
     <div id="page-wrapper">
         <div class="page-header">
             <div class="page-action">

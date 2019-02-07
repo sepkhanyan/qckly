@@ -1,5 +1,8 @@
 @extends('home', ['title' => 'Mealtimes'])
 @section('content')
+
+    <script src="{{ asset('js/mealtimes.js') }}"></script>
+
     <div id="page-wrapper">
         <div class="page-header">
             <div class="page-action">

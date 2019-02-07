@@ -423,7 +423,7 @@ class RestaurantsController extends Controller
                 $provider = $restaurant->name_en;
 
 
-                $content = $provider .  ' has changed  data.';
+                $content = $provider .  ' has changed data.';
 
 
                 // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=$content&destination=974$mobile&source=97772&mask=Qckly";
