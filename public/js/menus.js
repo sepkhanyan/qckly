@@ -103,15 +103,15 @@ jQuery(document).ready(function() {
 
     // reject edited category
     $('body').on('click', '#reject', function() {
-        var collectionId = $(this).attr('data-id');
+        var categoryId = $(this).attr('data-id');
 
         $.ajax({
-            url: '/collection/edit_reject/' + collectionId,
+            url: '/menu_category/edit_reject/' + categoryId,
             method: 'GET',
             success: function(result) {
-                $('#edited_collection').modal('hide');
-                $('#statusAndBtn' + collectionId).remove();
-                $('#mainTr' + collectionId).removeClass('info')
+                $('#edited_category').modal('hide');
+                $('#statusAndBtn' + categoryId).remove();
+                $('#mainTr' + categoryId).removeClass('info')
             }
         })
     });
