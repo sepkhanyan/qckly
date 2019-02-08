@@ -221,9 +221,10 @@ class NotificationsController extends Controller
         $req_auth = $request->header('Authorization');
         $user_id = User::getUserByToken($req_auth);
         if ($user_id) {
-            $notifications = Notification::where('to_device', $user_id)->orderby('id', 'desc')->paginate(20);
+            $notifications = Notification::where('to_device', $user_id)->orderby('id', 'desc')->with('order')->paginate(20);
             $restaurant_id = '';
             $order_id = '';
+            $is_rated = '';
             if(count($notifications) > 0){
                 foreach ($notifications as $notification) {
                     if($notification->notification_type == 2){
@@ -232,6 +233,11 @@ class NotificationsController extends Controller
                     if($notification->notification_type == 3 || $notification->notification_type == 4){
                         $order_id = $notification->order_id;
                     }
+
+                    if($notification->notification_type == 4){
+                        $is_rated = $notification->order->is_rated;
+                    }
+
                     if($notification->is_read == 1){
                         $is_read = true;
                     }else{
@@ -244,6 +250,7 @@ class NotificationsController extends Controller
                         'notification_type' => $notification->notification_type,
                         'is_read' => $is_read,
                         'order_id' => $order_id,
+                        'is_rated' => $is_rated,
                         'restaurant_id' => $restaurant_id,
                         'notification_date' => date("j M, Y, g:i A", strtotime($notification->created_at))
                     ];

@@ -17,4 +17,9 @@ class Notification extends Model
         'order_id',
         'restaurant_id'
     ];
+
+    public function order()
+    {
+        return $this->belongsTo('App\Order', 'order_id');
+    }
 }

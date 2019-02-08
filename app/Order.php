@@ -49,4 +49,9 @@ class Order extends Model
         return $this->hasMany('App\OrderCollection', 'order_id');
     }
 
+
+    public function notification()
+    {
+        return $this->hasOne('App\Notification', 'order_id')->where('notification_type', 4);
+    }
 }
