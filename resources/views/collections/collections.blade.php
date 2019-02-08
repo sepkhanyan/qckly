@@ -280,7 +280,7 @@
         </div>
     @endif
 
-    <!-- view edited fileds modal -->
+    <!-- view edited fields modal -->
         <div class="modal fade" id="edited_collection">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -299,10 +299,10 @@
                 </div>
             </div>
         </div>
-    <!-- /view edited fileds modal -->
+    <!-- /view edited fields modal -->
 
 
-    <!-- view edited fileds modal -->
+
     <div class="modal fade" id="extra_images">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -321,7 +321,7 @@
             </div>
         </div>
     </div>
-    <!-- /view edited fileds modal -->
+
 
     <script type="text/javascript">
         $(document).ready(function () {

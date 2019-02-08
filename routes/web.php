@@ -79,6 +79,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
             Route::post('edit_approve/{id}', 'MenuCategoriesController@editApprove');
             Route::get('edit_reject/{id}', 'MenuCategoriesController@editReject');
             Route::post('delete', 'MenuCategoriesController@deleteCategory');
+            Route::get('get-category-edited-fields/{id}', 'MenuCategoriesController@getEditedFields');
         });
 
         Route::get('/collection_categories', 'CollectionCategoriesController@index');

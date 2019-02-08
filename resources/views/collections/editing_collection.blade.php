@@ -277,7 +277,7 @@
 
                                 @if (isset($oldFields['image']))
                                     <div class="form-group">
-                                        <label class="control-label col-lg-3">Allow Person Increase </label>
+                                        <label class="control-label col-lg-3">Image </label>
                                         <div class="col-lg-5">
                                             <img src="{{ url('/images') . '/' . $oldFields['image'] }}" height="50%" width="50%">
                                         </div>

@@ -102,7 +102,7 @@
                                 @if($selectedRestaurant)
                                     @if(count($categories) > 0)
                                         @foreach($categories as $category)
-                                            <tr class="{{($category->editingMenuCategory || $category->approved == 0) ? 'info' : ''}}">
+                                            <tr class="{{($category->editingMenuCategory || $category->approved == 0) ? 'info' : ''}}" id="mainTr{{ $category->id }}">
                                                 <td class="action">
                                                     <input type="checkbox" value="{{ $category->id }}" name="delete"/>
                                                     <a class="btn btn-edit" title=""
@@ -124,8 +124,8 @@
                                                         @endif
                                                     @endif
                                                 </td>
-                                                <td>{{$category->name_en}}</td>
-                                                <td>{{$category->description_en}}</td>
+                                                <td id="name{{ $category->id }}">{{$category->name_en}}</td>
+                                                <td id="description{{ $category->id }}">{{$category->description_en}}</td>
                                                 <td>{{$category->id}}</td>
                                                 <td>
                                                     @if($category->approved == 0)
@@ -133,9 +133,20 @@
                                                     @elseif($category->approved == 2)
                                                         <span class="label label-danger">Rejected</span>
                                                     @endif
-                                                    @if($category->editingMenuCategory)
-                                                        <span class="label label-default">Pending Edit Approval</span>
-                                                    @endif
+
+                                                        @if($category->editingMenuCategory)
+                                                            <div id="statusAndBtn{{ $category->id }}">
+                                                                @if ($user->admin == 1)
+                                                                    <button type="button" class="btn btn-info" id="view_edited"
+                                                                            data-id="{{ $category->id }}"
+                                                                            data-toggle="modal"
+                                                                            data-target="#edited_category">
+                                                                        View edited fields
+                                                                    </button><br>
+                                                                @endif
+                                                                <span class="label label-default">Pending Edit Approval</span>
+                                                            </div>
+                                                        @endif
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -156,6 +167,30 @@
             </div>
         </div>
     </div>
+
+
+
+    <!-- view edited fields modal -->
+    <div class="modal fade" id="edited_category">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">View edited fields</h4>
+                </div>
+
+                <div class="modal-body" id="show_fields">
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-top: 10px;">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /view edited fields modal -->
+
     <script type="text/javascript">
         $(document).ready(function () {
             $('select.form-control').select2();

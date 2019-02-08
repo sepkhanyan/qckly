@@ -209,14 +209,6 @@ class MenuCategoriesController extends Controller
                 return redirect()->back();
             }
         }
-        if ($user->admin == 1 && $category->editingMenuCategory !== null) {
-            $editingMenuCategory = $category->editingMenuCategory;
-            return view('menu_category_edit_approve', [
-                'category' => $category,
-                'editingMenuCategory' => $editingMenuCategory,
-                'user' => $user
-            ]);
-        }
         return view('menus.menu_category_edit', [
             'category' => $category,
             'user' => $user
@@ -309,32 +301,24 @@ class MenuCategoriesController extends Controller
     }
 
 
-    public function editApprove(MenuCategoryRequest $request, $id)
+    public function editApprove(Request $request, $id)
     {
         $user = Auth::user();
         if ($user->admin == 1) {
+
+            $data = $request->except('_token');
 
             $category = MenuCategory::find($id);
 
             $editingProduct = $category->name_en;
 
             $editingMenuCategory = EditingMenuCategory::where('category_id', $id)->first();
-            $restaurant_id = $request->input('restaurant');
-            $category->name_en = $request->input('name_en');
-            $category->description_en = $request->input('description_en');
-            $category->name_ar = $request->input('name_ar');
-            $category->description_ar = $request->input('description_ar');
-
             if ($editingMenuCategory->image) {
-                if ($category->image) {
-                    File::delete(public_path('images/' . $category->image));
-                }
-                $category->image = $editingMenuCategory->image;
+                $data['image'] = $editingMenuCategory->image;
             }
 
-            $category->approved = 1;
-            $category->save();
-
+            $data['approved'] = 1;
+            $category->update($data);
 
             EditingMenuCategory::where('category_id', $category->id)->delete();
 
@@ -349,7 +333,13 @@ class MenuCategoriesController extends Controller
 
             // file($url);
 
-            return redirect('/menu_categories/' . $restaurant_id);
+
+            $updatedCategory = [
+                'name' => $category->name_en,
+                'description' => $category->description_en,
+            ];
+
+            return response()->json($updatedCategory);
         } else {
             return redirect()->back();
         }
@@ -391,6 +381,60 @@ class MenuCategoriesController extends Controller
             return redirect()->back();
         }
     }
+
+
+
+    public function getEditedFields($id)
+    {
+        $user = Auth::user();
+        $category = MenuCategory::find($id);
+
+        if ($user->admin == 1 && !is_null($category)) {
+
+
+            $oldCategory = $category->toArray();
+            $oldCategory = array_except($oldCategory, [
+                'id',
+                'restaurant_id',
+                'approved',
+                'created_at',
+                'updated_at',
+                'deleted',
+            ]);
+
+            $editedCategory = EditingMenuCategory::where('category_id', $id)->first();
+
+            $newCategory = $editedCategory->toArray();
+            $newCategory = array_except($newCategory, [
+                'id',
+                'category_id',
+                'created_at',
+                'updated_at',
+                'approved'
+            ]);
+
+            if (is_null($newCategory['image'])) {
+
+                unset($newCategory['image']);
+                unset($oldCategory['image']);
+            }
+
+            $oldFields = array_diff_assoc($oldCategory, $newCategory);
+            $newFields = array_diff_assoc($newCategory, $oldCategory);
+
+
+            $data = [
+                'category' => $category,
+                'editedCategory' => $editedCategory,
+                'oldFields' => $oldFields,
+                'newFields' => $newFields,
+            ];
+
+            $html = view('menus.editing_menu_category', $data)->render();
+            return response()->json(['success' => true, 'html' => $html]);
+        }
+    }
+
 
     /**
      * Remove the specified resource from storage.

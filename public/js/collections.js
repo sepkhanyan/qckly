@@ -183,7 +183,7 @@ jQuery(document).ready(function() {
         });
     // end approve edited collection
 
-    // reject edited restaurant
+    // reject edited collection
         $('body').on('click', '#reject', function() {
             var collectionId = $(this).attr('data-id');
 
@@ -197,11 +197,11 @@ jQuery(document).ready(function() {
                 }
             })
         });
-    // end reject edited restaurant
+    // end reject edited collection
 
 
 
-    // view edited fields in modal
+
     $('body').on('click', '#add_images', function() {
         var collectionID = $(this).attr('data-id');
 
