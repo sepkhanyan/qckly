@@ -59,7 +59,7 @@ class NewRestaurant implements ShouldQueue
                     'NotificationType' => $NotificationType,
 
                 ];
-
+            \Log::info($messages);
             dispatch(new SendToAndroid($user_id, $messages));
             dispatch(new SendToIos($user_id, $this->msg,  $messages));
         }
