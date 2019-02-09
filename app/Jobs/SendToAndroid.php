@@ -64,6 +64,7 @@ class SendToAndroid implements ShouldQueue
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
         $result = curl_exec($ch);
+        \Log::info($result);
 
         curl_close($ch);
     }
