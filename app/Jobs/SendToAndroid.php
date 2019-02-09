@@ -35,6 +35,7 @@ class SendToAndroid implements ShouldQueue
      */
     public function handle()
     {
+        \Log::info($this->messages);
         $devicetoken = Device::where('user_id', $this->user_id)->where('device_type', 'android')->get();
         $device = array();
         foreach ($devicetoken as $dev) {
