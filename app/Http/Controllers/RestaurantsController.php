@@ -966,11 +966,13 @@ class RestaurantsController extends Controller
                 $restaurants = Restaurant::where('deleted', 0)->where('active', 1)->
                 whereHas('restaurantArea', function ($q) use ($id) {
                     $q->where('area_id', $id);
-                })->with(['workingHour', 'categoryRestaurant', 'review', 'approvedMenu', 'approvedCollection' => function ($query) use ($category) {
+                })->with(['workingHour', 'review', 'approvedMenu', 'approvedCollection' => function ($query) use ($category) {
                     $query->whereHas('serviceType', function ($x) use ($category) {
                         $x->where('service_type_id', $category);
                     });
-                }] )->paginate(20);
+                }] )->whereHas('categoryRestaurant', function ($c) use($category) {
+                    $c->where('category_id', $category);
+                })->paginate(20);
 
             }else{
                 $restaurants = Restaurant::where('deleted', 0)->where('active', 1)->
