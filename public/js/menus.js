@@ -62,7 +62,7 @@ jQuery(document).ready(function() {
     });
 
 
-    // view edited fields in modal
+    // view edited category fields in modal
     $('body').on('click', '#view_edited', function() {
         var editedCategoryID = $(this).attr('data-id');
 
@@ -74,7 +74,7 @@ jQuery(document).ready(function() {
             }
         })
     });
-    // view edited fields in modal
+    // view edited category fields in modal
 
     // approve edited category
     $('body').on('submit', '#editForm', function(e) {
@@ -116,6 +116,64 @@ jQuery(document).ready(function() {
         })
     });
     // end reject edited category
+
+
+
+
+
+    // view edited menu fields in modal
+    $('body').on('click', '#view_edited_menu', function() {
+        var editedMenuID = $(this).attr('data-id');
+
+        $.ajax({
+            url: '/menu/get-menu-edited-fields/' + editedMenuID,
+            method: 'GET',
+            success: function (result) {
+                $('#show_menu_fields').html(result.html)
+            }
+        })
+    });
+    // view edited menu fields in modal
+
+    // approve edited menu
+    $('body').on('submit', '#menuEditForm', function(e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+        var menuId = $(this).attr('data-id');
+
+        $.ajax({
+            url: '/menu/edit_approve/' + menuId,
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(result) {
+                $('#edited_menu').modal('hide');
+                $('#statusAndBtn' + menuId).remove();
+                $('#mainTr' + menuId).removeClass('info');
+
+                $.each(result, function(index, value) {
+                    $('#' + index + menuId).html(value)
+                })
+            }
+        })
+    });
+    // end approve edited menu
+
+    // reject edited menu
+    $('body').on('click', '#reject', function() {
+        var menuId = $(this).attr('data-id');
+
+        $.ajax({
+            url: '/menu/edit_reject/' + menuId,
+            method: 'GET',
+            success: function(result) {
+                $('#edited_menu').modal('hide');
+                $('#statusAndBtn' + menuId).remove();
+                $('#mainTr' + menuId).removeClass('info')
+            }
+        })
+    });
 
 
 });

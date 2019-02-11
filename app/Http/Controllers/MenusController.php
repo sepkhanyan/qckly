@@ -258,14 +258,7 @@ class MenusController extends Controller
                 return redirect()->back();
             }
         }
-        if ($user->admin == 1 && $menu->editingMenu !== null) {
-            $editingMenu = $menu->editingMenu;
-            return view('menus.menu_edit_approve', [
-                'menu' => $menu,
-                'editingMenu' => $editingMenu,
-                'user' => $user
-            ]);
-        }
+
         return view('menus.menu_edit', [
             'menu' => $menu,
             'user' => $user
@@ -380,34 +373,24 @@ class MenusController extends Controller
 
     }
 
-    public function editApprove(MenuRequest $request, $id)
+    public function editApprove(Request $request, $id)
     {
         $user = Auth::user();
         if ($user->admin == 1) {
 
-            $restaurant_id = $request->input('restaurant');
+
+            $data = $request->except('_token');
+
             $menu = Menu::find($id);
             $editingProduct = $menu->name_en;
 
             $editingMenu = EditingMenu::where('menu_id', $id)->first();
-
-            $menu->name_en = $request->input('name_en');
-            $menu->description_en = $request->input('description_en');
-            $menu->name_ar = $request->input('name_ar');
-            $menu->description_ar = $request->input('description_ar');
-            $menu->price = $request->input('price');
-            $menu->famous = $request->input('famous');
-            $menu->status = $request->input('status');
-
             if ($editingMenu->image) {
-                if ($menu->image) {
-                    File::delete(public_path('images/' . $menu->image));
-                }
-                $menu->image = $editingMenu->image;
+                $data['image'] = $editingMenu->image;
             }
 
-            $menu->approved = 1;
-            $menu->save();
+            $data['approved'] = 1;
+            $menu->update($data);
 
             EditingMenu::where('menu_id', $menu->id)->delete();
 
@@ -421,7 +404,21 @@ class MenusController extends Controller
 
             // file($url);
 
-            return redirect('/menus/' . $restaurant_id);
+            if($menu->status == 1){
+                $status = 'Enable';
+            }else{
+                $status = 'Disable';
+            }
+
+            $updatedMenu = [
+                'name' => $menu->name_en,
+                'description' => $menu->description_en,
+                'categoryName' => $menu->category->name_en,
+                'status' => $status,
+                'price' => $menu->price
+            ];
+
+            return response()->json($updatedMenu);
         } else {
             return redirect()->back();
         }
@@ -481,6 +478,59 @@ class MenusController extends Controller
             Menu::whereIn('id', $id)->update(['deleted' => 1]);
         }
         return redirect()->back();
+    }
+
+
+
+    public function getEditedFields($id)
+    {
+        $user = Auth::user();
+        $menu = Menu::with('category')->find($id);
+
+        if ($user->admin == 1 && !is_null($menu)) {
+
+            $oldMenu = $menu->toArray();
+            $oldMenu = array_except($oldMenu, [
+                'id',
+                'restaurant_id',
+                'category_id',
+                'approved',
+                'created_at',
+                'updated_at',
+                'deleted',
+            ]);
+
+            $editedMenu = EditingMenu::where('menu_id', $id)->first();
+
+
+            $newMenu = $editedMenu->toArray();
+            $newMenu = array_except($newMenu, [
+                'id',
+                'menu_id',
+                'created_at',
+                'updated_at',
+            ]);
+
+            if (is_null($newMenu['image'])) {
+
+                unset($newMenu['image']);
+                unset($oldMenu['image']);
+            }
+
+            $oldFields = array_diff_assoc($oldMenu, $newMenu);
+            $newFields = array_diff_assoc($newMenu, $oldMenu);
+
+
+            $data = [
+                'menu' => $menu,
+                'editedMenu' => $editedMenu,
+                'oldFields' => $oldFields,
+                'newFields' => $newFields
+            ];
+
+            $html = view('menus.editing_menu', $data)->render();
+            return response()->json(['success' => true, 'html' => $html]);
+        }
     }
 
 

@@ -100,6 +100,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
             Route::post('edit_approve/{id}', 'MenusController@editApprove');
             Route::get('edit_reject/{id}', 'MenusController@editReject');
             Route::post('delete', 'MenusController@deleteMenu');
+            Route::get('get-menu-edited-fields/{id}', 'MenusController@getEditedFields');
         });
 
         Route::get('/collections/{id?}', 'CollectionsController@index');

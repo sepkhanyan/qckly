@@ -714,7 +714,7 @@ class OrdersController extends Controller
                 }
 
                 if ($order->payment_type == 1) {
-                    $order->transaction_id = -1;
+                    $order->transaction_id = 0;
                     $payment = \Lang::get('message.cash');
                 }
                 if ($order->payment_type == 2) {

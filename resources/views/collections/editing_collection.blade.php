@@ -163,7 +163,16 @@
                                     <div class="form-group">
                                         <label class="control-label col-lg-3">Female Caterer Available </label>
                                         <div class="col-lg-5">
-                                            <input type="radio" {{ $oldFields['female_caterer_available'] == 1 ? 'checked' : '' }} readonly>
+                                            @if($oldFields['female_caterer_available'] == 1)
+                                                <label class="btn btn-success">
+                                                    Yes
+                                                </label>
+                                            @else
+                                                <label class="btn btn-danger">
+                                                    No
+                                                </label>
+                                            @endif
+
                                         </div>
                                     </div>
                                 @endif
@@ -208,7 +217,15 @@
                                     <div class="form-group">
                                         <label class="control-label col-lg-3">Allow Person Increase </label>
                                         <div class="col-lg-5">
-                                            <input type="radio" {{ $oldFields['allow_person_increase'] == 1 ? 'checked' : '' }} readonly>
+                                            @if($oldFields['female_caterer_available'] == 1)
+                                                <label class="btn btn-success">
+                                                    Yes
+                                                </label>
+                                            @else
+                                                <label class="btn btn-danger">
+                                                    No
+                                                </label>
+                                            @endif
                                         </div>
                                     </div>
                                 @endif
@@ -439,7 +456,19 @@
                                     <div class="form-group">
                                         <label class="control-label col-lg-3">Female Caterer Available </label>
                                         <div class="col-lg-5">
-                                            <input type="radio" name="female_caterer_available" {{ $newFields['female_caterer_available'] == 1 ? 'checked' : '' }} readonly>
+                                            @if($newFields['female_caterer_available'] == 1)
+                                                <label class="btn btn-success">
+                                                    Yes
+                                                    <input type="hidden" name="female_caterer_available"
+                                                           value="1" >
+                                                </label>
+                                            @else
+                                                <label class="btn btn-danger">
+                                                    No
+                                                    <input type="hidden" name="female_caterer_available"
+                                                           value="0" >
+                                                </label>
+                                            @endif
                                         </div>
                                     </div>
                                 @endif
@@ -485,7 +514,19 @@
                                     <div class="form-group">
                                         <label class="control-label col-lg-3">Allow Person Increase </label>
                                         <div class="col-lg-5">
-                                            <input type="radio" name="allow_person_increase" {{ $newFields['allow_person_increase'] == 1 ? 'checked' : '' }} readonly>
+                                            @if($newFields['allow_person_increase'] == 1)
+                                                <label class="btn btn-success">
+                                                    Yes
+                                                    <input type="hidden" name="allow_person_increase"
+                                                           value="1" >
+                                                </label>
+                                            @else
+                                                <label class="btn btn-danger">
+                                                    No
+                                                    <input type="hidden" name="allow_person_increase"
+                                                           value="0" >
+                                                </label>
+                                            @endif
                                         </div>
                                     </div>
                                 @endif

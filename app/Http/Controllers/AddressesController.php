@@ -102,7 +102,8 @@ class AddressesController extends Controller
 
                 return response()->json(array(
                     'success' => 1,
-                    'status_code' => 200));
+                    'status_code' => 200,
+                    'address_id' => $address->id));
             }
         } else {
             return response()->json(array(
