@@ -197,19 +197,19 @@ class UsersController extends Controller
 
                 $date = Carbon::now()->format('Y-m-d');
 
-                if ($mobile == '31003167' || $mobile == '88888888' || $mobile == '66524147' || $mobile == '23456789') {
+                if ($mobile == '31003167' || $mobile == '88888888' || $mobile == '66524147' || $mobile == '23456789' || $mobile == '77052700') {
 
                     $client->otp = '1234';
+                    $client->save();
                 } else {
 
                     $client->otp = $activation_code;
+                    $client->save();
+
+                    $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=Your%20Qckly%20code%20is%20:%20$activation_code&destination=974$mobile&source=97772&mask=Qckly";
+
+                    file($url);
                 }
-
-                $client->save();
-
-                // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=Your%20Qckly%20code%20is%20:%20$activation_code&destination=974$mobile&source=97772&mask=Qckly";
-
-                // file($url);
 
                 return response()->json([
                     'success' => 1,
@@ -253,9 +253,9 @@ class UsersController extends Controller
 
                     if ($u_id) {
 
-                        // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=Your%20Qckly%20code%20is%20:%20$activation_code&destination=974$mobile&source=97772&mask=Qckly";
+                        $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=Your%20Qckly%20code%20is%20:%20$activation_code&destination=974$mobile&source=97772&mask=Qckly";
 
-                        // file($url);
+                        file($url);
 
                         return response()->json([
                             'success' => 1,
@@ -380,18 +380,18 @@ class UsersController extends Controller
                 $activation_code = rand(1000, 9999);
                 $date = Carbon::now()->format('Y-m-d');
 
-                if ($mobile == '31003167' || $mobile == '88888888' || $mobile == '66524147' || $mobile == '23456789') {
+                if ($mobile == '31003167' || $mobile == '88888888' || $mobile == '66524147' || $mobile == '23456789' || $mobile == '77052700') {
 
                     $client->otp = '1234';
+                    $client->save();
                 } else {
 
                     $client->otp = $activation_code;
+                    $client->save();
+
+                    $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=Your%20Qckly%20code%20is%20:%20$activation_code&destination=974$mobile&source=97772&mask=Qckly";
+                    file($url);
                 }
-
-                $client->save();
-
-                // $url = "https://connectsms.vodafone.com.qa/SMSConnect/SendServlet?application=http_gw209&password=zpr885mi&content=Your%20Qckly%20code%20is%20:%20$activation_code&destination=974$mobile&source=97772&mask=Qckly";
-                // file($url);
 
                 return response()->json([
                     'success' => 1,
