@@ -292,6 +292,15 @@
                                     </table>
                                 @endif
 
+                                    @if (isset($oldFields['food_list']))
+                                        <div class="form-group">
+                                            <label class="control-label col-lg-3">Foodlist </label>
+                                            <div class="col-lg-5">
+                                                <textarea class="form-control"  rows="10" readonly>{{ $oldFields['food_list'] }}</textarea>
+                                            </div>
+                                        </div>
+                                    @endif
+
                                 @if (isset($oldFields['image']))
                                     <div class="form-group">
                                         <label class="control-label col-lg-3">Image </label>
@@ -591,6 +600,15 @@
                                             </tbody>
                                         @endif
                                     </table>
+                                @endif
+
+                                @if (isset($newFields['food_list']))
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-3">Foodlist </label>
+                                        <div class="col-lg-5">
+                                            <textarea class="form-control" name="food_list" rows="10" readonly>{{ $newFields['food_list'] }}</textarea>
+                                        </div>
+                                    </div>
                                 @endif
 
                                 @if (isset($newFields['image']))

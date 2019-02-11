@@ -28,6 +28,8 @@ class EditingCollection extends Model
         'service_presentation_ar',
         'description_en',
         'description_ar',
+        'food_list_en',
+        'food_list_ar',
         'mealtime_id',
         'female_caterer_available',
         'max_qty',

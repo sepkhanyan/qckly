@@ -163,6 +163,8 @@ class CollectionsController extends Controller
         $collection->name_ar = $request->input('name_ar');
         $collection->description_en = $request->input('description_en');
         $collection->description_ar = $request->input('description_ar');
+        $collection->food_list_en = $request->input('food_list_en');
+        $collection->food_list_ar = $request->input('food_list_ar');
 
         $collection->image = $name;
         $collection->mealtime_id = $request->input('mealtime');
@@ -518,6 +520,9 @@ class CollectionsController extends Controller
             $editingCollection->name_ar = $request->input('name_ar');
             $editingCollection->description_en = $request->input('description_en');
             $editingCollection->description_ar = $request->input('description_ar');
+            $editingCollection->food_list_en = $request->input('food_list_en');
+            $editingCollection->food_list_ar = $request->input('food_list_ar');
+
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $name = 'collection_' . time() . '.' . $image->getClientOriginalExtension();
@@ -606,6 +611,9 @@ class CollectionsController extends Controller
             $collection->name_ar = $request->input('name_ar');
             $collection->description_en = $request->input('description_en');
             $collection->description_ar = $request->input('description_ar');
+            $collection->food_list_en = $request->input('food_list_en');
+            $collection->food_list_ar = $request->input('food_list_ar');
+
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $name = 'collection_' . time() . '.' . $image->getClientOriginalExtension();

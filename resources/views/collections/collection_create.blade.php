@@ -409,6 +409,40 @@
                                     </div>
                                 @endforeach
                             @endforeach
+                                <div class="form-group{{ $errors->has('food_list_en') ? ' has-error' : '' }}">
+                                    <label for="" class="col-sm-3 control-label text-right">
+                                         <span class="text-right">
+                                             <big>Foodlist En</big>
+                                         </span>
+                                    </label>
+                                    <div class="col-sm-4">
+                                    <textarea name="food_list_en" class="form-control"
+                                              id="food_list_en" rows="10"
+                                              cols="40">{{old('food_list_en')}}</textarea>
+                                        @if ($errors->has('food_list_en'))
+                                            <span class="help-block">
+                                        <strong>{{ $errors->first('food_list_en') }}</strong>
+                                    </span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="form-group{{ $errors->has('food_list_ar') ? ' has-error' : '' }}">
+                                    <label for="" class="col-sm-3 control-label text-right">
+                                         <span class="text-right">
+                                             <big>Foodlist Ar</big>
+                                         </span>
+                                    </label>
+                                    <div class="col-sm-4">
+                                    <textarea name="food_list_ar" class="form-control"
+                                              id="food_list_ar" rows="10"
+                                              cols="40">{{old('food_list_en')}}</textarea>
+                                        @if ($errors->has('food_list_ar'))
+                                            <span class="help-block">
+                                        <strong>{{ $errors->first('food_list_ar') }}</strong>
+                                    </span>
+                                        @endif
+                                    </div>
+                                </div>
                             {{--@if($collection_category->id == 2 || $collection_category->id == 3)--}}
                             {{--<div class="form-group">--}}
                             {{--<label for="" class="col-sm-3 control-label"></label>--}}

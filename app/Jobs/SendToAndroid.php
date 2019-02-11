@@ -35,7 +35,6 @@ class SendToAndroid implements ShouldQueue
      */
     public function handle()
     {
-        \Log::info($this->messages);
         $devicetoken = Device::where('user_id', $this->user_id)->where('device_type', 'android')->get();
         $device = array();
         foreach ($devicetoken as $dev) {
@@ -65,7 +64,6 @@ class SendToAndroid implements ShouldQueue
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
         $result = curl_exec($ch);
-        \Log::info($result);
 
         curl_close($ch);
     }

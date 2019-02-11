@@ -1242,7 +1242,6 @@ class RestaurantsController extends Controller
                         } else {
                             $female_caterer_available = false;
                         }
-                        $foodlist = [];
                         $foodlist_images = [];
                         $setup = '';
                         $max = '';
@@ -1323,10 +1322,8 @@ class RestaurantsController extends Controller
                             $menu = [];
                             foreach ($collection->approvedCollectionItem as $collection_item) {
                                 if ($lang == 'ar') {
-                                    $foodlist [] = $collection_item->menu->name_ar;
                                     $item_name = $collection_item->menu->name_ar;
                                 } else {
-                                    $foodlist [] = $collection_item->menu->name_en;
                                     $item_name = $collection_item->menu->name_en;
                                 }
 
@@ -1366,11 +1363,9 @@ class RestaurantsController extends Controller
                                 }
                                 foreach ($collectionMenu->approvedCollectionItem as $collection_item) {
                                     if ($lang == 'ar') {
-                                        $foodlist [] = $collection_item->menu->name_ar;
                                         $item_name = $collection_item->menu->name_ar;
                                         $menu_name = $collectionMenu->category->name_ar;
                                     } else {
-                                        $foodlist [] = $collection_item->menu->name_en;
                                         $item_name = $collection_item->menu->name_en;
                                         $menu_name = $collectionMenu->category->name_en;
                                     }
@@ -1448,6 +1443,7 @@ class RestaurantsController extends Controller
                             $service_provide = $collection->service_provide_ar;
                             $service_presentation = $collection->service_presentation_ar;
                             $service_type = $collection->serviceType->name_ar;
+                            $foodlist = $collection->food_list_ar;
                         } else {
                             $collection_name = $collection->name_en;
                             $collection_description = $collection->description_en;
@@ -1456,6 +1452,7 @@ class RestaurantsController extends Controller
                             $service_provide = $collection->service_provide_en;
                             $service_presentation = $collection->service_presentation_en;
                             $service_type = $collection->serviceType->name_en;
+                            $foodlist = $collection->food_list_en;
                         }
 
                         $service = [];
