@@ -30,6 +30,8 @@ class EditingCollection extends Model
         'description_ar',
         'food_list_en',
         'food_list_ar',
+        'container_title_en',
+        'container_title_ar',
         'mealtime_id',
         'female_caterer_available',
         'max_qty',

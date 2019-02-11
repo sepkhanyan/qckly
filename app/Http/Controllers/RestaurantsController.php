@@ -1444,6 +1444,7 @@ class RestaurantsController extends Controller
                             $service_presentation = $collection->service_presentation_ar;
                             $service_type = $collection->serviceType->name_ar;
                             $foodlist = $collection->food_list_ar;
+                            $title = $collection->container_title_ar;
                         } else {
                             $collection_name = $collection->name_en;
                             $collection_description = $collection->description_en;
@@ -1453,6 +1454,7 @@ class RestaurantsController extends Controller
                             $service_presentation = $collection->service_presentation_en;
                             $service_type = $collection->serviceType->name_en;
                             $foodlist = $collection->food_list_en;
+                            $title = $collection->container_title_en;
                         }
 
                         $service = [];
@@ -1561,6 +1563,7 @@ class RestaurantsController extends Controller
                             'notice_period' => $collection->notice_period,
                             'service_provide' => $service_provide,
                             'service_presentation' => $service_presentation,
+                            'container_title' => $title,
                             'food_list' => $foodlist,
                             'special_instruction' => '',
                             'food_item_image' => url('/') . '/images/' . $collection_item->menu->image,

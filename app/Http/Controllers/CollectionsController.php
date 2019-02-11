@@ -165,6 +165,8 @@ class CollectionsController extends Controller
         $collection->description_ar = $request->input('description_ar');
         $collection->food_list_en = $request->input('food_list_en');
         $collection->food_list_ar = $request->input('food_list_ar');
+        $collection->container_title_en = $request->input('container_title_en');
+        $collection->container_title_ar = $request->input('container_title_ar');
 
         $collection->image = $name;
         $collection->mealtime_id = $request->input('mealtime');
@@ -522,6 +524,8 @@ class CollectionsController extends Controller
             $editingCollection->description_ar = $request->input('description_ar');
             $editingCollection->food_list_en = $request->input('food_list_en');
             $editingCollection->food_list_ar = $request->input('food_list_ar');
+            $editingCollection->container_title_en = $request->input('container_title_en');
+            $editingCollection->container_title_ar = $request->input('container_title_ar');
 
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
@@ -613,6 +617,8 @@ class CollectionsController extends Controller
             $collection->description_ar = $request->input('description_ar');
             $collection->food_list_en = $request->input('food_list_en');
             $collection->food_list_ar = $request->input('food_list_ar');
+            $collection->container_title_en = $request->input('container_title_en');
+            $collection->container_title_ar = $request->input('container_title_ar');
 
             if ($request->hasFile('image')) {
                 $image = $request->file('image');

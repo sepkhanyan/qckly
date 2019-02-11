@@ -27,6 +27,8 @@ class Collection extends Model
         'service_presentation_ar',
         'food_list_en',
         'food_list_ar',
+        'container_title_en',
+        'container_title_ar',
         'description_en',
         'description_ar',
         'mealtime_id',

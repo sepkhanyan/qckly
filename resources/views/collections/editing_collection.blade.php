@@ -310,6 +310,26 @@
                                     </table>
                                 @endif
 
+                                    @if (isset($oldFields['container_title_en']))
+                                        <div class="form-group">
+                                            <label class="control-label col-lg-3">Title En </label>
+                                            <div class="col-lg-5">
+                                                <input type="text" class="form-control" value="{{ $oldFields['container_title_en'] }}"
+                                                       readonly>
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    @if (isset($oldFields['container_title_ar']))
+                                        <div class="form-group">
+                                            <label class="control-label col-lg-3">Title Ar </label>
+                                            <div class="col-lg-5">
+                                                <input type="text" class="form-control" value="{{ $oldFields['container_title_ar'] }}"
+                                                       readonly>
+                                            </div>
+                                        </div>
+                                    @endif
+
                                 @if (isset($oldFields['food_list_en']))
                                     <div class="form-group">
                                         <label class="control-label col-lg-3">Foodlist En</label>
@@ -652,6 +672,26 @@
                                             </tbody>
                                         @endif
                                     </table>
+                                @endif
+
+                                @if (isset($newFields['container_title_en']))
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-3">Title En </label>
+                                        <div class="col-lg-5">
+                                            <input type="text" name="container_title_en" class="form-control" value="{{ $newFields['container_title_en'] }}"
+                                                   readonly>
+                                        </div>
+                                    </div>
+                                @endif
+
+                                @if (isset($newFields['container_title_ar']))
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-3">Title Ar </label>
+                                        <div class="col-lg-5">
+                                            <input type="text" name="container_title_ar" class="form-control" value="{{ $newFields['container_title_ar'] }}"
+                                                   readonly>
+                                        </div>
+                                    </div>
                                 @endif
 
                                 @if (isset($newFields['food_list_en']))

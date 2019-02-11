@@ -409,6 +409,30 @@
                                     </div>
                                 @endforeach
                             @endforeach
+                                <div class="form-group{{ $errors->has('container_title_en') ? ' has-error' : '' }}">
+                                    <label for="container_title_en" class="col-sm-3 control-label">Title En</label>
+                                    <div class="col-sm-4">
+                                        <input type="text" name="container_title_en" id="container_title_en" class="form-control"
+                                               value="{{old('container_title_en')}}">
+                                        @if ($errors->has('container_title_en'))
+                                            <span class="help-block">
+                                            <strong>{{ $errors->first('container_title_en') }}</strong>
+                                        </span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="form-group{{ $errors->has('container_title_ar') ? ' has-error' : '' }}">
+                                    <label for="container_title_ar" class="col-sm-3 control-label">Title Ar</label>
+                                    <div class="col-sm-4">
+                                        <input type="text" name="container_title_ar" id="container_title_ar" class="form-control"
+                                               value="{{old('container_title_ar')}}">
+                                        @if ($errors->has('container_title_ar'))
+                                            <span class="help-block">
+                                            <strong>{{ $errors->first('container_title_ar') }}</strong>
+                                        </span>
+                                        @endif
+                                    </div>
+                                </div>
                                 <div class="form-group{{ $errors->has('food_list_en') ? ' has-error' : '' }}">
                                     <label for="" class="col-sm-3 control-label text-right">
                                          <span class="text-right">
